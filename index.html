@@ -171,14 +171,23 @@
       margin-bottom:18px;
     }
 
-    .hero-title{
-      margin:0 0 18px;
-      font-size:clamp(30px, 5.2vw, 54px);
-      line-height:1.08;
-      letter-spacing:-.03em;
-      text-wrap:balance;
-      word-break:keep-all;
-    }
+	.hero-copy{
+	  max-width:1100px;
+	}
+
+	.hero-title{
+	  margin:0 0 18px;
+	  font-size:clamp(30px, 5.2vw, 54px);
+	  line-height:1.08;
+	  letter-spacing:-.03em;
+	  word-break:keep-all;
+	}
+
+	@media (min-width: 769px){
+	  .hero-title{
+		white-space:nowrap;
+	  }
+	}
 
     #products{
       scroll-margin-top:90px;
