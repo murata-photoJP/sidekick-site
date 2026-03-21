@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sidekick | 星景・ポートレート・スカイエフェクト販売ページ</title>
-  <meta name="description" content="Sidekickシリーズ販売ページ。星景、ポートレート、スカイエフェクト向けの写真処理・思考支援ツール。3ヶ月試用あり。">
+  <meta name="description" content="Sidekickシリーズ販売ページ。星景、ポートレート、スカイエフェクト向けの写真処理・思考支援ツール。3ヶ月試用あり。" />
   <style>
     :root{
       --bg:#0b0b0d;
@@ -424,6 +424,68 @@
       margin-top:22px;
     }
 
+    .legal{
+      padding:40px 0;
+      border-top:1px solid rgba(255,255,255,.08);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.02);
+    }
+
+    .legal-box{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .legal-box h2{
+      margin:0 0 16px;
+      font-size:24px;
+      line-height:1.2;
+    }
+
+    .legal-box p{
+      margin:0 0 12px;
+      color:var(--sub);
+      font-size:14px;
+    }
+
+    .legal-box p:last-child{
+      margin-bottom:0;
+    }
+
+    .legal-box strong{
+      color:var(--white);
+      font-weight:800;
+    }
+
+    .legal-links{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .legal-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:0 16px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--white);
+      font-size:14px;
+      font-weight:700;
+      background:rgba(255,255,255,.02);
+    }
+
+    .legal-link:hover{
+      background:rgba(255,255,255,.05);
+      border-color:rgba(255,255,255,.22);
+    }
+
     .footer{
       padding:32px 0 60px;
       border-top:1px solid rgba(255,255,255,.06);
@@ -503,6 +565,7 @@
         <a href="#products">Sidekickを選ぶ</a>
         <a href="#why">できること</a>
         <a href="#trial">3ヶ月試用</a>
+        <a href="#purchase-info">ご購入について</a>
       </nav>
     </div>
   </header>
@@ -515,7 +578,10 @@
 
           <h1 class="hero-title">星景・ポートレート・空表現を、もっと速く、もっと自分らしく。</h1>
 
-          <p class="hero-desc">Sidekickは、撮影後の迷いと反復作業を減らすための、写真家のためのワークフローツールです。まずはあなたのジャンルに合うSidekickを選んで、3ヶ月試してみてください。</p>
+          <p class="hero-desc">
+            Sidekickは、撮影後の迷いと反復作業を減らすための、写真家のためのワークフローツールです。
+            まずはあなたのジャンルに合うSidekickを選んで、3ヶ月試してみてください。
+          </p>
 
           <div class="hero-actions">
             <a class="btn btn-primary" href="#products">あなたに合うSidekickを選ぶ</a>
@@ -533,9 +599,7 @@
       <div class="wrap">
         <div class="section-head">
           <h2>まずは、必要なSidekickを選ぶ</h2>
-          <p>
-            用途別に、星景・ポートレート・スカイエフェクトをご用意しています。
-          </p>
+          <p>用途別に、星景・ポートレート・スカイエフェクトをご用意しています。</p>
         </div>
 
         <div class="products">
@@ -564,12 +628,14 @@
                 </div>
                 <div class="cta-row">
                   <a class="btn btn-secondary mini" href="star.html">詳細を見る</a>
-					<a class="btn btn-primary mini"
-					   href="https://drive.google.com/uc?export=download&id=1OlTxwqE3q8QlPhDsXi3OoxQ5VfdwDMpl"
-					   target="_blank"
-					   rel="noopener">
-					  Sidekick Starを試してみる
-					</a>
+                  <a
+                    class="btn btn-primary mini"
+                    href="https://drive.google.com/uc?export=download&id=1OlTxwqE3q8QlPhDsXi3OoxQ5VfdwDMpl"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    Sidekick Starを試してみる
+                  </a>
                 </div>
               </div>
             </div>
@@ -675,33 +741,3 @@
         </div>
       </div>
     </section>
-
-    <section class="section" id="trial">
-      <div class="wrap">
-        <div class="trial-block">
-          <h3>まずは気になるSidekickから、3ヶ月試してみてください</h3>
-          <p>
-            Sidekickシリーズは、まずダウンロードして使ってもらうのが一番早いと考えています。
-            説明だけではなく、実際のワークフローの中で判断してください。
-          </p>
-
-          <div class="trial-actions">
-            <a class="btn btn-primary" href="#products">あなたに合うSidekickを選ぶ</a>
-            <a class="btn btn-secondary" href="#why">Sidekickについて見る</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="wrap footer-inner">
-      <div>© Sidekick</div>
-      <div>
-        星景 / ポートレート / スカイエフェクト
-      </div>
-    </div>
-  </footer>
-
-</body>
-</html>
