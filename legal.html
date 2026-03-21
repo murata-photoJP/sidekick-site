@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特定商取引法に基づく表記 | Sidekick</title>
+  <meta name="description" content="Sidekickの特定商取引法に基づく表記ページです。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:900px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.7;
+    }
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+    .site-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(10px);
+      background:rgba(11,11,13,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .header-inner{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-height:64px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      color:var(--text);
+      text-decoration:none;
+    }
+    .brand-mark{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:grid;
+      place-items:center;
+      color:#111;
+      font-weight:900;
+    }
+    .page-hero{
+      padding:64px 0 40px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero h1{
+      margin:0 0 10px;
+      font-size:clamp(24px,4vw,36px);
+      letter-spacing:-.02em;
+    }
+    .page-hero p{
+      margin:0;
+      color:var(--sub);
+      font-size:14px;
+    }
+    .legal-body{
+      padding:48px 0 80px;
+    }
+    .legal-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:15px;
+    }
+    .legal-table th,
+    .legal-table td{
+      padding:16px 20px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      vertical-align:top;
+      text-align:left;
+    }
+    .legal-table th{
+      width:200px;
+      color:var(--accent2);
+      font-weight:700;
+      white-space:nowrap;
+      background:rgba(255,138,0,.04);
+    }
+    .legal-table td{
+      color:var(--sub);
+      line-height:1.8;
+    }
+    .legal-table tr:last-child th,
+    .legal-table tr:last-child td{
+      border-bottom:none;
+    }
+    .legal-wrap{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      overflow:hidden;
+    }
+    .note-box{
+      margin-top:28px;
+      padding:20px 24px;
+      background:rgba(255,138,0,.06);
+      border:1px solid rgba(255,138,0,.18);
+      border-radius:14px;
+      font-size:14px;
+      color:var(--sub);
+      line-height:1.8;
+    }
+    .footer{
+      padding:28px 0 48px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:var(--sub);
+      font-size:13px;
+    }
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .footer-links{
+      display:flex;
+      gap:20px;
+    }
+    @media(max-width:600px){
+      .legal-table th{
+        width:120px;
+        font-size:13px;
+      }
+      .legal-table th,
+      .legal-table td{
+        padding:12px 14px;
+        font-size:13px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <span>Sidekick</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <h1>特定商取引法に基づく表記</h1>
+        <p>Specified Commercial Transaction Act</p>
+      </div>
+    </section>
+
+    <section class="legal-body">
+      <div class="wrap">
+        <div class="legal-wrap">
+          <table class="legal-table">
+            <tr>
+              <th>販売者名</th>
+              <td>村田 一朗</td>
+            </tr>
+            <tr>
+              <th>所在地</th>
+              <td>
+                請求があった場合、遅滞なく開示いたします。<br>
+                <span style="font-size:13px;">（特定商取引法に基づき、住所は請求時に開示）</span>
+              </td>
+            </tr>
+            <tr>
+              <th>電話番号</th>
+              <td>
+                請求があった場合、遅滞なく開示いたします。<br>
+                <span style="font-size:13px;">（特定商取引法に基づき、電話番号は請求時に開示）</span>
+              </td>
+            </tr>
+            <tr>
+              <th>メールアドレス</th>
+              <td><a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a></td>
+            </tr>
+            <tr>
+              <th>販売URL</th>
+              <td><a href="https://sidekick-site-tawny.vercel.app/index.html" target="_blank" rel="noopener">https://sidekick-site-tawny.vercel.app/index.html</a>（ご自身のURLに差し替えてください）</td>
+            </tr>
+            <tr>
+              <th>販売商品</th>
+              <td>
+                Sidekick Star（星景写真向けワークフローツール）<br>
+                Sidekick Portrait（ポートレート向けワークフローツール）<br>
+                Sidekick Sky Effect（空表現向けワークフローツール）<br>
+                <span style="font-size:13px;">※ いずれもPhotoshop向けデジタルソフトウェアです。</span>
+              </td>
+            </tr>
+            <tr>
+              <th>販売価格</th>
+              <td>各商品ページに記載の価格（消費税込み）</td>
+            </tr>
+            <tr>
+              <th>支払い方法</th>
+              <td>クレジットカード決済（Stripe）</td>
+            </tr>
+            <tr>
+              <th>支払い時期</th>
+              <td>注文時に即時決済</td>
+            </tr>
+            <tr>
+              <th>商品の提供時期</th>
+              <td>決済完了後、速やかにダウンロードリンクをご案内、またはメールにて提供いたします。</td>
+            </tr>
+            <tr>
+              <th>返品・返金について</th>
+              <td>
+                デジタルコンテンツの性質上、購入後の返品・返金は原則としてお受けできません。<br>
+                ただし、ファイルの破損・提供不備など、販売者側の瑕疵が認められる場合は個別に対応いたします。<br>
+                その際は <a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a> までご連絡ください。
+              </td>
+            </tr>
+            <tr>
+              <th>動作環境</th>
+              <td>
+                Adobe Photoshop（バージョンは各商品ページを参照）<br>
+                Windows / macOS
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="note-box">
+          ご不明な点がございましたら <a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a> までお気軽にお問い合わせください。<br>
+          通常、2営業日以内にご返信いたします。
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>© Sidekick — 村田 一朗</div>
+      <div class="footer-links">
+        <a href="index.html" style="color:var(--sub);">トップページ</a>
+        <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
