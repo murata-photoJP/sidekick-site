@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sidekick Star | 星景写真向けワークフロー支援ツール</title>
-  <meta name="description" content="Sidekick Starは、星景写真の比較明合成、空と地上の整理、星景特有のマスク処理やブレンド判断など、撮影後の反復判断を減らすための実務ツールです。3ヶ月試用あり。">
+  <title>Sidekick | 星景・ポートレート・スカイエフェクト販売ページ</title>
+  <meta name="description" content="Sidekickシリーズ販売ページ。星景、ポートレート、スカイエフェクト向けの写真処理・思考支援ツール。3ヶ月試用あり。">
   <style>
     :root{
       --bg:#0b0b0d;
@@ -15,11 +15,8 @@
       --sub:#b8c0cc;
       --accent:#ff8a00;
       --accent2:#ffb14a;
-      --blue1:#08111f;
-      --blue2:#182d4a;
-      --blue3:#381541;
       --white:#ffffff;
-      --max:1180px;
+      --max:1200px;
       --shadow:0 20px 60px rgba(0,0,0,.35);
     }
 
@@ -29,11 +26,11 @@
       margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
       background:
-        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
-        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
-        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+        radial-gradient(circle at top right, rgba(255,138,0,.12), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 20%),
+        var(--bg);
       color:var(--text);
-      line-height:1.75;
+      line-height:1.7;
     }
 
     a{color:inherit;text-decoration:none}
@@ -144,22 +141,19 @@
       background:rgba(255,255,255,.03);
     }
 
-    .mini{
-      min-height:44px;
-      padding:0 18px;
-      border-radius:12px;
-      font-size:14px;
-    }
-
     .hero{
       padding:88px 0 56px;
     }
 
     .hero-grid{
       display:grid;
-      grid-template-columns:1.05fr .95fr;
+      grid-template-columns:1fr;
       gap:34px;
       align-items:center;
+    }
+
+    .hero-copy{
+      max-width:1100px;
     }
 
     .eyebrow{
@@ -177,19 +171,35 @@
       margin-bottom:18px;
     }
 
-    h1{
+    .hero-title{
       margin:0 0 18px;
-      font-size:clamp(34px, 6vw, 62px);
+      font-size:clamp(30px, 5.2vw, 54px);
       line-height:1.08;
       letter-spacing:-.03em;
       word-break:keep-all;
     }
 
-    .lead{
+    @media (min-width: 769px){
+      .hero-title{
+        white-space:nowrap;
+      }
+    }
+
+    #products{
+      scroll-margin-top:90px;
+    }
+
+    #commerce{
+      scroll-margin-top:90px;
+    }
+
+    .hero-desc{
       margin:0;
       color:var(--sub);
       font-size:clamp(16px, 2vw, 20px);
-      max-width:760px;
+      max-width:800px;
+      text-wrap:balance;
+      word-break:keep-all;
     }
 
     .hero-actions{
@@ -205,66 +215,8 @@
       font-size:14px;
     }
 
-    .hero-card{
-      min-height:420px;
-      border-radius:28px;
-      position:relative;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-      background:
-        linear-gradient(180deg, rgba(7,9,23,.16), rgba(7,9,23,.74)),
-        radial-gradient(circle at 72% 20%, rgba(255,255,255,.20), transparent 10%),
-        radial-gradient(circle at 30% 12%, rgba(255,255,255,.10), transparent 7%),
-        radial-gradient(circle at 18% 34%, rgba(255,255,255,.06), transparent 5%),
-        linear-gradient(135deg, var(--blue1), var(--blue2) 55%, var(--blue3));
-    }
-
-    .hero-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        radial-gradient(circle at 80% 15%, rgba(255,177,74,.18), transparent 12%),
-        linear-gradient(180deg, transparent 40%, rgba(0,0,0,.32));
-      pointer-events:none;
-    }
-
-    .hero-card-inner{
-      position:absolute;
-      inset:auto 0 0 0;
-      padding:28px;
-      z-index:2;
-    }
-
-    .hero-card-tag{
-      display:inline-flex;
-      padding:8px 12px;
-      border-radius:999px;
-      background:rgba(0,0,0,.34);
-      border:1px solid rgba(255,255,255,.12);
-      font-size:12px;
-      font-weight:800;
-      color:#fff;
-      letter-spacing:.04em;
-      margin-bottom:14px;
-    }
-
-    .hero-card h2{
-      margin:0 0 10px;
-      font-size:34px;
-      line-height:1;
-      letter-spacing:-.03em;
-    }
-
-    .hero-card p{
-      margin:0;
-      color:#e9edf4;
-      max-width:420px;
-    }
-
     .section{
-      padding:32px 0 84px;
+      padding:36px 0 88px;
     }
 
     .section-head{
@@ -281,59 +233,91 @@
     .section-head p{
       margin:0;
       color:var(--sub);
-      max-width:760px;
+      max-width:none;
     }
 
-    .pain-grid,
-    .value-grid,
-    .flow-grid{
+    .products{
       display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:18px;
-      margin-top:28px;
-    }
-
-    .card{
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
-        var(--card);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:22px;
-      padding:24px;
-      box-shadow:var(--shadow);
-    }
-
-    .card h3{
-      margin:0 0 10px;
-      font-size:19px;
-    }
-
-    .card p{
-      margin:0;
-      color:var(--sub);
-      font-size:15px;
-    }
-
-    .feature-wrap{
-      display:grid;
-      grid-template-columns:1fr 1fr;
+      grid-template-columns:repeat(3, 1fr);
       gap:22px;
       margin-top:28px;
     }
 
-    .feature-box{
+    .product{
       background:
         linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
         var(--card);
       border:1px solid rgba(255,255,255,.08);
       border-radius:24px;
-      padding:26px;
+      overflow:hidden;
       box-shadow:var(--shadow);
+      display:flex;
+      flex-direction:column;
     }
 
-    .feature-box h3{
-      margin:0 0 14px;
-      font-size:22px;
+    .product-visual{
+      aspect-ratio:16 / 10;
+      display:grid;
+      place-items:end start;
+      padding:22px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .star-bg{
+      background:
+        linear-gradient(180deg, rgba(7,9,23,.15), rgba(7,9,23,.7)),
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,.22), transparent 12%),
+        radial-gradient(circle at 30% 10%, rgba(255,255,255,.14), transparent 10%),
+        linear-gradient(135deg, #08111f, #182d4a 55%, #381541);
+    }
+
+    .portrait-bg{
+      background:
+        linear-gradient(180deg, rgba(20,11,14,.1), rgba(20,11,14,.72)),
+        radial-gradient(circle at 30% 30%, rgba(255,209,179,.28), transparent 18%),
+        linear-gradient(135deg, #38222a, #5c3441 52%, #8c5a61);
+    }
+
+    .sky-bg{
+      background:
+        linear-gradient(180deg, rgba(11,19,30,.1), rgba(11,19,30,.72)),
+        radial-gradient(circle at 75% 22%, rgba(255,210,119,.40), transparent 15%),
+        linear-gradient(135deg, #274261, #446f9b 55%, #f28f45);
+    }
+
+    .product-tag{
+      position:absolute;
+      top:18px;
+      left:18px;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(0,0,0,.34);
+      border:1px solid rgba(255,255,255,.12);
+      font-size:12px;
+      font-weight:800;
+      color:#fff;
+      letter-spacing:.04em;
+    }
+
+    .product-visual h3{
+      margin:0;
+      font-size:32px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .product-body{
+      padding:24px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      flex:1;
+    }
+
+    .product-body p{
+      margin:0;
+      color:var(--sub);
     }
 
     .feature-list{
@@ -341,7 +325,7 @@
       padding:0;
       margin:0;
       display:grid;
-      gap:12px;
+      gap:10px;
     }
 
     .feature-list li{
@@ -360,7 +344,63 @@
       font-weight:900;
     }
 
-    .quote{
+    .price-box{
+      margin-top:auto;
+      padding-top:8px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .trial{
+      font-size:14px;
+      color:var(--accent2);
+      font-weight:800;
+    }
+
+    .cta-row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .mini{
+      min-height:44px;
+      padding:0 18px;
+      border-radius:12px;
+      font-size:14px;
+    }
+
+    .why{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:28px;
+    }
+
+    .why-card{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:20px;
+      padding:22px;
+    }
+
+    .why-card h3{
+      margin:0 0 10px;
+      font-size:18px;
+    }
+
+    .why-card p{
+      margin:0;
+      color:var(--sub);
+      font-size:15px;
+    }
+
+    .trial-block{
       margin-top:28px;
       padding:28px;
       border-radius:24px;
@@ -371,41 +411,17 @@
       box-shadow:var(--shadow);
     }
 
-    .quote strong{
-      display:block;
-      font-size:24px;
-      line-height:1.4;
-      margin-bottom:10px;
-    }
-
-    .quote p{
-      margin:0;
-      color:var(--sub);
-    }
-
-    .cta{
-      margin-top:28px;
-      padding:30px;
-      border-radius:26px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
-        var(--card);
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:var(--shadow);
-    }
-
-    .cta h3{
+    .trial-block h3{
       margin:0 0 10px;
-      font-size:28px;
+      font-size:26px;
     }
 
-    .cta p{
+    .trial-block p{
       margin:0;
       color:var(--sub);
-      max-width:760px;
     }
 
-    .cta-actions{
+    .trial-actions{
       display:flex;
       gap:12px;
       flex-wrap:wrap;
@@ -427,18 +443,26 @@
     }
 
     @media (max-width: 980px){
-      .hero-grid,
-      .feature-wrap,
-      .pain-grid,
-      .value-grid,
-      .flow-grid{
+      .products,
+      .why{
         grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 768px){
+      .hero-title,
+      .hero-desc{
+        text-wrap:wrap;
       }
     }
 
     @media (max-width: 640px){
       .wrap{
         width:min(var(--max), calc(100% - 24px));
+      }
+
+      .header-inner{
+        padding:8px 0;
       }
 
       .nav{
@@ -449,8 +473,8 @@
         padding:56px 0 34px;
       }
 
-      .hero-card{
-        min-height:320px;
+      .product-visual h3{
+        font-size:28px;
       }
 
       .btn{
@@ -461,7 +485,7 @@
         width:auto;
       }
 
-      .cta-actions .btn{
+      .cta-row .btn{
         width:auto;
       }
     }
@@ -480,10 +504,10 @@
       </a>
 
       <nav class="nav">
-        <a href="#features">できること</a>
-        <a href="#value">価値</a>
+        <a href="#products">Sidekickを選ぶ</a>
+        <a href="#why">できること</a>
         <a href="#trial">3ヶ月試用</a>
-        <a href="index.html">トップへ戻る</a>
+        <a href="#commerce">ご購入について</a>
       </nav>
     </div>
   </header>
@@ -491,205 +515,166 @@
   <main>
     <section class="hero">
       <div class="wrap hero-grid">
-        <div>
-          <div class="eyebrow">STARSCAPE / 3ヶ月試用あり</div>
-          <h1>
-            星景写真で消耗する<br>
-            “あとからの判断”を、<br>
-            少しずつ減らす。
-          </h1>
+        <div class="hero-copy">
+          <div class="eyebrow">3ヶ月試用あり / Sidekickシリーズ</div>
 
-          <p class="lead">
-            Sidekick Starは、星景写真の比較明合成、空と地上の整理、
-            星景特有のマスク処理やブレンド判断など、繰り返し発生する判断と処理を
-            まとめて支えるための実務ツールです。
-          </p>
+          <h1 class="hero-title">星景・ポートレート・空表現を、もっと速く、もっと自分らしく。</h1>
+
+          <p class="hero-desc">Sidekickは、撮影後の迷いと反復作業を減らすための、写真家のためのワークフローツールです。まずはあなたのジャンルに合うSidekickを選んで、3ヶ月試してみてください。</p>
 
           <div class="hero-actions">
-            <a class="btn btn-primary" href="https://drive.google.com/uc?export=download&id=1OlTxwqE3q8QlPhDsXi3OoxQ5VfdwDMpl">Sidekick Starを試してみる</a>
-            <a class="btn btn-secondary" href="#features">できることを見る</a>
+            <a class="btn btn-primary" href="#products">あなたに合うSidekickを選ぶ</a>
+            <a class="btn btn-secondary" href="#trial">3ヶ月試用について</a>
           </div>
 
           <div class="hero-note">
-            プリセットではなく、星景処理の判断を少しずつ肩代わりするためのSidekickです。<br>
-            <span style="color:var(--accent2); font-weight:700;">販売価格 ¥9,800（税込）</span>／ まずは3ヶ月試用あり
-          </div>
-        </div>
-
-        <div class="hero-card">
-          <div class="hero-card-inner">
-            <div class="hero-card-tag">Sidekick Star</div>
-            <h2>星景向け</h2>
-            <p>
-              日本の光害環境や大量処理の現実に合わせて、
-              実際の星景ワークフローから組み立てたモジュール。
-            </p>
+            用途に合わせて選べる、写真家のためのワークフローツールです。
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" id="products">
       <div class="wrap">
         <div class="section-head">
-          <h2>こんな悩みがある人に向いています</h2>
+          <h2>まずは、必要なSidekickを選ぶ</h2>
           <p>
-            星景写真で本当に時間を奪われるのは、撮ることよりも、
-            その後に同じような判断を何度も繰り返す部分だったりします。
+            用途別に、星景・ポートレート・スカイエフェクトをご用意しています。
           </p>
         </div>
 
-        <div class="pain-grid">
-          <div class="card">
-            <h3>ファイル枚数が多すぎる</h3>
-            <p>
-              比較明合成や連続フレーム処理で、撮影枚数が膨らみやすく、
-              1枚ずつ判断するだけで集中力が削られる。
-            </p>
-          </div>
+        <div class="products">
 
-          <div class="card">
-            <h3>毎回似た判断が発生する</h3>
-            <p>
-              空と地上の分離、星や天の川の扱い、光害の調整など、
-              似た判断を毎回最初からやり直している。
-            </p>
-          </div>
+          <article class="product">
+            <div class="product-visual star-bg">
+              <div class="product-tag">STARSCAPE</div>
+              <h3>Sidekick Star</h3>
+            </div>
+            <div class="product-body">
+              <p>
+                星景写真向け。比較明合成、空と地上の整理、天の川表現など、
+                星景ワークフローを加速するためのSidekick。
+              </p>
 
-          <div class="card">
-            <h3>一般的な処理では合わない</h3>
-            <p>
-              日本の星景は光害や空の条件が厳しく、
-              一般的なテンプレ的ワークフローではそのまま使いにくいことがある。
-            </p>
-          </div>
-        </div>
+              <ul class="feature-list">
+                <li>比較明合成ワークフローの効率化</li>
+                <li>星景特有のブレンドや仕上げ判断を整理</li>
+                <li>星景特有の判断と処理の反復を短縮</li>
+              </ul>
 
-        <div class="quote">
-          <strong>
-            Sidekick Starは、星景の“処理”を売るのではなく、
-            星景で繰り返してきた“判断”をツールとして外に出すために作っています。
-          </strong>
-          <p>
-            だから、ただの見た目調整ではなく、
-            実際のワークフローを支える実務ツールとして使えます。
-          </p>
+              <div class="price-box">
+                <div>
+                  <div class="trial">3ヶ月試用あり</div>
+                  <div>星景向けモジュール</div>
+                </div>
+                <div class="cta-row">
+                  <a class="btn btn-secondary mini" href="star.html">詳細を見る</a>
+					<a class="btn btn-primary mini"
+					   href="https://drive.google.com/uc?export=download&id=1OlTxwqE3q8QlPhDsXi3OoxQ5VfdwDMpl"
+					   target="_blank"
+					   rel="noopener">
+					  Sidekick Starを試してみる
+					</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="product-visual portrait-bg">
+              <div class="product-tag">PORTRAIT</div>
+              <h3>Sidekick Portrait</h3>
+            </div>
+            <div class="product-body">
+              <p>
+                ポートレート向け。肌、色、立体感、印象の整理など、
+                ポートレート処理を自分の方向へ寄せるためのSidekick。
+              </p>
+
+              <ul class="feature-list">
+                <li>肌や色の方向性を整えやすい</li>
+                <li>作品トーンの統一を助ける</li>
+                <li>処理判断の迷いを減らせる</li>
+              </ul>
+
+              <div class="price-box">
+                <div>
+                  <div class="trial">3ヶ月試用あり</div>
+                  <div>ポートレート向けモジュール</div>
+                </div>
+                <div class="cta-row">
+                  <a class="btn btn-secondary mini" href="portrait.html">詳細を見る</a>
+                  <a class="btn btn-primary mini" href="#">Sidekick Portraitを試してみる</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="product-visual sky-bg">
+              <div class="product-tag">SKY EFFECT</div>
+              <h3>Sidekick Sky Effect</h3>
+            </div>
+            <div class="product-body">
+              <p>
+                空の表情を活かしたい写真向け。空を主役にする時の印象整理や、
+                スカイエフェクト系の仕上げを支えるためのSidekick。
+              </p>
+
+              <ul class="feature-list">
+                <li>空の印象を整えやすい</li>
+                <li>雲や光の表情を整理しやすい</li>
+                <li>空を主役にした仕上げを効率化</li>
+              </ul>
+
+              <div class="price-box">
+                <div>
+                  <div class="trial">3ヶ月試用あり</div>
+                  <div>空表現向けモジュール</div>
+                </div>
+                <div class="cta-row">
+                  <a class="btn btn-secondary mini" href="skyeffect.html">詳細を見る</a>
+                  <a class="btn btn-primary mini" href="#">Sidekick Sky Effectを試してみる</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
         </div>
       </div>
     </section>
 
-    <section class="section" id="features">
+    <section class="section" id="why">
       <div class="wrap">
         <div class="section-head">
-          <h2>Sidekick Starでできること</h2>
+          <h2>Sidekickでできること</h2>
           <p>
-            実装内容は今後更新されていきますが、
-            方向性としては次のような星景ワークフローを支えます。
+            単なる処理の自動化ではなく、迷いの多い部分を減らし、写真家としての判断を前に進めるためのツールとして設計しています。
           </p>
         </div>
 
-        <div class="feature-wrap">
-          <div class="feature-box">
-            <h3>星景ワークフロー支援</h3>
-            <ul class="feature-list">
-              <li>比較明合成前後の流れを整理しやすくする</li>
-              <li>空と地上の分離処理を助ける</li>
-              <li>星景特有の反復手順を減らす</li>
-              <li>大量ファイル前提の処理負荷を軽くする</li>
-            </ul>
-          </div>
-
-          <div class="feature-box">
-            <h3>判断支援</h3>
-            <ul class="feature-list">
-              <li>星マスク生成の補助</li>
-              <li>スカイマスク生成の補助</li>
-              <li>光害補正やブレンド判断の補助</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="value">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>Sidekick Starが売っているもの</h2>
-          <p>
-            表面上はツールですが、実際に届けたい価値はもっと別のところにあります。
-          </p>
-        </div>
-
-        <div class="value-grid">
-          <div class="card">
-            <h3>時間</h3>
+        <div class="why">
+          <div class="why-card">
+            <h3>処理時間を短縮する</h3>
             <p>
-              何度も繰り返していた星景処理の判断を減らし、
-              撮影や作品づくりに回せる時間を増やします。
+              毎回似たような手順を繰り返している作業を減らし、
+              作品づくりに使える時間を増やします。
             </p>
           </div>
 
-          <div class="card">
-            <h3>一貫性</h3>
+          <div class="why-card">
+            <h3>判断の迷いを減らす</h3>
             <p>
-              毎回ブレやすい処理判断を整え、
-              ワークフローを安定させやすくします。
+              何をどこまでやるか迷いやすい工程を整理し、
+              ワークフローを安定させます。
             </p>
           </div>
 
-          <div class="card">
-            <h3>写真家の思考</h3>
+          <div class="why-card">
+            <h3>自分の方向へ寄せる</h3>
             <p>
-              村田一朗が星景で積み重ねてきた考え方を、
-              使える形にしたものを届けます。
-            </p>
-          </div>
-        </div>
-
-        <div class="quote">
-          <strong>
-            人はスクリプトを買うのではなく、
-            それによって自分が繰り返さずに済む判断を買っています。
-          </strong>
-          <p>
-            Sidekick Starは、まさにそこを支えるためのモジュールです。
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>使う流れ</h2>
-          <p>
-            まずはダウンロードして、実際の星景ワークフローの中で判断してください。
-            説明を読むより、使ってみる方が早いと考えています。
-          </p>
-        </div>
-
-        <div class="flow-grid">
-          <div class="card">
-            <h3>1. 試用版を入れる</h3>
-            <p>
-              まずは3ヶ月試用版を使って、
-              自分の星景処理に合うかを確認します。
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>2. 実際の素材で試す</h3>
-            <p>
-              手持ちの星景素材に使って、
-              どこが楽になるか、どこが合うかを見ます。
-            </p>
-          </div>
-
-          <div class="card">
-            <h3>3. 継続判断する</h3>
-            <p>
-              実際に時間短縮や判断の安定化が感じられたら、
-              正式利用へ進みます。
+              単なる一括処理ではなく、ジャンルや目的に合わせて
+              自分の写真に使いやすい形を目指します。
             </p>
           </div>
         </div>
@@ -698,27 +683,74 @@
 
     <section class="section" id="trial">
       <div class="wrap">
-        <div class="cta">
-          <h3>まずは3ヶ月、Sidekick Starを使ってみてください</h3>
+        <div class="trial-block">
+          <h3>まずは気になるSidekickから、3ヶ月試してみてください</h3>
           <p>
-            説明だけで判断するより、実際の星景素材に使ってみる方が早いです。
-            まずは試して、自分のワークフローに合うかどうかを見てください。
+            Sidekickシリーズは、まずダウンロードして使ってもらうのが一番早いと考えています。
+            説明だけではなく、実際のワークフローの中で判断してください。
           </p>
 
-          <div style="margin-top:20px; padding:16px 20px; background:rgba(255,138,0,.06); border:1px solid rgba(255,138,0,.18); border-radius:14px; display:inline-block;">
-            <div style="font-size:13px; color:var(--sub); margin-bottom:4px;">販売価格（税込）</div>
-            <div style="font-size:28px; font-weight:800; letter-spacing:-.02em;">¥9,800</div>
-            <div style="font-size:12px; color:var(--sub); margin-top:4px;">※ 購入リンクは準備中です。まずは3ヶ月試用版をお試しください。</div>
-          </div>
-
-          <div class="cta-actions">
-            <a class="btn btn-primary" href="https://drive.google.com/uc?export=download&id=1OlTxwqE3q8QlPhDsXi3OoxQ5VfdwDMpl">Sidekick Starを試してみる</a>
-            <a class="btn btn-secondary" href="index.html">トップへ戻る</a>
+          <div class="trial-actions">
+            <a class="btn btn-primary" href="#products">あなたに合うSidekickを選ぶ</a>
+            <a class="btn btn-secondary" href="#why">Sidekickについて見る</a>
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <!-- ======================================================
+       ご購入について（特定商取引法に基づく表記）
+       ====================================================== -->
+  <section id="commerce" style="padding:56px 0; border-top:1px solid rgba(255,255,255,.08);">
+    <div class="wrap">
+      <h2 style="margin:0 0 28px; font-size:clamp(22px,3vw,30px); letter-spacing:-.02em;">ご購入について</h2>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:22px;">
+
+        <div style="background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:24px;">
+          <h3 style="margin:0 0 14px; font-size:16px; color:var(--accent2);">商品・価格</h3>
+          <p style="margin:0; color:var(--sub); font-size:14px; line-height:1.9;">
+            Sidekick Star（星景向け）：各商品ページに記載<br>
+            Sidekick Portrait（ポートレート向け）：各商品ページに記載<br>
+            Sidekick Sky Effect（空表現向け）：各商品ページに記載<br>
+            <br>
+            ※ 試用期間終了後、購入いただくことで継続利用可能です。
+          </p>
+        </div>
+
+        <div style="background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:24px;">
+          <h3 style="margin:0 0 14px; font-size:16px; color:var(--accent2);">お支払い・提供方法</h3>
+          <p style="margin:0; color:var(--sub); font-size:14px; line-height:1.9;">
+            <strong style="color:var(--text);">支払い方法：</strong>オンライン決済（Stripe）<br>
+            <strong style="color:var(--text);">支払い時期：</strong>注文時に即時決済<br>
+            <strong style="color:var(--text);">提供方法：</strong>決済完了後すぐにダウンロードリンク、またはメールにてお届け<br>
+            <strong style="color:var(--text);">提供時期：</strong>決済完了後すぐ
+          </p>
+        </div>
+
+        <div style="background:var(--card); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:24px;">
+          <h3 style="margin:0 0 14px; font-size:16px; color:var(--accent2);">返品・返金・お問い合わせ</h3>
+          <p style="margin:0; color:var(--sub); font-size:14px; line-height:1.9;">
+            <strong style="color:var(--text);">返品・返金：</strong>デジタルコンテンツの性質上、原則として返品・返金はお受けできません。ただし、不具合が確認された場合は個別に対応いたします。<br>
+            <br>
+            <strong style="color:var(--text);">お問い合わせ：</strong><br>
+            <!-- ↓ メールアドレスを実際のものに差し替えてください -->
+            <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);">murata@mbg.nifty.com</a>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- 特定商取引法に基づく表記（詳細ページへのリンク想定） -->
+      <p style="margin:22px 0 0; font-size:13px; color:var(--sub);">
+        販売者情報・特定商取引法に基づく表記は
+        <a href="legal.html" style="color:var(--accent2); text-decoration:underline;">こちら</a>をご確認ください。
+        ／
+        <a href="privacy.html" style="color:var(--accent2); text-decoration:underline;">プライバシーポリシー</a>
+      </p>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="wrap footer-inner">
@@ -727,7 +759,14 @@
         <div style="font-size:13px;">お問い合わせ：<a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a></div>
       </div>
       <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; font-size:13px;">
-        <div>星景写真向けワークフロー支援ツール</div>
+        <div>星景 / ポートレート / スカイエフェクト</div>
         <div style="display:flex; gap:16px;">
           <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
-          <a href="priva
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
