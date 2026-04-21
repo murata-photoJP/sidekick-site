@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidekick Star 操作マニュアル</title>
+<style>
+:root {
+  --bg:#0b0b0d;
+  --bg2:#121317;
+  --card:#17191f;
+  --line:#2a2f3a;
+  --text:#f5f7fb;
+  --sub:#b8c0cc;
+  --accent:#ff8a00;
+  --accent2:#ffb14a;
+  --ok:#8ec5ff;
+  --max:1100px;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:linear-gradient(180deg, var(--bg), #0f1116 35%, var(--bg));
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  line-height:1.75;
+}
+a { color:var(--accent2); }
+.wrap {
+  max-width:var(--max);
+  margin:0 auto;
+  padding:28px 18px 60px;
+}
+.hero {
+  margin:0 0 28px;
+  padding:28px;
+  background:linear-gradient(180deg, #181b22, #111319);
+  border:1px solid var(--line);
+  border-radius:20px;
+}
+.hero h1 {
+  margin:0 0 10px;
+  font-size:34px;
+  line-height:1.2;
+}
+.hero p {
+  margin:8px 0 0;
+  color:var(--sub);
+}
+.note {
+  margin-top:14px;
+  padding:12px 14px;
+  background:#151923;
+  border:1px solid #273042;
+  border-radius:12px;
+  color:#d7e7ff;
+}
+.section {
+  margin:24px 0;
+  padding:24px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+.section h2 {
+  margin:0 0 12px;
+  font-size:26px;
+  color:var(--accent);
+}
+.section h3 {
+  margin:18px 0 8px;
+  font-size:18px;
+}
+.section p {
+  margin:8px 0;
+}
+.mini {
+  color:var(--sub);
+  font-size:14px;
+}
+.steps {
+  margin:14px 0 0;
+  padding-left:20px;
+}
+.grid2 {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:16px;
+}
+.grid3 {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+.card {
+  background:#12151c;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px;
+}
+.card img, .shot img {
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:12px;
+  border:1px solid #2b313e;
+}
+.caption {
+  margin-top:8px;
+  color:var(--sub);
+  font-size:14px;
+}
+.kv {
+  margin:12px 0 0;
+  padding:12px 14px;
+  background:#10141b;
+  border-left:4px solid var(--accent);
+  border-radius:10px;
+}
+.compare {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin-top:12px;
+}
+.badge {
+  display:inline-block;
+  padding:4px 10px;
+  border-radius:999px;
+  background:#1d2430;
+  border:1px solid #2d394b;
+  color:#d8e7ff;
+  font-size:13px;
+  margin-bottom:8px;
+}
+hr {
+  border:none;
+  border-top:1px solid var(--line);
+  margin:20px 0;
+}
+@media (max-width: 820px) {
+  .grid2, .grid3, .compare {
+    grid-template-columns:1fr;
+  }
+  .hero h1 { font-size:28px; }
+  .section h2 { font-size:22px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>Sidekick Star 操作マニュアル</h1>
+    <p>星景写真向けの RAW現像 / 2WB現像 / 強調 / 比較明スタックを、迷わず使うための最短ガイドです。</p>
+    <div class="note">まずは <strong>比較明スタック</strong> か <strong>RAW現像</strong> のどちらかひとつから始めればOKです。迷ったら比較明スタックを使ってください。</div>
+  </section>
+
+  <section class="section">
+    <h2>1. ライセンス画面</h2>
+    <p>初回起動時、または未登録時にこの画面が表示されます。これはエラーではありません。</p>
+    <div class="grid2">
+      <div class="card">
+        <img src="sidekick_manual_assets/license_dialog.jpg" alt="ライセンス登録画面">
+        <div class="caption">試用期間中は「後で登録（試用モードで起動）」を押してください。</div>
+      </div>
+      <div class="card">
+        <img src="sidekick_manual_assets/trial_notice.jpg" alt="試用モード起動メッセージ">
+        <div class="caption">このメッセージが出たら正常です。試用モードのまま起動できます。</div>
+      </div>
+    </div>
+    <div class="kv">試用期間は 90日です。まずはそのまま使い始めて問題ありません。</div>
+  </section>
+
+  <section class="section">
+    <h2>2. 起動画面</h2>
+    <p>Sidekickを起動すると、この画面が表示されます。ここから処理内容を選びます。</p>
+    <div class="card shot">
+      <img src="sidekick_manual_assets/start_screen.jpg" alt="起動画面">
+      <div class="caption">RAW現像 / 星・天の川強調 / 比較明スタック の3ブロックがあります。</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>3. RAW現像</h2>
+    <p>RAW現像を使う場合は、最初に <strong>RAW現像実行</strong> にチェックを入れ、モードを選びます。</p>
+    <div class="grid2">
+      <div class="card">
+        <span class="badge">比較明</span>
+        <img src="sidekick_manual_assets/raw_stack.jpg" alt="RAW現像 比較明">
+        <div class="caption">星をつなげる素材づくり用。通常はこちらを使います。</div>
+      </div>
+      <div class="card">
+        <span class="badge">天の川</span>
+        <img src="sidekick_manual_assets/raw_mw.jpg" alt="RAW現像 天の川">
+        <div class="caption">天の川を強調した単体作品づくり用です。</div>
+      </div>
+    </div>
+    <div class="kv">迷ったら <strong>比較明</strong> を選んでください。</div>
+  </section>
+
+  <section class="section">
+    <h2>4. 星・天の川強調</h2>
+    <p>仕上がりを調整する機能です。最初は全部 <strong>Natural</strong> で大丈夫です。</p>
+    <div class="grid2">
+      <div class="card">
+        <img src="sidekick_manual_assets/star_off.jpg" alt="星・天の川強調 OFF">
+        <div class="caption">チェックを入れると、Lch / abch / 色合い を調整できます。</div>
+      </div>
+      <div class="card">
+        <img src="sidekick_manual_assets/hue_menu.jpg" alt="色合いメニュー">
+        <div class="caption">色合いは Natural / Warm / Cool の3択です。</div>
+      </div>
+    </div>
+
+    <div class="grid3" style="margin-top:16px;">
+      <div class="card">
+        <img src="sidekick_manual_assets/lch_menu.jpg" alt="Lchメニュー">
+        <div class="caption"><strong>Lch</strong> = 輝度コントラスト。迷ったら Natural。</div>
+      </div>
+      <div class="card">
+        <img src="sidekick_manual_assets/abch_menu.jpg" alt="abchメニュー">
+        <div class="caption"><strong>abch</strong> = 彩度コントラスト。迷ったら Natural。</div>
+      </div>
+      <div class="card">
+        <img src="sidekick_manual_assets/hue_menu.jpg" alt="色合い">
+        <div class="caption"><strong>色合い</strong> = 全体の色バランス。迷ったら Natural。</div>
+      </div>
+    </div>
+
+    <div class="kv">
+      基本設定：<strong>Lch = Natural / abch = Natural / 色合い = Natural</strong>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>5. 比較明スタック</h2>
+    <p>複数枚を合成して星をつなげる、Sidekick Star のメイン機能です。</p>
+    <div class="grid2">
+      <div class="card">
+        <img src="sidekick_manual_assets/stack_basic.jpg" alt="比較明スタック基本">
+        <div class="caption">まずは <strong>比較明スタック</strong> にチェックを入れてOKです。</div>
+      </div>
+      <div class="card">
+        <img src="sidekick_manual_assets/stack_avg.jpg" alt="飛行機軌跡除去">
+        <div class="caption">飛行機が多いときは、飛行機軌跡を除去をONのまま使ってください。平均枚数は 5 のままでOKです。</div>
+      </div>
+    </div>
+    <hr>
+    <p><strong>PSBで書き出さない</strong> は通常OFFで問題ありません。<br>
+    <strong>ブロック枚数</strong> は 100 のままで大丈夫です。</p>
+  </section>
+
+  <section class="section">
+    <h2>6. 処理結果の例</h2>
+    <p>下の3枚は、RAW → 2WB現像 → 強調 の変化です。</p>
+    <div class="compare">
+      <div class="card">
+        <span class="badge">RAW（撮影そのまま）</span>
+        <img src="sidekick_manual_assets/raw_original.jpg" alt="RAW元画像">
+        <div class="caption">暗く、コントラストも弱い状態です。</div>
+      </div>
+      <div class="card">
+        <span class="badge">2WB現像</span>
+        <img src="sidekick_manual_assets/raw_2wb.jpg" alt="2WB現像">
+        <div class="caption">空と地上を分けて最適化し、見え方を整えます。</div>
+      </div>
+      <div class="card">
+        <span class="badge">強調後</span>
+        <img src="sidekick_manual_assets/raw_enhanced.jpg" alt="強調後">
+        <div class="caption">天の川の構造や星の見え方が、よりはっきりします。</div>
+      </div>
+    </div>
+    <div class="kv">特別な知識や複雑な調整は不要です。まずはデフォルト設定のまま試してください。</div>
+  </section>
+
+  <section class="section">
+    <h2>7. 最初のおすすめ手順</h2>
+    <ol class="steps">
+      <li>初回は「後で登録（試用モードで起動）」で進む</li>
+      <li>起動画面で、やりたい処理にチェックを入れる</li>
+      <li>迷ったら、比較明スタックだけONにしてOKを押す</li>
+      <li>強調を使う場合は、まず全部 Natural のまま試す</li>
+      <li>飛行機が多いときだけ、飛行機軌跡除去をONで使う</li>
+    </ol>
+  </section>
+
+</div>
+</body>
+</html>

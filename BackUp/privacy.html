@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プライバシーポリシー | Sidekick</title>
+  <meta name="description" content="Sidekickのプライバシーポリシーページです。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:900px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.7;
+    }
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+    .site-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(10px);
+      background:rgba(11,11,13,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .header-inner{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-height:64px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      color:var(--text);
+      text-decoration:none;
+    }
+    .brand-mark{
+      width:36px;
+      height:36px;
+      border-radius:10px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:grid;
+      place-items:center;
+      color:#111;
+      font-weight:900;
+    }
+    .page-hero{
+      padding:64px 0 40px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero h1{
+      margin:0 0 10px;
+      font-size:clamp(24px,4vw,36px);
+      letter-spacing:-.02em;
+    }
+    .page-hero p{
+      margin:0;
+      color:var(--sub);
+      font-size:14px;
+    }
+    .privacy-body{
+      padding:48px 0 80px;
+    }
+    .privacy-section{
+      margin-bottom:36px;
+    }
+    .privacy-section h2{
+      margin:0 0 14px;
+      font-size:18px;
+      color:var(--accent2);
+      border-left:3px solid var(--accent);
+      padding-left:12px;
+    }
+    .privacy-section p,
+    .privacy-section ul{
+      margin:0 0 10px;
+      color:var(--sub);
+      font-size:15px;
+      line-height:1.85;
+    }
+    .privacy-section ul{
+      padding-left:20px;
+    }
+    .privacy-section li{
+      margin-bottom:6px;
+    }
+    .updated{
+      margin:0 0 36px;
+      color:var(--sub);
+      font-size:13px;
+    }
+    .contact-box{
+      margin-top:36px;
+      padding:20px 24px;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      font-size:14px;
+      color:var(--sub);
+      line-height:1.8;
+    }
+    .footer{
+      padding:28px 0 48px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:var(--sub);
+      font-size:13px;
+    }
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .footer-links{
+      display:flex;
+      gap:20px;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <span>Sidekick</span>
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <h1>プライバシーポリシー</h1>
+        <p>Privacy Policy</p>
+      </div>
+    </section>
+
+    <section class="privacy-body">
+      <div class="wrap">
+
+        <p class="updated">最終更新日：2026年3月</p>
+
+        <div class="privacy-section">
+          <h2>1. 基本方針</h2>
+          <p>
+            Sidekick（以下「当サービス」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めます。
+            本ポリシーは、当サービスが取得・利用する情報の取り扱いについて説明するものです。
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>2. 取得する情報</h2>
+          <p>当サービスでは、以下の情報を取得することがあります。</p>
+          <ul>
+            <li>お問い合わせ時にご記入いただいたメールアドレスおよびお名前</li>
+            <li>ご購入時に決済サービス（Stripe）を通じて処理される情報（クレジットカード情報は当サービスでは保持しません）</li>
+            <li>サイトのアクセスログ（IPアドレス、ブラウザ情報、閲覧ページ等）</li>
+          </ul>
+        </div>
+
+        <div class="privacy-section">
+          <h2>3. 情報の利用目的</h2>
+          <p>取得した情報は、以下の目的にのみ使用します。</p>
+          <ul>
+            <li>購入した商品の提供・サポート</li>
+            <li>お問い合わせへの対応</li>
+            <li>サービス改善のためのアクセス解析</li>
+            <li>重要なお知らせの連絡（サービス変更・不具合通知等）</li>
+          </ul>
+          <p>上記以外の目的で個人情報を利用することはありません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>4. 第三者への提供</h2>
+          <p>
+            当サービスは、法令に基づく場合を除き、取得した個人情報を本人の同意なく第三者に提供することはありません。
+            ただし、以下のサービスを利用しており、これらのサービスの規約に基づく情報処理が行われます。
+          </p>
+          <ul>
+            <li><strong style="color:var(--text);">Stripe</strong>：決済処理（<a href="https://stripe.com/jp/privacy" target="_blank" rel="noopener">Stripeプライバシーポリシー</a>）</li>
+            <li><strong style="color:var(--text);">Google Drive</strong>：ファイルの配信</li>
+          </ul>
+        </div>
+
+        <div class="privacy-section">
+          <h2>5. Cookieについて</h2>
+          <p>
+            当サイトでは、アクセス解析のためCookieを使用する場合があります。
+            Cookieはブラウザの設定から無効にすることができますが、一部のサービス機能に影響が出る場合があります。
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>6. 個人情報の保管・管理</h2>
+          <p>
+            取得した個人情報は、適切な安全管理措置を講じて保管します。
+            不要になった個人情報は、速やかに削除いたします。
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>7. 開示・訂正・削除の請求</h2>
+          <p>
+            ご本人から個人情報の開示・訂正・削除の請求があった場合は、
+            合理的な期間内に対応いたします。下記お問い合わせ先までご連絡ください。
+          </p>
+        </div>
+
+        <div class="privacy-section">
+          <h2>8. ポリシーの変更</h2>
+          <p>
+            本ポリシーは、必要に応じて変更することがあります。
+            変更の際はこのページにて告知いたします。
+          </p>
+        </div>
+
+        <div class="contact-box">
+          <strong style="color:var(--text);">お問い合わせ先</strong><br>
+          Sidekick — 村田 一朗<br>
+          メール：<a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a><br>
+          <span style="font-size:13px;">通常、2営業日以内にご返信いたします。</span>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div>© Sidekick — 村田 一朗</div>
+      <div class="footer-links">
+        <a href="index.html" style="color:var(--sub);">トップページ</a>
+        <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery | Ichiro Murata — Fine Art Prints</title>
+  <meta name="description" content="村田一朗の星景写真ギャラリー。1X Award受賞作品を含むファインアートプリントをFine Art Americaにて販売中。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1200px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 26%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* Header */
+    .site-header{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:blur(10px);
+      background:rgba(11,11,13,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .header-inner{
+      display:flex;justify-content:space-between;align-items:center;
+      gap:20px;min-height:72px;
+    }
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{
+      width:40px;height:40px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;
+    }
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav a{color:var(--sub);font-size:14px;font-weight:700;margin-left:18px;}
+    .nav a:hover{color:#fff}
+
+    /* Button */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:50px;padding:0 24px;border-radius:14px;
+      font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#121212;
+      box-shadow:0 6px 28px rgba(255,138,0,.3);
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,138,0,.42);}
+    .btn-outline{
+      background:transparent;
+      border-color:rgba(255,255,255,.16);
+      color:var(--text);
+    }
+    .btn-outline:hover{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.04);}
+
+    /* Page head */
+    .page-head{padding:72px 0 48px;}
+    .eyebrow{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:7px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:18px;
+    }
+    .page-head h1{margin:0 0 12px;font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;}
+    .page-head .lead{margin:0 0 28px;color:var(--sub);font-size:16px;max-width:640px;}
+
+    .faa-link-bar{
+      display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+      padding:18px 22px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.09);
+    }
+    .faa-link-bar span{color:var(--sub);font-size:14px;}
+    .faa-link-bar strong{color:var(--text);}
+
+    /* Gallery grid */
+    .gallery-section{padding:48px 0 80px;}
+    .section-label{
+      font-size:13px;font-weight:800;letter-spacing:.08em;
+      color:var(--sub);text-transform:uppercase;
+      margin-bottom:20px;
+      padding-bottom:12px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-bottom:48px;
+    }
+
+    .gallery-item{
+      position:relative;
+      border-radius:16px;
+      overflow:hidden;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.07);
+      box-shadow:0 8px 32px rgba(0,0,0,.45);
+      transition:.25s ease;
+    }
+    .gallery-item:hover{
+      transform:translateY(-3px);
+      box-shadow:0 16px 48px rgba(0,0,0,.6);
+      border-color:rgba(255,138,0,.2);
+    }
+
+    .gallery-item img{
+      width:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      display:block;
+    }
+
+    .gallery-item-info{
+      padding:14px 16px 16px;
+    }
+    .gallery-item-info h3{
+      margin:0 0 4px;
+      font-size:15px;
+      letter-spacing:-.01em;
+    }
+    .gallery-item-info p{
+      margin:0 0 12px;
+      font-size:13px;
+      color:var(--sub);
+    }
+    .gallery-item-info a{
+      display:inline-flex;align-items:center;gap:6px;
+      font-size:13px;font-weight:700;
+      color:var(--accent2);
+      border-bottom:1px solid rgba(255,177,74,.3);
+      padding-bottom:1px;
+      transition:.15s;
+    }
+    .gallery-item-info a:hover{color:#fff;border-color:rgba(255,255,255,.4);}
+
+    .award-badge-small{
+      position:absolute;top:12px;left:12px;
+      padding:5px 10px;border-radius:999px;
+      background:rgba(0,0,0,.55);border:1px solid rgba(255,200,0,.3);
+      font-size:11px;font-weight:800;color:#ffd86e;letter-spacing:.04em;
+    }
+
+    /* Awards section uses awards images */
+    .award-highlight{
+      grid-column:1 / -1;
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      gap:18px;
+    }
+    .award-highlight .main-img img{
+      aspect-ratio:3/2;
+      border-radius:16px;
+      width:100%;
+      object-fit:cover;
+      border:1px solid rgba(255,255,255,.07);
+    }
+    .award-highlight .sub-imgs{
+      display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    }
+    .award-highlight .sub-imgs img{
+      width:100%;aspect-ratio:1;object-fit:cover;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.07);
+    }
+    .award-highlight-text{
+      grid-column:1/-1;
+      margin-top:6px;
+    }
+    .award-highlight-text p{
+      margin:0;color:var(--sub);font-size:14px;font-style:italic;
+      text-align:center;
+    }
+
+    /* FAA note */
+    .faa-note{
+      padding:28px;border-radius:20px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      margin-top:0;
+    }
+    .faa-note h3{margin:0 0 8px;font-size:17px;}
+    .faa-note p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    /* Footer */
+    .footer{padding:28px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:900px){
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
+      .award-highlight{grid-template-columns:1fr;grid-column:auto;}
+      .award-highlight .sub-imgs{grid-template-columns:repeat(4,1fr);}
+    }
+    @media(max-width:640px){
+      .gallery-grid{grid-template-columns:1fr;}
+      .nav{display:none}
+      .award-highlight .sub-imgs{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-text">
+        <span>Sidekick</span>
+        <small>PHOTO WORKFLOW TOOLS</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">トップ</a>
+      <a href="star.html">Sidekick Star</a>
+      <a href="changelog.html">更新履歴</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="page-head">
+      <div class="eyebrow">🖼 GALLERY</div>
+      <h1>Ichiro Murata — Fine Art Prints</h1>
+      <p class="lead">
+        1X Award受賞を含む星景写真をファインアートプリントとして販売しています。<br>
+        プリント・キャンバス・アクリルなど各種フォーマットに対応。
+      </p>
+
+      <div class="faa-link-bar">
+        <div>
+          <strong>販売プラットフォーム：</strong>
+          <span>Fine Art America（世界最大級のアートプリントマーケット）</span>
+        </div>
+        <a class="btn btn-primary"
+           href="https://fineartamerica.com/profiles/ichiro-murata"
+           target="_blank" rel="noopener">
+          FAA プロフィールを見る →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <section class="gallery-section">
+    <div class="wrap">
+
+      <!-- 1X Award 受賞作品 -->
+      <div class="section-label">🏆 1X Award 受賞作品</div>
+
+      <div class="award-highlight">
+        <div class="main-img">
+          <img src="images/awards/3102187.jpg"
+               alt="1X Award受賞 星景写真 — 村田一朗">
+        </div>
+        <div class="sub-imgs">
+          <img src="images/awards/3083835.jpg" alt="1X Award受賞作品 1">
+          <img src="images/awards/3086530.jpg" alt="1X Award受賞作品 2">
+          <img src="images/awards/3095761.jpg" alt="1X Award受賞作品 3">
+          <img src="images/awards/3095833.jpg" alt="1X Award受賞作品 4">
+        </div>
+        <div class="award-highlight-text">
+          <p>"Selected and awarded on 1X, one of the most curated photo platforms worldwide."</p>
+        </div>
+      </div>
+
+      <!-- 販売中の作品 -->
+      <div class="section-label" style="margin-top:56px;">販売中の作品（Fine Art America）</div>
+
+      <!--
+        ================================================================
+        作品リスト — URLが変わったらここを編集するだけでOK
+        各 gallery-item の href を FAA の作品URLに差し替えてください
+        作品を追加・削除するときはこのブロックをコピー／削除してください
+        ================================================================
+      -->
+      <div class="gallery-grid">
+
+        <article class="gallery-item">
+          <img src="images/awards/3102187.jpg"
+               alt="Inner Structure 01 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Inner Structure 01</h3>
+            <p>Starscape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/inner-structure-01-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              プリントを購入 →
+            </a>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="images/awards/3095761.jpg"
+               alt="Quiet Line 02 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Quiet Line 02</h3>
+            <p>Starscape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/quiet-line-02-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              プリントを購入 →
+            </a>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="images/awards/3083835.jpg"
+               alt="Quiet Line 01 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Quiet Line 01</h3>
+            <p>Starscape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/quiet-line-01-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              プリントを購入 →
+            </a>
+          </div>
+        </article>
+
+        <!--
+          ↓ 新しい作品を追加するときはここにコピーして追加
+          <article class="gallery-item">
+            <img src="images/awards/XXXXXXX.jpg" alt="作品タイトル">
+            <div class="gallery-item-info">
+              <h3>作品タイトル</h3>
+              <p>ジャンル / Fine Art Print</p>
+              <a href="https://fineartamerica.com/featured/xxxx-ichiro-murata.html"
+                 target="_blank" rel="noopener">プリントを購入 →</a>
+            </div>
+          </article>
+        -->
+
+      </div>
+
+      <div class="faa-note">
+        <h3>作品の入れ替えについて</h3>
+        <p>
+          掲載作品はFine Art Americaの無料プランの都合上、随時入れ替えを行っています。
+          最新の全作品は
+          <a href="https://fineartamerica.com/profiles/ichiro-murata"
+             target="_blank" rel="noopener"
+             style="color:var(--accent2);">FAA プロフィールページ</a>
+          をご覧ください。
+        </p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>© Sidekick — 村田 一朗</div>
+    <div style="display:flex;gap:16px;font-size:13px;">
+      <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+      <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

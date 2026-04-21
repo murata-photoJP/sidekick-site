@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>更新履歴 | Sidekick</title>
+  <meta name="description" content="SidekickおよびWebサイトの更新履歴。バージョン変更・新機能追加・サイトの改善内容をまとめています。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --line:#2a2f3a;
+      --max:860px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 26%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* Header */
+    .site-header{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:blur(10px);
+      background:rgba(11,11,13,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .header-inner{
+      display:flex;justify-content:space-between;align-items:center;
+      gap:20px;min-height:72px;
+    }
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{
+      width:40px;height:40px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;
+    }
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav a{color:var(--sub);font-size:14px;font-weight:700;margin-left:18px;}
+    .nav a:hover{color:#fff}
+
+    /* Page head */
+    .page-head{
+      padding:72px 0 48px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-head .eyebrow{
+      display:inline-flex;gap:10px;align-items:center;
+      padding:7px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:18px;
+    }
+    .page-head h1{
+      margin:0 0 12px;
+      font-size:clamp(28px,4vw,40px);
+      letter-spacing:-.025em;
+    }
+    .page-head p{
+      margin:0;color:var(--sub);font-size:16px;max-width:600px;
+    }
+
+    /* Filter tabs */
+    .filter-row{
+      display:flex;gap:10px;flex-wrap:wrap;
+      padding:28px 0 0;
+    }
+    .filter-btn{
+      padding:7px 16px;border-radius:999px;
+      font-size:13px;font-weight:700;cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);
+      background:transparent;color:var(--sub);
+      transition:.15s ease;
+    }
+    .filter-btn:hover,.filter-btn.active{
+      background:rgba(255,138,0,.12);
+      border-color:rgba(255,138,0,.3);
+      color:var(--accent2);
+    }
+
+    /* Timeline */
+    .timeline{
+      padding:48px 0 80px;
+      display:grid;
+      gap:0;
+    }
+
+    .entry{
+      display:grid;
+      grid-template-columns:140px 1fr;
+      gap:0 28px;
+      position:relative;
+    }
+
+    /* vertical line */
+    .entry::after{
+      content:"";
+      position:absolute;
+      left:140px;
+      top:0;bottom:0;
+      width:1px;
+      background:linear-gradient(to bottom, rgba(255,255,255,.10), rgba(255,255,255,.04));
+    }
+
+    .entry:first-child::after{top:28px;}
+    .entry:last-child::after{bottom:calc(100% - 28px);}
+
+    .entry-date{
+      text-align:right;
+      padding:28px 28px 0 0;
+      position:relative;
+    }
+
+    .entry-date time{
+      display:block;
+      font-size:13px;
+      font-weight:700;
+      color:var(--sub);
+      letter-spacing:.02em;
+    }
+
+    /* dot on line */
+    .entry-date::after{
+      content:"";
+      position:absolute;
+      right:-6px;top:36px;
+      width:11px;height:11px;
+      border-radius:50%;
+      background:var(--card);
+      border:2px solid var(--line);
+      z-index:1;
+    }
+
+    .entry[data-type="sidekick"] .entry-date::after{
+      border-color:var(--accent);
+      background:rgba(255,138,0,.2);
+    }
+
+    .entry[data-type="site"] .entry-date::after{
+      border-color:#6c8cff;
+      background:rgba(108,140,255,.2);
+    }
+
+    .entry-body{
+      padding:24px 0 32px;
+    }
+
+    .entry-tag{
+      display:inline-block;
+      padding:4px 12px;
+      border-radius:999px;
+      font-size:11px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:10px;
+    }
+
+    .tag-sidekick{
+      background:rgba(255,138,0,.12);
+      border:1px solid rgba(255,138,0,.24);
+      color:var(--accent2);
+    }
+
+    .tag-site{
+      background:rgba(108,140,255,.10);
+      border:1px solid rgba(108,140,255,.22);
+      color:#a0b4ff;
+    }
+
+    .entry-body h2{
+      margin:0 0 8px;
+      font-size:18px;
+      letter-spacing:-.01em;
+    }
+
+    .entry-body p{
+      margin:0 0 0;
+      color:var(--sub);
+      font-size:15px;
+    }
+
+    .entry-body ul{
+      margin:10px 0 0;
+      padding:0 0 0 18px;
+      color:var(--sub);
+      font-size:15px;
+      display:grid;gap:6px;
+    }
+
+    .entry-body li{
+      padding-left:4px;
+    }
+
+    /* footer */
+    .footer{
+      padding:28px 0 48px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:var(--sub);font-size:14px;
+    }
+    .footer-inner{
+      display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    }
+
+    /* hidden by filter */
+    .entry.hidden{display:none}
+
+    @media(max-width:640px){
+      .entry{grid-template-columns:1fr;}
+      .entry::after{display:none}
+      .entry-date{text-align:left;padding:28px 0 0;}
+      .entry-date::after{display:none}
+      .entry-body{padding-top:8px;}
+      .nav{display:none}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-text">
+        <span>Sidekick</span>
+        <small>PHOTO WORKFLOW TOOLS</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="index.html">トップ</a>
+      <a href="star.html">Sidekick Star</a>
+      <a href="gallery.html">ギャラリー</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="eyebrow">CHANGELOG</div>
+      <h1>更新履歴</h1>
+      <p>Sidekick のバージョン更新とWebサイトの変更をまとめています。</p>
+
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">すべて</button>
+        <button class="filter-btn" data-filter="sidekick">Sidekick</button>
+        <button class="filter-btn" data-filter="site">サイト</button>
+      </div>
+    </div>
+
+    <div class="timeline" id="timeline">
+
+      <!-- ▼ 新しい順に追加 ▼ -->
+
+      <div class="entry" data-type="site">
+        <div class="entry-date">
+          <time>2026-04-21</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>LP リニューアル・ページ追加</h2>
+          <ul>
+            <li>ファーストビューのコピーを刷新</li>
+            <li>Before / After セクション追加</li>
+            <li>1X Award 受賞作品セクション追加</li>
+            <li>ギャラリーページ（gallery.html）追加</li>
+            <li>更新履歴ページ（changelog.html）追加</li>
+            <li>画像を <code>images/awards/</code> に整理</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-03-24</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Sidekick Star — マニュアルパッケージ同梱</h2>
+          <ul>
+            <li>試用版ダウンロードにマニュアル PDF を同梱</li>
+            <li>スクリプトの動作確認（Photoshop Beta 対応）</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date">
+          <time>2026-03-21</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>サイト公開・初回デプロイ（Vercel）</h2>
+          <ul>
+            <li>index.html・star.html・legal.html・privacy.html を公開</li>
+            <li>Stripe 決済フロー準備開始</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-03-14</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Sidekick Star — 初版リリース（試用版）</h2>
+          <ul>
+            <li>比較明合成スクリプト実装</li>
+            <li>スカイマスク・星マスク自動生成</li>
+            <li>光害補正ワークフロー組み込み</li>
+            <li>3ヶ月試用ライセンスとして配布開始</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- ▲ 古い順ここまで ▲ -->
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>© Sidekick — 村田 一朗</div>
+    <div style="display:flex;gap:16px;font-size:13px;">
+      <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+      <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // フィルタータブ
+  const btns = document.querySelectorAll('.filter-btn');
+  const entries = document.querySelectorAll('.entry');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      entries.forEach(e => {
+        e.classList.toggle('hidden', f !== 'all' && e.dataset.type !== f);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
