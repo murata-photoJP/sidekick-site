@@ -517,6 +517,116 @@
       }
     }
 
+    /* ── Workflow 3-step ── */
+    .workflow-block{
+      margin-top:52px;
+    }
+
+    .workflow-grid{
+      display:grid;
+      grid-template-columns:1fr auto 1fr auto 1fr;
+      gap:12px;
+      align-items:start;
+      margin-top:16px;
+    }
+
+    .workflow-arrow{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding-top:80px;
+      color:var(--accent2);
+      font-size:22px;
+      font-weight:900;
+      opacity:.7;
+    }
+
+    .workflow-item{
+      display:flex;
+      flex-direction:column;
+    }
+
+    .workflow-img-wrap{
+      border-radius:14px 14px 0 0;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      border-bottom:none;
+      line-height:0;
+      box-shadow:0 16px 48px rgba(0,0,0,.45);
+    }
+
+    .workflow-img-final{
+      border-color:rgba(255,138,0,.2);
+    }
+
+    .workflow-img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .workflow-caption{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:0 0 14px 14px;
+      font-size:13px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.08);
+      border-top:none;
+    }
+
+    .step-raw{
+      background:rgba(255,255,255,.03);
+      color:var(--sub);
+    }
+
+    .step-dev{
+      background:rgba(100,160,255,.05);
+      border-color:rgba(100,160,255,.12);
+      color:#8ab4f8;
+    }
+
+    .step-final{
+      background:rgba(255,138,0,.07);
+      border-color:rgba(255,138,0,.16);
+      color:var(--accent2);
+    }
+
+    .workflow-num{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:22px;
+      height:22px;
+      border-radius:50%;
+      background:rgba(255,255,255,.1);
+      font-size:11px;
+      font-weight:900;
+      flex-shrink:0;
+    }
+
+    .step-final .workflow-num{
+      background:rgba(255,138,0,.2);
+      color:var(--accent2);
+    }
+
+    @media (max-width:860px){
+      .workflow-grid{
+        grid-template-columns:1fr 1fr 1fr;
+      }
+      .workflow-arrow{
+        display:none;
+      }
+    }
+
+    @media (max-width:540px){
+      .workflow-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
     /* ── Sections ── */
     .section{
       padding:72px 0;
@@ -1057,6 +1167,56 @@
           <p class="result-note">
             この差が、Sidekick Star の処理そのものです。
           </p>
+        </div>
+
+        <!-- Workflow: 撮って出し → RAW現像 → 天の川強調 -->
+        <div class="workflow-block">
+          <div class="ba-label-row">
+            <span class="result-badge">WORKFLOW</span>
+            <span class="result-caption-text">撮って出し → RAW現像 → 天の川強調</span>
+          </div>
+
+          <div class="workflow-grid">
+            <div class="workflow-item">
+              <div class="workflow-img-wrap">
+                <img src="images/awards/20220503_234434(0071779)0.jpeg"
+                     alt="撮って出しJPEG — 処理前"
+                     loading="lazy">
+              </div>
+              <div class="workflow-caption step-raw">
+                <span class="workflow-num">01</span>
+                撮って出しJPEG
+              </div>
+            </div>
+
+            <div class="workflow-arrow">→</div>
+
+            <div class="workflow-item">
+              <div class="workflow-img-wrap">
+                <img src="images/awards/20220503_234434(0071779)0_SideKick_現像.jpeg"
+                     alt="SideKick RAW現像後"
+                     loading="lazy">
+              </div>
+              <div class="workflow-caption step-dev">
+                <span class="workflow-num">02</span>
+                SideKick RAW現像
+              </div>
+            </div>
+
+            <div class="workflow-arrow">→</div>
+
+            <div class="workflow-item">
+              <div class="workflow-img-wrap workflow-img-final">
+                <img src="images/awards/20220503_234434(0071779)0_SideKick.jpeg"
+                     alt="SideKick 天の川強調 — 完成"
+                     loading="lazy">
+              </div>
+              <div class="workflow-caption step-final">
+                <span class="workflow-num">03</span>
+                天の川強調 — 完成
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
