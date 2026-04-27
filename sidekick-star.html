@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidekick Star | 星景写真向けワークフロー支援ツール</title>
+  <meta name="description" content="Sidekick Starは、星景写真の比較明合成・スカイマスク・光害補正など繰り返し発生する処理判断を自動化するPhotoshopツール。1X Award受賞写真家が自分のために開発。3ヶ月無料試用あり。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --blue1:#08111f;
+      --blue2:#182d4a;
+      --blue3:#381541;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
+        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* ── Header ── */
+    .site-header{
+      position:sticky;
+      top:0;
+      z-index:20;
+      backdrop-filter:blur(10px);
+      background:rgba(11,11,13,.72);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+
+    .header-inner{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      min-height:72px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+
+    .brand-mark{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      display:grid;
+      place-items:center;
+      color:#111;
+      font-weight:900;
+      box-shadow:var(--shadow);
+    }
+
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+
+    .brand-text small{
+      color:var(--sub);
+      font-size:12px;
+      font-weight:600;
+      letter-spacing:.08em;
+    }
+
+    .nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .nav a{
+      color:var(--sub);
+      font-size:14px;
+      font-weight:700;
+      transition:.15s;
+    }
+
+    .nav a:hover{color:var(--white)}
+    .nav a.active{color:var(--white)}
+
+    /* ── Buttons ── */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:52px;
+      padding:0 28px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:15px;
+      transition:.2s ease;
+      border:1px solid transparent;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+
+    .btn-primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#121212;
+      box-shadow:0 8px 32px rgba(255,138,0,.32);
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 40px rgba(255,138,0,.42);
+    }
+
+    .btn-secondary{
+      background:transparent;
+      border-color:rgba(255,255,255,.16);
+      color:var(--white);
+    }
+
+    .btn-secondary:hover{
+      border-color:rgba(255,255,255,.32);
+      background:rgba(255,255,255,.04);
+    }
+
+    .btn-lg{
+      min-height:60px;
+      padding:0 36px;
+      font-size:17px;
+      border-radius:16px;
+    }
+
+    /* ── Hero ── */
+    .hero{
+      padding:88px 0 64px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:40px;
+      align-items:center;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:20px;
+    }
+
+    h1{
+      margin:0 0 20px;
+      font-size:clamp(32px, 5.5vw, 60px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+
+    .lead{
+      margin:0;
+      color:var(--sub);
+      font-size:clamp(16px, 2vw, 19px);
+      max-width:680px;
+      line-height:1.8;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      margin-top:32px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .hero-note{
+      margin-top:16px;
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.9;
+    }
+
+    .price-inline{
+      color:var(--accent2);
+      font-weight:800;
+    }
+
+    .hero-card{
+      min-height:440px;
+      border-radius:28px;
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:var(--shadow);
+      background:
+        linear-gradient(180deg, rgba(7,9,23,.16), rgba(7,9,23,.74)),
+        radial-gradient(circle at 72% 20%, rgba(255,255,255,.22), transparent 10%),
+        radial-gradient(circle at 30% 12%, rgba(255,255,255,.12), transparent 7%),
+        radial-gradient(circle at 18% 34%, rgba(255,255,255,.07), transparent 5%),
+        radial-gradient(circle at 55% 55%, rgba(255,255,255,.04), transparent 8%),
+        linear-gradient(135deg, var(--blue1), var(--blue2) 55%, var(--blue3));
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 80% 15%, rgba(255,177,74,.18), transparent 12%),
+        linear-gradient(180deg, transparent 40%, rgba(0,0,0,.32));
+      pointer-events:none;
+    }
+
+    .hero-card-inner{
+      position:absolute;
+      inset:auto 0 0 0;
+      padding:32px;
+      z-index:2;
+    }
+
+    .hero-card-tag{
+      display:inline-flex;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(0,0,0,.34);
+      border:1px solid rgba(255,255,255,.14);
+      font-size:12px;
+      font-weight:800;
+      color:#fff;
+      letter-spacing:.04em;
+      margin-bottom:14px;
+    }
+
+    .hero-card h2{
+      margin:0 0 10px;
+      font-size:32px;
+      line-height:1;
+      letter-spacing:-.03em;
+    }
+
+    .hero-card p{
+      margin:0;
+      color:#d8dde8;
+      font-size:15px;
+      max-width:380px;
+    }
+
+    /* ── Award Bar ── */
+    .award-bar{
+      padding:20px 0;
+      border-top:1px solid rgba(255,255,255,.05);
+      border-bottom:1px solid rgba(255,255,255,.05);
+      margin-bottom:0;
+    }
+
+    .award-bar-inner{
+      display:flex;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .award-bar-label{
+      font-size:12px;
+      font-weight:800;
+      color:var(--sub);
+      letter-spacing:.08em;
+      white-space:nowrap;
+    }
+
+    .award-tags{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .award-tag{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      background:rgba(255,215,0,.06);
+      border:1px solid rgba(255,215,0,.18);
+      color:#f5d76e;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.02em;
+    }
+
+    /* ── Video Demo ── */
+    .video-section{
+      padding:72px 0;
+      background:
+        linear-gradient(180deg, transparent, rgba(8,17,31,.4) 30%, rgba(8,17,31,.4) 70%, transparent);
+    }
+
+    .section-label{
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      color:var(--accent2);
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    .section-title{
+      margin:0 0 12px;
+      font-size:clamp(26px, 3.5vw, 40px);
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+
+    .section-desc{
+      margin:0 0 36px;
+      color:var(--sub);
+      font-size:clamp(15px, 1.8vw, 18px);
+      max-width:680px;
+    }
+
+    .video-wrap{
+      position:relative;
+      padding-bottom:56.25%;
+      height:0;
+      overflow:hidden;
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 32px 80px rgba(0,0,0,.5);
+    }
+
+    .video-wrap iframe{
+      position:absolute;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      border:0;
+    }
+
+    .video-caption{
+      margin-top:18px;
+      color:var(--sub);
+      font-size:14px;
+      text-align:center;
+    }
+
+    .result-block{
+      margin-top:52px;
+    }
+
+    .result-label{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .result-badge{
+      display:inline-flex;
+      padding:5px 12px;
+      border-radius:999px;
+      background:rgba(255,138,0,.12);
+      border:1px solid rgba(255,138,0,.28);
+      color:var(--accent2);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.1em;
+    }
+
+    .result-caption-text{
+      font-size:15px;
+      font-weight:700;
+      color:var(--sub);
+    }
+
+    .result-img-wrap{
+      border-radius:20px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 32px 80px rgba(0,0,0,.6);
+      line-height:0;
+    }
+
+    .result-img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .result-note{
+      margin:18px 0 0;
+      text-align:center;
+      color:var(--sub);
+      font-size:14px;
+    }
+
+    /* ── Before / After ── */
+    .ba-block{
+      margin-top:52px;
+    }
+
+    .ba-label-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .ba-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .ba-item{
+      display:flex;
+      flex-direction:column;
+      gap:0;
+    }
+
+    .ba-img-wrap{
+      border-radius:16px 16px 0 0;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      border-bottom:none;
+      line-height:0;
+      box-shadow:0 20px 60px rgba(0,0,0,.5);
+    }
+
+    .ba-img-wrap img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    .ba-caption{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:0 0 16px 16px;
+      font-size:14px;
+      font-weight:700;
+      border:1px solid rgba(255,255,255,.08);
+      border-top:none;
+    }
+
+    .ba-before{
+      background:rgba(255,255,255,.03);
+      color:var(--sub);
+    }
+
+    .ba-after{
+      background:rgba(255,138,0,.06);
+      color:var(--accent2);
+      border-color:rgba(255,138,0,.14);
+    }
+
+    .ba-tag{
+      padding:3px 9px;
+      border-radius:6px;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+    }
+
+    .ba-before .ba-tag{
+      background:rgba(255,255,255,.08);
+      color:var(--sub);
+    }
+
+    .ba-after .ba-tag{
+      background:rgba(255,138,0,.18);
+      color:var(--accent2);
+    }
+
+    @media (max-width:640px){
+      .ba-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
+    /* ── Sections ── */
+    .section{
+      padding:72px 0;
+    }
+
+    .section-head{
+      margin-bottom:36px;
+    }
+
+    .section-head h2{
+      margin:0 0 12px;
+      font-size:clamp(26px, 3.5vw, 40px);
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+
+    .section-head p{
+      margin:0;
+      color:var(--sub);
+      max-width:680px;
+      font-size:clamp(15px, 1.8vw, 18px);
+    }
+
+    /* ── Cards ── */
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:20px;
+    }
+
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .card-icon{
+      font-size:28px;
+      margin-bottom:14px;
+    }
+
+    .card h3{
+      margin:0 0 10px;
+      font-size:18px;
+      line-height:1.3;
+    }
+
+    .card p{
+      margin:0;
+      color:var(--sub);
+      font-size:15px;
+      line-height:1.75;
+    }
+
+    /* ── Feature list ── */
+    .feature-list{
+      list-style:none;
+      padding:0;
+      margin:14px 0 0;
+      display:grid;
+      gap:10px;
+    }
+
+    .feature-list li{
+      position:relative;
+      padding-left:18px;
+      font-size:15px;
+      color:var(--text);
+      line-height:1.6;
+    }
+
+    .feature-list li::before{
+      content:"•";
+      position:absolute;
+      left:0;
+      color:var(--accent2);
+      font-weight:900;
+    }
+
+    /* ── Quote / Callout ── */
+    .callout{
+      margin-top:32px;
+      padding:32px;
+      border-radius:24px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.10), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.18);
+      box-shadow:var(--shadow);
+    }
+
+    .callout strong{
+      display:block;
+      font-size:clamp(18px, 2.2vw, 24px);
+      line-height:1.5;
+      margin-bottom:12px;
+    }
+
+    .callout p{
+      margin:0;
+      color:var(--sub);
+      font-size:15px;
+    }
+
+    /* ── Award Proof ── */
+    .award-section{
+      padding:72px 0;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(255,215,0,.04), transparent 60%),
+        linear-gradient(180deg, transparent, rgba(5,8,20,.3) 30%, rgba(5,8,20,.3) 70%, transparent);
+    }
+
+    .award-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:12px;
+      margin-top:32px;
+    }
+
+    .award-thumb{
+      aspect-ratio:1/1;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,215,0,.14);
+      background:var(--card);
+      position:relative;
+    }
+
+    .award-thumb img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      transition:.3s ease;
+    }
+
+    .award-thumb:hover img{
+      transform:scale(1.04);
+    }
+
+    .award-thumb-badge{
+      position:absolute;
+      bottom:8px;
+      left:8px;
+      background:rgba(0,0,0,.6);
+      border:1px solid rgba(255,215,0,.3);
+      color:#f5d76e;
+      font-size:10px;
+      font-weight:800;
+      padding:4px 8px;
+      border-radius:6px;
+      letter-spacing:.04em;
+    }
+
+    .award-placeholder{
+      aspect-ratio:1/1;
+      border-radius:14px;
+      border:1px dashed rgba(255,215,0,.2);
+      background:rgba(255,215,0,.03);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:rgba(255,215,0,.3);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .award-note{
+      margin-top:20px;
+      text-align:center;
+      font-size:14px;
+      color:var(--sub);
+    }
+
+    .award-note a{
+      color:var(--accent2);
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+
+    /* ── How it works ── */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:32px;
+      counter-reset:step;
+    }
+
+    .step{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      position:relative;
+      counter-increment:step;
+    }
+
+    .step::before{
+      content:counter(step);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#111;
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:16px;
+    }
+
+    .step h3{
+      margin:0 0 8px;
+      font-size:18px;
+    }
+
+    .step p{
+      margin:0;
+      color:var(--sub);
+      font-size:15px;
+    }
+
+    /* ── Pricing ── */
+    .pricing-section{
+      padding:72px 0 96px;
+    }
+
+    .pricing-card{
+      max-width:680px;
+      margin:0 auto;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:28px;
+      padding:44px;
+      box-shadow:var(--shadow);
+      text-align:center;
+    }
+
+    .pricing-badge{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 16px;
+      border-radius:999px;
+      background:rgba(255,138,0,.1);
+      border:1px solid rgba(255,138,0,.24);
+      color:var(--accent2);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:24px;
+    }
+
+    .pricing-trial{
+      margin-bottom:8px;
+      font-size:clamp(22px, 3vw, 32px);
+      font-weight:800;
+      line-height:1.2;
+    }
+
+    .pricing-trial-note{
+      color:var(--sub);
+      font-size:15px;
+      margin-bottom:28px;
+    }
+
+    .pricing-cta-group{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:14px;
+    }
+
+    .divider-or{
+      color:var(--sub);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .pricing-purchase{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .pricing-amount{
+      font-size:28px;
+      font-weight:800;
+      letter-spacing:-.02em;
+    }
+
+    .pricing-amount small{
+      font-size:14px;
+      font-weight:600;
+      color:var(--sub);
+      display:block;
+      margin-top:2px;
+      letter-spacing:0;
+    }
+
+    .pricing-footnote{
+      margin-top:24px;
+      padding-top:24px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.9;
+    }
+
+    /* ── Footer ── */
+    .footer{
+      padding:32px 0 60px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:var(--sub);
+      font-size:14px;
+    }
+
+    .footer-inner{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width:980px){
+      .hero-grid,
+      .grid-2,
+      .award-grid{
+        grid-template-columns:1fr;
+      }
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr 1fr;
+      }
+      .award-grid{
+        grid-template-columns:repeat(3,1fr);
+      }
+    }
+
+    @media (max-width:640px){
+      .wrap{
+        width:min(var(--max), calc(100% - 24px));
+      }
+      .nav{
+        display:none;
+      }
+      .hero{
+        padding:56px 0 40px;
+      }
+      .hero-card{
+        min-height:320px;
+      }
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr;
+      }
+      .award-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+      .btn{
+        width:100%;
+      }
+      .pricing-card{
+        padding:28px 22px;
+      }
+      .pricing-purchase{
+        flex-direction:column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>PHOTO WORKFLOW TOOLS</small>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">TOP</a>
+        <a href="sidekick.html">Sidekickとは</a>
+        <a href="sidekick-star.html" class="active">Star</a>
+        <a href="portrait.html">Portrait</a>
+        <a href="sky-effect.html">Sky Effect</a>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">
+            ⭐ 1X Award 受賞写真家が開発 &nbsp;｜&nbsp; 3ヶ月無料試用あり
+          </div>
+
+          <h1>
+            星景写真の<br>
+            繰り返し処理を、<br>
+            一気に片づける。
+          </h1>
+
+          <p class="lead">
+            比較明合成・スカイマスク・光害補正。
+            毎回同じ判断を何度もやり直している時間を、
+            Sidekick Starが肩代わりします。
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg"
+               href="https://drive.google.com/uc?export=download&id=1GVK99AV7xUHEaDhtk00qKphd6x01ZSP5">
+              ▶ 3ヶ月無料で試す
+            </a>
+            <a class="btn btn-secondary" href="#pricing">
+              購入する（¥9,800）
+            </a>
+          </div>
+
+          <div class="hero-note">
+            クレジットカード不要 &nbsp;·&nbsp; 3ヶ月間フル機能を試用可能<br>
+            <span class="price-inline">販売価格 ¥9,800（税込）</span> — 気に入ったときだけ購入
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-inner">
+            <div class="hero-card-tag">Sidekick Star — 星景向け</div>
+            <h2>星景向け</h2>
+            <p>
+              日本の光害環境と大量ファイル処理の現実から設計した、
+              実務ベースのワークフロー支援モジュール。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Award Bar -->
+    <div class="award-bar">
+      <div class="wrap award-bar-inner">
+        <span class="award-bar-label">AWARD</span>
+        <div class="award-tags">
+          <span class="award-tag">🏆 1X Award × 5作品受賞</span>
+          <span class="award-tag">🥇 Top 5 Selection 受賞</span>
+          <span class="award-tag">📸 全作品 Sidekick ワークフローで処理</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════
+         VIDEO DEMO
+    ═══════════════════════════════════════════ -->
+    <section class="video-section">
+      <div class="wrap">
+        <div class="section-label">DEMO</div>
+        <h2 class="section-title">比較明スタック合成 — 実際の動作</h2>
+        <p class="section-desc">
+          数千枚〜1万枚以上の星景フレームを比較明合成で積み上げる処理を、
+          Sidekick Star がどう扱うかを動画でご覧ください。
+        </p>
+
+        <div class="video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/TioWf1hv0PI"
+            title="Sidekick Star — 比較明スタック合成デモ"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <p class="video-caption">
+          使用素材：実際の星景撮影フレーム（比較明合成用）&ensp;／&ensp;
+          処理ソフト：Adobe Photoshop ＋ Sidekick Star
+        </p>
+
+        <!-- Before / After -->
+        <div class="ba-block">
+          <div class="ba-label-row">
+            <span class="result-badge">BEFORE / AFTER</span>
+            <span class="result-caption-text">原画 1枚 → 比較明スタック 3,800枚合成</span>
+          </div>
+
+          <div class="ba-grid">
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="images/20210919_200745_13_0.0.jpeg"
+                     alt="原画 1枚 — スタック合成前"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-before">
+                <span class="ba-tag">BEFORE</span>
+                原画 1枚
+              </div>
+            </div>
+
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="images/20210919_200736_67_0.0.jpg"
+                     alt="比較明スタック合成 3,800枚 — 完成画像"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-after">
+                <span class="ba-tag">AFTER</span>
+                3,800枚 比較明スタック合成
+              </div>
+            </div>
+          </div>
+
+          <p class="result-note">
+            この差が、Sidekick Star の処理そのものです。
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         PAIN POINTS
+    ═══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>こんな状況が続いていませんか</h2>
+          <p>
+            星景写真で本当に時間を奪われるのは、撮ることよりも
+            「その後に同じ判断を何度も繰り返す部分」だったりします。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">📁</div>
+            <h3>ファイル枚数が多すぎる</h3>
+            <p>
+              比較明合成や連続フレーム処理で撮影枚数が膨らみやすく、
+              1枚ずつ判断するだけで集中力が削られる。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔁</div>
+            <h3>毎回同じ判断が発生する</h3>
+            <p>
+              空と地上の分離、星や天の川の扱い、光害の調整——
+              似た判断を毎回ゼロからやり直している。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🌏</div>
+            <h3>日本の環境に合わない</h3>
+            <p>
+              国内の光害や空の条件は厳しく、
+              海外向けに作られたワークフローではそのまま使いにくい。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>
+            Sidekick Starは、星景の "処理" を売るのではなく、
+            星景で繰り返してきた "判断" をツールとして外に出すために作っています。
+          </strong>
+          <p>
+            ただの見た目調整ではなく、実際のワークフローを支える実務ツールとして使えます。
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         FEATURES
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sidekick Starでできること</h2>
+          <p>
+            星景ワークフローの中で繰り返し発生する処理と判断を、
+            まとめて支えます。
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>🌌 星景ワークフロー支援</h3>
+            <ul class="feature-list">
+              <li>比較明合成前後の流れを整理・自動化</li>
+              <li>空と地上の分離処理を補助</li>
+              <li>大量ファイル前提の処理負荷を軽減</li>
+              <li>星景特有の反復手順を削減</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>🎯 判断支援</h3>
+            <ul class="feature-list">
+              <li>星マスク生成の補助</li>
+              <li>スカイマスク生成の補助</li>
+              <li>光害補正・ブレンド判断の補助</li>
+              <li>RAW現像後のフロー整理</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         AWARD PROOF
+    ═══════════════════════════════════════════ -->
+    <section class="award-section">
+      <div class="wrap">
+        <div class="section-label">RESULTS</div>
+        <h2 class="section-title">受賞作品はすべてこのワークフローで処理しています</h2>
+        <p class="section-desc">
+          1X Award は世界的に権威ある写真賞のひとつ。
+          受賞した5作品はすべて、Sidekick のワークフローを通じて処理されています。
+        </p>
+
+        <div class="award-grid">
+          <div class="award-thumb">
+            <img src="images/awards/3083835.jpg" alt="1X Award 受賞作品" loading="lazy">
+            <span class="award-thumb-badge">1X AWARD</span>
+          </div>
+          <div class="award-thumb">
+            <img src="images/awards/3086530.jpg" alt="1X Award 受賞作品" loading="lazy">
+            <span class="award-thumb-badge">1X AWARD</span>
+          </div>
+          <div class="award-thumb">
+            <img src="images/awards/3095761.jpg" alt="1X Award 受賞作品" loading="lazy">
+            <span class="award-thumb-badge">1X AWARD</span>
+          </div>
+          <div class="award-thumb">
+            <img src="images/awards/3095833.jpg" alt="1X Award 受賞作品" loading="lazy">
+            <span class="award-thumb-badge">TOP 5</span>
+          </div>
+          <div class="award-thumb">
+            <img src="images/awards/3102187.jpg" alt="1X Award 受賞作品" loading="lazy">
+            <span class="award-thumb-badge">1X AWARD</span>
+          </div>
+        </div>
+
+        <p class="award-note">
+          1X は世界の写真家から投稿される作品の中から、厳正な審査で選ばれる写真賞です。&ensp;
+          <a href="https://1x.com" target="_blank" rel="noopener">1x.com で詳細を見る →</a>
+        </p>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         VALUE
+    ═══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sidekick Starが届けるもの</h2>
+          <p>
+            表面上はツールですが、実際に届けたい価値はそこではありません。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">⏱</div>
+            <h3>時間</h3>
+            <p>
+              繰り返していた星景処理の判断を減らし、
+              撮影や作品づくりに回せる時間を増やします。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📐</div>
+            <h3>一貫性</h3>
+            <p>
+              毎回ブレやすい処理判断を整え、
+              ワークフローを安定させます。
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🧠</div>
+            <h3>写真家の思考</h3>
+            <p>
+              村田一朗が星景で積み重ねてきた判断基準を、
+              使える形で届けます。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>
+            人はスクリプトを買うのではなく、
+            それによって自分が繰り返さずに済む「判断」を買っています。
+          </strong>
+          <p>Sidekick Star は、まさにそこを支えるためのモジュールです。</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         HOW TO START
+    ═══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>使い始める流れ</h2>
+          <p>
+            まずはダウンロードして、実際の星景ワークフローの中で試してください。
+            説明を読むより、動かしてみる方が早いです。
+          </p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <h3>試用版をダウンロード</h3>
+            <p>
+              3ヶ月間フル機能を無料で試せます。
+              クレジットカードの登録は不要です。
+            </p>
+          </div>
+          <div class="step">
+            <h3>実際の素材に使う</h3>
+            <p>
+              手持ちの星景フレームに使って、
+              どこが楽になるかを自分の目で確認します。
+            </p>
+          </div>
+          <div class="step">
+            <h3>必要なら購入する</h3>
+            <p>
+              時間短縮・判断の安定化を実感できたら、
+              正式購入へ。気に入らなければそれだけです。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         PRICING / CTA
+    ═══════════════════════════════════════════ -->
+    <section class="pricing-section" id="pricing">
+      <div class="wrap">
+        <div class="pricing-card">
+          <div class="pricing-badge">⭐ Sidekick Star</div>
+
+          <div class="pricing-trial">
+            まず3ヶ月、無料で試してください
+          </div>
+          <p class="pricing-trial-note">
+            クレジットカード不要 &nbsp;·&nbsp; フル機能 &nbsp;·&nbsp; 試用期間中はいつでも終了可
+          </p>
+
+          <div class="pricing-cta-group">
+            <a class="btn btn-primary btn-lg"
+               href="https://drive.google.com/uc?export=download&id=1GVK99AV7xUHEaDhtk00qKphd6x01ZSP5"
+               style="width:100%; max-width:380px;">
+              ▶ 無料試用版をダウンロード
+            </a>
+
+            <span class="divider-or">— 試用後に購入する場合 —</span>
+
+            <div class="pricing-purchase">
+              <div class="pricing-amount">
+                ¥9,800
+                <small>税込 &nbsp;·&nbsp; 買い切り</small>
+              </div>
+              <a class="btn btn-secondary"
+                 href="https://buy.stripe.com/eVqbJ3fBs3iwg459czbo400"
+                 target="_blank" rel="noopener">
+                購入する →
+              </a>
+            </div>
+          </div>
+
+          <div class="pricing-footnote">
+            決済後、ライセンスキーをメールでお送りします（通常数時間以内）<br>
+            操作方法は <a href="sidekick_manual_package/manual_star.html" style="color:var(--accent2);">マニュアル</a> をご参照ください &nbsp;·&nbsp;
+            お問い合わせ：<a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);">murata@mbg.nifty.com</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="line-height:1.9;">
+        <div>© Sidekick — 村田 一朗</div>
+        <div style="font-size:13px;">
+          お問い合わせ：<a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px; font-size:13px;">
+        <div>星景写真向けワークフロー支援ツール</div>
+        <div style="display:flex; gap:16px;">
+          <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
