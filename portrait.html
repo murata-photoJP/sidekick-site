@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidekick Portrait | 14スタイル×3段階強度でポートレートの方向性を決める</title>
+  <meta name="description" content="Sidekick Portraitは、14のスタイル×3段階の強さでポートレートの色・肌・立体感をPhotoshopレイヤーとして出力するワークフロー支援ツール。90日間無料試用あり。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --p-accent:#c47a8a;
+      --p-accent2:#e8a0b0;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(196,122,138,.12), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.03), transparent 18%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;box-shadow:var(--shadow);}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:14px;font-weight:700;}
+    .nav a:hover{color:var(--white)}
+    .nav a.active{color:var(--white)}
+
+    /* ── Buttons ── */
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:14px;font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;font-size:15px;}
+    .btn-primary{background:linear-gradient(135deg,var(--p-accent),var(--p-accent2));color:#121212;box-shadow:0 6px 28px rgba(196,122,138,.35);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(196,122,138,.45);}
+    .btn-secondary{background:transparent;border-color:rgba(255,255,255,.14);color:var(--white);}
+    .btn-secondary:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.03);}
+
+    /* ── Hero ── */
+    .hero{padding:88px 0 64px;}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;}
+
+    .eyebrow{
+      display:inline-flex;gap:10px;align-items:center;padding:8px 14px;border-radius:999px;
+      background:rgba(196,122,138,.1);border:1px solid rgba(196,122,138,.28);
+      color:var(--p-accent2);font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:18px;
+    }
+    .hero h1{margin:0 0 18px;font-size:clamp(34px,5.5vw,58px);line-height:1.08;letter-spacing:-.03em;word-break:keep-all;}
+    .hero h1 em{font-style:normal;color:var(--p-accent2);}
+    .hero-lead{margin:0;color:var(--sub);font-size:clamp(15px,1.8vw,18px);max-width:560px;line-height:1.85;}
+    .hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+    .hero-note{margin-top:16px;color:var(--sub);font-size:13px;}
+
+    .hero-ui{
+      border-radius:22px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:var(--shadow);
+      background:var(--card);
+    }
+    .hero-ui-label{
+      font-size:11px;font-weight:800;letter-spacing:.1em;
+      color:var(--sub);text-transform:uppercase;
+      padding:14px 18px 10px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hero-ui img{width:100%;display:block;}
+
+    /* ── Section base ── */
+    .section{padding:24px 0 80px;}
+    .section-head{margin-bottom:28px;}
+    .section-head h2{margin:0 0 10px;font-size:clamp(26px,3.5vw,40px);line-height:1.15;letter-spacing:-.025em;}
+    .section-head h2 em{font-style:normal;color:var(--p-accent2);}
+    .section-head p{margin:0;color:var(--sub);max-width:680px;}
+
+    /* ── Style grid ── */
+    #styles{scroll-margin-top:90px;}
+    .style-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:28px;
+    }
+    .style-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:18px 16px;
+      transition:.2s ease;
+    }
+    .style-card:hover{border-color:rgba(196,122,138,.3);transform:translateY(-2px);}
+    .style-name{font-size:15px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em;}
+    .style-desc{font-size:12px;color:var(--sub);line-height:1.65;margin:0;}
+    .style-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
+    .style-tag{
+      font-size:10px;font-weight:700;letter-spacing:.04em;
+      padding:3px 8px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      color:var(--sub);
+    }
+    .style-tag.light{background:rgba(255,220,180,.1);color:#f0c080;}
+    .style-tag.dark{background:rgba(80,100,160,.12);color:#8ab4f8;}
+    .style-tag.sat{background:rgba(180,100,120,.12);color:var(--p-accent2);}
+    .style-tag.bw{background:rgba(180,180,180,.1);color:#ccc;}
+    .style-tag.cinema{background:rgba(60,160,160,.1);color:#7de0d8;}
+    .style-tag.trend{background:rgba(200,140,200,.1);color:#d8a0d8;}
+
+    /* ── How it works ── */
+    #how{scroll-margin-top:90px;}
+    .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px;}
+    .how-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:28px;
+    }
+    .how-icon{font-size:28px;margin-bottom:14px;}
+    .how-card h3{margin:0 0 10px;font-size:19px;}
+    .how-card p{margin:0;color:var(--sub);font-size:15px;line-height:1.8;}
+    .how-card ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;}
+    .how-card ul li{color:var(--sub);font-size:14px;padding-left:16px;position:relative;}
+    .how-card ul li::before{content:"•";position:absolute;left:0;color:var(--p-accent2);font-weight:900;}
+
+    .layer-visual{
+      margin-top:20px;border-radius:14px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      padding:16px 18px;
+    }
+    .layer-visual-title{font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:12px;}
+    .layer-item{
+      display:flex;align-items:center;gap:10px;
+      padding:7px 10px;border-radius:8px;margin-bottom:5px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);
+      font-size:12px;font-weight:600;
+    }
+    .layer-item:last-child{margin-bottom:0;}
+    .layer-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+    /* ── Settings ── */
+    .settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;}
+    .setting-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:22px;
+    }
+    .setting-icon{font-size:24px;margin-bottom:12px;}
+    .setting-card h3{margin:0 0 8px;font-size:17px;}
+    .setting-card p{margin:0;color:var(--sub);font-size:14px;line-height:1.75;}
+    .strength-row{display:flex;gap:8px;margin-top:12px;}
+    .strength-pill{
+      flex:1;text-align:center;padding:7px 4px;border-radius:999px;
+      font-size:12px;font-weight:800;border:1px solid rgba(255,255,255,.1);
+      color:var(--sub);
+    }
+    .strength-pill.mid{background:rgba(196,122,138,.15);border-color:rgba(196,122,138,.3);color:var(--p-accent2);}
+
+    /* ── Steps (how to use) ── */
+    #steps{scroll-margin-top:90px;}
+    .steps-list{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+    .step-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;overflow:hidden;
+    }
+    .step-num{
+      background:rgba(196,122,138,.1);border-bottom:1px solid rgba(196,122,138,.18);
+      padding:14px 20px;font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--p-accent2);
+    }
+    .step-body{padding:22px;}
+    .step-body h3{margin:0 0 8px;font-size:17px;}
+    .step-body p{margin:0;color:var(--sub);font-size:14px;line-height:1.75;}
+    .step-img{width:100%;border-top:1px solid rgba(255,255,255,.06);}
+    .step-img img{width:100%;display:block;}
+
+    /* ── Quote ── */
+    .quote-block{
+      margin-top:28px;padding:32px;border-radius:24px;
+      background:linear-gradient(135deg,rgba(196,122,138,.1),rgba(92,52,65,.05)),var(--card);
+      border:1px solid rgba(196,122,138,.2);
+    }
+    .quote-block strong{display:block;font-size:clamp(18px,2.2vw,22px);line-height:1.5;margin-bottom:12px;}
+    .quote-block p{margin:0;color:var(--sub);font-size:15px;line-height:1.85;}
+
+    /* ── Pricing / CTA ── */
+    #pricing{scroll-margin-top:90px;}
+    .pricing-card{
+      border-radius:28px;padding:48px;
+      background:linear-gradient(135deg,rgba(196,122,138,.1),rgba(92,52,65,.05)),var(--card);
+      border:1px solid rgba(196,122,138,.22);
+      text-align:center;
+    }
+    .pricing-eyebrow{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:7px 16px;border-radius:999px;
+      background:rgba(196,122,138,.1);border:1px solid rgba(196,122,138,.25);
+      color:var(--p-accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:20px;
+    }
+    .pricing-card h2{margin:0 0 12px;font-size:clamp(26px,3.5vw,38px);line-height:1.15;}
+    .pricing-card .lead{margin:0 auto 28px;color:var(--sub);max-width:540px;font-size:16px;}
+    .pricing-price{
+      font-size:clamp(36px,5vw,52px);font-weight:900;letter-spacing:-.03em;
+      color:var(--p-accent2);margin-bottom:6px;
+    }
+    .pricing-price small{font-size:18px;font-weight:700;color:var(--sub);}
+    .pricing-note{color:var(--sub);font-size:13px;margin-bottom:28px;}
+    .pricing-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .trial-note{margin-top:16px;font-size:13px;color:var(--sub);}
+
+    /* ── Footer ── */
+    .footer{padding:32px 0 60px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    /* ── Responsive ── */
+    @media(max-width:980px){
+      .hero-grid,.how-grid,.steps-list{grid-template-columns:1fr;}
+      .style-grid{grid-template-columns:repeat(2,1fr);}
+      .settings-grid{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:640px){
+      .wrap{width:calc(100% - 24px);}
+      .nav{display:none;}
+      .hero{padding:56px 0 36px;}
+      .style-grid{grid-template-columns:repeat(2,1fr);}
+      .settings-grid{grid-template-columns:1fr;}
+      .pricing-card{padding:28px 20px;}
+      .btn{width:100%;}
+    }
+    @media(max-width:400px){
+      .style-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>PHOTO WORKFLOW TOOLS</small>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">TOP</a>
+        <a href="sidekick.html">Sidekickとは</a>
+        <a href="sidekick-star.html">Star</a>
+        <a href="portrait.html" class="active">Portrait</a>
+        <a href="sky-effect.html">Sky Effect</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ① Hero ──────────────────────────────────────── -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">🎨 Sidekick Portrait — 90日間無料試用あり</div>
+          <h1>
+            ポートレートの「方向性」を、<br>
+            <em>スタイルと強さ</em>で決める。
+          </h1>
+          <p class="hero-lead">
+            14のスタイル × 3段階の強さ。<br>
+            色・肌・立体感・ビネットをまとめて処理し、
+            Photoshopのレイヤーとして出力。
+            プリセットとは違い、<strong style="color:var(--text);">後から個別に調整できる</strong>構造で書き出します。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="mailto:murata@mbg.nifty.com?subject=Sidekick Portrait リリース案内希望">
+              📩 リリース案内を希望する
+            </a>
+            <a class="btn btn-secondary" href="#styles">スタイルを見る</a>
+          </div>
+          <div class="hero-note">現在リリース準備中 ／ 予定価格 ¥4,800（税込）／ 90日間無料試用あり</div>
+        </div>
+
+        <div>
+          <div class="hero-ui">
+            <div class="hero-ui-label">Sidekick Portrait — メインダイアログ</div>
+            <img src="sidekick_manual_package/sidekick_portrait_manual_assets/02.jpg"
+                 alt="Sidekick Portrait UIスクリーンショット — スタイル選択・強さ・PSD書き出し設定">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② スタイル一覧 ────────────────────────────── -->
+    <section class="section" id="styles">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>14のスタイル — <em>「思想」として選ぶ</em></h2>
+          <p>
+            スタイルは単なる色補正ではなく、村田一朗のポートレートワークフローから抽出した
+            「方向性の判断」です。ハイライト・シャドウ・彩度・立体感の組み合わせが、スタイルごとに設計されています。
+          </p>
+        </div>
+
+        <div class="style-grid">
+
+          <div class="style-card">
+            <div class="style-name">標準</div>
+            <p class="style-desc">シャドウを程よく締めた汎用ベース。迷ったときの出発点。</p>
+            <div class="style-tags"><span class="style-tag">スタンダード</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">ダーク</div>
+            <p class="style-desc">シャドウを強く締め、コントラストを上げた重厚感のある仕上がり。</p>
+            <div class="style-tags"><span class="style-tag dark">ダーク</span><span class="style-tag dark">ハイコントラスト</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">ダーク（冷）</div>
+            <p class="style-desc">ダークベースに冷調（ブルー寄り）の色味を加えた、クールな重厚感。</p>
+            <div class="style-tags"><span class="style-tag dark">ダーク</span><span class="style-tag dark">クール</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">清楚</div>
+            <p class="style-desc">ハイライトを持ち上げた白基調。清潔感と繊細さ重視。立体感は控えめ。</p>
+            <div class="style-tags"><span class="style-tag light">ハイキー</span><span class="style-tag light">清潔感</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">清楚ハイキー</div>
+            <p class="style-desc">清楚のさらに明るいバリエーション。白飛び寸前の透明感。</p>
+            <div class="style-tags"><span class="style-tag light">ハイキー</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">ナチュラル</div>
+            <p class="style-desc">ホワイト＋ブラックのバランス型。加工感を抑えた素直な自然仕上げ。</p>
+            <div class="style-tags"><span class="style-tag">ナチュラル</span><span class="style-tag">バランス</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">ビューティ</div>
+            <p class="style-desc">ホワイトミスト＋立体感強調。美しさと存在感を両立させた定番。</p>
+            <div class="style-tags"><span class="style-tag light">ホワイト</span><span class="style-tag">立体感</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">ビューティ_ハイキー</div>
+            <p class="style-desc">ビューティの明るいバリエーション。やわらかく輝くような印象。</p>
+            <div class="style-tags"><span class="style-tag light">ハイキー</span><span class="style-tag light">ホワイト</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">ビューティ_ローキー</div>
+            <p class="style-desc">ビューティの深みあるバリエーション。陰影で存在感を引き立てる。</p>
+            <div class="style-tags"><span class="style-tag dark">ローキー</span><span class="style-tag">立体感</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">グラビア</div>
+            <p class="style-desc">彩度高め、ホワイト＋ブラックの両方を効かせた艶やかでボリューム感のある仕上がり。</p>
+            <div class="style-tags"><span class="style-tag sat">彩度高め</span><span class="style-tag">艶やか</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">韓国ブライダル</div>
+            <p class="style-desc">明るくウォームな白基調。ウェディング・フェミニン向けの柔らかい仕上がり。</p>
+            <div class="style-tags"><span class="style-tag trend">トレンド</span><span class="style-tag light">ハイキー</span><span class="style-tag sat">彩度</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">韓国SNS</div>
+            <p class="style-desc">鮮やかで明るく、彩度を積極的に活かしたトレンド感のある仕上がり。</p>
+            <div class="style-tags"><span class="style-tag trend">トレンド</span><span class="style-tag sat">彩度高め</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">シネマティック</div>
+            <p class="style-desc">シャドウ域にティールを乗せた映画的雰囲気。スタイリッシュな印象。</p>
+            <div class="style-tags"><span class="style-tag cinema">ティール</span><span class="style-tag cinema">映画的</span></div>
+          </div>
+
+          <div class="style-card">
+            <div class="style-name">モノクロ</div>
+            <p class="style-desc">B&W変換ベース。ポートレートモノクロのスタート地点として機能。</p>
+            <div class="style-tags"><span class="style-tag bw">モノクロ</span></div>
+          </div>
+
+        </div><!-- /style-grid -->
+      </div>
+    </section>
+
+    <!-- ③ どう機能するか ────────────────────────── -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>プリセットと何が違うか</h2>
+          <p>Sidekick Portrait は、エフェクトを「貼る」のではなく、処理を「レイヤーとして積む」設計です。</p>
+        </div>
+
+        <div class="how-grid">
+          <div class="how-card">
+            <div class="how-icon">🗂</div>
+            <h3>レイヤー構造として出力</h3>
+            <p>実行するとPhotoshopのレイヤーとして処理結果が書き出されます。何をしたかが目に見え、後から個別に不透明度を変えたり、オフにしたりできます。</p>
+            <div class="layer-visual">
+              <div class="layer-visual-title">出力レイヤー構造（例）</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#c47a8a;"></div>ビネット</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#8ab4f8;"></div>立体感・Structure</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#ffb14a;"></div>ポートレート・肌処理</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#6ecf8a;"></div>ホワイトミスト</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#888;"></div>シャドウ締め</div>
+            </div>
+          </div>
+
+          <div class="how-card">
+            <div class="how-icon">⚙️</div>
+            <h3>スタイルごとに処理の組み合わせが変わる</h3>
+            <p>「ビューティ」と「清楚」では、どの処理をONにするかが違います。単にパラメーターを変えるだけでなく、<strong style="color:var(--text);">処理の構成そのものが設計されています。</strong></p>
+            <ul>
+              <li>清楚 → ホワイトON、シャドウOFF、立体感OFF</li>
+              <li>グラビア → ホワイト＋シャドウ＋彩度 全てON</li>
+              <li>シネマティック → ティールシャドウを追加</li>
+              <li>モノクロ → 彩度ゼロ変換レイヤーを追加</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="quote-block" style="margin-top:24px;">
+          <strong>
+            「プリセットは見た目を配る。Sidekick Portraitは判断を配る。」
+          </strong>
+          <p>
+            どのスタイルを選ぶかは、写真の方向性を決める判断です。
+            そのスタイルを選んだとき、何がONになり、何がOFFになるのか——
+            その設計が、Sidekick Portraitの本体です。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 設定の説明 ──────────────────────────────── -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>3つの設定で、仕上がりをコントロール</h2>
+          <p>スタイルを選んだあと、強さ・PSD書き出し・ビネットの3つを設定して実行します。</p>
+        </div>
+
+        <div class="settings-grid">
+          <div class="setting-card">
+            <div class="setting-icon">💪</div>
+            <h3>強さ（弱 / 中 / 強）</h3>
+            <p>各処理のかかり具合を3段階で調整。「中」が基準値。同じスタイルでも、強さで印象が大きく変わります。</p>
+            <div class="strength-row">
+              <div class="strength-pill">弱</div>
+              <div class="strength-pill mid">中（推奨）</div>
+              <div class="strength-pill">強</div>
+            </div>
+          </div>
+
+          <div class="setting-card">
+            <div class="setting-icon">💾</div>
+            <h3>PSD書き出し</h3>
+            <p>ONにすると、処理結果を別ファイル（PSD）として指定フォルダに保存します。元ファイルを保ちながら、仕上げ済みデータを別に管理できます。</p>
+          </div>
+
+          <div class="setting-card">
+            <div class="setting-icon">🔲</div>
+            <h3>ビネットを有効</h3>
+            <p>周辺光量を落とすビネット処理のON/OFF。スタイルによってフェザー量や描画モードが最適化されています。OFFにすれば適用しません。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑤ 使い方 3ステップ ────────────────────────── -->
+    <section class="section" id="steps">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>使い方 — 3ステップ</h2>
+          <p>Photoshopで画像を開いた状態でスクリプトを起動するだけです。</p>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-card">
+            <div class="step-num">STEP 01 — 初回起動</div>
+            <div class="step-body">
+              <h3>ライセンス確認</h3>
+              <p>初回起動時にライセンス画面が表示されます。「後で登録（試用モードで起動）」を選ぶと、90日間無料で全機能が使えます。</p>
+            </div>
+            <div class="step-img">
+              <img src="sidekick_manual_package/sidekick_portrait_manual_assets/01.jpg"
+                   alt="Sidekick Portrait 初回起動 — ライセンス確認画面">
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">STEP 02 — スタイル選択</div>
+            <div class="step-body">
+              <h3>スタイルと強さを選ぶ</h3>
+              <p>「思想」セクションでスタイルをドロップダウンから選択。強さ（弱/中/強）とビネット・PSD書き出しのオプションを設定し、「実行」を押します。</p>
+            </div>
+            <div class="step-img">
+              <img src="sidekick_manual_package/sidekick_portrait_manual_assets/02.jpg"
+                   alt="Sidekick Portrait — スタイル選択・設定画面">
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">STEP 03 — 確認・調整</div>
+            <div class="step-body">
+              <h3>レイヤーで確認・微調整</h3>
+              <p>処理結果はPhotoshopのレイヤーとして書き出されます。各レイヤーの不透明度を変えたり、オフにしたりして、自分の方向に微調整してください。</p>
+            </div>
+            <div style="padding:28px 20px;text-align:center;background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.06);">
+              <div style="font-size:13px;color:var(--sub);line-height:1.8;">
+                Photoshopレイヤーパネルに<br>
+                処理が積み上がった状態で出力されます。<br>
+                <span style="color:var(--p-accent2);font-weight:700;">後から自由に調整できます。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑥ こんな方に ────────────────────────────────── -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>こんな方に向いています</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px;">
+          <div class="how-card">
+            <div class="how-icon">📷</div>
+            <h3>毎回方向性が安定しない</h3>
+            <p style="color:var(--sub);font-size:15px;">撮影ごとに光が違い、現像のたびに「どこへ持っていくか」を最初から考え直している。</p>
+          </div>
+          <div class="how-card">
+            <div class="how-icon">🔁</div>
+            <h3>同じ処理を毎回手作業でやっている</h3>
+            <p style="color:var(--sub);font-size:15px;">肌の整理、ビネット、色の方向——繰り返しているのに毎回微妙にブレる。</p>
+          </div>
+          <div class="how-card">
+            <div class="how-icon">🎯</div>
+            <h3>方向性は決まっているが手順が崩れる</h3>
+            <p style="color:var(--sub);font-size:15px;">「ビューティ系で仕上げたい」という判断はある。でもその通りに手が動かない。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ Pricing / CTA ─────────────────────────────── -->
+    <section class="section" id="pricing">
+      <div class="wrap">
+        <div class="pricing-card">
+          <div class="pricing-eyebrow">🎨 Sidekick Portrait</div>
+          <h2>リリース準備中</h2>
+          <p class="lead">
+            現在最終調整中です。リリース時に優先してご案内します。<br>
+            ご興味のある方はメールでお知らせください。
+          </p>
+          <div class="pricing-price">
+            ¥4,800<small>（税込・予定）</small>
+          </div>
+          <div class="pricing-note">90日間無料試用あり ／ ライセンス登録後に本番利用</div>
+          <div class="pricing-actions">
+            <a class="btn btn-primary" href="mailto:murata@mbg.nifty.com?subject=Sidekick Portrait リリース案内希望">
+              📩 リリース案内を希望する
+            </a>
+            <a class="btn btn-secondary" href="sidekick-star.html">Star（星景向け）を見る</a>
+          </div>
+          <div class="trial-note">
+            Sidekick Star（星景向け）は現在3ヶ月試用あり ／
+            <a href="sidekick-star.html" style="color:var(--p-accent2);font-weight:700;">詳細はこちら</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="line-height:1.9;">
+        <div>© Sidekick — 村田 一朗</div>
+        <div style="font-size:13px;">お問い合わせ：<a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:13px;">
+        <div>ポートレート向けワークフロー支援ツール</div>
+        <div style="display:flex;gap:16px;">
+          <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
