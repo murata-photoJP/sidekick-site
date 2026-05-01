@@ -224,6 +224,90 @@
     .pricing-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
     .trial-note{margin-top:16px;font-size:13px;color:var(--sub);}
 
+    /* ── Style Gallery ── */
+    #gallery{scroll-margin-top:90px;}
+    .gallery-original-wrap{
+      display:flex;
+      gap:32px;
+      align-items:flex-start;
+      margin-bottom:40px;
+      padding:28px;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+    }
+    .gallery-original-img{
+      flex-shrink:0;
+      width:200px;
+      border-radius:14px;
+      overflow:hidden;
+      cursor:pointer;
+      border:1px solid rgba(255,255,255,.1);
+    }
+    .gallery-original-img img{width:100%;display:block;}
+    .gallery-original-info{flex:1;}
+    .gallery-original-badge{
+      display:inline-flex;padding:5px 12px;border-radius:999px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+      font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);
+      text-transform:uppercase;margin-bottom:14px;
+    }
+    .gallery-original-info h3{margin:0 0 10px;font-size:20px;letter-spacing:-.01em;}
+    .gallery-original-info p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:16px;
+    }
+    .gallery-card{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      overflow:hidden;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .gallery-card:hover{border-color:rgba(196,122,138,.35);transform:translateY(-2px);}
+    .gallery-card img{width:100%;display:block;}
+    .gallery-card-name{
+      padding:10px 14px;
+      font-size:13px;font-weight:800;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .gallery-card-hint{font-size:10px;color:var(--sub);font-weight:600;}
+    .gallery-note{
+      margin-top:20px;padding:14px 18px;border-radius:12px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+      font-size:13px;color:var(--sub);line-height:1.8;
+    }
+    .gallery-note strong{color:var(--text);}
+
+    /* ── Lightbox ── */
+    .lightbox{
+      display:none;position:fixed;inset:0;z-index:100;
+      background:rgba(0,0,0,.88);
+      align-items:center;justify-content:center;
+      padding:20px;
+    }
+    .lightbox.open{display:flex;}
+    .lightbox img{max-width:92vw;max-height:92vh;border-radius:10px;object-fit:contain;}
+    .lightbox-close{
+      position:fixed;top:20px;right:24px;
+      font-size:32px;color:#fff;cursor:pointer;
+      line-height:1;opacity:.7;
+    }
+    .lightbox-close:hover{opacity:1;}
+
+    @media(max-width:860px){
+      .gallery-original-wrap{flex-direction:column;}
+      .gallery-original-img{width:100%;max-width:280px;}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:500px){
+      .gallery-grid{grid-template-columns:1fr;}
+    }
+
     /* ── Footer ── */
     .footer{padding:32px 0 60px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
     .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
@@ -490,6 +574,118 @@
       </div>
     </section>
 
+    <!-- ④.5 スタイルギャラリー ─────────────────────── -->
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>14スタイルの実際の処理結果</h2>
+          <p>同じ1枚の写真（原画）に各スタイルを適用した結果です。<br>
+          スクリーンショット右側のパネルに見えるのが、Sidekick Portraitが生成した<strong style="color:var(--text);">Photoshopレイヤー構造</strong>です。</p>
+        </div>
+
+        <!-- 原画 -->
+        <div class="gallery-original-wrap">
+          <div class="gallery-original-img" onclick="openLightbox('images/portrait/original.png')">
+            <img src="images/portrait/original.png" alt="原画 — 処理前">
+          </div>
+          <div class="gallery-original-info">
+            <div class="gallery-original-badge">ORIGINAL</div>
+            <h3>処理前の原画</h3>
+            <p>
+              この1枚の写真に、14のスタイルをそれぞれ適用した結果が下に並んでいます。<br><br>
+              スタイルを変えるだけで、同じ写真がどこまで変わるか——
+              そして右パネルに積み上がったレイヤー構造が、
+              プリセットとの本質的な違いです。<br><br>
+              <strong style="color:var(--text);">強さは「中」で統一。</strong>
+            </p>
+          </div>
+        </div>
+
+        <!-- スタイル一覧 -->
+        <div class="gallery-grid">
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_standard.jpg')">
+            <img src="images/portrait/style_standard.jpg" alt="標準" loading="lazy">
+            <div class="gallery-card-name">標準 <span class="gallery-card-hint">クリックで拡大</span></div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_dark.jpg')">
+            <img src="images/portrait/style_dark.jpg" alt="ダーク" loading="lazy">
+            <div class="gallery-card-name">ダーク</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_dark_cool.jpg')">
+            <img src="images/portrait/style_dark_cool.jpg" alt="ダーク（冷）" loading="lazy">
+            <div class="gallery-card-name">ダーク（冷）</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_seiso.jpg')">
+            <img src="images/portrait/style_seiso.jpg" alt="清楚" loading="lazy">
+            <div class="gallery-card-name">清楚</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_seiso_highkey.jpg')">
+            <img src="images/portrait/style_seiso_highkey.jpg" alt="清楚ハイキー" loading="lazy">
+            <div class="gallery-card-name">清楚ハイキー</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_natural.jpg')">
+            <img src="images/portrait/style_natural.jpg" alt="ナチュラル" loading="lazy">
+            <div class="gallery-card-name">ナチュラル</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_beauty.jpg')">
+            <img src="images/portrait/style_beauty.jpg" alt="ビューティ" loading="lazy">
+            <div class="gallery-card-name">ビューティ</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_beauty_highkey.jpg')">
+            <img src="images/portrait/style_beauty_highkey.jpg" alt="ビューティ_ハイキー" loading="lazy">
+            <div class="gallery-card-name">ビューティ_ハイキー</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_beauty_lowkey.jpg')">
+            <img src="images/portrait/style_beauty_lowkey.jpg" alt="ビューティ_ローキー" loading="lazy">
+            <div class="gallery-card-name">ビューティ_ローキー</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_gravure.jpg')">
+            <img src="images/portrait/style_gravure.jpg" alt="グラビア" loading="lazy">
+            <div class="gallery-card-name">グラビア</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_korean_bridal.jpg')">
+            <img src="images/portrait/style_korean_bridal.jpg" alt="韓国ブライダル" loading="lazy">
+            <div class="gallery-card-name">韓国ブライダル</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_korean_sns.jpg')">
+            <img src="images/portrait/style_korean_sns.jpg" alt="韓国SNS" loading="lazy">
+            <div class="gallery-card-name">韓国SNS</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_cinematic.jpg')">
+            <img src="images/portrait/style_cinematic.jpg" alt="シネマティック" loading="lazy">
+            <div class="gallery-card-name">シネマティック</div>
+          </div>
+
+          <div class="gallery-card" onclick="openLightbox('images/portrait/style_monochrome.jpg')">
+            <img src="images/portrait/style_monochrome.jpg" alt="モノクロ" loading="lazy">
+            <div class="gallery-card-name">モノクロ</div>
+          </div>
+
+        </div><!-- /gallery-grid -->
+
+        <p class="gallery-note">
+          <strong>スクリーンショットについて：</strong>
+          右側に見えるPhotoshopのレイヤーパネルは意図的に残しています。
+          Sidekick Portraitはエフェクトを「焼き込む」のではなく、
+          <strong>調整レイヤーとして積み上げる</strong>ため、後から個別に調整・オフにできます。
+          このパネルがその証拠です。
+        </p>
+      </div>
+    </section>
+
     <!-- ⑤ 使い方 3ステップ ────────────────────────── -->
     <section class="section" id="steps">
       <div class="wrap">
@@ -597,6 +793,12 @@
 
   </main>
 
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
   <footer class="footer">
     <div class="wrap footer-inner">
       <div style="line-height:1.9;">
@@ -613,5 +815,21 @@
     </div>
   </footer>
 
+  <script>
+    function openLightbox(src) {
+      var lb = document.getElementById('lightbox');
+      var img = document.getElementById('lightbox-img');
+      img.src = src;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
 </body>
 </html>
