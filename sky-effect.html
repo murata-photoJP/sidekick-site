@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidekick Sky Effect | 空と地上をそれぞれの光で処理するPhotoshopツール</title>
+  <meta name="description" content="Sidekick Sky Effectは、RAWから空用・地上用の2つのWBで現像して合成し、夕焼け・ブルーアワー・青空のプリセットで仕上げる空表現向けPhotoshopスクリプト。30日間無料試用あり。村田一朗が開発。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --sky:#5ba4d4;
+      --sky2:#8ac8f0;
+      --sky3:#274261;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(91,164,212,.16), transparent 30%),
+        radial-gradient(circle at top left,  rgba(255,255,255,.03), transparent 18%),
+        linear-gradient(180deg, #060c14, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;box-shadow:var(--shadow);}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:14px;font-weight:700;}
+    .nav a:hover{color:var(--white)}
+    .nav a.active{color:var(--white)}
+
+    /* ── Buttons ── */
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:14px;font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;font-size:15px;}
+    .btn-primary{background:linear-gradient(135deg,var(--sky),var(--sky2));color:#0b1520;box-shadow:0 6px 28px rgba(91,164,212,.35);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(91,164,212,.5);}
+    .btn-secondary{background:transparent;border-color:rgba(255,255,255,.14);color:var(--white);}
+    .btn-secondary:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.03);}
+
+    /* ── Hero ── */
+    .hero{padding:88px 0 64px;}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;}
+
+    .eyebrow{
+      display:inline-flex;gap:10px;align-items:center;padding:8px 14px;border-radius:999px;
+      background:rgba(91,164,212,.12);border:1px solid rgba(91,164,212,.3);
+      color:var(--sky2);font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:18px;
+    }
+    .hero h1{margin:0 0 18px;font-size:clamp(34px,5.5vw,58px);line-height:1.08;letter-spacing:-.03em;word-break:keep-all;}
+    .hero h1 em{font-style:normal;color:var(--sky2);}
+    .hero-lead{margin:0;color:var(--sub);font-size:clamp(15px,1.8vw,18px);max-width:560px;line-height:1.85;}
+    .hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+    .hero-note{margin-top:16px;color:var(--sub);font-size:13px;}
+
+    .hero-img-wrap{
+      border-radius:22px;overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:var(--shadow);
+      background:var(--card);
+      position:relative;
+    }
+    .hero-img-wrap img{width:100%;display:block;}
+    .hero-img-badge{
+      position:absolute;bottom:16px;left:16px;
+      display:inline-flex;padding:7px 13px;border-radius:999px;
+      background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.14);
+      backdrop-filter:blur(8px);
+      font-size:12px;font-weight:800;color:#fff;letter-spacing:.04em;
+    }
+
+    /* ── Section base ── */
+    .section{padding:24px 0 80px;}
+    .section-head{margin-bottom:28px;}
+    .section-head h2{margin:0 0 10px;font-size:clamp(26px,3.5vw,40px);line-height:1.15;letter-spacing:-.025em;}
+    .section-head h2 em{font-style:normal;color:var(--sky2);}
+    .section-head p{margin:0;color:var(--sub);max-width:680px;}
+
+    /* ── Pain cards ── */
+    .pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px;}
+    .card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:24px;box-shadow:var(--shadow);
+    }
+    .card-icon{font-size:26px;margin-bottom:12px;}
+    .card h3{margin:0 0 10px;font-size:18px;}
+    .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.8;}
+
+    /* ── How it works ── */
+    #how{scroll-margin-top:90px;}
+    .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px;}
+    .how-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:28px;
+    }
+    .how-icon{font-size:28px;margin-bottom:14px;}
+    .how-card h3{margin:0 0 10px;font-size:20px;}
+    .how-card p{margin:0;color:var(--sub);font-size:15px;line-height:1.8;}
+    .how-card ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;}
+    .how-card ul li{color:var(--sub);font-size:14px;padding-left:16px;position:relative;}
+    .how-card ul li::before{content:"•";position:absolute;left:0;color:var(--sky2);font-weight:900;}
+
+    .layer-visual{
+      margin-top:20px;border-radius:14px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      padding:16px 18px;
+    }
+    .layer-visual-title{font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:12px;}
+    .layer-item{
+      display:flex;align-items:center;gap:10px;
+      padding:7px 10px;border-radius:8px;margin-bottom:5px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);
+      font-size:12px;font-weight:600;
+    }
+    .layer-item:last-child{margin-bottom:0;}
+    .layer-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+    .layer-note{font-size:11px;color:var(--sub);margin-left:auto;}
+
+    /* ── Preset cards ── */
+    .preset-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;}
+    .preset-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;
+      transition:.2s ease;
+    }
+    .preset-card:hover{transform:translateY(-2px);border-color:rgba(91,164,212,.3);}
+    .preset-swatch{height:6px;}
+    .preset-body{padding:20px 22px;}
+    .preset-name{font-size:17px;font-weight:800;margin:0 0 8px;}
+    .preset-desc{font-size:13px;color:var(--sub);margin:0;line-height:1.75;}
+    .preset-wbs{
+      display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;
+    }
+    .preset-wb{
+      font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--sub);
+    }
+
+    /* ── Quote ── */
+    .quote-block{
+      margin-top:28px;padding:32px;border-radius:24px;
+      background:linear-gradient(135deg,rgba(91,164,212,.1),rgba(39,66,97,.06)),var(--card);
+      border:1px solid rgba(91,164,212,.2);
+    }
+    .quote-block strong{display:block;font-size:clamp(18px,2.2vw,22px);line-height:1.5;margin-bottom:12px;}
+    .quote-block p{margin:0;color:var(--sub);font-size:15px;line-height:1.85;}
+
+    /* ── Gallery ── */
+    #gallery{scroll-margin-top:90px;}
+    .gallery-tabs{display:flex;gap:8px;margin-top:28px;margin-bottom:20px;flex-wrap:wrap;}
+    .gallery-tab{
+      padding:9px 18px;border-radius:999px;font-size:13px;font-weight:800;cursor:pointer;
+      border:1px solid rgba(255,255,255,.12);color:var(--sub);background:transparent;
+      transition:.15s;
+    }
+    .gallery-tab:hover{border-color:rgba(91,164,212,.35);color:var(--sky2);}
+    .gallery-tab.active{background:rgba(91,164,212,.15);border-color:rgba(91,164,212,.4);color:var(--sky2);}
+
+    .gallery-scene{display:none;}
+    .gallery-scene.active{display:block;}
+
+    .gallery-original-wrap{
+      display:flex;gap:32px;align-items:flex-start;margin-bottom:32px;padding:24px;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;
+    }
+    .gallery-original-img{
+      flex-shrink:0;width:220px;border-radius:14px;overflow:hidden;
+      cursor:pointer;border:1px solid rgba(255,255,255,.1);transition:.2s;
+    }
+    .gallery-original-img:hover{border-color:rgba(91,164,212,.4);transform:scale(1.01);}
+    .gallery-original-img img{width:100%;display:block;}
+    .gallery-original-info{flex:1;}
+    .gallery-original-badge{
+      display:inline-flex;padding:5px 12px;border-radius:999px;
+      background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+      font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);
+      text-transform:uppercase;margin-bottom:14px;
+    }
+    .gallery-original-info h3{margin:0 0 10px;font-size:19px;letter-spacing:-.01em;}
+    .gallery-original-info p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .gallery-card{
+      background:var(--card);border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s;
+    }
+    .gallery-card:hover{border-color:rgba(91,164,212,.35);transform:translateY(-2px);}
+    .gallery-card img{width:100%;display:block;}
+    .gallery-card-info{padding:12px 14px 14px;}
+    .gallery-card-name{font-size:13px;font-weight:800;margin:0 0 4px;display:flex;align-items:center;justify-content:space-between;}
+    .gallery-card-desc{font-size:11px;color:var(--sub);line-height:1.6;margin:0;}
+    .gallery-note{
+      margin-top:20px;padding:14px 18px;border-radius:12px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+      font-size:13px;color:var(--sub);line-height:1.8;
+    }
+    .gallery-note strong{color:var(--text);}
+
+    /* ── Lightbox ── */
+    .lightbox{
+      display:none;position:fixed;inset:0;z-index:100;
+      background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px;
+    }
+    .lightbox.open{display:flex;}
+    #lightbox-img{max-width:min(90vw,1000px);max-height:86vh;border-radius:10px;object-fit:contain;}
+    .lightbox-close{
+      position:fixed;top:20px;right:24px;font-size:32px;color:#fff;
+      cursor:pointer;line-height:1;opacity:.7;z-index:102;
+    }
+    .lightbox-close:hover{opacity:1;}
+    .lightbox-nav{
+      position:fixed;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);
+      color:#fff;font-size:48px;line-height:1;cursor:pointer;
+      width:52px;height:74px;border-radius:10px;z-index:102;
+      display:none;align-items:center;justify-content:center;transition:.15s;
+    }
+    .lightbox.open .lightbox-nav{display:flex;}
+    .lightbox-nav:hover{background:rgba(255,255,255,.22);}
+    .lightbox-prev{left:16px;}
+    .lightbox-next{right:16px;}
+    .lightbox-caption{position:fixed;bottom:20px;left:0;right:0;text-align:center;pointer-events:none;z-index:102;}
+    .lightbox-caption-name{display:block;color:#fff;font-size:15px;font-weight:800;}
+    .lightbox-caption-idx{display:block;color:rgba(255,255,255,.38);font-size:12px;margin-top:5px;}
+
+    /* ── Steps ── */
+    #steps{scroll-margin-top:90px;}
+    .steps-list{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+    .step-card{
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.08);border-radius:22px;overflow:hidden;
+    }
+    .step-num{
+      background:rgba(91,164,212,.1);border-bottom:1px solid rgba(91,164,212,.18);
+      padding:14px 20px;font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--sky2);
+    }
+    .step-body{padding:22px;}
+    .step-body h3{margin:0 0 8px;font-size:17px;}
+    .step-body p{margin:0;color:var(--sub);font-size:14px;line-height:1.75;}
+    .step-inner-box{
+      padding:20px;border-top:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.02);
+      font-size:13px;color:var(--sub);line-height:1.8;text-align:center;
+    }
+
+    /* ── Pricing ── */
+    #pricing{scroll-margin-top:90px;}
+    .pricing-card{
+      border-radius:28px;padding:48px;
+      background:linear-gradient(135deg,rgba(91,164,212,.1),rgba(39,66,97,.05)),var(--card);
+      border:1px solid rgba(91,164,212,.22);text-align:center;
+    }
+    .pricing-eyebrow{
+      display:inline-flex;gap:8px;align-items:center;padding:7px 16px;border-radius:999px;
+      background:rgba(91,164,212,.1);border:1px solid rgba(91,164,212,.25);
+      color:var(--sky2);font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:20px;
+    }
+    .pricing-card h2{margin:0 0 12px;font-size:clamp(26px,3.5vw,38px);line-height:1.15;}
+    .pricing-card .lead{margin:0 auto 28px;color:var(--sub);max-width:540px;font-size:16px;}
+    .pricing-price{font-size:clamp(36px,5vw,52px);font-weight:900;letter-spacing:-.03em;color:var(--sky2);margin-bottom:6px;}
+    .pricing-price small{font-size:18px;font-weight:700;color:var(--sub);}
+    .pricing-note{color:var(--sub);font-size:13px;margin-bottom:28px;}
+    .pricing-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .trial-note{margin-top:16px;font-size:13px;color:var(--sub);}
+
+    /* ── Footer ── */
+    .footer{padding:32px 0 60px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    /* ── Responsive ── */
+    @media(max-width:980px){
+      .hero-grid,.how-grid,.steps-list{grid-template-columns:1fr;}
+      .pain-grid,.preset-grid{grid-template-columns:1fr 1fr;}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:640px){
+      .wrap{width:calc(100% - 24px);}
+      .nav{display:none;}
+      .hero{padding:56px 0 36px;}
+      .pain-grid,.preset-grid{grid-template-columns:1fr;}
+      .gallery-original-wrap{flex-direction:column;}
+      .gallery-original-img{width:100%;}
+      .gallery-grid{grid-template-columns:1fr;}
+      .pricing-card{padding:28px 20px;}
+      .btn{width:100%;}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>PHOTO WORKFLOW TOOLS</small>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">TOP</a>
+        <a href="sidekick.html">Sidekickとは</a>
+        <a href="sidekick-star.html">Star</a>
+        <a href="portrait.html">Portrait</a>
+        <a href="sky-effect.html" class="active">Sky Effect</a>
+        <a href="gallery.html">Gallery</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ① Hero ──────────────────────────────────────── -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">☁️ Sidekick Sky Effect — 30日間無料試用あり</div>
+          <h1>
+            空と地上を、<br>
+            <em>それぞれの光</em>で処理する。
+          </h1>
+          <p class="hero-lead">
+            RAWから空用・地上用の2つのWBで現像し、<br>
+            SkyMaskで合成。夕焼け・ブルーアワー・青空の<br>
+            プリセットで仕上げるまでをワンクリックで。
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary"
+               href="https://drive.google.com/uc?export=download&id=1TbrA3FAme6rnDXUNjAKKsmPGBuFGSLKA">
+              ▶ 30日間無料で試す
+            </a>
+            <a class="btn btn-secondary" href="#gallery">作例を見る</a>
+          </div>
+          <div class="hero-note">クレジットカード不要・インストールはZIPを解凍するだけ</div>
+        </div>
+
+        <div class="hero-img-wrap">
+          <img src="images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073607_880_0.0_SkyEffect.jpg"
+               alt="Sidekick Sky Effect — ブルーアワー作例">
+          <span class="hero-img-badge">ブルーアワー プリセット適用後</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ② こんな悩み ──────────────────────────────── -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>こんな状況に向いています</h2>
+          <p>空を主役にした写真で、毎回同じ判断を繰り返していませんか。</p>
+        </div>
+
+        <div class="pain-grid">
+          <div class="card">
+            <div class="card-icon">🌅</div>
+            <h3>空と地上の色温度が合わない</h3>
+            <p>
+              夕焼けの空に合わせると地上が色かぶりし、
+              地上に合わせると空の色が死ぬ——
+              その板挟みを毎回繰り返している。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔁</div>
+            <h3>マスク作成が毎回手間</h3>
+            <p>
+              空と地上を分けてそれぞれ処理したいが、
+              SkyMask を作るところから始める手順が
+              ルーティン化できていない。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🎨</div>
+            <h3>仕上がりの方向が安定しない</h3>
+            <p>
+              夕焼け・ブルーアワーなど狙いはあるのに、
+              毎回スライダーをいじって着地点が
+              微妙にブレる。
+            </p>
+          </div>
+        </div>
+
+        <div class="quote-block">
+          <strong>
+            Sidekick Sky Effectは、空の「処理」を売るのではなく、<br>
+            空表現で積み重ねてきた「判断」をツールとして外に出したものです。
+          </strong>
+          <p>
+            RAW現像から SkyMask 生成・合成・カラーオーバーレイまで、
+            繰り返している手順をそのままスクリプト化しました。
+            プリセットではなく、実際のワークフローそのものです。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ③ どう機能するか ──────────────────────────── -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>プリセットと何が違うか</h2>
+          <p>Sidekick Sky Effect は「見た目を貼る」のではなく、RAW現像から合成・仕上げまでを一括で処理します。</p>
+        </div>
+
+        <div class="how-grid">
+          <div class="how-card">
+            <div class="how-icon">🪄</div>
+            <h3>RAW 2WB 合成の仕組み</h3>
+            <p>
+              同じRAWファイルを「空用WB」と「地上用WB」で2回開き、
+              SkyMask / GroundMask で合成します。
+              1枚現像では出せない、空と地上それぞれに最適な光を同時に実現します。
+            </p>
+            <div class="layer-visual">
+              <div class="layer-visual-title">出力レイヤー構造</div>
+              <div class="layer-item">
+                <div class="layer-dot" style="background:#8ac8f0;"></div>
+                SkyWB
+                <span class="layer-note">空用WB・GroundMask部分を削除</span>
+              </div>
+              <div class="layer-item">
+                <div class="layer-dot" style="background:#5ba4d4;opacity:.6;"></div>
+                SkyWB_blend
+                <span class="layer-note">全面・ソフトライト・任意不透明度</span>
+              </div>
+              <div class="layer-item">
+                <div class="layer-dot" style="background:#d4a45b;"></div>
+                GroundWB
+                <span class="layer-note">地上用WB・全面ベース</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="how-card">
+            <div class="how-icon">🌈</div>
+            <h3>3つのプリセット</h3>
+            <p>
+              2WB合成の後、空・地上それぞれに最適化した
+              カラーオーバーレイを適用します。
+              処理はPhotoshopのレイヤーとして残るため、
+              後から不透明度変更やオフが可能です。
+            </p>
+            <ul>
+              <li>夕焼け — 暖色×高温WBで空を焼く</li>
+              <li>ブルーアワー — 低温WBで空をクールに締める</li>
+              <li>青空 — デイライトWBに青みを強化</li>
+              <li>空と地上それぞれ独立してコントロール</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ④ 3プリセット ──────────────────────────────── -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>3つのプリセット — <em>設計と色の方向</em></h2>
+          <p>それぞれWBの温度・カラーオーバーレイ・不透明度が最適化されています。</p>
+        </div>
+
+        <div class="preset-grid">
+          <div class="preset-card">
+            <div class="preset-swatch" style="background:linear-gradient(90deg,#ff8a00,#f5c518);"></div>
+            <div class="preset-body">
+              <div class="preset-name">🌅 夕焼け</div>
+              <p class="preset-desc">
+                空を25000K超の高温WBで焼き、暖色のソフトライトを乗せて夕暮れの光を強調。
+                地上はやや暖色系で統一感を出します。
+              </p>
+              <div class="preset-wbs">
+                <span class="preset-wb">空 25000K</span>
+                <span class="preset-wb">地上 4000K</span>
+                <span class="preset-wb">SOFTLIGHT</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="preset-card">
+            <div class="preset-swatch" style="background:linear-gradient(90deg,#274261,#446f9b);"></div>
+            <div class="preset-body">
+              <div class="preset-name">🌙 ブルーアワー</div>
+              <p class="preset-desc">
+                空を2500Kの極低温WBで開き、深みのある青に仕上げます。
+                地上は5000K系でニュートラルに保ち、空との対比を際立たせます。
+              </p>
+              <div class="preset-wbs">
+                <span class="preset-wb">空 2500K</span>
+                <span class="preset-wb">地上 5000K</span>
+                <span class="preset-wb">SOFTLIGHT</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="preset-card">
+            <div class="preset-swatch" style="background:linear-gradient(90deg,#5ba4d4,#8ac8f0);"></div>
+            <div class="preset-body">
+              <div class="preset-name">☀️ 青空</div>
+              <p class="preset-desc">
+                デイライト付近（4800K）で空の青を強調し、COLORBLENDで純粋な青みを乗せます。
+                地上は陽光の温かみ系で晴天の自然な印象を出します。
+              </p>
+              <div class="preset-wbs">
+                <span class="preset-wb">空 4800K</span>
+                <span class="preset-wb">地上 5500K</span>
+                <span class="preset-wb">COLORBLEND</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑤ ギャラリー ────────────────────────────────── -->
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>作例 — <em>同じRAWに3プリセットを適用</em></h2>
+          <p>
+            同じRAWファイルにそれぞれのプリセットを適用した結果です。<br>
+            カードをクリックすると拡大表示。<strong style="color:var(--text);">← →キー または ＜ ＞ボタン</strong>で前後の作例と比較できます。
+          </p>
+        </div>
+
+        <div class="gallery-tabs">
+          <button class="gallery-tab active" onclick="switchScene(0, this)">Scene 1 — 海と雲</button>
+          <button class="gallery-tab"        onclick="switchScene(1, this)">Scene 2 — 広角の空</button>
+        </div>
+
+        <!-- Scene 0 -->
+        <div class="gallery-scene active" id="scene-0">
+          <div class="gallery-original-wrap">
+            <div class="gallery-original-img" onclick="openLightbox(0, 0)">
+              <img src="images/SkyEffects/20260510_073607_880_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 1 海と雲">
+            </div>
+            <div class="gallery-original-info">
+              <div class="gallery-original-badge">ORIGINAL</div>
+              <h3>処理前の原画（Scene 1）</h3>
+              <p>
+                海と雲のある空。RAWから空用・地上用の2つのWBで現像し、
+                SkyMaskで合成した後に各プリセットを適用しています。<br><br>
+                空と地上が独立したレイヤーになっているため、
+                <strong style="color:var(--text);">後から不透明度を変えたり、レイヤーをオフにして微調整できます。</strong>
+              </p>
+            </div>
+          </div>
+          <div class="gallery-grid" id="grid-0"></div>
+        </div>
+
+        <!-- Scene 1 -->
+        <div class="gallery-scene" id="scene-1">
+          <div class="gallery-original-wrap">
+            <div class="gallery-original-img" onclick="openLightbox(1, 0)">
+              <img src="images/SkyEffects/20260510_073816_855_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 2 広角の空">
+            </div>
+            <div class="gallery-original-info">
+              <div class="gallery-original-badge">ORIGINAL</div>
+              <h3>処理前の原画（Scene 2）</h3>
+              <p>
+                広角で捉えた海辺の空。Scene 1と同じRAW 2WBワークフローを適用しています。<br><br>
+                光の条件やシーンが変わっても、<strong style="color:var(--text);">プリセットを選ぶだけで同じワークフローが走ります。</strong>
+              </p>
+            </div>
+          </div>
+          <div class="gallery-grid" id="grid-1"></div>
+        </div>
+
+        <p class="gallery-note">
+          実行するとPhotoshopに <strong>SkyWB / SkyWB_blend / GroundWB</strong> のレイヤー構造で書き出されます。
+          プリセットのカラーオーバーレイも独立したレイヤーとして積まれるため、後から自由に調整できます。
+        </p>
+      </div>
+    </section>
+
+    <!-- ⑥ 使い方 3ステップ ────────────────────────── -->
+    <section class="section" id="steps">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>使い方 — 3ステップ</h2>
+          <p>PhotoshopでRAWフォルダを指定してスクリプトを起動するだけです。</p>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-card">
+            <div class="step-num">STEP 01 — 初回起動</div>
+            <div class="step-body">
+              <h3>ライセンス確認</h3>
+              <p>
+                初回起動時にライセンス画面が表示されます。
+                「後で登録（試用モードで起動）」を選ぶと、
+                30日間無料で全機能が使えます。
+              </p>
+            </div>
+            <div class="step-inner-box">
+              メールアドレスとレジストコードで<br>
+              <span style="color:var(--sky2);font-weight:700;">いつでも本番登録に切り替えられます</span>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">STEP 02 — プリセット選択</div>
+            <div class="step-body">
+              <h3>プリセットとオプションを選ぶ</h3>
+              <p>
+                夕焼け・ブルーアワー・青空からプリセットを選択。
+                「RAWから2つのWBで開いて合成する」をONにして
+                RAWフォルダを指定し、「実行」を押します。
+              </p>
+            </div>
+            <div class="step-inner-box">
+              SkyMask / GroundMask は<br>
+              <span style="color:var(--sky2);font-weight:700;">自動生成されます</span>
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">STEP 03 — 確認・微調整</div>
+            <div class="step-body">
+              <h3>レイヤーで確認・微調整</h3>
+              <p>
+                処理結果はPhotoshopのレイヤーとして書き出されます。
+                SkyWBの不透明度を変えたり、カラーオーバーレイをオフにしたりして
+                自分の方向に微調整してください。
+              </p>
+            </div>
+            <div class="step-inner-box">
+              PSD と JPEG を<br>
+              <span style="color:var(--sky2);font-weight:700;">自動保存します</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ⑦ Pricing / CTA ─────────────────────────────── -->
+    <section class="section" id="pricing">
+      <div class="wrap">
+        <div class="pricing-card">
+          <div class="pricing-eyebrow">☁️ Sidekick Sky Effect</div>
+          <h2>30日間、無料でお試しください。</h2>
+          <p class="lead">
+            クレジットカード不要。ZIPを解凍してPhotoshopのスクリプトメニューから起動するだけです。<br>
+            30日後は登録（有料）が必要ですが、試用中は全機能が使えます。
+          </p>
+          <div class="pricing-price">¥980<small>（税込）</small></div>
+          <div class="pricing-note">30日間無料試用 ／ ライセンス登録後に本番利用</div>
+          <div class="pricing-actions">
+            <a class="btn btn-primary"
+               href="https://drive.google.com/uc?export=download&id=1TbrA3FAme6rnDXUNjAKKsmPGBuFGSLKA"
+               style="min-width:280px;">
+              ▶ 無料試用版をダウンロード
+            </a>
+            <a class="btn btn-secondary" href="sidekick-star.html">Star（星景向け）を見る</a>
+          </div>
+          <div class="trial-note">
+            Sidekick Star（星景向け）は現在3ヶ月試用あり ／
+            <a href="sidekick-star.html" style="color:var(--sky2);font-weight:700;">詳細はこちら</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">✕</span>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&#8249;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav lightbox-next" id="lightbox-next">&#8250;</button>
+    <div class="lightbox-caption">
+      <span class="lightbox-caption-name" id="lightbox-name"></span>
+      <span class="lightbox-caption-idx"  id="lightbox-idx"></span>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="line-height:1.9;">
+        <div>© Sidekick — 村田 一朗</div>
+        <div style="font-size:13px;">お問い合わせ：<a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:13px;">
+        <div>空表現向けワークフロー支援ツール</div>
+        <div style="display:flex;gap:16px;">
+          <a href="legal.html"   style="color:var(--sub);">特定商取引法に基づく表記</a>
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── ギャラリーデータ ───────────────────────────────
+    var scenes = [
+      {
+        base: '20260510_073607_880_0.0_SkyEffect',
+        original: 'images/SkyEffects/20260510_073607_880_0.0_SkyEffect_オリジナル.jpg',
+        presets: [
+          { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_073607_880_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
+          { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073607_880_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
+          { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_073607_880_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
+        ]
+      },
+      {
+        base: '20260510_073816_855_0.0_SkyEffect',
+        original: 'images/SkyEffects/20260510_073816_855_0.0_SkyEffect_オリジナル.jpg',
+        presets: [
+          { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_073816_855_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
+          { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073816_855_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
+          { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_073816_855_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
+        ]
+      }
+    ];
+
+    var swatchColors = {
+      '夕焼け':      'linear-gradient(90deg,#ff8a00,#f5c518)',
+      'ブルーアワー': 'linear-gradient(90deg,#274261,#446f9b)',
+      '青空':        'linear-gradient(90deg,#5ba4d4,#8ac8f0)'
+    };
+
+    // ── ライトボックス状態 ────────────────────────────
+    var lbScene  = 0;
+    var lbIdx    = 0;  // 0=オリジナル, 1-3=各プリセット
+
+    function lbItems(sceneIdx) {
+      var s = scenes[sceneIdx];
+      var items = [{ name: 'オリジナル（処理前）', file: s.original }];
+      s.presets.forEach(function(p){ items.push({ name: p.name, file: p.file }); });
+      return items;
+    }
+
+    function _updateLightbox() {
+      var items = lbItems(lbScene);
+      var item  = items[lbIdx];
+      document.getElementById('lightbox-img').src = item.file;
+      document.getElementById('lightbox-name').textContent = item.name;
+      document.getElementById('lightbox-idx').textContent  =
+        'Scene ' + (lbScene + 1) + ' — ' + (lbIdx + 1) + ' / ' + items.length;
+    }
+
+    function openLightbox(sceneIdx, itemIdx) {
+      lbScene = sceneIdx;
+      lbIdx   = itemIdx;
+      _updateLightbox();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function lightboxNav(dir) {
+      var items = lbItems(lbScene);
+      lbIdx = (lbIdx + dir + items.length) % items.length;
+      _updateLightbox();
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape')      closeLightbox();
+      if (e.key === 'ArrowLeft')   lightboxNav(-1);
+      if (e.key === 'ArrowRight')  lightboxNav(1);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+      });
+      document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev').addEventListener('click', function(e) {
+        e.stopPropagation(); lightboxNav(-1);
+      });
+      document.getElementById('lightbox-next').addEventListener('click', function(e) {
+        e.stopPropagation(); lightboxNav(1);
+      });
+
+      // ── グリッド生成 ────────────────────────────────
+      scenes.forEach(function(scene, si) {
+        var grid = document.getElementById('grid-' + si);
+        scene.presets.forEach(function(preset, pi) {
+          var card = document.createElement('div');
+          card.className = 'gallery-card';
+          card.onclick = function() { openLightbox(si, pi + 1); };
+
+          var swatch = document.createElement('div');
+          swatch.style.cssText = 'height:4px;background:' + (swatchColors[preset.name] || '#555') + ';';
+
+          var img = document.createElement('img');
+          img.src = preset.file;
+          img.alt = 'Sidekick Sky Effect ' + preset.name + ' — Scene ' + (si + 1);
+          img.loading = 'lazy';
+
+          var info = document.createElement('div');
+          info.className = 'gallery-card-info';
+          info.innerHTML =
+            '<div class="gallery-card-name">' + preset.name +
+            '<span style="font-size:10px;color:var(--sub);font-weight:600;">拡大 ↗</span></div>' +
+            '<p class="gallery-card-desc">' + preset.desc + '</p>';
+
+          card.appendChild(swatch);
+          card.appendChild(img);
+          card.appendChild(info);
+          grid.appendChild(card);
+        });
+      });
+    });
+
+    // ── シーン切り替え ───────────────────────────────
+    function switchScene(idx, btn) {
+      document.querySelectorAll('.gallery-scene').forEach(function(el, i) {
+        el.classList.toggle('active', i === idx);
+      });
+      document.querySelectorAll('.gallery-tab').forEach(function(el) {
+        el.classList.remove('active');
+      });
+      btn.classList.add('active');
+    }
+  </script>
+
+</body>
+</html>
