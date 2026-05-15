@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sidekick Portrait | 14スタイル×3段階強度でポートレートの方向性を決める</title>
-  <meta name="description" content="Sidekick Portraitは、14のスタイル×3段階の強さでポートレートの色・肌・立体感をPhotoshopレイヤーとして出力するワークフロー支援ツール。90日間無料試用あり。">
+  <title>Sidekick Portrait | 15スタイル×3段階強度でポートレートの方向性を決める</title>
+  <meta name="description" content="Sidekick Portraitは、15のスタイル×3段階の強さでポートレートの色・肌・立体感をPhotoshopレイヤーとして出力するワークフロー支援ツール。90日間無料試用あり。">
   <style>
     :root{
       --bg:#0b0b0d;
@@ -286,18 +286,40 @@
     /* ── Lightbox ── */
     .lightbox{
       display:none;position:fixed;inset:0;z-index:100;
-      background:rgba(0,0,0,.88);
+      background:rgba(0,0,0,.92);
       align-items:center;justify-content:center;
       padding:20px;
     }
     .lightbox.open{display:flex;}
-    .lightbox img{max-width:92vw;max-height:92vh;border-radius:10px;object-fit:contain;}
+    #lightbox-img{max-width:min(88vw,580px);max-height:84vh;border-radius:10px;object-fit:contain;}
     .lightbox-close{
       position:fixed;top:20px;right:24px;
       font-size:32px;color:#fff;cursor:pointer;
-      line-height:1;opacity:.7;
+      line-height:1;opacity:.7;z-index:102;
     }
     .lightbox-close:hover{opacity:1;}
+    .lightbox-nav{
+      position:fixed;top:50%;transform:translateY(-50%);
+      background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);
+      color:#fff;font-size:48px;line-height:1;cursor:pointer;
+      width:52px;height:74px;border-radius:10px;z-index:102;
+      display:none;align-items:center;justify-content:center;transition:.15s;
+    }
+    .lightbox.open .lightbox-nav{display:flex;}
+    .lightbox-nav:hover{background:rgba(255,255,255,.22);}
+    .lightbox-prev{left:16px;}
+    .lightbox-next{right:16px;}
+    .lightbox-caption{
+      position:fixed;bottom:20px;left:0;right:0;
+      text-align:center;pointer-events:none;z-index:102;
+    }
+    .lightbox-caption-name{display:block;color:#fff;font-size:15px;font-weight:800;letter-spacing:-.01em;}
+    .lightbox-caption-idx{display:block;color:rgba(255,255,255,.38);font-size:12px;margin-top:5px;}
+    /* ── Gallery card (enhanced) ── */
+    .gallery-card-info{padding:10px 14px 14px;}
+    .gallery-card-name{font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:space-between;}
+    .gallery-card-desc{font-size:11px;color:var(--sub);line-height:1.6;margin:5px 0 0;}
+    .gallery-card .style-tags{margin-top:8px;}
 
     @media(max-width:860px){
       .gallery-original-wrap{flex-direction:column;}
@@ -365,18 +387,18 @@
             <em>スタイルと強さ</em>で決める。
           </h1>
           <p class="hero-lead">
-            14のスタイル × 3段階の強さ。<br>
+            15のスタイル × 3段階の強さ。<br>
             色・肌・立体感・ビネットをまとめて処理し、
             Photoshopのレイヤーとして出力。
             プリセットとは違い、<strong style="color:var(--text);">後から個別に調整できる</strong>構造で書き出します。
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:murata@mbg.nifty.com?subject=Sidekick Portrait リリース案内希望">
-              📩 リリース案内を希望する
+            <a class="btn btn-primary btn-lg" href="https://drive.google.com/uc?export=download&id=1BFlEZsRvOwbVj4su-XNuMnREAIqsy8Hz">
+              ▶ 3ヶ月無料で試す
             </a>
             <a class="btn btn-secondary" href="#styles">スタイルを見る</a>
           </div>
-          <div class="hero-note">現在リリース準備中 ／ 予定価格 ¥4,800（税込）／ 90日間無料試用あり</div>
+          <div class="hero-note">クレジットカード不要・インストールはZIPを解凍するだけ</div>
         </div>
 
         <div>
@@ -386,107 +408,6 @@
                  alt="Sidekick Portrait UIスクリーンショット — スタイル選択・強さ・PSD書き出し設定">
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- ② スタイル一覧 ────────────────────────────── -->
-    <section class="section" id="styles">
-      <div class="wrap">
-        <div class="section-head">
-          <h2>14のスタイル — <em>「思想」として選ぶ</em></h2>
-          <p>
-            スタイルは単なる色補正ではなく、村田一朗のポートレートワークフローから抽出した
-            「方向性の判断」です。ハイライト・シャドウ・彩度・立体感の組み合わせが、スタイルごとに設計されています。
-          </p>
-        </div>
-
-        <div class="style-grid">
-
-          <div class="style-card">
-            <div class="style-name">標準</div>
-            <p class="style-desc">シャドウを程よく締めた汎用ベース。迷ったときの出発点。</p>
-            <div class="style-tags"><span class="style-tag">スタンダード</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">ダーク</div>
-            <p class="style-desc">シャドウを強く締め、コントラストを上げた重厚感のある仕上がり。</p>
-            <div class="style-tags"><span class="style-tag dark">ダーク</span><span class="style-tag dark">ハイコントラスト</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">ダーク（冷）</div>
-            <p class="style-desc">ダークベースに冷調（ブルー寄り）の色味を加えた、クールな重厚感。</p>
-            <div class="style-tags"><span class="style-tag dark">ダーク</span><span class="style-tag dark">クール</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">清楚</div>
-            <p class="style-desc">ハイライトを持ち上げた白基調。清潔感と繊細さ重視。立体感は控えめ。</p>
-            <div class="style-tags"><span class="style-tag light">ハイキー</span><span class="style-tag light">清潔感</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">清楚ハイキー</div>
-            <p class="style-desc">清楚のさらに明るいバリエーション。白飛び寸前の透明感。</p>
-            <div class="style-tags"><span class="style-tag light">ハイキー</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">ナチュラル</div>
-            <p class="style-desc">ホワイト＋ブラックのバランス型。加工感を抑えた素直な自然仕上げ。</p>
-            <div class="style-tags"><span class="style-tag">ナチュラル</span><span class="style-tag">バランス</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">ビューティ</div>
-            <p class="style-desc">ホワイトミスト＋立体感強調。美しさと存在感を両立させた定番。</p>
-            <div class="style-tags"><span class="style-tag light">ホワイト</span><span class="style-tag">立体感</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">ビューティ_ハイキー</div>
-            <p class="style-desc">ビューティの明るいバリエーション。やわらかく輝くような印象。</p>
-            <div class="style-tags"><span class="style-tag light">ハイキー</span><span class="style-tag light">ホワイト</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">ビューティ_ローキー</div>
-            <p class="style-desc">ビューティの深みあるバリエーション。陰影で存在感を引き立てる。</p>
-            <div class="style-tags"><span class="style-tag dark">ローキー</span><span class="style-tag">立体感</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">グラビア</div>
-            <p class="style-desc">彩度高め、ホワイト＋ブラックの両方を効かせた艶やかでボリューム感のある仕上がり。</p>
-            <div class="style-tags"><span class="style-tag sat">彩度高め</span><span class="style-tag">艶やか</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">韓国ブライダル</div>
-            <p class="style-desc">明るくウォームな白基調。ウェディング・フェミニン向けの柔らかい仕上がり。</p>
-            <div class="style-tags"><span class="style-tag trend">トレンド</span><span class="style-tag light">ハイキー</span><span class="style-tag sat">彩度</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">韓国SNS</div>
-            <p class="style-desc">鮮やかで明るく、彩度を積極的に活かしたトレンド感のある仕上がり。</p>
-            <div class="style-tags"><span class="style-tag trend">トレンド</span><span class="style-tag sat">彩度高め</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">シネマティック</div>
-            <p class="style-desc">シャドウ域にティールを乗せた映画的雰囲気。スタイリッシュな印象。</p>
-            <div class="style-tags"><span class="style-tag cinema">ティール</span><span class="style-tag cinema">映画的</span></div>
-          </div>
-
-          <div class="style-card">
-            <div class="style-name">モノクロ</div>
-            <p class="style-desc">B&W変換ベース。ポートレートモノクロのスタート地点として機能。</p>
-            <div class="style-tags"><span class="style-tag bw">モノクロ</span></div>
-          </div>
-
-        </div><!-- /style-grid -->
       </div>
     </section>
 
@@ -518,7 +439,7 @@
             <h3>スタイルごとに処理の組み合わせが変わる</h3>
             <p>「ビューティ」と「清楚」では、どの処理をONにするかが違います。単にパラメーターを変えるだけでなく、<strong style="color:var(--text);">処理の構成そのものが設計されています。</strong></p>
             <ul>
-              <li>清楚 → ホワイトON、シャドウOFF、立体感OFF</li>
+              <li>清楚_乳白調 → ホワイトON、シャドウOFF、立体感OFF</li>
               <li>グラビア → ホワイト＋シャドウ＋彩度 全てON</li>
               <li>シネマティック → ティールシャドウを追加</li>
               <li>モノクロ → 彩度ゼロ変換レイヤーを追加</li>
@@ -578,110 +499,35 @@
     <section class="section" id="gallery">
       <div class="wrap">
         <div class="section-head">
-          <h2>14スタイルの実際の処理結果</h2>
+          <h2>15のスタイル — <em>思想と処理結果</em></h2>
           <p>同じ1枚の写真（原画）に各スタイルを適用した結果です。<br>
-          スクリーンショット右側のパネルに見えるのが、Sidekick Portraitが生成した<strong style="color:var(--text);">Photoshopレイヤー構造</strong>です。</p>
+          カードをクリックすると拡大表示。<strong style="color:var(--text);">← →キー または ＜ ＞ボタン</strong>で他のスタイルと比較できます。</p>
         </div>
 
         <!-- 原画 -->
         <div class="gallery-original-wrap">
-          <div class="gallery-original-img" onclick="openLightbox('images/portrait/original.png')">
-            <img src="images/portrait/original.png" alt="原画 — 処理前">
+          <div class="gallery-original-img">
+            <img src="images/portrait/gallery2/original_white.png" alt="原画 — 処理前">
           </div>
           <div class="gallery-original-info">
             <div class="gallery-original-badge">ORIGINAL</div>
             <h3>処理前の原画</h3>
             <p>
-              この1枚の写真に、14のスタイルをそれぞれ適用した結果が下に並んでいます。<br><br>
+              この1枚の写真に、15のスタイルをそれぞれ適用した結果が下に並んでいます。<br><br>
               スタイルを変えるだけで、同じ写真がどこまで変わるか——
-              そして右パネルに積み上がったレイヤー構造が、
-              プリセットとの本質的な違いです。<br><br>
-              <strong style="color:var(--text);">強さは「中」で統一。</strong>
+              その判断がSidekick Portraitの本体です。<br><br>
+              <strong style="color:var(--text);">強さは「中」で統一。背景色はスタイルの思想に合わせて選択。</strong>
             </p>
           </div>
         </div>
 
-        <!-- スタイル一覧 -->
-        <div class="gallery-grid">
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_standard.jpg')">
-            <img src="images/portrait/style_standard.jpg" alt="標準" loading="lazy">
-            <div class="gallery-card-name">標準 <span class="gallery-card-hint">クリックで拡大</span></div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_dark.jpg')">
-            <img src="images/portrait/style_dark.jpg" alt="ダーク" loading="lazy">
-            <div class="gallery-card-name">ダーク</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_dark_cool.jpg')">
-            <img src="images/portrait/style_dark_cool.jpg" alt="ダーク（冷）" loading="lazy">
-            <div class="gallery-card-name">ダーク（冷）</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_seiso.jpg')">
-            <img src="images/portrait/style_seiso.jpg" alt="清楚" loading="lazy">
-            <div class="gallery-card-name">清楚</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_seiso_highkey.jpg')">
-            <img src="images/portrait/style_seiso_highkey.jpg" alt="清楚ハイキー" loading="lazy">
-            <div class="gallery-card-name">清楚ハイキー</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_natural.jpg')">
-            <img src="images/portrait/style_natural.jpg" alt="ナチュラル" loading="lazy">
-            <div class="gallery-card-name">ナチュラル</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_beauty.jpg')">
-            <img src="images/portrait/style_beauty.jpg" alt="ビューティ" loading="lazy">
-            <div class="gallery-card-name">ビューティ</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_beauty_highkey.jpg')">
-            <img src="images/portrait/style_beauty_highkey.jpg" alt="ビューティ_ハイキー" loading="lazy">
-            <div class="gallery-card-name">ビューティ_ハイキー</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_beauty_lowkey.jpg')">
-            <img src="images/portrait/style_beauty_lowkey.jpg" alt="ビューティ_ローキー" loading="lazy">
-            <div class="gallery-card-name">ビューティ_ローキー</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_gravure.jpg')">
-            <img src="images/portrait/style_gravure.jpg" alt="グラビア" loading="lazy">
-            <div class="gallery-card-name">グラビア</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_korean_bridal.jpg')">
-            <img src="images/portrait/style_korean_bridal.jpg" alt="韓国ブライダル" loading="lazy">
-            <div class="gallery-card-name">韓国ブライダル</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_korean_sns.jpg')">
-            <img src="images/portrait/style_korean_sns.jpg" alt="韓国SNS" loading="lazy">
-            <div class="gallery-card-name">韓国SNS</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_cinematic.jpg')">
-            <img src="images/portrait/style_cinematic.jpg" alt="シネマティック" loading="lazy">
-            <div class="gallery-card-name">シネマティック</div>
-          </div>
-
-          <div class="gallery-card" onclick="openLightbox('images/portrait/style_monochrome.jpg')">
-            <img src="images/portrait/style_monochrome.jpg" alt="モノクロ" loading="lazy">
-            <div class="gallery-card-name">モノクロ</div>
-          </div>
-
-        </div><!-- /gallery-grid -->
+        <!-- スタイル一覧（JS生成） -->
+        <div class="gallery-grid" id="gallery-grid"></div><!-- /gallery-grid -->
 
         <p class="gallery-note">
-          <strong>スクリーンショットについて：</strong>
-          右側に見えるPhotoshopのレイヤーパネルは意図的に残しています。
-          Sidekick Portraitはエフェクトを「焼き込む」のではなく、
-          <strong>調整レイヤーとして積み上げる</strong>ため、後から個別に調整・オフにできます。
-          このパネルがその証拠です。
+          各スタイルの仕上がりはJPEGで出力しています。
+          実際にSidekick Portraitを実行すると、この仕上がりがPhotoshopの
+          <strong>調整レイヤーとして積み上がり</strong>、後から個別に不透明度変更・オフが可能です。
         </p>
       </div>
     </section>
@@ -778,8 +624,10 @@
           </div>
           <div class="pricing-note">90日間無料試用あり ／ ライセンス登録後に本番利用</div>
           <div class="pricing-actions">
-            <a class="btn btn-primary" href="mailto:murata@mbg.nifty.com?subject=Sidekick Portrait リリース案内希望">
-              📩 リリース案内を希望する
+            <a class="btn btn-primary btn-lg"
+               href="https://drive.google.com/uc?export=download&id=1BFlEZsRvOwbVj4su-XNuMnREAIqsy8Hz"
+               style="width:100%; max-width:380px;">
+              ▶ 無料試用版をダウンロード
             </a>
             <a class="btn btn-secondary" href="sidekick-star.html">Star（星景向け）を見る</a>
           </div>
@@ -794,9 +642,15 @@
   </main>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">✕</span>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&#8249;</button>
     <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav lightbox-next" id="lightbox-next">&#8250;</button>
+    <div class="lightbox-caption">
+      <span class="lightbox-caption-name" id="lightbox-name"></span>
+      <span class="lightbox-caption-idx" id="lightbox-idx"></span>
+    </div>
   </div>
 
   <footer class="footer">
@@ -816,19 +670,152 @@
   </footer>
 
   <script>
-    function openLightbox(src) {
-      var lb = document.getElementById('lightbox');
-      var img = document.getElementById('lightbox-img');
-      img.src = src;
-      lb.classList.add('open');
+    var currentIdx = 0;
+
+    var galleryStyles = [
+      { name: '標準',               file: 'standard_white.jpg',
+        desc: 'シャドウを程よく締めた汎用ベース。迷ったときの出発点。',
+        tags: [{l:'スタンダード',c:''}] },
+      { name: 'ダーク_温黒調',      file: 'dark_warm_white.jpg',
+        desc: 'シャドウを強く締め、温かみのある黒調でコントラストを上げた重厚感のある仕上がり。',
+        tags: [{l:'ダーク',c:'dark'},{l:'ウォーム',c:'dark'}] },
+      { name: 'ダーク_冷黒調',      file: 'dark_cool_white.jpg',
+        desc: 'シャドウを強く締め、冷調（ブルー寄り）の黒ベースにしたクールで鋭い重厚感。',
+        tags: [{l:'ダーク',c:'dark'},{l:'クール',c:'dark'}] },
+      { name: '清楚_乳白調',        file: 'seiso_milk_black.jpg',
+        desc: '乳白色の淡い白みを乗せた清潔感。肌がやわらかく、繊細さを前面に出す。立体感は控えめ。',
+        tags: [{l:'ハイキー',c:'light'},{l:'清潔感',c:'light'}] },
+      { name: '清楚_白霞調',        file: 'seiso_haze_black.jpg',
+        desc: '白い霞がかかったような透明感。清楚_乳白調よりさらに淡く、幻想的な仕上がり。',
+        tags: [{l:'ハイキー',c:'light'},{l:'霞調',c:'light'}] },
+      { name: 'ナチュラル',         file: 'natural_white.jpg',
+        desc: 'ホワイト＋ブラックのバランス型。加工感を抑えた素直な自然仕上げ。',
+        tags: [{l:'ナチュラル',c:''},{l:'バランス',c:''}] },
+      { name: 'ビューティ',         file: 'beauty_white.jpg',
+        desc: 'ホワイトミスト＋立体感強調。美しさと存在感を両立させた定番。',
+        tags: [{l:'ホワイト',c:'light'},{l:'立体感',c:''}] },
+      { name: 'ビューティ_ハイキー', file: 'beauty_highkey_black.jpg',
+        desc: 'ビューティの明るいバリエーション。やわらかく輝くような印象。',
+        tags: [{l:'ハイキー',c:'light'},{l:'ホワイト',c:'light'}] },
+      { name: 'ビューティ_ローキー', file: 'beauty_lowkey_white.jpg',
+        desc: 'ビューティの深みあるバリエーション。陰影で存在感を引き立てる。',
+        tags: [{l:'ローキー',c:'dark'},{l:'立体感',c:''}] },
+      { name: 'グラビア',           file: 'gravure_white.jpg',
+        desc: '彩度高め、ホワイト＋ブラックの両方を効かせた艶やかでボリューム感のある仕上がり。',
+        tags: [{l:'彩度高め',c:'sat'},{l:'艶やか',c:''}] },
+      { name: '韓国ブライダル',     file: 'korean_bridal_black.jpg',
+        desc: '明るくウォームな白基調。ウェディング・フェミニン向けの柔らかい仕上がり。',
+        tags: [{l:'トレンド',c:'trend'},{l:'ハイキー',c:'light'},{l:'彩度',c:'sat'}] },
+      { name: '韓国SNS',            file: 'korean_sns_white.jpg',
+        desc: '鮮やかで明るく、彩度を積極的に活かしたトレンド感のある仕上がり。',
+        tags: [{l:'トレンド',c:'trend'},{l:'彩度高め',c:'sat'}] },
+      { name: 'モデルSNS',          file: 'model_sns_white.jpg',
+        desc: 'モデル向けSNS投稿を意識した、透明感と鮮やかさを両立させたトレンド感のある仕上がり。',
+        tags: [{l:'トレンド',c:'trend'},{l:'透明感',c:'light'},{l:'彩度',c:'sat'}] },
+      { name: 'シネマティック',      file: 'cinematic_white.jpg',
+        desc: 'シャドウ域にティールを乗せた映画的雰囲気。スタイリッシュな印象。',
+        tags: [{l:'ティール',c:'cinema'},{l:'映画的',c:'cinema'}] },
+      { name: 'モノクロ',           file: 'monochrome_white.jpg',
+        desc: 'B&W変換ベース。ポートレートモノクロのスタート地点として機能。',
+        tags: [{l:'モノクロ',c:'bw'}] }
+    ];
+
+    var lightboxItems = [
+      { name: '原画（処理前）', file: 'original_white.png',
+        desc: 'スタイル適用前の原画。すべての処理結果はこの1枚から始まります。',
+        tags: [{l:'ORIGINAL',c:''}] }
+    ].concat(galleryStyles);
+
+    function _updateLightbox() {
+      var s = lightboxItems[currentIdx];
+      document.getElementById('lightbox-img').src = 'images/portrait/gallery2/' + s.file;
+      document.getElementById('lightbox-name').textContent = s.name;
+      document.getElementById('lightbox-idx').textContent = (currentIdx + 1) + ' / ' + lightboxItems.length;
+    }
+    function openLightbox(idx) {
+      currentIdx = idx;
+      _updateLightbox();
+      document.getElementById('lightbox').classList.add('open');
       document.body.style.overflow = 'hidden';
+    }
+    function lightboxNav(dir) {
+      currentIdx = (currentIdx + dir + lightboxItems.length) % lightboxItems.length;
+      _updateLightbox();
     }
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('open');
       document.body.style.overflow = '';
     }
+
     document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
       if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxNav(-1);
+      if (e.key === 'ArrowRight') lightboxNav(1);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+      });
+      document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev').addEventListener('click', function(e) {
+        e.stopPropagation(); lightboxNav(-1);
+      });
+      document.getElementById('lightbox-next').addEventListener('click', function(e) {
+        e.stopPropagation(); lightboxNav(1);
+      });
+
+      var origWrap = document.querySelector('.gallery-original-img');
+      if (origWrap) {
+        origWrap.style.cursor = 'pointer';
+        origWrap.addEventListener('click', function() { openLightbox(0); });
+      }
+
+      var grid = document.getElementById('gallery-grid');
+      galleryStyles.forEach(function(style, i) {
+        var card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.addEventListener('click', function() { openLightbox(i + 1); }); // +1 for original at index 0
+
+        var img = document.createElement('img');
+        img.src = 'images/portrait/gallery2/' + style.file;
+        img.alt = style.name;
+        img.loading = 'lazy';
+        card.appendChild(img);
+
+        var info = document.createElement('div');
+        info.className = 'gallery-card-info';
+
+        var nameDiv = document.createElement('div');
+        nameDiv.className = 'gallery-card-name';
+        nameDiv.textContent = style.name;
+        if (i === 0) {
+          var hint = document.createElement('span');
+          hint.className = 'gallery-card-hint';
+          hint.textContent = 'クリックで拡大';
+          nameDiv.appendChild(hint);
+        }
+        info.appendChild(nameDiv);
+
+        var desc = document.createElement('p');
+        desc.className = 'gallery-card-desc';
+        desc.textContent = style.desc;
+        info.appendChild(desc);
+
+        var tagsDiv = document.createElement('div');
+        tagsDiv.className = 'style-tags';
+        style.tags.forEach(function(t) {
+          var tag = document.createElement('span');
+          tag.className = 'style-tag' + (t.c ? ' ' + t.c : '');
+          tag.textContent = t.l;
+          tagsDiv.appendChild(tag);
+        });
+        info.appendChild(tagsDiv);
+
+        card.appendChild(info);
+        grid.appendChild(card);
+      });
     });
   </script>
 </body>
