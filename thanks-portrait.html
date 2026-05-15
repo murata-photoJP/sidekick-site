@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ご購入ありがとうございます | Sidekick Portrait</title>
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#c47a8a;
+      --accent2:#e8a0b0;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(196,122,138,.14), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:40px 20px;line-height:1.75;
+    }
+    a{color:inherit;text-decoration:none;}
+
+    .thanks-card{
+      width:100%;max-width:500px;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:28px;padding:48px 40px;
+      text-align:center;
+    }
+    .check-icon{
+      width:64px;height:64px;border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:flex;align-items:center;justify-content:center;
+      font-size:28px;margin:0 auto 24px;
+    }
+    .product-label{
+      font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--accent2);
+      text-transform:uppercase;margin-bottom:12px;
+    }
+    h1{margin:0 0 20px;font-size:clamp(22px,4vw,28px);letter-spacing:-.02em;line-height:1.2;}
+
+    .info-box{
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;padding:22px;margin:24px 0;text-align:left;
+    }
+    .info-box p{margin:0 0 10px;color:var(--sub);font-size:14px;line-height:1.8;}
+    .info-box p:last-child{margin:0;}
+    .info-box strong{color:var(--text);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:50px;padding:0 28px;border-radius:12px;
+      font-weight:800;font-size:15px;transition:.2s ease;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#1a0810;margin-top:8px;
+    }
+    .btn:hover{transform:translateY(-1px);}
+    .btn-ghost{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:44px;padding:0 20px;border-radius:10px;
+      font-weight:700;font-size:13px;color:var(--sub);
+      border:1px solid rgba(255,255,255,.1);margin-top:10px;
+      transition:.15s;
+    }
+    .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,.2);}
+
+    .actions{display:flex;flex-direction:column;align-items:center;gap:4px;margin-top:4px;}
+
+    @media(max-width:520px){
+      .thanks-card{padding:36px 24px;}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="thanks-card">
+    <div class="check-icon">✓</div>
+    <div class="product-label">🎨 Sidekick Portrait</div>
+    <h1>ご購入ありがとうございます</h1>
+
+    <div class="info-box">
+      <p>
+        <strong>ライセンスキーの送付について</strong><br>
+        ご登録のメールアドレス宛にライセンスキーをお送りします。<br>
+        通常、数時間以内にお届けします。
+      </p>
+      <p>
+        メールが届かない場合は、迷惑メールフォルダをご確認ください。<br>
+        それでも届かない場合は
+        <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);font-weight:700;">murata@mbg.nifty.com</a>
+        までご連絡ください。
+      </p>
+    </div>
+
+    <div class="info-box">
+      <p>
+        <strong>登録方法</strong><br>
+        Sidekick Portrait を起動し、ライセンス画面でメールアドレスと
+        レジストコードを入力してください。
+      </p>
+    </div>
+
+    <div class="actions">
+      <a class="btn" href="portrait.html">Sidekick Portrait のページへ戻る</a>
+      <a class="btn-ghost" href="index.html">トップページへ</a>
+    </div>
+  </div>
+
+</body>
+</html>
