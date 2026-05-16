@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://sidekick-site-tawny.vercel.app/sitemap.xml
