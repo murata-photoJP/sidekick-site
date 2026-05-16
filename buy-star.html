@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sidekick Star を購入 | ¥9,800（税込）</title>
+  <meta name="description" content="Sidekick Star の購入ページ。メールアドレスを入力して Stripe 決済へ進みます。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --shadow:0 20px 60px rgba(0,0,0,.4);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Yu Gothic UI",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.12), transparent 30%),
+        var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:40px 20px;line-height:1.7;
+    }
+    a{color:inherit;text-decoration:none;}
+
+    .back-link{
+      display:inline-flex;align-items:center;gap:6px;
+      color:var(--sub);font-size:13px;margin-bottom:32px;transition:.15s;
+    }
+    .back-link:hover{color:var(--text);}
+
+    .buy-card{
+      width:100%;max-width:480px;
+      background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);
+      border:1px solid rgba(255,255,255,.09);
+      border-radius:28px;padding:40px;box-shadow:var(--shadow);
+    }
+
+    .product-badge{
+      font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);
+      text-transform:uppercase;margin-bottom:16px;
+      padding:6px 12px;border-radius:8px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);
+      display:inline-block;
+    }
+    h1{margin:0 0 6px;font-size:28px;letter-spacing:-.02em;line-height:1.1;}
+    .price-row{
+      display:flex;align-items:baseline;gap:8px;
+      margin:18px 0 24px;padding-bottom:24px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+    }
+    .price{font-size:40px;font-weight:900;letter-spacing:-.03em;color:var(--accent2);}
+    .price-note{font-size:14px;color:var(--sub);}
+
+    .what-you-get{
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+      border-radius:14px;padding:16px 18px;margin-bottom:28px;
+    }
+    .what-you-get-title{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--sub);text-transform:uppercase;margin-bottom:12px;}
+    .what-item{
+      display:flex;align-items:center;gap:10px;
+      font-size:14px;padding:5px 0;color:var(--text);
+    }
+    .what-item::before{content:"✓";color:var(--accent2);font-weight:900;flex-shrink:0;}
+
+    label{display:block;font-size:13px;font-weight:700;color:var(--sub);margin-bottom:8px;letter-spacing:.02em;}
+    label span{color:var(--accent2);margin-left:4px;}
+    input[type="email"]{
+      width:100%;padding:14px 16px;border-radius:12px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+      color:var(--text);font-size:15px;font-family:inherit;
+      outline:none;transition:.15s;margin-bottom:8px;
+    }
+    input[type="email"]:focus{border-color:rgba(255,138,0,.5);background:rgba(255,255,255,.08);}
+    input[type="email"]::placeholder{color:rgba(255,255,255,.28);}
+    .input-note{font-size:12px;color:var(--sub);margin-bottom:24px;line-height:1.6;}
+
+    .btn-buy{
+      display:flex;align-items:center;justify-content:center;gap:10px;
+      width:100%;min-height:56px;border-radius:14px;border:none;cursor:pointer;
+      font-size:16px;font-weight:800;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#1a0800;
+      box-shadow:0 6px 28px rgba(255,138,0,.35);
+      transition:.2s ease;font-family:inherit;
+    }
+    .btn-buy:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,138,0,.5);}
+    .btn-buy:disabled{opacity:.45;cursor:not-allowed;transform:none;}
+
+    .security-note{
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      margin-top:16px;font-size:12px;color:var(--sub);
+    }
+    .error-msg{
+      display:none;color:#f28080;font-size:13px;margin-bottom:16px;
+      padding:10px 14px;border-radius:8px;
+      background:rgba(242,128,128,.08);border:1px solid rgba(242,128,128,.2);
+    }
+    .error-msg.show{display:block;}
+
+    .footer-links{margin-top:32px;display:flex;gap:20px;font-size:12px;color:var(--sub);}
+    .footer-links a:hover{color:var(--text);}
+
+    @media(max-width:520px){
+      .buy-card{padding:28px 22px;}
+      h1{font-size:24px;}
+      .price{font-size:34px;}
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back-link" href="sidekick-star.html">← Sidekick Star の詳細に戻る</a>
+
+  <div class="buy-card">
+    <div class="product-badge">⭐ Sidekick Star</div>
+    <h1>Sidekick Star を購入</h1>
+
+    <div class="price-row">
+      <span class="price">¥9,800</span>
+      <span class="price-note">税込・買い切り</span>
+    </div>
+
+    <div class="what-you-get">
+      <div class="what-you-get-title">購入内容</div>
+      <div class="what-item">Sidekick Star 本体（jsxbin）</div>
+      <div class="what-item">ライセンスキー（メールでお届け）</div>
+      <div class="what-item">3ヶ月の無料試用期間も引き続き利用可</div>
+      <div class="what-item">星景・天の川ワークフロー全機能</div>
+    </div>
+
+    <form id="buy-form">
+      <label for="email">メールアドレス <span>※必須</span></label>
+      <input type="email" id="email" name="email"
+             placeholder="your@email.com" required autocomplete="email">
+      <div class="input-note">
+        ライセンスキーをこのアドレスへお送りします。<br>
+        Stripe の決済画面でも同じアドレスが使われます。
+      </div>
+
+      <div class="error-msg" id="error-msg">メールアドレスを正しく入力してください。</div>
+
+      <button class="btn-buy" type="submit" id="btn-buy">
+        決済ページへ進む →
+      </button>
+    </form>
+
+    <div class="security-note">
+      🔒 決済は Stripe が処理します。カード情報はこのサイトに保存されません。
+    </div>
+  </div>
+
+  <div class="footer-links">
+    <a href="legal.html">特定商取引法に基づく表記</a>
+    <a href="privacy.html">プライバシーポリシー</a>
+  </div>
+
+  <script>
+    var STRIPE_URL = 'https://buy.stripe.com/eVqbJ3fBs3iwg459czbo400';
+
+    document.getElementById('buy-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value.trim();
+      var errEl = document.getElementById('error-msg');
+
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        errEl.classList.add('show');
+        return;
+      }
+      errEl.classList.remove('show');
+
+      var btn = document.getElementById('btn-buy');
+      btn.disabled = true;
+      btn.textContent = '移動中...';
+
+      var url = STRIPE_URL + '?prefilled_email=' + encodeURIComponent(email);
+      window.location.href = url;
+    });
+  </script>
+
+</body>
+</html>
