@@ -559,48 +559,131 @@
         </div>
 
         <div class="gallery-tabs">
-          <button class="gallery-tab active" onclick="switchScene(0, this)">Scene 1 — 海と雲</button>
-          <button class="gallery-tab"        onclick="switchScene(1, this)">Scene 2 — 広角の空</button>
+          <button class="gallery-tab active" onclick="switchScene(0, this)">Scene 1 — 海への小道</button>
+          <button class="gallery-tab"        onclick="switchScene(1, this)">Scene 2 — 海辺の交差点</button>
+          <button class="gallery-tab"        onclick="switchScene(2, this)">Scene 3 — 砂浜と雲</button>
+          <button class="gallery-tab"        onclick="switchScene(3, this)">Scene 4 — 砂浜と島</button>
+          <button class="gallery-tab"        onclick="switchScene(4, this)">Scene 5 — 渚・波</button>
+          <button class="gallery-tab"        onclick="switchScene(5, this)">Scene 6 — 広角の空</button>
         </div>
 
-        <!-- Scene 0 -->
+        <!-- Scene 0 — 海への小道 -->
         <div class="gallery-scene active" id="scene-0">
           <div class="gallery-original-wrap">
             <div class="gallery-original-img" onclick="openLightbox(0, 0)">
-              <img src="images/SkyEffects/20260510_073607_880_0.0_SkyEffect_オリジナル.jpg"
-                   alt="オリジナル — Scene 1 海と雲">
+              <img src="images/SkyEffects/20260510_073247_980_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 1 海への小道">
             </div>
             <div class="gallery-original-info">
               <div class="gallery-original-badge">ORIGINAL</div>
               <h3>処理前の原画（Scene 1）</h3>
               <p>
-                海と雲のある空。RAWから空用・地上用の2つのWBで現像し、
-                SkyMaskで合成した後に各プリセットを適用しています。<br><br>
-                空と地上が独立したレイヤーになっているため、
-                <strong style="color:var(--text);">後から不透明度を変えたり、レイヤーをオフにして微調整できます。</strong>
+                住宅街の細道の先に海が見える構図。SkyMaskが空と地上を正確に切り分け、
+                奥に見える空にのみプリセットを適用しています。<br><br>
+                <strong style="color:var(--text);">前景が複雑でも、SkyMaskが空領域を自動判定します。</strong>
               </p>
             </div>
           </div>
           <div class="gallery-grid" id="grid-0"></div>
         </div>
 
-        <!-- Scene 1 -->
+        <!-- Scene 1 — 海辺の交差点 -->
         <div class="gallery-scene" id="scene-1">
           <div class="gallery-original-wrap">
             <div class="gallery-original-img" onclick="openLightbox(1, 0)">
-              <img src="images/SkyEffects/20260510_073816_855_0.0_SkyEffect_オリジナル.jpg"
-                   alt="オリジナル — Scene 2 広角の空">
+              <img src="images/SkyEffects/20260510_073447_377_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 2 海辺の交差点">
             </div>
             <div class="gallery-original-info">
               <div class="gallery-original-badge">ORIGINAL</div>
               <h3>処理前の原画（Scene 2）</h3>
               <p>
-                広角で捉えた海辺の空。Scene 1と同じRAW 2WBワークフローを適用しています。<br><br>
-                光の条件やシーンが変わっても、<strong style="color:var(--text);">プリセットを選ぶだけで同じワークフローが走ります。</strong>
+                横断歩道・信号と背後の海。空の占める比率が大きく、
+                プリセットによる色の変化が際立ちます。<br><br>
+                <strong style="color:var(--text);">地上（道路・信号）の色調はほぼ保ったまま、空だけを変えられます。</strong>
               </p>
             </div>
           </div>
           <div class="gallery-grid" id="grid-1"></div>
+        </div>
+
+        <!-- Scene 2 — 砂浜と雲 -->
+        <div class="gallery-scene" id="scene-2">
+          <div class="gallery-original-wrap">
+            <div class="gallery-original-img" onclick="openLightbox(2, 0)">
+              <img src="images/SkyEffects/20260510_073607_880_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 3 砂浜と雲">
+            </div>
+            <div class="gallery-original-info">
+              <div class="gallery-original-badge">ORIGINAL</div>
+              <h3>処理前の原画（Scene 3）</h3>
+              <p>
+                砂浜から見上げた積雲のある空。雲の表情がプリセットで大きく変わるシーンです。<br><br>
+                RAWから空用・地上用の2つのWBで現像し、SkyMaskで合成した後に各プリセットを適用。
+                <strong style="color:var(--text);">後から不透明度を変えたり、レイヤーをオフにして微調整できます。</strong>
+              </p>
+            </div>
+          </div>
+          <div class="gallery-grid" id="grid-2"></div>
+        </div>
+
+        <!-- Scene 3 — 砂浜と島 -->
+        <div class="gallery-scene" id="scene-3">
+          <div class="gallery-original-wrap">
+            <div class="gallery-original-img" onclick="openLightbox(3, 0)">
+              <img src="images/SkyEffects/20260510_073703_263_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 4 砂浜と島">
+            </div>
+            <div class="gallery-original-info">
+              <div class="gallery-original-badge">ORIGINAL</div>
+              <h3>処理前の原画（Scene 4）</h3>
+              <p>
+                砂浜から島を望む構図。水平線と空の比率が大きく、
+                プリセット3種の違いが最もわかりやすいシーンのひとつです。<br><br>
+                <strong style="color:var(--text);">同じ写真でも、プリセットを変えるだけで朝・夕・夜の印象を切り替えられます。</strong>
+              </p>
+            </div>
+          </div>
+          <div class="gallery-grid" id="grid-3"></div>
+        </div>
+
+        <!-- Scene 4 — 渚・波 -->
+        <div class="gallery-scene" id="scene-4">
+          <div class="gallery-original-wrap">
+            <div class="gallery-original-img" onclick="openLightbox(4, 0)">
+              <img src="images/SkyEffects/20260510_073816_855_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 5 渚・波">
+            </div>
+            <div class="gallery-original-info">
+              <div class="gallery-original-badge">ORIGINAL</div>
+              <h3>処理前の原画（Scene 5）</h3>
+              <p>
+                渚に打ち寄せる波を近距離で捉えた構図。地上（砂浜・波）の比率が高く、
+                SkyMaskの精度が問われるシーンです。<br><br>
+                <strong style="color:var(--text);">光の条件やシーンが変わっても、プリセットを選ぶだけで同じワークフローが走ります。</strong>
+              </p>
+            </div>
+          </div>
+          <div class="gallery-grid" id="grid-4"></div>
+        </div>
+
+        <!-- Scene 5 — 広角の空 -->
+        <div class="gallery-scene" id="scene-5">
+          <div class="gallery-original-wrap">
+            <div class="gallery-original-img" onclick="openLightbox(5, 0)">
+              <img src="images/SkyEffects/20260510_074039_551_0.0_SkyEffect_オリジナル.jpg"
+                   alt="オリジナル — Scene 6 広角の空">
+            </div>
+            <div class="gallery-original-info">
+              <div class="gallery-original-badge">ORIGINAL</div>
+              <h3>処理前の原画（Scene 6）</h3>
+              <p>
+                広角で捉えた海岸の空。雲が広く広がり、空の面積が最も大きいシーンです。<br><br>
+                <strong style="color:var(--text);">夕焼け・ブルーアワー・青空、3プリセットの効果の違いが最もわかりやすい構図です。</strong>
+              </p>
+            </div>
+          </div>
+          <div class="gallery-grid" id="grid-5"></div>
         </div>
 
         <p class="gallery-note">
@@ -732,6 +815,24 @@
     // ── ギャラリーデータ ───────────────────────────────
     var scenes = [
       {
+        base: '20260510_073247_980_0.0_SkyEffect',
+        original: 'images/SkyEffects/20260510_073247_980_0.0_SkyEffect_オリジナル.jpg',
+        presets: [
+          { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_073247_980_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
+          { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073247_980_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
+          { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_073247_980_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
+        ]
+      },
+      {
+        base: '20260510_073447_377_0.0_SkyEffect',
+        original: 'images/SkyEffects/20260510_073447_377_0.0_SkyEffect_オリジナル.jpg',
+        presets: [
+          { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_073447_377_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
+          { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073447_377_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
+          { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_073447_377_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
+        ]
+      },
+      {
         base: '20260510_073607_880_0.0_SkyEffect',
         original: 'images/SkyEffects/20260510_073607_880_0.0_SkyEffect_オリジナル.jpg',
         presets: [
@@ -741,12 +842,30 @@
         ]
       },
       {
+        base: '20260510_073703_263_0.0_SkyEffect',
+        original: 'images/SkyEffects/20260510_073703_263_0.0_SkyEffect_オリジナル.jpg',
+        presets: [
+          { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_073703_263_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
+          { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073703_263_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
+          { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_073703_263_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
+        ]
+      },
+      {
         base: '20260510_073816_855_0.0_SkyEffect',
         original: 'images/SkyEffects/20260510_073816_855_0.0_SkyEffect_オリジナル.jpg',
         presets: [
           { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_073816_855_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
           { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073816_855_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
           { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_073816_855_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
+        ]
+      },
+      {
+        base: '20260510_074039_551_0.0_SkyEffect',
+        original: 'images/SkyEffects/20260510_074039_551_0.0_SkyEffect_オリジナル.jpg',
+        presets: [
+          { name: '夕焼け',      file: 'images/SkyEffects/Sidekick_SkyEffect_夕焼け/20260510_074039_551_0.0_SkyEffect.jpg',      desc: '暖色 × 高温WBで空を焼いた夕暮れの表現。' },
+          { name: 'ブルーアワー', file: 'images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_074039_551_0.0_SkyEffect.jpg', desc: '低温WBで深みのある青に仕上げたブルーアワー。' },
+          { name: '青空',        file: 'images/SkyEffects/Sidekick_SkyEffect_青空/20260510_074039_551_0.0_SkyEffect.jpg',        desc: 'デイライト系WBにCOLORBLENDで青みを強調。' }
         ]
       }
     ];
