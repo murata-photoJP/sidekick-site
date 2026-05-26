@@ -4,137 +4,130 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sidekick | 星景後処理を Photoshop で自動化するツール</title>
-  <meta name="description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。20年の星景経験から生まれた実戦ツール。3ヶ月無料で試せます。">
+  <meta name="description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。20年の星景経験から生まれた実戦ツール。3ヶ月無料。">
 
-  <!-- OGP / SNS card -->
+  <!-- OGP -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Sidekick">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:title" content="Sidekick | 星景後処理を Photoshop で自動化するツール">
-  <meta property="og:description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。20年の星景経験から生まれた実戦ツール。3ヶ月無料で試せます。">
+  <meta property="og:description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。20年の星景経験から生まれた実戦ツール。3ヶ月無料。">
   <meta property="og:url" content="https://sidekick-site-tawny.vercel.app/">
   <meta property="og:image" content="https://sidekick-site-tawny.vercel.app/images/awards/milkyway_03_after.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Sidekick | 星景後処理を Photoshop で自動化するツール">
-  <meta name="twitter:description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。20年の星景経験から生まれた実戦ツール。3ヶ月無料で試せます。">
+  <meta name="twitter:description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。20年の星景経験から生まれた実戦ツール。3ヶ月無料。">
   <meta name="twitter:image" content="https://sidekick-site-tawny.vercel.app/images/awards/milkyway_03_after.jpg">
 
   <style>
     :root{
-      --bg:#0a0a0d;
-      --bg2:#111318;
-      --card:#16181f;
-      --line:#252a36;
-      --text:#f0f3fa;
-      --sub:#9aa3b4;
-      --muted:#5e6677;
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
       --accent:#ff8a00;
       --accent2:#ffb14a;
-      --red:#ff4545;
-      --green:#3ecf82;
-      --white:#fff;
-      --max:1140px;
-      --max-wide:1320px;
-      --r:20px;
-      --r-lg:28px;
-      --shadow:0 24px 64px rgba(0,0,0,.45);
+      --red:#ff4444;
+      --green:#36d988;
+      --blue:#4e8cff;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
     }
-    *{box-sizing:border-box}
+    *{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{
-      margin:0;
       font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
         "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
-      background:var(--bg);
-      color:var(--text);
-      line-height:1.75;
+      background:var(--bg);color:var(--text);line-height:1.7;
       -webkit-font-smoothing:antialiased;
     }
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
-    p{margin:0}
 
     .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
-    .wrap-wide{width:min(var(--max-wide),calc(100% - 32px));margin:0 auto;}
+    .wrap-full{width:min(1320px,calc(100% - 32px));margin:0 auto;}
+
+    /* ── Util ── */
+    .lbl{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:10px;}
+    .h2{font-size:clamp(24px,3.4vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.1;}
+    .h2 em{font-style:normal;color:var(--accent2);}
+    .lead{color:var(--sub);font-size:clamp(14px,1.6vw,16px);line-height:1.8;}
 
     /* ── Header ── */
-    .site-header{
-      position:sticky;top:0;z-index:30;
-      backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
-      background:rgba(10,10,13,.88);
+    .hdr{
+      position:sticky;top:0;z-index:40;
+      background:rgba(9,9,12,.9);backdrop-filter:blur(16px);
       border-bottom:1px solid rgba(255,255,255,.06);
     }
-    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:68px;}
-    .brand{display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.02em;}
-    .brand-mark{
-      width:38px;height:38px;border-radius:10px;
+    .hdr-in{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;}
+    .brand-mk{
+      width:36px;height:36px;border-radius:9px;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
-      display:grid;place-items:center;color:#111;font-weight:900;font-size:15px;
+      display:grid;place-items:center;color:#111;font-weight:900;font-size:14px;flex-shrink:0;
     }
-    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
-    .brand-text small{color:var(--sub);font-size:11px;font-weight:600;letter-spacing:.08em;}
-    .nav{display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
-    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.12s;}
-    .nav a:hover,.nav a.active{color:var(--white)}
-    .nav-cta{
+    .brand-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;display:block;margin-top:1px;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover{color:#fff}
+    .nav-dl{
       display:inline-flex;align-items:center;gap:6px;
-      padding:7px 16px;border-radius:10px;
+      padding:7px 15px;border-radius:9px;
       background:linear-gradient(135deg,var(--accent),var(--accent2));
-      color:#111;font-size:13px;font-weight:800;
-      box-shadow:0 4px 16px rgba(255,138,0,.28);
-      transition:.15s ease;white-space:nowrap;
+      color:#111;font-size:13px;font-weight:800;white-space:nowrap;
+      box-shadow:0 4px 14px rgba(255,138,0,.28);transition:.15s;
     }
-    .nav-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,138,0,.38);}
+    .nav-dl:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.38);}
 
     /* ── Buttons ── */
     .btn{
-      display:inline-flex;align-items:center;justify-content:center;gap:7px;
-      min-height:50px;padding:0 26px;border-radius:13px;
-      font-weight:800;font-size:14px;transition:.18s ease;
-      border:1px solid transparent;cursor:pointer;white-space:nowrap;
+      display:inline-flex;align-items:center;justify-content:center;gap:6px;
+      min-height:48px;padding:0 24px;border-radius:12px;
+      font-weight:800;font-size:14px;transition:.16s;border:1px solid transparent;
+      cursor:pointer;white-space:nowrap;
     }
-    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;box-shadow:0 6px 24px rgba(255,138,0,.3);}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,138,0,.4);}
-    .btn-outline{background:transparent;border-color:rgba(255,255,255,.18);color:var(--white);}
-    .btn-outline:hover{border-color:rgba(255,255,255,.36);background:rgba(255,255,255,.05);}
-    .btn-ghost{background:transparent;border-color:transparent;color:var(--sub);}
-    .btn-ghost:hover{color:var(--white);}
-    .btn-lg{min-height:58px;padding:0 34px;font-size:16px;border-radius:15px;}
-    .btn-sm{min-height:40px;padding:0 16px;font-size:13px;border-radius:10px;}
+    .btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;box-shadow:0 6px 22px rgba(255,138,0,.28);}
+    .btn-p:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(255,138,0,.38);}
+    .btn-o{background:transparent;border-color:rgba(255,255,255,.18);color:#fff;}
+    .btn-o:hover{border-color:rgba(255,255,255,.34);background:rgba(255,255,255,.05);}
+    .btn-g{background:transparent;border-color:transparent;color:var(--sub);}
+    .btn-g:hover{color:#fff;}
+    .btn-lg{min-height:56px;padding:0 32px;font-size:15px;border-radius:14px;}
+    .btn-sm{min-height:38px;padding:0 14px;font-size:12px;border-radius:9px;}
 
-    /* ═══════════════════════════════════
-       HERO
-    ═══════════════════════════════════ */
+    /* ═══════════════════════════════
+       HERO — B/A が主役
+    ═══════════════════════════════ */
     .hero{
-      padding:72px 0 60px;
+      padding:56px 0 48px;
       background:
-        radial-gradient(ellipse 65% 55% at 72% 0%,rgba(255,138,0,.10),transparent),
-        radial-gradient(ellipse 45% 55% at 8% 90%,rgba(18,38,100,.20),transparent),
+        radial-gradient(ellipse 70% 50% at 50% 0%,rgba(255,138,0,.07),transparent),
         var(--bg);
       position:relative;overflow:hidden;
     }
+    /* star dots */
     .hero::before{
       content:"";position:absolute;inset:0;pointer-events:none;
       background-image:
-        radial-gradient(1px 1px at 8%  8%,rgba(255,255,255,.55),transparent),
-        radial-gradient(1px 1px at 20% 4%,rgba(255,255,255,.4),transparent),
-        radial-gradient(1.5px 1.5px at 33% 16%,rgba(255,255,255,.6),transparent),
-        radial-gradient(1px 1px at 46% 7%,rgba(255,255,255,.4),transparent),
-        radial-gradient(1px 1px at 60% 12%,rgba(255,255,255,.5),transparent),
-        radial-gradient(1.5px 1.5px at 74% 3%,rgba(255,255,255,.6),transparent),
-        radial-gradient(1px 1px at 87% 9%,rgba(255,255,255,.45),transparent),
-        radial-gradient(1px 1px at 14% 30%,rgba(255,255,255,.3),transparent),
-        radial-gradient(1px 1px at 55% 24%,rgba(255,255,255,.3),transparent),
-        radial-gradient(1px 1px at 80% 28%,rgba(255,255,255,.4),transparent);
+        radial-gradient(1px 1px at  7%  7%,rgba(255,255,255,.55),transparent),
+        radial-gradient(1px 1px at 19%  3%,rgba(255,255,255,.4),transparent),
+        radial-gradient(1.5px 1.5px at 32% 15%,rgba(255,255,255,.6),transparent),
+        radial-gradient(1px 1px at 47%  6%,rgba(255,255,255,.4),transparent),
+        radial-gradient(1px 1px at 61% 11%,rgba(255,255,255,.5),transparent),
+        radial-gradient(1.5px 1.5px at 76%  2%,rgba(255,255,255,.6),transparent),
+        radial-gradient(1px 1px at 89%  8%,rgba(255,255,255,.45),transparent),
+        radial-gradient(1px 1px at 13% 28%,rgba(255,255,255,.28),transparent),
+        radial-gradient(1px 1px at 54% 22%,rgba(255,255,255,.28),transparent);
     }
 
-    .hero-grid{
-      display:grid;grid-template-columns:1fr 1fr;
-      gap:52px;align-items:center;
-      position:relative;z-index:1;
-    }
+    .hero-head{text-align:center;margin-bottom:32px;position:relative;z-index:1;}
     .hero-kicker{
       display:inline-flex;align-items:center;gap:8px;
       padding:5px 14px;border-radius:999px;
@@ -142,309 +135,314 @@
       color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
       margin-bottom:18px;
     }
-    h1{
-      margin:0 0 18px;
-      font-size:clamp(32px,4.8vw,56px);
-      line-height:1.07;letter-spacing:-.03em;word-break:keep-all;
+    .hero h1{
+      font-size:clamp(28px,5vw,58px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.07;
+      margin-bottom:14px;word-break:keep-all;
     }
-    h1 em{
+    .hero h1 em{
       font-style:normal;
       background:linear-gradient(90deg,var(--accent),var(--accent2));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .hero-lead{
-      color:var(--sub);font-size:clamp(15px,1.75vw,17px);
-      max-width:520px;line-height:1.85;margin-bottom:24px;
+    .hero-sub{
+      color:var(--sub);font-size:clamp(15px,1.8vw,18px);
+      max-width:540px;margin:0 auto;line-height:1.75;
     }
-    .hero-badges{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:26px;}
-    .hb{
-      display:inline-flex;align-items:center;gap:5px;
-      padding:5px 12px;border-radius:999px;
-      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.11);
-      font-size:12px;font-weight:700;color:var(--text);
-    }
-    .hero-cta{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
-    .hero-note{font-size:12px;color:var(--muted);line-height:1.85;}
-    .hero-note b{color:var(--sub);}
 
-    /* Hero right — Star product preview */
-    .hero-product{
+    /* B/A PAIR — hero main visual */
+    .hero-ba{
+      position:relative;z-index:1;
       border-radius:var(--r-lg);overflow:hidden;
       border:1px solid rgba(255,255,255,.09);
-      box-shadow:var(--shadow);
+      box-shadow:var(--sh);
+      margin-bottom:16px;
+    }
+    .hero-ba-pair{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:rgba(255,255,255,.06);}
+    .hero-ba-half{position:relative;}
+    .hero-ba-half img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;}
+    .hero-ba-lbl{
+      position:absolute;top:0;left:0;right:0;
+      padding:12px 16px;
+      background:linear-gradient(rgba(0,0,0,.72),transparent);
+    }
+    .hero-ba-lbl-txt{font-size:clamp(12px,1.4vw,15px);font-weight:800;letter-spacing:.03em;}
+    .hero-ba-lbl.before .hero-ba-lbl-txt{color:rgba(255,255,255,.85);}
+    .hero-ba-lbl.after  .hero-ba-lbl-txt{color:var(--accent2);}
+    .hero-ba-lbl-sub{font-size:clamp(10px,1.1vw,12px);color:rgba(255,255,255,.5);margin-top:2px;}
+
+    /* stat bar */
+    .hero-stat{
+      display:flex;align-items:center;justify-content:center;gap:0;
       background:var(--card);
+      border-top:1px solid rgba(255,255,255,.06);
     }
-    .hero-product-img{position:relative;}
-    .hero-product-img img{width:100%;display:block;}
-    .hero-product-img-tag{
-      position:absolute;top:14px;left:14px;
-      display:inline-flex;align-items:center;gap:6px;
-      padding:5px 12px;border-radius:999px;
-      background:rgba(255,138,0,.9);color:#111;font-size:12px;font-weight:800;
+    .hs-item{flex:1;padding:13px 16px;text-align:center;}
+    .hs-item + .hs-item{border-left:1px solid rgba(255,255,255,.07);}
+    .hs-val{font-size:clamp(14px,1.8vw,20px);font-weight:800;line-height:1.2;margin-bottom:2px;}
+    .hs-val.bad{color:var(--red);}
+    .hs-val.good{color:var(--green);}
+    .hs-val.gold{color:var(--accent2);}
+    .hs-lbl{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.04em;}
+    .hs-arrow{padding:13px 8px;color:var(--accent2);font-size:18px;opacity:.8;}
+
+    /* hero CTA */
+    .hero-cta{
+      display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+      margin-bottom:12px;position:relative;z-index:1;
     }
-    .hero-product-body{padding:22px 24px;}
-    .hero-product-title{font-size:20px;font-weight:800;margin-bottom:6px;letter-spacing:-.01em;}
-    .hero-product-desc{font-size:13px;color:var(--sub);line-height:1.7;margin-bottom:16px;}
-    .hero-product-feats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
-    .hero-product-feat{
-      font-size:12px;font-weight:700;
-      padding:4px 10px;border-radius:999px;
-      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.18);
-      color:var(--accent2);
+    .hero-note{text-align:center;font-size:12px;color:var(--muted);position:relative;z-index:1;}
+    .hero-note b{color:var(--sub);}
+
+    /* feature pills */
+    .feat-pills{
+      display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
+      margin:20px 0 0;position:relative;z-index:1;
     }
-    .hero-product-actions{
-      display:flex;gap:8px;align-items:center;
-      padding-top:14px;border-top:1px solid rgba(255,255,255,.07);
+    .fp{
+      display:inline-flex;align-items:center;gap:5px;
+      padding:6px 13px;border-radius:999px;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+      font-size:13px;font-weight:700;color:var(--text);
     }
-    .hero-product-price{font-size:13px;color:var(--muted);margin-left:auto;white-space:nowrap;}
 
     /* ── Trust strip ── */
     .trust{
-      padding:13px 0;
       border-top:1px solid rgba(255,255,255,.06);
       border-bottom:1px solid rgba(255,255,255,.06);
-      background:rgba(255,255,255,.013);
+      background:rgba(255,255,255,.012);
+      padding:12px 0;
     }
-    .trust-inner{display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;}
-    .ti{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap;}
+    .trust-in{display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;}
+    .ti{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap;}
 
-    /* ═══════════════════════════════════
-       PAIN STRIP
-    ═══════════════════════════════════ */
-    .pain-strip{
-      padding:44px 0;
-      border-bottom:1px solid rgba(255,255,255,.07);
-      background:linear-gradient(180deg,var(--bg),#0d0f1a 60%,#0d0f1a);
+    /* ═══════════════════════════════
+       PAIN QUOTES
+    ═══════════════════════════════ */
+    .pain{
+      padding:56px 0;
+      background:linear-gradient(180deg,var(--bg),#0d0f1c 50%,#0d0f1c);
+      border-top:1px solid rgba(255,255,255,.07);
     }
-    .pain-strip-head{text-align:center;margin-bottom:28px;}
-    .pain-strip-head h2{
-      font-size:clamp(20px,2.8vw,30px);
-      letter-spacing:-.025em;line-height:1.2;margin:0 0 8px;
-    }
-    .pain-strip-head h2 em{font-style:normal;color:var(--accent2);}
-    .pain-strip-head p{color:var(--sub);font-size:15px;}
-    .pain-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px;}
-    .pain-card{
-      padding:20px;background:var(--card);
+    .pain-intro{text-align:center;margin-bottom:32px;}
+    .pain-intro h2{font-size:clamp(20px,2.8vw,32px);letter-spacing:-.025em;line-height:1.2;margin-bottom:6px;}
+    .pain-intro h2 em{font-style:normal;color:var(--accent2);}
+    .pain-intro p{color:var(--sub);font-size:15px;}
+
+    .pain-quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+    .pq{
+      padding:22px 22px 20px;background:var(--card);
       border:1px solid rgba(255,255,255,.07);border-radius:var(--r);
-      border-top:3px solid rgba(255,69,69,.3);
-    }
-    .pain-icon{font-size:22px;margin-bottom:10px;}
-    .pain-title{font-size:14px;font-weight:800;margin-bottom:5px;line-height:1.3;}
-    .pain-desc{font-size:13px;color:var(--sub);line-height:1.6;}
-    .pain-cta-row{
-      display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;
-    }
-    .pain-cta-label{font-size:15px;font-weight:700;color:var(--text);}
-    .pain-cta-label em{font-style:normal;color:var(--accent2);}
-
-    /* ═══════════════════════════════════
-       SIDEKICK STAR MAIN SECTION
-    ═══════════════════════════════════ */
-    .star-sec{padding:72px 0;border-top:1px solid rgba(255,255,255,.07);}
-    .star-inner{
-      display:grid;grid-template-columns:1fr 1fr;
-      gap:52px;align-items:start;
-    }
-    .sec-label{
-      font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent2);
-      text-transform:uppercase;margin-bottom:12px;
-    }
-    .sec-h2{
-      font-size:clamp(26px,3.5vw,42px);
-      letter-spacing:-.03em;line-height:1.1;margin:0 0 14px;
-    }
-    .sec-h2 em{font-style:normal;color:var(--accent2);}
-    .sec-lead{color:var(--sub);font-size:clamp(15px,1.6vw,16px);line-height:1.85;margin-bottom:24px;max-width:480px;}
-    .star-feats{display:grid;gap:10px;margin-bottom:28px;}
-    .star-feat{
-      display:flex;align-items:flex-start;gap:12px;
-      padding:14px 16px;
-      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-      border-radius:13px;
-    }
-    .star-feat.main{
-      background:rgba(255,138,0,.05);border-color:rgba(255,138,0,.2);
-    }
-    .sf-icon{font-size:18px;flex-shrink:0;margin-top:1px;}
-    .sf-title{font-size:14px;font-weight:800;margin-bottom:2px;}
-    .sf-desc{font-size:12px;color:var(--sub);line-height:1.6;}
-    .star-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:10px;}
-    .star-price{font-size:13px;color:var(--muted);}
-
-    /* B/A preview in Star section */
-    .ba-preview{border-radius:var(--r-lg);overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);}
-    .ba-preview-pair{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
-    .ba-half{position:relative;}
-    .ba-half img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover;}
-    .ba-lbl{
-      position:absolute;top:10px;left:10px;
-      padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.05em;
-    }
-    .ba-lbl.before{background:rgba(0,0,0,.75);color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.12);}
-    .ba-lbl.after{background:rgba(255,138,0,.9);color:#111;}
-    .ba-preview-stat{
-      display:flex;align-items:center;justify-content:center;gap:8px;
-      padding:12px 16px;
-      background:var(--card);font-size:13px;font-weight:700;
-    }
-    .ba-stat-bad{color:var(--red);}
-    .ba-stat-good{color:var(--green);}
-    .ba-stat-arr{color:var(--accent2);font-size:16px;}
-
-    /* ═══════════════════════════════════
-       OTHER PRODUCTS
-    ═══════════════════════════════════ */
-    .products-sec{padding:64px 0;border-top:1px solid rgba(255,255,255,.07);}
-    .products-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
-    .prod-card{
-      border-radius:var(--r);border:1px solid rgba(255,255,255,.08);overflow:hidden;
-      background:var(--card);display:flex;flex-direction:column;
-      box-shadow:0 12px 40px rgba(0,0,0,.3);
-      transition:.18s ease;
-    }
-    .prod-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.14);}
-    .prod-visual{
-      height:140px;display:flex;flex-direction:column;justify-content:flex-end;
-      padding:18px;position:relative;
-    }
-    .portrait-bg{
-      background:linear-gradient(180deg,rgba(20,11,14,.1),rgba(20,11,14,.72)),
-        radial-gradient(circle at 30% 30%,rgba(255,209,179,.28),transparent 18%),
-        linear-gradient(135deg,#38222a,#5c3441 52%,#8c5a61);
-    }
-    .sky-bg{
-      background:linear-gradient(180deg,rgba(11,19,30,.1),rgba(11,19,30,.72)),
-        radial-gradient(circle at 75% 22%,rgba(255,210,119,.40),transparent 15%),
-        linear-gradient(135deg,#274261,#446f9b 55%,#f28f45);
-    }
-    .prod-tag{
-      position:absolute;top:12px;left:12px;
-      padding:4px 10px;border-radius:999px;
-      background:rgba(0,0,0,.36);border:1px solid rgba(255,255,255,.12);
-      font-size:11px;font-weight:800;color:#fff;letter-spacing:.06em;
-    }
-    .prod-visual h3{margin:0;font-size:22px;line-height:1;letter-spacing:-.02em;}
-    .prod-body{padding:18px;flex:1;display:flex;flex-direction:column;gap:10px;}
-    .prod-body p{color:var(--sub);font-size:13px;line-height:1.65;flex:1;}
-    .prod-footer{
-      padding-top:12px;border-top:1px solid rgba(255,255,255,.07);
-      display:flex;justify-content:space-between;align-items:center;gap:8px;
-    }
-    .prod-price{font-size:12px;color:var(--accent2);font-weight:700;}
-
-    /* ═══════════════════════════════════
-       DEVELOPER
-    ═══════════════════════════════════ */
-    .dev-sec{
-      padding:64px 0;border-top:1px solid rgba(255,255,255,.07);
-      background:linear-gradient(180deg,var(--bg),#0c0e1c 45%,var(--bg));
-    }
-    .dev-grid{display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;}
-    .dev-photo{
-      border-radius:var(--r-lg);overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);
       position:relative;
     }
-    .dev-photo img{width:100%;display:block;}
-    .dev-photo-cap{
+    .pq::before{
+      content:"\201C";
+      position:absolute;top:8px;left:14px;
+      font-size:44px;line-height:1;color:rgba(255,138,0,.14);
+      font-family:Georgia,serif;font-weight:900;
+    }
+    .pq-text{
+      padding-top:18px;
+      font-size:clamp(14px,1.6vw,17px);font-style:italic;
+      color:var(--text);line-height:1.55;letter-spacing:-.01em;
+    }
+    .pq-tag{margin-top:12px;font-size:11px;color:var(--muted);font-style:normal;}
+
+    .pain-answer{
+      padding:24px 28px;
+      background:linear-gradient(135deg,rgba(255,138,0,.07),rgba(255,177,74,.03));
+      border:1px solid rgba(255,138,0,.2);border-radius:var(--r);
+      display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+    }
+    .pain-answer-text{font-size:clamp(15px,1.8vw,19px);font-weight:800;line-height:1.5;flex:1;}
+    .pain-answer-text em{font-style:normal;color:var(--accent2);}
+
+    /* ═══════════════════════════════
+       SIDEKICK STAR — main product
+    ═══════════════════════════════ */
+    .star{padding:64px 0;border-top:1px solid rgba(255,255,255,.07);}
+    .star-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+
+    /* left */
+    .star-feats{display:grid;gap:8px;margin:20px 0 24px;}
+    .sf{
+      display:flex;align-items:flex-start;gap:10px;
+      padding:13px 14px;background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.07);border-radius:12px;
+    }
+    .sf.star-item{background:rgba(255,138,0,.04);border-color:rgba(255,138,0,.18);}
+    .sf-ic{font-size:16px;flex-shrink:0;margin-top:1px;}
+    .sf-t{font-size:13px;font-weight:800;margin-bottom:2px;}
+    .sf-d{font-size:12px;color:var(--sub);line-height:1.55;}
+    .star-cta{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:8px;}
+    .star-price{font-size:12px;color:var(--muted);}
+
+    /* right — B/A milkyway */
+    .mw-ba{border-radius:var(--r-lg);overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);}
+    .mw-pair{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:rgba(255,255,255,.05);}
+    .mw-half{position:relative;}
+    .mw-half img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover;}
+    .mw-lbl{
+      position:absolute;top:8px;left:8px;
+      padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.05em;
+    }
+    .mw-lbl.b{background:rgba(0,0,0,.76);color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.12);}
+    .mw-lbl.a{background:rgba(255,138,0,.9);color:#111;}
+    .mw-cap{
+      padding:10px 14px;background:var(--card);
+      font-size:12px;color:var(--sub);line-height:1.5;
+    }
+
+    /* ═══════════════════════════════
+       DEVELOPER — short trust
+    ═══════════════════════════════ */
+    .dev{
+      padding:56px 0;border-top:1px solid rgba(255,255,255,.07);
+      background:linear-gradient(180deg,var(--bg),#0c0e1c 45%,var(--bg));
+    }
+    .dev-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .dev-img{
+      border-radius:var(--r-lg);overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);
+      position:relative;
+    }
+    .dev-img img{width:100%;display:block;}
+    .dev-img-cap{
       position:absolute;bottom:0;left:0;right:0;
-      padding:24px 20px 16px;
+      padding:22px 16px 14px;
       background:linear-gradient(transparent,rgba(0,0,0,.8));
       font-size:12px;color:rgba(255,255,255,.7);font-weight:600;
     }
-    .dev-h2{
-      font-size:clamp(22px,2.8vw,34px);
-      letter-spacing:-.025em;line-height:1.2;margin:0 0 14px;
-    }
+    .dev-h2{font-size:clamp(22px,2.8vw,34px);font-weight:800;letter-spacing:-.025em;line-height:1.2;margin:12px 0;}
     .dev-h2 em{font-style:normal;color:var(--accent2);}
-    .dev-body{color:var(--sub);font-size:15px;line-height:1.85;margin-bottom:22px;}
-    .dev-body p{margin-bottom:12px;}
-    .dev-body p:last-child{margin-bottom:0;}
-    .dev-creds{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px;}
-    .dev-cred{
-      display:flex;align-items:flex-start;gap:8px;
-      padding:11px 13px;
-      background:rgba(255,215,0,.04);border:1px solid rgba(255,215,0,.1);
-      border-radius:11px;
+    .dev-body{color:var(--sub);font-size:15px;line-height:1.8;margin-bottom:20px;}
+    .dev-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;}
+    .dev-chip{
+      display:inline-flex;align-items:center;gap:5px;
+      padding:6px 12px;border-radius:999px;
+      background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);
+      font-size:12px;font-weight:700;color:var(--sub);
     }
-    .dev-cred-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
-    .dev-cred-text{font-size:12px;color:var(--sub);line-height:1.5;}
-    .dev-cred-text b{color:var(--text);display:block;margin-bottom:1px;font-size:13px;}
+    .ai-note{
+      padding:14px 16px;
+      background:rgba(78,140,255,.04);border:1px solid rgba(78,140,255,.14);
+      border-radius:12px;font-size:13px;color:var(--sub);line-height:1.75;
+    }
+    .ai-note b{color:var(--text);}
 
-    /* ═══════════════════════════════════
-       LINKS GRID
-    ═══════════════════════════════════ */
-    .links-sec{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
-    .links-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-    .link-card{
-      padding:22px 20px;
-      background:var(--card);border:1px solid rgba(255,255,255,.07);
-      border-radius:var(--r);
-      display:flex;flex-direction:column;gap:8px;
-      transition:.15s ease;
+    /* ═══════════════════════════════
+       FAQ
+    ═══════════════════════════════ */
+    .faq{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .faq-item{
+      padding:18px 20px;background:var(--card);
+      border:1px solid rgba(255,255,255,.07);border-radius:var(--r);
     }
-    .link-card:hover{border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.04);}
-    .link-icon{font-size:22px;}
-    .link-title{font-size:15px;font-weight:800;}
-    .link-desc{font-size:12px;color:var(--sub);line-height:1.55;flex:1;}
-    .link-arrow{font-size:13px;color:var(--accent2);font-weight:700;margin-top:4px;}
+    .faq-q{font-size:14px;font-weight:800;margin-bottom:7px;color:var(--text);}
+    .faq-a{font-size:13px;color:var(--sub);line-height:1.65;}
+    .faq-a b{color:var(--text);}
+
+    /* ═══════════════════════════════
+       OTHER PRODUCTS
+    ═══════════════════════════════ */
+    .others{padding:48px 0;border-top:1px solid rgba(255,255,255,.07);}
+    .others-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .prod{
+      display:flex;align-items:center;gap:16px;
+      padding:18px 20px;background:var(--card);
+      border:1px solid rgba(255,255,255,.07);border-radius:var(--r);
+      transition:.15s;
+    }
+    .prod:hover{border-color:rgba(255,255,255,.14);transform:translateY(-1px);}
+    .prod-visual{
+      width:52px;height:52px;border-radius:12px;flex-shrink:0;
+    }
+    .portrait-bg{background:linear-gradient(135deg,#38222a,#8c5a61);}
+    .sky-bg{background:linear-gradient(135deg,#274261,#f28f45);}
+    .prod-name{font-size:15px;font-weight:800;margin-bottom:3px;}
+    .prod-desc{font-size:12px;color:var(--sub);line-height:1.5;}
+    .prod-meta{font-size:11px;color:var(--accent2);font-weight:700;margin-top:4px;}
+    .prod-arr{margin-left:auto;font-size:16px;color:var(--muted);}
+
+    /* ═══════════════════════════════
+       CTA FINAL
+    ═══════════════════════════════ */
+    .cta-sec{
+      padding:72px 0 88px;border-top:1px solid rgba(255,255,255,.07);
+      background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(255,138,0,.08),transparent),var(--bg);
+    }
+    .cta-card{
+      max-width:600px;margin:0 auto;text-align:center;
+      background:var(--card);border:1px solid rgba(255,255,255,.1);
+      border-radius:var(--r-lg);padding:48px 40px;
+      box-shadow:0 40px 90px rgba(0,0,0,.45);
+    }
+    .cta-badge{
+      display:inline-flex;padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.05em;
+      margin-bottom:18px;
+    }
+    .cta-h2{font-size:clamp(20px,2.8vw,28px);font-weight:800;line-height:1.25;margin-bottom:8px;letter-spacing:-.02em;}
+    .cta-sub{color:var(--sub);font-size:14px;margin-bottom:28px;line-height:1.8;}
+    .cta-dl{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:20px;}
+    .cta-links{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;}
+    .cta-fn{
+      margin-top:22px;padding-top:18px;
+      border-top:1px solid rgba(255,255,255,.07);
+      font-size:12px;color:var(--muted);line-height:1.9;
+    }
+    .cta-fn a{color:var(--sub);}
+    .cta-fn a:hover{color:var(--accent2);}
 
     /* ── Footer ── */
-    .footer{padding:32px 0 52px;border-top:1px solid rgba(255,255,255,.06);}
-    .footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+    .footer{padding:30px 0 48px;border-top:1px solid rgba(255,255,255,.06);}
+    .footer-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
 
     /* ── Lightbox ── */
-    #lightbox{
-      display:none;position:fixed;inset:0;z-index:100;
-      background:rgba(0,0,0,.88);align-items:center;justify-content:center;cursor:pointer;
-    }
+    #lightbox{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);align-items:center;justify-content:center;cursor:pointer;}
     #lightbox.open{display:flex;}
-    #lightbox img{max-width:90vw;max-height:88vh;border-radius:12px;box-shadow:0 30px 80px rgba(0,0,0,.6);}
-    #lightbox-close{
-      position:fixed;top:20px;right:24px;
-      background:rgba(255,255,255,.12);border:none;color:#fff;
-      font-size:20px;width:40px;height:40px;border-radius:50%;
-      cursor:pointer;display:grid;place-items:center;
-    }
+    #lightbox img{max-width:90vw;max-height:88vh;border-radius:10px;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+    #lb-close{position:fixed;top:18px;right:22px;background:rgba(255,255,255,.12);border:none;color:#fff;font-size:18px;width:38px;height:38px;border-radius:50%;cursor:pointer;display:grid;place-items:center;}
 
     /* ── Responsive ── */
-    @media(max-width:920px){
-      .hero-grid,.star-inner,.dev-grid{grid-template-columns:1fr;}
-      .pain-cards{grid-template-columns:1fr 1fr;}
-      .products-grid{grid-template-columns:1fr 1fr;}
-      .links-grid{grid-template-columns:1fr 1fr;}
-      .dev-creds{grid-template-columns:1fr;}
+    @media(max-width:860px){
+      .star-inner,.dev-inner{grid-template-columns:1fr;}
+      .pain-quotes{grid-template-columns:1fr;}
+      .faq-grid{grid-template-columns:1fr;}
+      .others-grid{grid-template-columns:1fr;}
+      .hero-ba-pair{grid-template-columns:1fr;}
+      .mw-pair{grid-template-columns:1fr;}
+      .pain-answer{flex-direction:column;gap:14px;}
     }
     @media(max-width:600px){
-      .hero{padding:52px 0 40px;}
+      .hero{padding:44px 0 36px;}
       .nav{display:none;}
-      .pain-cards{grid-template-columns:1fr;}
-      .products-grid{grid-template-columns:1fr;}
-      .links-grid{grid-template-columns:1fr 1fr;}
-      .ba-preview-pair{grid-template-columns:1fr;}
+      .cta-card{padding:36px 20px;}
+      .trust-in{gap:14px;}
     }
   </style>
 </head>
 <body>
 
   <!-- ── Header ── -->
-  <header class="site-header">
-    <div class="wrap header-inner">
+  <header class="hdr">
+    <div class="wrap hdr-in">
       <a href="index.html" class="brand">
-        <div class="brand-mark">S</div>
-        <div class="brand-text">
-          Sidekick <small>by Ichiro Murata</small>
+        <div class="brand-mk">S</div>
+        <div>
+          <div>Sidekick</div>
+          <span class="brand-sub">by Ichiro Murata</span>
         </div>
       </a>
       <nav class="nav">
         <a href="index.html" class="active">TOP</a>
-        <a href="lp-star.html">Sidekick Star</a>
-        <a href="portrait.html">Portrait</a>
-        <a href="sky-effect.html">Sky Effect</a>
+        <a href="lp-star.html">Star LP</a>
+        <a href="sidekick-star.html">詳細・デモ</a>
         <a href="gallery.html">作例</a>
         <a href="sidekick.html">開発の思想</a>
-        <a class="nav-cta"
+        <a class="nav-dl"
            href="https://drive.google.com/uc?export=download&id=1gjbxxFL6h-eviuKCsBwoSMcpcX0vks80&confirm=t">
           ▶ Star を無料で試す
         </a>
@@ -454,214 +452,216 @@
 
   <main>
 
-    <!-- ═══════════════════════════════════
-         HERO — 3秒で伝わる
-    ═══════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════
+         HERO — B/Aが主役、3秒で理解
+    ═══════════════════════════════════════════ -->
     <section class="hero">
       <div class="wrap">
-        <div class="hero-grid">
 
-          <!-- Left -->
-          <div>
-            <div class="hero-kicker">⭐ Photoshop スクリプト | 星景後処理の自動化</div>
-            <h1>
-              星景後処理の消耗を、<br>
-              <em>Photoshop で終わらせる。</em>
-            </h1>
-            <p class="hero-lead">
-              飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。<br>
-              20年間フィールドで撮り続けた写真家が、自分のために作ったツールです。
-            </p>
-            <div class="hero-badges">
-              <span class="hb">✈ 飛行機軌跡 自動除去</span>
-              <span class="hb">🌌 天の川 現像・強調</span>
-              <span class="hb">🎞 フィルム仕上げ</span>
-              <span class="hb">⚡ 比較明 全自動</span>
-            </div>
-            <div class="hero-cta">
-              <a class="btn btn-primary btn-lg" href="lp-star.html">Sidekick Star を見る →</a>
-              <a class="btn btn-outline"
-                 href="https://drive.google.com/uc?export=download&id=1gjbxxFL6h-eviuKCsBwoSMcpcX0vks80&confirm=t">
-                ▶ 無料で試す
-              </a>
-            </div>
-            <p class="hero-note">
-              <b>クレジットカード不要</b>・3ヶ月フル機能試用・購入価格 ¥9,800
-            </p>
-          </div>
-
-          <!-- Right: Sidekick Star product card -->
-          <div>
-            <div class="hero-product">
-              <div class="hero-product-img">
-                <img src="images/Star/web_after.jpg" alt="Sidekick Star 処理後 — 飛行機・人工衛星の軌跡が消え、星の軌跡だけが残る">
-                <div class="hero-product-img-tag">✓ Sidekick Star 処理後</div>
-              </div>
-              <div class="hero-product-body">
-                <div class="hero-product-title">⭐ Sidekick Star</div>
-                <div class="hero-product-desc">比較明合成・飛行機軌跡除去・天の川現像を Photoshop で全自動。手作業1週間 → PCの一晩。</div>
-                <div class="hero-product-feats">
-                  <span class="hero-product-feat">✈ 飛行機軌跡除去</span>
-                  <span class="hero-product-feat">🌌 天の川処理</span>
-                  <span class="hero-product-feat">🎞 フィルム仕上げ</span>
-                </div>
-                <div class="hero-product-actions">
-                  <a class="btn btn-primary btn-sm" href="lp-star.html">詳しく見る</a>
-                  <a class="btn btn-outline btn-sm"
-                     href="https://drive.google.com/uc?export=download&id=1gjbxxFL6h-eviuKCsBwoSMcpcX0vks80&confirm=t">
-                    無料で試す
-                  </a>
-                  <span class="hero-product-price">¥9,800</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
+        <!-- Headline -->
+        <div class="hero-head">
+          <div class="hero-kicker">⭐ Sidekick Star — Photoshop スクリプト</div>
+          <h1>
+            飛行機軌跡、<br>
+            <em>まだ手で消してますか？</em>
+          </h1>
+          <p class="hero-sub">
+            比較明合成の後処理を Photoshop で自動化。20年の星景経験から生まれた実戦ツール。
+          </p>
         </div>
+
+        <!-- B/A main visual -->
+        <div class="hero-ba">
+          <div class="hero-ba-pair">
+            <div class="hero-ba-half">
+              <img src="images/Star/web_before.jpg" alt="手作業前 — 飛行機・人工衛星の軌跡が残る">
+              <div class="hero-ba-lbl before">
+                <div class="hero-ba-lbl-txt">✈ BEFORE — 手作業前の地獄</div>
+                <div class="hero-ba-lbl-sub">赤い線（飛行機・人工衛星）がスタック全体に</div>
+              </div>
+            </div>
+            <div class="hero-ba-half">
+              <img src="images/Star/web_after.jpg" alt="Sidekick Star 処理後 — 星の軌跡だけが残る">
+              <div class="hero-ba-lbl after">
+                <div class="hero-ba-lbl-txt">✓ AFTER — Sidekick Star 処理後</div>
+                <div class="hero-ba-lbl-sub">星の軌跡だけが残る</div>
+              </div>
+            </div>
+          </div>
+          <div class="hero-stat">
+            <div class="hs-item">
+              <div class="hs-val bad">1週間〜</div>
+              <div class="hs-lbl">手作業での処理時間</div>
+            </div>
+            <div class="hs-arrow">→</div>
+            <div class="hs-item">
+              <div class="hs-val good">PCの一晩</div>
+              <div class="hs-lbl">Sidekick Star での処理時間</div>
+            </div>
+            <div class="hs-item">
+              <div class="hs-val gold">3ヶ月</div>
+              <div class="hs-lbl">無料試用（CC不要）</div>
+            </div>
+            <div class="hs-item">
+              <div class="hs-val gold">¥9,800</div>
+              <div class="hs-lbl">税込・買い切り</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="hero-cta">
+          <a class="btn btn-p btn-lg" href="lp-star.html">
+            Before/After・詳細を見る →
+          </a>
+          <a class="btn btn-o btn-lg"
+             href="https://drive.google.com/uc?export=download&id=1gjbxxFL6h-eviuKCsBwoSMcpcX0vks80&confirm=t">
+            ▶ 無料で3ヶ月試す
+          </a>
+        </div>
+        <p class="hero-note"><b>クレジットカード不要</b> · フル機能 · 3ヶ月試用</p>
+
+        <!-- Feature pills -->
+        <div class="feat-pills">
+          <span class="fp">✈ 飛行機軌跡 自動除去</span>
+          <span class="fp">🌌 天の川 現像・強調</span>
+          <span class="fp">🎞 フィルム仕上げ</span>
+          <span class="fp">⚡ 比較明 全自動</span>
+          <span class="fp">🏠 ローカル処理・外部送信なし</span>
+        </div>
+
       </div>
     </section>
 
     <!-- Trust strip -->
     <div class="trust">
-      <div class="wrap-wide">
-        <div class="trust-inner">
+      <div class="wrap-full">
+        <div class="trust-in">
           <div class="ti">🏆 1X Award ×5受賞</div>
           <div class="ti">📖 著書6冊（玄光社 他）</div>
           <div class="ti">🎤 CP+ セミナー講師</div>
           <div class="ti">⭐ 星景歴 20年</div>
-          <div class="ti">🆓 3ヶ月フル機能・CC不要</div>
+          <div class="ti">⚡ Photoshop JSX スクリプト</div>
         </div>
       </div>
     </div>
 
 
-    <!-- ═══════════════════════════════════
-         PAIN STRIP — 後処理地獄への共感
-    ═══════════════════════════════════ -->
-    <section class="pain-strip" id="pain">
+    <!-- ═══════════════════════════════════════════
+         PAIN — 短くて刺さる
+    ═══════════════════════════════════════════ -->
+    <section class="pain" id="pain">
       <div class="wrap">
 
-        <div class="pain-strip-head">
-          <h2>星景写真家の<em>「後処理地獄」</em>に、心当たりはありませんか。</h2>
-          <p>撮影より後処理の方が圧倒的に時間がかかる——それは当たり前ではありません。</p>
+        <div class="pain-intro">
+          <h2>その消耗、<em>当たり前じゃない。</em></h2>
+          <p>星景写真家なら一度は思ったはず。</p>
         </div>
 
-        <div class="pain-cards">
-          <div class="pain-card">
-            <div class="pain-icon">✈️</div>
-            <div class="pain-title">軌跡消しに1週間</div>
-            <p class="pain-desc">一晩の撮影データ、飛行機軌跡の手作業除去だけで早くて1週間。ずっと操作し続けながら同じ判断を繰り返す。</p>
+        <div class="pain-quotes">
+          <div class="pq">
+            <div class="pq-text">「また週末が飛行機消しで終わった。撮影地に3時間かけて行ったのに。」</div>
+            <div class="pq-tag">✈ 飛行機軌跡の手修正</div>
           </div>
-          <div class="pain-card">
-            <div class="pain-icon">🌌</div>
-            <div class="pain-title">天の川が出てこない</div>
-            <p class="pain-desc">確かに撮れているはずなのに、Photoshop で現像すると天の川がほぼ消える。どこをどう触れば良いのか、毎回試行錯誤。</p>
+          <div class="pq">
+            <div class="pq-text">「RAW現像したら天の川がほぼ消えていた。撮れてるはずなのに、どうすれば...」</div>
+            <div class="pq-tag">🌌 天の川が出てこない</div>
           </div>
-          <div class="pain-card">
-            <div class="pain-icon">〰️</div>
-            <div class="pain-title">比較明の星が途切れる</div>
-            <p class="pain-desc">デジタルの比較明合成の宿命——どんなに理想的な撮影をしても星の軌跡がコマとコマの間で途切れる。100%表示でがっかりする。</p>
-          </div>
-          <div class="pain-card">
-            <div class="pain-icon">⏱</div>
-            <div class="pain-title">撮影より後処理が長い</div>
-            <p class="pain-desc">2時間撮って、3日間現像する。本当にやりたかった仕上げの時間が、繰り返し作業の中に埋まっていく。</p>
+          <div class="pq">
+            <div class="pq-text">「比較明合成、100%で確認してがっかり。フィルム時代の美しさにならない。」</div>
+            <div class="pq-tag">〰 比較明の破線問題</div>
           </div>
         </div>
 
-        <div class="pain-cta-row">
-          <span class="pain-cta-label">この消耗、<em>Photoshop スクリプトで終わらせられます。</em></span>
-          <a class="btn btn-primary" href="lp-star.html">解決方法を見る →</a>
+        <div class="pain-answer">
+          <div class="pain-answer-text">
+            これ全部、<em>Sidekick Star が代わりにやります。</em>
+          </div>
+          <a class="btn btn-p" href="lp-star.html">解決策を見る →</a>
         </div>
 
       </div>
     </section>
 
 
-    <!-- ═══════════════════════════════════
-         SIDEKICK STAR — 主役
-    ═══════════════════════════════════ -->
-    <section class="star-sec" id="star">
+    <!-- ═══════════════════════════════════════════
+         SIDEKICK STAR — product section
+    ═══════════════════════════════════════════ -->
+    <section class="star" id="star">
       <div class="wrap">
         <div class="star-inner">
 
-          <!-- Left: Features + CTA -->
+          <!-- Left: features + CTA -->
           <div>
-            <div class="sec-label">⭐ Main Product — 最も強いツール</div>
-            <h2 class="sec-h2">
+            <div class="lbl">⭐ Sidekick Star — Main Product</div>
+            <h2 class="h2" style="margin:10px 0 10px;">
               比較明合成の後処理を、<br><em>全部自動化する。</em>
             </h2>
-            <p class="sec-lead">
-              一晩の撮影データをフォルダに入れてスクリプトをスタートする。
-              PCに任せて寝る。翌朝、比較明合成が完成している。
+            <p class="lead" style="margin-bottom:0;">
+              フォルダに入れてスタート → PCに任せて寝る → 翌朝、完成。
             </p>
 
             <div class="star-feats">
-              <div class="star-feat main">
-                <div class="sf-icon">✈</div>
+              <div class="sf star-item">
+                <div class="sf-ic">✈</div>
                 <div>
-                  <div class="sf-title">飛行機・車・船の軌跡 自動除去</div>
-                  <div class="sf-desc">比較明スタックの原画から人工の光跡だけを検出・除去。手作業1週間 → PCの一晩。独自の2段階処理。</div>
+                  <div class="sf-t">飛行機・車・船の軌跡 自動除去</div>
+                  <div class="sf-d">手作業1週間 → PCの一晩。独自の2段階処理。手法は非公開。</div>
                 </div>
               </div>
-              <div class="star-feat main">
-                <div class="sf-icon">🌌</div>
+              <div class="sf star-item">
+                <div class="sf-ic">🌌</div>
                 <div>
-                  <div class="sf-title">天の川の現像・強調</div>
-                  <div class="sf-desc">RAW 現像から天の川強調まで、20年のワークフローをスクリプトに落とし込んだ処理。「撮れているのに出てこない」を解決。</div>
+                  <div class="sf-t">天の川の現像・強調</div>
+                  <div class="sf-d">RAW現像から強調まで。「撮れているのに出てこない」を解決。</div>
                 </div>
               </div>
-              <div class="star-feat">
-                <div class="sf-icon">🎞</div>
+              <div class="sf">
+                <div class="sf-ic">🎞</div>
                 <div>
-                  <div class="sf-title">フィルム仕上げ — 破線を連続軌跡に</div>
-                  <div class="sf-desc">デジタル比較明の宿命、星の軌跡の破線をなめらかな連続軌跡に。フィルム時代の美しさがデジタルで手に入る。</div>
+                  <div class="sf-t">フィルム仕上げ — 破線を連続軌跡に</div>
+                  <div class="sf-d">デジタル比較明の宿命、星の途切れをなめらかに。</div>
                 </div>
               </div>
-              <div class="star-feat">
-                <div class="sf-icon">📂</div>
+              <div class="sf">
+                <div class="sf-ic">📂</div>
                 <div>
-                  <div class="sf-title">ファイル整理・スタック・比較明合成 全自動</div>
-                  <div class="sf-desc">テストカット除外から比較明合成まで一気通貫。JSON 設定で次回もワンクリック再現。</div>
+                  <div class="sf-t">ファイル整理・比較明合成 全自動</div>
+                  <div class="sf-d">テストカット除外からスタック・合成まで一気通貫。</div>
                 </div>
               </div>
             </div>
 
-            <div class="star-actions">
-              <a class="btn btn-primary btn-lg" href="lp-star.html">Sidekick Star を詳しく見る</a>
-              <a class="btn btn-outline"
+            <div class="star-cta">
+              <a class="btn btn-p btn-lg" href="lp-star.html">Sidekick Star を詳しく見る</a>
+              <a class="btn btn-o"
                  href="https://drive.google.com/uc?export=download&id=1gjbxxFL6h-eviuKCsBwoSMcpcX0vks80&confirm=t">
-                ▶ 無料で3ヶ月試す
+                ▶ 無料で試す
               </a>
             </div>
-            <p class="star-price">クレジットカード不要・フル機能・3ヶ月試用 ｜ 購入価格 ¥9,800（税込・買い切り）</p>
+            <p class="star-price">3ヶ月フル機能・CC不要 ／ 購入 ¥9,800（税込・買い切り）</p>
           </div>
 
-          <!-- Right: Before/After -->
+          <!-- Right: Milky Way B/A -->
           <div>
-            <div class="ba-preview">
-              <div class="ba-preview-pair">
-                <div class="ba-half">
-                  <img src="images/Star/web_before.jpg" alt="飛行機軌跡 手作業前 — 赤い線が残る">
-                  <span class="ba-lbl before">BEFORE — 手作業前の地獄</span>
+            <div class="mw-ba">
+              <div class="mw-pair">
+                <div class="mw-half">
+                  <img src="images/Star/web_milkyway_before.jpg" alt="Photoshop無補正現像 — 天の川がほぼ見えない">
+                  <span class="mw-lbl b">BEFORE</span>
                 </div>
-                <div class="ba-half">
-                  <img src="images/Star/web_after.jpg" alt="Sidekick Star 処理後 — 星の軌跡だけが残る">
-                  <span class="ba-lbl after">AFTER — 処理後</span>
+                <div class="mw-half">
+                  <img src="images/Star/web_milkyway_after.jpg" alt="Sidekick Star 現像＋天の川強調">
+                  <span class="mw-lbl a">AFTER</span>
                 </div>
               </div>
-              <div class="ba-preview-stat">
-                <span class="ba-stat-bad">手作業 1週間〜</span>
-                <span class="ba-stat-arr">→</span>
-                <span class="ba-stat-good">Sidekick Star: PCの一晩</span>
+              <div class="mw-cap">
+                🌌 同じRAW・同じ1枚——違いは現像の判断と強調の有無
               </div>
             </div>
 
-            <div style="margin-top:16px;border-radius:var(--r-lg);overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);">
-              <img src="images/Star/web_milkyway_after.jpg" alt="Sidekick Star で現像＋天の川強調した結果" style="width:100%;display:block;">
-              <div style="padding:11px 16px;background:var(--card);font-size:12px;color:var(--sub);">
-                🌌 同じRAWから — Sidekick Star で現像＋天の川強調
-              </div>
+            <div style="margin-top:14px;text-align:right;">
+              <a class="btn btn-g btn-sm" href="sidekick-star.html">デモ動画・全作例を見る →</a>
             </div>
           </div>
 
@@ -670,101 +670,39 @@
     </section>
 
 
-    <!-- ═══════════════════════════════════
-         OTHER PRODUCTS
-    ═══════════════════════════════════ -->
-    <section class="products-sec" id="products">
+    <!-- ═══════════════════════════════════════════
+         DEVELOPER — 短く・信頼感
+    ═══════════════════════════════════════════ -->
+    <section class="dev" id="developer">
       <div class="wrap">
-        <div class="sec-label">Other Tools</div>
-        <h2 class="sec-h2" style="font-size:clamp(22px,2.8vw,32px);margin:0 0 6px;">ポートレート・空表現にも対応</h2>
-        <p style="color:var(--sub);font-size:15px;margin-bottom:24px;max-width:560px;">
-          Sidekick はシリーズです。写真ジャンルに合わせて選べます。
-        </p>
+        <div class="dev-inner">
 
-        <div class="products-grid">
-          <a href="portrait.html" class="prod-card">
-            <div class="prod-visual portrait-bg">
-              <div class="prod-tag">PORTRAIT</div>
-              <h3>Sidekick Portrait</h3>
-            </div>
-            <div class="prod-body">
-              <p>肌・色・立体感の整理など、ポートレート処理を自分の方向へ寄せる Photoshop スクリプト。14スタイルのギャラリーで実例確認できます。</p>
-              <div class="prod-footer">
-                <span class="prod-price">90日試用あり ／ ¥4,800</span>
-                <span class="btn btn-outline btn-sm">詳細 →</span>
-              </div>
-            </div>
-          </a>
-
-          <a href="sky-effect.html" class="prod-card">
-            <div class="prod-visual sky-bg">
-              <div class="prod-tag">SKY EFFECT</div>
-              <h3>Sidekick Sky Effect</h3>
-            </div>
-            <div class="prod-body">
-              <p>雲・光・空の印象整理など、空を主役にした仕上げを効率化する Photoshop スクリプト。6シーンの実例ギャラリー付き。</p>
-              <div class="prod-footer">
-                <span class="prod-price">30日試用あり ／ ¥980</span>
-                <span class="btn btn-outline btn-sm">詳細 →</span>
-              </div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════
-         DEVELOPER — 写真家が作った
-    ═══════════════════════════════════ -->
-    <section class="dev-sec" id="developer">
-      <div class="wrap">
-        <div class="dev-grid">
-
-          <div class="dev-photo">
-            <img src="images/awards/milkyway_03_after.jpg" alt="村田一朗 1X Award受賞作 — 天の川を含む星景写真">
-            <div class="dev-photo-cap">🏆 1X Award 受賞作 — 村田一朗</div>
+          <div class="dev-img">
+            <img src="images/awards/milkyway_03_after.jpg" alt="村田一朗 1X Award受賞作">
+            <div class="dev-img-cap">🏆 1X Award 受賞作 — 村田一朗</div>
           </div>
 
           <div>
-            <div class="sec-label">Developer</div>
+            <div class="lbl">Developer</div>
             <h2 class="dev-h2">
-              20年間、<em>同じ消耗をしてきた</em><br>
-              写真家が作ったツール。
+              20年間<em>同じ消耗をしてきた</em><br>写真家が作ったツール。
             </h2>
-            <div class="dev-body">
-              <p>
-                村田一朗は20年以上、フィールドで星景写真を撮り続けている写真家です。
-                Sidekick シリーズは、そのワークフローで実際に直面した消耗を、
-                自分が使うために解決していったスクリプト群です。
-              </p>
-              <p>
-                「ユーザーが何を困っているか」ではなく、
-                「自分が何に消耗しているか」から作り始めました。
-                だから、実際の現場ワークフローを支える実務ツールとして使えます。
-              </p>
+            <p class="dev-body">
+              村田一朗は20年以上フィールドで撮り続けています。
+              Sidekick は「ユーザーが困っていること」ではなく、
+              「自分が消耗していること」から作り始めたスクリプトです。
+            </p>
+            <div class="dev-chips">
+              <span class="dev-chip">🏆 1X Award ×5</span>
+              <span class="dev-chip">📖 著書6冊</span>
+              <span class="dev-chip">🎤 CP+ 講師</span>
+              <span class="dev-chip">⭐ 星景歴20年</span>
             </div>
-            <div class="dev-creds">
-              <div class="dev-cred">
-                <div class="dev-cred-icon">🏆</div>
-                <div class="dev-cred-text"><b>1X Award ×5受賞</b>国際的な写真賞を複数受賞</div>
-              </div>
-              <div class="dev-cred">
-                <div class="dev-cred-icon">📖</div>
-                <div class="dev-cred-text"><b>著書6冊（玄光社 他）</b>星景写真の技法書を執筆</div>
-              </div>
-              <div class="dev-cred">
-                <div class="dev-cred-icon">🎤</div>
-                <div class="dev-cred-text"><b>CP+ セミナー講師</b>国内最大の写真展示会で登壇</div>
-              </div>
-              <div class="dev-cred">
-                <div class="dev-cred-icon">⭐</div>
-                <div class="dev-cred-text"><b>星景歴 20年</b>実戦経験からツールを設計</div>
-              </div>
-            </div>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <a class="btn btn-outline btn-sm" href="sidekick.html">開発の思想を読む →</a>
-              <a class="btn btn-outline btn-sm" href="gallery.html">作例ギャラリーを見る →</a>
+            <div class="ai-note">
+              💡 <b>「AIツール」ではなく「実戦補助AI」です。</b>
+              飛行機の<b>検出</b>にAIモデルを使いますが、<b>除去は手作業と同じ原画画素の置換</b>です。
+              生成AI・画像補完は一切使用していません。
+              外部サービスへの送信もなし——すべてあなたの Photoshop 内で完結します。
             </div>
           </div>
 
@@ -773,37 +711,115 @@
     </section>
 
 
-    <!-- ═══════════════════════════════════
-         LINKS GRID — 導線整理
-    ═══════════════════════════════════ -->
-    <section class="links-sec">
+    <!-- ═══════════════════════════════════════════
+         FAQ — 疑問を先回りして解消
+    ═══════════════════════════════════════════ -->
+    <section class="faq" id="faq">
       <div class="wrap">
-        <div class="sec-label" style="margin-bottom:16px;">Quick Links</div>
-        <div class="links-grid">
-          <a href="lp-star.html" class="link-card">
-            <div class="link-icon">⭐</div>
-            <div class="link-title">Sidekick Star LP</div>
-            <div class="link-desc">飛行機軌跡除去・天の川現像・比較明合成の詳細・Before/After・デモ動画</div>
-            <div class="link-arrow">詳細を見る →</div>
+        <div class="lbl" style="margin-bottom:14px;">FAQ</div>
+        <div class="faq-grid">
+          <div class="faq-item">
+            <div class="faq-q">❓ 生成AIで画像を補完・生成しますか？</div>
+            <div class="faq-a">
+              <b>しません。</b>飛行機の軌跡の検出にのみAIモデルを使います。
+              除去処理は「時間差のある原画フレームから同じ位置の画素を持ってきて上書き」する、
+              手作業の Photoshop と同じ処理です。
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 無料試用後に自動課金されますか？</div>
+            <div class="faq-a">
+              <b>されません。</b>3ヶ月の試用期間終了後は機能が制限されます。
+              購入は任意です。クレジットカードの登録も不要です。
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ Photoshop のバージョン・OSの要件は？</div>
+            <div class="faq-a">
+              <b>Photoshop CC に対応。Windows / Mac 両対応。</b>
+              詳細な動作環境はマニュアルをご参照ください。
+            </div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q">❓ 写真データが外部に送信されますか？</div>
+            <div class="faq-a">
+              <b>送信されません。</b>すべての処理はあなたの PC 上の Photoshop 内で完結します。
+              クラウドへの送信は一切行いません。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         OTHER PRODUCTS
+    ═══════════════════════════════════════════ -->
+    <section class="others">
+      <div class="wrap">
+        <div class="lbl" style="margin-bottom:14px;">Other Tools — Sidekickシリーズ</div>
+        <div class="others-grid">
+          <a href="portrait.html" class="prod">
+            <div class="prod-visual portrait-bg"></div>
+            <div>
+              <div class="prod-name">Sidekick Portrait</div>
+              <div class="prod-desc">肌・色・立体感の整理。ポートレート処理を自分の方向へ。</div>
+              <div class="prod-meta">90日試用あり ／ ¥4,800</div>
+            </div>
+            <div class="prod-arr">→</div>
           </a>
-          <a href="gallery.html" class="link-card">
-            <div class="link-icon">🖼</div>
-            <div class="link-title">作例ギャラリー</div>
-            <div class="link-desc">Sidekick で処理した実際の星景・ポートレート・空の作例一覧</div>
-            <div class="link-arrow">作例を見る →</div>
+          <a href="sky-effect.html" class="prod">
+            <div class="prod-visual sky-bg"></div>
+            <div>
+              <div class="prod-name">Sidekick Sky Effect</div>
+              <div class="prod-desc">雲・光・空の印象整理。空を主役にした仕上げを効率化。</div>
+              <div class="prod-meta">30日試用あり ／ ¥980</div>
+            </div>
+            <div class="prod-arr">→</div>
           </a>
-          <a href="mailto:murata@mbg.nifty.com" class="link-card">
-            <div class="link-icon">🎓</div>
-            <div class="link-title">ワークショップ</div>
-            <div class="link-desc">星景撮影・現像ワークフローのワークショップ。次回日程はお問い合わせください</div>
-            <div class="link-arrow">問い合わせる →</div>
-          </a>
-          <a href="sidekick.html" class="link-card">
-            <div class="link-icon">💡</div>
-            <div class="link-title">開発の思想</div>
-            <div class="link-desc">Sidekick がどのような考え方・経緯で作られたか。プリセットではなく思想</div>
-            <div class="link-arrow">読む →</div>
-          </a>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════
+         CTA FINAL — 「試したい」に誘導
+    ═══════════════════════════════════════════ -->
+    <section class="cta-sec" id="try">
+      <div class="wrap">
+        <div class="cta-card">
+          <div class="cta-badge">⭐ Sidekick Star</div>
+          <div class="cta-h2">まず3ヶ月、実際の素材で試してください。</div>
+          <p class="cta-sub">
+            「軌跡消しが楽になった」を自分の目で確認してから、購入を決めてください。<br>
+            クレジットカード不要・フル機能・いつでも終了可。
+          </p>
+
+          <div class="cta-dl">
+            <a class="btn btn-p btn-lg"
+               href="https://drive.google.com/uc?export=download&id=1gjbxxFL6h-eviuKCsBwoSMcpcX0vks80&confirm=t"
+               style="width:100%;max-width:340px;">
+              ▶ 無料で3ヶ月試す
+            </a>
+            <span style="font-size:12px;color:var(--muted);">CC不要・フル機能・3ヶ月試用</span>
+          </div>
+
+          <div class="cta-links">
+            <a class="btn btn-o btn-sm" href="lp-star.html">📄 LP でもっと詳しく見る</a>
+            <a class="btn btn-o btn-sm" href="sidekick-star.html">🎬 デモ動画・作例を見る</a>
+            <a class="btn btn-o btn-sm" href="gallery.html">🖼 ギャラリーへ</a>
+          </div>
+          <div style="margin-top:10px;display:flex;justify-content:center;">
+            <a class="btn btn-g btn-sm" href="buy-star.html">💳 今すぐ購入（¥9,800）</a>
+          </div>
+
+          <div class="cta-fn">
+            マニュアル：
+            <a href="manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">日本語 PDF</a> /
+            <a href="manual/Manual_SideKick_Star_EN.pdf" target="_blank">English PDF</a>
+            &nbsp;·&nbsp;
+            <a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a>
+          </div>
         </div>
       </div>
     </section>
@@ -811,16 +827,16 @@
   </main>
 
   <footer class="footer">
-    <div class="wrap footer-inner">
+    <div class="wrap footer-in">
       <div style="line-height:1.9;">
         <div style="font-weight:700;font-size:15px;">村田 一朗 / Ichiro Murata</div>
-        <div style="font-size:13px;margin-top:3px;">
-          お問い合わせ：<a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a>
+        <div style="font-size:13px;margin-top:2px;">
+          <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:13px;">
         <div style="color:var(--muted);">© Sidekick — 村田 一朗</div>
-        <div style="display:flex;gap:16px;">
+        <div style="display:flex;gap:14px;">
           <a href="changelog.html" style="color:var(--sub);">更新履歴</a>
           <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
           <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
@@ -830,20 +846,12 @@
   </footer>
 
   <div id="lightbox" onclick="closeLightbox()">
-    <button id="lightbox-close" onclick="closeLightbox()">✕</button>
-    <img id="lightbox-img" src="" alt="拡大表示">
+    <button id="lb-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="">
   </div>
-
   <script>
-    function openLightbox(src){
-      document.getElementById('lightbox-img').src=src;
-      document.getElementById('lightbox').classList.add('open');
-      document.body.style.overflow='hidden';
-    }
-    function closeLightbox(){
-      document.getElementById('lightbox').classList.remove('open');
-      document.body.style.overflow='';
-    }
+    function openLightbox(s){document.getElementById('lightbox-img').src=s;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
+    function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
   </script>
 
