@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ワークショップ | 村田一朗 × 写真</title>
+  <meta name="description" content="村田一朗が主催する写真ワークショップ。星景撮影・大判カメラ・町撮りフォトウォークなど。次回は2026年8月8日（土）大野山・夏の星空撮影実習。">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --card2:#1c1f2a;
+      --line:#252a36;
+      --text:#f0f3fa;
+      --sub:#9aa3b4;
+      --muted:#5e6677;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --green:#3ecf82;
+      --blue:#4e8cff;
+      --white:#fff;
+      --max:860px;
+      --r:20px;
+      --shadow:0 20px 60px rgba(0,0,0,.4);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right,rgba(255,138,0,.09),transparent 26%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.75;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    p{margin:0}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .site-header{
+      position:sticky;top:0;z-index:20;
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+      background:rgba(11,11,13,.82);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{
+      width:40px;height:40px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;
+    }
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:14px;font-weight:700;}
+    .nav a:hover,.nav a.active{color:var(--white)}
+
+    /* ── Buttons ── */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:7px;
+      padding:0 24px;min-height:48px;border-radius:12px;
+      font-weight:800;font-size:14px;border:1px solid transparent;
+      cursor:pointer;transition:.18s;white-space:nowrap;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#111;box-shadow:0 6px 24px rgba(255,138,0,.3);
+    }
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,138,0,.4);}
+    .btn-outline{background:transparent;border-color:rgba(255,255,255,.2);color:var(--white);}
+    .btn-outline:hover{border-color:rgba(255,255,255,.36);background:rgba(255,255,255,.04);}
+    .btn-lg{min-height:56px;padding:0 34px;font-size:16px;border-radius:14px;}
+
+    /* ── Page head ── */
+    .page-head{
+      padding:72px 0 52px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .eyebrow{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:6px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:18px;
+    }
+    .page-head h1{
+      margin:0 0 12px;
+      font-size:clamp(28px,4vw,42px);
+      letter-spacing:-.025em;line-height:1.1;
+    }
+    .page-head p{margin:0;color:var(--sub);font-size:16px;max-width:600px;line-height:1.8;}
+
+    /* ── Next WS card ── */
+    .next-ws{padding:60px 0 52px;}
+    .next-label{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(62,207,130,.1);border:1px solid rgba(62,207,130,.25);
+      color:var(--green);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:20px;
+    }
+    .next-label::before{
+      content:"";width:7px;height:7px;border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 6px var(--green);
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    .ws-card{
+      background:linear-gradient(160deg,rgba(255,138,0,.06),rgba(255,138,0,.02)),var(--card);
+      border:1px solid rgba(255,138,0,.2);
+      border-radius:28px;
+      padding:40px 44px;
+      box-shadow:var(--shadow);
+    }
+    .ws-card-title{
+      margin:0 0 24px;
+      font-size:clamp(22px,3vw,32px);
+      letter-spacing:-.02em;line-height:1.2;
+    }
+    .ws-meta{
+      display:grid;grid-template-columns:repeat(2,1fr);
+      gap:14px;margin-bottom:32px;
+    }
+    .ws-meta-item{
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;padding:16px 20px;
+    }
+    .ws-meta-label{font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;margin-bottom:6px;}
+    .ws-meta-val{font-size:15px;font-weight:700;color:var(--text);}
+    .ws-meta-val em{font-style:normal;color:var(--accent2);}
+    .ws-desc{color:var(--sub);font-size:15px;line-height:1.85;margin-bottom:30px;}
+    .ws-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+    .ws-note{font-size:13px;color:var(--muted);}
+
+    /* ── History ── */
+    .history{padding:60px 0 80px;}
+    .section-title{
+      margin:0 0 36px;
+      font-size:clamp(20px,2.8vw,28px);
+      letter-spacing:-.02em;
+    }
+    .section-title span{color:var(--accent2);}
+
+    .timeline{position:relative;padding-left:28px;}
+    .timeline::before{
+      content:"";position:absolute;left:7px;top:8px;bottom:8px;
+      width:1px;background:var(--line);
+    }
+
+    .tl-item{position:relative;margin-bottom:28px;}
+    .tl-dot{
+      position:absolute;left:-28px;top:6px;
+      width:15px;height:15px;border-radius:50%;
+      background:var(--card);border:2px solid var(--line);
+    }
+    .tl-item.star .tl-dot{border-color:var(--accent);background:rgba(255,138,0,.15);}
+    .tl-item.photo .tl-dot{border-color:var(--blue);background:rgba(78,140,255,.12);}
+    .tl-item.ps .tl-dot{border-color:#a78bfa;background:rgba(167,139,250,.12);}
+
+    .tl-body{
+      background:var(--card);border:1px solid rgba(255,255,255,.07);
+      border-radius:16px;padding:20px 24px;
+    }
+    .tl-date{font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.04em;margin-bottom:6px;}
+    .tl-name{font-size:16px;font-weight:800;margin-bottom:6px;line-height:1.3;}
+    .tl-detail{font-size:13px;color:var(--sub);line-height:1.75;}
+    .tl-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+    .tl-tag{
+      font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;
+    }
+    .tag-star{background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.2);color:var(--accent2);}
+    .tag-photo{background:rgba(78,140,255,.08);border:1px solid rgba(78,140,255,.18);color:#82aaff;}
+    .tag-ps{background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.18);color:#c4b5fd;}
+    .tag-film{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--sub);}
+
+    /* ── Footer ── */
+    .site-footer{
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:40px 0;text-align:center;
+      color:var(--muted);font-size:13px;
+    }
+    .footer-nav{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:16px;}
+    .footer-nav a{color:var(--sub);font-weight:600;}
+    .footer-nav a:hover{color:var(--white)}
+
+    @media(max-width:640px){
+      .ws-card{padding:28px 22px;}
+      .ws-meta{grid-template-columns:1fr;}
+      .header-inner{flex-wrap:wrap;min-height:auto;padding:14px 0;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="wrap">
+    <div class="header-inner">
+      <a href="index.html" class="brand">
+        <div class="brand-mark">SK</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>by Ichiro Murata</small>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">ホーム</a>
+        <a href="lp-star.html">Star</a>
+        <a href="gallery.html">作例</a>
+        <a href="workshop.html" class="active">WS</a>
+        <a href="changelog.html">更新履歴</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<!-- Page head -->
+<div class="page-head">
+  <div class="wrap">
+    <div class="eyebrow">📷 ワークショップ</div>
+    <h1>村田一朗と、<br>一緒に撮る。</h1>
+    <p>星景・大判カメラ・町撮りなど、少人数で実習形式のワークショップを不定期開催。現場でしか伝えられないことがある。</p>
+  </div>
+</div>
+
+<!-- Next WS -->
+<section class="next-ws">
+  <div class="wrap">
+    <div class="next-label">募集中</div>
+    <div class="ws-card">
+      <h2 class="ws-card-title">村田一朗さんと夏の星空を<br>まるごと楽しもう</h2>
+
+      <div class="ws-meta">
+        <div class="ws-meta-item">
+          <div class="ws-meta-label">日時</div>
+          <div class="ws-meta-val"><em>2026年8月8日（土）</em><br>17:30 〜 20:30</div>
+        </div>
+        <div class="ws-meta-item">
+          <div class="ws-meta-label">場所</div>
+          <div class="ws-meta-val">大野山（神奈川県）</div>
+        </div>
+        <div class="ws-meta-item">
+          <div class="ws-meta-label">参加費</div>
+          <div class="ws-meta-val"><em>¥6,600</em>（税込）</div>
+        </div>
+        <div class="ws-meta-item">
+          <div class="ws-meta-label">定員</div>
+          <div class="ws-meta-val">16名</div>
+        </div>
+      </div>
+
+      <p class="ws-desc">
+        城ヶ島から舞台を変え、今回は大野山へ。夏の星空をたっぷり撮影する実習形式のワークショップです。撮影ポイントの選び方、露出・構図のアドバイス、比較明合成まで、村田が現場で全部教えます。
+      </p>
+
+      <div class="ws-actions">
+        <a class="btn btn-primary btn-lg" href="https://aspaws20260808.peatix.com/" target="_blank" rel="noopener">
+          Peatix で申し込む →
+        </a>
+        <span class="ws-note">最少催行人員：設定なし</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- History -->
+<section class="history">
+  <div class="wrap">
+    <h2 class="section-title">過去の<span>開催記録</span></h2>
+
+    <div class="timeline">
+
+      <div class="tl-item star">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2026年5月9日・23日</div>
+          <div class="tl-name">大判カメラであなたの一枚を撮る一日（第3回）</div>
+          <div class="tl-detail">立石海岸での終日撮影＋葉山校での鑑賞会。4×5大判カメラ完全初心者向け、マンツーマンサポート。現像・鑑賞込み。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-film">大判カメラ</span>
+            <span class="tl-tag tag-photo">立石海岸 / 葉山校</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item photo">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2026年4月11日（土）12:00〜15:00</div>
+          <div class="tl-name">鎌倉 町撮りフォトウォーク</div>
+          <div class="tl-detail">鎌倉駅西口〜長谷駅。光と空気を見つける町撮り。構図・露出判断など。¥7,500、定員5名、雨天決行。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-photo">フォトウォーク</span>
+            <span class="tl-tag tag-photo">鎌倉</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item photo">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2026年4月3日頃</div>
+          <div class="tl-name">標準レンズ縛り・ローポジションWS</div>
+          <div class="tl-detail">標準レンズ1本でローアングルから光を拾う撮影実習。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-photo">撮影実習</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item ps">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2026年3月1日・15日（日）</div>
+          <div class="tl-name">Photoshopで星景写真を美しく仕上げる（全2回）</div>
+          <div class="tl-detail">比較明合成・天の川強調・飛行機軌跡除去など。オンライン／葉山校、Sidekickプレゼントあり。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-ps">Photoshop</span>
+            <span class="tl-tag tag-star">星景</span>
+            <span class="tl-tag tag-photo">オンライン / 葉山校</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item star">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2026年1月24日（土）夜</div>
+          <div class="tl-name">村田一朗さんと冬の星空をまるごと楽しもう（城ヶ島）</div>
+          <div class="tl-detail">城ヶ島。星景撮影＋星空観測（望遠鏡鑑賞）。初心者歓迎。¥5,500、16名参加。強風の中全員完走。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-star">星景撮影</span>
+            <span class="tl-tag tag-photo">城ヶ島</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item star">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2025年 夏頃</div>
+          <div class="tl-name">城ヶ島 星空WS（夏回）</div>
+          <div class="tl-detail">城ヶ島での夏の星景撮影。2026年冬回に「夏に開催した第2弾」と明記。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-star">星景撮影</span>
+            <span class="tl-tag tag-photo">城ヶ島</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tl-item star">
+        <div class="tl-dot"></div>
+        <div class="tl-body">
+          <div class="tl-date">2024年2月頃</div>
+          <div class="tl-name">城ヶ島 星空WS（第1回）</div>
+          <div class="tl-detail">インターバル合成・アストロトレーサーなど星景撮影の基本。参加者サポート・撮影アドバイス。</div>
+          <div class="tl-tags">
+            <span class="tl-tag tag-star">星景撮影</span>
+            <span class="tl-tag tag-photo">城ヶ島</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-nav">
+      <a href="index.html">ホーム</a>
+      <a href="lp-star.html">Sidekick Star</a>
+      <a href="gallery.html">作例ギャラリー</a>
+      <a href="changelog.html">更新履歴</a>
+      <a href="legal.html">特定商取引法</a>
+      <a href="privacy.html">プライバシーポリシー</a>
+    </div>
+    <p>© 2024–2026 Ichiro Murata. All rights reserved.</p>
+  </div>
+</footer>
+
+</body>
+</html>
