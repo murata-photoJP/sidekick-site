@@ -216,13 +216,16 @@
     }
     .comp-video-wrap video{width:100%;display:block;}
     .comp-video-label{
-      display:flex;justify-content:center;
-      padding:10px 18px;
+      display:grid;grid-template-columns:1fr 1fr;
       background:rgba(0,0,0,.6);
       backdrop-filter:blur(6px);
       font-size:13px;font-weight:800;letter-spacing:.03em;
-      color:rgba(255,255,255,.8);
     }
+    .comp-video-label span{
+      padding:10px 18px;text-align:center;
+    }
+    .comp-video-label .lbl-before{color:rgba(255,255,255,.8);}
+    .comp-video-label .lbl-after{color:var(--accent2);}
     .comp-video-caption{
       text-align:center;font-size:12px;color:var(--muted);
       margin-top:10px;position:relative;z-index:1;
@@ -495,7 +498,10 @@
 
         <!-- Comparison video -->
         <div class="comp-video-wrap">
-          <div class="comp-video-label">↓ 原画：飛行機軌跡削除 ↓</div>
+          <div class="comp-video-label">
+            <span class="lbl-before">↓ 原画</span>
+            <span class="lbl-after">飛行機軌跡削除 ↓</span>
+          </div>
           <video autoplay loop muted playsinline>
             <source src="images/Star/comparison_star.mp4" type="video/mp4">
           </video>
