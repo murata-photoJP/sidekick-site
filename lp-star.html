@@ -273,6 +273,24 @@
     .ba-half-label.before .ba-half-label-text{color:rgba(255,255,255,.85);}
     .ba-half-label.after .ba-half-label-text{color:var(--accent2);}
 
+    /* comparison video */
+    .comp-video-wrap{
+      margin:0 0 6px;
+      border-radius:var(--r-lg);overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      box-shadow:0 24px 64px rgba(0,0,0,.5);
+    }
+    .comp-video-wrap video{width:100%;display:block;}
+    .comp-video-label{
+      display:grid;grid-template-columns:1fr 1fr;
+      background:rgba(0,0,0,.6);
+      backdrop-filter:blur(6px);
+      font-size:13px;font-weight:800;letter-spacing:.03em;
+    }
+    .comp-video-label span{padding:10px 18px;text-align:center;}
+    .comp-video-label .lbl-before{color:rgba(255,255,255,.8);}
+    .comp-video-label .lbl-after{color:var(--accent2);}
+
     /* B/A stats row */
     .ba-stats{
       display:flex;align-items:center;justify-content:center;
@@ -750,6 +768,16 @@
             比較明スタックの原画から、飛行機・車・船など人工の光跡だけを検出・除去。
             村田が20年以上かけて培ってきた軌跡消しの判断を、スクリプトに落とし込んでいます。
           </p>
+        </div>
+
+        <div class="comp-video-wrap">
+          <div class="comp-video-label">
+            <span class="lbl-before">↓ 原画</span>
+            <span class="lbl-after">飛行機軌跡削除 ↓</span>
+          </div>
+          <video autoplay loop muted playsinline>
+            <source src="images/Star/comparison_star.mp4" type="video/mp4">
+          </video>
         </div>
 
         <div class="ba-pair">
