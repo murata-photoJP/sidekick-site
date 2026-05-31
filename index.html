@@ -206,6 +206,30 @@
       font-size:13px;font-weight:700;color:var(--text);
     }
 
+    /* ── Comparison video ── */
+    .comp-video-wrap{
+      position:relative;z-index:1;
+      margin:32px auto 0;
+      max-width:860px;
+      border-radius:var(--r-lg);overflow:hidden;
+      border:1px solid rgba(255,255,255,.09);
+      box-shadow:0 24px 64px rgba(0,0,0,.5);
+    }
+    .comp-video-wrap video{width:100%;display:block;}
+    .comp-video-label{
+      display:flex;justify-content:space-between;
+      padding:10px 18px;
+      background:rgba(0,0,0,.6);
+      backdrop-filter:blur(6px);
+      font-size:13px;font-weight:800;letter-spacing:.03em;
+    }
+    .comp-video-label .lbl-before{color:rgba(255,255,255,.75);}
+    .comp-video-label .lbl-after{color:var(--accent2);}
+    .comp-video-caption{
+      text-align:center;font-size:12px;color:var(--muted);
+      margin-top:10px;position:relative;z-index:1;
+    }
+
     /* ── Trust strip ── */
     .trust{
       border-top:1px solid rgba(255,255,255,.06);
@@ -530,6 +554,18 @@
           <span class="fp">⚡ 比較明 全自動</span>
           <span class="fp">🏠 ローカル処理・外部送信なし</span>
         </div>
+
+        <!-- Comparison video -->
+        <div class="comp-video-wrap">
+          <div class="comp-video-label">
+            <span class="lbl-before">← 原画（飛行機軌跡あり）</span>
+            <span class="lbl-after">軌跡削除後 →</span>
+          </div>
+          <video autoplay loop muted playsinline>
+            <source src="images/Star/comparison_star.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="comp-video-caption">Sidekick Star による飛行機軌跡の自動除去（実際の処理）</p>
 
       </div>
     </section>
