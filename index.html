@@ -209,7 +209,7 @@
     /* ── Comparison video ── */
     .comp-video-wrap{
       position:relative;z-index:1;
-      margin:32px auto 0;
+      margin:28px auto 28px;
       max-width:860px;
       border-radius:var(--r-lg);overflow:hidden;
       border:1px solid rgba(255,255,255,.09);
@@ -495,6 +495,17 @@
           </p>
         </div>
 
+        <!-- Comparison video -->
+        <div class="comp-video-wrap">
+          <div class="comp-video-label">
+            <span class="lbl-before">← 原画（飛行機軌跡あり）</span>
+            <span class="lbl-after">軌跡削除後 →</span>
+          </div>
+          <video autoplay loop muted playsinline>
+            <source src="images/Star/comparison_star.mp4" type="video/mp4">
+          </video>
+        </div>
+
         <!-- B/A main visual -->
         <div class="hero-ba">
           <div class="hero-ba-pair">
@@ -554,18 +565,6 @@
           <span class="fp">⚡ 比較明 全自動</span>
           <span class="fp">🏠 ローカル処理・外部送信なし</span>
         </div>
-
-        <!-- Comparison video -->
-        <div class="comp-video-wrap">
-          <div class="comp-video-label">
-            <span class="lbl-before">← 原画（飛行機軌跡あり）</span>
-            <span class="lbl-after">軌跡削除後 →</span>
-          </div>
-          <video autoplay loop muted playsinline>
-            <source src="images/Star/comparison_star.mp4" type="video/mp4">
-          </video>
-        </div>
-        <p class="comp-video-caption">Sidekick Star による飛行機軌跡の自動除去（実際の処理）</p>
 
       </div>
     </section>
