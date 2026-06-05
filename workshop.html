@@ -193,8 +193,31 @@
     .footer-nav a{color:var(--sub);font-weight:600;}
     .footer-nav a:hover{color:var(--white)}
 
+    /* ws card image */
+    .ws-img{
+      margin:0 -44px 28px;
+      overflow:hidden;
+    }
+    .ws-img img{width:100%;display:block;max-height:260px;object-fit:cover;}
+    .ws-ba{
+      display:grid;grid-template-columns:1fr 1fr;gap:3px;
+      margin:0 -44px 28px;overflow:hidden;
+    }
+    .ws-ba-half{position:relative;}
+    .ws-ba-half img{width:100%;display:block;max-height:220px;object-fit:cover;}
+    .ws-ba-lbl{
+      position:absolute;bottom:0;left:0;right:0;
+      padding:8px 12px;
+      background:linear-gradient(transparent,rgba(0,0,0,.75));
+      font-size:11px;font-weight:800;letter-spacing:.04em;
+    }
+    .ws-ba-lbl.before{color:rgba(255,255,255,.8);}
+    .ws-ba-lbl.after{color:var(--accent2);}
+
     @media(max-width:700px){
       .ws-card{padding:28px 22px;}
+      .ws-img{margin:0 -22px 24px;}
+      .ws-ba{margin:0 -22px 24px;}
       .ws-meta{grid-template-columns:1fr;}
       .header-inner{flex-wrap:wrap;min-height:auto;padding:14px 0;}
       .next-ws > .wrap > div[style]{grid-template-columns:1fr !important;}
@@ -242,6 +265,9 @@
     <div>
     <div class="next-label">募集中</div>
     <div class="ws-card">
+      <div class="ws-img">
+        <img src="images/WS/20260413_214949_138_DxO.jpg" alt="大野山の星空">
+      </div>
       <h2 class="ws-card-title">村田一朗さんと夏の星空を<br>まるごと楽しもう</h2>
 
       <div class="ws-meta">
@@ -279,6 +305,16 @@
     <div>
     <div class="next-label">募集中</div>
     <div class="ws-card">
+      <div class="ws-ba">
+        <div class="ws-ba-half">
+          <img src="images/WS/20260124_181947_577_0.0_0_DxO_比較明_A.jpg" alt="比較明合成 処理前">
+          <div class="ws-ba-lbl before">処理前</div>
+        </div>
+        <div class="ws-ba-half">
+          <img src="images/WS/20260124_181939_447_0.0_0_DxO_比較明_B.jpg" alt="比較明合成 Sidekick処理後">
+          <div class="ws-ba-lbl after">Sidekick処理後</div>
+        </div>
+      </div>
       <h2 class="ws-card-title">星空WSスピンオフ<br>Photoshopで星景写真を<br>美しく仕上げる</h2>
 
       <div class="ws-meta">
