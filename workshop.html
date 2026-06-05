@@ -142,6 +142,77 @@
     .ws-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
     .ws-note{font-size:13px;color:var(--muted);}
 
+    /* ── Pain section ── */
+    .pain-sec{padding:56px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+    .pain-sec-head{margin-bottom:28px;}
+    .pain-sec-head h2{margin:0 0 8px;font-size:clamp(20px,2.8vw,28px);letter-spacing:-.02em;}
+    .pain-sec-head p{margin:0;color:var(--sub);font-size:15px;}
+    .pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .pain-card{
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      border-radius:16px;padding:18px 20px;
+      display:flex;align-items:flex-start;gap:12px;
+    }
+    .pain-icon{font-size:20px;flex-shrink:0;margin-top:2px;}
+    .pain-card h3{margin:0 0 4px;font-size:14px;font-weight:800;}
+    .pain-card p{margin:0;font-size:13px;color:var(--sub);line-height:1.7;}
+
+    /* ── Bridge section ── */
+    .bridge-sec{
+      padding:56px 0;
+      background:linear-gradient(180deg,rgba(255,138,0,.04),transparent);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .bridge-head{text-align:center;margin-bottom:36px;}
+    .bridge-head h2{margin:0 0 10px;font-size:clamp(20px,2.8vw,28px);letter-spacing:-.02em;}
+    .bridge-head p{margin:0;color:var(--sub);font-size:15px;}
+    .bridge-grid{display:grid;grid-template-columns:1fr auto 1fr;gap:16px;align-items:center;}
+    .bridge-card{
+      border-radius:20px;padding:28px 24px;
+    }
+    .bridge-card.tool{
+      background:linear-gradient(160deg,rgba(255,138,0,.08),rgba(255,138,0,.03));
+      border:1px solid rgba(255,138,0,.2);
+    }
+    .bridge-card.learn{
+      background:linear-gradient(160deg,rgba(167,139,250,.08),rgba(167,139,250,.03));
+      border:1px solid rgba(167,139,250,.2);
+    }
+    .bridge-label{font-size:11px;font-weight:800;letter-spacing:.1em;margin-bottom:10px;}
+    .bridge-card.tool .bridge-label{color:var(--accent2);}
+    .bridge-card.learn .bridge-label{color:#c4b5fd;}
+    .bridge-card h3{margin:0 0 8px;font-size:17px;font-weight:800;}
+    .bridge-card p{margin:0;font-size:13px;color:var(--sub);line-height:1.75;}
+    .bridge-arrow{
+      font-size:28px;color:var(--accent2);text-align:center;font-weight:900;
+    }
+    .bridge-result{
+      text-align:center;margin-top:28px;
+      padding:20px 28px;border-radius:16px;
+      background:rgba(62,207,130,.06);border:1px solid rgba(62,207,130,.18);
+    }
+    .bridge-result p{margin:0;font-size:15px;font-weight:700;color:var(--green);}
+
+    /* ── Outcome section ── */
+    .outcome-sec{padding:56px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+    .outcome-head{margin-bottom:28px;}
+    .outcome-head h2{margin:0 0 8px;font-size:clamp(20px,2.8vw,28px);letter-spacing:-.02em;}
+    .outcome-head p{margin:0;color:var(--sub);font-size:15px;}
+    .outcome-list{display:grid;gap:10px;}
+    .outcome-item{
+      display:flex;align-items:flex-start;gap:14px;
+      background:var(--card);border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;padding:16px 20px;
+    }
+    .outcome-check{
+      width:22px;height:22px;border-radius:50%;flex-shrink:0;
+      background:rgba(62,207,130,.15);border:1px solid rgba(62,207,130,.3);
+      display:grid;place-items:center;
+      color:var(--green);font-size:12px;font-weight:900;margin-top:1px;
+    }
+    .outcome-item h3{margin:0 0 3px;font-size:14px;font-weight:800;}
+    .outcome-item p{margin:0;font-size:13px;color:var(--sub);line-height:1.7;}
+
     /* ── History ── */
     .history{padding:60px 0 80px;}
     .section-title{
@@ -219,6 +290,9 @@
       .ws-img{margin:0 -22px 24px;}
       .ws-ba{margin:0 -22px 24px;}
       .ws-meta{grid-template-columns:1fr;}
+      .pain-grid{grid-template-columns:1fr;}
+      .bridge-grid{grid-template-columns:1fr;text-align:center;}
+      .bridge-arrow{transform:rotate(90deg);}
       .header-inner{flex-wrap:wrap;min-height:auto;padding:14px 0;}
       .next-ws > .wrap > div[style]{grid-template-columns:1fr !important;}
     }
@@ -252,10 +326,123 @@
 <div class="page-head">
   <div class="wrap">
     <div class="eyebrow">📷 ワークショップ</div>
-    <h1>村田一朗と、<br>一緒に撮る・仕上げる。</h1>
-    <p>星景撮影・Sidekick実習・大判カメラ・町撮りなど、少人数で実習形式のワークショップを不定期開催。現場でしか伝えられないことがある。</p>
+    <h1>道具だけでは、<br>作品は完成しない。</h1>
+    <p>Sidekick Star は星景後処理を自動化する道具です。でも道具の使い方・考え方を知ることで、はじめて作品の完成度が上がります。Workshopはその「考え方」を学ぶ場所です。</p>
   </div>
 </div>
+
+<!-- Pain section -->
+<section class="pain-sec">
+  <div class="wrap">
+    <div class="pain-sec-head">
+      <h2>こんな悩み、ありませんか？</h2>
+      <p>Sidekick Star を使っていても、こういった壁にぶつかることがあります。</p>
+    </div>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">✈</div>
+        <div>
+          <h3>飛行機軌跡の処理が面倒</h3>
+          <p>スクリプトは動くけど、設定や判断基準がよくわからない。</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🌌</div>
+        <div>
+          <h3>天の川現像がうまくいかない</h3>
+          <p>処理しても「なんか違う」と感じる。何が足りないのかわからない。</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">⚡</div>
+        <div>
+          <h3>比較明合成の考え方がわからない</h3>
+          <p>何枚撮ればいい？インターバルは？根本的な疑問が残ったまま。</p>
+        </div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">⏱</div>
+        <div>
+          <h3>自動化しても時間がかかる</h3>
+          <p>ツールを使っているのに、なぜか後処理に時間がかかっている。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Bridge section -->
+<section class="bridge-sec">
+  <div class="wrap">
+    <div class="bridge-head">
+      <h2>Sidekick Star × Workshop</h2>
+      <p>道具と学びは、セットで機能する。</p>
+    </div>
+    <div class="bridge-grid">
+      <div class="bridge-card tool">
+        <div class="bridge-label">SIDEKICK STAR</div>
+        <h3>道具 ── 自動化・効率化</h3>
+        <p>比較明合成・飛行機軌跡除去・天の川現像を Photoshop スクリプトで自動処理。判断をアルゴリズム化し、手作業1週間をPCの一晩に。</p>
+      </div>
+      <div class="bridge-arrow">＋</div>
+      <div class="bridge-card learn">
+        <div class="bridge-label">WORKSHOP</div>
+        <h3>学び ── 使い方・考え方</h3>
+        <p>なぜその設定なのか、どう判断するのか。撮影現場で20年培った考え方を少人数で直接伝える。道具を使いこなすための場所。</p>
+      </div>
+    </div>
+    <div class="bridge-result">
+      <p>✓ ツール × 考え方 = 自分で判断できるようになる → 作品の完成度が上がる</p>
+    </div>
+  </div>
+</section>
+
+<!-- Outcome section -->
+<section class="outcome-sec">
+  <div class="wrap">
+    <div class="outcome-head">
+      <h2>Workshopで<span style="color:var(--accent2)">できるようになること</span></h2>
+      <p>内容説明ではなく、参加後に何が変わるかで選んでください。</p>
+    </div>
+    <div class="outcome-list">
+      <div class="outcome-item">
+        <div class="outcome-check">✓</div>
+        <div>
+          <h3>比較明合成の考え方が理解できる</h3>
+          <p>何枚撮るべきか、インターバルはどう設定するか。現場での判断基準が身につく。</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check">✓</div>
+        <div>
+          <h3>飛行機軌跡への対処方法がわかる</h3>
+          <p>スクリプトの設定根拠と、自動処理では対応しきれないケースの判断方法を学ぶ。</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check">✓</div>
+        <div>
+          <h3>天の川現像の流れが理解できる</h3>
+          <p>RAWから天の川を引き出す現像の考え方と、Sidekick Star での実装方法を知る。</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check">✓</div>
+        <div>
+          <h3>自宅で再現できるようになる</h3>
+          <p>当日の手順をそのまま持ち帰れる。次の撮影から自分でできるようになる。</p>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check">✓</div>
+        <div>
+          <h3>Sidekick Star を使いこなせる</h3>
+          <p>機能を知るだけでなく、どの場面でどう使うかの判断力が身につく。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Next WS -->
 <section class="next-ws">
