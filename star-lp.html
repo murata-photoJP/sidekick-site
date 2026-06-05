@@ -219,28 +219,14 @@
     .btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(99,102,241,.45);text-decoration:none;}
     .btn-note{font-size:12px;color:var(--muted);margin-top:12px;}
 
-    /* Star photo showcase */
-    .star-showcase{padding:0 0 8px;background:var(--bg);}
-    .star-showcase-grid{
-      display:grid;grid-template-columns:1fr 1fr;gap:4px;
-    }
-    .star-showcase-item{position:relative;}
-    .star-showcase-item img{width:100%;height:300px;object-fit:cover;display:block;}
-    .star-showcase-lbl{
-      position:absolute;bottom:0;left:0;right:0;
-      padding:10px 16px;
-      background:linear-gradient(transparent,rgba(0,0,0,.75));
-      font-size:12px;font-weight:800;color:rgba(255,255,255,.85);
-      letter-spacing:.04em;
-    }
-    .showcase-caption{
-      text-align:center;font-size:12px;color:var(--muted);
-      padding:10px 0 24px;
-    }
-    @media(max-width:600px){
-      .star-showcase-grid{grid-template-columns:1fr;}
-      .star-showcase-item img{height:240px;}
-    }
+    /* Hero image */
+    .hero-img-full{margin:0;padding:0;}
+    .hero-img-full img{width:100%;max-height:520px;object-fit:cover;display:block;}
+
+    /* Image break */
+    .img-break{margin:2.4em 0;}
+    .img-break img{width:100%;max-height:400px;object-fit:cover;display:block;border-radius:var(--r);}
+    .img-break figcaption{font-size:12px;color:var(--muted);text-align:right;margin-top:6px;}
 
     /* footer */
     .site-footer{
@@ -282,19 +268,9 @@
     </div>
   </section>
 
-  <!-- Star photo showcase -->
-  <div class="star-showcase">
-    <div class="star-showcase-grid">
-      <div class="star-showcase-item">
-        <img src="images/PhotoAdvice/web/20220430_011452_783_0.0.jpg" alt="天の川 作例" loading="lazy">
-        <div class="star-showcase-lbl">天の川現像・強調</div>
-      </div>
-      <div class="star-showcase-item">
-        <img src="images/PhotoAdvice/web/統合_20190522_193914_0175617_0_DxO.jpg" alt="比較明合成 星の軌跡 作例" loading="lazy">
-        <div class="star-showcase-lbl">比較明合成による星の軌跡</div>
-      </div>
-    </div>
-    <p class="showcase-caption">村田一朗 作例 — 天の川現像と比較明合成、どちらも星景講座で扱います</p>
+  <!-- Hero image: 天の川を1枚大きく -->
+  <div class="hero-img-full">
+    <img src="images/PhotoAdvice/web/20220430_011452_783_0.0.jpg" alt="天の川 村田一朗 作例" loading="lazy">
   </div>
 
   <!-- Article -->
@@ -356,6 +332,11 @@
       <h3>① 比較明合成・星の軌跡</h3>
       <p>星景写真には2つの表現があります。天の川のように「点として」星を写すものと、長時間露光や比較明合成で「軌跡として」星を写すものです。</p>
       <p>比較明合成は、複数枚を合成して星の動きを軌跡として表現する手法です。何枚撮ればいいのか、インターバルはどう設定するのか、飛行機や人工衛星の軌跡を除くにはどうするのか——<strong>撮影から仕上げまでの判断プロセスを学びます。</strong></p>
+
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/統合_20190522_193914_0175617_0_DxO.jpg" alt="比較明合成による星の軌跡 村田一朗 作例" loading="lazy">
+        <figcaption>比較明合成による星の軌跡</figcaption>
+      </figure>
 
       <h3>② 天の川現像・強調</h3>
       <p>「撮れているはずなのに天の川が出ない」——これはRAW現像の判断の問題です。露光量・ホワイトバランス・カラーグレーディングをどこまでどう調整するのか。光害の色をどう扱うのかを、実際のRAWデータで学びます。</p>

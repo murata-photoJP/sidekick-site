@@ -180,34 +180,14 @@
     .btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(217,119,6,.45);text-decoration:none;}
     .btn-note{font-size:12px;color:var(--muted);margin-top:12px;}
 
-    /* Photo gallery */
-    .photo-gallery{
-      padding:0 0 8px;
-      background:var(--bg);
-    }
-    .gallery-grid{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      grid-template-rows:auto auto auto;
-      gap:4px;
-      width:100%;
-    }
-    .gallery-grid img{
-      width:100%;height:220px;object-fit:cover;display:block;
-    }
-    .gallery-grid .wide{
-      grid-column:span 2;
-    }
-    .gallery-grid .wide img{height:220px;}
-    .gallery-caption{
-      text-align:center;font-size:12px;color:var(--muted);
-      padding:10px 0 24px;
-    }
-    @media(max-width:600px){
-      .gallery-grid{grid-template-columns:1fr 1fr;}
-      .gallery-grid .wide{grid-column:span 2;}
-      .gallery-grid img,.gallery-grid .wide img{height:160px;}
-    }
+    /* Hero image */
+    .hero-img-full{margin:0;padding:0;}
+    .hero-img-full img{width:100%;max-height:520px;object-fit:cover;display:block;}
+
+    /* Image break */
+    .img-break{margin:2.4em 0;}
+    .img-break img{width:100%;max-height:400px;object-fit:cover;display:block;border-radius:var(--r);}
+    .img-break figcaption{font-size:12px;color:var(--muted);text-align:right;margin-top:6px;}
 
     /* Footer */
     .site-footer{
@@ -250,18 +230,9 @@
     </div>
   </section>
 
-  <!-- Photo gallery -->
-  <div class="photo-gallery">
-    <div class="gallery-grid">
-      <div class="wide"><img src="images/PhotoAdvice/web/20190522_101308_0172942_-0.5.jpg" alt="風景写真 作例" loading="lazy"></div>
-      <div><img src="images/PhotoAdvice/web/20180606_175313_0005549_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
-      <div><img src="images/PhotoAdvice/web/20190522_084237_0172892.jpg" alt="風景写真 作例" loading="lazy"></div>
-      <div><img src="images/PhotoAdvice/web/20190522_125712_0173622.jpg" alt="風景写真 作例" loading="lazy"></div>
-      <div class="wide"><img src="images/PhotoAdvice/web/20190524_062506_0180949_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
-      <div><img src="images/PhotoAdvice/web/20190524_063024_0180987_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
-      <div><img src="images/PhotoAdvice/web/20190524_084623_0181892_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
-    </div>
-    <p class="gallery-caption">村田一朗 作例 — 構図と光の読み方で、写真の伝わり方は変わる</p>
+  <!-- Hero image: 1枚大きく -->
+  <div class="hero-img-full">
+    <img src="images/PhotoAdvice/web/20190522_101308_0172942_-0.5.jpg" alt="風景写真 村田一朗 作例" loading="lazy">
   </div>
 
   <!-- Article -->
@@ -286,6 +257,10 @@
         <p>「うまく撮れる」と「伝わる写真が撮れる」は、別のことです。</p>
       </div>
 
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/20190522_084237_0172892.jpg" alt="風景写真 作例" loading="lazy">
+      </figure>
+
       <h2>なぜ「たくさん撮っているのに」変わらないのか</h2>
 
       <p>写真が上達しない理由として多くの人が考えるのは、「まだ撮影量が足りない」「もっと良い機材があれば」「センスがない」といったことです。</p>
@@ -303,6 +278,10 @@
         <p>構図とは「どこに何を置くか」のルールではなく、「何をどう伝えたいのか」を画面に落とし込む言語です。言語を知っていても、伝えたいことがなければ何も伝わりません。</p>
       </div>
 
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/20180606_175313_0005549_-1.0.jpg" alt="風景写真 作例" loading="lazy">
+      </figure>
+
       <h2>構図の本当の役割</h2>
 
       <p>三分割・対角線・シンメトリー——構図の「型」は、それ自体が目的ではありません。<strong>型は、意図を効率よく伝えるための手段</strong>です。</p>
@@ -310,6 +289,10 @@
       <p>熟練した写真家が構図を選ぶとき、「三分割だから」ではなく、「この光をこう見せたいから、視線をここに誘導する」という判断が先にあります。型はそのあとに選ばれます。</p>
 
       <p>構図を学ぶとはつまり、<strong>「自分が感じたことを写真に変換する言語を身につける」</strong>こと。型の暗記ではなく、判断力の育成です。</p>
+
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/20190522_125712_0173622.jpg" alt="風景写真 作例" loading="lazy">
+      </figure>
 
       <h2>「伝わる写真」と「記録の写真」の違い</h2>
 
@@ -338,6 +321,10 @@
 
       <p>この差は機材でも撮影地でも生まれません。<strong>「何を見せたいか」という意図の有無</strong>から生まれます。</p>
 
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/20190524_062506_0180949_-1.0.jpg" alt="風景写真 作例" loading="lazy">
+      </figure>
+
       <h2>実際に学べること</h2>
 
       <ul class="learn-list">
@@ -350,6 +337,10 @@
       </ul>
 
       <p>月ごとに自分の撮影作品を提出し、講師から具体的なフィードバックを受けられます。プロカメラマンの作例約300点（PDF）も参照でき、「どう判断してその構図を選んだか」のプロセスを学べます。</p>
+
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/20190524_063024_0180987_-1.0.jpg" alt="風景写真 作例" loading="lazy">
+      </figure>
 
       <h2>受講後に変わること</h2>
 
@@ -373,6 +364,10 @@
       </div>
 
       <p style="margin-top:1.4em;">講座は1年以上の継続が推奨されています。写真の「判断力」は短期で身につくものではなく、撮影と添削を繰り返すことで徐々に身体に染み込んでいくものです。「自己流で10年かかること」を、体系的に学ぶことで大幅に短縮できます。</p>
+
+      <figure class="img-break">
+        <img src="images/PhotoAdvice/web/20190524_084623_0181892_-1.0.jpg" alt="風景写真 作例" loading="lazy">
+      </figure>
 
     </div>
   </div>
