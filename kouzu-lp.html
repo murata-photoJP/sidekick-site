@@ -180,6 +180,35 @@
     .btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(217,119,6,.45);text-decoration:none;}
     .btn-note{font-size:12px;color:var(--muted);margin-top:12px;}
 
+    /* Photo gallery */
+    .photo-gallery{
+      padding:0 0 8px;
+      background:var(--bg);
+    }
+    .gallery-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-template-rows:auto auto auto;
+      gap:4px;
+      width:100%;
+    }
+    .gallery-grid img{
+      width:100%;height:220px;object-fit:cover;display:block;
+    }
+    .gallery-grid .wide{
+      grid-column:span 2;
+    }
+    .gallery-grid .wide img{height:220px;}
+    .gallery-caption{
+      text-align:center;font-size:12px;color:var(--muted);
+      padding:10px 0 24px;
+    }
+    @media(max-width:600px){
+      .gallery-grid{grid-template-columns:1fr 1fr;}
+      .gallery-grid .wide{grid-column:span 2;}
+      .gallery-grid img,.gallery-grid .wide img{height:160px;}
+    }
+
     /* Footer */
     .site-footer{
       padding:32px 0;border-top:1px solid rgba(255,255,255,.06);
@@ -220,6 +249,20 @@
       </p>
     </div>
   </section>
+
+  <!-- Photo gallery -->
+  <div class="photo-gallery">
+    <div class="gallery-grid">
+      <div class="wide"><img src="images/PhotoAdvice/web/20190522_101308_0172942_-0.5.jpg" alt="風景写真 作例" loading="lazy"></div>
+      <div><img src="images/PhotoAdvice/web/20180606_175313_0005549_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
+      <div><img src="images/PhotoAdvice/web/20190522_084237_0172892.jpg" alt="風景写真 作例" loading="lazy"></div>
+      <div><img src="images/PhotoAdvice/web/20190522_125712_0173622.jpg" alt="風景写真 作例" loading="lazy"></div>
+      <div class="wide"><img src="images/PhotoAdvice/web/20190524_062506_0180949_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
+      <div><img src="images/PhotoAdvice/web/20190524_063024_0180987_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
+      <div><img src="images/PhotoAdvice/web/20190524_084623_0181892_-1.0.jpg" alt="風景写真 作例" loading="lazy"></div>
+    </div>
+    <p class="gallery-caption">村田一朗 作例 — 構図と光の読み方で、写真の伝わり方は変わる</p>
+  </div>
 
   <!-- Article -->
   <div class="article">
