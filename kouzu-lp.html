@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>カメラは上達した。でも写真は変わらない。｜写真が伝わらない本当の理由と構図の学び方</title>
+  <meta name="description" content="写真をたくさん撮っているのに上達しない——その理由は構図の「知識」にあるのではなく「判断」にあります。写真が伝わらない根本的な理由と、実際に変わるための方法を村田一朗が解説します。">
+  <meta name="keywords" content="構図,写真 上達,写真 伝わらない,構図 学び方,風景写真 構図,写真 センス,写真実践塾">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="カメラは上達した。でも写真は変わらない。｜写真が伝わらない本当の理由">
+  <meta property="og:description" content="写真をたくさん撮っているのに上達しない——その理由と、実際に変わるための方法を解説します。">
+  <meta property="og:url" content="https://sidekick-site-tawny.vercel.app/kouzu-lp">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root{
+      --bg:#0d0b09;
+      --bg2:#131109;
+      --card:#1a1710;
+      --line:#2a2618;
+      --text:#f5f0e8;
+      --sub:#9a9282;
+      --muted:#5a5248;
+      --accent:#d97706;
+      --accent2:#fbbf24;
+      --green:#34d399;
+      --blue:#60a5fa;
+      --max:720px;
+      --max-wide:960px;
+      --r:16px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.85;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:var(--accent2);text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    img{max-width:100%;display:block;}
+    p{margin:0 0 1.4em;}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+    .wrap-wide{width:min(var(--max-wide),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .site-header{
+      padding:18px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .header-inner{display:flex;justify-content:space-between;align-items:center;}
+    .site-name{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.04em;}
+
+    /* ── Hero ── */
+    .hero{
+      padding:80px 0 60px;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% -10%,rgba(217,119,6,.12),transparent),
+        var(--bg);
+      border-bottom:1px solid var(--line);
+    }
+    .hero-tag{
+      display:inline-block;
+      padding:4px 12px;border-radius:999px;
+      background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);
+      color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:.06em;
+      margin-bottom:24px;
+    }
+    .hero h1{
+      margin:0 0 20px;
+      font-size:clamp(28px,4.5vw,48px);
+      line-height:1.15;letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+    .hero h1 em{font-style:normal;color:var(--accent2);}
+    .hero-lead{
+      font-size:clamp(16px,1.8vw,18px);
+      color:var(--sub);line-height:1.9;max-width:600px;
+    }
+
+    /* ── Article ── */
+    .article{padding:64px 0;}
+    .article h2{
+      margin:2em 0 .8em;
+      font-size:clamp(20px,2.6vw,26px);
+      letter-spacing:-.025em;line-height:1.25;
+      padding-bottom:12px;
+      border-bottom:1px solid var(--line);
+    }
+    .article h3{
+      margin:1.6em 0 .5em;
+      font-size:clamp(17px,2vw,20px);
+      letter-spacing:-.015em;
+      color:var(--accent2);
+    }
+    .article p{color:var(--sub);font-size:16px;line-height:1.95;}
+    .article strong{color:var(--text);font-weight:800;}
+
+    .pain-list{list-style:none;margin:0 0 1.4em;padding:0;display:grid;gap:10px;}
+    .pain-list li{
+      display:flex;align-items:flex-start;gap:12px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      border-radius:12px;padding:14px 18px;
+      font-size:15px;color:var(--text);
+    }
+    .pain-list li::before{content:"—";color:var(--muted);flex-shrink:0;margin-top:2px;}
+
+    .quote{
+      margin:2em 0;padding:24px 28px;
+      background:linear-gradient(135deg,rgba(217,119,6,.08),rgba(217,119,6,.02));
+      border-left:3px solid var(--accent);
+      border-radius:0 var(--r) var(--r) 0;
+    }
+    .quote p{color:var(--text);font-size:17px;font-weight:700;line-height:1.7;margin:0;}
+
+    .keybox{
+      margin:2em 0;padding:24px 28px;
+      background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+    }
+    .keybox-label{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--accent2);margin-bottom:10px;}
+    .keybox p{color:var(--text);margin:0;font-size:15px;line-height:1.85;}
+
+    .learn-list{list-style:none;margin:0 0 1.4em;padding:0;display:grid;gap:8px;}
+    .learn-list li{display:flex;align-items:flex-start;gap:12px;font-size:15px;color:var(--sub);}
+    .learn-list li::before{content:"✓";color:var(--green);font-weight:900;flex-shrink:0;margin-top:2px;}
+
+    .compare{
+      display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:1.4em 0;
+    }
+    .compare-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;}
+    .compare-card h4{margin:0 0 10px;font-size:13px;font-weight:800;letter-spacing:.06em;}
+    .compare-card.before h4{color:var(--muted);}
+    .compare-card.after h4{color:var(--accent2);}
+    .compare-card ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;}
+    .compare-card ul li{font-size:13px;color:var(--sub);}
+
+    .future-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:1.4em 0;}
+    .future-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;}
+    .future-card h4{margin:0 0 6px;font-size:14px;color:var(--accent2);}
+    .future-card p{margin:0;font-size:13px;color:var(--sub);line-height:1.75;}
+
+    /* Course section */
+    .course-sec{
+      padding:56px 0;
+      background:var(--bg2);
+      border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    }
+    .course-badge{
+      display:inline-block;padding:4px 12px;border-radius:999px;
+      background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);
+      color:var(--accent2);font-size:12px;font-weight:700;letter-spacing:.06em;margin-bottom:16px;
+    }
+    .course-sec h2{margin:0 0 16px;font-size:clamp(22px,3vw,30px);letter-spacing:-.025em;}
+    .course-desc{font-size:15px;color:var(--sub);line-height:1.9;margin-bottom:28px;}
+    .course-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:32px;}
+    .cf-item{
+      display:flex;align-items:center;gap:10px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);
+      border-radius:10px;padding:12px 16px;font-size:14px;color:var(--text);font-weight:600;
+    }
+    .cf-item::before{content:"●";color:var(--accent);font-size:8px;}
+    .guarantee{font-size:13px;color:var(--muted);margin-top:16px;}
+
+    /* CTA */
+    .cta-wrap{text-align:center;padding:56px 0 64px;}
+    .cta-wrap h2{margin:0 0 12px;font-size:clamp(20px,2.6vw,26px);}
+    .cta-wrap p{color:var(--sub);font-size:15px;margin:0 0 28px;}
+    .btn-cta{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:0 40px;min-height:60px;border-radius:14px;
+      background:linear-gradient(135deg,#d97706,#fbbf24);
+      color:#111;font-size:16px;font-weight:800;
+      box-shadow:0 8px 32px rgba(217,119,6,.35);
+      transition:.2s;text-decoration:none;letter-spacing:.01em;
+    }
+    .btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(217,119,6,.45);text-decoration:none;}
+    .btn-note{font-size:12px;color:var(--muted);margin-top:12px;}
+
+    /* Footer */
+    .site-footer{
+      padding:32px 0;border-top:1px solid rgba(255,255,255,.06);
+      text-align:center;font-size:13px;color:var(--muted);
+    }
+    .footer-links{display:flex;justify-content:center;gap:20px;margin-bottom:12px;flex-wrap:wrap;}
+    .footer-links a{color:var(--muted);}
+
+    @media(max-width:600px){
+      .compare{grid-template-columns:1fr;}
+      .future-grid{grid-template-columns:1fr;}
+      .course-features{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap-wide">
+    <div class="header-inner">
+      <span class="site-name">村田一朗 写真の学び場</span>
+      <a href="https://photo-kouza.com/zissen_kiso/kouzu/" style="font-size:13px;font-weight:700;color:var(--accent2);" target="_blank" rel="noopener">講座に申し込む →</a>
+    </div>
+  </div>
+</header>
+
+<article>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-tag">写真構図 上達のヒント</div>
+      <h1>カメラは上達した。<br><em>でも、写真は変わらない。</em></h1>
+      <p class="hero-lead">
+        露出もわかった。ピントも合う。たくさん撮っている。<br>
+        それでも「何かが足りない」と感じているなら、<br>
+        それは技術の問題ではなく「伝える力」の問題かもしれません。
+      </p>
+    </div>
+  </section>
+
+  <!-- Article -->
+  <div class="article">
+    <div class="wrap">
+
+      <h2>こんな状況、心当たりはありませんか？</h2>
+
+      <ul class="pain-list">
+        <li>写真を撮るたびに「なんか違う」と感じる</li>
+        <li>SNSに投稿しても反応が少ない</li>
+        <li>構図の本を読んだが、撮るときに活かせない</li>
+        <li>何を撮ればいいのかわからなくなることがある</li>
+        <li>同じような写真ばかりになる</li>
+        <li>他の人の写真と比べて、どこが違うのかわからない</li>
+        <li>写真に自信が持てない</li>
+      </ul>
+
+      <p>これらは、写真経験1〜5年の多くの人が経験する壁です。<br>カメラの腕前が上がっても、ある時点から成長が止まったように感じる。</p>
+
+      <div class="quote">
+        <p>「うまく撮れる」と「伝わる写真が撮れる」は、別のことです。</p>
+      </div>
+
+      <h2>なぜ「たくさん撮っているのに」変わらないのか</h2>
+
+      <p>写真が上達しない理由として多くの人が考えるのは、「まだ撮影量が足りない」「もっと良い機材があれば」「センスがない」といったことです。</p>
+
+      <p>しかし実際には、これらはほとんど関係ありません。</p>
+
+      <p>本当の問題は、<strong>「何を見せたいのか」が決まっていないまま撮っていること</strong>です。</p>
+
+      <p>たとえば夕焼けを撮るとき。空の色が綺麗だから、とりあえず広角で全体を収める。結果、すべてが主役のような、すべてが主役でないような写真になる。</p>
+
+      <p>構図の三分割法を知っていても、「今この瞬間にこの被写体を、なぜこの位置に置くのか」という意図が伴っていなければ、ルールの適用にすぎません。<strong>規則正しく並べた写真と、人を動かす写真は、まったく違うもの</strong>です。</p>
+
+      <div class="keybox">
+        <div class="keybox-label">POINT</div>
+        <p>構図とは「どこに何を置くか」のルールではなく、「何をどう伝えたいのか」を画面に落とし込む言語です。言語を知っていても、伝えたいことがなければ何も伝わりません。</p>
+      </div>
+
+      <h2>構図の本当の役割</h2>
+
+      <p>三分割・対角線・シンメトリー——構図の「型」は、それ自体が目的ではありません。<strong>型は、意図を効率よく伝えるための手段</strong>です。</p>
+
+      <p>熟練した写真家が構図を選ぶとき、「三分割だから」ではなく、「この光をこう見せたいから、視線をここに誘導する」という判断が先にあります。型はそのあとに選ばれます。</p>
+
+      <p>構図を学ぶとはつまり、<strong>「自分が感じたことを写真に変換する言語を身につける」</strong>こと。型の暗記ではなく、判断力の育成です。</p>
+
+      <h2>「伝わる写真」と「記録の写真」の違い</h2>
+
+      <div class="compare">
+        <div class="compare-card before">
+          <h4>記録の写真</h4>
+          <ul>
+            <li>「あったもの」をそのまま写す</li>
+            <li>被写体が均等に配置される</li>
+            <li>何が主役かわかりにくい</li>
+            <li>見る人の視線が定まらない</li>
+            <li>「綺麗だね」で終わる</li>
+          </ul>
+        </div>
+        <div class="compare-card after">
+          <h4>伝わる写真</h4>
+          <ul>
+            <li>「見せたいもの」を意図して切り取る</li>
+            <li>主役と脇役が明確</li>
+            <li>視線の流れが設計されている</li>
+            <li>見た人が次のコマを想像する</li>
+            <li>感情や場の空気が伝わる</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>この差は機材でも撮影地でも生まれません。<strong>「何を見せたいか」という意図の有無</strong>から生まれます。</p>
+
+      <h2>実際に学べること</h2>
+
+      <ul class="learn-list">
+        <li>三分割・対角・シンメトリーなど基本構図の原理と、その選び方</li>
+        <li>光・影・色の配置が写真に与える影響</li>
+        <li>被写体の「重さ」と画面バランスの関係</li>
+        <li>朝焼け・夕焼けなど光が変わる場面での判断方法</li>
+        <li>同じ被写体でも違う印象を生む切り取り方の考え方</li>
+        <li>自分の写真のどこが問題なのかを自己診断する力</li>
+      </ul>
+
+      <p>月ごとに自分の撮影作品を提出し、講師から具体的なフィードバックを受けられます。プロカメラマンの作例約300点（PDF）も参照でき、「どう判断してその構図を選んだか」のプロセスを学べます。</p>
+
+      <h2>受講後に変わること</h2>
+
+      <div class="future-grid">
+        <div class="future-card">
+          <h4>撮影前に「意図」が生まれる</h4>
+          <p>「今日は何を撮ろう」ではなく「今日はこれをこう見せよう」と考えて出かけられるようになる。</p>
+        </div>
+        <div class="future-card">
+          <h4>同じ場所でも違う写真が撮れる</h4>
+          <p>被写体ではなく光と構造を見る目が育ち、どこでも作品を作れる力がつく。</p>
+        </div>
+        <div class="future-card">
+          <h4>自分の写真の問題がわかる</h4>
+          <p>「なんか違う」の正体を言語化できるようになり、次の改善につながる。</p>
+        </div>
+        <div class="future-card">
+          <h4>写真に自信が持てる</h4>
+          <p>意図して撮った写真は説明できる。説明できる写真は、人に伝わる。</p>
+        </div>
+      </div>
+
+      <p style="margin-top:1.4em;">講座は1年以上の継続が推奨されています。写真の「判断力」は短期で身につくものではなく、撮影と添削を繰り返すことで徐々に身体に染み込んでいくものです。「自己流で10年かかること」を、体系的に学ぶことで大幅に短縮できます。</p>
+
+    </div>
+  </div>
+
+  <!-- Course section -->
+  <section class="course-sec">
+    <div class="wrap">
+      <div class="course-badge">📷 講座案内</div>
+      <h2>写真実践塾 構図講座</h2>
+      <p class="course-desc">
+        プロカメラマン・村田一朗が主宰する実践型の構図講座です。<br>
+        「構図のルールを覚える」のではなく、<strong>「自分の意図を写真に変換する力」を育てること</strong>を目的にしています。<br>
+        添削と実作を繰り返しながら、確実に変わる実感を得てください。
+      </p>
+
+      <div class="course-features">
+        <div class="cf-item">構図の原理から実践判断まで学ぶ</div>
+        <div class="cf-item">撮影作品への具体的な添削フィードバック</div>
+        <div class="cf-item">プロ作例約300点PDF付き</div>
+        <div class="cf-item">カメラ機材に依存しない技術の習得</div>
+        <div class="cf-item">25日間返金保証あり</div>
+        <div class="cf-item">月1日からスタート可能</div>
+      </div>
+
+      <div style="text-align:center;">
+        <a class="btn-cta" href="https://photo-kouza.com/zissen_kiso/kouzu/" target="_blank" rel="noopener">
+          写真実践塾 構図講座を見る →
+        </a>
+        <p class="btn-note">外部サイト（photo-kouza.com）に移動します</p>
+        <p class="guarantee">※ 25日間返金保証あり。まず試してみてください。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <div class="cta-wrap">
+    <div class="wrap">
+      <h2>「伝わる写真」を撮るための第一歩</h2>
+      <p>たくさん撮っても変わらないなら、<br>見てもらい方を学ぶときかもしれません。</p>
+      <a class="btn-cta" href="https://photo-kouza.com/zissen_kiso/kouzu/" target="_blank" rel="noopener">
+        構図講座の詳細を見る →
+      </a>
+      <p class="btn-note">photo-kouza.com（外部サイト）に移動します</p>
+    </div>
+  </div>
+
+</article>
+
+<footer class="site-footer">
+  <div class="wrap-wide">
+    <div class="footer-links">
+      <a href="https://photo-kouza.com/zissen_kiso/kouzu/" target="_blank" rel="noopener">写真実践塾 構図講座</a>
+      <a href="https://photo-kouza.com/zissen_kiso/star/" target="_blank" rel="noopener">写真実践塾 星景講座</a>
+      <a href="star-lp.html">星景写真の学び方 →</a>
+      <a href="index.html">Sidekick（後処理ツール）</a>
+    </div>
+    <p>© 村田一朗 / Ichiro Murata</p>
+  </div>
+</footer>
+
+</body>
+</html>
