@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>なぜ私は写真を撮るのか — 村田一朗 / Sidekick</title>
+  <meta name="description" content="写真家・村田一朗の原点。幼少期の美術館体験、東大生産技術研究所での画像処理研究、そしてSidekick開発へ。すべては「発見」の延長線上にある。">
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .hdr{
+      position:sticky;top:0;z-index:40;
+      background:rgba(9,9,12,.9);backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hdr-in{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;}
+    .brand-mk{
+      width:36px;height:36px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;font-size:14px;flex-shrink:0;
+    }
+    .brand-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;display:block;margin-top:1px;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover,.nav a.active{color:#fff}
+    .nav-dl{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 15px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#111;font-size:13px;font-weight:800;white-space:nowrap;
+      box-shadow:0 4px 14px rgba(255,138,0,.28);transition:.15s;
+    }
+    .nav-dl:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.38);}
+
+    /* ── Article layout ── */
+    .page-hero{
+      padding:72px 0 56px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:680px;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(28px,4.5vw,50px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:20px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-lead{
+      color:var(--sub);font-size:clamp(15px,1.8vw,17px);line-height:1.85;
+    }
+
+    /* ── Article body ── */
+    .article{padding:64px 0 80px;}
+    .article-inner{
+      display:grid;
+      grid-template-columns:1fr 320px;
+      gap:56px;
+      align-items:start;
+    }
+    @media(max-width:800px){
+      .article-inner{grid-template-columns:1fr;}
+    }
+
+    .prose{max-width:640px;}
+    .prose h2{
+      font-size:clamp(20px,2.4vw,26px);
+      font-weight:800;letter-spacing:-.02em;
+      margin:52px 0 16px;padding-top:16px;
+      border-top:1px solid rgba(255,255,255,.07);
+      color:var(--text);
+    }
+    .prose h2:first-child{margin-top:0;padding-top:0;border-top:none;}
+    .prose p{
+      font-size:clamp(14px,1.5vw,15.5px);
+      line-height:1.95;
+      color:var(--sub);
+      margin-bottom:18px;
+    }
+    .prose p strong{color:var(--text);font-weight:700;}
+    .prose blockquote{
+      margin:28px 0;
+      padding:20px 24px;
+      background:var(--card);
+      border-left:3px solid var(--accent);
+      border-radius:0 12px 12px 0;
+      color:var(--text);
+      font-size:15px;
+      line-height:1.85;
+      font-style:italic;
+    }
+    .prose .note{
+      font-size:13px;
+      color:var(--muted);
+      padding:14px 18px;
+      background:var(--card2);
+      border-radius:10px;
+      margin:20px 0;
+    }
+
+    /* ── Sidebar / Profile card ── */
+    .sidebar{}
+    .profile-card{
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:var(--r);
+      padding:28px 24px;
+      position:sticky;
+      top:84px;
+    }
+    .profile-avatar{
+      width:80px;height:80px;border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;
+      font-size:32px;
+      margin-bottom:16px;
+      border:3px solid rgba(255,255,255,.1);
+    }
+    .profile-name{font-size:18px;font-weight:800;margin-bottom:4px;}
+    .profile-en{font-size:12px;color:var(--muted);letter-spacing:.06em;margin-bottom:16px;}
+    .profile-bio{font-size:13px;color:var(--sub);line-height:1.8;margin-bottom:20px;}
+    .profile-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:20px;}
+    .tag{
+      font-size:11px;font-weight:700;
+      padding:4px 10px;border-radius:999px;
+      background:rgba(255,138,0,.1);
+      color:var(--accent2);
+      border:1px solid rgba(255,138,0,.2);
+    }
+    .profile-links{display:flex;flex-direction:column;gap:8px;}
+    .profile-link{
+      display:flex;align-items:center;gap:8px;
+      font-size:13px;color:var(--sub);
+      padding:8px 12px;border-radius:9px;
+      background:var(--card2);
+      transition:.1s;
+    }
+    .profile-link:hover{color:#fff;background:rgba(255,255,255,.05);}
+
+    .award-item{
+      display:flex;align-items:flex-start;gap:10px;
+      padding:10px 0;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      font-size:13px;
+    }
+    .award-item:last-child{border-bottom:none;}
+    .award-dot{
+      width:8px;height:8px;border-radius:50%;
+      background:var(--accent);
+      margin-top:5px;flex-shrink:0;
+    }
+    .award-label{color:var(--sub);line-height:1.7;}
+
+    /* ── Section separator ── */
+    .section-label{
+      font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+      color:var(--accent2);margin-bottom:8px;
+    }
+
+    /* ── Timeline ── */
+    .timeline{margin:28px 0;border-left:2px solid rgba(255,138,0,.25);padding-left:24px;}
+    .tl-item{position:relative;padding-bottom:24px;}
+    .tl-item:last-child{padding-bottom:0;}
+    .tl-dot{
+      position:absolute;left:-31px;top:4px;
+      width:14px;height:14px;border-radius:50%;
+      background:var(--bg);border:2px solid var(--accent);
+    }
+    .tl-year{font-size:11px;font-weight:800;color:var(--accent2);letter-spacing:.06em;margin-bottom:4px;}
+    .tl-desc{font-size:14px;color:var(--sub);line-height:1.75;}
+    .tl-desc strong{color:var(--text);}
+
+    /* ── Footer ── */
+    .footer{padding:30px 0 48px;border-top:1px solid rgba(255,255,255,.06);}
+    .footer-in{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+  </style>
+</head>
+<body>
+
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a href="index.html" class="brand">
+        <div class="brand-mk">S</div>
+        <div>Sidekick</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">TOP</a>
+        <a href="lp-star.html">Star LP</a>
+        <a href="sidekick-star.html">詳細・デモ</a>
+        <a href="gallery.html">作例</a>
+        <a href="workshop.html">WS</a>
+        <a href="about.html" class="active">私について</a>
+        <a class="nav-dl"
+           href="https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Star.zip">
+          ▶ Star を無料で試す
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">写真とSidekickの原点</div>
+          <h1 class="page-h1">なぜ私は<br><em>写真を撮るのか</em></h1>
+          <p class="page-lead">
+            受賞歴でも機材スペックでもない。<br>
+            写真家として、そしてSidekick開発者として、<br>その根っこにあるのは「発見すること」への飽くなき興味だ。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="article">
+      <div class="wrap">
+        <div class="article-inner">
+
+          <!-- ── 本文 ── -->
+          <article class="prose">
+
+            <h2>上野の美術館と、解説のない体験</h2>
+            <p>
+              子供の頃、両親は画家を目指していた。
+              戦後の日本でその道を諦めた二人は、美術館へ行くことだけはやめなかった。
+            </p>
+            <p>
+              私は上野の美術館へ何度も連れて行かれた。
+              正直に言えば、当時は退屈だった。覚えているのは入場待ちの長い列ばかりだ。
+            </p>
+            <p>
+              ただ、不思議なことに、<strong>作品について説明された記憶がない。</strong>
+            </p>
+            <blockquote>
+              「これはこういう絵だ」<br>
+              「こう見るべきだ」
+            </blockquote>
+            <p>
+              そう教えられたことがない。ただ、本物だけを見続けた。
+            </p>
+            <p>
+              だから今でも私は、作品を見る前に解説を読むより、
+              まず見て、<strong>面白いと思うかどうか</strong>を大切にしている。
+              「この作品は何を意味しているんだろう」より「なんか好き」が先に来る。
+            </p>
+
+            <h2>発見する写真</h2>
+            <p>
+              私の写真の多くは、何かを表現しようとして作ったものではない。
+            </p>
+            <div class="timeline">
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">波 ICM</div>
+                <div class="tl-desc">動かして撮ってみた。<strong>予想外の形が現れた。</strong></div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">赤外線写真</div>
+                <div class="tl-desc">葉っぱを撮ったら青くなった。その色が面白かった。</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">左右対称化</div>
+                <div class="tl-desc">霜の植物を対称化したら、<strong>仮面のような顔が現れた。</strong>冬の精霊を表現しようとしたのではなく、やってみたら現れた。</div>
+              </div>
+              <div class="tl-item">
+                <div class="tl-dot"></div>
+                <div class="tl-year">比較明合成 / 星景</div>
+                <div class="tl-desc">何百枚もの空を重ねると、見えなかった星の軌跡が浮かび上がる。</div>
+              </div>
+            </div>
+            <p>
+              制作の順序が、
+              <strong>「意味 → 制作」ではなく「発見 → 感動 → 作品」</strong>
+              なのだ。
+            </p>
+            <p>
+              言語化が苦手なのは能力の問題ではなく、そもそもプロセスが違うから。
+              世界の中に隠れているものを探している感覚に近い。
+            </p>
+
+            <h2>東京大学生産技術研究所での経験</h2>
+            <p>
+              東海大学海洋学部在学中、外部研究生として
+              <strong>東京大学生産技術研究所・高木幹雄研究室</strong>に参加する機会を得た。
+              1985年前後のことだ。
+            </p>
+            <p>
+              テーマは気象衛星NOAAの熱赤外画像処理。
+              海面温度の分布から温水塊の動きを抽出し、エルニーニョ現象の兆候を探る研究だ。
+            </p>
+            <div class="note">
+              使用環境：富士通FACOMメインフレーム（デュアルCPU）/ PL/I言語 / フレームバッファ型画像処理装置（512×512）
+              / NTSC出力CRT表示 / 9トラック磁気テープ。
+              画像一枚の生成に1〜2分。他の環境なら数時間〜1日かかるような処理だった。
+            </div>
+            <p>
+              この研究室の文化は、伝統的な大学の「理論 → 応用」とは少し違った。
+              <strong>とにかく作る。とにかく試す。現象を見る。後から理屈を考える。</strong>
+            </p>
+            <p>
+              2時刻の画像からブロックマッチングで動ベクトルを推定し、
+              温水塊の移動方向と速度をベクトル場で可視化する。
+              その結果として1986年、テレビジョン学会で発表した。
+            </p>
+            <p>
+              この経験が今の画像処理への興味の原点にある。
+              衛星から届いたデータの中に、目に見えない海の動きを「発見」する作業は、
+              写真の中に隠れた形を探す感覚と、どこかで繋がっている。
+            </p>
+
+            <h2>Sidekickも同じ発想だった</h2>
+            <p>
+              写真を続ける中で、何千枚もの星景写真を前に同じ作業を繰り返していた。
+              飛行機が写り込んだコマを一枚一枚確認して除外する。同じ空を何度も調整する。
+            </p>
+            <p>
+              <strong>だったら機械に任せればいい。</strong>
+            </p>
+            <p>
+              そう考えて、自分のためにPhotoshopのスクリプトを書き始めた。
+              Sidekickは商品として生まれたのではない。
+              撮影や現像の中で見つけた問題を解決するために生まれた。
+            </p>
+            <p>
+              私にとって写真もツール開発も、どちらも<strong>「発見」の延長線上にある。</strong>
+            </p>
+            <p>
+              上野の美術館で解説なしに本物を見続けた子供は、
+              今も世界の中に何が隠れているかを探しながら、シャッターを切り、コードを書いている。
+            </p>
+
+          </article>
+
+          <!-- ── サイドバー ── -->
+          <aside class="sidebar">
+            <div class="profile-card">
+              <div class="profile-avatar">📷</div>
+              <div class="profile-name">村田 一朗</div>
+              <div class="profile-en">Ichiro Murata</div>
+              <p class="profile-bio">
+                写真家 / Sidekick 開発者。星景・抽象写真を中心に活動。
+                20年以上の星景撮影経験を元に、現像ワークフローを自動化するPhotoshopスクリプト群
+                「Sidekick」を開発・公開。
+              </p>
+              <div class="profile-tags">
+                <span class="tag">星景写真</span>
+                <span class="tag">抽象写真</span>
+                <span class="tag">Photoshop</span>
+                <span class="tag">画像処理</span>
+                <span class="tag">WS講師</span>
+              </div>
+
+              <div class="section-label" style="margin-bottom:12px;">受賞 / 掲載</div>
+              <div class="award-item">
+                <div class="award-dot"></div>
+                <div class="award-label"><strong>1X Awards</strong><br>複数回入選・掲載</div>
+              </div>
+              <div class="award-item">
+                <div class="award-dot"></div>
+                <div class="award-label"><strong>著書</strong><br>星景・構図関連 電子書籍</div>
+              </div>
+              <div class="award-item">
+                <div class="award-dot"></div>
+                <div class="award-label"><strong>東大生産技術研究所</strong><br>高木幹雄研究室（外部研究生 / 1985年頃）</div>
+              </div>
+              <div class="award-item">
+                <div class="award-dot"></div>
+                <div class="award-label"><strong>テレビジョン学会発表</strong><br>衛星画像処理（1986年）</div>
+              </div>
+
+              <div style="margin-top:20px;">
+                <div class="section-label" style="margin-bottom:10px;">リンク</div>
+                <div class="profile-links">
+                  <a href="mailto:murata@mbg.nifty.com" class="profile-link">✉ murata@mbg.nifty.com</a>
+                  <a href="workshop.html" class="profile-link">🏔 ワークショップ情報</a>
+                  <a href="gallery.html" class="profile-link">🖼 作例ギャラリー</a>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <div style="line-height:1.9;">
+        <div style="font-weight:700;font-size:15px;">村田 一朗 / Ichiro Murata</div>
+        <div style="font-size:13px;margin-top:2px;">
+          <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:13px;">
+        <div style="color:var(--muted);">© Sidekick — 村田 一朗</div>
+        <div style="display:flex;gap:14px;">
+          <a href="changelog.html" style="color:var(--sub);">更新履歴</a>
+          <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
