@@ -269,6 +269,7 @@
       <a href="index.html">トップ</a>
       <a href="sidekick-star.html">Sidekick Star</a>
       <a href="gallery.html">ギャラリー</a>
+      <a href="changelog.html" style="color:#fff;">更新履歴</a>
     </nav>
   </div>
 </header>
@@ -290,6 +291,22 @@
     <div class="timeline" id="timeline">
 
       <!-- ▼ 新しいエントリを追加 ▼ -->
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-06-19</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>バグ修正：GPU対応・飛行機除去の安定性向上</h2>
+          <ul>
+            <li>GPU非対応・旧世代GPU環境で、AIマスク生成が0枚になる問題を修正（CPUへ自動切り替え）</li>
+            <li>LZW圧縮のTIFFファイルを開く際にフリーズする問題を修正</li>
+            <li>飛行機除去処理が正常に完了しない場合がある問題を修正</li>
+            <li>同梱Pythonランタイム（_runtime）を優先して使用するよう改善</li>
+          </ul>
+        </div>
+      </div>
 
       <div class="entry" data-type="site">
         <div class="entry-date">
