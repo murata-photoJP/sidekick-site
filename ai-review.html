@@ -384,7 +384,7 @@
       document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
 
     } catch (err) {
-      showError('通信エラーが発生しました。もう一度お試しください。');
+      showError('通信エラー: ' + (err.message || err));
     } finally {
       btn.disabled = false;
       document.getElementById('loading').style.display = 'none';
