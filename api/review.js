@@ -97,7 +97,13 @@ export default async function handler(req) {
     }
 
     const imageBuffer = await imageFile.arrayBuffer();
-    const imageBase64 = btoa(String.fromCharCode(...new Uint8Array(imageBuffer)));
+    const bytes = new Uint8Array(imageBuffer);
+    let binary = '';
+    const chunkSize = 8192;
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+    }
+    const imageBase64 = btoa(binary);
     const mediaType = imageFile.type || 'image/jpeg';
 
     const userText = `以下の写真を村田一朗として講評してください。
