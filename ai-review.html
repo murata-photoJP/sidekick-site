@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>村田一朗 AI写真講評</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: #1a1a1a;
+    color: #e8e8e8;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  header {
+    text-align: center;
+    padding: 40px 0 30px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 32px;
+  }
+  header h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #f0f0f0;
+    letter-spacing: 0.05em;
+  }
+  header p {
+    margin-top: 10px;
+    color: #888;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  /* パスワードエリア */
+  #password-area {
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+  #password-area h2 {
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 14px;
+  }
+  .pw-row {
+    display: flex;
+    gap: 10px;
+  }
+  .pw-row input {
+    flex: 1;
+    padding: 10px 14px;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #e8e8e8;
+    font-size: 1rem;
+  }
+  .pw-row button {
+    padding: 10px 20px;
+    background: #555;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .pw-row button:hover { background: #666; }
+  #pw-error {
+    color: #e05a00;
+    font-size: 0.85rem;
+    margin-top: 8px;
+    display: none;
+  }
+
+  /* メインフォーム */
+  #main-form {
+    display: none;
+  }
+  .section {
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .section h2 {
+    font-size: 1rem;
+    color: #ccc;
+    margin-bottom: 16px;
+  }
+
+  /* 画像アップロード */
+  .upload-area {
+    border: 2px dashed #444;
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .upload-area:hover, .upload-area.dragover {
+    border-color: #e05a00;
+    background: #2a1f1a;
+  }
+  .upload-area p { color: #888; font-size: 0.9rem; line-height: 1.8; }
+  .upload-area .icon { font-size: 2.5rem; margin-bottom: 10px; }
+  #file-input { display: none; }
+  #preview-wrap { display: none; margin-top: 16px; }
+  #preview-wrap img {
+    max-width: 100%;
+    max-height: 400px;
+    border-radius: 6px;
+    border: 1px solid #444;
+  }
+  #change-btn {
+    display: block;
+    margin: 10px auto 0;
+    padding: 6px 16px;
+    background: #333;
+    border: 1px solid #555;
+    border-radius: 5px;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  /* テキストエリア */
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    background: #1a1a1a;
+    border: 1px solid #444;
+    border-radius: 6px;
+    color: #e8e8e8;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    resize: vertical;
+    min-height: 90px;
+    font-family: inherit;
+  }
+  textarea::placeholder { color: #555; }
+
+  /* 送信ボタン */
+  #submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: #e05a00;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    transition: background 0.2s;
+  }
+  #submit-btn:hover { background: #c84e00; }
+  #submit-btn:disabled { background: #555; cursor: not-allowed; }
+
+  /* 結果 */
+  #result-area {
+    display: none;
+    background: #1e2a1e;
+    border: 1px solid #3a5a3a;
+    border-radius: 10px;
+    padding: 28px;
+    margin-top: 24px;
+  }
+  #result-area h2 {
+    font-size: 1rem;
+    color: #8bc88b;
+    margin-bottom: 16px;
+  }
+  #result-text {
+    line-height: 2;
+    font-size: 1rem;
+    color: #e0e8e0;
+    white-space: pre-wrap;
+  }
+  #copy-btn {
+    margin-top: 16px;
+    padding: 8px 20px;
+    background: #2a4a2a;
+    border: 1px solid #3a6a3a;
+    border-radius: 5px;
+    color: #8bc88b;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+  #copy-btn:hover { background: #3a5a3a; }
+
+  /* ローディング */
+  #loading {
+    display: none;
+    text-align: center;
+    padding: 30px;
+    color: #888;
+  }
+  .spinner {
+    width: 36px; height: 36px;
+    border: 3px solid #333;
+    border-top-color: #e05a00;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #error-msg {
+    display: none;
+    background: #2a1a1a;
+    border: 1px solid #5a2a2a;
+    border-radius: 8px;
+    padding: 16px 20px;
+    color: #e08080;
+    margin-top: 16px;
+    font-size: 0.9rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px 0 20px;
+    color: #555;
+    font-size: 0.8rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>村田一朗 AI写真講評</h1>
+    <p>写真をアップロードすると、村田一朗スタイルで構図・露出などを講評します。<br>
+    オンラインサロン会員限定サービスです。</p>
+  </header>
+
+  <!-- パスワード入力 -->
+  <div id="password-area">
+    <h2>メンバーパスワード</h2>
+    <div class="pw-row">
+      <input type="password" id="pw-input" placeholder="サロン限定パスワードを入力" />
+      <button onclick="checkPassword()">確認</button>
+    </div>
+    <p id="pw-error">パスワードが違います</p>
+  </div>
+
+  <!-- メインフォーム -->
+  <form id="main-form" onsubmit="submitReview(event)">
+    <div class="section">
+      <h2>写真をアップロード</h2>
+      <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+        <div class="icon">📷</div>
+        <p>クリックまたはドラッグ＆ドロップで写真を選択<br>
+        JPG / PNG / WEBP 対応（最大10MB）</p>
+      </div>
+      <input type="file" id="file-input" accept="image/*" onchange="onFileSelected(this)">
+      <div id="preview-wrap">
+        <img id="preview-img" src="" alt="プレビュー">
+        <button type="button" id="change-btn" onclick="changeImage()">写真を変更</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>撮影者コメント・質問（任意）</h2>
+      <textarea id="comment" placeholder="撮影意図、気になっている点、質問などがあれば書いてください"></textarea>
+    </div>
+
+    <button type="submit" id="submit-btn">講評を受ける</button>
+  </form>
+
+  <div id="loading">
+    <div class="spinner"></div>
+    <p>講評を生成しています...</p>
+  </div>
+
+  <div id="error-msg"></div>
+
+  <div id="result-area">
+    <h2>村田一朗からの講評</h2>
+    <p id="result-text"></p>
+    <button id="copy-btn" onclick="copyResult()">コピー</button>
+  </div>
+
+  <footer>© 村田一朗 AIフォト講評 — サロン会員限定</footer>
+</div>
+
+<script>
+  let verifiedPassword = '';
+  let selectedFile = null;
+
+  function checkPassword() {
+    const pw = document.getElementById('pw-input').value.trim();
+    if (!pw) return;
+    // クライアント側では検証せず、APIに送って判断させる
+    // ここでは「入力した」という状態を保持するだけ
+    verifiedPassword = pw;
+    document.getElementById('password-area').style.display = 'none';
+    document.getElementById('main-form').style.display = 'block';
+    document.getElementById('pw-error').style.display = 'none';
+  }
+
+  // Enterキーでも確認できるように
+  document.getElementById('pw-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { e.preventDefault(); checkPassword(); }
+  });
+
+  // ドラッグ＆ドロップ
+  const uploadArea = document.getElementById('upload-area');
+  uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+  uploadArea.addEventListener('drop', e => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) setFile(file);
+  });
+
+  function onFileSelected(input) {
+    if (input.files[0]) setFile(input.files[0]);
+  }
+
+  function setFile(file) {
+    if (file.size > 10 * 1024 * 1024) {
+      showError('ファイルサイズが大きすぎます（最大10MB）');
+      return;
+    }
+    selectedFile = file;
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('preview-img').src = e.target.result;
+      document.getElementById('preview-wrap').style.display = 'block';
+      document.getElementById('upload-area').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function changeImage() {
+    selectedFile = null;
+    document.getElementById('preview-wrap').style.display = 'none';
+    document.getElementById('upload-area').style.display = 'block';
+    document.getElementById('file-input').value = '';
+  }
+
+  async function submitReview(e) {
+    e.preventDefault();
+    if (!selectedFile) { showError('写真をアップロードしてください'); return; }
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('result-area').style.display = 'none';
+    document.getElementById('error-msg').style.display = 'none';
+
+    try {
+      const formData = new FormData();
+      formData.append('password', verifiedPassword);
+      formData.append('image', selectedFile);
+      formData.append('comment', document.getElementById('comment').value);
+
+      const res = await fetch('/api/review', { method: 'POST', body: formData });
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        if (res.status === 401) {
+          // パスワードエラー：入力画面に戻す
+          document.getElementById('main-form').style.display = 'none';
+          document.getElementById('password-area').style.display = 'block';
+          document.getElementById('pw-error').style.display = 'block';
+        } else {
+          showError(data.error || 'エラーが発生しました');
+        }
+        return;
+      }
+
+      document.getElementById('result-text').textContent = data.result;
+      document.getElementById('result-area').style.display = 'block';
+      document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (err) {
+      showError('通信エラーが発生しました。もう一度お試しください。');
+    } finally {
+      btn.disabled = false;
+      document.getElementById('loading').style.display = 'none';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function copyResult() {
+    const text = document.getElementById('result-text').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copy-btn');
+      btn.textContent = 'コピーしました！';
+      setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+    });
+  }
+</script>
+</body>
+</html>
