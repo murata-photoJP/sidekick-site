@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>よくある質問 (FAQ) — SideKick</title>
+  <meta name="description" content="SideKick よくある質問。RAW現像・比較明合成・GPU/AI処理・飛行機除去など、ユーザーから寄せられた質問と回答をまとめています。">
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .hdr{
+      position:sticky;top:0;z-index:40;
+      background:rgba(9,9,12,.9);backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hdr-in{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;}
+    .brand-mk{
+      width:36px;height:36px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;font-size:14px;flex-shrink:0;
+    }
+    .brand-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;display:block;margin-top:1px;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover,.nav a.active{color:#fff}
+    .nav-dl{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 15px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#111;font-size:13px;font-weight:800;white-space:nowrap;
+      box-shadow:0 4px 14px rgba(255,138,0,.28);transition:.15s;
+    }
+    .nav-dl:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.38);}
+
+    /* ── Hero ── */
+    .page-hero{
+      padding:72px 0 56px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:680px;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(28px,4.5vw,50px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:20px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-lead{color:var(--sub);font-size:clamp(15px,1.8vw,17px);line-height:1.85;}
+
+    /* ── FAQ body ── */
+    .faq-body{padding:64px 0 96px;}
+    .faq-inner{max-width:760px;}
+
+    /* Category heading */
+    .faq-cat{
+      display:flex;align-items:center;gap:12px;
+      margin:52px 0 20px;
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.07);
+      font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--muted);
+    }
+    .faq-cat:first-of-type{margin-top:0;padding-top:0;border-top:none;}
+    .faq-cat-icon{
+      width:30px;height:30px;border-radius:8px;
+      background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.2);
+      display:grid;place-items:center;font-size:14px;flex-shrink:0;
+    }
+
+    /* Accordion item */
+    .faq-item{
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;
+      background:var(--card);
+      margin-bottom:10px;
+      overflow:hidden;
+      transition:border-color .2s;
+    }
+    .faq-item:hover{border-color:rgba(255,255,255,.13);}
+    .faq-item.open{border-color:rgba(255,138,0,.22);}
+
+    .faq-q{
+      width:100%;text-align:left;
+      display:flex;align-items:center;gap:14px;
+      padding:20px 22px;
+      background:none;border:none;cursor:pointer;
+      color:var(--text);font-size:15px;font-weight:700;line-height:1.5;
+      font-family:inherit;
+    }
+    .faq-q-icon{
+      width:22px;height:22px;border-radius:6px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;flex-shrink:0;
+      font-size:11px;font-weight:900;color:#111;
+    }
+    .faq-q-text{flex:1;text-align:left;}
+    .faq-q-arrow{
+      width:20px;height:20px;flex-shrink:0;
+      border-radius:50%;border:1px solid rgba(255,255,255,.12);
+      display:grid;place-items:center;
+      color:var(--muted);font-size:10px;
+      transition:transform .25s,background .2s;
+    }
+    .faq-item.open .faq-q-arrow{
+      transform:rotate(180deg);
+      background:rgba(255,138,0,.12);
+      border-color:rgba(255,138,0,.3);
+      color:var(--accent2);
+    }
+
+    /* Answer panel */
+    .faq-a{
+      max-height:0;overflow:hidden;
+      transition:max-height .3s ease;
+    }
+    .faq-item.open .faq-a{max-height:600px;}
+    .faq-a-inner{
+      padding:0 22px 22px 58px;
+      font-size:14.5px;line-height:1.9;color:var(--sub);
+    }
+    .faq-a-inner p{margin-bottom:12px;}
+    .faq-a-inner p:last-child{margin-bottom:0;}
+    .faq-a-inner strong{color:var(--text);font-weight:700;}
+    .faq-a-inner ol,.faq-a-inner ul{
+      padding-left:1.4em;margin:10px 0;
+    }
+    .faq-a-inner li{margin-bottom:6px;}
+    .faq-a-inner code{
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      font-size:12.5px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:5px;padding:1px 6px;color:var(--accent2);
+    }
+    .faq-note{
+      margin-top:10px;
+      padding:12px 16px;
+      background:var(--card2);
+      border-radius:9px;
+      border-left:3px solid rgba(255,138,0,.4);
+      font-size:13px;color:var(--muted);
+    }
+
+    /* ── Footer ── */
+    .footer{
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:32px 0;
+    }
+    .footer-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:640px){
+      .nav a:not(.nav-dl){display:none;}
+      .faq-a-inner{padding-left:22px;}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a href="index.html" class="brand">
+        <div class="brand-mk">S</div>
+        <div>SideKick<span class="brand-sub">by Ichiro Murata</span></div>
+      </a>
+      <nav class="nav">
+        <a href="index.html">TOP</a>
+        <a href="lp-star.html">Star LP</a>
+        <a href="sidekick-star.html">詳細・デモ</a>
+        <a href="gallery.html">作例</a>
+        <a href="workshop.html">WS</a>
+        <a href="about.html">私について</a>
+        <a href="changelog.html">更新履歴</a>
+        <a href="faq.html" class="active">FAQ</a>
+        <a class="nav-dl"
+           href="https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Star.zip">
+          ▶ Star を無料で試す
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">よくある質問</div>
+          <h1 class="page-h1">FAQ /<br><em>トラブルシューティング</em></h1>
+          <p class="page-lead">
+            ユーザーから寄せられた質問と、その回答・対処法をまとめています。<br>
+            解決しない場合は <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);">メール</a> でお問い合わせください。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-body">
+      <div class="wrap">
+        <div class="faq-inner">
+
+          <!-- ▼ カテゴリ: RAW現像 / 前処理 -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">📷</div>
+            RAW現像 / 前処理
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">他のソフトで現像したあと SideKick が動かない</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>症状：</strong>DxO や Lightroom で先に現像してしまったあと、SideKick を起動しても現像が走らない・スキップされる。</p>
+                <p><strong>原因：</strong>SideKick は出力フォルダ（<code>比較明用現像_自動露出</code> など）に既存 TIF があると「リスタート検出」で自動スキップします。</p>
+                <p><strong>対処：</strong></p>
+                <ol>
+                  <li>出力フォルダ（<code>比較明用現像_自動露出</code> など）を<strong>丸ごと削除</strong>する</li>
+                  <li>SideKick を再実行する</li>
+                </ol>
+                <div class="faq-note">TIF だけ削除しても隠しファイルや 0 バイトファイルが残る場合があるため、フォルダごと削除するのが確実です。</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">XMP を削除すれば元の RAW に戻れる？</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>はい。SideKick の RAW 現像は XMP サイドカーファイル（<code>.xmp</code>）に露出・トーン設定を書き込むだけで、<strong>RAW ファイル本体は変わりません。</strong></p>
+                <p>XMP を削除すれば Camera Raw が初期状態として扱います。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">比較明合成だけやり直したい（RAW 現像はやり直したくない）</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>SideKick GUI で「RAW 現像実行」のチェックを<strong>外して</strong>、「比較明合成」だけにチェックを入れて実行してください。</p>
+                <p>既存の TIF をそのまま入力として使うため、再現像は不要です。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▼ カテゴリ: 比較明合成 -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">🌠</div>
+            比較明合成
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">途中で Photoshop がクラッシュ・固まる（メモリ不足）</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>症状：</strong>400 枚前後の大量処理で Photoshop が途中停止する。</p>
+                <p><strong>原因：</strong>大量のレイヤーをメモリに展開しきれない。Temp ファイルが蓄積してストレージも逼迫する。</p>
+                <p><strong>対処：</strong></p>
+                <ol>
+                  <li>GUI の「ブロック枚数」を <strong>100 → 25〜50</strong> に変更して再実行</li>
+                  <li>Temp フォルダ（<code>%TEMP%</code>）の古い <code>stac_*</code> / <code>stac_async_*</code> ファイルを削除してストレージを確保</li>
+                  <li>処理前に不要なアプリを閉じて RAM を確保</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▼ カテゴリ: GPU / AI処理 -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">🤖</div>
+            GPU / AI 処理（SkyMask・StarTrail AI）
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">GPU 対応になっているか確認したい</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>同梱の <code>GPU_セットアップ.bat</code> を実行してください。GPU 名と CUDA 対応状況が表示されます。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">AI マスク生成が 0 枚で終わる（exit=1）</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>症状：</strong>Phase A が <code>0/227 masks</code> などで終了し先に進まない。</p>
+                <p><strong>原因候補：</strong></p>
+                <ul>
+                  <li>古い・非 CUDA 対応 GPU で exe がクラッシュ</li>
+                  <li>入力フォルダのパスに問題がある</li>
+                  <li>モデルファイル（<code>startrail_unet.pth</code>）が見つからない</li>
+                </ul>
+                <p><strong>対処：</strong>最新版の SideKick Star を使用してください（GPU 失敗時に CPU で自動再試行する機能が入っています）。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">GPU 非対応 PC で AI 処理を使いたい</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>特別な設定は不要です。SideKick は GPU が使えない場合、<strong>自動的に CPU で処理します。</strong></p>
+                <p>CPU では時間がかかりますが（目安: GPU 比 5〜10 倍）、結果は同じです。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ▼ カテゴリ: 飛行機除去 -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">✈️</div>
+            飛行機除去（AirplaneRemove）
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">処理が始まらない / exit:-1 エラーが出る</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>症状：</strong>飛行機除去でエラーダイアログが出て処理が完了しない。</p>
+                <p><strong>原因：</strong>処理の完了を待たずに次のステップへ進んでしまうタイミング問題が発生することがあります。</p>
+                <p><strong>対処：</strong>最新版の SideKick Star を使用してください（待機処理が改善されています）。</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <div style="line-height:1.9;">
+        <div style="font-weight:700;font-size:15px;">村田 一朗 / Ichiro Murata</div>
+        <div style="font-size:13px;margin-top:2px;">
+          <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:13px;">
+        <div style="color:var(--muted);">© Sidekick — 村田 一朗</div>
+        <div style="display:flex;gap:14px;">
+          <a href="changelog.html" style="color:var(--sub);">更新履歴</a>
+          <a href="faq.html" style="color:var(--sub);">FAQ</a>
+          <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+  </script>
+
+</body>
+</html>
