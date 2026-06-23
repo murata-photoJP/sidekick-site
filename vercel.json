@@ -1,4 +1,12 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "sidekick-site-tawny.vercel.app" }],
+      "destination": "https://sidekick-lab.com/$1",
+      "permanent": true
+    }
+  ]
 }
