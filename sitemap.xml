@@ -1,43 +1,68 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/sidekick-star.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/lp-star.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://sidekick-lab.com/sidekick-star.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/portrait.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/portrait.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/sky-effect.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/sky-effect.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/gallery.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/sidekick.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://sidekick-lab.com/gallery.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/changelog.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/about.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://sidekick-lab.com/workshop.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sidekick-lab.com/faq.html</loc>
+    <lastmod>2026-06-21</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://sidekick-lab.com/changelog.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/legal.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/legal.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://sidekick-site-tawny.vercel.app/privacy.html</loc>
-    <lastmod>2026-05-16</lastmod>
+    <loc>https://sidekick-lab.com/privacy.html</loc>
+    <lastmod>2026-06-21</lastmod>
     <priority>0.3</priority>
   </url>
 </urlset>
