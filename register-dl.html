@@ -145,6 +145,12 @@
     line-height: 1.9;
   }
   .info-list li::before { content: '・'; color: var(--accent); }
+  .info-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 8px;
+    line-height: 1.7;
+  }
   .info-divider {
     height: 1px;
     background: var(--line);
@@ -339,17 +345,18 @@
           <div class="info-section">
             <div class="info-label">取得する情報</div>
             <ul class="info-list">
-              <li>Googleアカウントの氏名</li>
-              <li>メールアドレス</li>
+              <li>Googleアカウントの表示名</li>
+              <li>Googleアカウントのメールアドレス</li>
             </ul>
+            <p class="info-note">※ Googleドライブ内のファイル、写真、連絡先、パスワード等にはアクセスしません。</p>
           </div>
           <div class="info-divider"></div>
           <div class="info-section">
             <div class="info-label">利用目的</div>
             <ul class="info-list">
               <li>ダウンロード履歴の管理</li>
-              <li>製品アップデートのお知らせ</li>
-              <li>サポート対応</li>
+              <li>製品アップデートや重要なお知らせのご案内</li>
+              <li>お問い合わせ・サポート対応</li>
               <li>不正利用防止</li>
             </ul>
           </div>
@@ -374,7 +381,7 @@
             </div>
           </div>
           <button id="agree-btn" class="agree-btn" disabled onclick="agreeAndDownload()">
-            同意してダウンロードへ進む
+            同意して無料ダウンロードへ進む
           </button>
           <div class="switch-account-note">
             <button class="link-btn" onclick="switchAccount()">別のアカウントでログインする</button>
