@@ -280,6 +280,29 @@
     </div>
   </header>
 
+  <!-- プライバシー情報（常時表示） -->
+  <div class="login-privacy">
+    <div class="lp-section">
+      <div class="lp-label">取得する情報</div>
+      <div class="lp-items">Googleアカウントの表示名 / メールアドレス</div>
+    </div>
+    <div class="lp-divider"></div>
+    <div class="lp-section">
+      <div class="lp-label">利用目的</div>
+      <ul class="lp-list">
+        <li>利用者識別</li>
+        <li>利用回数管理</li>
+        <li>サポート対応</li>
+        <li>サービス改善</li>
+        <li>不正利用防止</li>
+      </ul>
+    </div>
+    <div class="lp-note">
+      ※ アップロードした画像はAI講評生成のためAnthropicのClaude API（外部サービス）へ送信されます。
+    </div>
+    <a href="/privacy.html" class="lp-link" target="_blank">プライバシーポリシーを読む →</a>
+  </div>
+
   <!-- ローディング（Auth確認中） -->
   <div id="loading-state">
     <div class="spinner"></div>
@@ -294,27 +317,6 @@
         AI写真講評を使うにはGoogleアカウントが必要です。<br>
         週5枚まで無料でお使いいただけます（キャンペーン期間中）。
       </p>
-      <div class="login-privacy">
-        <div class="lp-section">
-          <div class="lp-label">取得する情報</div>
-          <div class="lp-items">Googleアカウントの表示名 / メールアドレス</div>
-        </div>
-        <div class="lp-divider"></div>
-        <div class="lp-section">
-          <div class="lp-label">利用目的</div>
-          <ul class="lp-list">
-            <li>利用者識別</li>
-            <li>利用回数管理</li>
-            <li>サポート対応</li>
-            <li>サービス改善</li>
-            <li>不正利用防止</li>
-          </ul>
-        </div>
-        <div class="lp-note">
-          ※ アップロードした画像はAI講評生成のためAnthropicのClaude API（外部サービス）へ送信されます。
-        </div>
-        <a href="/privacy.html" class="lp-link" target="_blank">プライバシーポリシーを読む →</a>
-      </div>
 
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
