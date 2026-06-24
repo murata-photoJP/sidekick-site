@@ -110,25 +110,143 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ログイン促進 */
-  #login-state { display: none; }
-  .reason-box {
+  /* 同意・ログイン画面 */
+  #consent-state { display: none; }
+
+  .consent-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+
+  .info-box {
     background: rgba(255,138,0,0.06);
     border: 1px solid rgba(255,138,0,0.2);
     border-radius: 12px;
     padding: 18px 20px;
-    margin-bottom: 24px;
+    margin-bottom: 14px;
     font-size: 0.88rem;
-    line-height: 1.8;
-    color: var(--sub);
   }
-  .reason-box strong { color: var(--text); }
-  .privacy-note {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 8px;
+  .info-section { margin-bottom: 14px; }
+  .info-section:last-child { margin-bottom: 0; }
+  .info-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--accent2);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .info-list {
+    list-style: none;
+    padding: 0;
+    color: var(--sub);
+    line-height: 1.9;
+  }
+  .info-list li::before { content: '・'; color: var(--accent); }
+  .info-divider {
+    height: 1px;
+    background: var(--line);
+    margin: 14px 0;
   }
 
+  .privacy-link-row {
+    text-align: right;
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+  }
+  .privacy-link-row a {
+    color: var(--accent2);
+    text-decoration: underline;
+  }
+  .privacy-link-row a:hover { color: var(--accent); }
+
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: var(--sub);
+    line-height: 1.5;
+  }
+  .checkbox-row input[type="checkbox"] {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 1px;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  /* ログイン済みユーザー向け */
+  .account-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+  }
+  .acc-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--line);
+    flex-shrink: 0;
+  }
+  .acc-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+  }
+  .acc-email {
+    color: var(--sub);
+    font-size: 0.82rem;
+  }
+
+  .agree-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 15px 24px;
+    background: var(--accent);
+    color: #000;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    margin-bottom: 10px;
+  }
+  .agree-btn:hover:not(:disabled) { background: var(--accent2); }
+  .agree-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .switch-account-note { text-align: center; margin-top: 4px; }
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-size: 0.78rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+    font-family: inherit;
+  }
+  .link-btn:hover { color: var(--sub); }
+
+  /* Google ログインボタン */
   .google-btn {
     display: flex;
     align-items: center;
@@ -143,11 +261,12 @@
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    transition: background 0.15s, box-shadow 0.15s;
+    transition: background 0.15s, box-shadow 0.15s, opacity 0.15s;
     box-shadow: 0 2px 8px rgba(0,0,0,0.25);
     margin-bottom: 12px;
   }
-  .google-btn:hover { background: #f1f3f4; box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .google-btn:hover:not(:disabled) { background: #f1f3f4; box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .google-btn:disabled { opacity: 0.35; cursor: not-allowed; }
   .google-btn svg { flex-shrink: 0; }
 
   .unsubscribe-note {
@@ -211,27 +330,71 @@
         <div class="spinner"></div>
       </div>
 
-      <!-- ログイン未済 -->
-      <div id="login-state">
-        <div class="reason-box">
-          <strong>Googleアカウントでダウンロード（無料）</strong><br>
-          バージョンアップや重要なサポート情報をお送りするために、Googleアカウントでのログインをお願いしています。<br>
-          取得するのは<strong>お名前・メールアドレス・アイコン画像</strong>のみです。
-          勝手に商業メールを送ることはありません。
-          <div class="privacy-note">※ お使いの Google アカウントを選ぶだけで完了します。パスワード入力は不要です。</div>
+      <!-- 同意・ログイン画面（ログイン済み・未済ともにここを通す） -->
+      <div id="consent-state">
+
+        <!-- 個人情報の取り扱い説明 -->
+        <div class="consent-title">個人情報の取り扱いについて</div>
+        <div class="info-box">
+          <div class="info-section">
+            <div class="info-label">取得する情報</div>
+            <ul class="info-list">
+              <li>Googleアカウントの氏名</li>
+              <li>メールアドレス</li>
+            </ul>
+          </div>
+          <div class="info-divider"></div>
+          <div class="info-section">
+            <div class="info-label">利用目的</div>
+            <ul class="info-list">
+              <li>ダウンロード履歴の管理</li>
+              <li>製品アップデートのお知らせ</li>
+              <li>サポート対応</li>
+              <li>不正利用防止</li>
+            </ul>
+          </div>
+        </div>
+        <div class="privacy-link-row">
+          <a href="/privacy.html" target="_blank">プライバシーポリシーを読む →</a>
         </div>
 
-        <button class="google-btn" onclick="signInWithGoogle()">
-          <!-- Google ロゴ -->
-          <svg width="18" height="18" viewBox="0 0 18 18">
-            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-            <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
-            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
-          </svg>
-          Google アカウントでダウンロード
-        </button>
-        <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
+        <!-- 同意チェックボックス -->
+        <label class="checkbox-row">
+          <input type="checkbox" id="consent-check" onchange="onConsentChange()">
+          <span><a href="/privacy.html" target="_blank" style="color:var(--accent2);text-decoration:underline">プライバシーポリシー</a>とメール連絡に同意します</span>
+        </label>
+
+        <!-- ログイン済みユーザー向け -->
+        <div id="account-info" style="display:none">
+          <div class="account-card">
+            <img id="acc-avatar" class="acc-avatar" src="" alt="">
+            <div>
+              <div id="acc-name" class="acc-name"></div>
+              <div id="acc-email" class="acc-email"></div>
+            </div>
+          </div>
+          <button id="agree-btn" class="agree-btn" disabled onclick="agreeAndDownload()">
+            同意してダウンロードへ進む
+          </button>
+          <div class="switch-account-note">
+            <button class="link-btn" onclick="switchAccount()">別のアカウントでログインする</button>
+          </div>
+        </div>
+
+        <!-- 未ログインユーザー向け -->
+        <div id="google-login-area" style="display:none">
+          <button id="google-btn" class="google-btn" disabled onclick="signInWithGoogle()">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+              <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
+            </svg>
+            Google アカウントでダウンロード
+          </button>
+          <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
+        </div>
+
         <div id="error-msg"></div>
       </div>
 
@@ -259,6 +422,8 @@
 <script src="/firebase-init.js"></script>
 
 <script>
+const CONSENT_VERSION = 'download-2026-06-25';
+
 // URL パラメータから製品・流入元を取得
 const params = new URLSearchParams(window.location.search);
 const PRODUCT = params.get('product') || 'star';
@@ -283,29 +448,72 @@ const PRODUCT_NAME = PRODUCT_NAMES[PRODUCT] || 'Sidekick_Star';
 // バージョン（都度更新）
 const CURRENT_VERSION = '3.16';
 
-firebase.auth().onAuthStateChanged(async function(user) {
-  document.getElementById('loading-state').style.display = 'none';
+let currentUser = null;
+let consentTimestamp = null;
 
-  if (user) {
-    // すでにログイン済み → そのまま処理へ
-    await processAfterLogin(user);
-  } else {
-    // 未ログイン → ログインボタン表示
-    document.getElementById('login-state').style.display = 'block';
-  }
+firebase.auth().onAuthStateChanged(function(user) {
+  document.getElementById('loading-state').style.display = 'none';
+  currentUser = user;
+  showConsentScreen(user);
 });
 
+function showConsentScreen(user) {
+  document.getElementById('consent-state').style.display = 'block';
+
+  if (user) {
+    // ログイン済み：アカウント情報を表示してから同意を求める
+    document.getElementById('acc-name').textContent = user.displayName || user.email;
+    document.getElementById('acc-email').textContent = user.email;
+    const avatar = document.getElementById('acc-avatar');
+    if (user.photoURL) {
+      avatar.src = user.photoURL;
+    } else {
+      avatar.style.display = 'none';
+    }
+    document.getElementById('account-info').style.display = 'block';
+    document.getElementById('google-login-area').style.display = 'none';
+  } else {
+    // 未ログイン：Googleログインボタンを表示
+    document.getElementById('account-info').style.display = 'none';
+    document.getElementById('google-login-area').style.display = 'block';
+  }
+}
+
+function onConsentChange() {
+  const checked = document.getElementById('consent-check').checked;
+  document.getElementById('agree-btn').disabled = !checked;
+  document.getElementById('google-btn').disabled = !checked;
+}
+
+async function agreeAndDownload() {
+  consentTimestamp = new Date().toISOString();
+  document.getElementById('consent-state').style.display = 'none';
+  await processAfterLogin(currentUser);
+}
+
 async function signInWithGoogle() {
+  consentTimestamp = new Date().toISOString();
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     const result = await firebase.auth().signInWithPopup(provider);
-    document.getElementById('login-state').style.display = 'none';
+    currentUser = result.user;
+    document.getElementById('consent-state').style.display = 'none';
     await processAfterLogin(result.user);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
       showError('ログインに失敗しました。もう一度お試しください。');
     }
   }
+}
+
+async function switchAccount() {
+  await firebase.auth().signOut();
+  currentUser = null;
+  document.getElementById('consent-check').checked = false;
+  document.getElementById('agree-btn').disabled = true;
+  document.getElementById('google-btn').disabled = true;
+  document.getElementById('account-info').style.display = 'none';
+  document.getElementById('google-login-area').style.display = 'block';
 }
 
 async function processAfterLogin(user) {
@@ -316,14 +524,16 @@ async function processAfterLogin(user) {
   const now = firebase.firestore.FieldValue.serverTimestamp();
 
   try {
-    // 1. users/{uid} を作成または更新
+    // 1. users/{uid} を作成または更新（同意情報も保存）
     await db.collection('users').doc(uid).set({
       uid,
       email: user.email,
       displayName: user.displayName || '',
       photoURL: user.photoURL || '',
       provider: 'google',
-      lastLoginAt: now
+      lastLoginAt: now,
+      latestConsentVersion: CONSENT_VERSION,
+      latestConsentedAt: consentTimestamp
     }, { merge: true });
 
     // 初回のみ createdAt と roles を設定（merge で上書きしない）
@@ -336,7 +546,7 @@ async function processAfterLogin(user) {
       });
     }
 
-    // 2. downloads/{id} にDL履歴を記録
+    // 2. downloads/{id} にDL履歴を記録（同意情報も保存）
     await db.collection('downloads').add({
       userId: uid,
       email: user.email,
@@ -344,11 +554,12 @@ async function processAfterLogin(user) {
       downloadedAt: now,
       version: CURRENT_VERSION,
       sourcePage: SRC,
-      leadSource: SRC
+      leadSource: SRC,
+      consentVersion: CONSENT_VERSION,
+      consentedAt: consentTimestamp
     });
 
     // 3. Brevo へコンタクト追加（非同期・失敗許容）
-    //    DL導線はここを待たずに続行
     fetch('/api/add-contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -366,7 +577,7 @@ async function processAfterLogin(user) {
 
   } catch (err) {
     document.getElementById('processing-state').style.display = 'none';
-    document.getElementById('login-state').style.display = 'block';
+    document.getElementById('consent-state').style.display = 'block';
     showError('処理中にエラーが発生しました。もう一度お試しください。\n(' + err.message + ')');
   }
 }
