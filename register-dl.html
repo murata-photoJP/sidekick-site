@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidekick Star 無料ダウンロード | Sidekick Lab</title>
+<style>
+  :root {
+    --bg: #0a0a0d;
+    --card: #16181f;
+    --card2: #1c1f2a;
+    --line: #252a36;
+    --text: #f0f3fa;
+    --sub: #9aa3b4;
+    --muted: #5e6677;
+    --accent: #ff8a00;
+    --accent2: #ffb14a;
+    --green: #3ecf82;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+      "Hiragino Kaku Gothic ProN", "Yu Gothic UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  .container { max-width: 520px; width: 100%; }
+
+  /* ロゴ */
+  .logo {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .logo a {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  /* カード */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  /* 製品ヘッダー */
+  .product-header {
+    background: linear-gradient(135deg, #1a1428 0%, #12161f 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 28px 32px;
+  }
+  .product-badge {
+    display: inline-block;
+    background: rgba(255,138,0,0.15);
+    border: 1px solid rgba(255,138,0,0.4);
+    color: var(--accent2);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+  .product-name {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .product-desc {
+    color: var(--sub);
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 14px;
+  }
+  .tag {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--line);
+    color: var(--sub);
+    font-size: 0.78rem;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* メインエリア */
+  .main-area { padding: 32px; }
+
+  #loading-state { text-align: center; padding: 20px 0; }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ログイン促進 */
+  #login-state { display: none; }
+  .reason-box {
+    background: rgba(255,138,0,0.06);
+    border: 1px solid rgba(255,138,0,0.2);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: var(--sub);
+  }
+  .reason-box strong { color: var(--text); }
+  .privacy-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  .google-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 15px 24px;
+    background: #fff;
+    color: #3c4043;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    margin-bottom: 12px;
+  }
+  .google-btn:hover { background: #f1f3f4; box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
+  .google-btn svg { flex-shrink: 0; }
+
+  .unsubscribe-note {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* 処理中 */
+  #processing-state { display: none; text-align: center; padding: 20px 0; }
+  #processing-state p { color: var(--sub); font-size: 0.9rem; margin-top: 12px; }
+
+  /* エラー */
+  #error-msg {
+    display: none;
+    background: rgba(90,30,30,0.4);
+    border: 1px solid rgba(200,60,60,0.4);
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #e08080;
+    font-size: 0.85rem;
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px 0 0;
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--sub); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="logo"><a href="/">Sidekick Lab</a></div>
+
+  <div class="card">
+    <!-- 製品ヘッダー -->
+    <div class="product-header">
+      <div class="product-badge">無料試用</div>
+      <div class="product-name">Sidekick Star</div>
+      <div class="product-desc">
+        飛行機軌跡除去・天の川現像・比較明合成を<br>自動化する Photoshop スクリプト
+      </div>
+      <div class="tag-list">
+        <span class="tag">3ヶ月無料</span>
+        <span class="tag">Windows 対応</span>
+        <span class="tag">Photoshop CC〜</span>
+      </div>
+    </div>
+
+    <!-- メインエリア -->
+    <div class="main-area">
+
+      <!-- ローディング（Auth状態確認中） -->
+      <div id="loading-state">
+        <div class="spinner"></div>
+      </div>
+
+      <!-- ログイン未済 -->
+      <div id="login-state">
+        <div class="reason-box">
+          <strong>Googleアカウントでダウンロード（無料）</strong><br>
+          バージョンアップや重要なサポート情報をお送りするために、Googleアカウントでのログインをお願いしています。<br>
+          取得するのは<strong>お名前・メールアドレス・アイコン画像</strong>のみです。
+          勝手に商業メールを送ることはありません。
+          <div class="privacy-note">※ お使いの Google アカウントを選ぶだけで完了します。パスワード入力は不要です。</div>
+        </div>
+
+        <button class="google-btn" onclick="signInWithGoogle()">
+          <!-- Google ロゴ -->
+          <svg width="18" height="18" viewBox="0 0 18 18">
+            <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+            <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+            <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+            <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
+          </svg>
+          Google アカウントでダウンロード
+        </button>
+        <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
+        <div id="error-msg"></div>
+      </div>
+
+      <!-- 処理中（DL記録・Brevo登録） -->
+      <div id="processing-state">
+        <div class="spinner"></div>
+        <p>ダウンロードを準備しています...</p>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <a href="/privacy.html">プライバシーポリシー</a> &nbsp;·&nbsp;
+    <a href="/legal.html">特定商取引法</a> &nbsp;·&nbsp;
+    <a href="/faq.html">FAQ</a>
+  </footer>
+
+</div>
+
+<!-- Firebase SDKs (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="/firebase-init.js"></script>
+
+<script>
+// URL パラメータから製品・流入元を取得
+const params = new URLSearchParams(window.location.search);
+const PRODUCT = params.get('product') || 'star';
+const SRC     = params.get('src')     || 'direct';
+
+// DL完了ページ（製品別）
+const DL_PAGES = {
+  star:     '/dl-star.html',
+  portrait: '/dl-portrait.html',
+  sky:      '/dl-sky.html'
+};
+const DL_PAGE = DL_PAGES[PRODUCT] || '/dl-star.html';
+
+// 製品名（Firestore 保存用）
+const PRODUCT_NAMES = {
+  star:     'Sidekick_Star',
+  portrait: 'Sidekick_Portrait',
+  sky:      'Sidekick_SkyEffect'
+};
+const PRODUCT_NAME = PRODUCT_NAMES[PRODUCT] || 'Sidekick_Star';
+
+// バージョン（都度更新）
+const CURRENT_VERSION = '3.16';
+
+firebase.auth().onAuthStateChanged(async function(user) {
+  document.getElementById('loading-state').style.display = 'none';
+
+  if (user) {
+    // すでにログイン済み → そのまま処理へ
+    await processAfterLogin(user);
+  } else {
+    // 未ログイン → ログインボタン表示
+    document.getElementById('login-state').style.display = 'block';
+  }
+});
+
+async function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    const result = await firebase.auth().signInWithPopup(provider);
+    document.getElementById('login-state').style.display = 'none';
+    await processAfterLogin(result.user);
+  } catch (err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      showError('ログインに失敗しました。もう一度お試しください。');
+    }
+  }
+}
+
+async function processAfterLogin(user) {
+  document.getElementById('processing-state').style.display = 'block';
+
+  const db = firebase.firestore();
+  const uid = user.uid;
+  const now = firebase.firestore.FieldValue.serverTimestamp();
+
+  try {
+    // 1. users/{uid} を作成または更新
+    await db.collection('users').doc(uid).set({
+      uid,
+      email: user.email,
+      displayName: user.displayName || '',
+      photoURL: user.photoURL || '',
+      provider: 'google',
+      lastLoginAt: now
+    }, { merge: true });
+
+    // 初回のみ createdAt と roles を設定（merge で上書きしない）
+    const userDoc = await db.collection('users').doc(uid).get();
+    if (!userDoc.data().createdAt) {
+      await db.collection('users').doc(uid).update({
+        createdAt: now,
+        roles: ['free'],
+        ownedProducts: []
+      });
+    }
+
+    // 2. downloads/{id} にDL履歴を記録
+    await db.collection('downloads').add({
+      userId: uid,
+      email: user.email,
+      productName: PRODUCT_NAME,
+      downloadedAt: now,
+      version: CURRENT_VERSION,
+      sourcePage: SRC,
+      leadSource: SRC
+    });
+
+    // 3. Brevo へコンタクト追加（非同期・失敗許容）
+    //    DL導線はここを待たずに続行
+    fetch('/api/add-contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email:       user.email,
+        firstName:   (user.displayName || '').split(' ')[0] || '',
+        product:     PRODUCT_NAME,
+        leadSource:  SRC,
+        interest:    'photography'
+      })
+    }).catch(function() { /* 失敗しても無視 */ });
+
+    // 4. dl ページへリダイレクト
+    window.location.href = DL_PAGE;
+
+  } catch (err) {
+    document.getElementById('processing-state').style.display = 'none';
+    document.getElementById('login-state').style.display = 'block';
+    showError('処理中にエラーが発生しました。もう一度お試しください。\n(' + err.message + ')');
+  }
+}
+
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+</script>
+</body>
+</html>

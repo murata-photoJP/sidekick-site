@@ -1,4 +1,13 @@
-export const config = { runtime: 'edge' };
+// 写真講評 API（Node.js runtime）
+// Firebase Admin でトークン検証・Firestore でロール確認・使用量管理・imageCache
+
+const admin = require('firebase-admin');
+
+if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
+  admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+}
+const db = admin.firestore();
 
 const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
 
@@ -60,105 +69,195 @@ const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
 - 受講生の思い入れを否定しない（ただし「第三者には伝わらない」と伝える）
 `;
 
-export default async function handler(req) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response('Method not allowed', { status: 405 });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const formData = await req.formData();
-    const password = formData.get('password') || '';
-    const comment = formData.get('comment') || '';
-    const imageFile = formData.get('image');
+    const { idToken, imageBase64, imageHash, mediaType, comment } = req.body || {};
 
-    // パスワード検証
-    const correctPassword = process.env.ACCESS_PASSWORD || '';
-    if (!correctPassword || password !== correctPassword) {
-      return new Response(JSON.stringify({ error: 'パスワードが違います' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
+    if (!idToken || !imageBase64) {
+      return res.status(400).json({ error: 'idToken と imageBase64 は必須です' });
+    }
+
+    // 1. Firebase ID トークン検証
+    let uid;
+    try {
+      const decoded = await admin.auth().verifyIdToken(idToken);
+      uid = decoded.uid;
+    } catch {
+      return res.status(401).json({ error: '認証エラー。再ログインしてください。' });
+    }
+
+    // 2. ユーザーの roles を取得
+    const userDoc = await db.collection('users').doc(uid).get();
+    const roles = (userDoc.exists && userDoc.data().roles) || ['free'];
+
+    // 3. config/planLimits を取得
+    const limitsDoc = await db.collection('config').doc('planLimits').get();
+    const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
+
+    // 4. 有効ロールと制限値を決定
+    const effectiveRole = getHighestRole(roles);
+    const now = new Date();
+    const campaignEnd = planLimits.campaignEndDate
+      ? new Date(planLimits.campaignEndDate)
+      : new Date('2026-08-31');
+
+    let limit, trackingKey;
+    if (now < campaignEnd) {
+      const weekKey = getWeekKey(now);
+      trackingKey = `${uid}_${weekKey}`;
+      const val = planLimits[effectiveRole]?.weeklyReviews;
+      limit = (val && val !== 'TBD') ? val : (planLimits.free_campaign?.weeklyReviews ?? 5);
+    } else if (effectiveRole === 'free') {
+      const monthKey = getMonthKey(now);
+      trackingKey = `${uid}_${monthKey}`;
+      limit = planLimits.free_after?.monthlyReviews ?? 5;
+    } else {
+      const weekKey = getWeekKey(now);
+      trackingKey = `${uid}_${weekKey}`;
+      const val = planLimits[effectiveRole]?.weeklyReviews;
+      limit = (val && val !== 'TBD') ? val : (planLimits.free_after?.monthlyReviews ?? 5);
+    }
+
+    // 5. 使用量チェック
+    const usageRef = db.collection('usageTracking').doc(trackingKey);
+    const usageDoc = await usageRef.get();
+    const usedCount = usageDoc.exists ? (usageDoc.data().count || 0) : 0;
+
+    if (usedCount >= limit) {
+      const isWeekly = trackingKey.includes('-W');
+      return res.status(429).json({
+        error: `今${isWeekly ? '週' : '月'}の講評枚数上限（${limit}枚）に達しました。${isWeekly ? '月曜日' : '翌月1日'}にリセットされます。`,
+        limit,
+        count: usedCount
       });
     }
 
+    // 6. imageCache チェック（同一画像は Claude を呼ばない）
+    if (imageHash) {
+      const cacheDoc = await db.collection('imageCache').doc(imageHash).get();
+      if (cacheDoc.exists) {
+        // キャッシュヒット：使用量だけカウントして返す
+        await Promise.all([
+          db.collection('imageCache').doc(imageHash).update({
+            hitCount: admin.firestore.FieldValue.increment(1)
+          }),
+          usageRef.set({
+            userId: uid,
+            count: admin.firestore.FieldValue.increment(1),
+            updatedAt: admin.firestore.FieldValue.serverTimestamp()
+          }, { merge: true })
+        ]);
+        return res.status(200).json({ result: cacheDoc.data().aiReview, cached: true });
+      }
+    }
+
+    // 7. Claude Haiku Vision API 呼び出し
     const apiKey = process.env.ANTHROPIC_API_KEY || '';
-    if (!apiKey) {
-      return new Response(JSON.stringify({ error: 'サーバー設定エラー' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    // 画像をbase64に変換
-    if (!imageFile) {
-      return new Response(JSON.stringify({ error: '写真をアップロードしてください' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-
-    const imageBuffer = await imageFile.arrayBuffer();
-    const bytes = new Uint8Array(imageBuffer);
-    let binary = '';
-    const chunkSize = 8192;
-    for (let i = 0; i < bytes.length; i += chunkSize) {
-      binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
-    }
-    const imageBase64 = btoa(binary);
-    const mediaType = imageFile.type || 'image/jpeg';
+    if (!apiKey) return res.status(500).json({ error: 'サーバー設定エラー' });
 
     const userText = `以下の写真を村田一朗として講評してください。
 
 【撮影者のコメント・質問】
-${comment.trim() || '（なし）'}
+${(comment || '').trim() || '（なし）'}
 
 写真を見て、構図・露出・主題の明確さなどの観点から講評をお願いします。`;
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'claude-haiku-4-5-20251001',
         max_tokens: 800,
         system: SYSTEM_PROMPT,
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'image',
-                source: { type: 'base64', media_type: mediaType, data: imageBase64 },
-              },
-              { type: 'text', text: userText },
-            ],
-          },
-        ],
-      }),
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'image',
+              source: { type: 'base64', media_type: mediaType || 'image/jpeg', data: imageBase64 }
+            },
+            { type: 'text', text: userText }
+          ]
+        }]
+      })
     });
 
-    if (!response.ok) {
-      const err = await response.text();
-      return new Response(JSON.stringify({ error: `API エラー: ${err}` }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+    if (!claudeRes.ok) {
+      const errText = await claudeRes.text();
+      return res.status(500).json({ error: `APIエラー: ${errText}` });
     }
 
-    const data = await response.json();
-    const text = data.content?.[0]?.text || '';
+    const claudeData = await claudeRes.json();
+    const reviewText = claudeData.content?.[0]?.text || '';
 
-    return new Response(JSON.stringify({ result: text }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    // 8. Firestore に保存（review + imageCache + usageTracking）
+    const reviewRef = db.collection('reviews').doc();
+    const serverTs = admin.firestore.FieldValue.serverTimestamp();
 
-  } catch (e) {
-    return new Response(JSON.stringify({ error: `エラー: ${e.message}` }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    await Promise.all([
+      reviewRef.set({
+        userId: uid,
+        imageHash: imageHash || null,
+        thumbnailUrl: null,
+        aiReview: reviewText,
+        murataNote: null,
+        murataReviewedAt: null,
+        tags: [],
+        genre: 'other',
+        userComment: comment || '',
+        createdAt: serverTs
+      }),
+      imageHash
+        ? db.collection('imageCache').doc(imageHash).set({
+            reviewId: reviewRef.id,
+            aiReview: reviewText,
+            createdAt: serverTs,
+            hitCount: 0
+          })
+        : Promise.resolve(),
+      usageRef.set({
+        userId: uid,
+        count: admin.firestore.FieldValue.increment(1),
+        updatedAt: serverTs
+      }, { merge: true })
+    ]);
+
+    return res.status(200).json({ result: reviewText, reviewId: reviewRef.id });
+
+  } catch (err) {
+    console.error('review error:', err);
+    return res.status(500).json({ error: `エラー: ${err.message}` });
   }
+};
+
+// ---- ユーティリティ ----
+
+function getHighestRole(roles) {
+  const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
+  for (const r of PRIORITY) {
+    if (roles.includes(r)) return r;
+  }
+  return 'free';
+}
+
+function getWeekKey(date) {
+  // ISO週番号（月曜始まり）
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
+}
+
+function getMonthKey(date) {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
 }

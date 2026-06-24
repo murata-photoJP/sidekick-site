@@ -3,207 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>村田一朗 AI写真講評</title>
+<title>村田一朗 AI写真講評 | Sidekick Lab</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
     padding: 20px;
   }
-  .container {
-    max-width: 720px;
-    margin: 0 auto;
-  }
+  .container { max-width: 720px; margin: 0 auto; }
+
   header {
     text-align: center;
     padding: 40px 0 30px;
     border-bottom: 1px solid #333;
     margin-bottom: 32px;
+    position: relative;
   }
-  header h1 {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #f0f0f0;
-    letter-spacing: 0.05em;
-  }
-  header p {
-    margin-top: 10px;
-    color: #888;
-    font-size: 0.9rem;
-    line-height: 1.7;
-  }
+  header h1 { font-size: 1.6rem; font-weight: 700; color: #f0f0f0; letter-spacing: 0.05em; }
+  header p { margin-top: 10px; color: #888; font-size: 0.9rem; line-height: 1.7; }
 
-  /* パスワードエリア */
-  #password-area {
-    background: #252525;
-    border: 1px solid #383838;
-    border-radius: 10px;
-    padding: 28px;
-    margin-bottom: 24px;
-  }
-  #password-area h2 {
-    font-size: 1rem;
-    color: #ccc;
-    margin-bottom: 14px;
-  }
-  .pw-row {
-    display: flex;
+  /* ユーザー情報（ヘッダー右上） */
+  .user-bar {
+    display: none;
+    position: absolute;
+    top: 0; right: 0;
+    align-items: center;
     gap: 10px;
+    padding-top: 40px;
   }
-  .pw-row input {
-    flex: 1;
-    padding: 10px 14px;
-    background: #1a1a1a;
-    border: 1px solid #444;
-    border-radius: 6px;
-    color: #e8e8e8;
-    font-size: 1rem;
-  }
-  .pw-row button {
-    padding: 10px 20px;
-    background: #555;
-    border: none;
-    border-radius: 6px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 0.9rem;
-    white-space: nowrap;
-  }
-  .pw-row button:hover { background: #666; }
-  #pw-error {
-    color: #e05a00;
-    font-size: 0.85rem;
-    margin-top: 8px;
-    display: none;
-  }
-
-  /* メインフォーム */
-  #main-form {
-    display: none;
-  }
-  .section {
-    background: #252525;
-    border: 1px solid #383838;
-    border-radius: 10px;
-    padding: 28px;
-    margin-bottom: 20px;
-  }
-  .section h2 {
-    font-size: 1rem;
-    color: #ccc;
-    margin-bottom: 16px;
-  }
-
-  /* 画像アップロード */
-  .upload-area {
-    border: 2px dashed #444;
-    border-radius: 8px;
-    padding: 40px 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-  }
-  .upload-area:hover, .upload-area.dragover {
-    border-color: #e05a00;
-    background: #2a1f1a;
-  }
-  .upload-area p { color: #888; font-size: 0.9rem; line-height: 1.8; }
-  .upload-area .icon { font-size: 2.5rem; margin-bottom: 10px; }
-  #file-input { display: none; }
-  #preview-wrap { display: none; margin-top: 16px; }
-  #preview-wrap img {
-    max-width: 100%;
-    max-height: 400px;
-    border-radius: 6px;
+  .user-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
     border: 1px solid #444;
   }
-  #change-btn {
-    display: block;
-    margin: 10px auto 0;
-    padding: 6px 16px;
-    background: #333;
-    border: 1px solid #555;
+  .user-name { font-size: 0.8rem; color: #888; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .logout-btn {
+    font-size: 0.75rem;
+    color: #666;
+    background: none;
+    border: 1px solid #444;
     border-radius: 5px;
-    color: #ccc;
+    padding: 3px 8px;
     cursor: pointer;
-    font-size: 0.85rem;
   }
-
-  /* テキストエリア */
-  textarea {
-    width: 100%;
-    padding: 12px 14px;
-    background: #1a1a1a;
-    border: 1px solid #444;
-    border-radius: 6px;
-    color: #e8e8e8;
-    font-size: 0.95rem;
-    line-height: 1.7;
-    resize: vertical;
-    min-height: 90px;
-    font-family: inherit;
-  }
-  textarea::placeholder { color: #555; }
-
-  /* 送信ボタン */
-  #submit-btn {
-    width: 100%;
-    padding: 16px;
-    background: #e05a00;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 1.1rem;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.05em;
-    transition: background 0.2s;
-  }
-  #submit-btn:hover { background: #c84e00; }
-  #submit-btn:disabled { background: #555; cursor: not-allowed; }
-
-  /* 結果 */
-  #result-area {
-    display: none;
-    background: #1e2a1e;
-    border: 1px solid #3a5a3a;
-    border-radius: 10px;
-    padding: 28px;
-    margin-top: 24px;
-  }
-  #result-area h2 {
-    font-size: 1rem;
-    color: #8bc88b;
-    margin-bottom: 16px;
-  }
-  #result-text {
-    line-height: 2;
-    font-size: 1rem;
-    color: #e0e8e0;
-    white-space: pre-wrap;
-  }
-  #copy-btn {
-    margin-top: 16px;
-    padding: 8px 20px;
-    background: #2a4a2a;
-    border: 1px solid #3a6a3a;
-    border-radius: 5px;
-    color: #8bc88b;
-    cursor: pointer;
-    font-size: 0.85rem;
-  }
-  #copy-btn:hover { background: #3a5a3a; }
+  .logout-btn:hover { color: #aaa; border-color: #666; }
 
   /* ローディング */
-  #loading {
-    display: none;
-    text-align: center;
-    padding: 30px;
-    color: #888;
-  }
+  #loading-state { text-align: center; padding: 60px 0; }
   .spinner {
     width: 36px; height: 36px;
     border: 3px solid #333;
@@ -214,41 +63,210 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  #error-msg {
+  /* ログイン促進 */
+  #login-state { display: none; }
+  .login-card {
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    padding: 36px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .login-card h2 { font-size: 1.1rem; margin-bottom: 12px; color: #ddd; }
+  .login-card p { color: #888; font-size: 0.88rem; line-height: 1.8; margin-bottom: 24px; }
+  .google-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: #3c4043;
+    font-size: 0.92rem;
+    font-weight: 600;
+    padding: 13px 28px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .google-btn:hover { background: #f1f3f4; }
+
+  /* 利用制限超え */
+  #limit-state { display: none; }
+  .limit-card {
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    color: #888;
+  }
+  .limit-card h2 { font-size: 1rem; color: #e05a00; margin-bottom: 10px; }
+  .limit-card p { font-size: 0.9rem; line-height: 1.8; }
+
+  /* 利用状況バー */
+  #usage-bar {
     display: none;
-    background: #2a1a1a;
-    border: 1px solid #5a2a2a;
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+  }
+  .usage-label { color: #888; margin-bottom: 8px; }
+  .usage-track {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .usage-bar-bg {
+    flex: 1;
+    height: 6px;
+    background: #333;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .usage-bar-fill {
+    height: 100%;
+    background: #e05a00;
+    border-radius: 3px;
+    transition: width 0.4s;
+  }
+  .usage-count { color: #ccc; font-size: 0.82rem; white-space: nowrap; }
+  .usage-reset { color: #666; font-size: 0.78rem; margin-top: 4px; }
+
+  /* メインフォーム */
+  #main-form { display: none; }
+  .section {
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .section h2 { font-size: 1rem; color: #ccc; margin-bottom: 16px; }
+
+  /* 画像アップロード */
+  .upload-area {
+    border: 2px dashed #444;
     border-radius: 8px;
-    padding: 16px 20px;
-    color: #e08080;
-    margin-top: 16px;
-    font-size: 0.9rem;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .upload-area:hover, .upload-area.dragover { border-color: #e05a00; background: #2a1f1a; }
+  .upload-area p { color: #888; font-size: 0.9rem; line-height: 1.8; }
+  .upload-area .icon { font-size: 2.5rem; margin-bottom: 10px; }
+  #file-input { display: none; }
+  #preview-wrap { display: none; margin-top: 16px; }
+  #preview-wrap img { max-width: 100%; max-height: 400px; border-radius: 6px; border: 1px solid #444; }
+  #change-btn {
+    display: block; margin: 10px auto 0; padding: 6px 16px;
+    background: #333; border: 1px solid #555; border-radius: 5px;
+    color: #ccc; cursor: pointer; font-size: 0.85rem;
   }
 
-  footer {
-    text-align: center;
-    padding: 40px 0 20px;
-    color: #555;
-    font-size: 0.8rem;
+  textarea {
+    width: 100%; padding: 12px 14px;
+    background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
+    color: #e8e8e8; font-size: 0.95rem; line-height: 1.7;
+    resize: vertical; min-height: 90px; font-family: inherit;
   }
+  textarea::placeholder { color: #555; }
+
+  #submit-btn {
+    width: 100%; padding: 16px;
+    background: #e05a00; border: none; border-radius: 8px;
+    color: #fff; font-size: 1.1rem; font-weight: 700; cursor: pointer;
+    letter-spacing: 0.05em; transition: background 0.2s;
+  }
+  #submit-btn:hover { background: #c84e00; }
+  #submit-btn:disabled { background: #555; cursor: not-allowed; }
+
+  /* 結果 */
+  #result-area {
+    display: none; background: #1e2a1e; border: 1px solid #3a5a3a;
+    border-radius: 10px; padding: 28px; margin-top: 24px;
+  }
+  #result-area h2 { font-size: 1rem; color: #8bc88b; margin-bottom: 16px; }
+  #result-text { line-height: 2; font-size: 1rem; color: #e0e8e0; white-space: pre-wrap; }
+  #copy-btn {
+    margin-top: 16px; padding: 8px 20px;
+    background: #2a4a2a; border: 1px solid #3a6a3a; border-radius: 5px;
+    color: #8bc88b; cursor: pointer; font-size: 0.85rem;
+  }
+  #copy-btn:hover { background: #3a5a3a; }
+
+  /* ローディング / エラー */
+  #loading { display: none; text-align: center; padding: 30px; color: #888; }
+  #error-msg {
+    display: none; background: #2a1a1a; border: 1px solid #5a2a2a;
+    border-radius: 8px; padding: 16px 20px; color: #e08080; margin-top: 16px; font-size: 0.9rem;
+  }
+
+  footer { text-align: center; padding: 40px 0 20px; color: #555; font-size: 0.8rem; }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
     <h1>村田一朗 AI写真講評</h1>
-    <p>写真をアップロードすると、村田一朗スタイルで構図・露出などを講評します。<br>
-    オンラインサロン会員限定サービスです。</p>
+    <p>写真をアップロードすると、村田一朗スタイルで構図・露出などを講評します。</p>
+    <!-- ユーザー情報バー -->
+    <div class="user-bar" id="user-bar">
+      <img class="user-avatar" id="user-avatar" src="" alt="">
+      <span class="user-name" id="user-name"></span>
+      <button class="logout-btn" onclick="logout()">ログアウト</button>
+    </div>
   </header>
 
-  <!-- パスワード入力 -->
-  <div id="password-area">
-    <h2>メンバーパスワード</h2>
-    <div class="pw-row">
-      <input type="password" id="pw-input" placeholder="サロン限定パスワードを入力" />
-      <button onclick="checkPassword()">確認</button>
+  <!-- ローディング（Auth確認中） -->
+  <div id="loading-state">
+    <div class="spinner"></div>
+    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+  </div>
+
+  <!-- 未ログイン -->
+  <div id="login-state">
+    <div class="login-card">
+      <h2>Googleアカウントでログイン</h2>
+      <p>
+        AI写真講評を使うにはGoogleアカウントが必要です。<br>
+        週5枚まで無料でお使いいただけます（キャンペーン期間中）。
+      </p>
+      <button class="google-btn" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+          <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
+        </svg>
+        Google アカウントでログイン
+      </button>
     </div>
-    <p id="pw-error">パスワードが違います</p>
+  </div>
+
+  <!-- 制限超え -->
+  <div id="limit-state">
+    <div class="limit-card">
+      <h2>今週の枚数を使い切りました</h2>
+      <p id="limit-msg"></p>
+    </div>
+  </div>
+
+  <!-- 利用状況バー -->
+  <div id="usage-bar">
+    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-track">
+      <div class="usage-bar-bg">
+        <div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div>
+      </div>
+      <div class="usage-count" id="usage-count">0 / 5 枚</div>
+    </div>
+    <div class="usage-reset" id="usage-reset"></div>
   </div>
 
   <!-- メインフォーム -->
@@ -288,156 +306,335 @@
     <button id="copy-btn" onclick="copyResult()">コピー</button>
   </div>
 
-  <footer>© 村田一朗 AIフォト講評 — サロン会員限定</footer>
+  <footer>© 村田一朗 AIフォト講評 — Sidekick Lab</footer>
 </div>
 
+<!-- Firebase SDKs (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="/firebase-init.js"></script>
+
 <script>
-  let verifiedPassword = '';
-  let selectedFile = null;
+let currentUser = null;
+let selectedFile = null;
+let usageLimit = 5;
+let usedCount = 0;
 
-  function checkPassword() {
-    const pw = document.getElementById('pw-input').value.trim();
-    if (!pw) return;
-    // クライアント側では検証せず、APIに送って判断させる
-    // ここでは「入力した」という状態を保持するだけ
-    verifiedPassword = pw;
-    document.getElementById('password-area').style.display = 'none';
+// ---- Auth 状態監視 ----
+firebase.auth().onAuthStateChanged(async function(user) {
+  document.getElementById('loading-state').style.display = 'none';
+
+  if (!user) {
+    document.getElementById('login-state').style.display = 'block';
+    return;
+  }
+
+  currentUser = user;
+
+  // ユーザーバーを表示
+  const bar = document.getElementById('user-bar');
+  bar.style.display = 'flex';
+  document.getElementById('user-name').textContent = user.displayName || user.email;
+  if (user.photoURL) {
+    document.getElementById('user-avatar').src = user.photoURL;
+  } else {
+    document.getElementById('user-avatar').style.display = 'none';
+  }
+
+  await loadUsageInfo(user.uid);
+});
+
+async function loadUsageInfo(uid) {
+  const db = firebase.firestore();
+  try {
+    // planLimits 取得
+    const limitsDoc = await db.collection('config').doc('planLimits').get();
+    const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
+    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-08-31');
+    const now = new Date();
+
+    // ユーザーの roles 取得
+    const userDoc = await db.collection('users').doc(uid).get();
+    const roles = (userDoc.exists && userDoc.data().roles) || ['free'];
+    const effectiveRole = getHighestRole(roles);
+
+    // 制限値と trackingKey を決定
+    let trackingKey, isWeekly;
+    if (now < campaignEnd) {
+      trackingKey = uid + '_' + getWeekKey(now);
+      const val = planLimits[effectiveRole]?.weeklyReviews;
+      usageLimit = (val && val !== 'TBD') ? val : (planLimits.free_campaign?.weeklyReviews ?? 5);
+      isWeekly = true;
+    } else if (effectiveRole === 'free') {
+      trackingKey = uid + '_' + getMonthKey(now);
+      usageLimit = planLimits.free_after?.monthlyReviews ?? 5;
+      isWeekly = false;
+    } else {
+      trackingKey = uid + '_' + getWeekKey(now);
+      const val = planLimits[effectiveRole]?.weeklyReviews;
+      usageLimit = (val && val !== 'TBD') ? val : (planLimits.free_after?.monthlyReviews ?? 5);
+      isWeekly = true;
+    }
+
+    // 使用量取得
+    const usageDoc = await db.collection('usageTracking').doc(trackingKey).get();
+    usedCount = usageDoc.exists ? (usageDoc.data().count || 0) : 0;
+
+    // 利用状況バーを更新
+    const barEl = document.getElementById('usage-bar');
+    barEl.style.display = 'block';
+    const label = isWeekly ? '今週の利用' : '今月の利用';
+    document.getElementById('usage-label').textContent = label;
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
+    const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
+    document.getElementById('usage-bar-fill').style.width = pct + '%';
+
+    // リセット日
+    if (isWeekly) {
+      const monday = getNextMonday(now);
+      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(monday) + '（月曜日）';
+    } else {
+      const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+    }
+
+    // 制限チェック
+    if (usedCount >= usageLimit) {
+      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      document.getElementById('limit-msg').textContent =
+        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}枚）を使い切りました。${resetInfo}`;
+      document.getElementById('limit-state').style.display = 'block';
+    } else {
+      document.getElementById('main-form').style.display = 'block';
+    }
+
+  } catch (err) {
+    console.error('usage load error:', err);
+    // 取得失敗しても使えるようにフォームを表示
     document.getElementById('main-form').style.display = 'block';
-    document.getElementById('pw-error').style.display = 'none';
   }
+}
 
-  // Enterキーでも確認できるように
-  document.getElementById('pw-input').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') { e.preventDefault(); checkPassword(); }
-  });
-
-  // ドラッグ＆ドロップ
-  const uploadArea = document.getElementById('upload-area');
-  uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
-  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
-  uploadArea.addEventListener('drop', e => {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) setFile(file);
-  });
-
-  function onFileSelected(input) {
-    if (input.files[0]) setFile(input.files[0]);
+// ---- Google ログイン / ログアウト ----
+async function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    await firebase.auth().signInWithPopup(provider);
+  } catch (err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      showError('ログインに失敗しました: ' + err.message);
+    }
   }
+}
 
-  function setFile(file) {
-    if (file.size > 10 * 1024 * 1024) {
-      showError('ファイルサイズが大きすぎます（最大10MB）');
+function logout() {
+  firebase.auth().signOut().then(function() {
+    window.location.reload();
+  });
+}
+
+// ---- 画像選択 ----
+const uploadArea = document.getElementById('upload-area');
+uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) setFile(file);
+});
+
+function onFileSelected(input) {
+  if (input.files[0]) setFile(input.files[0]);
+}
+
+function setFile(file) {
+  if (file.size > 10 * 1024 * 1024) { showError('ファイルサイズが大きすぎます（最大10MB）'); return; }
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('preview-img').src = e.target.result;
+    document.getElementById('preview-wrap').style.display = 'block';
+    document.getElementById('upload-area').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function changeImage() {
+  selectedFile = null;
+  document.getElementById('preview-wrap').style.display = 'none';
+  document.getElementById('upload-area').style.display = 'block';
+  document.getElementById('file-input').value = '';
+}
+
+// ---- 送信 ----
+async function submitReview(e) {
+  e.preventDefault();
+  if (!selectedFile) { showError('写真をアップロードしてください'); return; }
+  if (!currentUser) { showError('ログインが必要です'); return; }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  document.getElementById('loading').style.display = 'block';
+  document.getElementById('result-area').style.display = 'none';
+  document.getElementById('error-msg').style.display = 'none';
+
+  try {
+    // 1. 圧縮
+    const compressed = await compressImage(selectedFile);
+    const ab = await compressed.arrayBuffer();
+
+    // 2. SHA-256 ハッシュ（imageCache のキー）
+    const imageHash = await sha256(ab);
+
+    // 3. base64 変換
+    const imageBase64 = arrayBufferToBase64(ab);
+
+    // 4. Firebase ID トークン取得
+    const idToken = await currentUser.getIdToken(true);
+
+    // 5. API へ送信
+    const res = await fetch('/api/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idToken,
+        imageBase64,
+        imageHash,
+        mediaType: 'image/jpeg',
+        comment: document.getElementById('comment').value
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (res.status === 401) {
+        // 認証切れ → ログイン状態リセット
+        await firebase.auth().signOut();
+        window.location.reload();
+      } else if (res.status === 429) {
+        document.getElementById('main-form').style.display = 'none';
+        document.getElementById('limit-msg').textContent = data.error;
+        document.getElementById('limit-state').style.display = 'block';
+      } else {
+        showError(data.error || 'エラーが発生しました');
+      }
       return;
     }
-    selectedFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      document.getElementById('preview-img').src = e.target.result;
-      document.getElementById('preview-wrap').style.display = 'block';
-      document.getElementById('upload-area').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
+
+    document.getElementById('result-text').textContent = data.result;
+    document.getElementById('result-area').style.display = 'block';
+    document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+
+    // 使用量表示を更新
+    usedCount++;
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
+    const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
+    document.getElementById('usage-bar-fill').style.width = pct + '%';
+
+  } catch (err) {
+    showError('通信エラー: ' + (err.message || err));
+  } finally {
+    btn.disabled = false;
+    document.getElementById('loading').style.display = 'none';
   }
+}
 
-  function changeImage() {
-    selectedFile = null;
-    document.getElementById('preview-wrap').style.display = 'none';
-    document.getElementById('upload-area').style.display = 'block';
-    document.getElementById('file-input').value = '';
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function copyResult() {
+  const text = document.getElementById('result-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'コピーしました！';
+    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+  });
+}
+
+// ---- ユーティリティ ----
+async function sha256(buffer) {
+  const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
   }
+  return btoa(binary);
+}
 
-  function compressImage(file, maxSizeMB = 3) {
-    return new Promise((resolve) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        const canvas = document.createElement('canvas');
-        let w = img.naturalWidth, h = img.naturalHeight;
-        const maxPx = 2048;
-        if (w > maxPx || h > maxPx) {
-          if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
-          else { w = Math.round(w * maxPx / h); h = maxPx; }
-        }
-        canvas.width = w; canvas.height = h;
-        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-        let quality = 0.85;
-        const tryBlob = () => {
-          canvas.toBlob(blob => {
-            if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
-              quality -= 0.1;
-              tryBlob();
-            } else {
-              resolve(new File([blob], file.name, { type: 'image/jpeg' }));
-            }
-          }, 'image/jpeg', quality);
-        };
-        tryBlob();
-      };
-      img.src = url;
-    });
-  }
-
-  async function submitReview(e) {
-    e.preventDefault();
-    if (!selectedFile) { showError('写真をアップロードしてください'); return; }
-
-    const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    document.getElementById('loading').style.display = 'block';
-    document.getElementById('result-area').style.display = 'none';
-    document.getElementById('error-msg').style.display = 'none';
-
-    try {
-      const compressed = await compressImage(selectedFile);
-      const formData = new FormData();
-      formData.append('password', verifiedPassword);
-      formData.append('image', compressed);
-      formData.append('comment', document.getElementById('comment').value);
-
-      const res = await fetch('/api/review', { method: 'POST', body: formData });
-      const data = await res.json();
-
-      if (!res.ok || data.error) {
-        if (res.status === 401) {
-          // パスワードエラー：入力画面に戻す
-          document.getElementById('main-form').style.display = 'none';
-          document.getElementById('password-area').style.display = 'block';
-          document.getElementById('pw-error').style.display = 'block';
-        } else {
-          showError(data.error || 'エラーが発生しました');
-        }
-        return;
+function compressImage(file, maxSizeMB = 3) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const maxPx = 2048;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else { w = Math.round(w * maxPx / h); h = maxPx; }
       }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let quality = 0.85;
+      const tryBlob = () => {
+        canvas.toBlob(blob => {
+          if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1; tryBlob();
+          } else {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          }
+        }, 'image/jpeg', quality);
+      };
+      tryBlob();
+    };
+    img.src = url;
+  });
+}
 
-      document.getElementById('result-text').textContent = data.result;
-      document.getElementById('result-area').style.display = 'block';
-      document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
+function getHighestRole(roles) {
+  const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
+  for (const r of PRIORITY) { if (roles.includes(r)) return r; }
+  return 'free';
+}
 
-    } catch (err) {
-      showError('通信エラー: ' + (err.message || err));
-    } finally {
-      btn.disabled = false;
-      document.getElementById('loading').style.display = 'none';
-    }
-  }
+function getWeekKey(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return d.getUTCFullYear() + '-W' + String(weekNo).padStart(2, '0');
+}
 
-  function showError(msg) {
-    const el = document.getElementById('error-msg');
-    el.textContent = msg;
-    el.style.display = 'block';
-  }
+function getMonthKey(date) {
+  return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+}
 
-  function copyResult() {
-    const text = document.getElementById('result-text').textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.textContent = 'コピーしました！';
-      setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
-    });
-  }
+function getNextMonday(date) {
+  const d = new Date(date);
+  const day = d.getDay() || 7;
+  d.setDate(d.getDate() + (8 - day));
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function formatDate(date) {
+  return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+}
 </script>
 </body>
 </html>

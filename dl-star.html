@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidekick Star ダウンロード | Sidekick Lab</title>
+<style>
+  :root {
+    --bg: #0a0a0d;
+    --card: #16181f;
+    --line: #252a36;
+    --text: #f0f3fa;
+    --sub: #9aa3b4;
+    --accent: #ff8a00;
+    --green: #3ecf82;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+      "Hiragino Kaku Gothic ProN", "Yu Gothic UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .container { max-width: 560px; width: 100%; }
+
+  /* ローディング */
+  #loading-state { text-align: center; padding: 60px 0; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* メインカード */
+  #dl-state { display: none; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 40px 36px;
+    text-align: center;
+  }
+  .check-icon {
+    width: 64px; height: 64px;
+    background: rgba(62,207,130,0.12);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 2rem;
+  }
+  h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
+  .subtitle {
+    color: var(--sub);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .dl-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    padding: 16px 36px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.1s;
+    margin-bottom: 12px;
+  }
+  .dl-btn:hover { background: #e07000; transform: translateY(-1px); }
+  .dl-note { color: var(--sub); font-size: 0.8rem; margin-bottom: 36px; }
+
+  /* 次のステップ */
+  .next-steps {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: left;
+    margin-bottom: 28px;
+  }
+  .next-steps h2 {
+    font-size: 0.85rem;
+    color: var(--sub);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+  }
+  .step {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+  .step:last-child { margin-bottom: 0; }
+  .step-num {
+    flex-shrink: 0;
+    width: 24px; height: 24px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 1px;
+  }
+
+  /* 購入CTA */
+  .buy-cta {
+    border-top: 1px solid var(--line);
+    padding-top: 28px;
+  }
+  .buy-cta p {
+    color: var(--sub);
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+    line-height: 1.7;
+  }
+  .buy-link {
+    display: inline-block;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .buy-link:hover { background: var(--accent); color: #fff; }
+
+  footer {
+    text-align: center;
+    padding: 28px 0 0;
+    color: var(--sub);
+    font-size: 0.75rem;
+  }
+  footer a { color: var(--sub); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div id="loading-state">
+    <div class="spinner"></div>
+    <p style="color:var(--sub);font-size:0.9rem;">準備しています...</p>
+  </div>
+
+  <div id="dl-state">
+    <div class="card">
+      <div class="check-icon">✓</div>
+      <h1>ダウンロードの準備ができました</h1>
+      <p class="subtitle">
+        ダウンロードが自動で始まります。<br>
+        始まらない場合は下のボタンをクリックしてください。
+      </p>
+
+      <a id="dl-btn" class="dl-btn" href="#" download>
+        ↓ Sidekick Star をダウンロード
+      </a>
+      <p class="dl-note">ZIP形式 / 約3.2GB</p>
+
+      <div class="next-steps">
+        <h2>インストール手順</h2>
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>ダウンロードした ZIP を展開します</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            フォルダ内の <code>install.bat</code> を実行します<br>
+            <span style="color:var(--sub);font-size:0.85em;">（Photoshop スクリプトフォルダに自動コピー）</span>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>Photoshop を再起動して「ファイル → スクリプト」から起動</div>
+        </div>
+      </div>
+
+      <div class="buy-cta">
+        <p>
+          3ヶ月の試用後は<strong>¥9,800</strong>（買い切り・アップデート永続）。<br>
+          使ってみて「これは使える」と思ったらぜひ。
+        </p>
+        <a class="buy-link" href="/buy-star.html">Sidekick Star を購入する →</a>
+      </div>
+    </div>
+
+    <footer>
+      <a href="/">トップ</a> &nbsp;·&nbsp;
+      <a href="/faq.html">FAQ</a> &nbsp;·&nbsp;
+      <a href="/sidekick-star.html">製品詳細</a>
+    </footer>
+  </div>
+
+</div>
+
+<!-- Firebase SDKs (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="/firebase-init.js"></script>
+
+<script>
+const R2_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Star.zip';
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (!user) {
+    // 未ログイン → DLゲートへ
+    window.location.replace('/register-dl.html?product=star&src=dl-star');
+    return;
+  }
+
+  // ログイン済み → DL画面表示
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('dl-state').style.display = 'block';
+
+  const btn = document.getElementById('dl-btn');
+  btn.href = R2_URL;
+
+  // 自動ダウンロード（1秒後）
+  setTimeout(function() {
+    const a = document.createElement('a');
+    a.href = R2_URL;
+    a.download = 'Sidekick_Star.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }, 1000);
+});
+</script>
+</body>
+</html>
