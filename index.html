@@ -161,31 +161,18 @@
     .ti{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--sub);white-space:nowrap;}
 
     /* ─────────────────────────────────────
-       GOAL CARDS — やりたいことから探す
+       HUB CARDS — サービス一覧
     ───────────────────────────────────── */
-    .goals{
-      padding:64px 0 56px;
+    .hub{
+      padding:56px 0 64px;
       border-top:1px solid rgba(255,255,255,.07);
     }
-    .goals-head{text-align:center;margin-bottom:36px;}
-    .goals-head .section-label{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:5px 14px;border-radius:999px;margin-bottom:14px;
-      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.18);
-      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
-    }
-    .goals-head h2{
-      font-size:clamp(22px,3.2vw,36px);font-weight:800;letter-spacing:-.03em;
-      line-height:1.1;margin-bottom:8px;
-    }
-    .goals-head p{color:var(--sub);font-size:15px;}
-
-    .goal-grid{
+    .hub-grid{
       display:grid;
       grid-template-columns:repeat(2,1fr);
       gap:14px;
     }
-    .goal-card{
+    .hub-card{
       position:relative;
       display:flex;flex-direction:column;
       padding:28px 28px 24px;
@@ -194,94 +181,48 @@
       transition:.18s;
       overflow:hidden;
     }
-    .goal-card:hover{
+    .hub-card::before{
+      content:"";position:absolute;top:0;left:0;width:3px;height:100%;
+      border-radius:3px 0 0 3px;
+    }
+    .hub-card:hover{
       transform:translateY(-3px);
-      border-color:rgba(255,138,0,.3);
+      border-color:rgba(255,255,255,.16);
       box-shadow:0 12px 40px rgba(0,0,0,.4);
     }
-    .gc-star{background:linear-gradient(135deg,#14101f,#1a1030);}
-    .gc-portrait{background:linear-gradient(135deg,#16101a,#1e1224);}
-    .gc-sky{background:linear-gradient(135deg,#0a1220,#102040);}
-    .gc-workshop{background:linear-gradient(135deg,#0d1810,#142018);}
+    .hc-star{background:linear-gradient(135deg,#14101f,#1a1030);}
+    .hc-star::before{background:linear-gradient(180deg,#ff8a00,#ffb14a);}
+    .hc-portrait{background:linear-gradient(135deg,#16101a,#1e1224);}
+    .hc-portrait::before{background:linear-gradient(180deg,#b07aff,#e0a0ff);}
+    .hc-sky{background:linear-gradient(135deg,#0a1220,#102040);}
+    .hc-sky::before{background:linear-gradient(180deg,#4e8cff,#7aaeff);}
+    .hc-workshop{background:linear-gradient(135deg,#0d1810,#142018);}
+    .hc-workshop::before{background:linear-gradient(180deg,#36d988,#6de8b0);}
 
-    .goal-num{
-      font-size:11px;font-weight:800;letter-spacing:.1em;
-      color:rgba(255,255,255,.2);margin-bottom:14px;
-    }
-    .goal-want{
-      font-size:clamp(16px,2vw,20px);font-weight:800;
-      line-height:1.3;margin-bottom:10px;letter-spacing:-.02em;
-    }
-    .goal-product{
+    .hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+    .hc-badge{
       display:inline-flex;align-items:center;gap:5px;
-      font-size:12px;font-weight:800;letter-spacing:.04em;
-      color:var(--accent2);
-      margin-bottom:10px;
+      padding:4px 10px;border-radius:999px;
+      font-size:10px;font-weight:800;letter-spacing:.06em;
     }
-    .goal-product::before{content:"→";opacity:.6;font-size:11px;}
-    .goal-desc{
-      font-size:13px;color:var(--sub);line-height:1.65;
-      flex:1;margin-bottom:18px;
-    }
-    .goal-footer{
+    .hc-badge-tool{background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.2);color:var(--accent2);}
+    .hc-badge-purple{background:rgba(176,122,255,.1);border:1px solid rgba(176,122,255,.2);color:#c8a0ff;}
+    .hc-badge-blue{background:rgba(78,140,255,.1);border:1px solid rgba(78,140,255,.2);color:#7aaeff;}
+    .hc-badge-green{background:rgba(54,217,136,.1);border:1px solid rgba(54,217,136,.2);color:#6de8b0;}
+    .hc-icon{font-size:28px;line-height:1;}
+    .hc-name{font-size:clamp(18px,2.2vw,22px);font-weight:800;letter-spacing:-.02em;margin-bottom:6px;}
+    .hc-desc{font-size:13px;color:var(--sub);line-height:1.7;flex:1;margin-bottom:20px;}
+    .hc-footer{
       display:flex;align-items:center;justify-content:space-between;
       border-top:1px solid rgba(255,255,255,.07);
       padding-top:14px;
     }
-    .goal-meta{font-size:11px;color:var(--muted);font-weight:700;}
-    .goal-arr{
-      width:32px;height:32px;border-radius:50%;
-      background:rgba(255,138,0,.12);border:1px solid rgba(255,138,0,.25);
-      display:grid;place-items:center;
-      color:var(--accent);font-size:14px;
-      transition:.15s;
-    }
-    .goal-card:hover .goal-arr{
-      background:var(--accent);color:#111;
-    }
-
-    /* ─────────────────────────────────────
-       SERVICE LIST — サービス一覧
-    ───────────────────────────────────── */
-    .services{
-      padding:56px 0;
-      border-top:1px solid rgba(255,255,255,.07);
-      background:linear-gradient(180deg,var(--bg),#0d0f1c 60%,var(--bg));
-    }
-    .services-head{
-      display:flex;align-items:baseline;justify-content:space-between;
-      margin-bottom:24px;flex-wrap:wrap;gap:8px;
-    }
-    .services-head h2{font-size:clamp(18px,2.5vw,24px);font-weight:800;letter-spacing:-.02em;}
-    .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-    .svc{
-      display:flex;flex-direction:column;
-      padding:22px 20px;
-      background:var(--card);
-      border:1px solid rgba(255,255,255,.07);
-      border-radius:var(--r);
-      transition:.15s;
-    }
-    .svc:hover{border-color:rgba(255,255,255,.14);transform:translateY(-2px);}
-    .svc-badge{
+    .hc-price{font-size:11px;color:var(--muted);font-weight:700;}
+    .hc-arr{
       display:inline-flex;align-items:center;gap:5px;
-      padding:3px 10px;border-radius:999px;
-      font-size:10px;font-weight:800;letter-spacing:.06em;
-      margin-bottom:14px;width:fit-content;
+      font-size:12px;font-weight:700;color:var(--sub);transition:.15s;
     }
-    .badge-tool{background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.2);color:var(--accent2);}
-    .badge-ai{background:rgba(78,140,255,.1);border:1px solid rgba(78,140,255,.2);color:#7aaeff;}
-    .badge-learn{background:rgba(54,217,136,.1);border:1px solid rgba(54,217,136,.2);color:#6de8b0;}
-    .svc-name{font-size:16px;font-weight:800;margin-bottom:6px;}
-    .svc-desc{font-size:12px;color:var(--sub);line-height:1.65;flex:1;margin-bottom:16px;}
-    .svc-bottom{
-      display:flex;align-items:center;justify-content:space-between;
-      border-top:1px solid rgba(255,255,255,.06);
-      padding-top:12px;
-    }
-    .svc-price{font-size:11px;color:var(--accent2);font-weight:700;}
-    .svc-link{font-size:12px;font-weight:700;color:var(--sub);transition:.1s;}
-    .svc:hover .svc-link{color:var(--accent2);}
+    .hub-card:hover .hc-arr{color:var(--text);}
 
     /* ─────────────────────────────────────
        STAR SHOWCASE — 代表作品の例
@@ -357,15 +298,14 @@
 
     /* ── Responsive ── */
     @media(max-width:860px){
-      .goal-grid{grid-template-columns:1fr;}
-      .services-grid{grid-template-columns:1fr;}
+      .hub-grid{grid-template-columns:1fr;}
       .showcase-inner,.dev-inner{grid-template-columns:1fr;}
       .mw-pair{grid-template-columns:1fr;}
     }
     @media(max-width:600px){
       .hero{padding:48px 0 36px;}
       .nav{display:none;}
-      .goal-card{padding:22px 20px 18px;}
+      .hub-card{padding:22px 20px 18px;}
     }
   </style>
 
@@ -395,7 +335,6 @@
         <a href="portrait.html">👤 Portrait</a>
         <a href="sky-effect.html">☁️ Sky</a>
         <a href="workshop.html">📷 Workshop</a>
-        <a href="ai-review.html" class="nav-ai">🤖 AI講評</a>
         <a href="faq.html" style="color:var(--muted);">FAQ</a>
       </nav>
     </div>
@@ -418,10 +357,6 @@
             星景・ポートレート・空の仕上げを自動化する Photoshop スクリプトと、<br>
             撮影を学べるワークショップを提供しています。
           </p>
-          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-            <a href="#goals" class="btn btn-p btn-lg">やりたいことから探す →</a>
-            <a href="ai-review.html" class="btn btn-o btn-lg">🤖 AI写真講評を試す</a>
-          </div>
         </div>
       </div>
     </section>
@@ -441,168 +376,80 @@
 
 
     <!-- ══════════════════════════════════════
-         GOAL CARDS — やりたいことから探す
+         HUB — サービス一覧
     ══════════════════════════════════════ -->
-    <section class="goals" id="goals">
+    <section class="hub" id="services">
       <div class="wrap">
+        <div class="hub-grid">
 
-        <div class="goals-head">
-          <div class="section-label">🔍 やりたいことから探す</div>
-          <h2>何を撮っていますか？</h2>
-          <p>目的に合ったツール・サービスをすぐ見つけられます。</p>
-        </div>
-
-        <div class="goal-grid">
-
-          <!-- 1. 星景 -->
-          <a href="sidekick-star.html" class="goal-card gc-star">
-            <div class="goal-num">01</div>
-            <div class="goal-want">星景写真を仕上げたい</div>
-            <div class="goal-product">Sidekick Star</div>
-            <div class="goal-desc">
-              飛行機軌跡の除去・天の川の現像・比較明合成を全自動化。
+          <!-- Star -->
+          <a href="sidekick-star.html" class="hub-card hc-star">
+            <div class="hc-top">
+              <span class="hc-badge hc-badge-tool">⭐ Photoshop スクリプト</span>
+              <span class="hc-icon">🌌</span>
+            </div>
+            <div class="hc-name">Sidekick Star</div>
+            <div class="hc-desc">
+              比較明合成後の飛行機軌跡除去・天の川現像・フィルム仕上げを全自動化。
               手作業で1週間かかっていた処理を、PCに任せて寝ている間に完了。
             </div>
-            <div class="goal-footer">
-              <span class="goal-meta">3ヶ月無料試用 / 購入 ¥9,800（買い切り）</span>
-              <span class="goal-arr">→</span>
+            <div class="hc-footer">
+              <span class="hc-price">3ヶ月無料試用 / ¥9,800（買い切り）</span>
+              <span class="hc-arr">詳細を見る →</span>
             </div>
           </a>
 
-          <!-- 2. ポートレート -->
-          <a href="portrait.html" class="goal-card gc-portrait">
-            <div class="goal-num">02</div>
-            <div class="goal-want">ポートレートをレタッチしたい</div>
-            <div class="goal-product">Sidekick Portrait</div>
-            <div class="goal-desc">
-              肌・色・立体感の整理を半自動化。
+          <!-- Portrait -->
+          <a href="portrait.html" class="hub-card hc-portrait">
+            <div class="hc-top">
+              <span class="hc-badge hc-badge-purple">👤 Photoshop スクリプト</span>
+              <span class="hc-icon">🖼</span>
+            </div>
+            <div class="hc-name">Sidekick Portrait</div>
+            <div class="hc-desc">
+              ポートレート現像の肌色調整・立体感補正を半自動化。
               「なんとなく直す」ではなく、自分のスタイルに向けた一貫した仕上げを。
             </div>
-            <div class="goal-footer">
-              <span class="goal-meta">90日試用 / 購入 ¥4,800（買い切り）</span>
-              <span class="goal-arr">→</span>
+            <div class="hc-footer">
+              <span class="hc-price">90日試用 / ¥4,800（買い切り）</span>
+              <span class="hc-arr">詳細を見る →</span>
             </div>
           </a>
 
-          <!-- 3. 空 -->
-          <a href="sky-effect.html" class="goal-card gc-sky">
-            <div class="goal-num">03</div>
-            <div class="goal-want">空を印象的に仕上げたい</div>
-            <div class="goal-product">Sidekick SkyEffect</div>
-            <div class="goal-desc">
+          <!-- SkyEffect -->
+          <a href="sky-effect.html" class="hub-card hc-sky">
+            <div class="hc-top">
+              <span class="hc-badge hc-badge-blue">☁️ Photoshop スクリプト</span>
+              <span class="hc-icon">🌤</span>
+            </div>
+            <div class="hc-name">Sidekick SkyEffect</div>
+            <div class="hc-desc">
               雲・光・空の質感整理を効率化。
               空が主役の写真で、毎回違う仕上げになってしまう問題を解消。
             </div>
-            <div class="goal-footer">
-              <span class="goal-meta">30日試用 / 購入 ¥980（買い切り）</span>
-              <span class="goal-arr">→</span>
+            <div class="hc-footer">
+              <span class="hc-price">30日試用 / ¥980（買い切り）</span>
+              <span class="hc-arr">詳細を見る →</span>
             </div>
           </a>
 
-          <!-- 4. Workshop -->
-          <a href="workshop.html" class="goal-card gc-workshop">
-            <div class="goal-num">04</div>
-            <div class="goal-want">撮影・現像を基礎から学びたい</div>
-            <div class="goal-product">Workshop</div>
-            <div class="goal-desc">
+          <!-- Workshop -->
+          <a href="workshop.html" class="hub-card hc-workshop">
+            <div class="hc-top">
+              <span class="hc-badge hc-badge-green">📷 ワークショップ</span>
+              <span class="hc-icon">🎓</span>
+            </div>
+            <div class="hc-name">Workshop</div>
+            <div class="hc-desc">
               撮影地での実践から、比較明合成・天の川処理・仕上げまで。
-              ツールだけでなく「考え方」を学べるワークショップ。
+              ツールだけでなく「考え方」を体系的に学べるワークショップ。
             </div>
-            <div class="goal-footer">
-              <span class="goal-meta">随時開催 — 詳細はページで確認</span>
-              <span class="goal-arr">→</span>
-            </div>
-          </a>
-
-        </div>
-      </div>
-    </section>
-
-
-    <!-- ══════════════════════════════════════
-         SERVICE LIST — サービス一覧
-    ══════════════════════════════════════ -->
-    <section class="services" id="services">
-      <div class="wrap">
-        <div class="services-head">
-          <div>
-            <div class="lbl">All Services</div>
-            <h2>サービス一覧</h2>
-          </div>
-        </div>
-
-        <div class="services-grid">
-          <a href="sidekick-star.html" class="svc">
-            <div class="svc-badge badge-tool">⭐ Photoshop スクリプト</div>
-            <div class="svc-name">Sidekick Star</div>
-            <div class="svc-desc">
-              比較明合成後の飛行機軌跡除去・天の川現像・フィルム仕上げを全自動化する星景専用スクリプト。
-            </div>
-            <div class="svc-bottom">
-              <span class="svc-price">3ヶ月無料 / ¥9,800</span>
-              <span class="svc-link">詳細 →</span>
+            <div class="hc-footer">
+              <span class="hc-price">随時開催</span>
+              <span class="hc-arr">詳細を見る →</span>
             </div>
           </a>
 
-          <a href="portrait.html" class="svc">
-            <div class="svc-badge badge-tool">👤 Photoshop スクリプト</div>
-            <div class="svc-name">Sidekick Portrait</div>
-            <div class="svc-desc">
-              ポートレート現像の肌色調整・立体感補正を半自動化。自分のスタイルを保ちながら効率化。
-            </div>
-            <div class="svc-bottom">
-              <span class="svc-price">90日試用 / ¥4,800</span>
-              <span class="svc-link">詳細 →</span>
-            </div>
-          </a>
-
-          <a href="sky-effect.html" class="svc">
-            <div class="svc-badge badge-tool">☁️ Photoshop スクリプト</div>
-            <div class="svc-name">Sidekick SkyEffect</div>
-            <div class="svc-desc">
-              雲・光・空の質感を効率よく整理。空を主役にした写真の仕上げをワンステップで。
-            </div>
-            <div class="svc-bottom">
-              <span class="svc-price">30日試用 / ¥980</span>
-              <span class="svc-link">詳細 →</span>
-            </div>
-          </a>
-
-          <a href="ai-review.html" class="svc">
-            <div class="svc-badge badge-ai">🤖 AI サービス</div>
-            <div class="svc-name">AI 写真講評</div>
-            <div class="svc-desc">
-              村田一朗スタイルで構図・露出を AI が講評。週5枚まで無料（Googleアカウント必要）。
-            </div>
-            <div class="svc-bottom">
-              <span class="svc-price">週5枚まで無料</span>
-              <span class="svc-link">試す →</span>
-            </div>
-          </a>
-
-          <a href="workshop.html" class="svc">
-            <div class="svc-badge badge-learn">📷 ワークショップ</div>
-            <div class="svc-name">Workshop</div>
-            <div class="svc-desc">
-              星景撮影から比較明合成・天の川処理・仕上げまでを体系的に学べる実践型ワークショップ。
-            </div>
-            <div class="svc-bottom">
-              <span class="svc-price">随時開催</span>
-              <span class="svc-link">詳細 →</span>
-            </div>
-          </a>
-
-          <a href="gallery.html" class="svc">
-            <div class="svc-badge badge-learn">🖼 作品</div>
-            <div class="svc-name">Gallery</div>
-            <div class="svc-desc">
-              村田一朗の星景・ポートレート・風景作品を掲載。ツールで実現できる仕上がりの参考に。
-            </div>
-            <div class="svc-bottom">
-              <span class="svc-price">無料閲覧</span>
-              <span class="svc-link">見る →</span>
-            </div>
-          </a>
         </div>
       </div>
     </section>
