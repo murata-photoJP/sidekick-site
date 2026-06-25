@@ -225,66 +225,42 @@
     .hub-card:hover .hc-arr{color:var(--text);}
 
     /* ─────────────────────────────────────
-       STAR SHOWCASE — 代表作品の例
+       WHY SIDEKICK LAB
     ───────────────────────────────────── */
-    .showcase{
-      padding:56px 0;
-      border-top:1px solid rgba(255,255,255,.07);
-    }
-    .showcase-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
-    .mw-ba{border-radius:var(--r-lg);overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);}
-    .mw-pair{display:grid;grid-template-columns:1fr 1fr;gap:3px;background:rgba(255,255,255,.05);}
-    .mw-half{position:relative;}
-    .mw-half img{width:100%;display:block;aspect-ratio:3/2;object-fit:cover;}
-    .mw-lbl{
-      position:absolute;top:8px;left:8px;
-      padding:4px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.05em;
-    }
-    .mw-lbl.b{background:rgba(0,0,0,.76);color:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.12);}
-    .mw-lbl.a{background:rgba(255,138,0,.9);color:#111;}
-    .mw-cap{padding:10px 14px;background:var(--card);font-size:12px;color:var(--sub);line-height:1.5;}
-    .showcase-text .lbl{margin-bottom:6px;}
-    .showcase-text h2{font-size:clamp(20px,2.8vw,30px);font-weight:800;letter-spacing:-.025em;line-height:1.2;margin:10px 0 12px;}
-    .showcase-text h2 em{font-style:normal;color:var(--accent2);}
-    .showcase-text p{color:var(--sub);font-size:14px;line-height:1.8;margin-bottom:20px;}
-    .showcase-cta{display:flex;gap:9px;flex-wrap:wrap;}
+    .why{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
+    .why-hd{text-align:center;margin-bottom:36px;}
+    .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+    .why-card{padding:24px;background:var(--card);border-radius:var(--r);border:1px solid rgba(255,255,255,.07);}
+    .why-icon{font-size:26px;margin-bottom:12px;line-height:1;}
+    .why-card h3{font-size:15px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em;}
+    .why-card p{font-size:13px;color:var(--sub);line-height:1.75;}
 
     /* ─────────────────────────────────────
-       DEVELOPER
+       SUPPORT
     ───────────────────────────────────── */
-    .dev{
+    .supp{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
+    .supp-hd{text-align:center;margin-bottom:36px;}
+    .supp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+    .supp-card{
+      display:flex;flex-direction:column;align-items:center;text-align:center;
+      padding:28px 16px;background:var(--card);border-radius:var(--r);
+      border:1px solid rgba(255,255,255,.07);transition:.15s;
+    }
+    .supp-card:hover{border-color:rgba(255,255,255,.16);transform:translateY(-2px);}
+    .supp-icon{font-size:28px;margin-bottom:10px;line-height:1;}
+    .supp-name{font-size:14px;font-weight:800;margin-bottom:5px;}
+    .supp-desc{font-size:12px;color:var(--sub);}
+
+    /* ─────────────────────────────────────
+       ABOUT STRIP
+    ───────────────────────────────────── */
+    .abt{
       padding:56px 0;border-top:1px solid rgba(255,255,255,.07);
       background:linear-gradient(180deg,var(--bg),#0c0e1c 45%,var(--bg));
     }
-    .dev-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
-    .dev-img{
-      border-radius:var(--r-lg);overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);
-      position:relative;
-    }
-    .dev-img img{width:100%;display:block;}
-    .dev-img-cap{
-      position:absolute;bottom:0;left:0;right:0;
-      padding:22px 16px 14px;
-      background:linear-gradient(transparent,rgba(0,0,0,.8));
-      font-size:12px;color:rgba(255,255,255,.7);font-weight:600;
-    }
-    .dev-h2{font-size:clamp(20px,2.6vw,30px);font-weight:800;letter-spacing:-.025em;line-height:1.2;margin:12px 0;}
-    .dev-h2 em{font-style:normal;color:var(--accent2);}
-    .dev-body{color:var(--sub);font-size:14px;line-height:1.8;margin-bottom:18px;}
-    .dev-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;}
-    .dev-chip{
-      display:inline-flex;align-items:center;gap:5px;
-      padding:6px 12px;border-radius:999px;
-      background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);
-      font-size:12px;font-weight:700;color:var(--sub);
-    }
-    .ai-note{
-      padding:14px 16px;
-      background:rgba(78,140,255,.04);border:1px solid rgba(78,140,255,.14);
-      border-radius:12px;font-size:13px;color:var(--sub);line-height:1.75;
-    }
-    .ai-note b{color:var(--text);}
+    .abt-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+    .abt-img img{width:100%;display:block;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);}
+    .abt-img-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;}
 
     /* ── Footer ── */
     .footer{padding:48px 0 32px;border-top:1px solid rgba(255,255,255,.06);}
@@ -313,13 +289,16 @@
     /* ── Responsive ── */
     @media(max-width:860px){
       .hub-grid{grid-template-columns:1fr;}
-      .showcase-inner,.dev-inner{grid-template-columns:1fr;}
-      .mw-pair{grid-template-columns:1fr;}
+      .why-grid{grid-template-columns:1fr;}
+      .supp-grid{grid-template-columns:repeat(2,1fr);}
+      .abt-inner{grid-template-columns:1fr;}
+      .abt-img{order:-1;}
     }
     @media(max-width:600px){
       .hero{padding:48px 0 36px;}
       .nav{display:none;}
       .hub-card{padding:22px 20px 18px;}
+      .supp-grid{grid-template-columns:repeat(2,1fr);}
     }
   </style>
 
@@ -475,88 +454,101 @@
 
 
     <!-- ══════════════════════════════════════
-         STAR SHOWCASE — 代表作例
+         WHY SIDEKICK LAB
     ══════════════════════════════════════ -->
-    <section class="showcase" id="showcase">
+    <section class="why" id="why">
       <div class="wrap">
-        <div class="showcase-inner">
-
-          <div class="mw-ba">
-            <div class="mw-pair">
-              <div class="mw-half">
-                <img src="images/Star/web_milkyway_before.jpg" alt="Photoshop無補正現像 — 天の川がほぼ見えない">
-                <span class="mw-lbl b">BEFORE</span>
-              </div>
-              <div class="mw-half">
-                <img src="images/Star/web_milkyway_after.jpg" alt="Sidekick Star 現像＋天の川強調">
-                <span class="mw-lbl a">AFTER</span>
-              </div>
-            </div>
-            <div class="mw-cap">🌌 同じRAW・同じ1枚 — 違いは現像の判断と強調の有無（Sidekick Star）</div>
+        <div class="why-hd">
+          <div class="lbl">Why Sidekick Lab</div>
+          <h2 class="h2">選ばれる理由</h2>
+        </div>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon">🛠</div>
+            <h3>自分の消耗から生まれた</h3>
+            <p>「困っているユーザーを想像した」のではなく、自分が毎晩繰り返していた手作業を自動化したツールです。実際の現場で必要だった機能だけが入っています。</p>
           </div>
-
-          <div class="showcase-text">
-            <div class="lbl">Sidekick Star — 代表機能</div>
-            <h2>
-              「撮れているのに<em>出てこない</em>」<br>
-              天の川を引き出す。
-            </h2>
-            <p>
-              同じRAWファイルでも、現像の判断で天の川の出方は大きく変わります。
-              Sidekick Star は20年の星景経験から導き出した設定で、
-              自動的に現像・強調まで処理します。
-            </p>
-            <div class="showcase-cta">
-              <a class="btn btn-p" href="sidekick-star.html">Sidekick Star を詳しく見る →</a>
-              <a class="btn btn-o"
-                 href="/register-dl.html?product=star&src=index"
-                 onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
-                ▶ 3ヶ月無料で試す
-              </a>
-            </div>
+          <div class="why-card">
+            <div class="why-icon">🔒</div>
+            <h3>生成AI・外部送信なし</h3>
+            <p>飛行機検出にAIモデルを使用しますが、除去処理は原画素の置換のみ。生成補完・外部サービスへの送信は一切なし。すべて Photoshop 内で完結します。</p>
           </div>
-
+          <div class="why-card">
+            <div class="why-icon">🏆</div>
+            <h3>20年の現場経験が設定値に</h3>
+            <p>1X Award ×5受賞・著書6冊・CP+登壇。フィールドで磨いた現像判断がスクリプトの設定値として組み込まれています。プリセットとは根拠が違います。</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">📷</div>
+            <h3>ツールだけで終わらない</h3>
+            <p>ワークショップで撮影から仕上げまでを体系的に学べます。ツールを使いながら「なぜこの処理なのか」を理解することで、自分の現像力が上がります。</p>
+          </div>
         </div>
       </div>
     </section>
 
 
     <!-- ══════════════════════════════════════
-         DEVELOPER — 信頼
+         SUPPORT
     ══════════════════════════════════════ -->
-    <section class="dev" id="developer">
+    <section class="supp" id="support">
       <div class="wrap">
-        <div class="dev-inner">
+        <div class="supp-hd">
+          <div class="lbl">Support</div>
+          <h2 class="h2">困ったときのリソース</h2>
+        </div>
+        <div class="supp-grid">
+          <a href="sidekick_manual_package/manual_star.html" class="supp-card">
+            <div class="supp-icon">📘</div>
+            <div class="supp-name">マニュアル</div>
+            <div class="supp-desc">Star・Portraitの操作ガイド</div>
+          </a>
+          <a href="faq.html" class="supp-card">
+            <div class="supp-icon">❓</div>
+            <div class="supp-name">よくある質問</div>
+            <div class="supp-desc">インストールから動作まで</div>
+          </a>
+          <a href="changelog.html" class="supp-card">
+            <div class="supp-icon">📋</div>
+            <div class="supp-name">更新履歴</div>
+            <div class="supp-desc">バージョンアップの内容</div>
+          </a>
+          <a href="mailto:murata.photo@gmail.com" class="supp-card">
+            <div class="supp-icon">✉️</div>
+            <div class="supp-name">お問い合わせ</div>
+            <div class="supp-desc">直接メールで相談できます</div>
+          </a>
+        </div>
+      </div>
+    </section>
 
-          <div class="dev-img">
-            <img src="images/awards/milkyway_03_after.jpg" alt="村田一朗 1X Award受賞作">
-            <div class="dev-img-cap">🏆 1X Award 受賞作 — 村田一朗</div>
-          </div>
 
+    <!-- ══════════════════════════════════════
+         ABOUT
+    ══════════════════════════════════════ -->
+    <section class="abt" id="about">
+      <div class="wrap">
+        <div class="abt-inner">
           <div>
             <div class="lbl">About</div>
-            <h2 class="dev-h2">
-              20年間<em>同じ消耗をしてきた</em><br>写真家が作ったツール。
-            </h2>
-            <p class="dev-body">
-              村田一朗は20年以上フィールドで撮り続けています。
-              Sidekick は「ユーザーが困っていること」ではなく、
-              「自分が消耗していること」から作り始めたスクリプトです。
+            <h2 class="h2" style="margin:10px 0 16px;">写真家<em style="font-style:normal;color:var(--accent2);"> 村田 一朗</em></h2>
+            <p class="lead" style="margin-bottom:20px;">
+              北海道を拠点に20年以上フィールドで撮り続ける星景写真家。<br>
+              1X Award ×5受賞、著書6冊（玄光社 他）、CP+ セミナー登壇。<br>
+              Sidekick は「自分が毎晩繰り返していた消耗」を解決するために作り始めた。
             </p>
-            <div class="dev-chips">
-              <span class="dev-chip">🏆 1X Award ×5</span>
-              <span class="dev-chip">📖 著書6冊</span>
-              <span class="dev-chip">🎤 CP+ 講師</span>
-              <span class="dev-chip">⭐ 星景歴20年</span>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">🏆 1X Award ×5</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">📖 著書6冊</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">🎤 CP+ 講師</span>
+              <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">⭐ 星景歴20年</span>
             </div>
-            <div class="ai-note">
-              💡 <b>「AIツール」ではなく「実戦補助AI」です。</b>
-              飛行機の<b>検出</b>にAIモデルを使いますが、<b>除去は手作業と同じ原画画素の置換</b>です。
-              生成AI・画像補完は一切使用していません。
-              外部サービスへの送信もなし——すべてあなたの Photoshop 内で完結します。
-            </div>
+            <a href="about.html" class="btn btn-o">村田一朗について →</a>
           </div>
-
+          <div class="abt-img">
+            <img src="images/awards/milkyway_03_after.jpg" alt="村田一朗 1X Award受賞作">
+            <div class="abt-img-cap">🏆 1X Award 受賞作 — 村田一朗</div>
+          </div>
         </div>
       </div>
     </section>
