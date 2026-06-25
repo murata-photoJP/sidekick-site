@@ -228,12 +228,23 @@
        WHY SIDEKICK LAB
     ───────────────────────────────────── */
     .why{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
-    .why-hd{text-align:center;margin-bottom:36px;}
-    .why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
-    .why-card{padding:24px;background:var(--card);border-radius:var(--r);border:1px solid rgba(255,255,255,.07);}
-    .why-icon{font-size:26px;margin-bottom:12px;line-height:1;}
-    .why-card h3{font-size:15px;font-weight:800;margin-bottom:8px;letter-spacing:-.01em;}
-    .why-card p{font-size:13px;color:var(--sub);line-height:1.75;}
+    .why-hd{text-align:center;margin-bottom:48px;}
+    .why-list{border:1px solid rgba(255,255,255,.08);border-radius:var(--r-lg);overflow:hidden;}
+    .why-row{
+      display:flex;align-items:center;gap:28px;
+      padding:32px 40px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      transition:.15s;
+    }
+    .why-row:last-child{border-bottom:none;}
+    .why-row:hover{background:rgba(255,255,255,.025);}
+    .why-emoji{font-size:36px;line-height:1;flex-shrink:0;width:48px;text-align:center;}
+    .why-row h3{
+      font-size:clamp(20px,2.5vw,30px);
+      font-weight:800;letter-spacing:-.025em;line-height:1.2;
+      margin-bottom:5px;
+    }
+    .why-row p{font-size:13px;color:var(--sub);line-height:1.6;margin:0;}
 
     /* ─────────────────────────────────────
        SUPPORT
@@ -299,7 +310,6 @@
     /* ── Responsive ── */
     @media(max-width:860px){
       .hub-grid{grid-template-columns:1fr;}
-      .why-grid{grid-template-columns:1fr;}
       .supp-grid{grid-template-columns:repeat(2,1fr);}
       .abt-inner{grid-template-columns:1fr;}
       .abt-img{order:-1;}
@@ -309,6 +319,8 @@
       .nav{display:none;}
       .hub-card{padding:22px 20px 18px;}
       .supp-grid{grid-template-columns:repeat(2,1fr);}
+      .why-row{padding:24px 20px;gap:16px;}
+      .why-emoji{font-size:28px;width:36px;}
     }
   </style>
 
@@ -472,26 +484,34 @@
           <div class="lbl">Why Sidekick Lab</div>
           <h2 class="h2">選ばれる理由</h2>
         </div>
-        <div class="why-grid">
-          <div class="why-card">
-            <div class="why-icon">🛠</div>
-            <h3>自分の消耗から生まれた</h3>
-            <p>「困っているユーザーを想像した」のではなく、自分が毎晩繰り返していた手作業を自動化したツールです。実際の現場で必要だった機能だけが入っています。</p>
+        <div class="why-list">
+          <div class="why-row">
+            <div class="why-emoji">🛠</div>
+            <div>
+              <h3>自分の消耗から生まれた</h3>
+              <p>「困っているユーザーを想像した」のではなく、自分が毎晩繰り返していた手作業を自動化した。現場で必要だった機能だけが入っている。</p>
+            </div>
           </div>
-          <div class="why-card">
-            <div class="why-icon">🔒</div>
-            <h3>生成AI・外部送信なし</h3>
-            <p>飛行機検出にAIモデルを使用しますが、除去処理は原画素の置換のみ。生成補完・外部サービスへの送信は一切なし。すべて Photoshop 内で完結します。</p>
+          <div class="why-row">
+            <div class="why-emoji">🔒</div>
+            <div>
+              <h3>生成AI・外部送信なし</h3>
+              <p>除去処理は原画素の置換のみ。生成補完・画像修整・クラウド送信は一切なし。すべて自分の Photoshop 内で完結する。</p>
+            </div>
           </div>
-          <div class="why-card">
-            <div class="why-icon">🏆</div>
-            <h3>20年の現場経験が設定値に</h3>
-            <p>1X Award ×5受賞・著書6冊・CP+登壇。フィールドで磨いた現像判断がスクリプトの設定値として組み込まれています。プリセットとは根拠が違います。</p>
+          <div class="why-row">
+            <div class="why-emoji">🏆</div>
+            <div>
+              <h3>20年の現場経験が設定値に</h3>
+              <p>1X Award ×5・著書6冊・CP+登壇。フィールドで磨いた現像判断がスクリプトに組み込まれている。プリセットとは根拠が違う。</p>
+            </div>
           </div>
-          <div class="why-card">
-            <div class="why-icon">📷</div>
-            <h3>ツールだけで終わらない</h3>
-            <p>ワークショップで撮影から仕上げまでを体系的に学べます。ツールを使いながら「なぜこの処理なのか」を理解することで、自分の現像力が上がります。</p>
+          <div class="why-row">
+            <div class="why-emoji">📷</div>
+            <div>
+              <h3>ツールだけで終わらない</h3>
+              <p>ワークショップで「なぜこの処理か」まで学べる。ツールを使いながら、自分の現像判断そのものが上がる。</p>
+            </div>
           </div>
         </div>
       </div>
