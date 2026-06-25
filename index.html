@@ -250,6 +250,16 @@
     .supp-icon{font-size:28px;margin-bottom:10px;line-height:1;}
     .supp-name{font-size:14px;font-weight:800;margin-bottom:5px;}
     .supp-desc{font-size:12px;color:var(--sub);}
+    .supp-manual-links{display:flex;flex-direction:column;gap:6px;margin-top:10px;width:100%;}
+    .supp-ml{
+      display:block;padding:7px 12px;border-radius:8px;
+      font-size:12px;font-weight:700;text-align:left;
+      background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+      color:var(--sub);transition:.12s;
+    }
+    .supp-ml:hover{background:rgba(255,255,255,.1);color:var(--text);}
+    .supp-ml-soon{opacity:.45;cursor:default;pointer-events:none;}
+    .supp-ml-soon::after{content:" 準備中";font-size:10px;font-weight:600;letter-spacing:.04em;}
 
     /* ─────────────────────────────────────
        ABOUT STRIP
@@ -498,11 +508,15 @@
           <h2 class="h2">困ったときのリソース</h2>
         </div>
         <div class="supp-grid">
-          <a href="sidekick_manual_package/manual_star.html" class="supp-card">
+          <div class="supp-card">
             <div class="supp-icon">📘</div>
             <div class="supp-name">マニュアル</div>
-            <div class="supp-desc">Star・Portraitの操作ガイド</div>
-          </a>
+            <div class="supp-manual-links">
+              <a href="sidekick_manual_package/manual_star.html" class="supp-ml">⭐ Star</a>
+              <span class="supp-ml supp-ml-soon">👤 Portrait</span>
+              <span class="supp-ml supp-ml-soon">☁️ Sky</span>
+            </div>
+          </div>
           <a href="faq.html" class="supp-card">
             <div class="supp-icon">❓</div>
             <div class="supp-name">よくある質問</div>
