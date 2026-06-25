@@ -265,13 +265,275 @@
   footer { text-align: center; padding: 40px 0 20px; color: #555; font-size: 0.8rem; }
   footer a { color: #555; text-decoration: none; }
   footer a:hover { color: #888; }
+
+  /* ── サイトナビ ── */
+  .site-nav {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(26,26,26,.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 0 20px;
+  }
+  .site-nav-in {
+    max-width: 720px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    min-height: 56px;
+  }
+  .site-brand {
+    display: flex; align-items: center; gap: 9px;
+    font-weight: 800; font-size: 14px; color: #eef1f8; text-decoration: none;
+  }
+  .site-brand-mk {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: linear-gradient(135deg,#ff8a00,#ffb14a);
+    display: grid; place-items: center; color: #111; font-weight: 900; font-size: 12px;
+  }
+  .site-nav-back {
+    font-size: 12px; color: #666; text-decoration: none; font-weight: 600;
+    transition: color .15s;
+  }
+  .site-nav-back:hover { color: #aaa; }
+
+  /* ── LP ヘッダー部 ── */
+  .lp-hero {
+    background: linear-gradient(135deg, rgba(224,90,0,.07), rgba(255,177,74,.03));
+    border-bottom: 1px solid rgba(255,138,0,.1);
+    padding: 40px 0 32px;
+    text-align: center;
+  }
+  .lp-hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 14px; border-radius: 999px;
+    background: rgba(255,138,0,.1); border: 1px solid rgba(255,138,0,.25);
+    color: #ffb14a; font-size: 11px; font-weight: 800; letter-spacing: .08em;
+    margin-bottom: 16px;
+  }
+  .lp-hero h1 {
+    font-size: clamp(20px, 4vw, 28px);
+    font-weight: 800; letter-spacing: -.02em; line-height: 1.25;
+    color: #f0f0f0; margin-bottom: 10px;
+  }
+  .lp-hero h1 em { font-style: normal; color: #ffb14a; }
+  .lp-hero-sub {
+    color: #888; font-size: 0.9rem; line-height: 1.8;
+    max-width: 560px; margin: 0 auto 20px;
+  }
+  .lp-origin {
+    display: inline-block;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 10px; padding: 12px 20px;
+    font-size: 0.82rem; color: #888; line-height: 1.7;
+    margin-bottom: 20px; max-width: 500px; text-align: left;
+  }
+  .lp-origin strong { color: #ccc; }
+  .lp-points {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+    margin-bottom: 16px;
+  }
+  .lp-point {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 12px; border-radius: 6px;
+    background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09);
+    font-size: 12px; color: #888; font-weight: 600;
+  }
+  .lp-caution {
+    font-size: 0.78rem; color: #555; margin-top: 8px;
+  }
+
+  /* ── 次にできること ── */
+  #next-steps {
+    display: none;
+    background: #1e1e1e; border: 1px solid #333;
+    border-radius: 12px; padding: 28px; margin-top: 24px;
+  }
+  #next-steps h3 {
+    font-size: 0.95rem; color: #ccc; font-weight: 700;
+    margin-bottom: 16px; letter-spacing: .02em;
+  }
+  .next-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  }
+  .next-card {
+    display: block; padding: 14px 16px;
+    background: #252525; border: 1px solid #383838; border-radius: 10px;
+    text-decoration: none; color: inherit; transition: border-color .15s, background .15s;
+  }
+  .next-card:hover { border-color: #555; background: #2a2a2a; }
+  .next-card-label {
+    font-size: 10px; color: #e05a00; font-weight: 700;
+    letter-spacing: .06em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  .next-card-name { font-size: 0.88rem; color: #ddd; font-weight: 700; margin-bottom: 3px; }
+  .next-card-desc { font-size: 0.78rem; color: #666; line-height: 1.6; }
+  @media(max-width: 500px) { .next-grid { grid-template-columns: 1fr; } }
+
+  /* ── できること / できないこと ── */
+  .ai-scope {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin: 0 0 20px;
+  }
+  .ai-scope-card {
+    background: #252525; border: 1px solid #383838;
+    border-radius: 10px; padding: 18px;
+  }
+  .ai-scope-card.can { border-top: 2px solid #3a6a3a; }
+  .ai-scope-card.cant { border-top: 2px solid #4a3a2a; }
+  .ai-scope-title {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: .06em;
+    margin-bottom: 10px;
+  }
+  .ai-scope-card.can .ai-scope-title { color: #6dc88b; }
+  .ai-scope-card.cant .ai-scope-title { color: #c88b50; }
+  .ai-scope-list {
+    list-style: none; padding: 0;
+    font-size: 0.8rem; color: #888; line-height: 1.9;
+  }
+  .ai-scope-card.can .ai-scope-list li::before { content: '✓ '; color: #4a9a6a; font-weight: 700; }
+  .ai-scope-card.cant .ai-scope-list li::before { content: '— '; color: #6a5040; }
+  @media(max-width: 500px) { .ai-scope { grid-template-columns: 1fr; } }
+
+  /* ── ストーリー ── */
+  .story-section {
+    background: linear-gradient(135deg,rgba(224,90,0,.05),rgba(255,177,74,.02));
+    border-bottom: 1px solid rgba(255,138,0,.08);
+    padding: 24px 0;
+  }
+  .story-inner {
+    max-width: 720px; margin: 0 auto; padding: 0 20px;
+    display: flex; gap: 18px; align-items: flex-start;
+  }
+  .story-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: linear-gradient(135deg,#ff8a00,#ffb14a);
+    display: grid; place-items: center;
+    font-size: 16px; flex-shrink: 0;
+    border: 2px solid rgba(255,138,0,.3);
+  }
+  .story-body { flex: 1; }
+  .story-label {
+    font-size: 10px; color: #e05a00; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .story-text { font-size: 0.86rem; color: #888; line-height: 1.95; }
+  .story-text strong { color: #ccc; }
+  .story-sig { margin-top: 10px; font-size: 0.78rem; color: #555; }
+
+  /* ── 講評サンプル ── */
+  .sample-card {
+    background: #252525; border: 1px solid #383838;
+    border-radius: 12px; padding: 20px; margin-bottom: 20px;
+  }
+  .sample-label {
+    font-size: 10px; color: #666; font-weight: 700;
+    letter-spacing: .08em; text-transform: uppercase; margin-bottom: 14px;
+  }
+  .sample-photo-ph {
+    background: #1e1e1e; border: 1px dashed #333; border-radius: 8px;
+    height: 90px; display: flex; align-items: center; justify-content: center;
+    color: #3a3a3a; font-size: 0.78rem; margin-bottom: 14px; gap: 8px;
+  }
+  .sample-items { list-style: none; padding: 0; }
+  .sample-items li {
+    padding: 8px 0; border-bottom: 1px solid #2e2e2e;
+    font-size: 0.83rem; color: #999; line-height: 1.7;
+  }
+  .sample-items li:last-child { border-bottom: none; }
+  .sample-items li .sit { color: #6dc88b; font-weight: 700; font-size: 0.78rem; margin-right: 4px; }
+
+  /* ── 3ステップ ── */
+  .steps-section { margin-top: 0; }
+  .steps-title {
+    font-size: 0.88rem; color: #888; font-weight: 700;
+    margin-bottom: 18px; letter-spacing: .02em;
+  }
+  .steps-flow { display: flex; flex-direction: column; margin-left: 18px; }
+  .step-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    border-left: 2px solid #2e2e2e; padding-bottom: 4px;
+  }
+  .step-item:last-child { border-left-color: transparent; }
+  .step-dot {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0;
+    margin-left: -18px; border: 2px solid #333; background: #252525;
+    margin-top: 0;
+  }
+  .step-item:nth-child(1) .step-dot { border-color: #3a6a4a; color: #6dc88b; }
+  .step-item:nth-child(2) .step-dot { border-color: #6a4a1a; color: #e08030; }
+  .step-item:nth-child(3) .step-dot { border-color: #1a3a6a; color: #4e8cff; }
+  .step-content { flex: 1; padding: 2px 0 20px; }
+  .step-num { font-size: 9px; color: #555; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  .step-title { font-size: 0.9rem; color: #ddd; font-weight: 700; margin: 3px 0 4px; }
+  .step-desc { font-size: 0.78rem; color: #666; line-height: 1.6; }
+  .step-link {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 7px; font-size: 0.76rem; font-weight: 700;
+    color: #555; text-decoration: none; transition: color .15s;
+  }
+  .step-link:hover { color: #aaa; }
 </style>
 </head>
 <body>
+
+  <!-- サイトナビ -->
+  <nav class="site-nav">
+    <div class="site-nav-in">
+      <a href="/" class="site-brand">
+        <div class="site-brand-mk">S</div>
+        <span>Sidekick Lab</span>
+      </a>
+      <a href="/" class="site-nav-back">← トップに戻る</a>
+    </div>
+  </nav>
+
+  <!-- LP ヘッダー -->
+  <div class="lp-hero">
+    <div style="max-width:720px;margin:0 auto;padding:0 20px;">
+      <div class="lp-hero-badge">Sidekick Lab · AI写真講評</div>
+      <h1>村田一朗の講評スタイルを、<em>AIで体験</em></h1>
+      <p class="lp-hero-sub">
+        撮ったあと、「これでいいのかな」と思うことはありませんか。<br>
+        そんなときに、作品を客観的に見直すためのAI講評です。
+      </p>
+      <p style="font-size:0.82rem;color:#666;line-height:1.8;max-width:500px;margin:0 auto 20px;">
+        写真をアップロードすると、構図・視線誘導・余白・主題の伝わり方・改善ポイントを整理します。
+      </p>
+      <div class="lp-origin">
+        <strong>写真家 村田一朗が、10年以上にわたり1万件以上の作品講評を行ってきた経験をもとに設計</strong><br>
+        構図・視線誘導・画面整理という、講評の中で何度も繰り返し伝えてきた考え方に特化しています。汎用AIとは設計の出発点が異なります。<br>
+        <span style="color:#555;font-size:0.76rem;">※ 本人講評ではなく、構図を客観的に確認するためのAI講評です。</span>
+      </div>
+      <div class="lp-points">
+        <span class="lp-point">📐 構図の整理</span>
+        <span class="lp-point">👁 視線誘導</span>
+        <span class="lp-point">⬜ 余白の使い方</span>
+        <span class="lp-point">☀️ 露出・明暗の印象</span>
+        <span class="lp-point">🌟 主題の伝わりやすさ</span>
+        <span class="lp-point">💡 改善ポイント</span>
+      </div>
+      <p style="font-size:0.78rem;color:#555;margin-top:14px;">Sidekick Labを知っていただくため、現在は無料公開しています。</p>
+    </div>
+  </div>
+
+  <!-- なぜこのAIを作ったのか -->
+  <div class="story-section">
+    <div class="story-inner">
+      <div class="story-avatar">📷</div>
+      <div class="story-body">
+        <div class="story-label">このAIを作った理由</div>
+        <p class="story-text">
+          私は写真家として活動する中で、10年以上にわたり、1万件以上の作品講評を行ってきました。<br>
+          その中で繰り返し伝えてきたのは、<strong>構図・視線誘導・画面整理</strong>という考え方です。<br>
+          この視点を、もっと多くの方にもっと気軽に体験していただきたい。<br>
+          それが、このAI講評を作った理由です。
+        </p>
+        <p class="story-sig">— 写真家 村田一朗</p>
+      </div>
+    </div>
+  </div>
+
 <div class="container">
   <header>
-    <h1>村田一朗 AI写真講評</h1>
-    <p>写真をアップロードすると、村田一朗スタイルで構図・露出などを講評します。</p>
     <!-- ユーザー情報バー -->
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
@@ -279,6 +541,52 @@
       <button class="logout-btn" onclick="logout()">ログアウト</button>
     </div>
   </header>
+
+  <!-- 講評サンプル -->
+  <p style="font-size:0.85rem;color:#aaa;margin-bottom:10px;font-weight:700;">実際には、このような講評が返ってきます</p>
+  <div class="sample-card">
+    <div class="sample-label">講評サンプル</div>
+
+    <img src="/images/AI/20240503_155526_675_-0.3_0_DxO.jpg" alt="流し撮りサンプル" style="width:100%;border-radius:8px;border:1px solid #333;margin-bottom:14px;">
+
+    <p style="font-size:0.85rem;color:#999;line-height:2;white-space:pre-wrap;">流し撮り、いい挑戦ですね。速度感がちゃんと出ていて、モーションブラーの効果も効いています。
+
+ただ、惜しいんですよ・・・。画面を見ると、上半分の背景（スタンド）が占める割合が大きすぎて、本来の主題であるレーシングカーが相対的に小さく感じられてしまう。レーシングカーがいるのは中央から右寄り、かなり下の位置にあります。
+
+流し撮りは背景をブラすことで速度感を表現する技法ですが、主題であるクルマは必ず画面の中央付近、三分割の交点に置くのが鉄則ですよ。今はクルマが低すぎて、見る人の目線がまず上のスタンドに行ってしまいます。
+
+次に撮るときは、もっとクルマが画面中央〜③④の交点周辺に来るように構図を決めてください。背景のモーションと、クルマの位置のバランスが取れれば、もっと迫力のある流し撮りになりますよ。
+
+この調子で引き続き頑張ってくださいね。</p>
+
+    <p style="font-size:0.78rem;color:#666;margin-top:12px;line-height:1.7;">このような形式で、作品の良い点と改善ポイントを整理します。</p>
+  </div>
+
+  <!-- このAIで分かること / 分からないこと -->
+  <div class="ai-scope">
+    <div class="ai-scope-card can">
+      <div class="ai-scope-title">このAIで分かること</div>
+      <ul class="ai-scope-list">
+        <li>構図の整理</li>
+        <li>主題の伝わりやすさ</li>
+        <li>視線誘導</li>
+        <li>余白の使い方</li>
+        <li>明暗・印象の方向性</li>
+        <li>改善ポイント</li>
+      </ul>
+    </div>
+    <div class="ai-scope-card cant">
+      <div class="ai-scope-title">判断しにくいこと</div>
+      <ul class="ai-scope-list">
+        <li>厳密なピント精度</li>
+        <li>AFの成否</li>
+        <li>ノイズ量の厳密な評価</li>
+        <li>RAW現像の細かな数値</li>
+        <li>具体的なレイヤー操作</li>
+        <li>コンテスト合否の予測</li>
+      </ul>
+    </div>
+  </div>
 
   <!-- プライバシー情報（常時表示） -->
   <div class="login-privacy">
@@ -386,6 +694,62 @@
     <h2>村田一朗からの講評</h2>
     <p id="result-text"></p>
     <button id="copy-btn" onclick="copyResult()">コピー</button>
+  </div>
+
+  <!-- 次にできること（講評後に表示） -->
+  <div id="next-steps">
+    <div class="steps-section">
+      <div class="steps-title">写真と向き合う、3つのステップ</div>
+      <div class="steps-flow">
+
+        <div class="step-item">
+          <div class="step-dot">1</div>
+          <div class="step-content">
+            <div class="step-num">STEP 1 · 今ここ</div>
+            <div class="step-title">写真を見る — AI講評</div>
+            <div class="step-desc">構図・視線誘導・余白を客観的に確認する。村田一朗の講評経験をもとに設計。</div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-dot">2</div>
+          <div class="step-content">
+            <div class="step-num">STEP 2</div>
+            <div class="step-title">写真を仕上げる — SideKick</div>
+            <div class="step-desc">後処理の消耗を減らし、完成度を上げる。Photoshopスクリプトで仕上げを効率化。</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              <a href="/sidekick-star.html" class="step-link">🌌 Star →</a>
+              <a href="/portrait.html" class="step-link">👤 Portrait →</a>
+              <a href="/sidekick.html" class="step-link">⚡ 全製品 →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-dot">3</div>
+          <div class="step-content">
+            <div class="step-num">STEP 3</div>
+            <div class="step-title">撮る・考える — Workshop</div>
+            <div class="step-desc">撮影現場から仕上げまで、作品づくりの流れを体系的に学ぶ。</div>
+            <a href="/workshop.html" class="step-link">Workshop を見る →</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ブランドメッセージ -->
+  <div style="text-align:center;padding:36px 0 12px;border-top:1px solid #252525;margin-top:12px;">
+    <p style="font-size:0.84rem;color:#4a4a4a;line-height:2.4;max-width:380px;margin:0 auto;">
+      写真は<br>
+      撮ることだけでも、仕上げることだけでも、<br>
+      上達しません。<br><br>
+      見る・仕上げる・撮る。<br>
+      その3つを行き来することで、<br>
+      作品は少しずつ変わっていきます。
+    </p>
+    <p style="font-size:0.82rem;color:#666;margin-top:16px;font-weight:700;">Sidekick Lab は、そのための場所です。</p>
   </div>
 
   <footer>
@@ -612,6 +976,7 @@ async function submitReview(e) {
 
     document.getElementById('result-text').textContent = data.result;
     document.getElementById('result-area').style.display = 'block';
+    document.getElementById('next-steps').style.display = 'block';
     document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
 
     // 使用量表示を更新
