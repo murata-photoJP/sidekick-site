@@ -305,6 +305,62 @@
     @media(max-width:860px){.footer-in{grid-template-columns:1fr 1fr;}}
     @media(max-width:500px){.footer-in{grid-template-columns:1fr;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
 
+    /* ── AI講評 Entry Banner ── */
+    .ai-entry{
+      padding:52px 0;
+      background:linear-gradient(135deg,rgba(224,90,0,.07) 0%,rgba(255,177,74,.03) 100%);
+      border-top:1px solid rgba(255,138,0,.14);
+      border-bottom:1px solid rgba(255,138,0,.07);
+      position:relative;overflow:hidden;
+    }
+    .ai-entry::before{
+      content:"";position:absolute;right:-60px;top:-60px;
+      width:300px;height:300px;border-radius:50%;
+      background:radial-gradient(circle,rgba(255,138,0,.06),transparent 70%);
+      pointer-events:none;
+    }
+    .ai-entry-inner{
+      display:flex;align-items:center;gap:48px;position:relative;z-index:1;
+    }
+    .ai-entry-text{flex:1;}
+    .ai-entry-badge{
+      display:inline-flex;align-items:center;gap:7px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.25);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.1em;
+      margin-bottom:16px;
+    }
+    .ai-entry-pts{
+      display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 0;
+    }
+    .ai-entry-pt{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:4px 11px;border-radius:6px;
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+      font-size:12px;color:var(--sub);font-weight:600;
+    }
+    .ai-entry-cta{
+      display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px;
+    }
+    .ai-entry-note{font-size:12px;color:var(--muted);}
+    .ai-entry-visual{
+      flex-shrink:0;width:220px;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .ai-ev-card{
+      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+      border-radius:12px;padding:14px 16px;
+    }
+    .ai-ev-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
+    .ai-ev-val{font-size:13px;color:var(--sub);}
+    @media(max-width:860px){
+      .ai-entry-visual{display:none;}
+    }
+    @media(max-width:600px){
+      .ai-entry-inner{flex-direction:column;}
+      .ai-entry{padding:40px 0;}
+    }
+
     /* ── Lightbox ── */
     #lightbox{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);align-items:center;justify-content:center;cursor:pointer;}
     #lightbox.open{display:flex;}
@@ -360,6 +416,7 @@
         <a href="about.html" style="color:var(--muted);">About</a>
         <a href="changelog.html" style="color:var(--muted);">更新履歴</a>
         <a href="faq.html" style="color:var(--muted);">Support</a>
+        <a href="ai-review.html" class="nav-ai">🤖 AI講評 無料</a>
       </nav>
     </div>
   </header>
@@ -373,13 +430,18 @@
       <div class="wrap">
         <div class="hero-inner">
           <div class="hero-kicker">📷 村田一朗の写真ラボ</div>
+          <!-- ABテスト候補（現在は非表示）
+               案B: 写真を見る。仕上げる。そして、また撮る。
+               案C: 写真を見る。写真を育てる。
+               案D: 写真に、もっと向き合う。
+          -->
           <h1>
-            写真の後処理を、<br>
-            <em>もっと賢くする。</em>
+            写真を見て、仕上げて、<br>
+            <em>撮りに行く。</em>
           </h1>
           <p class="hero-sub">
-            星景・ポートレート・空の仕上げを自動化する Photoshop スクリプトと、<br>
-            撮影を学べるワークショップを提供しています。
+            AI写真講評・Photoshop スクリプト・ワークショップ。<br>
+            写真と向き合うすべての工程を、Sidekick Lab で。
           </p>
         </div>
       </div>
@@ -398,6 +460,50 @@
       </div>
     </div>
 
+
+    <!-- ══════════════════════════════════════
+         AI講評 — 集客入口
+    ══════════════════════════════════════ -->
+    <section class="ai-entry">
+      <div class="wrap">
+        <div class="ai-entry-inner">
+          <div class="ai-entry-text">
+            <div class="ai-entry-badge">Sidekick Lab · AI写真講評</div>
+            <h2 class="h2">村田一朗の講評スタイルを、<br><em>AIで体験できます。</em></h2>
+            <p class="lead" style="margin-top:12px;">
+              写真家 村田一朗が、10年以上・1万件以上の講評経験をもとに設計。構図・視線誘導・画面整理に特化した、汎用AIとは設計の出発点が異なる講評が体験できます。<br>
+              <span style="font-size:13px;color:var(--muted);">Sidekick Labを知っていただくため、現在は無料公開しています。</span>
+            </p>
+            <div class="ai-entry-pts">
+              <span class="ai-entry-pt">📐 構図の整理</span>
+              <span class="ai-entry-pt">👁 視線誘導</span>
+              <span class="ai-entry-pt">⬜ 余白の使い方</span>
+              <span class="ai-entry-pt">🌟 主題の伝わり方</span>
+              <span class="ai-entry-pt">💡 改善ポイント</span>
+            </div>
+            <div class="ai-entry-cta">
+              <a href="ai-review.html" class="btn btn-p btn-lg">無料で講評してみる →</a>
+              <span class="ai-entry-note">Googleアカウントで利用 · 週5枚まで</span>
+            </div>
+            <p style="font-size:13px;color:var(--muted);margin-top:14px;font-style:italic;">まずは、あなたの写真を一枚、見せてください。</p>
+          </div>
+          <div class="ai-entry-visual">
+            <div class="ai-ev-card">
+              <div class="ai-ev-label">講評実績</div>
+              <div class="ai-ev-val">10年以上・1万件以上</div>
+            </div>
+            <div class="ai-ev-card">
+              <div class="ai-ev-label">設計者</div>
+              <div class="ai-ev-val">写真家 村田一朗</div>
+            </div>
+            <div class="ai-ev-card">
+              <div class="ai-ev-label">料金</div>
+              <div class="ai-ev-val">無料（週5枚）</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- ══════════════════════════════════════
          HUB — サービス一覧
@@ -615,6 +721,7 @@
             <li><a href="portrait.html">👤 Sidekick Portrait</a></li>
             <li><a href="sky-effect.html">☁️ Sidekick SkyEffect</a></li>
             <li><a href="workshop.html">📷 Workshop</a></li>
+            <li><a href="ai-review.html">🤖 AI写真講評（無料）</a></li>
           </ul>
         </div>
 

@@ -190,6 +190,7 @@
       btn.textContent = '移動中...';
 
       var url = STRIPE_URL + '?prefilled_email=' + encodeURIComponent(email);
+      gtag('event', 'stripe_click', {'product': 'Sidekick_SkyEffect'});
       window.location.href = url;
     });
   </script>
