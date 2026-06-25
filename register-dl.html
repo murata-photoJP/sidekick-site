@@ -33,7 +33,6 @@
 
   .container { max-width: 520px; width: 100%; }
 
-  /* ロゴ */
   .logo {
     text-align: center;
     margin-bottom: 32px;
@@ -45,7 +44,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* カード */
   .card {
     background: var(--card);
     border: 1px solid var(--line);
@@ -53,7 +51,6 @@
     overflow: hidden;
   }
 
-  /* 製品ヘッダー */
   .product-header {
     background: linear-gradient(135deg, #1a1428 0%, #12161f 100%);
     border-bottom: 1px solid var(--line);
@@ -96,22 +93,7 @@
     border-radius: 20px;
   }
 
-  /* メインエリア */
   .main-area { padding: 32px; }
-
-  #loading-state { text-align: center; padding: 20px 0; }
-  .spinner {
-    width: 32px; height: 32px;
-    border: 3px solid var(--line);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 12px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* 同意・ログイン画面 */
-  #consent-state { display: none; }
 
   .consent-title {
     font-size: 0.95rem;
@@ -145,12 +127,6 @@
     line-height: 1.9;
   }
   .info-list li::before { content: '・'; color: var(--accent); }
-  .info-note {
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin-top: 8px;
-    line-height: 1.7;
-  }
   .info-divider {
     height: 1px;
     background: var(--line);
@@ -191,36 +167,23 @@
     cursor: pointer;
   }
 
-  /* ログイン済みユーザー向け */
-  .account-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(255,255,255,0.04);
+  .email-input {
+    display: block;
+    width: 100%;
+    padding: 13px 16px;
+    margin-bottom: 10px;
+    background: var(--card2);
     border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 14px 16px;
-    margin-bottom: 14px;
-  }
-  .acc-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--line);
-    flex-shrink: 0;
-  }
-  .acc-name {
-    font-weight: 600;
+    border-radius: 10px;
+    color: var(--text);
     font-size: 0.9rem;
-    margin-bottom: 2px;
+    font-family: inherit;
+    transition: border-color 0.15s;
   }
-  .acc-email {
-    color: var(--sub);
-    font-size: 0.82rem;
-  }
+  .email-input:focus { outline: none; border-color: var(--accent); }
+  .email-input::placeholder { color: var(--muted); }
 
-  .agree-btn {
+  .dl-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -234,46 +197,11 @@
     border-radius: 12px;
     cursor: pointer;
     transition: background 0.15s, opacity 0.15s;
+    font-family: inherit;
     margin-bottom: 10px;
   }
-  .agree-btn:hover:not(:disabled) { background: var(--accent2); }
-  .agree-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-  .switch-account-note { text-align: center; margin-top: 4px; }
-  .link-btn {
-    background: none;
-    border: none;
-    color: var(--muted);
-    font-size: 0.78rem;
-    cursor: pointer;
-    text-decoration: underline;
-    padding: 0;
-    font-family: inherit;
-  }
-  .link-btn:hover { color: var(--sub); }
-
-  /* Google ログインボタン */
-  .google-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    width: 100%;
-    padding: 15px 24px;
-    background: #fff;
-    color: #3c4043;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.15s, box-shadow 0.15s, opacity 0.15s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-    margin-bottom: 12px;
-  }
-  .google-btn:hover:not(:disabled) { background: #f1f3f4; box-shadow: 0 4px 12px rgba(0,0,0,0.35); }
-  .google-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .google-btn svg { flex-shrink: 0; }
+  .dl-btn:hover:not(:disabled) { background: var(--accent2); }
+  .dl-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
   .unsubscribe-note {
     text-align: center;
@@ -281,54 +209,18 @@
     color: var(--muted);
   }
 
-  /* メールアドレス入力フォーム */
-  .or-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 18px 0;
-    color: var(--muted);
-    font-size: 0.78rem;
-  }
-  .or-divider::before,.or-divider::after {
-    content: '';flex: 1;height: 1px;background: var(--line);
-  }
-  .link-secondary {
-    display: block;width: 100%;text-align: center;
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--line);
-    border-radius: 10px;padding: 12px 16px;
-    color: var(--sub);font-size: 0.85rem;cursor: pointer;
-    transition: 0.15s;font-family: inherit;
-  }
-  .link-secondary:hover { background: rgba(255,255,255,0.07);border-color: rgba(255,255,255,0.14); }
-  .email-input {
-    display: block;width: 100%;
-    padding: 13px 16px;margin-bottom: 10px;
-    background: var(--card2);border: 1px solid var(--line);
-    border-radius: 10px;color: var(--text);
-    font-size: 0.9rem;font-family: inherit;
-    transition: border-color 0.15s;
-  }
-  .email-input:focus { outline: none;border-color: var(--accent); }
-  .email-input::placeholder { color: var(--muted); }
-  .email-btn {
-    display: flex;align-items: center;justify-content: center;
-    width: 100%;padding: 14px 24px;
-    background: rgba(255,138,0,0.12);color: var(--accent2);
-    font-size: 0.92rem;font-weight: 700;
-    border: 1px solid rgba(255,138,0,0.35);
-    border-radius: 12px;cursor: pointer;
-    transition: 0.15s;font-family: inherit;margin-bottom: 10px;
-  }
-  .email-btn:hover:not(:disabled) { background: rgba(255,138,0,0.22); }
-  .email-btn:disabled { opacity: 0.35;cursor: not-allowed; }
-
-  /* 処理中 */
   #processing-state { display: none; text-align: center; padding: 20px 0; }
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
   #processing-state p { color: var(--sub); font-size: 0.9rem; margin-top: 12px; }
 
-  /* エラー */
   #error-msg {
     display: none;
     background: rgba(90,30,30,0.4);
@@ -374,24 +266,16 @@
     <!-- メインエリア -->
     <div class="main-area">
 
-      <!-- ローディング（Auth状態確認中） -->
-      <div id="loading-state">
-        <div class="spinner"></div>
-      </div>
-
-      <!-- 同意・ログイン画面（ログイン済み・未済ともにここを通す） -->
+      <!-- 同意・入力画面 -->
       <div id="consent-state">
 
-        <!-- 個人情報の取り扱い説明 -->
         <div class="consent-title">個人情報の取り扱いについて</div>
         <div class="info-box">
           <div class="info-section">
             <div class="info-label">取得する情報</div>
             <ul class="info-list">
-              <li>Googleアカウントの表示名</li>
-              <li>Googleアカウントのメールアドレス</li>
+              <li>メールアドレス</li>
             </ul>
-            <p class="info-note">※ Googleドライブ内のファイル、写真、連絡先、パスワード等にはアクセスしません。</p>
           </div>
           <div class="info-divider"></div>
           <div class="info-section">
@@ -400,7 +284,6 @@
               <li>ダウンロード履歴の管理</li>
               <li>製品アップデートや重要なお知らせのご案内</li>
               <li>お問い合わせ・サポート対応</li>
-              <li>不正利用防止</li>
             </ul>
           </div>
         </div>
@@ -408,65 +291,23 @@
           <a href="/privacy.html" target="_blank">プライバシーポリシーを読む →</a>
         </div>
 
-        <!-- 同意チェックボックス -->
         <label class="checkbox-row">
           <input type="checkbox" id="consent-check" onchange="onConsentChange()">
           <span><a href="/privacy.html" target="_blank" style="color:var(--accent2);text-decoration:underline">プライバシーポリシー</a>とメール連絡に同意します</span>
         </label>
 
-        <!-- ログイン済みユーザー向け -->
-        <div id="account-info" style="display:none">
-          <div class="account-card">
-            <img id="acc-avatar" class="acc-avatar" src="" alt="">
-            <div>
-              <div id="acc-name" class="acc-name"></div>
-              <div id="acc-email" class="acc-email"></div>
-            </div>
-          </div>
-          <button id="agree-btn" class="agree-btn" disabled onclick="agreeAndDownload()">
-            同意して無料ダウンロードへ進む
-          </button>
-          <div class="switch-account-note">
-            <button class="link-btn" onclick="switchAccount()">別のアカウントでログインする</button>
-          </div>
-        </div>
-
-        <!-- 未ログインユーザー向け -->
-        <div id="google-login-area" style="display:none">
-          <button id="google-btn" class="google-btn" disabled onclick="signInWithGoogle()">
-            <svg width="18" height="18" viewBox="0 0 18 18">
-              <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
-              <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
-              <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
-              <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
-            </svg>
-            Google アカウントでダウンロード
-          </button>
-          <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
-
-          <div class="or-divider"><span>または</span></div>
-
-          <!-- メールアドレスのみルート -->
-          <div id="email-form-toggle">
-            <button class="link-secondary" onclick="showEmailForm()">
-              📧 Googleアカウントをお持ちでない方はこちら
-            </button>
-          </div>
-          <div id="email-form" style="display:none">
-            <input type="email" id="email-input" class="email-input"
-              placeholder="メールアドレスを入力" autocomplete="email"
-              oninput="updateEmailBtn()">
-            <button id="email-submit-btn" class="email-btn" disabled onclick="submitEmail()">
-              このメアドでダウンロード →
-            </button>
-            <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
-          </div>
-        </div>
+        <input type="email" id="email-input" class="email-input"
+          placeholder="メールアドレスを入力" autocomplete="email"
+          oninput="updateEmailBtn()">
+        <button id="dl-btn" class="dl-btn" disabled onclick="submitEmail()">
+          無料ダウンロードへ進む →
+        </button>
+        <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
 
         <div id="error-msg"></div>
       </div>
 
-      <!-- 処理中（DL記録・Brevo登録） -->
+      <!-- 処理中 -->
       <div id="processing-state">
         <div class="spinner"></div>
         <p>ダウンロードを準備しています...</p>
@@ -483,7 +324,7 @@
 
 </div>
 
-<!-- Firebase SDKs (compat) -->
+<!-- Firebase SDK (Firestore ログ用) -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
@@ -492,12 +333,10 @@
 <script>
 const CONSENT_VERSION = 'download-2026-06-25';
 
-// URL パラメータから製品・流入元を取得
 const params = new URLSearchParams(window.location.search);
 const PRODUCT = params.get('product') || 'star';
 const SRC     = params.get('src')     || 'direct';
 
-// DL完了ページ（製品別）
 const DL_PAGES = {
   star:     '/dl-star.html',
   portrait: '/dl-portrait.html',
@@ -505,7 +344,6 @@ const DL_PAGES = {
 };
 const DL_PAGE = DL_PAGES[PRODUCT] || '/dl-star.html';
 
-// 製品名（Firestore 保存用）
 const PRODUCT_NAMES = {
   star:     'Sidekick_Star',
   portrait: 'Sidekick_Portrait',
@@ -513,58 +351,17 @@ const PRODUCT_NAMES = {
 };
 const PRODUCT_NAME = PRODUCT_NAMES[PRODUCT] || 'Sidekick_Star';
 
-// バージョン（都度更新）
 const CURRENT_VERSION = '3.16';
 
-let currentUser = null;
-let consentTimestamp = null;
-
-firebase.auth().onAuthStateChanged(function(user) {
-  document.getElementById('loading-state').style.display = 'none';
-  currentUser = user;
-  showConsentScreen(user);
-});
-
-function showConsentScreen(user) {
-  document.getElementById('consent-state').style.display = 'block';
-
-  if (user) {
-    // ログイン済み：アカウント情報を表示してから同意を求める
-    document.getElementById('acc-name').textContent = user.displayName || user.email;
-    document.getElementById('acc-email').textContent = user.email;
-    const avatar = document.getElementById('acc-avatar');
-    if (user.photoURL) {
-      avatar.src = user.photoURL;
-    } else {
-      avatar.style.display = 'none';
-    }
-    document.getElementById('account-info').style.display = 'block';
-    document.getElementById('google-login-area').style.display = 'none';
-  } else {
-    // 未ログイン：Googleログインボタンを表示
-    document.getElementById('account-info').style.display = 'none';
-    document.getElementById('google-login-area').style.display = 'block';
-  }
-}
-
 function onConsentChange() {
-  const checked = document.getElementById('consent-check').checked;
-  document.getElementById('agree-btn').disabled = !checked;
-  document.getElementById('google-btn').disabled = !checked;
   updateEmailBtn();
-}
-
-function showEmailForm() {
-  document.getElementById('email-form-toggle').style.display = 'none';
-  document.getElementById('email-form').style.display = 'block';
-  document.getElementById('email-input').focus();
 }
 
 function updateEmailBtn() {
   const checked = document.getElementById('consent-check').checked;
   const val = (document.getElementById('email-input').value || '').trim();
   const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-  document.getElementById('email-submit-btn').disabled = !(checked && valid);
+  document.getElementById('dl-btn').disabled = !(checked && valid);
 }
 
 async function submitEmail() {
@@ -573,7 +370,7 @@ async function submitEmail() {
     showError('正しいメールアドレスを入力してください。');
     return;
   }
-  consentTimestamp = new Date().toISOString();
+  const consentTimestamp = new Date().toISOString();
   document.getElementById('consent-state').style.display = 'none';
   document.getElementById('processing-state').style.display = 'block';
 
@@ -581,14 +378,12 @@ async function submitEmail() {
     const db = firebase.firestore();
     const now = firebase.firestore.FieldValue.serverTimestamp();
 
-    // 匿名 Auth で UID を取得（Firestore rules が auth 必須の場合に対応）
     let uid = 'email-' + Date.now();
     try {
       const anon = await firebase.auth().signInAnonymously();
       uid = anon.user.uid;
     } catch(e) { /* 匿名 Auth 未有効でも続行 */ }
 
-    // Firestore にダウンロード記録
     try {
       await db.collection('downloads').add({
         userId: uid,
@@ -604,7 +399,6 @@ async function submitEmail() {
       });
     } catch(e) { console.warn('Firestore write skipped:', e.message); }
 
-    // Brevo へ登録
     fetch('/api/add-contact', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -617,108 +411,10 @@ async function submitEmail() {
       })
     }).catch(function() {});
 
-    // dl ページの Firebase auth チェックを通過させるフラグ（Anonymous Auth 未有効時の保険）
     localStorage.setItem('sk_dl_authorized', '1');
     window.location.href = DL_PAGE;
 
   } catch(err) {
-    document.getElementById('processing-state').style.display = 'none';
-    document.getElementById('consent-state').style.display = 'block';
-    showError('処理中にエラーが発生しました。もう一度お試しください。\n(' + err.message + ')');
-  }
-}
-
-async function agreeAndDownload() {
-  consentTimestamp = new Date().toISOString();
-  document.getElementById('consent-state').style.display = 'none';
-  await processAfterLogin(currentUser);
-}
-
-async function signInWithGoogle() {
-  consentTimestamp = new Date().toISOString();
-  const provider = new firebase.auth.GoogleAuthProvider();
-  try {
-    const result = await firebase.auth().signInWithPopup(provider);
-    currentUser = result.user;
-    document.getElementById('consent-state').style.display = 'none';
-    await processAfterLogin(result.user);
-  } catch (err) {
-    if (err.code !== 'auth/popup-closed-by-user') {
-      showError('ログインに失敗しました。もう一度お試しください。');
-    }
-  }
-}
-
-async function switchAccount() {
-  await firebase.auth().signOut();
-  currentUser = null;
-  document.getElementById('consent-check').checked = false;
-  document.getElementById('agree-btn').disabled = true;
-  document.getElementById('google-btn').disabled = true;
-  document.getElementById('account-info').style.display = 'none';
-  document.getElementById('google-login-area').style.display = 'block';
-}
-
-async function processAfterLogin(user) {
-  document.getElementById('processing-state').style.display = 'block';
-
-  const db = firebase.firestore();
-  const uid = user.uid;
-  const now = firebase.firestore.FieldValue.serverTimestamp();
-
-  try {
-    // 1. users/{uid} を作成または更新（同意情報も保存）
-    await db.collection('users').doc(uid).set({
-      uid,
-      email: user.email,
-      displayName: user.displayName || '',
-      photoURL: user.photoURL || '',
-      provider: 'google',
-      lastLoginAt: now,
-      latestConsentVersion: CONSENT_VERSION,
-      latestConsentedAt: consentTimestamp
-    }, { merge: true });
-
-    // 初回のみ createdAt と roles を設定（merge で上書きしない）
-    const userDoc = await db.collection('users').doc(uid).get();
-    if (!userDoc.data().createdAt) {
-      await db.collection('users').doc(uid).update({
-        createdAt: now,
-        roles: ['free'],
-        ownedProducts: []
-      });
-    }
-
-    // 2. downloads/{id} にDL履歴を記録（同意情報も保存）
-    await db.collection('downloads').add({
-      userId: uid,
-      email: user.email,
-      productName: PRODUCT_NAME,
-      downloadedAt: now,
-      version: CURRENT_VERSION,
-      sourcePage: SRC,
-      leadSource: SRC,
-      consentVersion: CONSENT_VERSION,
-      consentedAt: consentTimestamp
-    });
-
-    // 3. Brevo へコンタクト追加（非同期・失敗許容）
-    fetch('/api/add-contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email:       user.email,
-        firstName:   (user.displayName || '').split(' ')[0] || '',
-        product:     PRODUCT_NAME,
-        leadSource:  SRC,
-        interest:    'photography'
-      })
-    }).catch(function() { /* 失敗しても無視 */ });
-
-    // 4. dl ページへリダイレクト
-    window.location.href = DL_PAGE;
-
-  } catch (err) {
     document.getElementById('processing-state').style.display = 'none';
     document.getElementById('consent-state').style.display = 'block';
     showError('処理中にエラーが発生しました。もう一度お試しください。\n(' + err.message + ')');
