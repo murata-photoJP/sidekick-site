@@ -253,6 +253,78 @@
   }
   .lp-link:hover { color: #ff7a00; }
 
+  /* 同意セクション */
+  .consent-section {
+    background: #252525;
+    border: 1px solid #383838;
+    border-radius: 10px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
+  }
+  .consent-section h2 {
+    font-size: 0.92rem;
+    color: #ccc;
+    margin-bottom: 14px;
+  }
+  .rights-note {
+    font-size: 0.8rem;
+    color: #666;
+    line-height: 1.7;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid #333;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+  .consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #2e2e2e;
+  }
+  .consent-row:last-child { border-bottom: none; }
+  .consent-row input[type="checkbox"] {
+    width: 16px; height: 16px;
+    margin-top: 3px; flex-shrink: 0;
+    accent-color: #e05a00;
+    cursor: pointer;
+  }
+  .consent-label { flex: 1; }
+  .consent-label-main {
+    font-size: 0.875rem;
+    color: #ccc;
+    line-height: 1.6;
+    cursor: pointer;
+  }
+  .consent-label-sub {
+    font-size: 0.775rem;
+    color: #666;
+    line-height: 1.6;
+    margin-top: 3px;
+  }
+  .consent-optional {
+    font-size: 0.68rem;
+    color: #e05a00;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    background: rgba(224,90,0,0.1);
+    border: 1px solid rgba(224,90,0,0.2);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+  .credit-row {
+    margin-left: 26px;
+    padding-top: 6px;
+    border-bottom: none !important;
+  }
+  .credit-row .consent-label-main { color: #999; }
+  #credit-row-wrap.disabled .consent-label-main { color: #555; }
+  #credit-row-wrap.disabled .consent-label-sub { color: #444; }
+  #credit-row-wrap.disabled input[type="checkbox"] { cursor: not-allowed; opacity: 0.4; }
+
   /* 送信ボタン下の注記 */
   .submit-note {
     font-size: 0.78rem;
@@ -679,6 +751,37 @@
       <textarea id="comment" placeholder="撮影意図、気になっている点、質問などがあれば書いてください"></textarea>
     </div>
 
+    <!-- 同意セクション -->
+    <div class="consent-section">
+      <h2>写真の利用について</h2>
+
+      <div class="rights-note">
+        人物・建物・商品・第三者の著作物等が写る写真は、投稿者が必要な許諾を得ているものとして扱います。
+      </div>
+
+      <div class="consent-row">
+        <input type="checkbox" id="marketing-consent">
+        <div class="consent-label">
+          <label for="marketing-consent" class="consent-label-main">
+            アップロードした写真を、SideKickの作例・広告・SNS投稿・販売ページ等で使用することに同意します。
+            <span class="consent-optional">任意</span>
+          </label>
+          <div class="consent-label-sub">同意しない場合でもAI講評は利用できます。掲載時は必要に応じてトリミング・リサイズ・圧縮を行う場合があります。</div>
+        </div>
+      </div>
+
+      <div class="consent-row credit-row" id="credit-row-wrap">
+        <input type="checkbox" id="credit-consent" disabled>
+        <div class="consent-label">
+          <label for="credit-consent" class="consent-label-main">
+            掲載時に氏名・SNSアカウント名を表示してもよい
+            <span class="consent-optional">任意</span>
+          </label>
+          <div class="consent-label-sub">上の広告利用に同意した場合のみ有効です。未チェックの場合は匿名扱いとなります。</div>
+        </div>
+      </div>
+    </div>
+
     <button type="submit" id="submit-btn">講評を受ける</button>
     <p class="submit-note">アップロードした画像はAI講評生成のためAnthropicのClaude API（外部サービス）へ送信されます。</p>
   </form>
@@ -884,6 +987,20 @@ function logout() {
   });
 }
 
+// ---- 同意チェックボックスの連動 ----
+document.getElementById('marketing-consent').addEventListener('change', function() {
+  const creditWrap = document.getElementById('credit-row-wrap');
+  const creditCb = document.getElementById('credit-consent');
+  if (this.checked) {
+    creditWrap.classList.remove('disabled');
+    creditCb.disabled = false;
+  } else {
+    creditWrap.classList.add('disabled');
+    creditCb.disabled = true;
+    creditCb.checked = false;
+  }
+});
+
 // ---- 画像選択 ----
 const uploadArea = document.getElementById('upload-area');
 uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
@@ -953,7 +1070,9 @@ async function submitReview(e) {
         imageBase64,
         imageHash,
         mediaType: 'image/jpeg',
-        comment: document.getElementById('comment').value
+        comment: document.getElementById('comment').value,
+        marketingConsent: document.getElementById('marketing-consent').checked,
+        creditConsent: document.getElementById('credit-consent').checked
       })
     });
 
