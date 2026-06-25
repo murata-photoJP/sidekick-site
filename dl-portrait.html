@@ -216,10 +216,14 @@
 const R2_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Portrait.zip';
 
 firebase.auth().onAuthStateChanged(function(user) {
-  if (!user) {
+  const emailBypass = localStorage.getItem('sk_dl_authorized') === '1';
+
+  if (!user && !emailBypass) {
     window.location.replace('/register-dl.html?product=portrait&src=dl-portrait');
     return;
   }
+
+  if (emailBypass) localStorage.removeItem('sk_dl_authorized');
 
   document.getElementById('loading-state').style.display = 'none';
   document.getElementById('dl-state').style.display = 'block';

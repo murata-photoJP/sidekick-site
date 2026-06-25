@@ -617,6 +617,8 @@ async function submitEmail() {
       })
     }).catch(function() {});
 
+    // dl ページの Firebase auth チェックを通過させるフラグ（Anonymous Auth 未有効時の保険）
+    localStorage.setItem('sk_dl_authorized', '1');
     window.location.href = DL_PAGE;
 
   } catch(err) {

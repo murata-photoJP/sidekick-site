@@ -216,13 +216,19 @@
 const R2_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Star.zip';
 
 firebase.auth().onAuthStateChanged(function(user) {
-  if (!user) {
+  // メールのみ認証ルートからの bypass フラグを確認
+  const emailBypass = localStorage.getItem('sk_dl_authorized') === '1';
+
+  if (!user && !emailBypass) {
     // 未ログイン → DLゲートへ
     window.location.replace('/register-dl.html?product=star&src=dl-star');
     return;
   }
 
-  // ログイン済み → DL画面表示
+  // 一回使い捨て（フラグ消費）
+  if (emailBypass) localStorage.removeItem('sk_dl_authorized');
+
+  // ログイン済み（またはメール認証）→ DL画面表示
   document.getElementById('loading-state').style.display = 'none';
   document.getElementById('dl-state').style.display = 'block';
 
