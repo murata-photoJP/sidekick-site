@@ -282,6 +282,10 @@
     .abt-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
     .abt-img img{width:100%;display:block;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);}
     .abt-img-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;}
+    .abt-hd{display:inline-block;margin-bottom:16px;transition:.15s;}
+    .abt-hd:hover .h2{color:var(--accent2);}
+    .abt-hd .lbl{margin-bottom:6px;transition:.15s;}
+    .abt-hd:hover .lbl{letter-spacing:.16em;}
 
     /* ── Footer ── */
     .footer{padding:48px 0 32px;border-top:1px solid rgba(255,255,255,.06);}
@@ -564,20 +568,21 @@
       <div class="wrap">
         <div class="abt-inner">
           <div>
-            <div class="lbl">About</div>
-            <h2 class="h2" style="margin:10px 0 16px;">写真家<em style="font-style:normal;color:var(--accent2);"> 村田 一朗</em></h2>
+            <a href="about.html" class="abt-hd">
+              <div class="lbl">About →</div>
+              <h2 class="h2">写真家<em style="font-style:normal;color:var(--accent2);"> 村田 一朗</em></h2>
+            </a>
             <p class="lead" style="margin-bottom:20px;">
               北海道を拠点に20年以上フィールドで撮り続ける星景写真家。<br>
               1X Award ×5受賞、著書6冊（玄光社 他）、CP+ セミナー登壇。<br>
               Sidekick は「自分が毎晩繰り返していた消耗」を解決するために作り始めた。
             </p>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;">
               <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">🏆 1X Award ×5</span>
               <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">📖 著書6冊</span>
               <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">🎤 CP+ 講師</span>
               <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.05);border:1px solid rgba(255,215,0,.12);font-size:12px;font-weight:700;color:var(--sub);">⭐ 星景歴20年</span>
             </div>
-            <a href="about.html" class="btn btn-o">村田一朗について →</a>
           </div>
           <div class="abt-img">
             <img src="images/awards/milkyway_03_after.jpg" alt="村田一朗 1X Award受賞作">
