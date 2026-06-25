@@ -75,7 +75,11 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { idToken, imageBase64, imageHash, mediaType, comment } = req.body || {};
+    const { idToken, imageBase64, imageHash, mediaType, comment, marketingConsent, creditConsent } = req.body || {};
+
+    // boolean 正規化（フロントから truthy 値が来ても安全に処理）
+    const normalizedMarketingConsent = marketingConsent === true;
+    const normalizedCreditConsent = normalizedMarketingConsent && creditConsent === true;
 
     if (!idToken || !imageBase64) {
       return res.status(400).json({ error: 'idToken と imageBase64 は必須です' });
@@ -141,6 +145,9 @@ module.exports = async function handler(req, res) {
       const cacheDoc = await db.collection('imageCache').doc(imageHash).get();
       if (cacheDoc.exists) {
         // キャッシュヒット：使用量だけカウントして返す
+        // NOTE: キャッシュヒット時は新しい review ドキュメントを作成しないため、
+        // marketingConsent / creditConsent は記録されない。
+        // 同意履歴を厳密に残す必要が生じた場合は、ここでも reviewRef.set() を呼ぶこと。
         await Promise.all([
           db.collection('imageCache').doc(imageHash).update({
             hitCount: admin.firestore.FieldValue.increment(1)
@@ -213,6 +220,9 @@ ${(comment || '').trim() || '（なし）'}
         tags: [],
         genre: 'other',
         userComment: comment || '',
+        marketingConsent: normalizedMarketingConsent,
+        creditConsent: normalizedCreditConsent,
+        consentVersion: '2026-06-25',
         createdAt: serverTs
       }),
       imageHash
