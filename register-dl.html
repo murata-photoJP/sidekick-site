@@ -281,6 +281,49 @@
     color: var(--muted);
   }
 
+  /* メールアドレス入力フォーム */
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .or-divider::before,.or-divider::after {
+    content: '';flex: 1;height: 1px;background: var(--line);
+  }
+  .link-secondary {
+    display: block;width: 100%;text-align: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    border-radius: 10px;padding: 12px 16px;
+    color: var(--sub);font-size: 0.85rem;cursor: pointer;
+    transition: 0.15s;font-family: inherit;
+  }
+  .link-secondary:hover { background: rgba(255,255,255,0.07);border-color: rgba(255,255,255,0.14); }
+  .email-input {
+    display: block;width: 100%;
+    padding: 13px 16px;margin-bottom: 10px;
+    background: var(--card2);border: 1px solid var(--line);
+    border-radius: 10px;color: var(--text);
+    font-size: 0.9rem;font-family: inherit;
+    transition: border-color 0.15s;
+  }
+  .email-input:focus { outline: none;border-color: var(--accent); }
+  .email-input::placeholder { color: var(--muted); }
+  .email-btn {
+    display: flex;align-items: center;justify-content: center;
+    width: 100%;padding: 14px 24px;
+    background: rgba(255,138,0,0.12);color: var(--accent2);
+    font-size: 0.92rem;font-weight: 700;
+    border: 1px solid rgba(255,138,0,0.35);
+    border-radius: 12px;cursor: pointer;
+    transition: 0.15s;font-family: inherit;margin-bottom: 10px;
+  }
+  .email-btn:hover:not(:disabled) { background: rgba(255,138,0,0.22); }
+  .email-btn:disabled { opacity: 0.35;cursor: not-allowed; }
+
   /* 処理中 */
   #processing-state { display: none; text-align: center; padding: 20px 0; }
   #processing-state p { color: var(--sub); font-size: 0.9rem; margin-top: 12px; }
@@ -400,6 +443,24 @@
             Google アカウントでダウンロード
           </button>
           <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
+
+          <div class="or-divider"><span>または</span></div>
+
+          <!-- メールアドレスのみルート -->
+          <div id="email-form-toggle">
+            <button class="link-secondary" onclick="showEmailForm()">
+              📧 Googleアカウントをお持ちでない方はこちら
+            </button>
+          </div>
+          <div id="email-form" style="display:none">
+            <input type="email" id="email-input" class="email-input"
+              placeholder="メールアドレスを入力" autocomplete="email"
+              oninput="updateEmailBtn()">
+            <button id="email-submit-btn" class="email-btn" disabled onclick="submitEmail()">
+              このメアドでダウンロード →
+            </button>
+            <p class="unsubscribe-note">メール配信はいつでも解除できます</p>
+          </div>
         </div>
 
         <div id="error-msg"></div>
@@ -490,6 +551,79 @@ function onConsentChange() {
   const checked = document.getElementById('consent-check').checked;
   document.getElementById('agree-btn').disabled = !checked;
   document.getElementById('google-btn').disabled = !checked;
+  updateEmailBtn();
+}
+
+function showEmailForm() {
+  document.getElementById('email-form-toggle').style.display = 'none';
+  document.getElementById('email-form').style.display = 'block';
+  document.getElementById('email-input').focus();
+}
+
+function updateEmailBtn() {
+  const checked = document.getElementById('consent-check').checked;
+  const val = (document.getElementById('email-input').value || '').trim();
+  const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  document.getElementById('email-submit-btn').disabled = !(checked && valid);
+}
+
+async function submitEmail() {
+  const email = document.getElementById('email-input').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    showError('正しいメールアドレスを入力してください。');
+    return;
+  }
+  consentTimestamp = new Date().toISOString();
+  document.getElementById('consent-state').style.display = 'none';
+  document.getElementById('processing-state').style.display = 'block';
+
+  try {
+    const db = firebase.firestore();
+    const now = firebase.firestore.FieldValue.serverTimestamp();
+
+    // 匿名 Auth で UID を取得（Firestore rules が auth 必須の場合に対応）
+    let uid = 'email-' + Date.now();
+    try {
+      const anon = await firebase.auth().signInAnonymously();
+      uid = anon.user.uid;
+    } catch(e) { /* 匿名 Auth 未有効でも続行 */ }
+
+    // Firestore にダウンロード記録
+    try {
+      await db.collection('downloads').add({
+        userId: uid,
+        email: email,
+        productName: PRODUCT_NAME,
+        downloadedAt: now,
+        version: CURRENT_VERSION,
+        sourcePage: SRC,
+        leadSource: SRC,
+        consentVersion: CONSENT_VERSION,
+        consentedAt: consentTimestamp,
+        authMethod: 'email-only'
+      });
+    } catch(e) { console.warn('Firestore write skipped:', e.message); }
+
+    // Brevo へ登録
+    fetch('/api/add-contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: email,
+        firstName: '',
+        product: PRODUCT_NAME,
+        leadSource: SRC,
+        interest: 'photography'
+      })
+    }).catch(function() {});
+
+    window.location.href = DL_PAGE;
+
+  } catch(err) {
+    document.getElementById('processing-state').style.display = 'none';
+    document.getElementById('consent-state').style.display = 'block';
+    showError('処理中にエラーが発生しました。もう一度お試しください。\n(' + err.message + ')');
+  }
 }
 
 async function agreeAndDownload() {
