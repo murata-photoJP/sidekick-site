@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/en/portrait.html">
+  <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/portrait.html">
+  <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/portrait.html">
+  <title>Sidekick Portrait | 15 Styles × 3 Strengths for Portrait Processing in Photoshop</title>
+  <meta name="description" content="Sidekick Portrait outputs color, skin, and dimension as Photoshop layers — 15 styles × 3 strengths. Non-destructive by design. 90-day free trial, no credit card required.">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --p-accent:#c47a8a;
+      --p-accent2:#e8a0b0;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right,rgba(196,122,138,.12),transparent 28%),
+        radial-gradient(circle at top left,rgba(255,255,255,.03),transparent 18%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;max-width:1100px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;box-shadow:var(--shadow);}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover,.nav a.active{color:var(--white)}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:14px;font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;font-size:15px;}
+    .btn-primary{background:linear-gradient(135deg,var(--p-accent),var(--p-accent2));color:#121212;box-shadow:0 6px 28px rgba(196,122,138,.35);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(196,122,138,.45);}
+    .btn-secondary{background:transparent;border-color:rgba(255,255,255,.14);color:var(--white);}
+    .btn-secondary:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.03);}
+
+    .hero{padding:88px 0 64px;}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;}
+    .eyebrow{display:inline-flex;gap:10px;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(196,122,138,.1);border:1px solid rgba(196,122,138,.28);color:var(--p-accent2);font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:18px;}
+    .hero h1{margin:0 0 18px;font-size:clamp(34px,5.5vw,58px);line-height:1.08;letter-spacing:-.03em;}
+    .hero h1 em{font-style:normal;color:var(--p-accent2);}
+    .hero-lead{margin:0;color:var(--sub);font-size:clamp(15px,1.8vw,18px);max-width:560px;line-height:1.85;}
+    .hero-actions{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap;}
+    .hero-note{margin-top:16px;color:var(--sub);font-size:13px;}
+
+    .hero-ui{border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);box-shadow:var(--shadow);background:var(--card);}
+    .hero-ui-label{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;padding:14px 18px 10px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .hero-ui img{width:100%;display:block;}
+
+    .section{padding:24px 0 80px;}
+    .section-head{margin-bottom:28px;}
+    .section-head h2{margin:0 0 10px;font-size:clamp(26px,3.5vw,40px);line-height:1.15;letter-spacing:-.025em;}
+    .section-head h2 em{font-style:normal;color:var(--p-accent2);}
+    .section-head p{margin:0;color:var(--sub);max-width:680px;}
+
+    /* Style grid */
+    .style-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:28px;}
+    .style-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:18px 16px;transition:.2s ease;}
+    .style-card:hover{border-color:rgba(196,122,138,.3);transform:translateY(-2px);}
+    .style-name{font-size:15px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em;}
+    .style-desc{font-size:12px;color:var(--sub);line-height:1.65;margin:0;}
+    .style-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
+    .style-tag{font-size:10px;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.06);color:var(--sub);}
+    .style-tag.light{background:rgba(255,220,180,.1);color:#f0c080;}
+    .style-tag.dark{background:rgba(80,100,160,.12);color:#8ab4f8;}
+    .style-tag.sat{background:rgba(180,100,120,.12);color:var(--p-accent2);}
+    .style-tag.bw{background:rgba(180,180,180,.1);color:#ccc;}
+    .style-tag.cinema{background:rgba(60,160,160,.1);color:#7de0d8;}
+    .style-tag.trend{background:rgba(200,140,200,.1);color:#d8a0d8;}
+
+    /* How it works */
+    .how-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:28px;}
+    .how-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:28px;}
+    .how-icon{font-size:28px;margin-bottom:14px;}
+    .how-card h3{margin:0 0 10px;font-size:19px;}
+    .how-card p{margin:0;color:var(--sub);font-size:15px;line-height:1.8;}
+    .how-card ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;}
+    .how-card ul li{color:var(--sub);font-size:14px;padding-left:16px;position:relative;}
+    .how-card ul li::before{content:"•";position:absolute;left:0;color:var(--p-accent2);font-weight:900;}
+
+    .layer-visual{margin-top:20px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);padding:16px 18px;}
+    .layer-visual-title{font-size:10px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:12px;}
+    .layer-item{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;margin-bottom:5px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);font-size:12px;font-weight:600;}
+    .layer-item:last-child{margin-bottom:0;}
+    .layer-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
+    /* Settings */
+    .settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;}
+    .setting-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:22px;}
+    .setting-icon{font-size:24px;margin-bottom:12px;}
+    .setting-card h3{margin:0 0 8px;font-size:17px;}
+    .setting-card p{margin:0;color:var(--sub);font-size:14px;line-height:1.75;}
+    .strength-row{display:flex;gap:8px;margin-top:12px;}
+    .strength-pill{flex:1;text-align:center;padding:7px 4px;border-radius:999px;font-size:12px;font-weight:800;border:1px solid rgba(255,255,255,.1);color:var(--sub);}
+    .strength-pill.mid{background:rgba(196,122,138,.15);border-color:rgba(196,122,138,.3);color:var(--p-accent2);}
+
+    /* Steps */
+    .steps-list{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:32px;}
+    .step-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;overflow:hidden;}
+    .step-num{background:rgba(196,122,138,.1);border-bottom:1px solid rgba(196,122,138,.18);padding:14px 20px;font-size:11px;font-weight:900;letter-spacing:.12em;color:var(--p-accent2);}
+    .step-body{padding:22px;}
+    .step-body h3{margin:0 0 8px;font-size:17px;}
+    .step-body p{margin:0;color:var(--sub);font-size:14px;line-height:1.75;}
+    .step-img{width:100%;border-top:1px solid rgba(255,255,255,.06);}
+    .step-img img{width:100%;display:block;}
+
+    /* Quote */
+    .quote-block{margin-top:28px;padding:32px;border-radius:24px;background:linear-gradient(135deg,rgba(196,122,138,.1),rgba(92,52,65,.05)),var(--card);border:1px solid rgba(196,122,138,.2);}
+    .quote-block strong{display:block;font-size:clamp(18px,2.2vw,22px);line-height:1.5;margin-bottom:12px;}
+    .quote-block p{margin:0;color:var(--sub);font-size:15px;line-height:1.85;}
+
+    /* Pricing */
+    #pricing{scroll-margin-top:90px;}
+    .pricing-card{border-radius:28px;padding:48px;background:linear-gradient(135deg,rgba(196,122,138,.1),rgba(92,52,65,.05)),var(--card);border:1px solid rgba(196,122,138,.22);text-align:center;}
+    .pricing-eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 16px;border-radius:999px;background:rgba(196,122,138,.1);border:1px solid rgba(196,122,138,.25);color:var(--p-accent2);font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:20px;}
+    .pricing-card h2{margin:0 0 12px;font-size:clamp(26px,3.5vw,38px);line-height:1.15;}
+    .pricing-card .lead{margin:0 auto 28px;color:var(--sub);max-width:540px;font-size:16px;}
+    .pricing-price{font-size:clamp(36px,5vw,52px);font-weight:900;letter-spacing:-.03em;color:var(--p-accent2);margin-bottom:6px;}
+    .pricing-price small{font-size:18px;font-weight:700;color:var(--sub);}
+    .pricing-note{color:var(--sub);font-size:13px;margin-bottom:28px;}
+    .pricing-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+    .trial-note{margin-top:16px;font-size:13px;color:var(--sub);}
+
+    /* Gallery */
+    #gallery{scroll-margin-top:90px;}
+    .gallery-original-wrap{display:flex;gap:32px;align-items:flex-start;margin-bottom:40px;padding:28px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;}
+    .gallery-original-img{flex-shrink:0;width:200px;border-radius:14px;overflow:hidden;cursor:pointer;border:1px solid rgba(255,255,255,.1);}
+    .gallery-original-img img{width:100%;display:block;}
+    .gallery-original-info{flex:1;}
+    .gallery-original-badge{display:inline-flex;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:14px;}
+    .gallery-original-info h3{margin:0 0 10px;font-size:20px;letter-spacing:-.01em;}
+    .gallery-original-info p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    .gallery-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;cursor:pointer;transition:.2s ease;}
+    .gallery-card:hover{border-color:rgba(196,122,138,.35);transform:translateY(-2px);}
+    .gallery-card img{width:100%;display:block;}
+    .gallery-card-info{padding:10px 14px 14px;}
+    .gallery-card-name{font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:space-between;}
+    .gallery-card-hint{font-size:10px;color:var(--sub);font-weight:600;}
+    .gallery-card-desc{font-size:11px;color:var(--sub);line-height:1.6;margin:5px 0 0;}
+    .gallery-card .style-tags{margin-top:8px;}
+    .gallery-note{margin-top:20px;padding:14px 18px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);font-size:13px;color:var(--sub);line-height:1.8;}
+    .gallery-note strong{color:var(--text);}
+
+    /* Lightbox */
+    .lightbox{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px;}
+    .lightbox.open{display:flex;}
+    #lightbox-img{max-width:min(88vw,580px);max-height:84vh;border-radius:10px;object-fit:contain;}
+    .lightbox-close{position:fixed;top:20px;right:24px;font-size:32px;color:#fff;cursor:pointer;line-height:1;opacity:.7;z-index:102;}
+    .lightbox-close:hover{opacity:1;}
+    .lightbox-nav{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:48px;line-height:1;cursor:pointer;width:52px;height:74px;border-radius:10px;z-index:102;display:none;align-items:center;justify-content:center;transition:.15s;}
+    .lightbox.open .lightbox-nav{display:flex;}
+    .lightbox-nav:hover{background:rgba(255,255,255,.22);}
+    .lightbox-prev{left:16px;}
+    .lightbox-next{right:16px;}
+    .lightbox-caption{position:fixed;bottom:20px;left:0;right:0;text-align:center;pointer-events:none;z-index:102;}
+    .lightbox-caption-name{display:block;color:#fff;font-size:15px;font-weight:800;letter-spacing:-.01em;}
+    .lightbox-caption-idx{display:block;color:rgba(255,255,255,.38);font-size:12px;margin-top:5px;}
+
+    .footer{padding:32px 0 60px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:980px){
+      .hero-grid,.how-grid,.steps-list{grid-template-columns:1fr;}
+      .style-grid{grid-template-columns:repeat(2,1fr);}
+      .settings-grid{grid-template-columns:1fr 1fr;}
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    }
+    @media(max-width:860px){
+      .gallery-original-wrap{flex-direction:column;}
+      .gallery-original-img{width:100%;max-width:280px;}
+    }
+    @media(max-width:640px){
+      .wrap{width:calc(100% - 24px);}
+      .nav{display:none;}
+      .hero{padding:56px 0 36px;}
+      .style-grid{grid-template-columns:repeat(2,1fr);}
+      .settings-grid{grid-template-columns:1fr;}
+      .pricing-card{padding:28px 20px;}
+      .btn{width:100%;}
+    }
+    @media(max-width:500px){
+      .gallery-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:400px){
+      .style-grid{grid-template-columns:1fr;}
+    }
+  </style>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sidekick">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Sidekick Portrait | 15 Styles for Portrait Processing in Photoshop">
+  <meta property="og:description" content="Color, skin, and dimension output as editable Photoshop layers — 15 styles × 3 strengths. 90-day free trial.">
+  <meta property="og:url" content="https://www.sidekick-lab.com/en/portrait.html">
+  <meta property="og:image" content="https://www.sidekick-lab.com/images/portrait/style_beauty.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sidekick Portrait | 15 Styles for Portrait Processing in Photoshop">
+  <meta name="twitter:description" content="Color, skin, and dimension output as editable Photoshop layers. 90-day free trial.">
+  <meta name="twitter:image" content="https://www.sidekick-lab.com/images/portrait/style_beauty.jpg">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="../index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>PHOTO WORKFLOW TOOLS</small>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="sidekick-star.html">⭐ Star</a>
+        <a href="portrait.html" style="color:#fff;">👤 Portrait</a>
+        <a href="sky-effect.html">☁️ Sky</a>
+        <a href="../faq.html">Support</a>
+        <a href="../" style="color:var(--accent2);">🇯🇵 JA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">🎨 Sidekick Portrait — 90-day free trial</div>
+          <h1>
+            Set the direction.<br>
+            <em>Style and strength.</em>
+          </h1>
+          <p class="hero-lead">
+            15 styles × 3 strength levels.<br>
+            Color, skin tone, dimension, and vignette — processed together
+            and output as Photoshop layers.
+            Unlike presets, the structure lets you <strong style="color:var(--text);">adjust each element individually afterward.</strong>
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/register-dl.html?product=portrait&src=lp-portrait" onclick="gtag('event','download_trial',{'product':'Sidekick_Portrait'})">
+              ▶ Try free for 90 days
+            </a>
+            <a class="btn btn-secondary" href="../buy-portrait.html" onclick="gtag('event','buy_click',{'product':'Sidekick_Portrait'})">Buy now</a>
+          </div>
+          <div class="hero-note">No credit card required · Install by unzipping</div>
+        </div>
+
+        <div>
+          <div class="hero-ui">
+            <div class="hero-ui-label">Sidekick Portrait — Main dialog</div>
+            <img src="../sidekick_manual_package/sidekick_portrait_manual_assets/02.jpg"
+                 alt="Sidekick Portrait UI — style selection, strength, PSD export settings">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="section" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>How is this different from a preset?</h2>
+          <p>Sidekick Portrait doesn't paste an effect on top — it builds the processing as layers.</p>
+        </div>
+
+        <div class="how-grid">
+          <div class="how-card">
+            <div class="how-icon">🗂</div>
+            <h3>Output as layer structure</h3>
+            <p>When you run it, the results come out as Photoshop layers. You can see exactly what was applied, and dial each element up, down, or off independently afterward.</p>
+            <div class="layer-visual">
+              <div class="layer-visual-title">Output layer structure (example)</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#c47a8a;"></div>Vignette</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#8ab4f8;"></div>Dimension / Structure</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#ffb14a;"></div>Portrait skin processing</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#6ecf8a;"></div>White mist</div>
+              <div class="layer-item"><div class="layer-dot" style="background:#888;"></div>Shadow tightening</div>
+            </div>
+          </div>
+
+          <div class="how-card">
+            <div class="how-icon">⚙️</div>
+            <h3>Each style has its own processing recipe</h3>
+            <p>"Beauty" and "Seiso" (clean/pure) don't just change parameters — <strong style="color:var(--text);">the combination of processes itself is different by design.</strong></p>
+            <ul>
+              <li>Seiso Milk → White ON, Shadow OFF, Dimension OFF</li>
+              <li>Gravure → White + Shadow + Saturation all ON</li>
+              <li>Cinematic → Adds teal shadow layer</li>
+              <li>Monochrome → Adds zero-saturation conversion layer</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="quote-block" style="margin-top:24px;">
+          <strong>
+            "Presets distribute a look. Sidekick Portrait distributes judgment."
+          </strong>
+          <p>
+            Which style you choose is a creative decision about where you're taking the image.
+            What goes on when you choose that style, and what stays off —
+            that design is what Sidekick Portrait actually is.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Three controls, full range of results</h2>
+          <p>After choosing a style, set the strength, PSD export, and vignette — then run.</p>
+        </div>
+
+        <div class="settings-grid">
+          <div class="setting-card">
+            <div class="setting-icon">💪</div>
+            <h3>Strength (Light / Mid / Strong)</h3>
+            <p>Three levels control how hard each process hits. Mid is the reference. Same style, very different impressions across strength levels.</p>
+            <div class="strength-row">
+              <div class="strength-pill">Light</div>
+              <div class="strength-pill mid">Mid (default)</div>
+              <div class="strength-pill">Strong</div>
+            </div>
+          </div>
+
+          <div class="setting-card">
+            <div class="setting-icon">💾</div>
+            <h3>PSD Export</h3>
+            <p>When enabled, saves the result as a separate PSD file in a specified folder. Keeps your original intact while managing finished files separately.</p>
+          </div>
+
+          <div class="setting-card">
+            <div class="setting-icon">🔲</div>
+            <h3>Vignette</h3>
+            <p>Toggle peripheral darkening on or off. Feather amount and blend mode are optimized per style. Turn it off to skip it entirely.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section" id="gallery">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>15 Styles — <em>The concept and the result</em></h2>
+          <p>Each style applied to the same original image.<br>
+          Click any card to expand. <strong style="color:var(--text);">← → keys or &lt; &gt; buttons</strong> to compare styles side by side.</p>
+        </div>
+
+        <div class="gallery-original-wrap">
+          <div class="gallery-original-img">
+            <img src="../images/portrait/gallery2/original_white.png" alt="Original — before processing">
+          </div>
+          <div class="gallery-original-info">
+            <div class="gallery-original-badge">ORIGINAL</div>
+            <h3>Before processing</h3>
+            <p>
+              All 15 styles below were applied to this single image.<br><br>
+              See how far the same photo can go just by changing the style —
+              that choice is what Sidekick Portrait is about.<br><br>
+              <strong style="color:var(--text);">All at Mid strength. Background selected to match each style's intent.</strong>
+            </p>
+          </div>
+        </div>
+
+        <div class="gallery-grid" id="gallery-grid"></div>
+
+        <p class="gallery-note">
+          Results shown as JPEG exports.
+          When you actually run Sidekick Portrait, these results come out as
+          <strong>stacked adjustment layers in Photoshop</strong>, each independently adjustable or toggleable.
+        </p>
+      </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="section" id="steps">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>How to use — 3 steps</h2>
+          <p>Open an image in Photoshop and launch the script. That's the whole setup.</p>
+        </div>
+
+        <div class="steps-list">
+          <div class="step-card">
+            <div class="step-num">STEP 01 — First launch</div>
+            <div class="step-body">
+              <h3>License check</h3>
+              <p>On first launch, a license screen appears. Choose "Skip registration (trial mode)" to get full access free for 90 days.</p>
+            </div>
+            <div class="step-img">
+              <img src="../sidekick_manual_package/sidekick_portrait_manual_assets/01.jpg"
+                   alt="Sidekick Portrait first launch — license screen">
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">STEP 02 — Style selection</div>
+            <div class="step-body">
+              <h3>Choose style and strength</h3>
+              <p>Select a style from the "Intent" dropdown. Set strength (Light/Mid/Strong), vignette, and PSD export options, then hit Run.</p>
+            </div>
+            <div class="step-img">
+              <img src="../sidekick_manual_package/sidekick_portrait_manual_assets/02.jpg"
+                   alt="Sidekick Portrait — style selection and settings">
+            </div>
+          </div>
+
+          <div class="step-card">
+            <div class="step-num">STEP 03 — Review and refine</div>
+            <div class="step-body">
+              <h3>Adjust in the layers panel</h3>
+              <p>Results come out as Photoshop layers. Tweak individual layer opacity, toggle layers off, and nudge toward your vision from there.</p>
+            </div>
+            <div style="padding:28px 20px;text-align:center;background:rgba(255,255,255,.02);border-top:1px solid rgba(255,255,255,.06);">
+              <div style="font-size:13px;color:var(--sub);line-height:1.8;">
+                All processing stacks in<br>
+                the Photoshop Layers panel.<br>
+                <span style="color:var(--p-accent2);font-weight:700;">Fully adjustable at any time.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Who it's for -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Who this is for</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:4px;">
+          <div class="how-card">
+            <div class="how-icon">📷</div>
+            <h3>Your direction shifts shoot to shoot</h3>
+            <p style="color:var(--sub);font-size:15px;">Every session the light is different, and you're figuring out where to take the image from scratch every time.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-icon">🔁</div>
+            <h3>Same steps, every single time</h3>
+            <p style="color:var(--sub);font-size:15px;">Skin cleanup, vignette, color direction — you repeat them on every portrait and they still come out slightly different.</p>
+          </div>
+          <div class="how-card">
+            <div class="how-icon">🎯</div>
+            <h3>You know the direction but can't execute it cleanly</h3>
+            <p style="color:var(--sub);font-size:15px;">You know you want a beauty look. But getting there consistently is harder than it sounds.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" id="pricing">
+      <div class="wrap">
+        <div class="pricing-card">
+          <div class="pricing-eyebrow">🎨 Sidekick Portrait</div>
+          <h2>Try it free for 90 days.</h2>
+          <p class="lead">
+            No credit card required. Just unzip and launch from Photoshop's Scripts menu.<br>
+            Full features during the trial. Registration (paid) required after 90 days.
+          </p>
+          <div class="pricing-price">
+            ¥4,800<small> (tax incl. · one-time)</small>
+          </div>
+          <div class="pricing-note">90-day free trial / License registration to continue after trial</div>
+          <div class="pricing-actions">
+            <a class="btn btn-primary"
+               href="/register-dl.html?product=portrait&src=lp-portrait" onclick="gtag('event','download_trial',{'product':'Sidekick_Portrait'})"
+               style="min-width:240px;">
+              ▶ Download free trial
+            </a>
+            <a class="btn btn-secondary" href="../buy-portrait.html" onclick="gtag('event','buy_click',{'product':'Sidekick_Portrait'})">Buy now →</a>
+          </div>
+          <div class="trial-note">
+            Contact: <a href="mailto:murata@mbg.nifty.com" style="color:var(--p-accent2);">murata@mbg.nifty.com</a>
+          </div>
+          <div style="margin-top:14px;font-size:13px;color:var(--sub);">
+            📖 Manual:
+            <a href="../manual/Manual_SideKick_Portrait_EN.pdf" target="_blank" style="color:var(--p-accent2);">English PDF</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" id="lightbox-close">✕</span>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev">&#8249;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button class="lightbox-nav lightbox-next" id="lightbox-next">&#8250;</button>
+    <div class="lightbox-caption">
+      <span class="lightbox-caption-name" id="lightbox-name"></span>
+      <span class="lightbox-caption-idx" id="lightbox-idx"></span>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="line-height:1.9;">
+        <div>© Sidekick — Ichiro Murata</div>
+        <div style="font-size:13px;">Contact: <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:13px;">
+        <div>Portrait workflow tool for Photoshop</div>
+        <div style="display:flex;gap:16px;">
+          <a href="../legal.html" style="color:var(--sub);">Legal</a>
+          <a href="../privacy.html" style="color:var(--sub);">Privacy Policy</a>
+          <a href="../portrait.html" style="color:var(--sub);">🇯🇵 日本語</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    var currentIdx = 0;
+
+    var galleryStyles = [
+      { name: 'Standard',              file: 'standard_white.jpg',
+        desc: 'A versatile base with moderate shadow tightening. The starting point when you\'re undecided.',
+        tags: [{l:'Standard',c:''}] },
+      { name: 'Dark Warm',             file: 'dark_warm_white.jpg',
+        desc: 'Heavy shadow, warm-toned blacks. Rich and weighty.',
+        tags: [{l:'Dark',c:'dark'},{l:'Warm',c:'dark'}] },
+      { name: 'Dark Cool',             file: 'dark_cool_white.jpg',
+        desc: 'Heavy shadow with cool (blue-shifted) blacks. Sharp and intense.',
+        tags: [{l:'Dark',c:'dark'},{l:'Cool',c:'dark'}] },
+      { name: 'Seiso Milk',            file: 'seiso_milk_black.jpg',
+        desc: 'Milky white overlay for a clean, delicate feel. Soft skin, minimal dimension.',
+        tags: [{l:'High-key',c:'light'},{l:'Clean',c:'light'}] },
+      { name: 'Seiso Haze',            file: 'seiso_haze_black.jpg',
+        desc: 'A white haze for ethereal transparency. Even lighter than Seiso Milk.',
+        tags: [{l:'High-key',c:'light'},{l:'Haze',c:'light'}] },
+      { name: 'Natural',               file: 'natural_white.jpg',
+        desc: 'Balanced white and black. Minimal processing feel, natural result.',
+        tags: [{l:'Natural',c:''},{l:'Balanced',c:''}] },
+      { name: 'Beauty',                file: 'beauty_white.jpg',
+        desc: 'White mist + dimension emphasis. Classic beauty-and-presence balance.',
+        tags: [{l:'White',c:'light'},{l:'Dimension',c:''}] },
+      { name: 'Beauty High-key',       file: 'beauty_highkey_black.jpg',
+        desc: 'A brighter Beauty variant. Soft, luminous impression.',
+        tags: [{l:'High-key',c:'light'},{l:'White',c:'light'}] },
+      { name: 'Beauty Low-key',        file: 'beauty_lowkey_white.jpg',
+        desc: 'A deeper Beauty variant. Shadow and presence through contrast.',
+        tags: [{l:'Low-key',c:'dark'},{l:'Dimension',c:''}] },
+      { name: 'Gravure',               file: 'gravure_white.jpg',
+        desc: 'Higher saturation, full white + black. Glossy and voluminous.',
+        tags: [{l:'High-sat',c:'sat'},{l:'Glossy',c:''}] },
+      { name: 'Korean Bridal',         file: 'korean_bridal_black.jpg',
+        desc: 'Bright, warm white base. Soft and feminine — ideal for weddings.',
+        tags: [{l:'Trend',c:'trend'},{l:'High-key',c:'light'},{l:'Sat',c:'sat'}] },
+      { name: 'Korean SNS',            file: 'korean_sns_white.jpg',
+        desc: 'Vivid and bright, leaning into saturation for a trending feel.',
+        tags: [{l:'Trend',c:'trend'},{l:'High-sat',c:'sat'}] },
+      { name: 'Model SNS',             file: 'model_sns_white.jpg',
+        desc: 'Transparency and vibrancy combined for a model/social look.',
+        tags: [{l:'Trend',c:'trend'},{l:'Transparent',c:'light'},{l:'Sat',c:'sat'}] },
+      { name: 'Cinematic',             file: 'cinematic_white.jpg',
+        desc: 'Teal in the shadows for a filmic atmosphere. Stylish and clean.',
+        tags: [{l:'Teal',c:'cinema'},{l:'Filmic',c:'cinema'}] },
+      { name: 'Monochrome',            file: 'monochrome_white.jpg',
+        desc: 'B&W conversion base. The starting point for portrait black-and-white.',
+        tags: [{l:'B&W',c:'bw'}] }
+    ];
+
+    var lightboxItems = [
+      { name: 'Original (before)', file: 'original_white.png',
+        desc: 'The source image before any style is applied.',
+        tags: [{l:'ORIGINAL',c:''}] }
+    ].concat(galleryStyles);
+
+    function _updateLightbox() {
+      var s = lightboxItems[currentIdx];
+      document.getElementById('lightbox-img').src = '../images/portrait/gallery2/' + s.file;
+      document.getElementById('lightbox-name').textContent = s.name;
+      document.getElementById('lightbox-idx').textContent = (currentIdx + 1) + ' / ' + lightboxItems.length;
+    }
+    function openLightbox(idx) {
+      currentIdx = idx;
+      _updateLightbox();
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function lightboxNav(dir) {
+      currentIdx = (currentIdx + dir + lightboxItems.length) % lightboxItems.length;
+      _updateLightbox();
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') lightboxNav(-1);
+      if (e.key === 'ArrowRight') lightboxNav(1);
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('lightbox').addEventListener('click', function(e) {
+        if (e.target === this) closeLightbox();
+      });
+      document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+      document.getElementById('lightbox-prev').addEventListener('click', function(e) {
+        e.stopPropagation(); lightboxNav(-1);
+      });
+      document.getElementById('lightbox-next').addEventListener('click', function(e) {
+        e.stopPropagation(); lightboxNav(1);
+      });
+
+      var origWrap = document.querySelector('.gallery-original-img');
+      if (origWrap) {
+        origWrap.style.cursor = 'pointer';
+        origWrap.addEventListener('click', function() { openLightbox(0); });
+      }
+
+      var grid = document.getElementById('gallery-grid');
+      galleryStyles.forEach(function(style, i) {
+        var card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.addEventListener('click', function() { openLightbox(i + 1); });
+
+        var img = document.createElement('img');
+        img.src = '../images/portrait/gallery2/' + style.file;
+        img.alt = style.name;
+        img.loading = 'lazy';
+        card.appendChild(img);
+
+        var info = document.createElement('div');
+        info.className = 'gallery-card-info';
+
+        var nameDiv = document.createElement('div');
+        nameDiv.className = 'gallery-card-name';
+        nameDiv.textContent = style.name;
+        if (i === 0) {
+          var hint = document.createElement('span');
+          hint.className = 'gallery-card-hint';
+          hint.textContent = 'Click to expand';
+          nameDiv.appendChild(hint);
+        }
+        info.appendChild(nameDiv);
+
+        var desc = document.createElement('p');
+        desc.className = 'gallery-card-desc';
+        desc.textContent = style.desc;
+        info.appendChild(desc);
+
+        var tagsDiv = document.createElement('div');
+        tagsDiv.className = 'style-tags';
+        style.tags.forEach(function(t) {
+          var tag = document.createElement('span');
+          tag.className = 'style-tag' + (t.c ? ' ' + t.c : '');
+          tag.textContent = t.l;
+          tagsDiv.appendChild(tag);
+        });
+        info.appendChild(tagsDiv);
+
+        card.appendChild(info);
+        grid.appendChild(card);
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/en/sidekick-star.html">
+  <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sidekick-star.html">
+  <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/sidekick-star.html">
+  <title>Sidekick Star | Automate Astrophoto Stacking & Airplane Trail Removal in Photoshop</title>
+  <meta name="description" content="Sidekick Star automates the repetitive decisions in astrophotography — light stacking, sky mask, light pollution correction. 3-month free trial. No credit card required.">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --blue1:#08111f;
+      --blue2:#182d4a;
+      --blue3:#381541;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
+        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;max-width:1100px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;box-shadow:var(--shadow);}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover,.nav a.active{color:var(--white)}
+
+    /* ── Buttons ── */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 28px;border-radius:14px;font-weight:800;font-size:15px;transition:.2s ease;border:1px solid transparent;cursor:pointer;white-space:nowrap;}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#121212;box-shadow:0 8px 32px rgba(255,138,0,.32);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,138,0,.42);}
+    .btn-secondary{background:transparent;border-color:rgba(255,255,255,.16);color:var(--white);}
+    .btn-secondary:hover{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.04);}
+    .btn-lg{min-height:60px;padding:0 36px;font-size:17px;border-radius:16px;}
+
+    /* ── Hero ── */
+    .hero{padding:88px 0 64px;}
+    .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center;}
+    .eyebrow{display:inline-flex;gap:10px;align-items:center;padding:8px 14px;border-radius:999px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);color:var(--accent2);font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:20px;}
+    h1{margin:0 0 20px;font-size:clamp(32px,5.5vw,60px);line-height:1.08;letter-spacing:-.03em;}
+    .lead{margin:0;color:var(--sub);font-size:clamp(16px,2vw,19px);max-width:680px;line-height:1.8;}
+    .hero-actions{display:flex;gap:12px;margin-top:32px;flex-wrap:wrap;align-items:center;}
+    .hero-note{margin-top:16px;color:var(--sub);font-size:13px;line-height:1.9;}
+    .price-inline{color:var(--accent2);font-weight:800;}
+
+    .hero-card{
+      min-height:440px;border-radius:28px;position:relative;overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);
+      background:linear-gradient(180deg,rgba(7,9,23,.16),rgba(7,9,23,.74)),
+        radial-gradient(circle at 72% 20%,rgba(255,255,255,.22),transparent 10%),
+        radial-gradient(circle at 30% 12%,rgba(255,255,255,.12),transparent 7%),
+        radial-gradient(circle at 18% 34%,rgba(255,255,255,.07),transparent 5%),
+        radial-gradient(circle at 55% 55%,rgba(255,255,255,.04),transparent 8%),
+        linear-gradient(135deg,var(--blue1),var(--blue2) 55%,var(--blue3));
+    }
+    .hero-card::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 15%,rgba(255,177,74,.18),transparent 12%),linear-gradient(180deg,transparent 40%,rgba(0,0,0,.32));pointer-events:none;}
+    .hero-card-inner{position:absolute;inset:auto 0 0 0;padding:32px;z-index:2;}
+    .hero-card-tag{display:inline-flex;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.14);font-size:12px;font-weight:800;color:#fff;letter-spacing:.04em;margin-bottom:14px;}
+    .hero-card h2{margin:0 0 10px;font-size:32px;line-height:1;letter-spacing:-.03em;}
+    .hero-card p{margin:0;color:#d8dde8;font-size:15px;max-width:380px;}
+
+    /* ── Award Bar ── */
+    .award-bar{padding:20px 0;border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);}
+    .award-bar-inner{display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+    .award-bar-label{font-size:12px;font-weight:800;color:var(--sub);letter-spacing:.08em;white-space:nowrap;}
+    .award-tags{display:flex;gap:10px;flex-wrap:wrap;}
+    .award-tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(255,215,0,.06);border:1px solid rgba(255,215,0,.18);color:#f5d76e;font-size:12px;font-weight:800;letter-spacing:.02em;}
+
+    /* ── Video / Demo section ── */
+    .video-section{padding:72px 0;background:linear-gradient(180deg,transparent,rgba(8,17,31,.4) 30%,rgba(8,17,31,.4) 70%,transparent);}
+    .section-label{font-size:12px;font-weight:800;letter-spacing:.12em;color:var(--accent2);text-transform:uppercase;margin-bottom:12px;}
+    .section-title{margin:0 0 12px;font-size:clamp(26px,3.5vw,40px);line-height:1.15;letter-spacing:-.02em;}
+    .section-desc{margin:0 0 36px;color:var(--sub);font-size:clamp(15px,1.8vw,18px);max-width:680px;}
+
+    .video-wrap{position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.08);box-shadow:0 32px 80px rgba(0,0,0,.5);}
+    .video-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0;}
+    .video-caption{margin-top:18px;color:var(--sub);font-size:14px;text-align:center;}
+
+    /* ── Before / After ── */
+    .ba-block{margin-top:52px;}
+    .ba-label-row{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+    .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+    .ba-item{display:flex;flex-direction:column;gap:0;}
+    .ba-img-wrap{border-radius:16px 16px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.08);border-bottom:none;line-height:0;box-shadow:0 20px 60px rgba(0,0,0,.5);}
+    .ba-img-wrap img{width:100%;height:auto;display:block;}
+    .ba-caption{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:0 0 16px 16px;font-size:14px;font-weight:700;border:1px solid rgba(255,255,255,.08);border-top:none;}
+    .ba-before{background:rgba(255,255,255,.03);color:var(--sub);}
+    .ba-after{background:rgba(255,138,0,.06);color:var(--accent2);border-color:rgba(255,138,0,.14);}
+    .ba-tag{padding:3px 9px;border-radius:6px;font-size:11px;font-weight:800;letter-spacing:.08em;}
+    .ba-before .ba-tag{background:rgba(255,255,255,.08);color:var(--sub);}
+    .ba-after .ba-tag{background:rgba(255,138,0,.18);color:var(--accent2);}
+    .result-badge{display:inline-flex;padding:5px 12px;border-radius:999px;background:rgba(255,138,0,.12);border:1px solid rgba(255,138,0,.28);color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.1em;}
+    .result-caption-text{font-size:15px;font-weight:700;color:var(--sub);}
+    .result-note{margin:18px 0 0;text-align:center;color:var(--sub);font-size:14px;}
+
+    /* ── Workflow ── */
+    .workflow-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:12px;align-items:start;margin-top:16px;}
+    .workflow-arrow{display:flex;align-items:center;justify-content:center;padding-top:80px;color:var(--accent2);font-size:22px;font-weight:900;opacity:.7;}
+    .workflow-item{display:flex;flex-direction:column;}
+    .workflow-img-wrap{border-radius:14px 14px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.08);border-bottom:none;line-height:0;box-shadow:0 16px 48px rgba(0,0,0,.45);}
+    .workflow-img-final{border-color:rgba(255,138,0,.2);}
+    .workflow-img-wrap img{width:100%;height:auto;display:block;}
+    .workflow-caption{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:0 0 14px 14px;font-size:13px;font-weight:700;border:1px solid rgba(255,255,255,.08);border-top:none;}
+    .step-raw{background:rgba(255,255,255,.03);color:var(--sub);}
+    .step-dev{background:rgba(100,160,255,.05);border-color:rgba(100,160,255,.12);color:#8ab4f8;}
+    .step-final{background:rgba(255,138,0,.07);border-color:rgba(255,138,0,.16);color:var(--accent2);}
+    .workflow-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.1);font-size:11px;font-weight:900;flex-shrink:0;}
+    .step-final .workflow-num{background:rgba(255,138,0,.2);color:var(--accent2);}
+
+    /* ── Sections ── */
+    .section{padding:72px 0;}
+    .section-head{margin-bottom:36px;}
+    .section-head h2{margin:0 0 12px;font-size:clamp(26px,3.5vw,40px);line-height:1.15;letter-spacing:-.02em;}
+    .section-head p{margin:0;color:var(--sub);max-width:680px;font-size:clamp(15px,1.8vw,18px);}
+
+    /* ── Cards ── */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:26px;box-shadow:var(--shadow);}
+    .card-icon{font-size:28px;margin-bottom:14px;}
+    .card h3{margin:0 0 10px;font-size:18px;line-height:1.3;}
+    .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.75;}
+
+    /* ── Feature list ── */
+    .feature-list{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:10px;}
+    .feature-list li{position:relative;padding-left:18px;font-size:15px;color:var(--text);line-height:1.6;}
+    .feature-list li::before{content:"•";position:absolute;left:0;color:var(--accent2);font-weight:900;}
+
+    /* ── Callout ── */
+    .callout{margin-top:32px;padding:32px;border-radius:24px;background:linear-gradient(135deg,rgba(255,138,0,.10),rgba(255,177,74,.04)),var(--card);border:1px solid rgba(255,138,0,.18);box-shadow:var(--shadow);}
+    .callout strong{display:block;font-size:clamp(18px,2.2vw,24px);line-height:1.5;margin-bottom:12px;}
+    .callout p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── Steps ── */
+    .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px;counter-reset:step;}
+    .step{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:26px;position:relative;counter-increment:step;}
+    .step::before{content:counter(step);display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;font-weight:900;font-size:16px;margin-bottom:16px;}
+    .step h3{margin:0 0 8px;font-size:18px;}
+    .step p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── Pricing ── */
+    .pricing-section{padding:72px 0 96px;}
+    .pricing-card{max-width:680px;margin:0 auto;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02)),var(--card);border:1px solid rgba(255,255,255,.1);border-radius:28px;padding:44px;box-shadow:var(--shadow);text-align:center;}
+    .pricing-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.24);color:var(--accent2);font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:24px;}
+    .pricing-trial{margin-bottom:8px;font-size:clamp(22px,3vw,32px);font-weight:800;line-height:1.2;}
+    .pricing-trial-note{color:var(--sub);font-size:15px;margin-bottom:28px;}
+    .pricing-cta-group{display:flex;flex-direction:column;align-items:center;gap:14px;}
+    .divider-or{color:var(--sub);font-size:13px;font-weight:700;}
+    .pricing-purchase{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center;}
+    .pricing-amount{font-size:28px;font-weight:800;letter-spacing:-.02em;}
+    .pricing-amount small{font-size:14px;font-weight:600;color:var(--sub);display:block;margin-top:2px;letter-spacing:0;}
+    .pricing-footnote{margin-top:24px;padding-top:24px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:13px;line-height:1.9;}
+
+    /* ── Footer ── */
+    .footer{padding:32px 0 60px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    /* ── Responsive ── */
+    @media(max-width:980px){
+      .hero-grid,.grid-2{grid-template-columns:1fr;}
+      .grid-3,.steps{grid-template-columns:1fr 1fr;}
+    }
+    @media(max-width:860px){
+      .workflow-grid{grid-template-columns:1fr 1fr 1fr;}
+      .workflow-arrow{display:none;}
+    }
+    @media(max-width:640px){
+      .wrap{width:min(var(--max),calc(100% - 24px));}
+      .nav{display:none;}
+      .hero{padding:56px 0 40px;}
+      .hero-card{min-height:320px;}
+      .grid-3,.steps{grid-template-columns:1fr;}
+      .btn{width:100%;}
+      .pricing-card{padding:28px 22px;}
+      .pricing-purchase{flex-direction:column;}
+      .ba-grid{grid-template-columns:1fr;}
+      .workflow-grid{grid-template-columns:1fr;}
+    }
+  </style>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sidekick">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Sidekick Star | Astrophotography Workflow Tool for Photoshop">
+  <meta property="og:description" content="Automate light stacking, sky mask, and light pollution correction. Built by a 1X Award-winning astrophotographer. 3-month free trial.">
+  <meta property="og:url" content="https://www.sidekick-lab.com/en/sidekick-star.html">
+  <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sidekick Star | Astrophotography Workflow Tool for Photoshop">
+  <meta name="twitter:description" content="Automate light stacking, sky mask, and light pollution correction. 3-month free trial.">
+  <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="../index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>PHOTO WORKFLOW TOOLS</small>
+        </div>
+      </a>
+      <nav class="nav">
+        <a href="sidekick-star.html" style="color:#fff;">⭐ Star</a>
+        <a href="portrait.html">👤 Portrait</a>
+        <a href="sky-effect.html">☁️ Sky</a>
+        <a href="../faq.html">Support</a>
+        <a href="../" style="color:var(--accent2);">🇯🇵 JA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">
+            ⭐ Sidekick Star — Built by a 1X Award-winning photographer — 3-month free trial
+          </div>
+          <h1>
+            Clear the backlog.<br>
+            Shoot again tomorrow.
+          </h1>
+          <p class="lead">
+            Light stacking, sky masking, light pollution correction —
+            the decisions you repeat on every astrophoto session.
+            Sidekick Star handles them so you don't have to.
+          </p>
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg"
+               href="/register-dl.html?product=star&src=sidekick-star" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
+              ▶ Try free for 3 months
+            </a>
+            <a class="btn btn-secondary" href="../buy-star.html" onclick="gtag('event','buy_click',{'product':'Sidekick_Star'})">
+              Buy now →
+            </a>
+          </div>
+          <div class="hero-note">
+            No credit card required &nbsp;·&nbsp; Full features during trial<br>
+            <span class="price-inline">¥9,800 (tax incl.)</span> — only pay if it's worth it
+          </div>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-card-inner">
+            <div class="hero-card-tag">Sidekick Star — Astrophotography</div>
+            <h2>Built for the field</h2>
+            <p>
+              Designed from 20 years of shooting under Japan's light-polluted skies,
+              with thousands of frames per session as the baseline.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Award Bar -->
+    <div class="award-bar">
+      <div class="wrap award-bar-inner">
+        <span class="award-bar-label">AWARD</span>
+        <div class="award-tags">
+          <span class="award-tag">🏆 1X Award × 5 photos</span>
+          <span class="award-tag">🥇 Top 5 Selection winner</span>
+          <span class="award-tag">📸 All award shots processed with Sidekick workflow</span>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- DEMO 1: Milky Way Enhancement -->
+    <section class="video-section">
+      <div class="wrap">
+        <div class="section-label">DEMO</div>
+        <h2 class="section-title">Milky Way Enhancement — Step by Step</h2>
+        <p class="section-desc">
+          From the straight-out-of-camera JPEG, through RAW processing, to Milky Way enhancement.
+          Watch how Sidekick Star handles each step of the workflow.
+        </p>
+
+        <div class="workflow-grid">
+          <div class="workflow-item">
+            <div class="workflow-img-wrap">
+              <img src="../images/awards/milkyway_01_before.jpg"
+                   alt="Straight from camera — before processing"
+                   loading="lazy">
+            </div>
+            <div class="workflow-caption step-raw">
+              <span class="workflow-num">01</span>
+              Camera JPEG (straight)
+            </div>
+          </div>
+
+          <div class="workflow-arrow">→</div>
+
+          <div class="workflow-item">
+            <div class="workflow-img-wrap">
+              <img src="../images/awards/milkyway_02_raw.jpg"
+                   alt="After Sidekick RAW processing"
+                   loading="lazy">
+            </div>
+            <div class="workflow-caption step-dev">
+              <span class="workflow-num">02</span>
+              Sidekick RAW develop
+            </div>
+          </div>
+
+          <div class="workflow-arrow">→</div>
+
+          <div class="workflow-item">
+            <div class="workflow-img-wrap workflow-img-final">
+              <img src="../images/awards/milkyway_03_after.jpg"
+                   alt="Milky Way enhancement — final result"
+                   loading="lazy">
+            </div>
+            <div class="workflow-caption step-final">
+              <span class="workflow-num">03</span>
+              Milky Way enhanced — final
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- DEMO 2: RAW Processing Difference -->
+    <section class="video-section">
+      <div class="wrap">
+        <div class="section-label">DEMO</div>
+        <h2 class="section-title">What's hiding in your RAW</h2>
+        <p class="section-desc">
+          Same RAW file. Same single frame. The only difference is how it was developed.<br>
+          Default Photoshop processing vs. Sidekick Star develop + Milky Way enhancement.
+        </p>
+
+        <div class="ba-block">
+          <div class="ba-label-row">
+            <span class="result-badge">BEFORE / AFTER</span>
+            <span class="result-caption-text">Photoshop default → Sidekick Star develop + Milky Way enhancement</span>
+          </div>
+
+          <div class="ba-grid">
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="../images/Star/web_milkyway_before.jpg"
+                     alt="Milky Way — Photoshop default develop, Milky Way barely visible"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-before">
+                <span class="ba-tag">BEFORE</span>
+                Photoshop default — Milky Way barely visible
+              </div>
+            </div>
+
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="../images/Star/web_milkyway_after.jpg"
+                     alt="Milky Way enhanced with Sidekick Star — rock arch and Milky Way"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-after">
+                <span class="ba-tag">AFTER</span>
+                Sidekick Star develop + enhancement — same RAW
+              </div>
+            </div>
+          </div>
+
+          <p class="result-note">
+            The data was always there. Sidekick Star makes the right call on how to bring it out.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- DEMO 3: Light Stacking -->
+    <section class="video-section">
+      <div class="wrap">
+        <div class="section-label">DEMO</div>
+        <h2 class="section-title">Light Stacking — 3,800 frames</h2>
+        <p class="section-desc">
+          Stacking thousands of frames via lighten-blend compositing is a core astrophoto technique —
+          and one of the most time-consuming. Watch how Sidekick Star handles it.
+        </p>
+
+        <div class="ba-block">
+          <div class="ba-label-row">
+            <span class="result-badge">BEFORE / AFTER</span>
+            <span class="result-caption-text">Single frame → 3,800-frame lighten stack composite</span>
+          </div>
+
+          <div class="ba-grid">
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="../images/20210919_221952_01_0.0.jpeg"
+                     alt="Single frame — before stacking"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-before">
+                <span class="ba-tag">BEFORE</span>
+                Single frame
+              </div>
+            </div>
+
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="../images/20210919_200736_67_0.0.jpg"
+                     alt="3,800-frame lighten stack composite — final image"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-after">
+                <span class="ba-tag">AFTER</span>
+                3,800-frame lighten stack composite
+              </div>
+            </div>
+          </div>
+
+          <p class="result-note">
+            This is what Sidekick Star's processing actually produces.
+          </p>
+        </div>
+
+        <div class="video-wrap">
+          <iframe
+            src="https://www.youtube.com/embed/TioWf1hv0PI"
+            title="Sidekick Star — Light Stacking Demo"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+
+        <p class="video-caption">
+          Footage: actual astrophotography frames for lighten stacking &ensp;/&ensp;
+          Software: Adobe Photoshop + Sidekick Star
+        </p>
+
+      </div>
+    </section>
+
+
+    <!-- DEMO 4: Airplane Trail Removal -->
+    <section class="video-section">
+      <div class="wrap">
+        <div class="section-label">DEMO</div>
+        <h2 class="section-title">Airplane Trail Removal — Automated</h2>
+        <p class="section-desc">
+          Airplane trails are one of the biggest headaches in lighten-blend stacking.<br>
+          Sidekick Star detects and removes artificial light trails — planes, cars, satellites —
+          from the source frames. What used to take days of manual work, let the computer handle overnight.<br>
+          Twenty years of trail-removal technique, distilled into an algorithm.
+        </p>
+
+        <div class="ba-block">
+          <div class="ba-label-row">
+            <span class="result-badge">BEFORE / AFTER</span>
+            <span class="result-caption-text">With airplane trails → After removal</span>
+          </div>
+
+          <div class="ba-grid">
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="../images/Star/web_before.jpg"
+                     alt="Lighten stack with airplane trails remaining — before"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-before">
+                <span class="ba-tag">BEFORE</span>
+                Airplane and satellite trails still present
+              </div>
+            </div>
+
+            <div class="ba-item">
+              <div class="ba-img-wrap">
+                <img src="../images/Star/web_after.jpg"
+                     alt="Lighten stack with airplane trails removed — after"
+                     loading="lazy">
+              </div>
+              <div class="ba-caption ba-after">
+                <span class="ba-tag">AFTER</span>
+                Only star trails remain — clean result
+              </div>
+            </div>
+          </div>
+
+          <p class="result-note">
+            The red lines (planes, satellites) are gone. Only star trails remain.<br>
+            A problem that was impossible to solve on film — solved algorithmically.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- Pain Points -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sound familiar?</h2>
+          <p>
+            In astrophotography, the real time drain isn't shooting —
+            it's repeating the same decisions on every single session.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">📁</div>
+            <h3>Too many files</h3>
+            <p>
+              Lighten stacking and sequential frame capture means hundreds or thousands of files.
+              Making decisions frame by frame drains focus fast.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔁</div>
+            <h3>Same decisions, every time</h3>
+            <p>
+              Sky/ground separation, Milky Way handling, light pollution correction —
+              you've done it all before, but you're starting from scratch again.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🌏</div>
+            <h3>Japan's light pollution reality</h3>
+            <p>
+              Workflows designed for dark skies don't translate well.
+              Most astrophoto tools weren't built with Japan's shooting conditions in mind.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>
+            Sidekick Star doesn't sell you a "look" —
+            it externalizes the judgment calls you've been making for years.
+          </strong>
+          <p>
+            Not aesthetic presets. A practical workflow tool built on real shooting sessions.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Features -->
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What Sidekick Star does</h2>
+          <p>
+            It covers the repetitive processing and decisions that come up on every astrophoto shoot.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <h3>🌌 Astrophotography workflow</h3>
+            <ul class="feature-list">
+              <li>Organize and automate the flow around lighten-blend compositing</li>
+              <li>Assist with sky/ground separation processing</li>
+              <li>Reduce processing load on high-volume shoots</li>
+              <li>Cut down repetitive steps unique to astrophotography</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h3>🎯 Decision support</h3>
+            <ul class="feature-list">
+              <li>Star mask generation assistance</li>
+              <li>Sky mask generation assistance</li>
+              <li>Light pollution correction and blending guidance</li>
+              <li>Post-RAW-develop workflow organization</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Value -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>What you actually get</h2>
+          <p>
+            On the surface it's a tool. But what it actually delivers is something else.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">⏱</div>
+            <h3>Time</h3>
+            <p>
+              Fewer repetitive decisions on astrophoto processing means more time
+              for shooting and making images.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📐</div>
+            <h3>Consistency</h3>
+            <p>
+              Stabilize the processing decisions that drift session to session.
+              Your workflow becomes repeatable.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🧠</div>
+            <h3>A photographer's judgment</h3>
+            <p>
+              Twenty years of Ichiro Murata's astrophotography decision-making,
+              delivered in a usable form.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>
+            You're not buying a script.
+            You're buying the decisions you no longer have to make yourself.
+          </strong>
+          <p>Sidekick Star is a module built to support exactly that.</p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- How to Start -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Getting started</h2>
+          <p>
+            Download it and run it on your actual astrophotography footage.
+            Seeing it work beats reading about it.
+          </p>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <h3>Download the trial</h3>
+            <p>
+              Full features, free for 3 months.
+              No credit card needed.
+            </p>
+          </div>
+          <div class="step">
+            <h3>Use it on real footage</h3>
+            <p>
+              Run it on your own star frames.
+              See for yourself where it saves time.
+            </p>
+          </div>
+          <div class="step">
+            <h3>Buy it if it's worth it</h3>
+            <p>
+              If you feel the difference — buy it.
+              If not, no hard feelings.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- Pricing / CTA -->
+    <section class="pricing-section" id="pricing">
+      <div class="wrap">
+        <div class="pricing-card">
+          <div class="pricing-badge">⭐ Sidekick Star</div>
+
+          <div class="pricing-trial">
+            Try it free for 3 months
+          </div>
+          <p class="pricing-trial-note">
+            No credit card required &nbsp;·&nbsp; Full features &nbsp;·&nbsp; Cancel anytime during trial
+          </p>
+
+          <div class="pricing-cta-group">
+            <a class="btn btn-primary btn-lg"
+               href="/register-dl.html?product=star&src=sidekick-star" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})"
+               style="width:100%;max-width:380px;">
+              ▶ Download free trial
+            </a>
+
+            <span class="divider-or">— Ready to buy? —</span>
+
+            <div class="pricing-purchase">
+              <div class="pricing-amount">
+                ¥9,800
+                <small>tax incl. &nbsp;·&nbsp; one-time purchase</small>
+              </div>
+              <a class="btn btn-secondary" href="../buy-star.html" onclick="gtag('event','buy_click',{'product':'Sidekick_Star'})">
+                Buy now →
+              </a>
+            </div>
+          </div>
+
+          <div class="pricing-footnote">
+            License key delivered by email after purchase (usually within a few hours)<br>
+            Manual:
+            <a href="../manual/Manual_SideKick_Star_EN.pdf" target="_blank" style="color:var(--accent2);">English PDF</a>
+            &nbsp;·&nbsp;
+            Contact: <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);">murata@mbg.nifty.com</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="line-height:1.9;">
+        <div>© Sidekick — Ichiro Murata</div>
+        <div style="font-size:13px;">Contact: <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:13px;">
+        <div>Astrophotography workflow tool for Photoshop</div>
+        <div style="display:flex;gap:16px;">
+          <a href="../legal.html" style="color:var(--sub);">Legal</a>
+          <a href="../privacy.html" style="color:var(--sub);">Privacy Policy</a>
+          <a href="../sidekick-star.html" style="color:var(--sub);">🇯🇵 日本語</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
