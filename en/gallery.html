@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/en/gallery.html">
+  <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/gallery.html">
+  <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/gallery.html">
+  <title>Gallery | Ichiro Murata — Fine Art Prints</title>
+  <meta name="description" content="Star landscape photography gallery by Ichiro Murata. Fine art prints including 1X Award-winning works, available on Fine Art America.">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1200px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:radial-gradient(circle at top right,rgba(255,138,0,.10),transparent 26%),var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;max-width:1100px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover{color:#fff}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 24px;border-radius:14px;font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#121212;box-shadow:0 6px 28px rgba(255,138,0,.3);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,138,0,.42);}
+    .btn-outline{background:transparent;border-color:rgba(255,255,255,.16);color:var(--text);}
+    .btn-outline:hover{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.04);}
+
+    .page-head{padding:72px 0 48px;}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border-radius:999px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:18px;}
+    .page-head h1{margin:0 0 12px;font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;}
+    .page-head .lead{margin:0 0 28px;color:var(--sub);font-size:16px;max-width:640px;}
+
+    .faa-link-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);}
+    .faa-link-bar span{color:var(--sub);font-size:14px;}
+    .faa-link-bar strong{color:var(--text);}
+
+    .gallery-section{padding:48px 0 80px;}
+    .section-label{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--sub);text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07);}
+
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:48px;}
+
+    .gallery-item{position:relative;border-radius:16px;overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 32px rgba(0,0,0,.45);transition:.25s ease;}
+    .gallery-item:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.6);border-color:rgba(255,138,0,.2);}
+    .gallery-item img{width:100%;aspect-ratio:4/3;object-fit:contain;background:#0d0d10;display:block;}
+    .gallery-item-info{padding:14px 16px 16px;}
+    .gallery-item-info h3{margin:0 0 4px;font-size:15px;letter-spacing:-.01em;}
+    .gallery-item-info p{margin:0 0 12px;font-size:13px;color:var(--sub);}
+    .gallery-item-info a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent2);border-bottom:1px solid rgba(255,177,74,.3);padding-bottom:1px;transition:.15s;}
+    .gallery-item-info a:hover{color:#fff;border-color:rgba(255,255,255,.4);}
+
+    .award-highlight{grid-column:1 / -1;display:grid;grid-template-columns:1.4fr 1fr;gap:18px;}
+    .award-highlight .main-img img{aspect-ratio:3/2;border-radius:16px;width:100%;object-fit:cover;border:1px solid rgba(255,255,255,.07);}
+    .award-highlight .sub-imgs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .award-highlight .sub-imgs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.07);}
+    .award-highlight-text{grid-column:1/-1;margin-top:6px;}
+    .award-highlight-text p{margin:0;color:var(--sub);font-size:14px;font-style:italic;text-align:center;}
+
+    .faa-note{padding:28px;border-radius:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-top:0;}
+    .faa-note h3{margin:0 0 8px;font-size:17px;}
+    .faa-note p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    .footer{padding:28px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:900px){
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
+      .award-highlight{grid-template-columns:1fr;grid-column:auto;}
+      .award-highlight .sub-imgs{grid-template-columns:repeat(4,1fr);}
+    }
+    @media(max-width:640px){
+      .gallery-grid{grid-template-columns:1fr;}
+      .nav{display:none}
+      .award-highlight .sub-imgs{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sidekick">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Gallery | Ichiro Murata — Fine Art Prints">
+  <meta property="og:description" content="Star landscape photography gallery by Ichiro Murata. Fine art prints including 1X Award-winning works.">
+  <meta property="og:url" content="https://www.sidekick-lab.com/en/gallery.html">
+  <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gallery | Ichiro Murata — Fine Art Prints">
+  <meta name="twitter:description" content="Star landscape photography gallery by Ichiro Murata. Fine art prints including 1X Award-winning works.">
+  <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="../index.html" class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-text">
+        <span>Sidekick</span>
+        <small>PHOTO WORKFLOW TOOLS</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="sidekick-star.html">⭐ Star</a>
+      <a href="portrait.html">👤 Portrait</a>
+      <a href="sky-effect.html">☁️ Sky</a>
+      <a href="../workshop.html">📷 Workshop</a>
+      <a href="lp-star.html">LP</a>
+      <a href="gallery.html" style="color:#fff;">Gallery</a>
+      <a href="sidekick.html">What is Sidekick</a>
+      <a href="about.html">About</a>
+      <a href="changelog.html">Changelog</a>
+      <a href="../faq.html">Support</a>
+      <a href="../gallery.html" style="color:var(--sub);">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="page-head">
+      <div class="eyebrow">🖼 GALLERY</div>
+      <h1>Ichiro Murata — Fine Art Prints</h1>
+      <p class="lead">
+        Star landscape photography including 1X Award-winning works, available as fine art prints.<br>
+        Print, canvas, acrylic and more formats available.
+      </p>
+
+      <div class="faa-link-bar">
+        <div>
+          <strong>Platform: </strong>
+          <span>Fine Art America (one of the world's largest art print marketplaces)</span>
+        </div>
+        <a class="btn btn-primary"
+           href="https://fineartamerica.com/profiles/ichiro-murata"
+           target="_blank" rel="noopener">
+          View FAA Profile →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <section class="gallery-section">
+    <div class="wrap">
+
+      <div class="section-label">🏆 1X Award-Winning Works</div>
+
+      <div class="award-highlight">
+        <div class="main-img">
+          <img src="../images/awards/3102187.jpg"
+               alt="1X Award-winning star landscape — Ichiro Murata">
+        </div>
+        <div class="sub-imgs">
+          <img src="../images/awards/3083835.jpg" alt="1X Award work 1 — Ichiro Murata">
+          <img src="../images/awards/3086530.jpg" alt="1X Award work 2 — Ichiro Murata">
+          <img src="../images/awards/3095761.jpg" alt="1X Award work 3 — Ichiro Murata">
+          <img src="../images/awards/3095833.jpg" alt="1X Award work 4 — Ichiro Murata">
+        </div>
+        <div class="award-highlight-text">
+          <p>"Selected and awarded on 1X, one of the most curated photo platforms worldwide."</p>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:56px;">Prints Available (Fine Art America)</div>
+
+      <div class="gallery-grid">
+
+        <article class="gallery-item">
+          <img src="../images/awards/inner-structure-01.jpg"
+               alt="Inner Structure 01 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Inner Structure 01</h3>
+            <p>Abstract / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/inner-structure-01-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              Buy Print →
+            </a>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="../images/awards/quiet-line-02.jpg"
+               alt="Quiet Line 02 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Quiet Line 02</h3>
+            <p>Seascape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/quiet-line-02-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              Buy Print →
+            </a>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="../images/awards/quiet-line-01.jpg"
+               alt="Quiet Line 01 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Quiet Line 01</h3>
+            <p>Seascape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/quiet-line-01-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              Buy Print →
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="faa-note">
+        <h3>Rotating selection</h3>
+        <p>
+          The works shown here rotate periodically due to Fine Art America's free plan limits.
+          For the full current collection, visit the
+          <a href="https://fineartamerica.com/profiles/ichiro-murata"
+             target="_blank" rel="noopener"
+             style="color:var(--accent2);">FAA profile page</a>.
+        </p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>© Sidekick — Ichiro Murata</div>
+    <div style="display:flex;gap:16px;font-size:13px;">
+      <a href="../legal.html" style="color:var(--sub);">Legal</a>
+      <a href="../privacy.html" style="color:var(--sub);">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

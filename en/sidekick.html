@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/en/sidekick.html">
+  <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sidekick.html">
+  <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/sidekick.html">
+  <title>What is Sidekick | Ichiro Murata's Photoshop Tools for Photographers</title>
+  <meta name="description" content="Sidekick is a series of Photoshop scripts that automate repetitive post-processing decisions for star landscape, portrait, and sky photography. Built by 1X Award-winning photographer Ichiro Murata from his own field workflow.">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:1200px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.12), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 20%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.7;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max), calc(100% - 40px));margin:0 auto;}
+
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;max-width:1100px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;box-shadow:var(--shadow);}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover{color:var(--white)}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:14px;font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;font-size:15px;}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#121212;box-shadow:0 6px 28px rgba(255,138,0,.35);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,138,0,.45);}
+    .btn-secondary{background:transparent;border-color:rgba(255,255,255,.14);color:var(--white);}
+    .btn-secondary:hover{border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.03);}
+    .mini{min-height:44px;padding:0 18px;border-radius:12px;font-size:14px;}
+
+    .hero{padding:96px 0 64px;}
+    .eyebrow{display:inline-flex;gap:10px;align-items:center;padding:8px 16px;border-radius:999px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);color:var(--accent2);font-size:13px;font-weight:800;letter-spacing:.06em;margin-bottom:22px;}
+    .hero-title{margin:0 0 20px;font-size:clamp(34px,5.5vw,62px);line-height:1.06;letter-spacing:-.03em;word-break:keep-all;}
+    .hero-title em{font-style:normal;color:var(--accent2);}
+    .hero-sub{margin:18px 0 0;color:var(--white);font-size:clamp(17px,2.2vw,22px);font-weight:700;max-width:680px;letter-spacing:-.01em;}
+    .hero-desc{margin:12px 0 0;color:var(--sub);font-size:clamp(14px,1.6vw,17px);max-width:680px;}
+    .hero-actions{display:flex;gap:14px;margin-top:32px;flex-wrap:wrap;align-items:center;}
+    .hero-note{margin-top:16px;color:var(--sub);font-size:13px;}
+
+    .section{padding:36px 0 80px;}
+    .section-head{margin-bottom:28px;}
+    .section-head h2{margin:0 0 10px;font-size:clamp(26px,3.5vw,40px);line-height:1.15;letter-spacing:-.025em;}
+    .section-head p{margin:0;color:var(--sub);max-width:680px;}
+
+    #features{scroll-margin-top:90px}
+    .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:28px;}
+    .feature-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:28px;box-shadow:var(--shadow);}
+    .feature-icon{font-size:28px;margin-bottom:14px;}
+    .feature-card h3{margin:0 0 10px;font-size:20px;letter-spacing:-.01em;}
+    .feature-card p{margin:0;color:var(--sub);font-size:15px;}
+
+    #before-after{scroll-margin-top:90px}
+    .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:28px;}
+    .ba-card{border-radius:22px;padding:30px;box-shadow:var(--shadow);}
+    .ba-card.before{background:linear-gradient(135deg,rgba(40,20,20,.7),rgba(20,18,24,.9));border:1px solid rgba(255,80,80,.14);}
+    .ba-card.after{background:linear-gradient(135deg,rgba(20,32,20,.7),rgba(20,24,32,.9));border:1px solid rgba(255,138,0,.22);}
+    .ba-label{display:inline-block;padding:5px 14px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:18px;}
+    .ba-card.before .ba-label{background:rgba(200,60,60,.18);border:1px solid rgba(200,60,60,.28);color:#f88;}
+    .ba-card.after .ba-label{background:rgba(255,138,0,.14);border:1px solid rgba(255,138,0,.28);color:var(--accent2);}
+    .ba-card h3{margin:0 0 16px;font-size:22px;}
+    .ba-list{list-style:none;padding:0;margin:0;display:grid;gap:11px;}
+    .ba-list li{font-size:15px;color:var(--sub);padding-left:20px;position:relative;}
+    .ba-card.before .ba-list li::before{content:"✕";position:absolute;left:0;top:2px;color:#f88;font-size:12px;font-weight:900;}
+    .ba-card.after .ba-list li::before{content:"✓";position:absolute;left:0;top:0;color:var(--accent2);font-weight:900;}
+    .ba-card.after .ba-list li{color:var(--text);}
+
+    #award{scroll-margin-top:90px}
+    .award-section{padding:36px 0 80px;border-top:1px solid rgba(255,255,255,.06);}
+    .award-badge{display:inline-flex;gap:10px;align-items:center;padding:8px 16px;border-radius:999px;background:rgba(255,200,0,.08);border:1px solid rgba(255,200,0,.22);color:#ffd86e;font-size:13px;font-weight:800;letter-spacing:.04em;margin-bottom:20px;}
+    .award-main-img{width:100%;border-radius:20px;overflow:hidden;margin-top:28px;position:relative;box-shadow:0 24px 80px rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.08);}
+    .award-main-img img{width:100%;height:auto;display:block;}
+    .award-main-caption{position:absolute;bottom:0;left:0;right:0;padding:20px 28px;background:linear-gradient(transparent,rgba(0,0,0,.72));font-size:14px;color:rgba(255,255,255,.8);}
+    .award-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:16px;}
+    .award-grid-item{border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 8px 28px rgba(0,0,0,.4);}
+    .award-grid-item img{width:100%;height:auto;display:block;transition:.3s ease;}
+    .award-grid-item:hover img{transform:scale(1.03);}
+    .award-copy{margin-top:22px;color:var(--sub);font-size:15px;font-style:italic;text-align:center;border-top:1px solid rgba(255,255,255,.07);padding-top:20px;}
+    .award-main-img,.award-grid-item{cursor:pointer;}
+    #lightbox{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px;}
+    #lightbox.open{display:flex;}
+    #lightbox img{max-width:100%;max-height:90vh;border-radius:12px;box-shadow:0 32px 80px rgba(0,0,0,.8);object-fit:contain;}
+    #lightbox-close{position:fixed;top:20px;right:24px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:24px;font-weight:300;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s;}
+    #lightbox-close:hover{background:rgba(255,255,255,.2);}
+
+    #products{scroll-margin-top:90px}
+    .products{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:28px;}
+    .product{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.01)),var(--card);border:1px solid rgba(255,255,255,.08);border-radius:24px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;}
+    .product-visual{aspect-ratio:16/10;display:grid;place-items:end start;padding:22px;position:relative;overflow:hidden;}
+    .star-bg{background:linear-gradient(180deg,rgba(7,9,23,.15),rgba(7,9,23,.7)),radial-gradient(circle at 70% 20%,rgba(255,255,255,.22),transparent 12%),radial-gradient(circle at 30% 10%,rgba(255,255,255,.14),transparent 10%),linear-gradient(135deg,#08111f,#182d4a 55%,#381541);}
+    .portrait-bg{background:linear-gradient(180deg,rgba(20,11,14,.1),rgba(20,11,14,.72)),radial-gradient(circle at 30% 30%,rgba(255,209,179,.28),transparent 18%),linear-gradient(135deg,#38222a,#5c3441 52%,#8c5a61);}
+    .sky-bg{background:linear-gradient(180deg,rgba(11,19,30,.1),rgba(11,19,30,.72)),radial-gradient(circle at 75% 22%,rgba(255,210,119,.40),transparent 15%),linear-gradient(135deg,#274261,#446f9b 55%,#f28f45);}
+    .product-tag{position:absolute;top:18px;left:18px;padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.12);font-size:12px;font-weight:800;color:#fff;letter-spacing:.04em;}
+    .product-visual h3{margin:0;font-size:32px;line-height:1;letter-spacing:-.03em;}
+    .product-body{padding:24px;display:flex;flex-direction:column;gap:14px;flex:1;}
+    .product-body p{margin:0;color:var(--sub);font-size:15px;}
+    .price-box{margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;}
+    .trial-label{font-size:13px;color:var(--accent2);font-weight:800;}
+    .cta-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px;}
+
+    #trial{scroll-margin-top:90px}
+    .cta-block{padding:44px;border-radius:28px;background:linear-gradient(135deg,rgba(255,138,0,.14),rgba(255,177,74,.06)),var(--card);border:1px solid rgba(255,138,0,.2);box-shadow:var(--shadow);text-align:center;}
+    .cta-block h2{margin:0 0 14px;font-size:clamp(26px,3.5vw,38px);letter-spacing:-.025em;}
+    .cta-block p{margin:0 auto;color:var(--sub);max-width:600px;font-size:16px;}
+    .cta-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:28px;}
+    .cta-note{margin-top:14px;font-size:13px;color:var(--sub);}
+
+    #commerce{scroll-margin-top:90px;padding:56px 0;border-top:1px solid rgba(255,255,255,.08);}
+    .commerce-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:28px;}
+    .commerce-card{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;}
+    .commerce-card h3{margin:0 0 14px;font-size:16px;color:var(--accent2);}
+    .commerce-card p{margin:0;color:var(--sub);font-size:14px;line-height:1.9;}
+
+    .origin-section{padding:80px 0 88px;background:radial-gradient(circle at 20% 50%,rgba(100,160,255,.05),transparent 40%),linear-gradient(180deg,transparent,rgba(8,14,30,.5) 20%,rgba(8,14,30,.5) 80%,transparent);border-top:1px solid rgba(255,255,255,.06);}
+    .origin-eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:36px;}
+    .origin-year{font-size:13px;font-weight:900;letter-spacing:.12em;padding:6px 14px;border-radius:999px;background:rgba(100,160,255,.1);border:1px solid rgba(100,160,255,.22);color:#8ab4f8;}
+    .origin-label{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;}
+    .origin-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:start;margin-bottom:40px;}
+    .origin-title{margin:0 0 24px;font-size:clamp(24px,3vw,36px);line-height:1.25;letter-spacing:-.025em;}
+    .origin-body{margin:0 0 16px;color:var(--sub);font-size:15px;line-height:1.85;}
+    .origin-body strong{color:var(--text);}
+    .origin-quote{margin-top:28px;padding:20px 24px;border-left:3px solid rgba(100,160,255,.4);background:rgba(100,160,255,.04);border-radius:0 12px 12px 0;font-size:16px;font-weight:700;line-height:1.7;color:var(--text);}
+    .origin-quote span{display:block;margin-top:6px;font-size:13px;font-weight:400;color:var(--sub);}
+    .origin-system{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;margin-bottom:16px;}
+    .origin-system-title{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:18px;}
+    .origin-flow{display:flex;flex-direction:column;gap:0;}
+    .origin-flow-item{padding:10px 14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;font-size:13px;font-weight:700;color:var(--text);}
+    .origin-flow-arrow{text-align:center;color:rgba(100,160,255,.5);font-size:16px;padding:4px 0;}
+    .tech-table{background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:24px;}
+    .tech-table-title{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:16px;}
+    .tech-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+    .tech-row:last-child{border-bottom:none;}
+    .tech-then{font-size:12px;color:var(--sub);font-weight:600;}
+    .tech-arrow{color:rgba(100,160,255,.5);font-weight:900;text-align:center;}
+    .tech-now{font-size:12px;color:#8ab4f8;font-weight:700;}
+
+    .origin-phase2{margin:0 0 40px;background:linear-gradient(135deg,rgba(20,42,32,.55),rgba(18,28,38,.55));border:1px solid rgba(80,200,120,.13);border-radius:24px;padding:36px 36px 32px;}
+    .origin-p2-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+    .origin-p2-year{font-size:13px;font-weight:900;letter-spacing:.12em;padding:6px 14px;border-radius:999px;background:rgba(80,200,120,.1);border:1px solid rgba(80,200,120,.25);color:#6ecf8a;}
+    .origin-p2-label{font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;}
+    .origin-p2-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:start;}
+    .origin-p2-title{margin:0 0 18px;font-size:clamp(20px,2.4vw,28px);line-height:1.3;letter-spacing:-.02em;}
+    .vcd-card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:22px;}
+    .vcd-card-title{font-size:11px;font-weight:800;letter-spacing:.1em;color:var(--sub);text-transform:uppercase;margin-bottom:14px;}
+    .vcd-row{display:grid;grid-template-columns:30px 72px 1fr auto;gap:8px;align-items:center;padding:9px 12px;border-radius:10px;margin-bottom:6px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);font-size:13px;}
+    .vcd-row.mine{background:rgba(80,200,120,.06);border-color:rgba(80,200,120,.22);}
+    .vcd-abbr{font-weight:900;font-size:12px;color:var(--sub);}
+    .vcd-row.mine .vcd-abbr{color:#6ecf8a;}
+    .vcd-name{font-weight:700;color:var(--text);font-size:13px;}
+    .vcd-desc{color:var(--sub);font-size:12px;}
+    .vcd-mine-badge{font-size:10px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:999px;background:rgba(80,200,120,.18);color:#6ecf8a;white-space:nowrap;}
+    .vcd-scale{margin-top:12px;padding:11px 14px;border-radius:10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);font-size:12px;color:var(--sub);text-align:center;line-height:1.7;}
+    .origin-bridge{margin-top:24px;padding:16px 20px;border-left:3px solid rgba(80,200,120,.35);background:rgba(80,200,120,.04);border-radius:0 12px 12px 0;font-size:14px;color:var(--sub);line-height:1.85;}
+    .origin-bridge strong{color:var(--text);}
+
+    .origin-connect{border-top:1px solid rgba(255,255,255,.06);padding-top:36px;}
+    .origin-connect-inner{max-width:760px;}
+    .origin-connect-label{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent2);margin-bottom:12px;}
+    .origin-connect-inner p{margin:0;color:var(--sub);font-size:16px;line-height:1.9;}
+
+    .footer{padding:32px 0 60px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:980px){
+      .feature-grid,.products{grid-template-columns:1fr;}
+      .award-grid{grid-template-columns:repeat(2,1fr);}
+      .ba-grid{grid-template-columns:1fr;}
+      .origin-p2-grid{grid-template-columns:1fr;}
+      .vcd-row{grid-template-columns:28px 64px 1fr;}
+      .vcd-mine-badge{display:none;}
+    }
+    @media(max-width:768px){
+      .award-grid{grid-template-columns:repeat(2,1fr);}
+      .origin-grid{grid-template-columns:1fr;}
+    }
+    @media(max-width:640px){
+      .wrap{width:min(var(--max),calc(100% - 24px));}
+      .nav{display:none;}
+      .hero{padding:56px 0 34px;}
+      .btn{width:100%;}
+      .mini{width:auto;}
+      .cta-row .btn,.cta-actions .btn{width:auto;}
+      .cta-block{padding:28px 20px;}
+      .award-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="../index.html" class="brand">
+        <div class="brand-mark">S</div>
+        <div class="brand-text">
+          <span>Sidekick</span>
+          <small>PHOTO WORKFLOW TOOLS</small>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="sidekick-star.html">⭐ Star</a>
+        <a href="portrait.html">👤 Portrait</a>
+        <a href="sky-effect.html">☁️ Sky</a>
+        <a href="../workshop.html">📷 Workshop</a>
+        <a href="lp-star.html" style="color:var(--sub);">LP</a>
+        <a href="gallery.html" style="color:var(--sub);">Gallery</a>
+        <a href="sidekick.html" style="color:#fff;">What is Sidekick</a>
+        <a href="about.html" style="color:var(--sub);">About</a>
+        <a href="changelog.html" style="color:var(--sub);">Changelog</a>
+        <a href="../faq.html" style="color:var(--sub);">Support</a>
+        <a href="../sidekick.html" style="color:var(--sub);">🇯🇵 JA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Photographer's judgment, turned into a tool / 3-month free trial</div>
+
+        <h1 class="hero-title">
+          More time disappears<br>
+          <em>after the shot</em> than during it.
+        </h1>
+
+        <p class="hero-sub">
+          If you're burning out on the same decisions every time, it's faster to encode those decisions into a tool.
+        </p>
+
+        <p class="hero-desc">
+          Sidekick is a set of practical tools for photographers that gradually take over the
+          enormous volume of decisions that follow a shoot.<br>
+          Star landscape, light-stacking, mask processing — not presets. Judgment support.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/register-dl.html?product=star&src=sidekick-en">
+            ▶ Try Free for 3 Months
+          </a>
+          <a class="btn btn-secondary" href="#features">What decisions does it take over?</a>
+        </div>
+
+        <div class="hero-note">No credit card required · Install by unzipping</div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Not presets — <em style="font-style:normal;color:var(--accent2)">judgment</em> support</h2>
+          <p>Culling, masking, compositing — let the tool take over the decisions you keep repeating.</p>
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🌌</div>
+            <h3>Light-stacking in one click</h3>
+            <p>
+              Automates multi-frame light-stacking from end to end.
+              Eliminates hesitation over steps and processing errors, even with large batches of star material.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">🎭</div>
+            <h3>Auto mask generation</h3>
+            <p>
+              Generates star masks and sky masks automatically.
+              Sky/ground separation, light pollution correction — decisions you used to agonize over, handled in one step.
+            </p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Unified workflow</h3>
+            <p>
+              Consolidates scattered processing steps into a single script.
+              Pushes the time you used to spend re-deciding everything from scratch toward zero.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="before-after" style="padding-top:0">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Before and after Sidekick</h2>
+          <p>Processing the same material takes less time and fewer decisions.</p>
+        </div>
+
+        <div class="ba-grid">
+          <div class="ba-card before">
+            <span class="ba-label">BEFORE</span>
+            <h3>Without Sidekick</h3>
+            <ul class="ba-list">
+              <li>Looking up light-stacking steps every session</li>
+              <li>Remaking masks by hand multiple times</li>
+              <li>Stalling on light pollution correction decisions</li>
+              <li>Repeating the same operation on dozens of frames</li>
+              <li>More time developing than shooting</li>
+            </ul>
+          </div>
+
+          <div class="ba-card after">
+            <span class="ba-label">AFTER</span>
+            <h3>With Sidekick</h3>
+            <ul class="ba-list">
+              <li>Light-stacking finished with one button</li>
+              <li>Sky and star masks generated automatically</li>
+              <li>Light pollution correction becomes a defined routine</li>
+              <li>Script handles large frame batches</li>
+              <li>Time saved on decisions goes into the creative work</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="trial">
+      <div class="wrap">
+        <div class="cta-block">
+          <h2>Try it free for 3 months.</h2>
+          <p>
+            Reading about it will only get you so far.
+            Download it, run it on your own material, and see whether it fits your workflow.
+          </p>
+          <div class="cta-actions">
+            <a class="btn btn-primary"
+               href="/register-dl.html?product=star&src=sidekick-en">
+              Try Free for 3 Months (Sidekick Star)
+            </a>
+            <a class="btn btn-secondary" href="#products">See all products</a>
+          </div>
+          <div class="cta-note">No credit card · Just add to Photoshop · Purchase price ¥9,800 (tax included)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="products" style="padding-top:0">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Sidekick Series — All Products</h2>
+          <p>Three modules, each built for a different genre.</p>
+        </div>
+
+        <div class="products">
+
+          <article class="product">
+            <div class="product-visual star-bg">
+              <div class="product-tag">STARSCAPE</div>
+              <h3>Sidekick Star</h3>
+            </div>
+            <div class="product-body">
+              <p>
+                For star landscape. Automates the entire star landscape workflow — light-stacking, sky masking, light pollution correction, and more.
+              </p>
+              <div class="price-box">
+                <div>
+                  <div class="trial-label">3-month free trial</div>
+                  <div style="font-size:13px;color:var(--sub);">¥9,800 (tax included)</div>
+                </div>
+                <div class="cta-row">
+                  <a class="btn btn-secondary mini" href="sidekick-star.html">Details</a>
+                  <a class="btn btn-primary mini"
+                     href="/register-dl.html?product=star&src=sidekick-en">
+                    Try it
+                  </a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="product-visual portrait-bg">
+              <div class="product-tag">PORTRAIT</div>
+              <h3>Sidekick Portrait</h3>
+            </div>
+            <div class="product-body">
+              <p>
+                For portrait. Guides skin, color, and dimensionality toward your intended direction. A Sidekick for portrait processing.
+              </p>
+              <div class="price-box">
+                <div>
+                  <div class="trial-label">90-day free trial</div>
+                  <div style="font-size:13px;color:var(--sub);">¥4,800 (tax included)</div>
+                </div>
+                <div class="cta-row">
+                  <a class="btn btn-secondary mini" href="portrait.html">Details</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="product">
+            <div class="product-visual sky-bg">
+              <div class="product-tag">SKY EFFECT</div>
+              <h3>Sidekick Sky Effect</h3>
+            </div>
+            <div class="product-body">
+              <p>
+                For sky expression. Streamlines cloud, light, and sky impression work for sky-led finishing.
+              </p>
+              <div class="price-box">
+                <div>
+                  <div class="trial-label">30-day free trial</div>
+                  <div style="font-size:13px;color:var(--sub);">¥980 (tax included)</div>
+                </div>
+                <div class="cta-row">
+                  <a class="btn btn-secondary mini" href="sky-effect.html">Details</a>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+  <section class="award-section" id="award">
+    <div class="wrap">
+      <div class="award-badge">🏆 Developer's photography credentials</div>
+
+      <div class="section-head">
+        <h2>Ichiro Murata — 1X Award-winning photographer (including Top 5)</h2>
+        <p>1X is one of the world's most selective curated photography platforms — only a few percent of submitted works are accepted. Murata has won Award ×5 across architecture and fine art categories, including Top 5 selections.<br>
+        Sidekick grew from the same eye and judgment behind that work.</p>
+      </div>
+
+      <div class="award-main-img" onclick="openLightbox('../images/awards/3086530.jpg')">
+        <img src="../images/awards/3086530.jpg" alt="1X Award work — Ichiro Murata" loading="lazy">
+        <div class="award-main-caption">Featured Award Work — click to enlarge</div>
+      </div>
+
+      <div class="award-grid">
+        <div class="award-grid-item" onclick="openLightbox('../images/awards/3083835.jpg')">
+          <img src="../images/awards/3083835.jpg" alt="1X Award work 1 — Ichiro Murata" loading="lazy">
+        </div>
+        <div class="award-grid-item" onclick="openLightbox('../images/awards/3102187.jpg')">
+          <img src="../images/awards/3102187.jpg" alt="1X Award work 2 — Ichiro Murata" loading="lazy">
+        </div>
+        <div class="award-grid-item" onclick="openLightbox('../images/awards/3095761.jpg')">
+          <img src="../images/awards/3095761.jpg" alt="1X Award work 3 — Ichiro Murata" loading="lazy">
+        </div>
+        <div class="award-grid-item" onclick="openLightbox('../images/awards/3095833.jpg')">
+          <img src="../images/awards/3095833.jpg" alt="1X Award work 4 — Ichiro Murata" loading="lazy">
+        </div>
+      </div>
+
+      <p class="award-copy">
+        "Selected and awarded on 1X — one of the world's most curated photography platforms. The judgment behind the lens is the same judgment behind Sidekick."
+      </p>
+    </div>
+  </section>
+
+    <section class="origin-section">
+      <div class="wrap">
+
+        <div class="origin-eyebrow">
+          <span class="origin-year">1985</span>
+          <span class="origin-label">ORIGIN — Where the technology began</span>
+        </div>
+
+        <div class="origin-grid">
+          <div class="origin-text">
+            <h2 class="origin-title">
+              It started not with viewing images,<br>
+              but with generating and analyzing them.
+            </h2>
+
+            <p class="origin-body">
+              While studying at Tokai University's School of Marine Science and Technology,
+              Murata participated as an external research student at the
+              Mikio Takagi Laboratory, University of Tokyo Institute of Industrial Science.
+              The theme was thermal infrared image processing from NOAA weather satellites.
+            </p>
+
+            <p class="origin-body">
+              The core of the research: extracting motion vectors of warm water masses from two satellite images taken at different times, and visualizing early signs of El Niño.
+              Language: PL/I. Hardware: frame buffer image processor (512×512).
+              Images were generated line by line, drawn onto a CRT.
+            </p>
+
+            <p class="origin-body">
+              Processing time: about 1–2 minutes per image. Other universities needed hours or a full day for equivalent work — this was genuinely cutting-edge.
+              Results were presented at the <strong>Television Society of Japan (1986)</strong>.
+            </p>
+
+            <div class="origin-quote">
+              "Converting invisible phenomena into images through computation"<br>
+              <span>— This idea is the essence of what Sidekick does.</span>
+            </div>
+          </div>
+
+          <div class="origin-right">
+            <div class="origin-system">
+              <div class="origin-system-title">System configuration (1985)</div>
+              <div class="origin-flow">
+                <div class="origin-flow-item">📡 NOAA satellite reception (parabolic antenna)</div>
+                <div class="origin-flow-arrow">↓</div>
+                <div class="origin-flow-item">💾 9-track magnetic tape recording</div>
+                <div class="origin-flow-arrow">↓</div>
+                <div class="origin-flow-item">🖥 PL/I processing (Fujitsu FACOM)</div>
+                <div class="origin-flow-arrow">↓</div>
+                <div class="origin-flow-item">📺 Frame buffer → NTSC CRT display</div>
+                <div class="origin-flow-arrow">↓</div>
+                <div class="origin-flow-item">📷 Polaroid / slide film capture</div>
+              </div>
+            </div>
+
+            <div class="tech-table">
+              <div class="tech-table-title">Then → Now</div>
+              <div class="tech-row">
+                <span class="tech-then">Frame buffer</span>
+                <span class="tech-arrow">→</span>
+                <span class="tech-now">GPU</span>
+              </div>
+              <div class="tech-row">
+                <span class="tech-then">PL/I</span>
+                <span class="tech-arrow">→</span>
+                <span class="tech-now">Python / JavaScript</span>
+              </div>
+              <div class="tech-row">
+                <span class="tech-then">Block matching</span>
+                <span class="tech-arrow">→</span>
+                <span class="tech-now">Optical Flow / AI</span>
+              </div>
+              <div class="tech-row">
+                <span class="tech-then">Magnetic tape</span>
+                <span class="tech-arrow">→</span>
+                <span class="tech-now">Cloud</span>
+              </div>
+              <div class="tech-row">
+                <span class="tech-then">CRT photography (film)</span>
+                <span class="tech-arrow">→</span>
+                <span class="tech-now">Screen capture</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="origin-phase2">
+          <div class="origin-p2-eyebrow">
+            <span class="origin-p2-year">1986 – c.2006</span>
+            <span class="origin-p2-label">Phase 2 — As a circuit designer</span>
+          </div>
+
+          <div class="origin-p2-grid">
+            <div class="origin-p2-text">
+              <h3 class="origin-p2-title">
+                Designing the "color" of television<br>as a circuit, into mass production.
+              </h3>
+
+              <p class="origin-body">
+                Joined Toshiba Audio Video Engineering Co., Ltd. (Toshiba AVE) as a 5th-cohort hire.
+                Assigned to <strong>Toshiba Fukaya Factory</strong> in Saitama Prefecture —
+                an integrated line from TV and VTR design through mass production.
+              </p>
+
+              <p class="origin-body">
+                Primary role: design and mass production of <strong>V/C/D ICs for consumer televisions</strong> —
+                a chip integrating Video, Chroma, and Deflection circuits.
+                <strong>Deflection (sync) and I²C-BUS</strong> were his main responsibilities,
+                handled from design through evaluation through production handoff for about 20 years.
+              </p>
+
+              <p class="origin-body">
+                In the 4:3 CRT era, the "color and brightness" in Japan's living rooms
+                was designed and shipped from this line.
+              </p>
+
+              <div class="origin-bridge">
+                Around 2006, after roughly 20 years as an engineer, <strong>he went independent</strong>.
+                Large-format mountain photography, which he had started before that,
+                shifted to digital with the <strong>Nikon D1</strong> released in 1999.
+                He has worked as a photographer ever since.
+              </div>
+            </div>
+
+            <div>
+              <div class="vcd-card">
+                <div class="vcd-card-title">VCD IC — Areas of responsibility</div>
+                <div class="vcd-row">
+                  <span class="vcd-abbr">V</span>
+                  <span class="vcd-name">VIDEO</span>
+                  <span class="vcd-desc">Luminance signal processing</span>
+                  <span></span>
+                </div>
+                <div class="vcd-row">
+                  <span class="vcd-abbr">C</span>
+                  <span class="vcd-name">CHROMA</span>
+                  <span class="vcd-desc">Color difference / saturation</span>
+                  <span></span>
+                </div>
+                <div class="vcd-row mine">
+                  <span class="vcd-abbr">D</span>
+                  <span class="vcd-name">DEFL.</span>
+                  <span class="vcd-desc">Sync / deflection</span>
+                  <span class="vcd-mine-badge">Primary</span>
+                </div>
+                <div class="vcd-row mine">
+                  <span class="vcd-abbr">I²C</span>
+                  <span class="vcd-name">BUS</span>
+                  <span class="vcd-desc">Control bus design</span>
+                  <span class="vcd-mine-badge">Primary</span>
+                </div>
+                <div class="vcd-scale">
+                  ICs went into mass production<br>and shipped in millions of consumer TVs
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="origin-connect">
+          <div class="origin-connect-inner">
+            <div class="origin-connect-label">1985 → 2006 → NOW</div>
+            <p>
+              Turning invisible ocean movement into numbers from satellite imagery.
+              Designing the signal of "color" as a circuit for television.
+              Selecting "the moment of light" as a photographer.<br><br>
+              <strong style="color:var(--text);">All of it shares one thing: the judgment of what to keep and what to discard from an enormous amount of information.</strong><br>
+              Sidekick is an attempt to put that judgment outside, into a tool.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <section id="commerce">
+    <div class="wrap">
+      <h2 style="margin:0 0 8px;font-size:clamp(22px,3vw,30px);letter-spacing:-.02em;">About purchasing</h2>
+      <p style="margin:0 0 0;color:var(--sub);font-size:14px;">Transaction information</p>
+
+      <div class="commerce-grid">
+
+        <div class="commerce-card">
+          <h3>Products & Pricing</h3>
+          <p>
+            Sidekick Star (star landscape): ¥9,800 (tax included)<br>
+            Sidekick Portrait (portrait): ¥4,800 (tax included)<br>
+            Sidekick Sky Effect (sky expression): ¥980 (tax included)<br>
+            <br>
+            All products include a free trial period.
+          </p>
+        </div>
+
+        <div class="commerce-card">
+          <h3>Payment & Delivery</h3>
+          <p>
+            <strong style="color:var(--text);">Payment:</strong> Online payment (Stripe)<br>
+            <strong style="color:var(--text);">Timing:</strong> Charged at the time of order<br>
+            <strong style="color:var(--text);">Delivery:</strong> Download link sent immediately after payment<br>
+            <strong style="color:var(--text);">When:</strong> Immediately after payment completes
+          </p>
+        </div>
+
+        <div class="commerce-card">
+          <h3>Returns & Contact</h3>
+          <p>
+            <strong style="color:var(--text);">Returns/refunds:</strong> Due to the nature of digital content, returns and refunds are not available as a rule. Confirmed defects will be handled individually.<br>
+            <br>
+            <strong style="color:var(--text);">Contact:</strong><br>
+            <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);">murata@mbg.nifty.com</a>
+          </p>
+        </div>
+
+      </div>
+
+      <p style="margin:22px 0 0;font-size:13px;color:var(--sub);">
+        Seller information and legal disclosures:
+        <a href="../legal.html" style="color:var(--accent2);text-decoration:underline;">Legal notice</a>
+        ／
+        <a href="../privacy.html" style="color:var(--accent2);text-decoration:underline;">Privacy policy</a>
+      </p>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div style="line-height:1.9;">
+        <div>© Sidekick — Ichiro Murata</div>
+        <div style="font-size:13px;">Contact: <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;font-size:13px;">
+        <div>Star Landscape / Portrait / Sky Effect</div>
+        <div style="display:flex;gap:16px;">
+          <a href="../legal.html" style="color:var(--sub);">Legal</a>
+          <a href="../privacy.html" style="color:var(--sub);">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="lightbox" onclick="closeLightbox()">
+    <button id="lightbox-close" onclick="closeLightbox()">✕</button>
+    <img id="lightbox-img" src="" alt="Enlarged view">
+  </div>
+
+  <script>
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+  </script>
+
+</body>
+</html>

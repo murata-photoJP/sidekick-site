@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/en/changelog.html">
+  <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/changelog.html">
+  <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/changelog.html">
+  <title>Changelog | Sidekick</title>
+  <meta name="description" content="Sidekick version history and website updates. A log of feature additions, bug fixes, and site improvements.">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --muted:#5e6677;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --line:#2a2f3a;
+      --max:860px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:radial-gradient(circle at top right,rgba(255,138,0,.10),transparent 26%),var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .site-header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);background:rgba(11,11,13,.72);border-bottom:1px solid rgba(255,255,255,.06);}
+    .site-header .wrap{width:min(1100px,calc(100% - 40px));}
+    .header-inner{display:flex;justify-content:space-between;align-items:center;gap:20px;min-height:72px;max-width:1100px;}
+    .brand{display:flex;align-items:center;gap:14px;font-weight:800;letter-spacing:.02em;}
+    .brand-mark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:grid;place-items:center;color:#111;font-weight:900;}
+    .brand-text{display:flex;flex-direction:column;line-height:1.1;}
+    .brand-text small{color:var(--sub);font-size:12px;font-weight:600;letter-spacing:.08em;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover{color:#fff}
+
+    .page-head{padding:72px 0 48px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .page-head .eyebrow{display:inline-flex;gap:10px;align-items:center;padding:7px 14px;border-radius:999px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:18px;}
+    .page-head h1{margin:0 0 12px;font-size:clamp(28px,4vw,40px);letter-spacing:-.025em;}
+    .page-head p{margin:0;color:var(--sub);font-size:16px;max-width:600px;}
+
+    .filter-row{display:flex;gap:10px;flex-wrap:wrap;padding:28px 0 0;}
+    .filter-btn{padding:7px 16px;border-radius:999px;font-size:13px;font-weight:700;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:transparent;color:var(--sub);transition:.15s ease;}
+    .filter-btn:hover,.filter-btn.active{background:rgba(255,138,0,.12);border-color:rgba(255,138,0,.3);color:var(--accent2);}
+
+    .timeline{padding:48px 0 80px;display:grid;gap:0;}
+
+    .entry{display:grid;grid-template-columns:140px 1fr;gap:0 28px;position:relative;}
+    .entry::after{content:"";position:absolute;left:140px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,rgba(255,255,255,.10),rgba(255,255,255,.04));}
+    .entry:first-child::after{top:28px;}
+    .entry:last-child::after{bottom:calc(100% - 28px);}
+
+    .entry-date{text-align:right;padding:28px 28px 0 0;position:relative;}
+    .entry-date time{display:block;font-size:13px;font-weight:700;color:var(--sub);letter-spacing:.02em;}
+    .entry-date::after{content:"";position:absolute;right:-6px;top:36px;width:11px;height:11px;border-radius:50%;background:var(--card);border:2px solid var(--line);z-index:1;}
+    .entry[data-type="sidekick"] .entry-date::after{border-color:var(--accent);background:rgba(255,138,0,.2);}
+    .entry[data-type="site"] .entry-date::after{border-color:#6c8cff;background:rgba(108,140,255,.2);}
+
+    .entry-body{padding:24px 0 32px;}
+    .entry-tag{display:inline-block;padding:4px 12px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.06em;margin-bottom:10px;}
+    .tag-sidekick{background:rgba(255,138,0,.12);border:1px solid rgba(255,138,0,.24);color:var(--accent2);}
+    .tag-site{background:rgba(108,140,255,.10);border:1px solid rgba(108,140,255,.22);color:#a0b4ff;}
+    .entry-body h2{margin:0 0 8px;font-size:18px;letter-spacing:-.01em;}
+    .entry-body p{margin:0 0 0;color:var(--sub);font-size:15px;}
+    .entry-body ul{margin:10px 0 0;padding:0 0 0 18px;color:var(--sub);font-size:15px;display:grid;gap:6px;}
+    .entry-body li{padding-left:4px;}
+
+    .footer{padding:28px 0 48px;border-top:1px solid rgba(255,255,255,.06);color:var(--sub);font-size:14px;}
+    .footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+
+    .entry.hidden{display:none}
+
+    @media(max-width:640px){
+      .entry{grid-template-columns:1fr;}
+      .entry::after{display:none}
+      .entry-date{text-align:left;padding:28px 0 0;}
+      .entry-date::after{display:none}
+      .entry-body{padding-top:8px;}
+      .nav{display:none}
+    }
+  </style>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sidekick">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="Changelog | Sidekick">
+  <meta property="og:description" content="Sidekick version history and website updates.">
+  <meta property="og:url" content="https://www.sidekick-lab.com/en/changelog.html">
+  <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="../index.html" class="brand">
+      <div class="brand-mark">S</div>
+      <div class="brand-text">
+        <span>Sidekick</span>
+        <small>PHOTO WORKFLOW TOOLS</small>
+      </div>
+    </a>
+    <nav class="nav">
+      <a href="sidekick-star.html">⭐ Star</a>
+      <a href="portrait.html">👤 Portrait</a>
+      <a href="sky-effect.html">☁️ Sky</a>
+      <a href="../workshop.html">📷 Workshop</a>
+      <a href="lp-star.html" style="color:var(--muted);">LP</a>
+      <a href="gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="about.html" style="color:var(--muted);">About</a>
+      <a href="changelog.html" style="color:#fff;">Changelog</a>
+      <a href="../faq.html" style="color:var(--muted);">Support</a>
+      <a href="../changelog.html" style="color:var(--muted);">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="page-head">
+      <div class="eyebrow">CHANGELOG</div>
+      <h1>Changelog</h1>
+      <p>Version updates for Sidekick tools and changes to the website.</p>
+
+      <div class="filter-row">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="sidekick">Sidekick</button>
+        <button class="filter-btn" data-filter="site">Site</button>
+      </div>
+    </div>
+
+    <div class="timeline" id="timeline">
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-28</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">Site</span>
+          <h2>English pages added</h2>
+          <ul>
+            <li>Added English versions of the full site. Switch via the banner on the Japanese top page.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-06-28</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Auto white balance fix for light-stacking · UI in English</h2>
+          <ul>
+            <li>Fixed an issue where the automatic white balance during light-stacking was drifting from the intended target color. Stars and Milky Way now finish in more natural tones.</li>
+            <li>Control panel UI now supports English. Usable in non-Japanese environments.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-06-28</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK PORTRAIT</span>
+          <h2>Ver.2 update — GUI overhaul, quality improvements</h2>
+          <ul>
+            <li>Complete GUI redesign. Panel layout and usability improved; versioned as Ver.2.</li>
+            <li>Fixed issue in standard mode where white lift and soft-focus artifacts appeared.</li>
+            <li>License management unified with Portrait Ver.1 for more stable operation.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-28</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">AI Photo Critique</span>
+          <h2>AI Photo Critique: consent checkbox added</h2>
+          <ul>
+            <li>Added a consent checkbox for use of critique results (e.g. for marketing reference).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-25</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">AI Photo Critique</span>
+          <h2>AI Photo Critique officially launched</h2>
+          <ul>
+            <li>Sign in with Google, upload a photo, and receive a composition critique in Ichiro Murata's style. Official release.</li>
+            <li>Free users: up to 5 photos/week (campaign period: through August 2026)</li>
+            <li>Sample critique card updated with a real motorsport panning shot and actual AI critique text.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-25</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">Site</span>
+          <h2>Full site redesign</h2>
+          <ul>
+            <li>Complete design and structure overhaul — cleaner, easier to navigate.</li>
+            <li>Official product pages for Sidekick Portrait and Sidekick SkyEffect launched.</li>
+            <li>Workshop, gallery, FAQ, and AI Photo Critique pages added progressively.</li>
+            <li>Navigation and footer unified across all pages.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-25</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">Site</span>
+          <h2>Download registration form added · Workshop page redesigned</h2>
+          <ul>
+            <li>Email address now required for free download. Used to send updates and important notices (unsubscribe anytime).</li>
+            <li>Workshop page redesigned. Current open workshops shown at the top for easy registration access.</li>
+            <li>Fixed broken links on Portrait / SkyEffect pricing pages.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-23</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">Site</span>
+          <h2>Migrated to custom domain sidekick-lab.com</h2>
+          <ul>
+            <li>Acquired custom domain <strong>sidekick-lab.com</strong>. Site address has changed.</li>
+            <li>Old URL (vercel.app subdomain) redirects automatically.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-06-21</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR / PORTRAIT / SKY EFFECT</span>
+          <h2>UX fix: Cancel button added to trial expiry dialog</h2>
+          <ul>
+            <li>Added a Cancel button to the trial-expired dialog. Also closeable with the ESC key.</li>
+            <li>Previously the only option was force-quitting Photoshop.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-06-19</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Bug fixes: GPU support, airplane removal stability</h2>
+          <ul>
+            <li>Fixed AI mask generation producing 0 results on non-GPU / older GPU environments (auto-fallback to CPU).</li>
+            <li>Fixed freeze when opening LZW-compressed TIFF files.</li>
+            <li>Fixed cases where airplane removal did not complete properly.</li>
+            <li>Improved to prefer the bundled Python runtime (_runtime) over system Python.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-06</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <p>New "About" page (about.html) added. On the origin behind the photography and Sidekick development.</p>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-06-05</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>Site-wide improvements and user flow redesign</h2>
+          <ul>
+            <li>Airplane trail removal comparison video added to top page and LP (compressed 337MB → 9.3MB)</li>
+            <li>Workshop page redesigned around: pain → Star×Workshop relationship → what you'll be able to do</li>
+            <li>Workshop page: photo illustrations added for each workshop</li>
+            <li>Top page and LP: Workshop bridge section added</li>
+            <li>Workshop page: Sep 5 "Star Landscape Spinoff — Finishing Star Photos Beautifully in Photoshop" added</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-05-31</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Bug fixes</h2>
+          <ul>
+            <li>Minor bug fixes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-05-31</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>Download infrastructure improved · Workshop page launched</h2>
+          <ul>
+            <li>Download links migrated from Google Drive to Cloudflare R2 (resolves download failures)</li>
+            <li>New Workshop page (upcoming sessions and past history)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-05-27</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Bug fix</h2>
+          <ul>
+            <li>Fixed issue where directory selection for light-stacking target was not working</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-05-27</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>index.html conversion-rate redesign</h2>
+          <ul>
+            <li>H1 changed to pain-question format: "Still removing airplane trails by hand?"</li>
+            <li>Hero rebuilt with B/A pair as the main visual</li>
+            <li>Stat bar added: "1 week+" (red) → "Overnight" (green)</li>
+            <li>Pain section compressed to 3 short inner-monologue quote cards</li>
+            <li>New FAQ section (generative AI use, auto-billing, PS version support, no cloud upload)</li>
+            <li>Other products area: vertical cards → horizontal compact layout</li>
+            <li>CTA hierarchy reorganized: Try → LP detail → Examples → Buy (ghost)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-05-27</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>lp-star.html Round 3 redesign</h2>
+          <ul>
+            <li>H1 changed to direct pain-question</li>
+            <li>Full-width B/A hero section placed immediately after the hero</li>
+            <li>Pain section rebuilt: quote-wall (4 cards) + pain-details (4 cards)</li>
+            <li>Developer section: award photo large on left, AI clarification block on right</li>
+            <li>Header CTA changed to direct DL link</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-05-26</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>lp-star.html full redesign</h2>
+          <ul>
+            <li>Page structure overhauled: pain points placed early, Before/After as main feature</li>
+            <li>Milky Way Before/After (uncorrected vs Sidekick Star) featured prominently</li>
+            <li>Airplane trail removal Before/After incorporated into features section</li>
+            <li>Light-stacking Before/After added (1 frame vs 3800 frames)</li>
+            <li>Explicit "no generative AI" section added (AI detects; same pixel-replacement logic as manual work)</li>
+            <li>Award-winning photographer section made standalone</li>
+            <li>Manual link updated to PDF (from old HTML page)</li>
+            <li>Hero image changed from CSS pseudo-starfield to real Milky Way photo</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-05-26</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR / PORTRAIT / SKY EFFECT</span>
+          <h2>Bug-fix release for all tools · DL links updated</h2>
+          <ul>
+            <li>Sidekick Star: replaced with bug-fix version</li>
+            <li>Sidekick Portrait: replaced with bug-fix version</li>
+            <li>Sidekick Sky Effect: replaced with bug-fix version (3 updates)</li>
+            <li>Sky Effect: 3 style names changed from "Preset" → "Intent"</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-05-26</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>Page enhancements · Manuals published</h2>
+          <ul>
+            <li>Portrait: real-photo gallery of 14 styles added (click to enlarge)</li>
+            <li>Sky Effect: example gallery expanded from 2 to 6 scenes</li>
+            <li>Japanese and English manual PDFs linked on all product pages</li>
+            <li>lp-star.html: OGP tags added (Twitter/X card support)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-05-16</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK SKY EFFECT</span>
+          <h2>Clear Sky intent added</h2>
+          <ul>
+            <li>Added "Clear Sky" intent to SkyEffects</li>
+            <li>Sky WB: 4800K / -15, Ground WB: 5500K / 0 for vivid blue sky</li>
+            <li>Blend mode set to COLORBLEND to further emphasize the blue</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-05-16</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>Sky Effect & Portrait sales pages launched · Purchase flow set up</h2>
+          <ul>
+            <li>sky-effect.html updated from "coming soon" to full product page</li>
+            <li>buy-sky.html and buy-portrait.html added (email collection → Stripe)</li>
+            <li>thanks-sky.html and thanks-portrait.html (post-purchase pages) added</li>
+            <li>buy-star.html: email collection flow added (integrated with Stripe Payment Link)</li>
+            <li>Portrait and Sky Effect hero CTA changed from "See examples" → "Buy"</li>
+            <li>index.html: "coming soon" badges removed, pricing and trial periods shown</li>
+            <li>index.html: "Changelog" link added to nav and footer</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-04-21</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>LP redesign · New pages</h2>
+          <ul>
+            <li>Hero copy refreshed</li>
+            <li>Before / After section added</li>
+            <li>1X Award winning works section added</li>
+            <li>Gallery page (gallery.html) added</li>
+            <li>Changelog page (changelog.html) added</li>
+            <li>Images reorganized under <code>images/awards/</code></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-03-24</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Manual bundled with Sidekick Star download</h2>
+          <ul>
+            <li>Manual PDF included in the trial download package</li>
+            <li>Script operation confirmed; Photoshop Beta compatibility verified</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="site">
+        <div class="entry-date"><time>2026-03-21</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-site">SITE</span>
+          <h2>Site first deploy (Vercel)</h2>
+          <ul>
+            <li>index.html, star.html, legal.html, privacy.html published</li>
+            <li>Stripe payment flow setup started</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date"><time>2026-03-14</time></div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>Sidekick Star initial release (trial)</h2>
+          <ul>
+            <li>Light-stacking script implemented</li>
+            <li>Sky mask and star mask auto-generation</li>
+            <li>Light pollution correction workflow integrated</li>
+            <li>Released as 3-month trial license</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div>© Sidekick — Ichiro Murata</div>
+    <div style="display:flex;gap:16px;font-size:13px;">
+      <a href="../legal.html" style="color:var(--sub);">Legal</a>
+      <a href="../privacy.html" style="color:var(--sub);">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const entries = document.querySelectorAll('.entry');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      entries.forEach(e => {
+        e.classList.toggle('hidden', f !== 'all' && e.dataset.type !== f);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
