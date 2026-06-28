@@ -4,8 +4,14 @@
   "redirects": [
     {
       "source": "/(.*)",
+      "has": [{ "type": "host", "value": "sidekick-lab.com" }],
+      "destination": "https://www.sidekick-lab.com/$1",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
       "has": [{ "type": "host", "value": "sidekick-site-tawny.vercel.app" }],
-      "destination": "https://sidekick-lab.com/$1",
+      "destination": "https://www.sidekick-lab.com/$1",
       "permanent": true
     }
   ]

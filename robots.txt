@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sidekick-lab.com/sitemap.xml
+Sitemap: https://www.sidekick-lab.com/sitemap.xml
