@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/en/faq.html">
+  <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/faq.html">
+  <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/faq.html">
+  <title>FAQ / Support — Sidekick</title>
+  <meta name="description" content="Sidekick FAQ and troubleshooting. Answers to common questions about RAW processing, light-stacking, GPU/AI processing, airplane trail removal, and more.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sidekick">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="FAQ / Support — Sidekick">
+  <meta property="og:description" content="Answers to common questions about Sidekick — RAW processing, light-stacking, GPU/AI, airplane removal, and more.">
+  <meta property="og:url" content="https://www.sidekick-lab.com/en/faq.html">
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .hdr{
+      position:sticky;top:0;z-index:40;
+      background:rgba(9,9,12,.9);backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hdr-in{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;}
+    .brand-mk{
+      width:36px;height:36px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;font-size:14px;flex-shrink:0;
+    }
+    .brand-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;display:block;margin-top:1px;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover,.nav a.active{color:#fff}
+    .nav-dl{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 15px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#111;font-size:13px;font-weight:800;white-space:nowrap;
+      box-shadow:0 4px 14px rgba(255,138,0,.28);transition:.15s;
+    }
+    .nav-dl:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(255,138,0,.38);}
+
+    .page-hero{
+      padding:72px 0 56px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:680px;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(28px,4.5vw,50px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:20px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-lead{color:var(--sub);font-size:clamp(15px,1.8vw,17px);line-height:1.85;}
+
+    .faq-body{padding:64px 0 96px;}
+    .faq-inner{max-width:760px;}
+
+    .faq-cat{
+      display:flex;align-items:center;gap:12px;
+      margin:52px 0 20px;
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.07);
+      font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
+      color:var(--muted);
+    }
+    .faq-cat:first-of-type{margin-top:0;padding-top:0;border-top:none;}
+    .faq-cat-icon{
+      width:30px;height:30px;border-radius:8px;
+      background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.2);
+      display:grid;place-items:center;font-size:14px;flex-shrink:0;
+    }
+
+    .faq-item{
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;
+      background:var(--card);
+      margin-bottom:10px;
+      overflow:hidden;
+      transition:border-color .2s;
+    }
+    .faq-item:hover{border-color:rgba(255,255,255,.13);}
+    .faq-item.open{border-color:rgba(255,138,0,.22);}
+
+    .faq-q{
+      width:100%;text-align:left;
+      display:flex;align-items:center;gap:14px;
+      padding:20px 22px;
+      background:none;border:none;cursor:pointer;
+      color:var(--text);font-size:15px;font-weight:700;line-height:1.5;
+      font-family:inherit;
+    }
+    .faq-q-icon{
+      width:22px;height:22px;border-radius:6px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;flex-shrink:0;
+      font-size:11px;font-weight:900;color:#111;
+    }
+    .faq-q-text{flex:1;text-align:left;}
+    .faq-q-arrow{
+      width:20px;height:20px;flex-shrink:0;
+      border-radius:50%;border:1px solid rgba(255,255,255,.12);
+      display:grid;place-items:center;
+      color:var(--muted);font-size:10px;
+      transition:transform .25s,background .2s;
+    }
+    .faq-item.open .faq-q-arrow{
+      transform:rotate(180deg);
+      background:rgba(255,138,0,.12);
+      border-color:rgba(255,138,0,.3);
+      color:var(--accent2);
+    }
+
+    .faq-a{
+      max-height:0;overflow:hidden;
+      transition:max-height .3s ease;
+    }
+    .faq-item.open .faq-a{max-height:700px;}
+    .faq-a-inner{
+      padding:0 22px 22px 58px;
+      font-size:14.5px;line-height:1.9;color:var(--sub);
+    }
+    .faq-a-inner p{margin-bottom:12px;}
+    .faq-a-inner p:last-child{margin-bottom:0;}
+    .faq-a-inner strong{color:var(--text);font-weight:700;}
+    .faq-a-inner ol,.faq-a-inner ul{
+      padding-left:1.4em;margin:10px 0;
+    }
+    .faq-a-inner li{margin-bottom:6px;}
+    .faq-a-inner code{
+      font-family:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+      font-size:12.5px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:5px;padding:1px 6px;color:var(--accent2);
+    }
+    .faq-note{
+      margin-top:10px;
+      padding:12px 16px;
+      background:var(--card2);
+      border-radius:9px;
+      border-left:3px solid rgba(255,138,0,.4);
+      font-size:13px;color:var(--muted);
+    }
+
+    .contact-box{
+      margin-top:56px;padding:28px 32px;
+      background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:18px;
+    }
+    .contact-box h2{font-size:18px;margin-bottom:10px;}
+    .contact-box p{color:var(--sub);font-size:15px;line-height:1.9;}
+
+    .footer{
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:32px 0;
+    }
+    .footer-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:640px){
+      .nav a:not(.nav-dl){display:none;}
+      .faq-a-inner{padding-left:22px;}
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+</head>
+<body>
+
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a href="../index.html" class="brand">
+        <div class="brand-mk">S</div>
+        <div>Sidekick<span class="brand-sub">by Ichiro Murata</span></div>
+      </a>
+      <nav class="nav">
+        <a href="sidekick-star.html">⭐ Star</a>
+        <a href="portrait.html">👤 Portrait</a>
+        <a href="sky-effect.html">☁️ Sky</a>
+        <a href="../workshop.html">📷 Workshop</a>
+        <a href="lp-star.html" style="color:var(--muted);">LP</a>
+        <a href="gallery.html" style="color:var(--muted);">Gallery</a>
+        <a href="sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+        <a href="about.html" style="color:var(--muted);">About</a>
+        <a href="changelog.html" style="color:var(--muted);">Changelog</a>
+        <a href="faq.html" style="color:#fff;">Support</a>
+        <a href="../faq.html" style="color:var(--muted);">🇯🇵 JA</a>
+        <a href="/register-dl.html?product=star&src=faq-en" class="nav-dl">▶ Free Trial</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">FAQ &amp; Support</div>
+          <h1 class="page-h1">FAQ /<br><em>Troubleshooting</em></h1>
+          <p class="page-lead">
+            Answers to common questions and known issues.<br>
+            If you can't find a solution here, email us at
+            <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);">murata@mbg.nifty.com</a>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-body">
+      <div class="wrap">
+        <div class="faq-inner">
+
+          <!-- RAW Processing / Pre-processing -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">📷</div>
+            RAW Processing / Pre-processing
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Sidekick doesn't process after I developed with another app first</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>Symptom:</strong> After developing in DxO or Lightroom first, Sidekick launches but skips the processing step.</p>
+                <p><strong>Cause:</strong> Sidekick's restart-detection logic skips RAW development automatically when it finds existing TIF files in the output folder (e.g., <code>比較明用現像_自動露出</code>).</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                  <li><strong>Delete the entire output folder</strong> (e.g., <code>比較明用現像_自動露出</code>)</li>
+                  <li>Run Sidekick again</li>
+                </ol>
+                <div class="faq-note">Deleting only the TIF files may leave hidden files or zero-byte files behind. Deleting the whole folder is the safest approach.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Can I get back to the original RAW by deleting the XMP?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Yes. Sidekick's RAW development only writes exposure and tone settings into the XMP sidecar file (<code>.xmp</code>). <strong>The RAW file itself is never changed.</strong></p>
+                <p>Deleting the XMP file will cause Camera Raw to treat the RAW as untouched.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">I want to redo the light-stacking without redoing the RAW development</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>In the Sidekick GUI, <strong>uncheck "RAW Development"</strong> and check only "Light-Stacking", then run. Sidekick will use the existing TIF files as input — no re-development needed.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Light-Stacking -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">🌠</div>
+            Light-Stacking
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Photoshop crashes or freezes mid-process (out of memory)</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>Symptom:</strong> Photoshop stops mid-run when processing 400+ frames.</p>
+                <p><strong>Cause:</strong> Too many layers expanded in memory at once. Temp files can also pile up and exhaust storage.</p>
+                <p><strong>Fix:</strong></p>
+                <ol>
+                  <li>Change the GUI's "Block size" from 100 to <strong>25–50</strong> and rerun</li>
+                  <li>Clear old <code>stac_*</code> / <code>stac_async_*</code> temp files from <code>%TEMP%</code> to free storage</li>
+                  <li>Close unnecessary apps before processing to free RAM</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          <!-- GPU / AI Processing -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">🤖</div>
+            GPU / AI Processing (SkyMask · StarTrail AI)
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">How do I check whether GPU support is active?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Run the included <code>GPU_セットアップ.bat</code> (GPU Setup). It will display your GPU name and CUDA availability.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">AI mask generation finishes with 0 masks (exit=1)</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>Symptom:</strong> Phase A exits with something like <code>0/227 masks</code> and processing doesn't continue.</p>
+                <p><strong>Possible causes:</strong></p>
+                <ul>
+                  <li>Older or non-CUDA GPU causing the exe to crash</li>
+                  <li>Problem with the input folder path</li>
+                  <li>Model file (<code>startrail_unet.pth</code>) not found</li>
+                </ul>
+                <p><strong>Fix:</strong> Update to the latest version of Sidekick Star. It automatically retries on CPU if GPU processing fails.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Can I use AI processing without a compatible GPU?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Yes — no special setup needed. When a GPU isn't available, <strong>Sidekick automatically falls back to CPU.</strong></p>
+                <p>CPU processing takes longer (roughly 5–10× vs. GPU), but the output is identical.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Airplane Trail Removal -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">✈️</div>
+            Airplane Trail Removal (AirplaneRemove)
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Processing doesn't start / exit:-1 error</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>Symptom:</strong> An error dialog appears during airplane removal and the process doesn't complete.</p>
+                <p><strong>Cause:</strong> A timing issue can cause the script to advance to the next step before processing has finished.</p>
+                <p><strong>Fix:</strong> Update to the latest version of Sidekick Star. The wait logic has been improved in recent releases.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- License / Trial -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">🔑</div>
+            License / Trial
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">The trial expired dialog has no way to close it</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>From the June 2026 update, a Cancel button was added to the trial-expired dialog. You can also press <strong>ESC</strong> to close it.</p>
+                <p>If you're on an older version, update to the latest release.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Is there auto-billing or a subscription?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>No.</strong> Sidekick is a one-time purchase — not a subscription. You are charged once at the time of purchase. There is no auto-renewal.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Does Sidekick use generative AI to fill in pixels?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>No.</strong> Sidekick uses AI only to <em>detect</em> airplane trails and other artifacts. The actual removal uses the same pixel-replacement logic (sampling nearby background pixels) as manual clone-stamp or content-aware fill — no pixels are invented.</p>
+                <p>The result is factually identical to what you'd get doing it by hand, just much faster.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Does Sidekick upload my photos to the cloud?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p><strong>No.</strong> All processing runs entirely on your local machine inside Photoshop. Your photos never leave your PC.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Which Photoshop versions -->
+          <div class="faq-cat">
+            <div class="faq-cat-icon">💻</div>
+            Compatibility
+          </div>
+
+          <div class="faq-item open">
+            <button class="faq-q" aria-expanded="true">
+              <div class="faq-q-icon">Q</div>
+              <span class="faq-q-text">Which versions of Photoshop are supported?</span>
+              <div class="faq-q-arrow">▼</div>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>Sidekick is developed and tested primarily on <strong>Adobe Photoshop (Beta)</strong>. It also works on recent stable Photoshop CC releases.</p>
+                <p>Older versions (CS6 and earlier) are not supported.</p>
+                <div class="faq-note">If you experience unexpected behavior on a specific PS version, please let us know by email.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-box">
+            <h2>Still stuck? Email us.</h2>
+            <p>
+              Describe what happened, your Photoshop version, OS, and GPU model if possible.<br>
+              <a href="mailto:murata@mbg.nifty.com" style="color:var(--accent2);font-weight:700;">murata@mbg.nifty.com</a>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <div style="line-height:1.9;">
+        <div style="font-weight:700;font-size:15px;">Ichiro Murata</div>
+        <div style="font-size:13px;margin-top:2px;">
+          <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:13px;">
+        <div style="color:var(--muted);">© Sidekick — Ichiro Murata</div>
+        <div style="display:flex;gap:14px;">
+          <a href="changelog.html" style="color:var(--sub);">Changelog</a>
+          <a href="faq.html" style="color:var(--sub);">FAQ</a>
+          <a href="../legal.html" style="color:var(--sub);">Legal</a>
+          <a href="../privacy.html" style="color:var(--sub);">Privacy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.faq-q').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+  </script>
+
+</body>
+</html>
