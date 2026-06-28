@@ -388,6 +388,25 @@
     }
   </style>
 
+  <style>
+    .lang-banner{
+      background:rgba(78,140,255,.12);border-bottom:1px solid rgba(78,140,255,.25);
+      padding:9px 20px;text-align:center;font-size:13px;font-weight:700;
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      position:relative;
+    }
+    .lang-banner a{
+      color:#7aaeff;text-decoration:underline;text-underline-offset:3px;
+    }
+    .lang-banner a:hover{color:#fff;}
+    .lang-banner-close{
+      position:absolute;right:14px;top:50%;transform:translateY(-50%);
+      background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;
+      line-height:1;padding:4px;
+    }
+    .lang-banner-close:hover{color:var(--text);}
+  </style>
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
   <script>
@@ -398,6 +417,13 @@
   </script>
 </head>
 <body>
+
+  <!-- ── Language banner ── -->
+  <div class="lang-banner" id="lang-banner">
+    🇺🇸 This site is also available in English —
+    <a href="en/">View English page →</a>
+    <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+  </div>
 
   <!-- ── Header ── -->
   <header class="hdr">
