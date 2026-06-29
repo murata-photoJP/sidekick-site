@@ -651,6 +651,62 @@
       .trust-inner{gap:14px;}
       .ba-stats{border-radius:12px;}
     }
+
+    /* ── LP内FAQ アコーディオン ── */
+    .lp-faq-list{display:grid;gap:8px;}
+    .lp-faq-item{
+      border:1px solid rgba(255,255,255,.08);border-radius:14px;
+      background:var(--card);overflow:hidden;transition:border-color .2s;
+    }
+    .lp-faq-item:hover{border-color:rgba(255,255,255,.14);}
+    .lp-faq-item.open{border-color:rgba(255,138,0,.25);}
+    .lp-faq-q{
+      width:100%;display:flex;align-items:center;gap:13px;
+      padding:19px 22px;background:none;border:none;cursor:pointer;
+      color:var(--text);font-size:15px;font-weight:700;line-height:1.5;
+      font-family:inherit;text-align:left;
+    }
+    .lp-faq-q-icon{
+      width:22px;height:22px;border-radius:6px;flex-shrink:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;font-size:11px;font-weight:900;color:#111;
+    }
+    .lp-faq-q-text{flex:1;}
+    .lp-faq-arrow{
+      flex-shrink:0;font-size:10px;color:var(--muted);
+      transition:transform .25s;display:block;
+    }
+    .lp-faq-item.open .lp-faq-arrow{transform:rotate(180deg);color:var(--accent2);}
+    .lp-faq-a{max-height:0;overflow:hidden;transition:max-height .32s ease;}
+    .lp-faq-item.open .lp-faq-a{max-height:500px;}
+    .lp-faq-a-inner{
+      padding:0 22px 22px 57px;
+      font-size:14px;line-height:1.9;color:var(--sub);
+    }
+    .lp-faq-a-inner p{margin-bottom:10px;}
+    .lp-faq-a-inner p:last-child{margin-bottom:0;}
+    .lp-faq-a-inner strong{color:var(--text);}
+    @media(max-width:600px){.lp-faq-a-inner{padding-left:22px;}}
+
+    /* ── Sticky CTA bar ── */
+    .sticky-cta{
+      position:fixed;bottom:0;left:0;right:0;z-index:50;
+      background:rgba(10,10,13,.94);backdrop-filter:blur(16px);
+      border-top:1px solid rgba(255,138,0,.22);
+      padding:12px 20px;
+      display:flex;align-items:center;justify-content:center;gap:16px;
+      flex-wrap:wrap;
+      transform:translateY(100%);transition:transform .35s ease;
+    }
+    .sticky-cta.visible{transform:translateY(0);}
+    .sticky-cta-text{
+      font-size:13px;color:var(--sub);font-weight:600;white-space:nowrap;
+    }
+    .sticky-cta-text strong{color:var(--text);}
+    @media(max-width:600px){
+      .sticky-cta{gap:10px;}
+      .sticky-cta-text{display:none;}
+    }
   </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
@@ -785,6 +841,9 @@
           <div class="trust-item">🎤 CP+ セミナー講師</div>
           <div class="trust-item">⭐ 星景歴 20年</div>
           <div class="trust-item">🆓 3ヶ月フル機能・CC不要</div>
+          <!-- CRO追加: 購入前の安心材料をTrust stripで早期表示 -->
+          <div class="trust-item">🖥 Win・Mac 対応</div>
+          <div class="trust-item">🔒 全ローカル処理・外部送信なし</div>
         </div>
       </div>
     </div>
@@ -1326,6 +1385,139 @@
       </div>
     </section>
 
+    <!-- ══════════════════════════════════════════
+         FAQ — 購入前の不安を除去する（7問）
+         LP本文で補えない補足情報のみ掲載。
+         重要度が高い情報（Win/Mac対応・外部送信なし）はTrust stripへ移動済み。
+    ══════════════════════════════════════════ -->
+    <section id="faq" style="padding:64px 0;border-top:1px solid rgba(255,255,255,.07);">
+      <div class="wrap" style="max-width:760px;">
+
+        <div style="text-align:center;margin-bottom:40px;">
+          <div style="font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--accent2);text-transform:uppercase;margin-bottom:12px;">FAQ</div>
+          <h2 style="margin:0;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.025em;">購入前によくある質問</h2>
+        </div>
+
+        <!-- FAQ アコーディオン -->
+        <div class="lp-faq-list">
+
+          <!-- Q1: 初心者でも使えますか -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">Photoshop 初心者でも使えますか？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p>はい、使えます。基本的な操作はGUIのボタンを押すだけで完了します。</p>
+                <p>詳細なPDF マニュアルが日本語・英語で付属しており、インストールから最初の処理まで手順を追って説明しています。また、わからないことがあればメール（<a href="mailto:murata.photo@gmail.com" style="color:var(--accent2);">murata.photo@gmail.com</a>）でいつでも相談できます。</p>
+                <p>3ヶ月の無料試用期間中に、実際の素材で試してから購入を判断してください。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q2: 元画像は壊れないか -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">元の写真データは変更・削除されませんか？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p><strong>元のRAWファイルは一切変更されません。</strong> すべての処理は別フォルダへの出力（TIFファイル）として行われます。</p>
+                <p>RAW現像の設定はXMPサイドカーファイルへの書き込みのみで、RAW本体は保護されます。XMPを削除すれば Camera Raw が初期状態に戻ります。</p>
+                <p>元データを消す操作・上書きはどこにもありません。安心して試してください。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q3: 3ヶ月後 -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">3ヶ月の試用後はどうなりますか？自動課金されますか？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p><strong>自動課金はありません。</strong> 試用期間終了後は、ライセンス購入の案内が表示されます。</p>
+                <p>購入するかどうかはご自身で判断できます。試用のみで終了しても問題ありません。購入は <strong>¥9,800（税込・買い切り）</strong> で、追加費用・月額費用は一切かかりません。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q4: 流星 -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">流星も消えてしまいますか？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p>はい、<strong>流星も除去対象になります。</strong> Sidekick Star は「1フレームにしか写っていない光跡」を飛行機・人工衛星と同じロジックで検出するため、流星も対象になります。</p>
+                <p>流星コマを残したい場合は、そのコマを事前に入力フォルダから取り出してから処理してください。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q5: ローカル処理 -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">写真データはどこかに送信されますか？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p><strong>すべてローカルPC上で処理します。</strong> 画像データ・RAWファイルを外部に送信することはありません。</p>
+                <p>クラウドサービスへのアップロード・外部AIへの送信は一切なし。インターネット接続不要で処理が完結します（ライセンス認証を除く）。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q6: 動作環境 -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">対応OS・Photoshopのバージョンは？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p><strong>Windows・Mac どちらにも対応しています。</strong> Photoshop（Adobe CC）がインストールされていれば動作します。Photoshop Beta にも基本対応しています。</p>
+                <p>Sidekick Star 自体はサブスクリプション不要の買い切りです。お使いの Photoshop が動いていれば、追加の契約は必要ありません。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Q7: 返金 -->
+          <div class="lp-faq-item">
+            <button class="lp-faq-q" aria-expanded="false">
+              <span class="lp-faq-q-icon">Q</span>
+              <span class="lp-faq-q-text">返金はできますか？</span>
+              <span class="lp-faq-arrow">▼</span>
+            </button>
+            <div class="lp-faq-a">
+              <div class="lp-faq-a-inner">
+                <p>デジタルコンテンツの性質上、購入後の返金は原則としてお受けできません。</p>
+                <p>ただし、<strong>ファイル破損・提供不備など販売者側の瑕疵がある場合は個別に対応します。</strong> <a href="mailto:murata.photo@gmail.com" style="color:var(--accent2);">murata.photo@gmail.com</a> までご連絡ください。</p>
+                <p>3ヶ月の無料試用期間を設けているのは、購入前に十分確認していただくためです。試用期間中にご自身の環境での動作をご確認ください。</p>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /.lp-faq-list -->
+
+        <p style="text-align:center;margin-top:28px;font-size:13px;color:var(--muted);">
+          その他の質問・トラブルは <a href="faq.html" style="color:var(--accent2);">サポートFAQ</a> または <a href="mailto:murata.photo@gmail.com" style="color:var(--accent2);">メール</a> でご相談ください。
+        </p>
+
+      </div>
+    </section>
+
     <!-- Workshop bridge -->
     <section style="padding:52px 0;border-top:1px solid rgba(255,255,255,.06);">
       <div class="wrap" style="text-align:center;">
@@ -1452,6 +1644,52 @@
       </div>
     </div>
   </footer>
+
+  <!-- Sticky CTA bar: Hero が画面外に出たら表示 -->
+  <div class="sticky-cta" id="sticky-cta">
+    <span class="sticky-cta-text"><strong>Sidekick Star</strong> — 3ヶ月無料・CC不要・¥9,800 買い切り</span>
+    <a href="/register-dl.html?product=star&src=lp-star-sticky"
+       class="btn btn-primary"
+       onclick="gtag('event','cta_click',{cta_label:'sticky_cta'})"
+       style="min-height:42px;padding:0 22px;font-size:14px;border-radius:10px;">
+      ▶ 無料でダウンロード
+    </a>
+    <a href="buy-star.html"
+       class="btn btn-outline"
+       onclick="gtag('event','cta_click',{cta_label:'sticky_buy'})"
+       style="min-height:42px;padding:0 18px;font-size:13px;border-radius:10px;">
+      今すぐ購入 ¥9,800
+    </a>
+  </div>
+
+  <script>
+    // FAQ アコーディオン
+    document.querySelectorAll('.lp-faq-q').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var item = btn.closest('.lp-faq-item');
+        var isOpen = item.classList.contains('open');
+        item.classList.toggle('open', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+        if(!isOpen) gtag('event','faq_open',{question: btn.querySelector('.lp-faq-q-text').textContent.trim().slice(0,50)});
+      });
+    });
+
+    // Sticky CTA: Heroが画面外に出たら表示
+    var _hero = document.querySelector('.hero');
+    var _sticky = document.getElementById('sticky-cta');
+    var _stickyShown = false;
+    if(_hero && _sticky){
+      var _stickyObs = new IntersectionObserver(function(entries){
+        var inView = entries[0].isIntersecting;
+        _sticky.classList.toggle('visible', !inView);
+        if(!inView && !_stickyShown){
+          _stickyShown = true;
+          gtag('event','sticky_cta_shown',{});
+        }
+      },{threshold:0.1});
+      _stickyObs.observe(_hero);
+    }
+  </script>
 
 </body>
 </html>
