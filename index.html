@@ -471,12 +471,22 @@
             <em>撮りに行く。</em>
           </h1>
           <p class="hero-sub">
-            AI写真講評・Photoshop スクリプト・ワークショップ。<br>
-            写真と向き合うすべての工程を、Sidekick Lab で。
+            星景・ポートレート・空の現像を自動化する Photoshop スクリプトと、<br>
+            AI写真講評・ワークショップ。写真家のための Sidekick Lab。
           </p>
           <p class="hero-sub-en">
             Photoshop scripts &amp; AI photo critique for photographers.
           </p>
+          <!-- CRO改善: HeroにCTAが存在しなかったため追加。最も低摩擦な入口（無料AI講評）を主CTAに据える -->
+          <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px;">
+            <a href="ai-review.html" class="btn btn-p btn-lg" onclick="gtag('event','cta_click',{cta_label:'hero_ai_review'})">
+              写真を1枚、見せてください →
+            </a>
+            <a href="#services" class="btn btn-o btn-lg" onclick="gtag('event','cta_click',{cta_label:'hero_products'})">
+              製品を見る
+            </a>
+          </div>
+          <p style="font-size:12px;color:var(--muted);margin-top:12px;">AI写真講評は無料 · Googleアカウントで30秒で開始</p>
         </div>
       </div>
     </section>
@@ -516,8 +526,10 @@
               <span class="ai-entry-pt">💡 改善ポイント</span>
             </div>
             <div class="ai-entry-cta">
-              <a href="ai-review.html" class="btn btn-p btn-lg">無料で講評してみる →</a>
-              <span class="ai-entry-note">Googleアカウントで利用 · 週5枚まで</span>
+              <!-- CRO改善: GA4イベント計測追加 -->
+              <a href="ai-review.html" class="btn btn-p btn-lg" onclick="gtag('event','cta_click',{cta_label:'ai_review_section'})">無料で講評してみる →</a>
+              <!-- CRO改善: 摩擦感を減らすため「30秒で開始」「無料」を明記 -->
+              <span class="ai-entry-note">Googleアカウントで30秒で開始 · 週5枚まで無料</span>
             </div>
             <p style="font-size:13px;color:var(--muted);margin-top:14px;font-style:italic;">まずは、あなたの写真を一枚、見せてください。</p>
           </div>
@@ -559,7 +571,8 @@
             </div>
             <div class="hc-footer">
               <span class="hc-price">3ヶ月無料試用 / ¥9,800（買い切り）</span>
-              <span class="hc-arr">詳細を見る →</span>
+              <!-- CRO改善: 無料試用期間を前面に出した具体的CTAへ変更 -->
+              <span class="hc-arr">3ヶ月無料で試す →</span>
             </div>
           </a>
 
@@ -576,7 +589,7 @@
             </div>
             <div class="hc-footer">
               <span class="hc-price">90日試用 / ¥4,800（買い切り）</span>
-              <span class="hc-arr">詳細を見る →</span>
+              <span class="hc-arr">90日間無料で試す →</span>
             </div>
           </a>
 
@@ -593,7 +606,7 @@
             </div>
             <div class="hc-footer">
               <span class="hc-price">30日試用 / ¥980（買い切り）</span>
-              <span class="hc-arr">詳細を見る →</span>
+              <span class="hc-arr">30日間無料で試す →</span>
             </div>
           </a>
 
@@ -610,7 +623,7 @@
             </div>
             <div class="hc-footer">
               <span class="hc-price">随時開催</span>
-              <span class="hc-arr">詳細を見る →</span>
+              <span class="hc-arr">次回の日程を確認する →</span>
             </div>
           </a>
 
@@ -805,6 +818,59 @@
     function openLightbox(s){document.getElementById('lightbox-img').src=s;document.getElementById('lightbox').classList.add('open');document.body.style.overflow='hidden';}
     function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.body.style.overflow='';}
     document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLightbox();});
+  </script>
+
+  <!-- STEP7 計測設計: セクション表示・製品カードクリック・スクロール深度をGA4に送信 -->
+  <script>
+    // セクション表示イベント（Intersection Observer）
+    var _sectionsSeen = {};
+    var _io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting && !_sectionsSeen[e.target.id]){
+          _sectionsSeen[e.target.id] = true;
+          gtag('event','section_view',{section_id: e.target.id});
+        }
+      });
+    },{threshold:0.3});
+    ['services','why','support','about'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el) _io.observe(el);
+    });
+
+    // AI講評セクションの表示計測（id追加が必要なため要素で取得）
+    var _aiSection = document.querySelector('.ai-entry');
+    if(_aiSection){
+      _aiSection.id = 'ai-entry';
+      _io.observe(_aiSection);
+    }
+
+    // 製品カードクリック計測
+    var _cardMap = {
+      'sidekick-star.html':'star',
+      'portrait.html':'portrait',
+      'sky-effect.html':'skyeffect',
+      'workshop.html':'workshop'
+    };
+    document.querySelectorAll('.hub-card').forEach(function(card){
+      card.addEventListener('click',function(){
+        var href = card.getAttribute('href') || '';
+        var name = _cardMap[href] || href;
+        gtag('event','product_card_click',{product: name});
+      });
+    });
+
+    // スクロール深度計測（25 / 50 / 75 / 100%）
+    var _depths = [25,50,75,100];
+    var _fired = {};
+    window.addEventListener('scroll',function(){
+      var pct = Math.round((window.scrollY + window.innerHeight) / document.body.scrollHeight * 100);
+      _depths.forEach(function(d){
+        if(pct >= d && !_fired[d]){
+          _fired[d] = true;
+          gtag('event','scroll_depth',{depth_pct: d});
+        }
+      });
+    },{passive:true});
   </script>
 
 </body>
