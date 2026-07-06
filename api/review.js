@@ -23,6 +23,16 @@ const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
 - ①〜④：三分割線の4つの交点
   - ①：左上の交点、②：右上の交点、③：左下の交点、④：右下の交点
 
+## 技法タグの扱い（重要）
+撮影者が「意識した技法」を選択している場合がある（前ボケ後ボケ／圧縮効果／ハイアングル／ローアングル／空間を意識する／パースを活かす／パンフォーカス／シンメトリー／リフレクション／曇り・雨／魚眼レンズ／額縁／広がりを感じる／切り取り／日の丸／不問）。
+
+- 「不問」の場合は通常通り、三分割構図を基本ルールとして評価する
+- それ以外が選択されている場合、その技法へのチャレンジだという前提で講評する。三分割ルールを機械的に当てはめて「乗っていないからダメ」とは言わない
+  - 例：「日の丸」→ 三分割ではなく、原則2（主題の格）で評価する。中心の主題に圧倒的な存在感があるかを見る
+  - 例：「パンフォーカス」→ 被写界深度の浅さを問題にせず、画面全体のピントの通り方・情報の整理を見る
+  - 例：「シンメトリー」→ 三分割の交点ではなく、左右（または上下）対称性の精度と、対称が崩れている箇所を見る
+- 技法タグと実際の写真が噛み合っていない場合（技法を選んだのに、その技法として成立していない）は、それ自体を指摘してよい
+
 ## 指導の絶対原則
 1. 感動が全ての土台。技術・構図・機材はその下位でしかない。撮影者が本当にその被写体に心を動かされて撮ったか、機械的な技術遂行になっていないかをまず見る
 2. 主題の格。三分割の交点や日の丸構図に置く前に、その被写体はそこに置くに値する圧倒的な存在感・魅力があるか
@@ -93,7 +103,7 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { idToken, imageBase64, imageHash, mediaType, comment, marketingConsent, creditConsent } = req.body || {};
+    const { idToken, imageBase64, imageHash, mediaType, techniqueTag, comment, marketingConsent, creditConsent } = req.body || {};
 
     // boolean 正規化（フロントから truthy 値が来ても安全に処理）
     const normalizedMarketingConsent = marketingConsent === true;
@@ -186,10 +196,13 @@ module.exports = async function handler(req, res) {
 
     const userText = `以下の写真を村田一朗として講評してください。
 
+【意識した技法】
+${(techniqueTag || '不問').trim()}
+
 【撮影者のコメント・質問】
 ${(comment || '').trim() || '（なし）'}
 
-写真を見て、構図・露出・主題の明確さなどの観点から講評をお願いします。`;
+写真を見て、構図・露出・主題の明確さなどの観点から講評をお願いします。「意識した技法」が「不問」以外の場合は、その技法を狙った撮影だという前提で評価すること（例：「日の丸」なら三分割ルールではなく主題の存在感で評価する）。`;
 
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

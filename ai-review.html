@@ -177,6 +177,12 @@
   }
   textarea::placeholder { color: #555; }
 
+  select {
+    width: 100%; padding: 12px 14px; margin-bottom: 20px;
+    background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
+    color: #e8e8e8; font-size: 0.95rem; font-family: inherit;
+  }
+
   #submit-btn {
     width: 100%; padding: 16px;
     background: #e05a00; border: none; border-radius: 8px;
@@ -748,6 +754,26 @@
 
     <!-- コメント・同意セクション -->
     <div class="consent-section">
+      <h2>意識した技法（任意）</h2>
+      <select id="technique-tag">
+        <option value="不問" selected>不問（特に意識していない）</option>
+        <option value="前ボケ後ボケ">前ボケ後ボケ</option>
+        <option value="圧縮効果">圧縮効果</option>
+        <option value="ハイアングル">ハイアングル</option>
+        <option value="ローアングル">ローアングル</option>
+        <option value="空間を意識する">空間を意識する</option>
+        <option value="パースを活かす">パースを活かす</option>
+        <option value="パンフォーカス">パンフォーカス</option>
+        <option value="シンメトリー">シンメトリー</option>
+        <option value="リフレクション">リフレクション</option>
+        <option value="曇り・雨">曇り・雨</option>
+        <option value="魚眼レンズ">魚眼レンズ</option>
+        <option value="額縁">額縁</option>
+        <option value="広がりを感じる">広がりを感じる</option>
+        <option value="切り取り">切り取り</option>
+        <option value="日の丸">日の丸</option>
+      </select>
+
       <h2>撮影者コメント・質問（任意）</h2>
       <textarea id="comment" placeholder="撮影意図、気になっている点、質問などがあれば書いてください" style="margin-bottom:20px;"></textarea>
 
@@ -1069,6 +1095,7 @@ async function submitReview(e) {
         imageBase64,
         imageHash,
         mediaType: 'image/jpeg',
+        techniqueTag: document.getElementById('technique-tag').value,
         comment: document.getElementById('comment').value,
         marketingConsent: document.getElementById('marketing-consent').checked,
         creditConsent: document.getElementById('credit-consent').checked
