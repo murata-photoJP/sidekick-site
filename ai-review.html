@@ -1208,7 +1208,7 @@ function copyResult() {
 async function submitFollowUp() {
   const question = document.getElementById('followup-question').value.trim();
   if (!question) { return; }
-  if (!lastReviewId || !lastImageBase64) {
+  if (!lastReviewId) {
     document.getElementById('followup-error').textContent = 'この講評には追質問できません（キャッシュされた結果のため元データがない場合があります）。新しく写真を送信し直してください。';
     document.getElementById('followup-error').style.display = 'block';
     return;

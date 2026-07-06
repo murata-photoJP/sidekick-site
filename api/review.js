@@ -6,9 +6,13 @@ const admin = require('firebase-admin');
 
 if (!admin.apps.length) {
   const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT || '{}');
-  admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket: 'sidekick-6cfee.firebasestorage.app'
+  });
 }
 const db = admin.firestore();
+const bucket = admin.storage().bucket();
 
 const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
 
@@ -121,8 +125,9 @@ module.exports = async function handler(req, res) {
     const isFollowUp = followUp === true;
 
     if (isFollowUp) {
-      if (!idToken || !reviewId || !question || !imageBase64) {
-        return res.status(400).json({ error: 'idToken・reviewId・question・imageBase64 は必須です' });
+      // imageBase64はここでは必須にしない（Cloud Storageに保存済みの画像を使える場合があるため）
+      if (!idToken || !reviewId || !question) {
+        return res.status(400).json({ error: 'idToken・reviewId・question は必須です' });
       }
     } else if (!idToken || !imageBase64) {
       return res.status(400).json({ error: 'idToken と imageBase64 は必須です' });
@@ -184,7 +189,8 @@ module.exports = async function handler(req, res) {
     }
 
     // 5b. 追質問（followUp）の場合はここで完結させる
-    // 画像そのものはFirestoreに保存していないため、imageBase64はフロントから再送してもらう
+    // 画像はCloud Storageに保存済み（広告利用同意ユーザーのみ）ならそちらを使い、
+    // なければフロントから再送された imageBase64 を使う（同意していないユーザーはこちら）
     if (isFollowUp) {
       const reviewDoc = await db.collection('reviews').doc(reviewId).get();
       if (!reviewDoc.exists) {
@@ -193,6 +199,23 @@ module.exports = async function handler(req, res) {
       const reviewData = reviewDoc.data();
       if (reviewData.userId !== uid) {
         return res.status(403).json({ error: 'この講評への追質問は許可されていません' });
+      }
+
+      let followUpImageBase64 = imageBase64;
+      let followUpMediaType = mediaType || reviewData.mediaType || 'image/jpeg';
+      if (reviewData.imageStoragePath) {
+        try {
+          const [fileBuffer] = await bucket.file(reviewData.imageStoragePath).download();
+          followUpImageBase64 = fileBuffer.toString('base64');
+          followUpMediaType = reviewData.mediaType || 'image/jpeg';
+        } catch (dlErr) {
+          console.error('image storage download error:', dlErr);
+          // ダウンロード失敗時はフロントから送られてきたimageBase64にフォールバック
+        }
+      }
+
+      if (!followUpImageBase64) {
+        return res.status(400).json({ error: '画像データがありません。新しく写真を送信し直してください。' });
       }
 
       const followUpApiKey = process.env.ANTHROPIC_API_KEY || '';
@@ -213,7 +236,7 @@ module.exports = async function handler(req, res) {
             {
               role: 'user',
               content: [
-                { type: 'image', source: { type: 'base64', media_type: mediaType || 'image/jpeg', data: imageBase64 } },
+                { type: 'image', source: { type: 'base64', media_type: followUpMediaType, data: followUpImageBase64 } },
                 { type: 'text', text: `この写真について講評をお願いします。（意識した技法：${(reviewData.techniqueTag || '不問')}）` }
               ]
             },
@@ -327,10 +350,28 @@ ${(comment || '').trim() || '（なし）'}
     const reviewRef = db.collection('reviews').doc();
     const serverTs = admin.firestore.FieldValue.serverTimestamp();
 
+    // 広告利用に同意した場合のみ、画像をCloud Storageに保存する
+    // （同意していないユーザーの画像は保存しない。追質問はセッション中のみ画像を保持する）
+    let imageStoragePath = null;
+    if (normalizedMarketingConsent) {
+      try {
+        const ext = (mediaType || 'image/jpeg').split('/')[1] || 'jpg';
+        imageStoragePath = `review-images/${reviewRef.id}.${ext}`;
+        await bucket.file(imageStoragePath).save(Buffer.from(imageBase64, 'base64'), {
+          contentType: mediaType || 'image/jpeg'
+        });
+      } catch (storageErr) {
+        console.error('image storage save error:', storageErr);
+        imageStoragePath = null; // 保存に失敗しても講評自体は返す
+      }
+    }
+
     await Promise.all([
       reviewRef.set({
         userId: uid,
         imageHash: imageHash || null,
+        imageStoragePath,
+        mediaType: mediaType || 'image/jpeg',
         thumbnailUrl: null,
         aiReview: reviewText,
         murataNote: null,
