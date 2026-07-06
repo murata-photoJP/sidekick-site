@@ -1,0 +1,8 @@
+ここは「AI写真講評」機能のサーバー本体（review.js）が置いてあるディレクトリです。
+
+- review.js … 本番稼働中のAI講評API（Google認証・Firestore使用量管理）
+- サイトURL: https://sidekick-lab.com/ai-review
+- 詳細: _SideKick_Development/PROJECT_STATUS.md の「AI写真講評ページ」セクション参照
+
+旧・パスワード認証版のプロトタイプ（SideKick販売ページ/講評AI/）は
+未使用のため 2026-07-06 に削除済み。
