@@ -148,6 +148,21 @@
   }
   .section h2 { font-size: 1rem; color: #ccc; margin-bottom: 16px; }
 
+  /* 記号の説明（折りたたみ） */
+  #grid-legend {
+    background: #252525; border: 1px solid #383838; border-radius: 10px;
+    padding: 16px 20px; margin-bottom: 20px;
+  }
+  #grid-legend summary {
+    cursor: pointer; color: #ccc; font-size: 0.95rem; font-weight: 600;
+  }
+  #grid-legend p {
+    color: #aaa; font-size: 0.85rem; line-height: 1.7; margin: 12px 0;
+  }
+  #grid-legend img {
+    max-width: 100%; border-radius: 6px; border: 1px solid #444; margin-top: 4px;
+  }
+
   /* 画像アップロード */
   .upload-area {
     border: 2px dashed #444;
@@ -767,6 +782,16 @@
     </div>
     <div class="usage-reset" id="usage-reset"></div>
   </div>
+
+  <!-- 記号の説明（講評文中のA〜I・①〜④の意味） -->
+  <details id="grid-legend">
+    <summary>講評文の中の「A〜I」「①〜④」って何？</summary>
+    <p>
+      講評では、画面を3×3のマスに分けて位置を説明します。
+      A〜Iはマスの位置、①〜④は三分割線が交わる4つの交点を指します。
+    </p>
+    <img src="images/rule-of-thirds-grid.png" alt="三分割構図の記号説明図（A〜Iのマスと①〜④の交点）">
+  </details>
 
   <!-- メインフォーム -->
   <form id="main-form" onsubmit="submitReview(event)">
