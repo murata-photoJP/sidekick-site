@@ -234,10 +234,16 @@
     display: none; background: #2a1a1a; border: 1px solid #5a2a2a;
     border-radius: 8px; padding: 12px 16px; color: #e08080; margin-top: 10px; font-size: 0.85rem;
   }
-  #followup-result {
-    display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #333;
+  #followup-result { display: none; margin-top: 14px; }
+  .followup-qa {
+    margin-top: 14px; padding-top: 14px; border-top: 1px solid #333;
   }
-  #followup-answer { line-height: 1.9; font-size: 0.95rem; color: #e0e0e0; white-space: pre-wrap; }
+  .followup-q {
+    font-size: 0.9rem; color: #e0a060; white-space: pre-wrap; margin-bottom: 8px;
+  }
+  .followup-a {
+    line-height: 1.9; font-size: 0.95rem; color: #e0e0e0; white-space: pre-wrap;
+  }
 
   /* ログイン画面のプライバシー表示 */
   .login-privacy {
@@ -857,9 +863,7 @@
     <button type="button" id="followup-btn" onclick="submitFollowUp()">質問する</button>
     <div id="followup-loading">回答を生成しています...</div>
     <div id="followup-error"></div>
-    <div id="followup-result">
-      <p id="followup-answer"></p>
-    </div>
+    <div id="followup-result"></div>
   </div>
 
   <!-- 次にできること（講評後に表示） -->
@@ -1173,6 +1177,7 @@ async function submitReview(e) {
     lastMediaType = 'image/jpeg';
     document.getElementById('followup-question').value = '';
     document.getElementById('followup-result').style.display = 'none';
+    document.getElementById('followup-result').innerHTML = '';
     document.getElementById('followup-error').style.display = 'none';
     document.getElementById('followup-section').style.display = lastReviewId ? 'block' : 'none';
 
@@ -1252,7 +1257,18 @@ async function submitFollowUp() {
       return;
     }
 
-    document.getElementById('followup-answer').textContent = data.result;
+    // 質問と回答をひとつのブロックとして追記する（textContentのみ使用しXSSを防ぐ）
+    const qaBlock = document.createElement('div');
+    qaBlock.className = 'followup-qa';
+    const qEl = document.createElement('p');
+    qEl.className = 'followup-q';
+    qEl.textContent = '質問：' + question;
+    const aEl = document.createElement('p');
+    aEl.className = 'followup-a';
+    aEl.textContent = data.result;
+    qaBlock.appendChild(qEl);
+    qaBlock.appendChild(aEl);
+    document.getElementById('followup-result').appendChild(qaBlock);
     document.getElementById('followup-result').style.display = 'block';
     document.getElementById('followup-question').value = '';
 
