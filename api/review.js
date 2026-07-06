@@ -90,6 +90,13 @@ const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
 - 「AIです」と名乗らない
 - 「完璧です」「文句なしです」と言い切らない
 
+## 追質問への回答方針
+会話履歴に「講評について追加で質問です」という形でユーザーからの質問が続く場合がある。
+
+- 最初の講評を蒸し返して繰り返さない。質問に的確に答えることを優先する
+- 文字数の縛り（200〜400字）は最初の講評ほど厳密でなくてよい。質問が短ければ短く、深い質問なら多少長くてもよい
+- 技術的な質問に対して技術だけで答えるのではなく、「指導の絶対原則」（感動・主題の格）とのつながりを意識して答える
+
 ## 絶対に言ってはいけないこと
 - 「AIです」と名乗らない
 - 「完璧です」「文句なしです」と言い切らない
@@ -103,13 +110,21 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { idToken, imageBase64, imageHash, mediaType, techniqueTag, comment, marketingConsent, creditConsent } = req.body || {};
+    const {
+      idToken, imageBase64, imageHash, mediaType, techniqueTag, comment,
+      marketingConsent, creditConsent, followUp, reviewId, question
+    } = req.body || {};
 
     // boolean 正規化（フロントから truthy 値が来ても安全に処理）
     const normalizedMarketingConsent = marketingConsent === true;
     const normalizedCreditConsent = normalizedMarketingConsent && creditConsent === true;
+    const isFollowUp = followUp === true;
 
-    if (!idToken || !imageBase64) {
+    if (isFollowUp) {
+      if (!idToken || !reviewId || !question || !imageBase64) {
+        return res.status(400).json({ error: 'idToken・reviewId・question・imageBase64 は必須です' });
+      }
+    } else if (!idToken || !imageBase64) {
       return res.status(400).json({ error: 'idToken と imageBase64 は必須です' });
     }
 
@@ -168,6 +183,78 @@ module.exports = async function handler(req, res) {
       });
     }
 
+    // 5b. 追質問（followUp）の場合はここで完結させる
+    // 画像そのものはFirestoreに保存していないため、imageBase64はフロントから再送してもらう
+    if (isFollowUp) {
+      const reviewDoc = await db.collection('reviews').doc(reviewId).get();
+      if (!reviewDoc.exists) {
+        return res.status(404).json({ error: '元の講評が見つかりません' });
+      }
+      const reviewData = reviewDoc.data();
+      if (reviewData.userId !== uid) {
+        return res.status(403).json({ error: 'この講評への追質問は許可されていません' });
+      }
+
+      const followUpApiKey = process.env.ANTHROPIC_API_KEY || '';
+      if (!followUpApiKey) return res.status(500).json({ error: 'サーバー設定エラー' });
+
+      const followUpRes = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': followUpApiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 500,
+          system: SYSTEM_PROMPT,
+          messages: [
+            {
+              role: 'user',
+              content: [
+                { type: 'image', source: { type: 'base64', media_type: mediaType || 'image/jpeg', data: imageBase64 } },
+                { type: 'text', text: `この写真について講評をお願いします。（意識した技法：${(reviewData.techniqueTag || '不問')}）` }
+              ]
+            },
+            {
+              role: 'assistant',
+              content: [{ type: 'text', text: reviewData.aiReview || '' }]
+            },
+            {
+              role: 'user',
+              content: [{ type: 'text', text: `講評について追加で質問です。\n\n${String(question).trim()}` }]
+            }
+          ]
+        })
+      });
+
+      if (!followUpRes.ok) {
+        const errText = await followUpRes.text();
+        return res.status(500).json({ error: `APIエラー: ${errText}` });
+      }
+
+      const followUpData = await followUpRes.json();
+      const answerText = followUpData.content?.[0]?.text || '';
+
+      await Promise.all([
+        db.collection('reviews').doc(reviewId).update({
+          followUps: admin.firestore.FieldValue.arrayUnion({
+            question: String(question).trim(),
+            answer: answerText,
+            askedAt: new Date().toISOString()
+          })
+        }),
+        usageRef.set({
+          userId: uid,
+          count: admin.firestore.FieldValue.increment(1),
+          updatedAt: admin.firestore.FieldValue.serverTimestamp()
+        }, { merge: true })
+      ]);
+
+      return res.status(200).json({ result: answerText });
+    }
+
     // 6. imageCache チェック（同一画像は Claude を呼ばない）
     if (imageHash) {
       const cacheDoc = await db.collection('imageCache').doc(imageHash).get();
@@ -186,7 +273,7 @@ module.exports = async function handler(req, res) {
             updatedAt: admin.firestore.FieldValue.serverTimestamp()
           }, { merge: true })
         ]);
-        return res.status(200).json({ result: cacheDoc.data().aiReview, cached: true });
+        return res.status(200).json({ result: cacheDoc.data().aiReview, cached: true, reviewId: cacheDoc.data().reviewId || null });
       }
     }
 
@@ -250,6 +337,7 @@ ${(comment || '').trim() || '（なし）'}
         murataReviewedAt: null,
         tags: [],
         genre: 'other',
+        techniqueTag: (techniqueTag || '不問').trim(),
         userComment: comment || '',
         marketingConsent: normalizedMarketingConsent,
         creditConsent: normalizedCreditConsent,

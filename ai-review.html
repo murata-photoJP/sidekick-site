@@ -213,6 +213,32 @@
     border-radius: 8px; padding: 16px 20px; color: #e08080; margin-top: 16px; font-size: 0.9rem;
   }
 
+  /* 追質問セクション */
+  #followup-section {
+    display: none; margin-top: 16px; padding: 20px;
+    background: #1a1a1a; border: 1px solid #444; border-radius: 10px;
+  }
+  #followup-section h3 { font-size: 0.95rem; color: #ccc; margin-bottom: 10px; }
+  #followup-question {
+    width: 100%; padding: 10px 12px;
+    background: #111; border: 1px solid #444; border-radius: 6px;
+    color: #e8e8e8; font-size: 0.9rem; font-family: inherit; margin-bottom: 10px;
+  }
+  #followup-btn {
+    padding: 8px 20px; background: #e05a00; border: none; border-radius: 5px;
+    color: #fff; cursor: pointer; font-size: 0.9rem;
+  }
+  #followup-btn:disabled { opacity: 0.5; cursor: default; }
+  #followup-loading { display: none; color: #888; font-size: 0.85rem; margin-top: 8px; }
+  #followup-error {
+    display: none; background: #2a1a1a; border: 1px solid #5a2a2a;
+    border-radius: 8px; padding: 12px 16px; color: #e08080; margin-top: 10px; font-size: 0.85rem;
+  }
+  #followup-result {
+    display: none; margin-top: 14px; padding-top: 14px; border-top: 1px solid #333;
+  }
+  #followup-answer { line-height: 1.9; font-size: 0.95rem; color: #e0e0e0; white-space: pre-wrap; }
+
   /* ログイン画面のプライバシー表示 */
   .login-privacy {
     background: rgba(255,255,255,0.03);
@@ -824,6 +850,18 @@
     <button id="copy-btn" onclick="copyResult()">コピー</button>
   </div>
 
+  <!-- 追質問（講評後に表示。追質問も利用枚数を1カウント消費します） -->
+  <div id="followup-section">
+    <h3>この講評について聞く（1回につき利用枚数を1カウント消費します）</h3>
+    <textarea id="followup-question" rows="2" placeholder="例：なぜ主題が交点に乗っていないとダメなんですか？"></textarea>
+    <button type="button" id="followup-btn" onclick="submitFollowUp()">質問する</button>
+    <div id="followup-loading">回答を生成しています...</div>
+    <div id="followup-error"></div>
+    <div id="followup-result">
+      <p id="followup-answer"></p>
+    </div>
+  </div>
+
   <!-- 次にできること（講評後に表示） -->
   <div id="next-steps">
     <div class="steps-section">
@@ -898,6 +936,11 @@ let currentUser = null;
 let selectedFile = null;
 let usageLimit = 5;
 let usedCount = 0;
+
+// 追質問用に直近の講評コンテキストを保持（画像はサーバーに保存していないため）
+let lastReviewId = null;
+let lastImageBase64 = null;
+let lastMediaType = null;
 
 // ---- Auth 状態監視 ----
 firebase.auth().onAuthStateChanged(async function(user) {
@@ -1124,6 +1167,15 @@ async function submitReview(e) {
     document.getElementById('next-steps').style.display = 'block';
     document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
 
+    // 追質問用にコンテキストを保持し、追質問欄をリセットして表示
+    lastReviewId = data.reviewId || null;
+    lastImageBase64 = imageBase64;
+    lastMediaType = 'image/jpeg';
+    document.getElementById('followup-question').value = '';
+    document.getElementById('followup-result').style.display = 'none';
+    document.getElementById('followup-error').style.display = 'none';
+    document.getElementById('followup-section').style.display = lastReviewId ? 'block' : 'none';
+
     // 使用量表示を更新
     usedCount++;
     document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
@@ -1151,6 +1203,72 @@ function copyResult() {
     btn.textContent = 'コピーしました！';
     setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
   });
+}
+
+async function submitFollowUp() {
+  const question = document.getElementById('followup-question').value.trim();
+  if (!question) { return; }
+  if (!lastReviewId || !lastImageBase64) {
+    document.getElementById('followup-error').textContent = 'この講評には追質問できません（キャッシュされた結果のため元データがない場合があります）。新しく写真を送信し直してください。';
+    document.getElementById('followup-error').style.display = 'block';
+    return;
+  }
+  if (!currentUser) { return; }
+
+  const btn = document.getElementById('followup-btn');
+  btn.disabled = true;
+  document.getElementById('followup-loading').style.display = 'block';
+  document.getElementById('followup-error').style.display = 'none';
+
+  try {
+    const idToken = await currentUser.getIdToken(true);
+    const res = await fetch('/api/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idToken,
+        followUp: true,
+        reviewId: lastReviewId,
+        question,
+        imageBase64: lastImageBase64,
+        mediaType: lastMediaType || 'image/jpeg'
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      if (res.status === 401) {
+        await firebase.auth().signOut();
+        window.location.reload();
+        return;
+      } else if (res.status === 429) {
+        document.getElementById('followup-error').textContent = data.error;
+        document.getElementById('followup-error').style.display = 'block';
+      } else {
+        document.getElementById('followup-error').textContent = data.error || 'エラーが発生しました';
+        document.getElementById('followup-error').style.display = 'block';
+      }
+      return;
+    }
+
+    document.getElementById('followup-answer').textContent = data.result;
+    document.getElementById('followup-result').style.display = 'block';
+    document.getElementById('followup-question').value = '';
+
+    // 使用量表示を更新（追質問も1カウント消費）
+    usedCount++;
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
+    const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
+    document.getElementById('usage-bar-fill').style.width = pct + '%';
+
+  } catch (err) {
+    document.getElementById('followup-error').textContent = '通信エラー: ' + (err.message || err);
+    document.getElementById('followup-error').style.display = 'block';
+  } finally {
+    btn.disabled = false;
+    document.getElementById('followup-loading').style.display = 'none';
+  }
 }
 
 // ---- ユーティリティ ----
