@@ -182,6 +182,28 @@
   }
   .camera-ai-link a:hover { text-decoration: underline; }
 
+  .chat-msg-image {
+    display: block; max-width: 100%; max-height: 260px; border-radius: 8px;
+    margin-bottom: 8px; object-fit: contain;
+  }
+
+  #image-attach-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .attach-btn {
+    font-size: 0.82rem; padding: 8px 14px; border-radius: 8px; border: 1px solid #444;
+    background: #1a1a1a; color: #999; cursor: pointer;
+  }
+  .attach-btn:hover { border-color: #666; color: #ccc; }
+  #chat-image-preview-wrap { display: none; align-items: center; gap: 8px; }
+  #chat-image-preview {
+    width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #444;
+  }
+  #chat-image-remove-btn {
+    font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; border: 1px solid #444;
+    background: #1a1a1a; color: #999; cursor: pointer;
+  }
+  #chat-image-remove-btn:hover { border-color: #666; color: #ccc; }
+  .attach-note { font-size: 0.74rem; color: #555; margin: -4px 0 12px; }
+
   .chat-input-row { display: flex; gap: 8px; }
   #chat-input {
     flex: 1; padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
@@ -326,6 +348,15 @@
       </div>
       <div id="chat-loading">回答を考えています...</div>
       <div id="chat-error"></div>
+      <div id="image-attach-row">
+        <button type="button" class="attach-btn" onclick="document.getElementById('chat-image-input').click()">📷 画像を添付</button>
+        <input type="file" id="chat-image-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onChatImageSelected(this)">
+        <div id="chat-image-preview-wrap">
+          <img id="chat-image-preview" src="" alt="添付画像プレビュー">
+          <button type="button" id="chat-image-remove-btn" onclick="removeChatImage()">×</button>
+        </div>
+      </div>
+      <p class="attach-note">添付した画像はAnthropicのClaude API（外部サービス）へ送信されます。JPG / PNG / WebP対応（最大10MB）。</p>
       <div class="chat-input-row">
         <textarea id="chat-input" rows="2" placeholder="何を撮りたいですか？"></textarea>
         <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
@@ -351,6 +382,8 @@ let currentUser = null;
 let usageLimit = 5;
 let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
+let selectedChatImageFile = null;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 // ---- Auth 状態監視 ----
 firebase.auth().onAuthStateChanged(async function(user) {
@@ -476,13 +509,92 @@ function logout() {
   });
 }
 
+// ---- 画像添付 ----
+function onChatImageSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    showChatError('対応形式はJPG / PNG / WebPです');
+    input.value = '';
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showChatError('ファイルサイズが大きすぎます（最大10MB）');
+    input.value = '';
+    return;
+  }
+  selectedChatImageFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('chat-image-preview').src = e.target.result;
+    document.getElementById('chat-image-preview-wrap').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeChatImage() {
+  selectedChatImageFile = null;
+  document.getElementById('chat-image-preview-wrap').style.display = 'none';
+  document.getElementById('chat-image-input').value = '';
+}
+
+function compressImage(file, maxSizeMB = 3) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const maxPx = 2048;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let quality = 0.85;
+      const tryBlob = () => {
+        canvas.toBlob(blob => {
+          if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1; tryBlob();
+          } else {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          }
+        }, 'image/jpeg', quality);
+      };
+      tryBlob();
+    };
+    img.src = url;
+  });
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
 // ---- チャット ----
-function appendUserBubble(text) {
+function appendUserBubble(text, imageUrl) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
   const el = document.createElement('div');
   el.className = 'chat-msg user';
-  el.textContent = text;
+  if (imageUrl) {
+    const img = document.createElement('img');
+    img.className = 'chat-msg-image';
+    img.src = imageUrl;
+    img.alt = '添付画像';
+    el.appendChild(img);
+  }
+  const textEl = document.createElement('div');
+  textEl.textContent = text;
+  el.appendChild(textEl);
   log.appendChild(el);
   log.scrollTop = log.scrollHeight;
 }
@@ -513,9 +625,26 @@ async function sendChatMessage() {
   document.getElementById('chat-loading').style.display = 'block';
   document.getElementById('chat-error').style.display = 'none';
 
-  appendUserBubble(question);
+  let imagePayload = null;
+  let attachedPreviewUrl = null;
+  if (selectedChatImageFile) {
+    try {
+      const compressed = await compressImage(selectedChatImageFile);
+      const ab = await compressed.arrayBuffer();
+      imagePayload = { mediaType: 'image/jpeg', data: arrayBufferToBase64(ab) };
+      attachedPreviewUrl = document.getElementById('chat-image-preview').src;
+    } catch (err) {
+      showChatError('画像の処理に失敗しました: ' + (err.message || err));
+      btn.disabled = false;
+      document.getElementById('chat-loading').style.display = 'none';
+      return;
+    }
+  }
+
+  appendUserBubble(question, attachedPreviewUrl);
   chatMessages.push({ role: 'user', content: question });
   input.value = '';
+  removeChatImage();
 
   try {
     const idToken = await currentUser.getIdToken(true);
@@ -528,7 +657,8 @@ async function sendChatMessage() {
         sceneOutdoor: document.getElementById('scene-outdoor').value,
         sceneTime: document.getElementById('scene-time').value,
         sceneTripod: document.getElementById('scene-tripod').value,
-        messages: chatMessages
+        messages: chatMessages,
+        image: imagePayload
       })
     });
 

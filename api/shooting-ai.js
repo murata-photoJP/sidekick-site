@@ -12,6 +12,9 @@ if (!admin.apps.length) {
 }
 const db = admin.firestore();
 
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const MAX_IMAGE_BASE64_LENGTH = 8 * 1024 * 1024; // base64換算で約8MB（圧縮後3MB程度を想定した余裕枠）
+
 const LEVEL_GUIDE = {
   beginner: `- F値・SS（シャッタースピード）・ISOがそれぞれ何をする数値かを一言添えながら説明する
 - 専門用語はできるだけ避け、使う場合は短い補足を添える
@@ -63,7 +66,40 @@ F値、シャッター速度、ISO、AF、露出補正、三脚、NDフィルタ
 - 失敗しやすい点を入れる
 - 一般論を基本とし、個人作家風の押し付けは避ける
 
-## 回答の型（必ずこの順序で）
+## 情報が不足している場合の質問ルール（重要）
+質問内容だけでは適切な撮影方法を提案できない場合は、推測で断定しないでください。
+必要最小限の追加情報だけを質問してください。
+質問は一度に1〜2個までとし、ユーザーが答えやすい内容にしてください。
+
+優先順位は以下の通り。
+1. 写真が添付されている場合：写真から読み取れる情報を最大限利用し、不足している情報だけを質問する
+2. 写真が無い場合：「何を撮りたいか」「屋外か屋内か」「昼か夜か」「手持ちか三脚か」の中から、回答に必要な最小限だけを聞く
+
+追加質問は最小限にすること。一度に何個も質問しない。
+- 悪い例：「何を撮りますか？昼ですか？屋外ですか？三脚ありますか？レンズは？カメラは？RAWですか？」
+- 良い例：「まず確認したいのですが、屋外での撮影でしょうか？」「写真を添付していただけると、より具体的にご案内できます。」
+
+十分な情報が無いまま回答する場合、推測を事実のように断定しないでください。
+「一般的には〜」「多くの場合は〜」「条件によって変わります」「写真を見る限りでは〜」などの表現を使い、不確かな内容は明確に区別してください。
+
+## 画像が添付されている場合
+画像は作品講評のためではなく、撮影状況を把握するために使ってください。
+
+画像から読み取れる情報、たとえば
+明るさ、昼夜、屋内外、被写体、背景、ブレ、ピント、距離感、光の向き、撮影条件の推測
+を参考にして、次にどう撮るとよいかを一般論として案内してください。
+
+ただし、写真講評AIのように作品点数、作品価値、構図評価、芸術性評価を詳しく行わないでください。
+
+画像から判断できる内容については、同じことをユーザーに質問しないでください。
+
+画像だけでは分からない内容は、推測で断定せず、必要最小限の質問を1〜2個だけしてください。
+
+例：
+「画像を見る限り、屋外の夜景撮影のようです。まずは三脚が使える状況かどうかだけ確認したいです。」
+「画像を見る限り、被写体ブレが出ている可能性があります。動いている被写体を止めたいのか、あえて流したいのかで設定が変わります。」
+
+## 回答の型（情報が揃っている場合。必ずこの順序で）
 1. おすすめ設定
 2. 撮り方の手順
 3. 失敗しやすいポイント
@@ -89,10 +125,20 @@ module.exports = async function handler(req, res) {
   }
 
   try {
-    const { idToken, shootingLevel, sceneOutdoor, sceneTime, sceneTripod, messages } = req.body || {};
+    const { idToken, shootingLevel, sceneOutdoor, sceneTime, sceneTripod, messages, image } = req.body || {};
 
     if (!idToken || !Array.isArray(messages) || messages.length === 0) {
       return res.status(400).json({ error: 'idToken と messages は必須です' });
+    }
+
+    // 画像添付がある場合は形式・サイズを検証（不正な場合はテキストのみの質問として拒否する）
+    if (image) {
+      if (!image.data || !ALLOWED_IMAGE_TYPES.includes(image.mediaType)) {
+        return res.status(400).json({ error: '画像はJPG / PNG / WebP形式のみ対応しています' });
+      }
+      if (image.data.length > MAX_IMAGE_BASE64_LENGTH) {
+        return res.status(400).json({ error: '画像サイズが大きすぎます' });
+      }
     }
 
     // 1. Firebase ID トークン検証
@@ -165,8 +211,20 @@ module.exports = async function handler(req, res) {
     const claudeMessages = messages.map((m, i) => {
       const role = m.role === 'assistant' ? 'assistant' : 'user';
       const content = String(m.content || '').trim();
-      if (i === messages.length - 1 && role === 'user') {
-        return { role, content: `${sceneInfo}\n\n${content}` };
+      const isLastUserTurn = i === messages.length - 1 && role === 'user';
+
+      if (isLastUserTurn) {
+        const text = `${sceneInfo}\n\n${content}`;
+        if (image) {
+          return {
+            role,
+            content: [
+              { type: 'image', source: { type: 'base64', media_type: image.mediaType, data: image.data } },
+              { type: 'text', text }
+            ]
+          };
+        }
+        return { role, content: text };
       }
       return { role, content };
     });
