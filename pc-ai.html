@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC AI | Sidekick Lab</title>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
+</script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "xem6v4pdup");
+</script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    background: #1a1a1a;
+    color: #e8e8e8;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  /* サイトナビ */
+  .site-nav {
+    position: sticky; top: 0; z-index: 40;
+    background: rgba(26,26,26,.92); backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    padding: 0 20px; margin: -20px -20px 0;
+  }
+  .site-nav-in {
+    max-width: 720px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    min-height: 56px;
+  }
+  .site-brand {
+    display: flex; align-items: center; gap: 9px;
+    font-weight: 800; font-size: 14px; color: #eef1f8; text-decoration: none;
+  }
+  .site-brand-mk {
+    width: 30px; height: 30px; border-radius: 7px;
+    background: linear-gradient(135deg,#4e8cff,#7ab8ff);
+    display: grid; place-items: center; color: #111; font-weight: 900; font-size: 12px;
+  }
+  .site-nav-back {
+    font-size: 12px; color: #666; text-decoration: none; font-weight: 600;
+    transition: color .15s;
+  }
+  .site-nav-back:hover { color: #aaa; }
+
+  header {
+    text-align: center;
+    padding: 40px 0 24px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  header h1 { font-size: 1.5rem; font-weight: 700; color: #f0f0f0; letter-spacing: 0.02em; }
+  header p { margin-top: 10px; color: #888; font-size: 0.88rem; line-height: 1.7; }
+
+  .user-bar {
+    display: none;
+    position: absolute;
+    top: 0; right: 0;
+    align-items: center;
+    gap: 10px;
+    padding-top: 40px;
+  }
+  .user-avatar { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #444; }
+  .user-name { font-size: 0.8rem; color: #888; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .logout-btn {
+    font-size: 0.75rem; color: #666; background: none;
+    border: 1px solid #444; border-radius: 5px; padding: 3px 8px; cursor: pointer;
+  }
+  .logout-btn:hover { color: #aaa; border-color: #666; }
+
+  /* できること／できないこと */
+  .ai-scope { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+  .ai-scope-card { background: #252525; border: 1px solid #383838; border-radius: 10px; padding: 18px; }
+  .ai-scope-card.can { border-top: 2px solid #3a5a6a; }
+  .ai-scope-card.cant { border-top: 2px solid #4a3a2a; }
+  .ai-scope-title { font-size: 0.78rem; font-weight: 700; letter-spacing: .06em; margin-bottom: 10px; }
+  .ai-scope-card.can .ai-scope-title { color: #6db0e0; }
+  .ai-scope-card.cant .ai-scope-title { color: #c88b50; }
+  .ai-scope-list { list-style: none; padding: 0; font-size: 0.8rem; color: #888; line-height: 1.9; }
+  .ai-scope-card.can .ai-scope-list li::before { content: '✓ '; color: #4e8cff; font-weight: 700; }
+  .ai-scope-card.cant .ai-scope-list li::before { content: '— '; color: #6a5040; }
+  @media(max-width: 500px) { .ai-scope { grid-template-columns: 1fr; } }
+
+  #loading-state { text-align: center; padding: 60px 0; }
+  .spinner {
+    width: 36px; height: 36px; border: 3px solid #333; border-top-color: #4e8cff;
+    border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  #login-state { display: none; }
+  .login-card {
+    background: #252525; border: 1px solid #383838; border-radius: 12px;
+    padding: 36px; text-align: center; margin-bottom: 24px;
+  }
+  .login-card h2 { font-size: 1.1rem; margin-bottom: 12px; color: #ddd; }
+  .login-card p { color: #888; font-size: 0.88rem; line-height: 1.8; margin-bottom: 24px; }
+  .google-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #fff; color: #3c4043; font-size: 0.92rem; font-weight: 600;
+    padding: 13px 28px; border: none; border-radius: 10px; cursor: pointer;
+    transition: background 0.15s; box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .google-btn:hover { background: #f1f3f4; }
+
+  #limit-state { display: none; }
+  .limit-card { background: #252525; border: 1px solid #383838; border-radius: 12px; padding: 28px; text-align: center; color: #888; }
+  .limit-card h2 { font-size: 1rem; color: #4e8cff; margin-bottom: 10px; }
+  .limit-card p { font-size: 0.9rem; line-height: 1.8; }
+
+  #usage-bar {
+    display: none; background: #252525; border: 1px solid #383838; border-radius: 10px;
+    padding: 14px 20px; margin-bottom: 20px; font-size: 0.85rem;
+  }
+  .usage-label { color: #888; margin-bottom: 8px; }
+  .usage-track { display: flex; align-items: center; gap: 10px; }
+  .usage-bar-bg { flex: 1; height: 6px; background: #333; border-radius: 3px; overflow: hidden; }
+  .usage-bar-fill { height: 100%; background: #4e8cff; border-radius: 3px; transition: width 0.4s; }
+  .usage-count { color: #ccc; font-size: 0.82rem; white-space: nowrap; }
+  .usage-reset { color: #666; font-size: 0.78rem; margin-top: 4px; }
+  .usage-shared-note { color: #555; font-size: 0.75rem; margin-top: 6px; }
+
+  /* OS選択（初回必須） */
+  #os-select-state { display: none; }
+  .os-card {
+    background: #252525; border: 1px solid #383838; border-radius: 12px;
+    padding: 32px; text-align: center; margin-bottom: 24px;
+  }
+  .os-card h2 { font-size: 1.05rem; margin-bottom: 10px; color: #ddd; }
+  .os-card p { color: #888; font-size: 0.85rem; line-height: 1.7; margin-bottom: 22px; }
+  .os-choice-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .os-choice-btn {
+    flex: 1; min-width: 140px; max-width: 200px;
+    background: #1a1a1a; border: 1px solid #444; border-radius: 10px;
+    padding: 20px 14px; color: #e8e8e8; font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .os-choice-btn:hover { border-color: #4e8cff; background: #202634; }
+
+  #main-area { display: none; }
+  .section {
+    background: #252525; border: 1px solid #383838; border-radius: 10px;
+    padding: 24px; margin-bottom: 20px;
+  }
+  .section h2 { font-size: 0.95rem; color: #ccc; margin-bottom: 14px; }
+
+  select, input[type="text"] {
+    padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
+    color: #e8e8e8; font-size: 0.92rem; font-family: inherit;
+  }
+  #pc-info-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  #pc-os-label { font-size: 0.85rem; color: #ccc; background: #1a1a1a; border: 1px solid #444; border-radius: 6px; padding: 10px 14px; }
+  #pc-os-change-btn { font-size: 0.76rem; color: #666; background: none; border: 1px solid #444; border-radius: 5px; padding: 8px 10px; cursor: pointer; }
+  #pc-os-change-btn:hover { color: #aaa; border-color: #666; }
+  .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
+  #pc-level { width: 100%; }
+
+  /* チャット */
+  #chat-log {
+    display: flex; flex-direction: column; gap: 14px;
+    margin-bottom: 16px; max-height: 55vh; overflow-y: auto; padding-right: 4px;
+  }
+  .chat-msg {
+    max-width: 88%; padding: 12px 16px; border-radius: 12px;
+    line-height: 1.8; font-size: 0.92rem; white-space: pre-wrap;
+  }
+  .chat-msg.user {
+    align-self: flex-end; background: #2a3a4a; color: #dce8f5; border-bottom-right-radius: 3px;
+  }
+  .chat-msg.assistant {
+    align-self: flex-start; background: #1e1e1e; border: 1px solid #383838;
+    color: #e0e0e0; border-bottom-left-radius: 3px;
+  }
+  .chat-msg img.chat-thumb {
+    display: block; max-width: 200px; border-radius: 8px; margin-bottom: 8px;
+  }
+  .chat-empty { color: #555; font-size: 0.85rem; text-align: center; padding: 24px 0; }
+
+  .difficulty-check {
+    align-self: flex-start; display: flex; gap: 8px; align-items: center; margin-top: -6px;
+  }
+  .difficulty-label { font-size: 0.76rem; color: #666; }
+  .difficulty-btn {
+    font-size: 0.76rem; padding: 5px 12px; border-radius: 6px; border: 1px solid #444;
+    background: #1a1a1a; color: #999; cursor: pointer;
+  }
+  .difficulty-btn:hover { border-color: #666; color: #ccc; }
+  .difficulty-done { font-size: 0.76rem; color: #555; align-self: flex-start; }
+
+  /* スクリーンショット添付 */
+  #screenshot-preview-row { display: none; align-items: center; gap: 10px; margin-bottom: 10px; }
+  #screenshot-preview-img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #444; }
+  #screenshot-preview-name { flex: 1; font-size: 0.8rem; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #screenshot-remove-btn { font-size: 0.76rem; color: #666; background: none; border: 1px solid #444; border-radius: 5px; padding: 5px 9px; cursor: pointer; }
+  #screenshot-remove-btn:hover { color: #aaa; border-color: #666; }
+  #screenshot-hint { font-size: 0.76rem; color: #666; margin-bottom: 8px; }
+
+  .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
+  #chat-input {
+    flex: 1; padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
+    color: #e8e8e8; font-size: 0.92rem; font-family: inherit; resize: vertical; min-height: 48px;
+  }
+  #chat-input::placeholder { color: #555; }
+  #screenshot-attach-btn {
+    padding: 0 16px; height: 48px; background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
+    color: #999; cursor: pointer; font-size: 0.85rem; white-space: nowrap;
+  }
+  #screenshot-attach-btn:hover { border-color: #666; color: #ccc; }
+  #chat-send-btn {
+    padding: 0 22px; height: 48px; background: #4e6cff; border: none; border-radius: 8px;
+    color: #fff; font-weight: 700; cursor: pointer; font-size: 0.92rem;
+  }
+  #chat-send-btn:hover { background: #3d5ae0; }
+  #chat-send-btn:disabled { background: #555; cursor: not-allowed; }
+
+  #chat-loading { display: none; color: #888; font-size: 0.85rem; margin: 8px 0; }
+  #chat-error {
+    display: none; background: #2a1a1a; border: 1px solid #5a2a2a; border-radius: 8px;
+    padding: 12px 16px; color: #e08080; margin-top: 10px; font-size: 0.85rem;
+  }
+
+  footer { text-align: center; padding: 40px 0 20px; color: #555; font-size: 0.8rem; }
+  footer a { color: #555; text-decoration: none; }
+  footer a:hover { color: #888; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <div class="site-nav-in">
+    <a href="/" class="site-brand">
+      <div class="site-brand-mk">S</div>
+      <span>Sidekick Lab</span>
+    </a>
+    <a href="/" class="site-nav-back">← トップに戻る</a>
+  </div>
+</nav>
+
+<div class="container">
+  <header>
+    <div class="user-bar" id="user-bar">
+      <img class="user-avatar" id="user-avatar" src="" alt="">
+      <span class="user-name" id="user-name"></span>
+      <button class="logout-btn" onclick="logout()">ログアウト</button>
+    </div>
+    <h1>PC AI</h1>
+    <p>
+      ZIP解凍・ファイル操作・インストールなど、PCが苦手な人向けのサポートAIです。<br>
+      うまくいかないときは、画面のスクリーンショットを送っていただければ確認できます。
+    </p>
+  </header>
+
+  <div class="ai-scope">
+    <div class="ai-scope-card can">
+      <div class="ai-scope-title">答えられること</div>
+      <ul class="ai-scope-list">
+        <li>ZIP解凍・ファイル操作</li>
+        <li>インストール・アップデート</li>
+        <li>JSXファイルの配置</li>
+        <li>エラー画面の読み方</li>
+        <li>ダウンロードの確認</li>
+      </ul>
+    </div>
+    <div class="ai-scope-card cant">
+      <div class="ai-scope-title">対象外のこと</div>
+      <ul class="ai-scope-list">
+        <li>撮影テクニック</li>
+        <li>カメラ本体の操作</li>
+        <li>写真講評</li>
+        <li>SideKickの詳しい使い方</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="loading-state">
+    <div class="spinner"></div>
+    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+  </div>
+
+  <div id="login-state">
+    <div class="login-card">
+      <h2>Googleアカウントでログイン</h2>
+      <p>PC AIを使うにはGoogleアカウントが必要です。AI講評と共通の利用枠でご利用いただけます。</p>
+      <button class="google-btn" onclick="signInWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 18 18">
+          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z"/>
+          <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
+          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
+        </svg>
+        Google アカウントでログイン
+      </button>
+    </div>
+  </div>
+
+  <div id="limit-state">
+    <div class="limit-card">
+      <h2>今の利用枠を使い切りました</h2>
+      <p id="limit-msg"></p>
+    </div>
+  </div>
+
+  <div id="os-select-state">
+    <div class="os-card">
+      <h2>お使いのPCを選んでください</h2>
+      <p>Windows / Mac によって操作方法が異なるため、最初に選んでいただきます。<br>あとから設定画面で変更できます。</p>
+      <div class="os-choice-row">
+        <button class="os-choice-btn" onclick="chooseOs('windows')">🖥️ Windows</button>
+        <button class="os-choice-btn" onclick="chooseOs('mac')">💻 Mac</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="usage-bar">
+    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-track">
+      <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
+      <div class="usage-count" id="usage-count">0 / 5 回</div>
+    </div>
+    <div class="usage-reset" id="usage-reset"></div>
+    <div class="usage-shared-note">※ AI講評と共通の利用枠です</div>
+  </div>
+
+  <div id="main-area">
+    <div class="section">
+      <h2>PC情報</h2>
+      <div id="pc-info-row">
+        <span id="pc-os-label">OS: -</span>
+        <button id="pc-os-change-btn" onclick="showOsSelect()">変更する</button>
+      </div>
+      <label class="level-label" for="pc-level">説明のレベル</label>
+      <select id="pc-level" onchange="savePcProfile()">
+        <option value="beginner">初心者向け（右クリックやフォルダから丁寧に）</option>
+        <option value="intermediate">中級者向け（一般的なPC用語はそのまま使う）</option>
+        <option value="advanced">上級者向け（手順を簡潔に）</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <h2>質問する</h2>
+      <div id="chat-log">
+        <div class="chat-empty" id="chat-empty">例：「ZIPファイルの解凍方法が分かりません」「JSXファイルをどこに置けばいいですか？」</div>
+      </div>
+      <div id="chat-loading">回答を考えています...</div>
+      <div id="chat-error"></div>
+
+      <div id="screenshot-hint">うまくいかない場合は、画面のスクリーンショットを添付できます</div>
+      <div id="screenshot-preview-row">
+        <img id="screenshot-preview-img" src="" alt="">
+        <span id="screenshot-preview-name"></span>
+        <button id="screenshot-remove-btn" onclick="removeScreenshot()">削除</button>
+      </div>
+      <div class="chat-input-row">
+        <input type="file" id="screenshot-input" accept="image/*" style="display:none" onchange="onScreenshotSelected(this)">
+        <button id="screenshot-attach-btn" onclick="document.getElementById('screenshot-input').click()">📎 スクリーンショットを送る</button>
+        <textarea id="chat-input" rows="2" placeholder="PCについて質問を入力してください"></textarea>
+        <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    © PC AI — Sidekick Lab &nbsp;·&nbsp;
+    <a href="/privacy.html">プライバシーポリシー</a> &nbsp;·&nbsp;
+    <a href="/terms.html">利用規約</a>
+  </footer>
+</div>
+
+<!-- Firebase SDKs (compat) -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="/firebase-init.js"></script>
+
+<script>
+let currentUser = null;
+let usageLimit = 5;
+let usedCount = 0;
+let chatMessages = []; // {role:'user'|'assistant', content:string}
+let selectedScreenshotFile = null;
+
+// ---- Auth 状態監視 ----
+firebase.auth().onAuthStateChanged(async function(user) {
+  document.getElementById('loading-state').style.display = 'none';
+
+  if (!user) {
+    document.getElementById('login-state').style.display = 'block';
+    return;
+  }
+
+  currentUser = user;
+
+  const bar = document.getElementById('user-bar');
+  bar.style.display = 'flex';
+  document.getElementById('user-name').textContent = user.displayName || user.email;
+  if (user.photoURL) {
+    document.getElementById('user-avatar').src = user.photoURL;
+  } else {
+    document.getElementById('user-avatar').style.display = 'none';
+  }
+
+  await Promise.all([loadUsageInfo(user.uid), loadPcProfile(user.uid)]);
+});
+
+async function loadPcProfile(uid) {
+  try {
+    const db = firebase.firestore();
+    const userDoc = await db.collection('users').doc(uid).get();
+    const data = userDoc.exists ? userDoc.data() : {};
+    document.getElementById('pc-level').value = data.pc_level || 'beginner';
+
+    if (data.os_type === 'windows' || data.os_type === 'mac') {
+      applyOsLabel(data.os_type);
+    } else {
+      showOsSelect();
+    }
+  } catch (err) {
+    console.error('pc profile load error:', err);
+    showOsSelect();
+  }
+}
+
+function applyOsLabel(osType) {
+  document.getElementById('pc-os-label').textContent = 'OS: ' + (osType === 'windows' ? 'Windows' : 'Mac');
+  document.getElementById('os-select-state').style.display = 'none';
+}
+
+function showOsSelect() {
+  document.getElementById('os-select-state').style.display = 'block';
+}
+
+async function chooseOs(osType) {
+  if (!currentUser) return;
+  try {
+    const db = firebase.firestore();
+    await db.collection('users').doc(currentUser.uid).set({ os_type: osType }, { merge: true });
+    applyOsLabel(osType);
+  } catch (err) {
+    console.error('os save error:', err);
+    showChatError('OSの保存に失敗しました: ' + err.message);
+  }
+}
+
+async function savePcProfile() {
+  if (!currentUser) return;
+  try {
+    const db = firebase.firestore();
+    await db.collection('users').doc(currentUser.uid).set({
+      pc_level: document.getElementById('pc-level').value
+    }, { merge: true });
+  } catch (err) {
+    console.error('pc profile save error:', err);
+  }
+}
+
+async function loadUsageInfo(uid) {
+  const db = firebase.firestore();
+  try {
+    const limitsDoc = await db.collection('config').doc('planLimits').get();
+    const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
+    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-08-31');
+    const now = new Date();
+
+    const userDoc = await db.collection('users').doc(uid).get();
+    const roles = (userDoc.exists && userDoc.data().roles) || ['free'];
+    const effectiveRole = getHighestRole(roles);
+
+    let trackingKey, isWeekly;
+    if (now < campaignEnd) {
+      trackingKey = uid + '_' + getWeekKey(now);
+      const val = planLimits[effectiveRole]?.weeklyReviews;
+      usageLimit = (val && val !== 'TBD') ? val : (planLimits.free_campaign?.weeklyReviews ?? 5);
+      isWeekly = true;
+    } else if (effectiveRole === 'free') {
+      trackingKey = uid + '_' + getMonthKey(now);
+      usageLimit = planLimits.free_after?.monthlyReviews ?? 5;
+      isWeekly = false;
+    } else {
+      trackingKey = uid + '_' + getWeekKey(now);
+      const val = planLimits[effectiveRole]?.weeklyReviews;
+      usageLimit = (val && val !== 'TBD') ? val : (planLimits.free_after?.monthlyReviews ?? 5);
+      isWeekly = true;
+    }
+
+    const usageDoc = await db.collection('usageTracking').doc(trackingKey).get();
+    usedCount = usageDoc.exists ? (usageDoc.data().count || 0) : 0;
+
+    const barEl = document.getElementById('usage-bar');
+    barEl.style.display = 'block';
+    document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 回';
+    const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
+    document.getElementById('usage-bar-fill').style.width = pct + '%';
+
+    if (isWeekly) {
+      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(getNextMonday(now)) + '（月曜日）';
+    } else {
+      const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+    }
+
+    if (usedCount >= usageLimit) {
+      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      document.getElementById('limit-msg').textContent =
+        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}回）を使い切りました。${resetInfo}`;
+      document.getElementById('limit-state').style.display = 'block';
+    } else {
+      document.getElementById('main-area').style.display = 'block';
+    }
+  } catch (err) {
+    console.error('usage load error:', err);
+    document.getElementById('main-area').style.display = 'block';
+  }
+}
+
+// ---- Google ログイン / ログアウト ----
+async function signInWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    await firebase.auth().signInWithPopup(provider);
+  } catch (err) {
+    if (err.code !== 'auth/popup-closed-by-user') {
+      showChatError('ログインに失敗しました: ' + err.message);
+    }
+  }
+}
+
+function logout() {
+  firebase.auth().signOut().then(function() {
+    window.location.reload();
+  });
+}
+
+// ---- スクリーンショット添付 ----
+function onScreenshotSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) { showChatError('ファイルサイズが大きすぎます（最大10MB）'); return; }
+  selectedScreenshotFile = file;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('screenshot-preview-img').src = e.target.result;
+    document.getElementById('screenshot-preview-name').textContent = file.name;
+    document.getElementById('screenshot-preview-row').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeScreenshot() {
+  selectedScreenshotFile = null;
+  document.getElementById('screenshot-input').value = '';
+  document.getElementById('screenshot-preview-row').style.display = 'none';
+}
+
+// ---- チャット ----
+function appendUserBubble(text, thumbDataUrl) {
+  const log = document.getElementById('chat-log');
+  document.getElementById('chat-empty')?.remove();
+  const el = document.createElement('div');
+  el.className = 'chat-msg user';
+  if (thumbDataUrl) {
+    const img = document.createElement('img');
+    img.className = 'chat-thumb';
+    img.src = thumbDataUrl;
+    el.appendChild(img);
+  }
+  const textNode = document.createElement('div');
+  textNode.textContent = text;
+  el.appendChild(textNode);
+  log.appendChild(el);
+  log.scrollTop = log.scrollHeight;
+}
+
+function appendAssistantBubble(text) {
+  const log = document.getElementById('chat-log');
+  const el = document.createElement('div');
+  el.className = 'chat-msg assistant';
+  el.textContent = text;
+  log.appendChild(el);
+
+  const check = document.createElement('div');
+  check.className = 'difficulty-check';
+  const label = document.createElement('span');
+  label.className = 'difficulty-label';
+  label.textContent = 'この説明は難しかったですか？';
+  const hardBtn = document.createElement('button');
+  hardBtn.type = 'button';
+  hardBtn.className = 'difficulty-btn';
+  hardBtn.textContent = '説明をもっと簡単にする';
+  const okBtn = document.createElement('button');
+  okBtn.type = 'button';
+  okBtn.className = 'difficulty-btn';
+  okBtn.textContent = 'ちょうど良かった';
+
+  hardBtn.onclick = () => resolveDifficulty(check, true);
+  okBtn.onclick = () => resolveDifficulty(check, false);
+
+  check.appendChild(label);
+  check.appendChild(hardBtn);
+  check.appendChild(okBtn);
+  log.appendChild(check);
+
+  log.scrollTop = log.scrollHeight;
+}
+
+async function resolveDifficulty(checkEl, wasHard) {
+  const done = document.createElement('div');
+  done.className = 'difficulty-done';
+  if (wasHard) {
+    const levelSelect = document.getElementById('pc-level');
+    const order = ['advanced', 'intermediate', 'beginner'];
+    const idx = order.indexOf(levelSelect.value);
+    if (idx > -1 && idx < order.length - 1) {
+      levelSelect.value = order[idx + 1];
+      await savePcProfile();
+      done.textContent = '次の回答から、より分かりやすいレベルに調整します。';
+    } else {
+      done.textContent = 'すでに最も分かりやすいレベルです。';
+    }
+  } else {
+    done.textContent = 'フィードバックありがとうございます。';
+  }
+  checkEl.replaceWith(done);
+}
+
+async function sendChatMessage() {
+  const input = document.getElementById('chat-input');
+  const question = input.value.trim();
+  const hasScreenshot = !!selectedScreenshotFile;
+  if (!question && !hasScreenshot) return;
+  if (!currentUser) { showChatError('ログインが必要です'); return; }
+
+  const btn = document.getElementById('chat-send-btn');
+  btn.disabled = true;
+  document.getElementById('chat-loading').style.display = 'block';
+  document.getElementById('chat-error').style.display = 'none';
+
+  const displayText = question || '(スクリーンショットを送信)';
+  let thumbDataUrl = null;
+  let imageBase64 = null;
+  let mediaType = 'image/jpeg';
+
+  try {
+    if (hasScreenshot) {
+      thumbDataUrl = document.getElementById('screenshot-preview-img').src;
+      const compressed = await compressImage(selectedScreenshotFile);
+      const ab = await compressed.arrayBuffer();
+      imageBase64 = arrayBufferToBase64(ab);
+      mediaType = 'image/jpeg';
+    }
+  } catch (err) {
+    showChatError('画像の処理に失敗しました: ' + (err.message || err));
+    btn.disabled = false;
+    document.getElementById('chat-loading').style.display = 'none';
+    return;
+  }
+
+  appendUserBubble(displayText, thumbDataUrl);
+  chatMessages.push({ role: 'user', content: hasScreenshot ? `${displayText}\n[スクリーンショットを送信済み]` : displayText });
+  input.value = '';
+  removeScreenshot();
+
+  try {
+    const idToken = await currentUser.getIdToken(true);
+    const res = await fetch('/api/pc-ai', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        idToken,
+        osType: document.getElementById('pc-os-label').textContent.includes('Windows') ? 'windows'
+              : document.getElementById('pc-os-label').textContent.includes('Mac') ? 'mac' : '',
+        pcLevel: document.getElementById('pc-level').value,
+        messages: chatMessages,
+        imageBase64: imageBase64,
+        mediaType: mediaType
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      chatMessages.pop(); // 失敗した質問は履歴から取り除く
+      if (res.status === 401) {
+        await firebase.auth().signOut();
+        window.location.reload();
+      } else if (res.status === 429) {
+        document.getElementById('main-area').style.display = 'none';
+        document.getElementById('limit-msg').textContent = data.error;
+        document.getElementById('limit-state').style.display = 'block';
+      } else {
+        showChatError(data.error || 'エラーが発生しました');
+      }
+      return;
+    }
+
+    chatMessages.push({ role: 'assistant', content: data.result });
+    appendAssistantBubble(data.result);
+
+    usedCount++;
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 回';
+    const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
+    document.getElementById('usage-bar-fill').style.width = pct + '%';
+
+  } catch (err) {
+    chatMessages.pop();
+    showChatError('通信エラー: ' + (err.message || err));
+  } finally {
+    btn.disabled = false;
+    document.getElementById('chat-loading').style.display = 'none';
+  }
+}
+
+document.getElementById('chat-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendChatMessage();
+  }
+});
+
+function showChatError(msg) {
+  const el = document.getElementById('chat-error');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// ---- 画像処理ユーティリティ（ai-review.htmlと同一ロジック） ----
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
+function compressImage(file, maxSizeMB = 3) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const maxPx = 2048;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let quality = 0.85;
+      const tryBlob = () => {
+        canvas.toBlob(blob => {
+          if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1; tryBlob();
+          } else {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          }
+        }, 'image/jpeg', quality);
+      };
+      tryBlob();
+    };
+    img.src = url;
+  });
+}
+
+// ---- ユーティリティ ----
+function getHighestRole(roles) {
+  const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
+  for (const r of PRIORITY) { if (roles.includes(r)) return r; }
+  return 'free';
+}
+
+function getWeekKey(date) {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+  return d.getUTCFullYear() + '-W' + String(weekNo).padStart(2, '0');
+}
+
+function getMonthKey(date) {
+  return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0');
+}
+
+function getNextMonday(date) {
+  const d = new Date(date);
+  const day = d.getDay() || 7;
+  d.setDate(d.getDate() + (8 - day));
+  d.setHours(0, 0, 0, 0);
+  return d;
+}
+
+function formatDate(date) {
+  return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+}
+</script>
+</body>
+</html>
