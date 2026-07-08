@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sidekick Star ダウンロード | Sidekick Lab</title>
+<title>Sidekick AI ダウンロード | Sidekick Lab</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
@@ -138,48 +138,30 @@
     margin-top: 1px;
   }
 
-  /* 軽量版（Core）案内 */
-  .core-note {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 20px 24px;
-    text-align: left;
-    margin-bottom: 28px;
-  }
-  .core-note p {
-    color: var(--sub);
-    font-size: 0.85rem;
-    line-height: 1.7;
-    margin-bottom: 12px;
-  }
-  .core-dl-btn {
-    display: inline-block;
-    color: var(--accent2, var(--accent));
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-decoration: underline;
-  }
-  .core-dl-btn:hover { color: #fff; }
-
-  /* 購入CTA */
-  .buy-cta {
+  /* 無料・製品リンク案内 */
+  .free-cta {
     border-top: 1px solid var(--line);
     padding-top: 28px;
   }
-  .buy-cta p {
+  .free-cta p {
     color: var(--sub);
     font-size: 0.85rem;
     margin-bottom: 14px;
     line-height: 1.7;
   }
+  .product-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
   .buy-link {
     display: inline-block;
     border: 1px solid var(--accent);
     color: var(--accent);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 600;
-    padding: 12px 28px;
+    padding: 10px 20px;
     border-radius: 10px;
     text-decoration: none;
     transition: background 0.2s, color 0.2s;
@@ -213,9 +195,9 @@
       </p>
 
       <a id="dl-btn" class="dl-btn" href="#" download>
-        ↓ Sidekick Star をダウンロード
+        ↓ Sidekick AI をダウンロード
       </a>
-      <p class="dl-note">ZIP形式 / 約3.2GB</p>
+      <p class="dl-note">ZIP形式 / 約10MB・完全無料</p>
 
       <div class="next-steps">
         <h2>インストール手順</h2>
@@ -225,31 +207,30 @@
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <div>解凍したフォルダ内にあるマニュアルをお読みください</div>
+          <div>SideKickAI.exe をダブルクリックするだけで起動します（インストール不要）</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>使い方は同梱のマニュアル（PDF）をご覧ください</div>
         </div>
       </div>
 
-      <div class="core-note">
+      <div class="free-cta">
         <p>
-          2回目以降のダウンロード（アップデート時）は、AI飛行機除去などの大容量ランタイムを含まない
-          <strong>軽量版（Core）</strong>が便利です。既にランタイムをセットアップ済みの方はこちらをどうぞ。
+          Sidekick AI は <strong>完全無料</strong>・利用回数制限なしでご利用いただけます。<br>
+          Sidekick Star / Portrait / Sky Effect の使い方相談・エラー診断ができます。
         </p>
-        <a id="dl-core-btn" class="core-dl-btn" href="#">↓ Sidekick Star Core をダウンロード（軽量版）</a>
-      </div>
-
-      <div class="buy-cta">
-        <p>
-          3ヶ月の試用後は<strong>¥9,800</strong>（買い切り・アップデート永続）。<br>
-          使ってみて「これは使える」と思ったらぜひ。
-        </p>
-        <a class="buy-link" href="/buy-star.html">Sidekick Star を購入する →</a>
+        <div class="product-links">
+          <a class="buy-link" href="/sidekick-star.html">Sidekick Star →</a>
+          <a class="buy-link" href="/portrait.html">Sidekick Portrait →</a>
+          <a class="buy-link" href="/sky-effect.html">Sidekick Sky Effect →</a>
+        </div>
       </div>
     </div>
 
     <footer>
       <a href="/">トップ</a> &nbsp;·&nbsp;
-      <a href="/faq.html">FAQ</a> &nbsp;·&nbsp;
-      <a href="/sidekick-star.html">製品詳細</a>
+      <a href="/faq.html">FAQ</a>
     </footer>
   </div>
 
@@ -261,8 +242,7 @@
 <script src="/firebase-init.js"></script>
 
 <script>
-const R2_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Star.zip';
-const R2_URL_CORE = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Star_Core.zip';
+const R2_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_AI.zip';
 
 firebase.auth().onAuthStateChanged(function(user) {
   // メールのみ認証ルートからの bypass フラグを確認
@@ -270,7 +250,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
   if (!user && !emailBypass) {
     // 未ログイン → DLゲートへ
-    window.location.replace('/register-dl.html?product=star&src=dl-star');
+    window.location.replace('/register-dl.html?product=ai&src=dl-ai');
     return;
   }
 
@@ -284,15 +264,11 @@ firebase.auth().onAuthStateChanged(function(user) {
   const btn = document.getElementById('dl-btn');
   btn.href = R2_URL;
 
-  const coreBtn = document.getElementById('dl-core-btn');
-  coreBtn.href = R2_URL_CORE;
-  coreBtn.setAttribute('download', 'Sidekick_Star_Core.zip');
-
   // 自動ダウンロード（1秒後）
   setTimeout(function() {
     const a = document.createElement('a');
     a.href = R2_URL;
-    a.download = 'Sidekick_Star.zip';
+    a.download = 'Sidekick_AI.zip';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

@@ -265,14 +265,14 @@
   <div class="logo"><a href="/">Sidekick Lab</a></div>
 
   <div class="card">
-    <!-- 製品ヘッダー -->
+    <!-- 製品ヘッダー（JSでproductパラメータに応じて書き換える） -->
     <div class="product-header">
-      <div class="product-badge">無料試用</div>
-      <div class="product-name">Sidekick Star</div>
-      <div class="product-desc">
+      <div class="product-badge" id="ph-badge">無料試用</div>
+      <div class="product-name" id="ph-name">Sidekick Star</div>
+      <div class="product-desc" id="ph-desc">
         飛行機軌跡除去・天の川現像・比較明合成を<br>自動化する Photoshop スクリプト
       </div>
-      <div class="tag-list">
+      <div class="tag-list" id="ph-tags">
         <span class="tag">3ヶ月無料</span>
         <span class="tag">Windows 対応</span>
         <span class="tag">Photoshop CC〜</span>
@@ -356,16 +356,63 @@ const SRC     = params.get('src')     || 'direct';
 const DL_PAGES = {
   star:     '/dl-star.html',
   portrait: '/dl-portrait.html',
-  sky:      '/dl-sky.html'
+  sky:      '/dl-sky.html',
+  ai:       '/dl-ai.html'
 };
 const DL_PAGE = DL_PAGES[PRODUCT] || '/dl-star.html';
 
 const PRODUCT_NAMES = {
   star:     'Sidekick_Star',
   portrait: 'Sidekick_Portrait',
-  sky:      'Sidekick_SkyEffect'
+  sky:      'Sidekick_SkyEffect',
+  ai:       'Sidekick_AI'
 };
 const PRODUCT_NAME = PRODUCT_NAMES[PRODUCT] || 'Sidekick_Star';
+
+// 製品ヘッダー表示用（バッジ・名前・説明・タグ）
+const PRODUCT_INFO = {
+  star: {
+    badge: '無料試用',
+    name: 'Sidekick Star',
+    desc: '飛行機軌跡除去・天の川現像・比較明合成を<br>自動化する Photoshop スクリプト',
+    tags: ['3ヶ月無料', 'Windows 対応', 'Photoshop CC〜']
+  },
+  portrait: {
+    badge: '無料試用',
+    name: 'Sidekick Portrait',
+    desc: 'ポートレートの現像・レタッチ判断を<br>自動化する Photoshop スクリプト',
+    tags: ['3ヶ月無料', 'Windows 対応', 'Photoshop CC〜']
+  },
+  sky: {
+    badge: '無料試用',
+    name: 'Sidekick Sky Effect',
+    desc: '空の仕上げ・色調整を<br>自動化する Photoshop スクリプト',
+    tags: ['3ヶ月無料', 'Windows 対応', 'Photoshop CC〜']
+  },
+  ai: {
+    badge: '無料',
+    name: 'Sidekick AI',
+    desc: 'Sidekick Star / Portrait / Sky Effect の<br>使い方相談・エラー診断ローカルアシスタント',
+    tags: ['完全無料', 'ローカル動作', 'Windows 対応']
+  }
+};
+
+function applyProductHeader() {
+  const info = PRODUCT_INFO[PRODUCT] || PRODUCT_INFO.star;
+  document.getElementById('ph-badge').textContent = info.badge;
+  document.getElementById('ph-name').textContent = info.name;
+  document.getElementById('ph-desc').innerHTML = info.desc;
+  const tagsEl = document.getElementById('ph-tags');
+  tagsEl.innerHTML = '';
+  info.tags.forEach(function(tag) {
+    const span = document.createElement('span');
+    span.className = 'tag';
+    span.textContent = tag;
+    tagsEl.appendChild(span);
+  });
+  document.title = info.name + ' 無料ダウンロード | Sidekick Lab';
+}
+applyProductHeader();
 
 const CURRENT_VERSION = '3.16';
 
