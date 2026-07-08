@@ -764,7 +764,7 @@
       <h2>Googleアカウントでログイン</h2>
       <p>
         AI写真講評を使うにはGoogleアカウントが必要です。<br>
-        週5枚まで無料でお使いいただけます（キャンペーン期間中）。
+        週5AIチケットまで無料でお使いいただけます（キャンペーン期間中）。
       </p>
 
       <button class="google-btn" onclick="signInWithGoogle()">
@@ -794,7 +794,7 @@
       <div class="usage-bar-bg">
         <div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div>
       </div>
-      <div class="usage-count" id="usage-count">0 / 5 枚</div>
+      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
   </div>
@@ -1052,7 +1052,7 @@ async function loadUsageInfo(uid) {
     barEl.style.display = 'block';
     const label = isWeekly ? '今週の利用' : '今月の利用';
     document.getElementById('usage-label').textContent = label;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
@@ -1069,7 +1069,7 @@ async function loadUsageInfo(uid) {
     if (usedCount >= usageLimit) {
       const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}枚）を使い切りました。${resetInfo}`;
+        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-form').style.display = 'block';
@@ -1224,7 +1224,7 @@ async function submitReview(e) {
 
     // 使用量表示を更新
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
@@ -1315,7 +1315,7 @@ async function submitFollowUp() {
 
     // 使用量表示を更新（追質問も1カウント消費）
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 枚';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 

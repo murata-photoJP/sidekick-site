@@ -284,7 +284,7 @@
   <div id="login-state">
     <div class="login-card">
       <h2>Googleアカウントでログイン</h2>
-      <p>撮影AIを使うにはGoogleアカウントが必要です。AI講評・カメラAIと共通の利用枠でご利用いただけます。</p>
+      <p>撮影AIを使うにはGoogleアカウントが必要です。AI講評・カメラAIと共通のAIチケットでご利用いただけます。</p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
           <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
@@ -299,7 +299,7 @@
 
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今の利用枠を使い切りました</h2>
+      <h2>今週のAIチケットを使い切りました</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
@@ -308,10 +308,10 @@
     <div class="usage-label" id="usage-label">今週の利用</div>
     <div class="usage-track">
       <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
-      <div class="usage-count" id="usage-count">0 / 5 回</div>
+      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ AI講評・カメラAIと共通の利用枠です</div>
+    <div class="usage-shared-note">※ AI講評・カメラAIと共通のAIチケットです</div>
   </div>
 
   <div id="main-area">
@@ -466,7 +466,7 @@ async function loadUsageInfo(uid) {
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
     document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 回';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
@@ -480,7 +480,7 @@ async function loadUsageInfo(uid) {
     if (usedCount >= usageLimit) {
       const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}回）を使い切りました。${resetInfo}`;
+        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-area').style.display = 'block';
@@ -683,7 +683,7 @@ async function sendChatMessage() {
     appendAssistantBubble(data.result);
 
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' 回';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
