@@ -171,11 +171,13 @@
       padding:56px 0 64px;
       border-top:1px solid rgba(255,255,255,.07);
     }
+    .hub-hd{text-align:center;margin-bottom:36px;}
     .hub-grid{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns:repeat(3,1fr);
       gap:14px;
     }
+    .hub-grid-solo{grid-template-columns:1fr;max-width:640px;margin:0 auto;}
     .hub-card{
       position:relative;
       display:flex;flex-direction:column;
@@ -286,6 +288,12 @@
     .abt-inner{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
     .abt-img img{width:100%;display:block;border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.08);box-shadow:var(--sh);}
     .abt-img-cap{font-size:12px;color:var(--muted);margin-top:8px;text-align:center;}
+    .abt-gallery-strip{display:flex;align-items:center;gap:8px;margin-top:12px;}
+    .abt-gallery-strip img{width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,.1);flex-shrink:0;transition:.15s;}
+    .abt-gallery-strip:hover img{border-color:rgba(255,138,0,.4);}
+    .abt-gallery-more{font-size:12px;font-weight:700;color:var(--sub);margin-left:4px;white-space:nowrap;transition:.15s;}
+    .abt-gallery-strip:hover .abt-gallery-more{color:var(--text);}
+    @media(max-width:400px){.abt-gallery-strip img{width:44px;height:44px;}}
     .abt-hd{display:inline-block;margin-bottom:16px;transition:.15s;}
     .abt-hd:hover .h2{color:var(--accent2);}
     .abt-hd .lbl{margin-bottom:6px;transition:.15s;}
@@ -293,9 +301,11 @@
 
     /* ── Footer ── */
     .footer{padding:48px 0 32px;border-top:1px solid rgba(255,255,255,.06);}
-    .footer-in{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;margin-bottom:36px;}
+    .footer-in{display:flex;flex-wrap:wrap;gap:32px;margin-bottom:36px;}
+    .footer-brand{flex:1 1 220px;max-width:280px;}
     .footer-brand .brand{margin-bottom:10px;}
     .footer-brand p{font-size:12px;color:var(--muted);line-height:1.7;}
+    .footer-cols{flex:3 1 480px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:24px;}
     .footer-col h4{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
     .footer-col ul{list-style:none;}
     .footer-col ul li{margin-bottom:8px;}
@@ -306,8 +316,8 @@
     .footer-legal{display:flex;gap:16px;}
     .footer-legal a{font-size:12px;color:var(--muted);}
     .footer-legal a:hover{color:var(--sub);}
-    @media(max-width:860px){.footer-in{grid-template-columns:1fr 1fr;}}
-    @media(max-width:500px){.footer-in{grid-template-columns:1fr;}.footer-bottom{flex-direction:column;align-items:flex-start;}}
+    @media(max-width:860px){.footer-brand{flex-basis:100%;max-width:none;}.footer-cols{flex-basis:100%;}}
+    @media(max-width:500px){.footer-cols{grid-template-columns:repeat(2,1fr);}.footer-bottom{flex-direction:column;align-items:flex-start;}}
 
     /* ── AI講評 Entry Banner ── */
     .ai-entry{
@@ -323,10 +333,7 @@
       background:radial-gradient(circle,rgba(255,138,0,.06),transparent 70%);
       pointer-events:none;
     }
-    .ai-entry-inner{
-      display:flex;align-items:center;gap:48px;position:relative;z-index:1;
-    }
-    .ai-entry-text{flex:1;}
+    .ai-entry-hd{text-align:center;position:relative;z-index:1;margin-bottom:32px;}
     .ai-entry-badge{
       display:inline-flex;align-items:center;gap:7px;
       padding:5px 14px;border-radius:999px;
@@ -334,55 +341,31 @@
       color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.1em;
       margin-bottom:16px;
     }
-    .ai-entry-pts{
-      display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 0;
-    }
-    .ai-entry-pt{
-      display:inline-flex;align-items:center;gap:4px;
-      padding:4px 11px;border-radius:6px;
-      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
-      font-size:12px;color:var(--sub);font-weight:600;
-    }
-    .ai-entry-cta{
-      display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px;
-    }
-    .ai-entry-note{font-size:12px;color:var(--muted);}
-    .ai-entry-visual{
-      flex-shrink:0;width:220px;
-      display:flex;flex-direction:column;gap:10px;
-    }
-    .ai-ev-card{
-      background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
-      border-radius:12px;padding:14px 16px;
-    }
-    .ai-ev-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
-    .ai-ev-val{font-size:13px;color:var(--sub);}
-    @media(max-width:860px){
-      .ai-entry-visual{display:none;}
-    }
-    @media(max-width:600px){
-      .ai-entry-inner{flex-direction:column;}
-      .ai-entry{padding:40px 0;}
-    }
-    .ai-tools-hd{
-      font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.06em;
-      margin:32px 0 12px;position:relative;z-index:1;
-    }
+    .ai-entry-note{font-size:12px;color:var(--muted);margin-top:14px;}
     .ai-tools-grid{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;
       position:relative;z-index:1;
     }
     .ai-tool-card{
-      display:flex;align-items:center;gap:12px;
-      padding:16px 18px;background:rgba(255,255,255,.04);border-radius:var(--r);
+      display:flex;flex-direction:column;
+      padding:22px 20px;background:rgba(255,255,255,.04);border-radius:var(--r);
       border:1px solid rgba(255,255,255,.08);transition:.15s;
     }
-    .ai-tool-card:hover{border-color:rgba(255,138,0,.3);background:rgba(255,255,255,.06);transform:translateY(-2px);}
-    .ai-tool-icon{font-size:24px;line-height:1;flex-shrink:0;}
-    .ai-tool-name{font-size:13px;font-weight:800;margin-bottom:2px;}
-    .ai-tool-desc{font-size:11px;color:var(--sub);line-height:1.4;}
-    .ai-tools-note{font-size:12px;color:var(--muted);margin-top:14px;text-align:center;position:relative;z-index:1;}
-    @media(max-width:700px){.ai-tools-grid{grid-template-columns:1fr;}}
+    .ai-tool-card:hover{border-color:rgba(255,138,0,.3);background:rgba(255,255,255,.06);transform:translateY(-3px);}
+    .ai-tool-icon{font-size:26px;line-height:1;margin-bottom:10px;}
+    .ai-tool-name{font-size:15px;font-weight:800;margin-bottom:6px;}
+    .ai-tool-desc{font-size:12.5px;color:var(--sub);line-height:1.6;flex:1;margin-bottom:16px;}
+    .ai-tool-footer{
+      display:flex;align-items:center;justify-content:space-between;
+      border-top:1px solid rgba(255,255,255,.07);padding-top:12px;
+      font-size:11px;color:var(--muted);font-weight:700;
+    }
+    .ai-tool-arr{color:var(--sub);transition:.15s;}
+    .ai-tool-card:hover .ai-tool-arr{color:var(--text);}
+    .ai-tool-card.soon{border-style:dashed;background:transparent;opacity:.5;}
+    @media(max-width:600px){
+      .ai-entry{padding:40px 0;}
+    }
 
     /* ── Lightbox ── */
     #lightbox{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.88);align-items:center;justify-content:center;cursor:pointer;}
@@ -473,7 +456,7 @@
         <a href="about.html" style="color:var(--muted);">About</a>
         <a href="changelog.html" style="color:var(--muted);">更新履歴</a>
         <a href="faq.html" style="color:var(--muted);">Support</a>
-        <a href="#ai-entry" class="nav-ai">🤖 AIツール 無料</a>
+        <a href="#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
         <a href="en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;transition:.15s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='rgba(255,255,255,.2)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='rgba(255,255,255,.1)'">🇺🇸 EN</a>
       </nav>
     </div>
@@ -499,21 +482,21 @@
           </h1>
           <p class="hero-sub">
             星景・ポートレート・空の現像を自動化する Photoshop スクリプトと、<br>
-            AI写真講評・ワークショップ。写真家のための Sidekick Lab。
+            AI Lab・ワークショップ。写真家のための Sidekick Lab。
           </p>
           <p class="hero-sub-en">
             Photoshop scripts &amp; AI photo critique for photographers.
           </p>
-          <!-- CRO改善: HeroにCTAが存在しなかったため追加。最も低摩擦な入口（無料AI講評）を主CTAに据える -->
+          <!-- 主役はProducts。第一CTAを製品へ、AI Labは低摩擦の入口として第二CTAに -->
           <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:8px;">
-            <a href="ai-review.html" class="btn btn-p btn-lg" onclick="gtag('event','cta_click',{cta_label:'hero_ai_review'})">
-              写真を1枚、見せてください →
+            <a href="#products" class="btn btn-p btn-lg" onclick="gtag('event','cta_click',{cta_label:'hero_products'})">
+              製品を見る →
             </a>
-            <a href="#services" class="btn btn-o btn-lg" onclick="gtag('event','cta_click',{cta_label:'hero_products'})">
-              製品を見る
+            <a href="#ai-lab" class="btn btn-o btn-lg" onclick="gtag('event','cta_click',{cta_label:'hero_ai_lab'})">
+              AI Labを無料で試す
             </a>
           </div>
-          <p style="font-size:12px;color:var(--muted);margin-top:12px;">AI写真講評は無料 · Googleアカウントで30秒で開始</p>
+          <p style="font-size:12px;color:var(--muted);margin-top:12px;">AI Labは無料 · Googleアカウントで30秒で開始</p>
         </div>
       </div>
     </section>
@@ -533,81 +516,14 @@
 
 
     <!-- ══════════════════════════════════════
-         AI講評 — 集客入口
+         PRODUCTS — 主役。SideKick製品3本のみ
     ══════════════════════════════════════ -->
-    <section class="ai-entry" id="ai-entry">
+    <section class="hub" id="products">
       <div class="wrap">
-        <div class="ai-entry-inner">
-          <div class="ai-entry-text">
-            <div class="ai-entry-badge">Sidekick Lab · AI写真講評</div>
-            <h2 class="h2">村田一朗の講評スタイルを、<br><em>AIで体験できます。</em></h2>
-            <p class="lead" style="margin-top:12px;">
-              写真家 村田一朗が、10年以上・1万件以上の講評経験をもとに設計。構図・視線誘導・画面整理に特化した、汎用AIとは設計の出発点が異なる講評が体験できます。<br>
-              <span style="font-size:13px;color:var(--muted);">Sidekick Labを知っていただくため、現在は無料公開しています。</span>
-            </p>
-            <div class="ai-entry-pts">
-              <span class="ai-entry-pt">📐 構図の整理</span>
-              <span class="ai-entry-pt">👁 視線誘導</span>
-              <span class="ai-entry-pt">⬜ 余白の使い方</span>
-              <span class="ai-entry-pt">🌟 主題の伝わり方</span>
-              <span class="ai-entry-pt">💡 改善ポイント</span>
-            </div>
-            <div class="ai-entry-cta">
-              <!-- CRO改善: GA4イベント計測追加 -->
-              <a href="ai-review.html" class="btn btn-p btn-lg" onclick="gtag('event','cta_click',{cta_label:'ai_review_section'})">無料で講評してみる →</a>
-              <!-- CRO改善: 摩擦感を減らすため「30秒で開始」「無料」を明記 -->
-              <span class="ai-entry-note">Googleアカウントで30秒で開始 · 週5AIチケットまで無料</span>
-            </div>
-            <p style="font-size:13px;color:var(--muted);margin-top:14px;font-style:italic;">まずは、あなたの写真を一枚、見せてください。</p>
-          </div>
-          <div class="ai-entry-visual">
-            <div class="ai-ev-card">
-              <div class="ai-ev-label">講評実績</div>
-              <div class="ai-ev-val">10年以上・1万件以上</div>
-            </div>
-            <div class="ai-ev-card">
-              <div class="ai-ev-label">設計者</div>
-              <div class="ai-ev-val">写真家 村田一朗</div>
-            </div>
-            <div class="ai-ev-card">
-              <div class="ai-ev-label">料金</div>
-              <div class="ai-ev-val">無料（週5AIチケット）</div>
-            </div>
-          </div>
+        <div class="hub-hd">
+          <div class="lbl">Sidekick Lab · Products</div>
+          <h2 class="h2">写真の仕上げを自動化する<br><em>Photoshop スクリプト</em></h2>
         </div>
-
-        <div class="ai-tools-hd">ほかにも、こんなAIが使えます（AI講評と共通のAIチケットで利用可）</div>
-        <div class="ai-tools-grid">
-          <a href="camera-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_camera'})">
-            <div class="ai-tool-icon">📷</div>
-            <div>
-              <div class="ai-tool-name">カメラAI</div>
-              <div class="ai-tool-desc">カメラの設定・操作を質問できます</div>
-            </div>
-          </a>
-          <a href="shooting-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_shooting'})">
-            <div class="ai-tool-icon">🎯</div>
-            <div>
-              <div class="ai-tool-name">撮影AI</div>
-              <div class="ai-tool-desc">撮りたい写真から撮影方法を提案</div>
-            </div>
-          </a>
-          <a href="pc-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_pc'})">
-            <div class="ai-tool-icon">💻</div>
-            <div>
-              <div class="ai-tool-name">PC AI</div>
-              <div class="ai-tool-desc">ZIP解凍・インストールをサポート</div>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ══════════════════════════════════════
-         HUB — サービス一覧
-    ══════════════════════════════════════ -->
-    <section class="hub" id="services">
-      <div class="wrap">
         <div class="hub-grid">
 
           <!-- Star -->
@@ -662,7 +578,69 @@
             </div>
           </a>
 
-          <!-- Workshop -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         AI LAB — AI関連はここに1本化
+    ══════════════════════════════════════ -->
+    <section class="ai-entry" id="ai-lab">
+      <div class="wrap">
+        <div class="ai-entry-hd">
+          <div class="ai-entry-badge">Sidekick Lab · AI Lab</div>
+          <h2 class="h2">AI Lab</h2>
+          <p class="lead" style="max-width:520px;margin:12px auto 0;">
+            写真を学び、選び、改善するためのAIツール。<br>
+            村田一朗の視点をAIで体験できます。
+          </p>
+          <p class="ai-entry-note">Googleアカウントで30秒で開始 · 全ツール共通 週5AIチケットまで無料（キャンペーン期間中）</p>
+        </div>
+
+        <div class="ai-tools-grid">
+          <a href="ai-review.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_review'})">
+            <div class="ai-tool-icon">🤖</div>
+            <div class="ai-tool-name">AI講評</div>
+            <div class="ai-tool-desc">10年以上・1万件以上の講評経験をもとに、構図・視線誘導・画面整理をAIが講評</div>
+            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
+          </a>
+          <a href="camera-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_camera'})">
+            <div class="ai-tool-icon">📷</div>
+            <div class="ai-tool-name">カメラAI</div>
+            <div class="ai-tool-desc">カメラの設定・操作を質問できます</div>
+            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
+          </a>
+          <a href="shooting-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_shooting'})">
+            <div class="ai-tool-icon">🎯</div>
+            <div class="ai-tool-name">撮影AI</div>
+            <div class="ai-tool-desc">撮りたい写真から撮影方法を提案</div>
+            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
+          </a>
+          <a href="pc-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_pc'})">
+            <div class="ai-tool-icon">💻</div>
+            <div class="ai-tool-name">PC AI</div>
+            <div class="ai-tool-desc">ZIP解凍・インストールをサポート</div>
+            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
+          </a>
+          <div class="ai-tool-card soon">
+            <div class="ai-tool-icon">✨</div>
+            <div class="ai-tool-name">Coming Soon</div>
+            <div class="ai-tool-desc">今後追加予定のAIツール</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         WORKSHOP — Productsとは別商品群
+    ══════════════════════════════════════ -->
+    <section class="hub" id="workshop">
+      <div class="wrap">
+        <div class="hub-hd">
+          <div class="lbl">Sidekick Lab · Workshop</div>
+          <h2 class="h2">現場で学ぶ、<em>実践ワークショップ</em></h2>
+        </div>
+        <div class="hub-grid hub-grid-solo">
           <a href="workshop.html" class="hub-card hc-workshop">
             <div class="hc-top">
               <span class="hc-badge hc-badge-green">📷 ワークショップ</span>
@@ -678,7 +656,6 @@
               <span class="hc-arr">次回の日程を確認する →</span>
             </div>
           </a>
-
         </div>
       </div>
     </section>
@@ -794,6 +771,12 @@
           </div>
           <div class="abt-img">
             <img src="images/awards/milkyway_03_after.jpg" alt="村田一朗 作品">
+            <a href="gallery.html" class="abt-gallery-strip">
+              <img src="images/awards/3083835.jpg" alt="作品サムネイル">
+              <img src="images/awards/quiet-line-01.jpg" alt="作品サムネイル">
+              <img src="images/awards/inner-structure-01.jpg" alt="作品サムネイル">
+              <span class="abt-gallery-more">Galleryを見る →</span>
+            </a>
           </div>
         </div>
       </div>
@@ -816,41 +799,57 @@
           <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
         </div>
 
-        <div class="footer-col">
-          <h4>サービス</h4>
-          <ul>
-            <li><a href="sidekick-star.html">⭐ Sidekick Star</a></li>
-            <li><a href="portrait.html">👤 Sidekick Portrait</a></li>
-            <li><a href="sky-effect.html">☁️ Sidekick SkyEffect</a></li>
-            <li><a href="workshop.html">📷 Workshop</a></li>
-            <li><a href="ai-review.html">🤖 AI写真講評（無料）</a></li>
-            <li><a href="camera-ai.html">📷 カメラAI（無料）</a></li>
-            <li><a href="shooting-ai.html">🎯 撮影AI（無料）</a></li>
-            <li><a href="pc-ai.html">💻 PC AI（無料）</a></li>
-          </ul>
-        </div>
+        <div class="footer-cols">
 
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="faq.html">よくある質問</a></li>
-            <li><a href="changelog.html">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
+          <div class="footer-col">
+            <h4>Products</h4>
+            <ul>
+              <li><a href="sidekick-star.html">⭐ Sidekick Star</a></li>
+              <li><a href="portrait.html">👤 Sidekick Portrait</a></li>
+              <li><a href="sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+            </ul>
+          </div>
 
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="about.html">About</a></li>
-            <li><a href="sidekick.html">Sidekickとは</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="legal.html">特定商取引法</a></li>
-            <li><a href="privacy.html">プライバシーポリシー</a></li>
-          </ul>
+          <div class="footer-col">
+            <h4>AI Lab</h4>
+            <ul>
+              <li><a href="ai-review.html">🤖 AI講評（無料）</a></li>
+              <li><a href="camera-ai.html">📷 カメラAI（無料）</a></li>
+              <li><a href="shooting-ai.html">🎯 撮影AI（無料）</a></li>
+              <li><a href="pc-ai.html">💻 PC AI（無料）</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Workshop</h4>
+            <ul>
+              <li><a href="workshop.html">📷 Workshop</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>サポート</h4>
+            <ul>
+              <li><a href="manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+              <li><a href="manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+              <li><a href="manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+              <li><a href="faq.html">よくある質問</a></li>
+              <li><a href="changelog.html">更新履歴</a></li>
+              <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Sidekick Lab</h4>
+            <ul>
+              <li><a href="about.html">About</a></li>
+              <li><a href="sidekick.html">Sidekickとは</a></li>
+              <li><a href="gallery.html">Gallery</a></li>
+              <li><a href="legal.html">特定商取引法</a></li>
+              <li><a href="privacy.html">プライバシーポリシー</a></li>
+            </ul>
+          </div>
+
         </div>
 
       </div>
@@ -887,13 +886,13 @@
         }
       });
     },{threshold:0.3});
-    ['services','why','support','about'].forEach(function(id){
+    ['products','why','support','about','workshop'].forEach(function(id){
       var el = document.getElementById(id);
       if(el) _io.observe(el);
     });
 
-    // AI講評セクションの表示計測
-    var _aiSection = document.getElementById('ai-entry');
+    // AI Labセクションの表示計測
+    var _aiSection = document.getElementById('ai-lab');
     if(_aiSection) _io.observe(_aiSection);
 
     // 製品カードクリック計測
