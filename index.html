@@ -342,29 +342,21 @@
       margin-bottom:16px;
     }
     .ai-entry-note{font-size:12px;color:var(--muted);margin-top:14px;}
-    .ai-tools-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;
-      position:relative;z-index:1;
+    .ai-hub-wrap{max-width:720px;margin:0 auto;position:relative;z-index:1;}
+    .ai-hub-card{
+      display:flex;align-items:center;gap:22px;
+      padding:30px 34px;background:rgba(255,255,255,.04);border-radius:var(--r-lg);
+      border:1px solid rgba(255,255,255,.08);transition:.18s;
     }
-    .ai-tool-card{
-      display:flex;flex-direction:column;
-      padding:22px 20px;background:rgba(255,255,255,.04);border-radius:var(--r);
-      border:1px solid rgba(255,255,255,.08);transition:.15s;
-    }
-    .ai-tool-card:hover{border-color:rgba(255,138,0,.3);background:rgba(255,255,255,.06);transform:translateY(-3px);}
-    .ai-tool-icon{font-size:26px;line-height:1;margin-bottom:10px;}
-    .ai-tool-name{font-size:15px;font-weight:800;margin-bottom:6px;}
-    .ai-tool-desc{font-size:12.5px;color:var(--sub);line-height:1.6;flex:1;margin-bottom:16px;}
-    .ai-tool-footer{
-      display:flex;align-items:center;justify-content:space-between;
-      border-top:1px solid rgba(255,255,255,.07);padding-top:12px;
-      font-size:11px;color:var(--muted);font-weight:700;
-    }
-    .ai-tool-arr{color:var(--sub);transition:.15s;}
-    .ai-tool-card:hover .ai-tool-arr{color:var(--text);}
-    .ai-tool-card.soon{border-style:dashed;background:transparent;opacity:.5;}
+    .ai-hub-card:hover{border-color:rgba(255,138,0,.35);background:rgba(255,255,255,.06);transform:translateY(-3px);}
+    .ai-hub-icon{font-size:42px;line-height:1;flex-shrink:0;}
+    .ai-hub-text{flex:1;}
+    .ai-hub-name{font-size:20px;font-weight:800;margin-bottom:6px;}
+    .ai-hub-desc{font-size:13px;color:var(--sub);line-height:1.7;}
+    .ai-hub-btn{flex-shrink:0;pointer-events:none;}
     @media(max-width:600px){
       .ai-entry{padding:40px 0;}
+      .ai-hub-card{flex-direction:column;text-align:center;padding:28px 24px;}
     }
 
     /* ── Lightbox ── */
@@ -597,36 +589,18 @@
           <p class="ai-entry-note">Googleアカウントで30秒で開始 · 全ツール共通 週5AIチケットまで無料（キャンペーン期間中）</p>
         </div>
 
-        <div class="ai-tools-grid">
-          <a href="ai-review.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_review'})">
-            <div class="ai-tool-icon">🤖</div>
-            <div class="ai-tool-name">AI講評</div>
-            <div class="ai-tool-desc">10年以上・1万件以上の講評経験をもとに、構図・視線誘導・画面整理をAIが講評</div>
-            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
+        <div class="ai-hub-wrap">
+          <a href="ai-review.html" class="ai-hub-card" onclick="gtag('event','cta_click',{cta_label:'ai_hub_review'})">
+            <div class="ai-hub-icon">🤖</div>
+            <div class="ai-hub-text">
+              <div class="ai-hub-name">AI講評</div>
+              <div class="ai-hub-desc">
+                10年以上・1万件以上の講評経験をもとに、構図・視線誘導・画面整理をAIが講評。<br>
+                ほかにもカメラAI・撮影AI・PC AIが同じAI Labから利用できます。
+              </div>
+            </div>
+            <span class="btn btn-p ai-hub-btn">無料で試す →</span>
           </a>
-          <a href="camera-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_camera'})">
-            <div class="ai-tool-icon">📷</div>
-            <div class="ai-tool-name">カメラAI</div>
-            <div class="ai-tool-desc">カメラの設定・操作を質問できます</div>
-            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
-          </a>
-          <a href="shooting-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_shooting'})">
-            <div class="ai-tool-icon">🎯</div>
-            <div class="ai-tool-name">撮影AI</div>
-            <div class="ai-tool-desc">撮りたい写真から撮影方法を提案</div>
-            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
-          </a>
-          <a href="pc-ai.html" class="ai-tool-card" onclick="gtag('event','cta_click',{cta_label:'ai_tool_pc'})">
-            <div class="ai-tool-icon">💻</div>
-            <div class="ai-tool-name">PC AI</div>
-            <div class="ai-tool-desc">ZIP解凍・インストールをサポート</div>
-            <div class="ai-tool-footer"><span>無料</span><span class="ai-tool-arr">試してみる →</span></div>
-          </a>
-          <div class="ai-tool-card soon">
-            <div class="ai-tool-icon">✨</div>
-            <div class="ai-tool-name">Coming Soon</div>
-            <div class="ai-tool-desc">今後追加予定のAIツール</div>
-          </div>
         </div>
       </div>
     </section>
