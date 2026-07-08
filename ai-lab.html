@@ -99,7 +99,7 @@
     /* ── AI card grid ── */
     .ai-body{padding:56px 0 96px;}
     .ai-grid{
-      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;
+      display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
     }
     .ai-card{
       display:flex;flex-direction:column;
@@ -107,7 +107,22 @@
       border:1px solid rgba(255,255,255,.08);transition:.18s;
     }
     .ai-card:hover{border-color:rgba(255,138,0,.3);transform:translateY(-3px);box-shadow:var(--sh);}
-    .ai-card.featured{border-color:rgba(255,138,0,.35);background:linear-gradient(135deg,rgba(255,138,0,.08),var(--card) 60%);}
+    .ai-card.featured{
+      grid-column:1 / -1;
+      align-items:center;text-align:center;
+      padding:48px 40px;
+      border-color:rgba(255,138,0,.35);background:linear-gradient(135deg,rgba(255,138,0,.1),var(--card) 65%);
+    }
+    .ai-card.featured .ai-card-icon{font-size:56px;margin-bottom:18px;}
+    .ai-card.featured .ai-card-name{font-size:28px;margin-bottom:12px;}
+    .ai-card.featured .ai-card-desc{max-width:520px;margin:0 auto 26px;}
+    .ai-card.featured .ai-card-footer{border-top:none;padding-top:0;justify-content:center;gap:18px;font-size:14px;}
+    .ai-card.featured .ai-card-arr{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:48px;padding:0 26px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;
+      font-weight:800;font-size:14px;
+    }
     .ai-card-icon{font-size:30px;line-height:1;margin-bottom:14px;}
     .ai-card-name{font-size:17px;font-weight:800;margin-bottom:8px;}
     .ai-card-desc{font-size:13px;color:var(--sub);line-height:1.7;flex:1;margin-bottom:18px;}
@@ -118,6 +133,11 @@
     }
     .ai-card-arr{color:var(--sub);transition:.15s;}
     .ai-card:hover .ai-card-arr{color:var(--text);}
+    .ai-card.featured:hover .ai-card-arr{color:#111;}
+    @media(max-width:760px){
+      .ai-grid{grid-template-columns:1fr;}
+      .ai-card.featured{padding:36px 28px;}
+    }
 
     /* ── Footer ── */
     .footer{
