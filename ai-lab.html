@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.sidekick-lab.com/ai-lab">
+  <title>AI Lab | Sidekick Lab</title>
+  <meta name="description" content="村田一朗の視点をAIで体験できる4つの無料AIツール。AI講評・カメラAI・撮影AI・PC AIから、使いたいものを選んでください。">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Header ── */
+    .hdr{
+      position:sticky;top:0;z-index:40;
+      background:rgba(9,9,12,.9);backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .hdr-in{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;}
+    .brand-mk{
+      width:36px;height:36px;border-radius:9px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#111;font-weight:900;font-size:14px;flex-shrink:0;
+    }
+    .brand-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;display:block;margin-top:1px;}
+    .nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+    .nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+    .nav a:hover{color:#fff}
+
+    /* ── Hero ── */
+    .page-hero{
+      padding:72px 0 56px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      text-align:center;
+    }
+    .page-hero-inner{max-width:600px;margin:0 auto;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(28px,4.5vw,44px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:16px;
+    }
+    .page-lead{color:var(--sub);font-size:clamp(15px,1.8vw,17px);line-height:1.85;}
+    .page-note{font-size:12px;color:var(--muted);margin-top:16px;}
+
+    /* ── AI card grid ── */
+    .ai-body{padding:56px 0 96px;}
+    .ai-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;
+    }
+    .ai-card{
+      display:flex;flex-direction:column;
+      padding:26px 24px;background:var(--card);border-radius:var(--r);
+      border:1px solid rgba(255,255,255,.08);transition:.18s;
+    }
+    .ai-card:hover{border-color:rgba(255,138,0,.3);transform:translateY(-3px);box-shadow:var(--sh);}
+    .ai-card.featured{border-color:rgba(255,138,0,.35);background:linear-gradient(135deg,rgba(255,138,0,.08),var(--card) 60%);}
+    .ai-card-icon{font-size:30px;line-height:1;margin-bottom:14px;}
+    .ai-card-name{font-size:17px;font-weight:800;margin-bottom:8px;}
+    .ai-card-desc{font-size:13px;color:var(--sub);line-height:1.7;flex:1;margin-bottom:18px;}
+    .ai-card-footer{
+      display:flex;align-items:center;justify-content:space-between;
+      border-top:1px solid rgba(255,255,255,.07);padding-top:14px;
+      font-size:12px;color:var(--muted);font-weight:700;
+    }
+    .ai-card-arr{color:var(--sub);transition:.15s;}
+    .ai-card:hover .ai-card-arr{color:var(--text);}
+
+    /* ── Footer ── */
+    .footer{
+      border-top:1px solid rgba(255,255,255,.06);
+      padding:32px 0;
+    }
+    .footer-in{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;}
+
+    @media(max-width:640px){
+      .nav{display:none;}
+      .footer-in{flex-direction:column;align-items:flex-start;}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="hdr">
+    <div class="wrap hdr-in">
+      <a href="index.html" class="brand">
+        <div class="brand-mk">S</div>
+        <div>Sidekick Lab<span class="brand-sub">by Ichiro Murata</span></div>
+      </a>
+      <nav class="nav">
+        <a href="sidekick-star.html">⭐ Star</a>
+        <a href="portrait.html">👤 Portrait</a>
+        <a href="sky-effect.html">☁️ Sky</a>
+        <a href="workshop.html">📷 Workshop</a>
+        <a href="gallery.html" style="color:var(--muted);">Gallery</a>
+        <a href="about.html" style="color:var(--muted);">About</a>
+        <a href="faq.html" style="color:var(--muted);">Support</a>
+        <a href="ai-lab.html" style="color:#fff;">🤖 AI Lab</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">Sidekick Lab · AI Lab</div>
+          <h1 class="page-h1">使いたいAIを選んでください</h1>
+          <p class="page-lead">
+            村田一朗の視点をAIで体験できる、写真のためのAIツールです。<br>
+            まずは一番人気の「AI講評」がおすすめです。
+          </p>
+          <p class="page-note">Googleアカウントで30秒で開始 · 全ツール共通 週5AIチケットまで無料（キャンペーン期間中）</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ai-body">
+      <div class="wrap">
+        <div class="ai-grid">
+
+          <a href="ai-review.html" class="ai-card featured" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_review'})">
+            <div class="ai-card-icon">🤖</div>
+            <div class="ai-card-name">AI講評</div>
+            <div class="ai-card-desc">10年以上・1万件以上の講評経験をもとに、構図・視線誘導・画面整理をAIが講評します。</div>
+            <div class="ai-card-footer"><span>無料 · 一番人気</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+          <a href="camera-ai.html" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_camera'})">
+            <div class="ai-card-icon">📷</div>
+            <div class="ai-card-name">カメラAI</div>
+            <div class="ai-card-desc">カメラの設定・操作について質問できます。機種に合わせて案内します。</div>
+            <div class="ai-card-footer"><span>無料</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+          <a href="shooting-ai.html" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_shooting'})">
+            <div class="ai-card-icon">🎯</div>
+            <div class="ai-card-name">撮影AI</div>
+            <div class="ai-card-desc">撮りたい写真から逆算して、撮影方法を提案します。</div>
+            <div class="ai-card-footer"><span>無料</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+          <a href="pc-ai.html" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_pc'})">
+            <div class="ai-card-icon">💻</div>
+            <div class="ai-card-name">PC AI</div>
+            <div class="ai-card-desc">ZIP解凍・ファイル操作・インストールなど、PCが苦手な人向けのサポートです。</div>
+            <div class="ai-card-footer"><span>無料</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <div style="line-height:1.9;">
+        <div style="font-weight:700;font-size:15px;">村田 一朗 / Ichiro Murata</div>
+        <div style="font-size:13px;margin-top:2px;">
+          <a href="mailto:murata@mbg.nifty.com" style="color:var(--sub);">murata@mbg.nifty.com</a> &nbsp;·&nbsp; <a href="https://x.com/murata_photo" target="_blank" style="color:var(--sub);">𝕏 @murata_photo</a>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:13px;">
+        <div style="color:var(--muted);">© Sidekick Lab — 村田 一朗</div>
+        <div style="display:flex;gap:14px;">
+          <a href="index.html" style="color:var(--sub);">トップに戻る</a>
+          <a href="legal.html" style="color:var(--sub);">特定商取引法に基づく表記</a>
+          <a href="privacy.html" style="color:var(--sub);">プライバシーポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
