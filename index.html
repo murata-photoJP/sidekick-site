@@ -25,6 +25,7 @@
   <style>
     :root{
       --bg:#09090c;
+      --bg2:#1a1d26;
       --card:#14161d;
       --card2:#1a1d26;
       --line:#22263080;
@@ -171,6 +172,8 @@
       padding:56px 0 64px;
       border-top:1px solid rgba(255,255,255,.07);
     }
+    /* セクションの区切りが分かりにくいため、黒/グレーを交互に配置 */
+    #workshop{background:var(--bg2);}
     .hub-hd{text-align:center;margin-bottom:36px;}
     .hub-grid{
       display:grid;
@@ -255,7 +258,7 @@
     /* ─────────────────────────────────────
        SUPPORT
     ───────────────────────────────────── */
-    .supp{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
+    .supp{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);background:var(--bg2);}
     .supp-hd{text-align:center;margin-bottom:36px;}
     .supp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
     .supp-card{
