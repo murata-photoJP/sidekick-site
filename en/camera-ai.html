@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>カメラAI | Sidekick Lab</title>
+<link rel="canonical" href="https://www.sidekick-lab.com/en/camera-ai">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/camera-ai">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/camera-ai">
+<title>Camera AI | Sidekick Lab</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
@@ -23,7 +26,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
@@ -31,7 +34,7 @@
   }
   .container { max-width: 720px; margin: 0 auto; }
 
-  /* サイトナビ */
+  /* site nav */
   .site-nav {
     position: sticky; top: 0; z-index: 40;
     background: rgba(26,26,26,.92); backdrop-filter: blur(16px);
@@ -84,7 +87,7 @@
   }
   .logout-btn:hover { color: #aaa; border-color: #666; }
 
-  /* できること／できないこと */
+  /* can / can't */
   .ai-scope { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
   .ai-scope-card { background: #252525; border: 1px solid #383838; border-radius: 10px; padding: 18px; }
   .ai-scope-card.can { border-top: 2px solid #3a5a6a; }
@@ -154,7 +157,7 @@
   .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
   #camera-level { width: 100%; }
 
-  /* チャット */
+  /* chat */
   #chat-log {
     display: flex; flex-direction: column; gap: 14px;
     margin-bottom: 16px; max-height: 55vh; overflow-y: auto; padding-right: 4px;
@@ -211,11 +214,11 @@
 
 <nav class="site-nav">
   <div class="site-nav-in">
-    <a href="/" class="site-brand">
+    <a href="/en" class="site-brand">
       <div class="site-brand-mk">S</div>
       <span>Sidekick Lab</span>
     </a>
-    <a href="/" class="site-nav-back">← トップに戻る</a>
+    <a href="/en" class="site-nav-back">← Back to home</a>
   </div>
 </nav>
 
@@ -224,47 +227,47 @@
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <span class="user-name" id="user-name"></span>
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
-    <h1>カメラAI</h1>
+    <h1>Camera AI</h1>
     <p>
-      カメラ本体の取扱説明書レベルの質問に答えます。<br>
-      「この機能は何か」「どこで設定するか」を、機種に合わせて案内します。
+      Answers manual-level questions about your camera body.<br>
+      Guides you on "what this feature is" and "where to set it," tailored to your model.
     </p>
   </header>
 
   <div class="ai-scope">
     <div class="ai-scope-card can">
-      <div class="ai-scope-title">答えられること</div>
+      <div class="ai-scope-title">What it can answer</div>
       <ul class="ai-scope-list">
-        <li>本体設定・メニュー項目</li>
-        <li>ボタンカスタム・AFモード</li>
-        <li>記録形式・手ブレ補正</li>
-        <li>Wi-Fi / Bluetooth接続</li>
-        <li>SDカード・初期化</li>
+        <li>Body settings & menu items</li>
+        <li>Button customization & AF modes</li>
+        <li>Recording formats & stabilization</li>
+        <li>Wi-Fi / Bluetooth connections</li>
+        <li>SD cards & reset/initialization</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">深くは踏み込まないこと</div>
+      <div class="ai-scope-title">Won't go deep on</div>
       <ul class="ai-scope-list">
-        <li>作品講評・構図アドバイス</li>
-        <li>撮影地・場面ごとのおすすめ設定</li>
-        <li>SideKick / Photoshop操作</li>
-        <li>PCの一般操作</li>
+        <li>Photo critique & composition advice</li>
+        <li>Location & scene-specific settings</li>
+        <li>SideKick / Photoshop operation</li>
+        <li>General PC operation</li>
       </ul>
     </div>
   </div>
 
   <div id="loading-state">
     <div class="spinner"></div>
-    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+    <p style="color:#666;font-size:0.85rem;">Checking...</p>
   </div>
 
   <div id="login-state">
     <div class="login-card">
-      <h2>Googleアカウントでログイン</h2>
-      <p>カメラAIを使うにはGoogleアカウントが必要です。講評AIと共通のAIチケットでご利用いただけます。
-        <span class="campaign-note">週5AIチケットまで無料（〜2026年8月末）</span>
+      <h2>Sign in with Google</h2>
+      <p>You'll need a Google account to use Camera AI. It shares AI tickets with Photo Critique AI.
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
@@ -273,34 +276,34 @@
           <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
         </svg>
-        Google アカウントでログイン
+        Sign in with Google
       </button>
     </div>
   </div>
 
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今週のAIチケットを使い切りました</h2>
+      <h2>You've used this week's AI tickets</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
 
   <div id="usage-bar">
-    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-label" id="usage-label">This week's usage</div>
     <div class="usage-track">
       <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
-      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
+      <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ 講評AIと共通のAIチケットです</div>
+    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI</div>
   </div>
 
   <div id="main-area">
     <div class="section">
-      <h2>カメラ情報（任意・入力すると回答が正確になります）</h2>
+      <h2>Camera info (optional — improves answer accuracy)</h2>
       <div id="camera-info-row">
         <select id="camera-brand" onchange="saveCameraProfile()">
-          <option value="">メーカー未選択</option>
+          <option value="">Brand not selected</option>
           <option>Canon</option>
           <option>Nikon</option>
           <option>SONY</option>
@@ -309,36 +312,36 @@
           <option>Panasonic / LUMIX</option>
           <option>PENTAX / RICOH</option>
           <option>Leica</option>
-          <option>その他</option>
+          <option value="Other">Other</option>
         </select>
-        <input type="text" id="camera-model" placeholder="機種名（例: α7IV, EOS R6 Mark II）" onchange="saveCameraProfile()">
+        <input type="text" id="camera-model" placeholder="Model name (e.g. a7 IV, EOS R6 Mark II)" onchange="saveCameraProfile()">
       </div>
-      <label class="level-label" for="camera-level">説明のレベル</label>
+      <label class="level-label" for="camera-level">Explanation level</label>
       <select id="camera-level" onchange="saveCameraProfile()">
-        <option value="beginner">初心者向け（専門用語を避けて丁寧に）</option>
-        <option value="intermediate">中級者向け（一般的な用語はそのまま使う）</option>
-        <option value="advanced">上級者向け（設定名・数値を簡潔に）</option>
+        <option value="beginner">Beginner (avoids jargon, explains carefully)</option>
+        <option value="intermediate">Intermediate (uses common terms as-is)</option>
+        <option value="advanced">Advanced (concise setting names & values)</option>
       </select>
     </div>
 
     <div class="section">
-      <h2>質問する</h2>
+      <h2>Ask a question</h2>
       <div id="chat-log">
-        <div class="chat-empty" id="chat-empty">例：「AFエリアの切り替え方が分かりません」「Wi-Fiでスマホに転送する方法は？」</div>
+        <div class="chat-empty" id="chat-empty">e.g. "I don't know how to switch AF area modes" / "How do I transfer photos to my phone over Wi-Fi?"</div>
       </div>
-      <div id="chat-loading">回答を考えています...</div>
+      <div id="chat-loading">Thinking...</div>
       <div id="chat-error"></div>
       <div class="chat-input-row">
-        <textarea id="chat-input" rows="2" placeholder="カメラについて質問を入力してください"></textarea>
-        <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
+        <textarea id="chat-input" rows="2" placeholder="Ask a question about your camera"></textarea>
+        <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
-    © カメラAI — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy.html">プライバシーポリシー</a> &nbsp;·&nbsp;
-    <a href="/terms.html">利用規約</a>
+    © Camera AI — Sidekick Lab &nbsp;·&nbsp;
+    <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms.html">Terms of Service</a>
   </footer>
 </div>
 
@@ -354,7 +357,7 @@ let usageLimit = 5;
 let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
 
-// ---- Auth 状態監視 ----
+// ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
   document.getElementById('loading-state').style.display = 'none';
 
@@ -438,22 +441,22 @@ async function loadUsageInfo(uid) {
 
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
-    document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-label').textContent = isWeekly ? "This week's usage" : "This month's usage";
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
     if (isWeekly) {
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(getNextMonday(now)) + '（月曜日）';
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(getNextMonday(now)) + ' (Monday)';
     } else {
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(nextMonth);
     }
 
     if (usedCount >= usageLimit) {
-      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      const resetInfo = isWeekly ? 'It will reset on Monday.' : 'It will reset on the 1st of next month.';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
+        `You've used this ${isWeekly ? "week's" : "month's"} limit (${usageLimit} tickets). ${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-area').style.display = 'block';
@@ -464,14 +467,14 @@ async function loadUsageInfo(uid) {
   }
 }
 
-// ---- Google ログイン / ログアウト ----
+// ---- Google sign-in / sign-out ----
 async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     await firebase.auth().signInWithPopup(provider);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
-      showChatError('ログインに失敗しました: ' + err.message);
+      showChatError('Sign-in failed: ' + err.message);
     }
   }
 }
@@ -482,7 +485,7 @@ function logout() {
   });
 }
 
-// ---- チャット ----
+// ---- Chat ----
 function appendUserBubble(text) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
@@ -504,15 +507,15 @@ function appendAssistantBubble(text) {
   check.className = 'difficulty-check';
   const label = document.createElement('span');
   label.className = 'difficulty-label';
-  label.textContent = 'この説明は難しかったですか？';
+  label.textContent = 'Was this explanation hard to follow?';
   const hardBtn = document.createElement('button');
   hardBtn.type = 'button';
   hardBtn.className = 'difficulty-btn';
-  hardBtn.textContent = '難しかった';
+  hardBtn.textContent = 'Too hard';
   const okBtn = document.createElement('button');
   okBtn.type = 'button';
   okBtn.className = 'difficulty-btn';
-  okBtn.textContent = 'ちょうど良かった';
+  okBtn.textContent = 'Just right';
 
   hardBtn.onclick = () => resolveDifficulty(check, true);
   okBtn.onclick = () => resolveDifficulty(check, false);
@@ -535,12 +538,12 @@ async function resolveDifficulty(checkEl, wasHard) {
     if (idx > -1 && idx < order.length - 1) {
       levelSelect.value = order[idx + 1];
       await saveCameraProfile();
-      done.textContent = '次の回答から、より分かりやすいレベルに調整します。';
+      done.textContent = "I'll use a simpler level starting with the next answer.";
     } else {
-      done.textContent = 'すでに最も分かりやすいレベルです。';
+      done.textContent = "This is already the simplest level.";
     }
   } else {
-    done.textContent = 'フィードバックありがとうございます。';
+    done.textContent = 'Thanks for the feedback.';
   }
   checkEl.replaceWith(done);
 }
@@ -549,7 +552,7 @@ async function sendChatMessage() {
   const input = document.getElementById('chat-input');
   const question = input.value.trim();
   if (!question) return;
-  if (!currentUser) { showChatError('ログインが必要です'); return; }
+  if (!currentUser) { showChatError('Please sign in first'); return; }
 
   const btn = document.getElementById('chat-send-btn');
   btn.disabled = true;
@@ -567,6 +570,7 @@ async function sendChatMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
+        lang: 'en',
         cameraBrand: document.getElementById('camera-brand').value,
         cameraModel: document.getElementById('camera-model').value.trim(),
         cameraLevel: document.getElementById('camera-level').value,
@@ -577,7 +581,7 @@ async function sendChatMessage() {
     const data = await res.json();
 
     if (!res.ok) {
-      chatMessages.pop(); // 失敗した質問は履歴から取り除く
+      chatMessages.pop(); // remove the failed question from history
       if (res.status === 401) {
         await firebase.auth().signOut();
         window.location.reload();
@@ -586,7 +590,7 @@ async function sendChatMessage() {
         document.getElementById('limit-msg').textContent = data.error;
         document.getElementById('limit-state').style.display = 'block';
       } else {
-        showChatError(data.error || 'エラーが発生しました');
+        showChatError(data.error || 'An error occurred');
       }
       return;
     }
@@ -595,13 +599,13 @@ async function sendChatMessage() {
     appendAssistantBubble(data.result);
 
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
     chatMessages.pop();
-    showChatError('通信エラー: ' + (err.message || err));
+    showChatError('Connection error: ' + (err.message || err));
   } finally {
     btn.disabled = false;
     document.getElementById('chat-loading').style.display = 'none';
@@ -621,7 +625,7 @@ function showChatError(msg) {
   el.style.display = 'block';
 }
 
-// ---- ユーティリティ ----
+// ---- Utilities ----
 function getHighestRole(roles) {
   const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
   for (const r of PRIORITY) { if (roles.includes(r)) return r; }

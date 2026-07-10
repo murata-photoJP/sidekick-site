@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>カメラAI | Sidekick Lab</title>
+<link rel="canonical" href="https://www.sidekick-lab.com/en/pc-ai">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/pc-ai">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/pc-ai">
+<title>PC AI | Sidekick Lab</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
@@ -23,7 +26,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
@@ -31,7 +34,7 @@
   }
   .container { max-width: 720px; margin: 0 auto; }
 
-  /* サイトナビ */
+  /* site nav */
   .site-nav {
     position: sticky; top: 0; z-index: 40;
     background: rgba(26,26,26,.92); backdrop-filter: blur(16px);
@@ -84,7 +87,7 @@
   }
   .logout-btn:hover { color: #aaa; border-color: #666; }
 
-  /* できること／できないこと */
+  /* can / can't */
   .ai-scope { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
   .ai-scope-card { background: #252525; border: 1px solid #383838; border-radius: 10px; padding: 18px; }
   .ai-scope-card.can { border-top: 2px solid #3a5a6a; }
@@ -137,6 +140,23 @@
   .usage-reset { color: #666; font-size: 0.78rem; margin-top: 4px; }
   .usage-shared-note { color: #555; font-size: 0.75rem; margin-top: 6px; }
 
+  /* OS selection (required on first use) */
+  #os-select-state { display: none; }
+  .os-card {
+    background: #252525; border: 1px solid #383838; border-radius: 12px;
+    padding: 32px; text-align: center; margin-bottom: 24px;
+  }
+  .os-card h2 { font-size: 1.05rem; margin-bottom: 10px; color: #ddd; }
+  .os-card p { color: #888; font-size: 0.85rem; line-height: 1.7; margin-bottom: 22px; }
+  .os-choice-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .os-choice-btn {
+    flex: 1; min-width: 140px; max-width: 200px;
+    background: #1a1a1a; border: 1px solid #444; border-radius: 10px;
+    padding: 20px 14px; color: #e8e8e8; font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; transition: border-color .15s, background .15s;
+  }
+  .os-choice-btn:hover { border-color: #4e8cff; background: #202634; }
+
   #main-area { display: none; }
   .section {
     background: #252525; border: 1px solid #383838; border-radius: 10px;
@@ -148,13 +168,14 @@
     padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
     color: #e8e8e8; font-size: 0.92rem; font-family: inherit;
   }
-  #camera-info-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  #camera-brand { flex: 1; min-width: 140px; }
-  #camera-model { flex: 2; min-width: 180px; }
+  #pc-info-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  #pc-os-label { font-size: 0.85rem; color: #ccc; background: #1a1a1a; border: 1px solid #444; border-radius: 6px; padding: 10px 14px; }
+  #pc-os-change-btn { font-size: 0.76rem; color: #666; background: none; border: 1px solid #444; border-radius: 5px; padding: 8px 10px; cursor: pointer; }
+  #pc-os-change-btn:hover { color: #aaa; border-color: #666; }
   .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
-  #camera-level { width: 100%; }
+  #pc-level { width: 100%; }
 
-  /* チャット */
+  /* chat */
   #chat-log {
     display: flex; flex-direction: column; gap: 14px;
     margin-bottom: 16px; max-height: 55vh; overflow-y: auto; padding-right: 4px;
@@ -170,6 +191,9 @@
     align-self: flex-start; background: #1e1e1e; border: 1px solid #383838;
     color: #e0e0e0; border-bottom-left-radius: 3px;
   }
+  .chat-msg img.chat-thumb {
+    display: block; max-width: 200px; border-radius: 8px; margin-bottom: 8px;
+  }
   .chat-empty { color: #555; font-size: 0.85rem; text-align: center; padding: 24px 0; }
 
   .difficulty-check {
@@ -183,14 +207,27 @@
   .difficulty-btn:hover { border-color: #666; color: #ccc; }
   .difficulty-done { font-size: 0.76rem; color: #555; align-self: flex-start; }
 
-  .chat-input-row { display: flex; gap: 8px; }
+  /* screenshot attachment */
+  #screenshot-preview-row { display: none; align-items: center; gap: 10px; margin-bottom: 10px; }
+  #screenshot-preview-img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #444; }
+  #screenshot-preview-name { flex: 1; font-size: 0.8rem; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #screenshot-remove-btn { font-size: 0.76rem; color: #666; background: none; border: 1px solid #444; border-radius: 5px; padding: 5px 9px; cursor: pointer; }
+  #screenshot-remove-btn:hover { color: #aaa; border-color: #666; }
+  #screenshot-hint { font-size: 0.76rem; color: #666; margin-bottom: 8px; }
+
+  .chat-input-row { display: flex; gap: 8px; align-items: flex-end; }
   #chat-input {
     flex: 1; padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
     color: #e8e8e8; font-size: 0.92rem; font-family: inherit; resize: vertical; min-height: 48px;
   }
   #chat-input::placeholder { color: #555; }
+  #screenshot-attach-btn {
+    padding: 0 16px; height: 48px; background: #1a1a1a; border: 1px solid #444; border-radius: 8px;
+    color: #999; cursor: pointer; font-size: 0.85rem; white-space: nowrap;
+  }
+  #screenshot-attach-btn:hover { border-color: #666; color: #ccc; }
   #chat-send-btn {
-    padding: 0 22px; background: #4e6cff; border: none; border-radius: 8px;
+    padding: 0 22px; height: 48px; background: #4e6cff; border: none; border-radius: 8px;
     color: #fff; font-weight: 700; cursor: pointer; font-size: 0.92rem;
   }
   #chat-send-btn:hover { background: #3d5ae0; }
@@ -211,11 +248,11 @@
 
 <nav class="site-nav">
   <div class="site-nav-in">
-    <a href="/" class="site-brand">
+    <a href="/en" class="site-brand">
       <div class="site-brand-mk">S</div>
       <span>Sidekick Lab</span>
     </a>
-    <a href="/" class="site-nav-back">← トップに戻る</a>
+    <a href="/en" class="site-nav-back">← Back to home</a>
   </div>
 </nav>
 
@@ -224,47 +261,47 @@
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <span class="user-name" id="user-name"></span>
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
-    <h1>カメラAI</h1>
+    <h1>PC AI</h1>
     <p>
-      カメラ本体の取扱説明書レベルの質問に答えます。<br>
-      「この機能は何か」「どこで設定するか」を、機種に合わせて案内します。
+      A support AI for photographers who aren't comfortable with PCs — unzipping files, moving things around, installing software.<br>
+      If something isn't working, send a screenshot and it can take a look.
     </p>
   </header>
 
   <div class="ai-scope">
     <div class="ai-scope-card can">
-      <div class="ai-scope-title">答えられること</div>
+      <div class="ai-scope-title">What it can answer</div>
       <ul class="ai-scope-list">
-        <li>本体設定・メニュー項目</li>
-        <li>ボタンカスタム・AFモード</li>
-        <li>記録形式・手ブレ補正</li>
-        <li>Wi-Fi / Bluetooth接続</li>
-        <li>SDカード・初期化</li>
+        <li>Unzipping ZIPs & file operations</li>
+        <li>Installing & updating</li>
+        <li>Placing JSX files</li>
+        <li>Reading error screens</li>
+        <li>Checking your downloads</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">深くは踏み込まないこと</div>
+      <div class="ai-scope-title">Out of scope</div>
       <ul class="ai-scope-list">
-        <li>作品講評・構図アドバイス</li>
-        <li>撮影地・場面ごとのおすすめ設定</li>
-        <li>SideKick / Photoshop操作</li>
-        <li>PCの一般操作</li>
+        <li>Shooting technique</li>
+        <li>Camera-body operation</li>
+        <li>Photo critique</li>
+        <li>Detailed SideKick usage</li>
       </ul>
     </div>
   </div>
 
   <div id="loading-state">
     <div class="spinner"></div>
-    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+    <p style="color:#666;font-size:0.85rem;">Checking...</p>
   </div>
 
   <div id="login-state">
     <div class="login-card">
-      <h2>Googleアカウントでログイン</h2>
-      <p>カメラAIを使うにはGoogleアカウントが必要です。講評AIと共通のAIチケットでご利用いただけます。
-        <span class="campaign-note">週5AIチケットまで無料（〜2026年8月末）</span>
+      <h2>Sign in with Google</h2>
+      <p>You'll need a Google account to use PC AI. It shares AI tickets with Photo Critique AI.
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
@@ -273,72 +310,81 @@
           <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
         </svg>
-        Google アカウントでログイン
+        Sign in with Google
       </button>
     </div>
   </div>
 
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今週のAIチケットを使い切りました</h2>
+      <h2>You've used this week's AI tickets</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
 
+  <div id="os-select-state">
+    <div class="os-card">
+      <h2>Which computer are you using?</h2>
+      <p>Windows and Mac work differently, so please choose once up front.<br>You can change this later in settings.</p>
+      <div class="os-choice-row">
+        <button class="os-choice-btn" onclick="chooseOs('windows')">🖥️ Windows</button>
+        <button class="os-choice-btn" onclick="chooseOs('mac')">💻 Mac</button>
+      </div>
+    </div>
+  </div>
+
   <div id="usage-bar">
-    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-label" id="usage-label">This week's usage</div>
     <div class="usage-track">
       <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
-      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
+      <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ 講評AIと共通のAIチケットです</div>
+    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI</div>
   </div>
 
   <div id="main-area">
     <div class="section">
-      <h2>カメラ情報（任意・入力すると回答が正確になります）</h2>
-      <div id="camera-info-row">
-        <select id="camera-brand" onchange="saveCameraProfile()">
-          <option value="">メーカー未選択</option>
-          <option>Canon</option>
-          <option>Nikon</option>
-          <option>SONY</option>
-          <option>FUJIFILM</option>
-          <option>OM SYSTEM / Olympus</option>
-          <option>Panasonic / LUMIX</option>
-          <option>PENTAX / RICOH</option>
-          <option>Leica</option>
-          <option>その他</option>
-        </select>
-        <input type="text" id="camera-model" placeholder="機種名（例: α7IV, EOS R6 Mark II）" onchange="saveCameraProfile()">
+      <h2>PC info</h2>
+      <div id="pc-info-row">
+        <span id="pc-os-label">OS: -</span>
+        <button id="pc-os-change-btn" onclick="showOsSelect()">Change</button>
       </div>
-      <label class="level-label" for="camera-level">説明のレベル</label>
-      <select id="camera-level" onchange="saveCameraProfile()">
-        <option value="beginner">初心者向け（専門用語を避けて丁寧に）</option>
-        <option value="intermediate">中級者向け（一般的な用語はそのまま使う）</option>
-        <option value="advanced">上級者向け（設定名・数値を簡潔に）</option>
+      <label class="level-label" for="pc-level">Explanation level</label>
+      <select id="pc-level" onchange="savePcProfile()">
+        <option value="beginner">Beginner (careful, step-by-step — right-click, folders, etc.)</option>
+        <option value="intermediate">Intermediate (uses common PC terms as-is)</option>
+        <option value="advanced">Advanced (concise steps)</option>
       </select>
     </div>
 
     <div class="section">
-      <h2>質問する</h2>
+      <h2>Ask a question</h2>
       <div id="chat-log">
-        <div class="chat-empty" id="chat-empty">例：「AFエリアの切り替え方が分かりません」「Wi-Fiでスマホに転送する方法は？」</div>
+        <div class="chat-empty" id="chat-empty">e.g. "I don't know how to unzip a ZIP file" / "Where should I put the JSX file?"</div>
       </div>
-      <div id="chat-loading">回答を考えています...</div>
+      <div id="chat-loading">Thinking...</div>
       <div id="chat-error"></div>
+
+      <div id="screenshot-hint">If something isn't working, you can attach a screenshot of your screen</div>
+      <div id="screenshot-preview-row">
+        <img id="screenshot-preview-img" src="" alt="">
+        <span id="screenshot-preview-name"></span>
+        <button id="screenshot-remove-btn" onclick="removeScreenshot()">Remove</button>
+      </div>
       <div class="chat-input-row">
-        <textarea id="chat-input" rows="2" placeholder="カメラについて質問を入力してください"></textarea>
-        <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
+        <input type="file" id="screenshot-input" accept="image/*" style="display:none" onchange="onScreenshotSelected(this)">
+        <button id="screenshot-attach-btn" onclick="document.getElementById('screenshot-input').click()">📎 Send a screenshot</button>
+        <textarea id="chat-input" rows="2" placeholder="Ask a question about your PC"></textarea>
+        <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
-    © カメラAI — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy.html">プライバシーポリシー</a> &nbsp;·&nbsp;
-    <a href="/terms.html">利用規約</a>
+    © PC AI — Sidekick Lab &nbsp;·&nbsp;
+    <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms.html">Terms of Service</a>
   </footer>
 </div>
 
@@ -353,8 +399,9 @@ let currentUser = null;
 let usageLimit = 5;
 let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
+let selectedScreenshotFile = null;
 
-// ---- Auth 状態監視 ----
+// ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
   document.getElementById('loading-state').style.display = 'none';
 
@@ -374,33 +421,57 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.getElementById('user-avatar').style.display = 'none';
   }
 
-  await Promise.all([loadUsageInfo(user.uid), loadCameraProfile(user.uid)]);
+  await Promise.all([loadUsageInfo(user.uid), loadPcProfile(user.uid)]);
 });
 
-async function loadCameraProfile(uid) {
+async function loadPcProfile(uid) {
   try {
     const db = firebase.firestore();
     const userDoc = await db.collection('users').doc(uid).get();
     const data = userDoc.exists ? userDoc.data() : {};
-    document.getElementById('camera-brand').value = data.camera_brand || '';
-    document.getElementById('camera-model').value = data.camera_model || '';
-    document.getElementById('camera-level').value = data.camera_level || 'beginner';
+    document.getElementById('pc-level').value = data.pc_level || 'beginner';
+
+    if (data.os_type === 'windows' || data.os_type === 'mac') {
+      applyOsLabel(data.os_type);
+    } else {
+      showOsSelect();
+    }
   } catch (err) {
-    console.error('camera profile load error:', err);
+    console.error('pc profile load error:', err);
+    showOsSelect();
   }
 }
 
-async function saveCameraProfile() {
+function applyOsLabel(osType) {
+  document.getElementById('pc-os-label').textContent = 'OS: ' + (osType === 'windows' ? 'Windows' : 'Mac');
+  document.getElementById('os-select-state').style.display = 'none';
+}
+
+function showOsSelect() {
+  document.getElementById('os-select-state').style.display = 'block';
+}
+
+async function chooseOs(osType) {
+  if (!currentUser) return;
+  try {
+    const db = firebase.firestore();
+    await db.collection('users').doc(currentUser.uid).set({ os_type: osType }, { merge: true });
+    applyOsLabel(osType);
+  } catch (err) {
+    console.error('os save error:', err);
+    showChatError('Failed to save OS: ' + err.message);
+  }
+}
+
+async function savePcProfile() {
   if (!currentUser) return;
   try {
     const db = firebase.firestore();
     await db.collection('users').doc(currentUser.uid).set({
-      camera_brand: document.getElementById('camera-brand').value,
-      camera_model: document.getElementById('camera-model').value.trim(),
-      camera_level: document.getElementById('camera-level').value
+      pc_level: document.getElementById('pc-level').value
     }, { merge: true });
   } catch (err) {
-    console.error('camera profile save error:', err);
+    console.error('pc profile save error:', err);
   }
 }
 
@@ -438,22 +509,22 @@ async function loadUsageInfo(uid) {
 
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
-    document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-label').textContent = isWeekly ? "This week's usage" : "This month's usage";
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
     if (isWeekly) {
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(getNextMonday(now)) + '（月曜日）';
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(getNextMonday(now)) + ' (Monday)';
     } else {
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(nextMonth);
     }
 
     if (usedCount >= usageLimit) {
-      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      const resetInfo = isWeekly ? 'It will reset on Monday.' : 'It will reset on the 1st of next month.';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
+        `You've used this ${isWeekly ? "week's" : "month's"} limit (${usageLimit} tickets). ${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-area').style.display = 'block';
@@ -464,14 +535,14 @@ async function loadUsageInfo(uid) {
   }
 }
 
-// ---- Google ログイン / ログアウト ----
+// ---- Google sign-in / sign-out ----
 async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     await firebase.auth().signInWithPopup(provider);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
-      showChatError('ログインに失敗しました: ' + err.message);
+      showChatError('Sign-in failed: ' + err.message);
     }
   }
 }
@@ -482,13 +553,43 @@ function logout() {
   });
 }
 
-// ---- チャット ----
-function appendUserBubble(text) {
+// ---- Screenshot attachment ----
+function onScreenshotSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (file.size > 10 * 1024 * 1024) { showChatError('File is too large (max 10MB)'); return; }
+  selectedScreenshotFile = file;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('screenshot-preview-img').src = e.target.result;
+    document.getElementById('screenshot-preview-name').textContent = file.name;
+    document.getElementById('screenshot-preview-row').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeScreenshot() {
+  selectedScreenshotFile = null;
+  document.getElementById('screenshot-input').value = '';
+  document.getElementById('screenshot-preview-row').style.display = 'none';
+}
+
+// ---- Chat ----
+function appendUserBubble(text, thumbDataUrl) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
   const el = document.createElement('div');
   el.className = 'chat-msg user';
-  el.textContent = text;
+  if (thumbDataUrl) {
+    const img = document.createElement('img');
+    img.className = 'chat-thumb';
+    img.src = thumbDataUrl;
+    el.appendChild(img);
+  }
+  const textNode = document.createElement('div');
+  textNode.textContent = text;
+  el.appendChild(textNode);
   log.appendChild(el);
   log.scrollTop = log.scrollHeight;
 }
@@ -504,15 +605,15 @@ function appendAssistantBubble(text) {
   check.className = 'difficulty-check';
   const label = document.createElement('span');
   label.className = 'difficulty-label';
-  label.textContent = 'この説明は難しかったですか？';
+  label.textContent = 'Was this explanation hard to follow?';
   const hardBtn = document.createElement('button');
   hardBtn.type = 'button';
   hardBtn.className = 'difficulty-btn';
-  hardBtn.textContent = '難しかった';
+  hardBtn.textContent = 'Make it simpler';
   const okBtn = document.createElement('button');
   okBtn.type = 'button';
   okBtn.className = 'difficulty-btn';
-  okBtn.textContent = 'ちょうど良かった';
+  okBtn.textContent = 'Just right';
 
   hardBtn.onclick = () => resolveDifficulty(check, true);
   okBtn.onclick = () => resolveDifficulty(check, false);
@@ -529,18 +630,18 @@ async function resolveDifficulty(checkEl, wasHard) {
   const done = document.createElement('div');
   done.className = 'difficulty-done';
   if (wasHard) {
-    const levelSelect = document.getElementById('camera-level');
+    const levelSelect = document.getElementById('pc-level');
     const order = ['advanced', 'intermediate', 'beginner'];
     const idx = order.indexOf(levelSelect.value);
     if (idx > -1 && idx < order.length - 1) {
       levelSelect.value = order[idx + 1];
-      await saveCameraProfile();
-      done.textContent = '次の回答から、より分かりやすいレベルに調整します。';
+      await savePcProfile();
+      done.textContent = "I'll use a simpler level starting with the next answer.";
     } else {
-      done.textContent = 'すでに最も分かりやすいレベルです。';
+      done.textContent = "This is already the simplest level.";
     }
   } else {
-    done.textContent = 'フィードバックありがとうございます。';
+    done.textContent = 'Thanks for the feedback.';
   }
   checkEl.replaceWith(done);
 }
@@ -548,36 +649,61 @@ async function resolveDifficulty(checkEl, wasHard) {
 async function sendChatMessage() {
   const input = document.getElementById('chat-input');
   const question = input.value.trim();
-  if (!question) return;
-  if (!currentUser) { showChatError('ログインが必要です'); return; }
+  const hasScreenshot = !!selectedScreenshotFile;
+  if (!question && !hasScreenshot) return;
+  if (!currentUser) { showChatError('Please sign in first'); return; }
 
   const btn = document.getElementById('chat-send-btn');
   btn.disabled = true;
   document.getElementById('chat-loading').style.display = 'block';
   document.getElementById('chat-error').style.display = 'none';
 
-  appendUserBubble(question);
-  chatMessages.push({ role: 'user', content: question });
+  const displayText = question || '(Screenshot sent)';
+  let thumbDataUrl = null;
+  let imageBase64 = null;
+  let mediaType = 'image/jpeg';
+
+  try {
+    if (hasScreenshot) {
+      thumbDataUrl = document.getElementById('screenshot-preview-img').src;
+      const compressed = await compressImage(selectedScreenshotFile);
+      const ab = await compressed.arrayBuffer();
+      imageBase64 = arrayBufferToBase64(ab);
+      mediaType = 'image/jpeg';
+    }
+  } catch (err) {
+    showChatError('Failed to process image: ' + (err.message || err));
+    btn.disabled = false;
+    document.getElementById('chat-loading').style.display = 'none';
+    return;
+  }
+
+  appendUserBubble(displayText, thumbDataUrl);
+  chatMessages.push({ role: 'user', content: hasScreenshot ? `${displayText}\n[Screenshot already sent]` : displayText });
   input.value = '';
+  removeScreenshot();
 
   try {
     const idToken = await currentUser.getIdToken(true);
-    const res = await fetch('/api/camera-ai', {
+    const res = await fetch('/api/pc-ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
-        cameraBrand: document.getElementById('camera-brand').value,
-        cameraModel: document.getElementById('camera-model').value.trim(),
-        cameraLevel: document.getElementById('camera-level').value,
-        messages: chatMessages
+        lang: 'en',
+        osType: document.getElementById('pc-os-label').textContent.includes('Windows') ? 'windows'
+              : document.getElementById('pc-os-label').textContent.includes('Mac') ? 'mac' : '',
+        pcLevel: document.getElementById('pc-level').value,
+        messages: chatMessages,
+        imageBase64: imageBase64,
+        mediaType: mediaType
       })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      chatMessages.pop(); // 失敗した質問は履歴から取り除く
+      chatMessages.pop(); // remove the failed question from history
       if (res.status === 401) {
         await firebase.auth().signOut();
         window.location.reload();
@@ -586,7 +712,7 @@ async function sendChatMessage() {
         document.getElementById('limit-msg').textContent = data.error;
         document.getElementById('limit-state').style.display = 'block';
       } else {
-        showChatError(data.error || 'エラーが発生しました');
+        showChatError(data.error || 'An error occurred');
       }
       return;
     }
@@ -595,13 +721,13 @@ async function sendChatMessage() {
     appendAssistantBubble(data.result);
 
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
     chatMessages.pop();
-    showChatError('通信エラー: ' + (err.message || err));
+    showChatError('Connection error: ' + (err.message || err));
   } finally {
     btn.disabled = false;
     document.getElementById('chat-loading').style.display = 'none';
@@ -621,7 +747,49 @@ function showChatError(msg) {
   el.style.display = 'block';
 }
 
-// ---- ユーティリティ ----
+// ---- Image processing utilities (same logic as ai-review.html) ----
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
+function compressImage(file, maxSizeMB = 3) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const maxPx = 2048;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let quality = 0.85;
+      const tryBlob = () => {
+        canvas.toBlob(blob => {
+          if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1; tryBlob();
+          } else {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          }
+        }, 'image/jpeg', quality);
+      };
+      tryBlob();
+    };
+    img.src = url;
+  });
+}
+
+// ---- Utilities ----
 function getHighestRole(roles) {
   const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
   for (const r of PRIORITY) { if (roles.includes(r)) return r; }

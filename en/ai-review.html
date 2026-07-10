@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>村田一朗 AI写真講評 | Sidekick Lab</title>
+<link rel="canonical" href="https://www.sidekick-lab.com/en/ai-review">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/ai-review">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/ai-review">
+<title>Ichiro Murata Photo Critique AI | Sidekick Lab</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
@@ -12,7 +15,7 @@
   gtag('js', new Date());
   gtag('config', 'G-K73T3Y352W');
 </script>
-<!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+<!-- Microsoft Clarity — coexists with GA4, no duplicate loading -->
 <script type="text/javascript">
   (function(c,l,a,r,i,t,y){
       c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -23,7 +26,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
@@ -41,7 +44,7 @@
   header h1 { font-size: 1.6rem; font-weight: 700; color: #f0f0f0; letter-spacing: 0.05em; }
   header p { margin-top: 10px; color: #888; font-size: 0.9rem; line-height: 1.7; }
 
-  /* ユーザー情報（ヘッダー右上） */
+  /* user info (top right) */
   .user-bar {
     display: none;
     position: absolute;
@@ -67,7 +70,7 @@
   }
   .logout-btn:hover { color: #aaa; border-color: #666; }
 
-  /* ローディング */
+  /* loading */
   #loading-state { text-align: center; padding: 60px 0; }
   .spinner {
     width: 36px; height: 36px;
@@ -79,7 +82,7 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ログイン促進 */
+  /* login prompt */
   #login-state { display: none; }
   .login-card {
     background: #252525;
@@ -109,7 +112,7 @@
   }
   .google-btn:hover { background: #f1f3f4; }
 
-  /* 利用制限超え */
+  /* limit exceeded */
   #limit-state { display: none; }
   .limit-card {
     background: #252525;
@@ -122,7 +125,7 @@
   .limit-card h2 { font-size: 1rem; color: #e05a00; margin-bottom: 10px; }
   .limit-card p { font-size: 0.9rem; line-height: 1.8; }
 
-  /* 利用状況バー */
+  /* usage bar */
   #usage-bar {
     display: none;
     background: #252525;
@@ -154,7 +157,7 @@
   .usage-count { color: #ccc; font-size: 0.82rem; white-space: nowrap; }
   .usage-reset { color: #666; font-size: 0.78rem; margin-top: 4px; }
 
-  /* メインフォーム */
+  /* main form */
   #main-form { display: none; }
   .section {
     background: #252525;
@@ -165,7 +168,7 @@
   }
   .section h2 { font-size: 1rem; color: #ccc; margin-bottom: 16px; }
 
-  /* 記号の説明（折りたたみ） */
+  /* symbol legend (collapsible) */
   #grid-legend {
     background: #252525; border: 1px solid #383838; border-radius: 10px;
     padding: 16px 20px; margin-bottom: 20px;
@@ -180,7 +183,7 @@
     max-width: 100%; border-radius: 6px; border: 1px solid #444; margin-top: 4px;
   }
 
-  /* 画像アップロード */
+  /* image upload */
   .upload-area {
     border: 2px dashed #444;
     border-radius: 8px;
@@ -224,7 +227,7 @@
   #submit-btn:hover { background: #c84e00; }
   #submit-btn:disabled { background: #555; cursor: not-allowed; }
 
-  /* 結果 */
+  /* result */
   #result-area {
     display: none; background: #1e2a1e; border: 1px solid #3a5a3a;
     border-radius: 10px; padding: 28px; margin-top: 24px;
@@ -238,14 +241,14 @@
   }
   #copy-btn:hover { background: #3a5a3a; }
 
-  /* ローディング / エラー */
+  /* loading / error */
   #loading { display: none; text-align: center; padding: 30px; color: #888; }
   #error-msg {
     display: none; background: #2a1a1a; border: 1px solid #5a2a2a;
     border-radius: 8px; padding: 16px 20px; color: #e08080; margin-top: 16px; font-size: 0.9rem;
   }
 
-  /* 追質問セクション */
+  /* follow-up section */
   #followup-section {
     display: none; margin-top: 16px; padding: 20px;
     background: #1a1a1a; border: 1px solid #444; border-radius: 10px;
@@ -277,7 +280,7 @@
     line-height: 1.9; font-size: 0.95rem; color: #e0e0e0; white-space: pre-wrap;
   }
 
-  /* ログイン画面のプライバシー表示 */
+  /* privacy notice on login screen */
   .login-privacy {
     background: rgba(255,255,255,0.03);
     border: 1px solid #333;
@@ -323,7 +326,7 @@
   }
   .lp-link:hover { color: #ff7a00; }
 
-  /* 同意セクション */
+  /* consent section */
   .consent-section {
     background: #252525;
     border: 1px solid #383838;
@@ -395,7 +398,7 @@
   #credit-row-wrap.disabled .consent-label-sub { color: #444; }
   #credit-row-wrap.disabled input[type="checkbox"] { cursor: not-allowed; opacity: 0.4; }
 
-  /* 送信ボタン下の注記 */
+  /* note below submit button */
   .submit-note {
     font-size: 0.78rem;
     color: #555;
@@ -408,7 +411,7 @@
   footer a { color: #555; text-decoration: none; }
   footer a:hover { color: #888; }
 
-  /* ── サイトナビ ── */
+  /* ── site nav ── */
   .site-nav {
     position: sticky; top: 0; z-index: 40;
     background: rgba(26,26,26,.92); backdrop-filter: blur(16px);
@@ -435,7 +438,7 @@
   }
   .site-nav-back:hover { color: #aaa; }
 
-  /* ── LP ヘッダー部 ── */
+  /* ── LP header ── */
   .lp-hero {
     background: linear-gradient(135deg, rgba(224,90,0,.07), rgba(255,177,74,.03));
     border-bottom: 1px solid rgba(255,138,0,.1);
@@ -481,7 +484,7 @@
     font-size: 0.78rem; color: #555; margin-top: 8px;
   }
 
-  /* ── 次にできること ── */
+  /* ── next steps ── */
   #next-steps {
     display: none;
     background: #1e1e1e; border: 1px solid #333;
@@ -508,7 +511,7 @@
   .next-card-desc { font-size: 0.78rem; color: #666; line-height: 1.6; }
   @media(max-width: 500px) { .next-grid { grid-template-columns: 1fr; } }
 
-  /* ── できること / できないこと ── */
+  /* ── can / can't ── */
   .ai-scope {
     display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
     margin: 0 0 20px;
@@ -533,7 +536,7 @@
   .ai-scope-card.cant .ai-scope-list li::before { content: '— '; color: #6a5040; }
   @media(max-width: 500px) { .ai-scope { grid-template-columns: 1fr; } }
 
-  /* ── ストーリー ── */
+  /* ── story ── */
   .story-section {
     background: linear-gradient(135deg,rgba(224,90,0,.05),rgba(255,177,74,.02));
     border-bottom: 1px solid rgba(255,138,0,.08);
@@ -559,7 +562,7 @@
   .story-text strong { color: #ccc; }
   .story-sig { margin-top: 10px; font-size: 0.78rem; color: #555; }
 
-  /* ── 講評サンプル ── */
+  /* ── sample critique ── */
   .sample-card {
     background: #252525; border: 1px solid #383838;
     border-radius: 12px; padding: 20px; margin-bottom: 20px;
@@ -581,7 +584,7 @@
   .sample-items li:last-child { border-bottom: none; }
   .sample-items li .sit { color: #6dc88b; font-weight: 700; font-size: 0.78rem; margin-right: 4px; }
 
-  /* ── 3ステップ ── */
+  /* ── 3-step ── */
   .steps-section { margin-top: 0; }
   .steps-title {
     font-size: 0.88rem; color: #888; font-weight: 700;
@@ -617,155 +620,155 @@
 </head>
 <body>
 
-  <!-- サイトナビ -->
+  <!-- site nav -->
   <nav class="site-nav">
     <div class="site-nav-in">
-      <a href="/" class="site-brand">
+      <a href="/en" class="site-brand">
         <div class="site-brand-mk">S</div>
         <span>Sidekick Lab</span>
       </a>
-      <a href="/" class="site-nav-back">← トップに戻る</a>
+      <a href="/en" class="site-nav-back">← Back to home</a>
     </div>
   </nav>
 
-  <!-- LP ヘッダー -->
+  <!-- LP header -->
   <div class="lp-hero">
     <div style="max-width:720px;margin:0 auto;padding:0 20px;">
-      <div class="lp-hero-badge">Sidekick Lab · 写真講評AI</div>
-      <h1>村田一朗の講評スタイルを、<em>AIで体験</em></h1>
+      <div class="lp-hero-badge">Sidekick Lab · Photo Critique AI</div>
+      <h1>Ichiro Murata's critique style, <em>experienced through AI</em></h1>
       <p class="lp-hero-sub">
-        撮ったあと、「これでいいのかな」と思うことはありませんか。<br>
-        そんなときに、作品を客観的に見直すための講評AIです。
+        Ever finished a shoot and thought "I'm not sure this one worked"?<br>
+        This AI critique gives you an objective second look at your work.
       </p>
       <p style="font-size:0.82rem;color:#666;line-height:1.8;max-width:500px;margin:0 auto 20px;">
-        写真をアップロードすると、構図・視線誘導・余白・主題の伝わり方・改善ポイントを整理します。
+        Upload a photo and get notes on composition, visual flow, use of negative space, how clearly the subject reads, and what to improve.
       </p>
       <div class="lp-origin">
-        <strong>写真家 村田一朗が、10年以上にわたり1万件以上の作品講評を行ってきた経験をもとに設計</strong><br>
-        構図・視線誘導・画面整理という、講評の中で何度も繰り返し伝えてきた考え方に特化しています。汎用AIとは設計の出発点が異なります。<br>
-        <span style="color:#555;font-size:0.76rem;">※ 本人講評ではなく、構図を客観的に確認するための講評AIです。</span>
+        <strong>Note: this reflects one photographer's personal perspective, translated from Japanese.</strong><br>
+        This tool is built on the specific critique style and vocabulary of Ichiro Murata, a Japanese photographer with over 10 years and 10,000+ critiques of experience — not a generic or culturally-neutral critique framework. It is his particular way of seeing photographs, carried over into English as faithfully as possible.<br>
+        <span style="color:#555;font-size:0.76rem;">※ This is an AI critique for checking your composition objectively, not a critique from Murata in person.</span>
       </div>
       <div class="lp-points">
-        <span class="lp-point">📐 構図の整理</span>
-        <span class="lp-point">👁 視線誘導</span>
-        <span class="lp-point">⬜ 余白の使い方</span>
-        <span class="lp-point">☀️ 露出・明暗の印象</span>
-        <span class="lp-point">🌟 主題の伝わりやすさ</span>
-        <span class="lp-point">💡 改善ポイント</span>
+        <span class="lp-point">📐 Composition</span>
+        <span class="lp-point">👁 Visual flow</span>
+        <span class="lp-point">⬜ Use of negative space</span>
+        <span class="lp-point">☀️ Exposure & tonal impression</span>
+        <span class="lp-point">🌟 Subject clarity</span>
+        <span class="lp-point">💡 Improvement points</span>
       </div>
-      <p style="font-size:0.78rem;color:#555;margin-top:14px;">Sidekick Labを知っていただくため、現在は無料公開しています。</p>
+      <p style="font-size:0.78rem;color:#555;margin-top:14px;">Currently free to try, so you can get to know Sidekick Lab.</p>
     </div>
   </div>
 
-  <!-- なぜこのAIを作ったのか -->
+  <!-- why this AI exists -->
   <div class="story-section">
     <div class="story-inner">
       <div class="story-avatar">📷</div>
       <div class="story-body">
-        <div class="story-label">このAIを作った理由</div>
+        <div class="story-label">Why I built this AI</div>
         <p class="story-text">
-          私は写真家として活動する中で、10年以上にわたり、1万件以上の作品講評を行ってきました。<br>
-          その中で繰り返し伝えてきたのは、<strong>構図・視線誘導・画面整理</strong>という考え方です。<br>
-          この視点を、もっと多くの方にもっと気軽に体験していただきたい。<br>
-          それが、この講評AIを作った理由です。
+          As a working photographer, I've done over 10 years and 10,000+ critiques of other people's work.<br>
+          What I keep coming back to, again and again, is the idea of <strong>composition, visual flow, and image structure</strong>.<br>
+          I wanted more people to be able to experience that perspective, more easily.<br>
+          That's why I built this AI critique.
         </p>
-        <p class="story-sig">— 写真家 村田一朗</p>
+        <p class="story-sig">— Photographer Ichiro Murata</p>
       </div>
     </div>
   </div>
 
 <div class="container">
   <header>
-    <!-- ユーザー情報バー -->
+    <!-- user info bar -->
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <span class="user-name" id="user-name"></span>
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
   </header>
 
-  <!-- 講評サンプル -->
-  <p style="font-size:0.85rem;color:#aaa;margin-bottom:10px;font-weight:700;">実際には、このような講評が返ってきます</p>
+  <!-- sample critique -->
+  <p style="font-size:0.85rem;color:#aaa;margin-bottom:10px;font-weight:700;">Here's an example of what you'll get back</p>
   <div class="sample-card">
-    <div class="sample-label">講評サンプル</div>
+    <div class="sample-label">Sample critique</div>
 
-    <img src="/images/AI/20240503_155526_675_-0.3_0_DxO.jpg" alt="流し撮りサンプル" style="width:100%;border-radius:8px;border:1px solid #333;margin-bottom:14px;">
+    <img src="/images/AI/20240503_155526_675_-0.3_0_DxO.jpg" alt="Panning shot sample" style="width:100%;border-radius:8px;border:1px solid #333;margin-bottom:14px;">
 
-    <p style="font-size:0.85rem;color:#999;line-height:2;white-space:pre-wrap;">流し撮り、いい挑戦ですね。速度感がちゃんと出ていて、モーションブラーの効果も効いています。
+    <p style="font-size:0.85rem;color:#999;line-height:2;white-space:pre-wrap;">A panning shot — nice challenge to take on. You've got a real sense of speed here, and the motion blur is working well.
 
-ただ、惜しいんですよ・・・。画面を見ると、上半分の背景（スタンド）が占める割合が大きすぎて、本来の主題であるレーシングカーが相対的に小さく感じられてしまう。レーシングカーがいるのは中央から右寄り、かなり下の位置にあります。
+But it's a bit of a shame... Looking at the frame, the top half — the grandstand in the background — takes up too much of the space, so the actual subject, the race car, ends up feeling small by comparison. The car sits center-right, quite low in the frame.
 
-流し撮りは背景をブラすことで速度感を表現する技法ですが、主題であるクルマは必ず画面の中央付近、三分割の交点に置くのが鉄則ですよ。今はクルマが低すぎて、見る人の目線がまず上のスタンドに行ってしまいます。
+Panning uses background blur to express speed, but the car — your subject — should still sit near the center of the frame, at one of the rule-of-thirds intersections. Right now it's too low, so the viewer's eye goes to the grandstand above it first.
 
-次に撮るときは、もっとクルマが画面中央〜③④の交点周辺に来るように構図を決めてください。背景のモーションと、クルマの位置のバランスが取れれば、もっと迫力のある流し撮りになりますよ。
+Next time, try composing so the car lands closer to the center, around the ③④ intersections. If you can balance the background motion against the car's position, you'll get a panning shot with a lot more impact.
 
-この調子で引き続き頑張ってくださいね。</p>
+Keep at it — you're on the right track.</p>
 
-    <p style="font-size:0.78rem;color:#666;margin-top:12px;line-height:1.7;">このような形式で、作品の良い点と改善ポイントを整理します。</p>
+    <p style="font-size:0.78rem;color:#666;margin-top:12px;line-height:1.7;">This is the kind of format you'll get: what's working, and what to improve.</p>
   </div>
 
-  <!-- このAIで分かること / 分からないこと -->
+  <!-- what this AI can / can't tell you -->
   <div class="ai-scope">
     <div class="ai-scope-card can">
-      <div class="ai-scope-title">このAIで分かること</div>
+      <div class="ai-scope-title">What this AI can tell you</div>
       <ul class="ai-scope-list">
-        <li>構図の整理</li>
-        <li>主題の伝わりやすさ</li>
-        <li>視線誘導</li>
-        <li>余白の使い方</li>
-        <li>明暗・印象の方向性</li>
-        <li>改善ポイント</li>
+        <li>Composition clarity</li>
+        <li>How clearly the subject reads</li>
+        <li>Visual flow</li>
+        <li>Use of negative space</li>
+        <li>Tonal/exposure impression</li>
+        <li>Improvement points</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">判断しにくいこと</div>
+      <div class="ai-scope-title">Hard to judge</div>
       <ul class="ai-scope-list">
-        <li>厳密なピント精度</li>
-        <li>AFの成否</li>
-        <li>ノイズ量の厳密な評価</li>
-        <li>RAW現像の細かな数値</li>
-        <li>具体的なレイヤー操作</li>
-        <li>コンテスト合否の予測</li>
+        <li>Precise focus accuracy</li>
+        <li>Whether AF succeeded</li>
+        <li>Precise noise levels</li>
+        <li>Fine RAW-development values</li>
+        <li>Specific layer operations</li>
+        <li>Whether it would place in a contest</li>
       </ul>
     </div>
   </div>
 
-  <!-- プライバシー情報（常時表示） -->
+  <!-- privacy info (always visible) -->
   <div class="login-privacy">
     <div class="lp-section">
-      <div class="lp-label">取得する情報</div>
-      <div class="lp-items">Googleアカウントの表示名 / メールアドレス</div>
+      <div class="lp-label">Information collected</div>
+      <div class="lp-items">Your Google account display name / email address</div>
     </div>
     <div class="lp-divider"></div>
     <div class="lp-section">
-      <div class="lp-label">利用目的</div>
+      <div class="lp-label">Purpose of use</div>
       <ul class="lp-list">
-        <li>利用者識別</li>
-        <li>利用回数管理</li>
-        <li>サポート対応</li>
-        <li>サービス改善</li>
-        <li>不正利用防止</li>
+        <li>Identifying users</li>
+        <li>Tracking usage limits</li>
+        <li>Support</li>
+        <li>Service improvement</li>
+        <li>Preventing misuse</li>
       </ul>
     </div>
     <div class="lp-note">
-      ※ アップロードした画像は、講評AIによる回答生成のためAnthropicのClaude API（外部サービス）へ送信されます。
+      ※ Uploaded photos are sent to Anthropic's Claude API (an external service) to generate the critique.
     </div>
-    <a href="/privacy.html" class="lp-link" target="_blank">プライバシーポリシーを読む →</a>
+    <a href="/privacy.html" class="lp-link" target="_blank">Read the Privacy Policy →</a>
   </div>
 
-  <!-- ローディング（Auth確認中） -->
+  <!-- loading (checking auth) -->
   <div id="loading-state">
     <div class="spinner"></div>
-    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+    <p style="color:#666;font-size:0.85rem;">Checking...</p>
   </div>
 
-  <!-- 未ログイン -->
+  <!-- not signed in -->
   <div id="login-state">
     <div class="login-card">
-      <h2>Googleアカウントでログイン</h2>
+      <h2>Sign in with Google</h2>
       <p>
-        AI写真講評を使うにはGoogleアカウントが必要です。
-        <span class="campaign-note">週5AIチケットまで無料でお使いいただけます（〜2026年8月末）。</span>
+        You'll need a Google account to use the AI photo critique.
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026).</span>
       </p>
 
       <button class="google-btn" onclick="signInWithGoogle()">
@@ -775,97 +778,97 @@
           <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
         </svg>
-        Google アカウントでログイン
+        Sign in with Google
       </button>
     </div>
   </div>
 
-  <!-- 制限超え -->
+  <!-- limit exceeded -->
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今週の枚数を使い切りました</h2>
+      <h2>You've used this week's critiques</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
 
-  <!-- 利用状況バー -->
+  <!-- usage bar -->
   <div id="usage-bar">
-    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-label" id="usage-label">This week's usage</div>
     <div class="usage-track">
       <div class="usage-bar-bg">
         <div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div>
       </div>
-      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
+      <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
   </div>
 
-  <!-- 記号の説明（講評文中のA〜I・①〜④の意味） -->
+  <!-- symbol legend (A-I / ①-④ used in critique text) -->
   <details id="grid-legend">
-    <summary>講評文の中の「A〜I」「①〜④」って何？</summary>
+    <summary>What do the "A–I" and "①–④" in the critique mean?</summary>
     <p>
-      講評では、画面を3×3のマスに分けて位置を説明します。
-      A〜Iはマスの位置、①〜④は三分割線が交わる4つの交点を指します。
+      The critique describes position by dividing the frame into a 3×3 grid.
+      A–I refer to the nine regions, and ①–④ refer to the four points where the rule-of-thirds lines intersect.
     </p>
-    <img src="images/rule-of-thirds-grid.png" alt="三分割構図の記号説明図（A〜Iのマスと①〜④の交点）">
+    <img src="/images/rule-of-thirds-grid.png" alt="Diagram explaining the A-I regions and ①-④ intersection points">
   </details>
 
-  <!-- メインフォーム -->
+  <!-- main form -->
   <form id="main-form" onsubmit="submitReview(event)">
     <div class="section">
-      <h2>写真をアップロード</h2>
+      <h2>Upload a photo</h2>
       <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
         <div class="icon">📷</div>
-        <p>クリックまたはドラッグ＆ドロップで写真を選択<br>
-        JPG / PNG / WEBP 対応（最大10MB）</p>
+        <p>Click or drag and drop a photo<br>
+        JPG / PNG / WEBP supported (max 10MB)</p>
       </div>
       <input type="file" id="file-input" accept="image/*" onchange="onFileSelected(this)">
       <div id="preview-wrap">
-        <img id="preview-img" src="" alt="プレビュー">
-        <button type="button" id="change-btn" onclick="changeImage()">写真を変更</button>
+        <img id="preview-img" src="" alt="Preview">
+        <button type="button" id="change-btn" onclick="changeImage()">Change photo</button>
       </div>
     </div>
 
-    <!-- コメント・同意セクション -->
+    <!-- comment / consent section -->
     <div class="consent-section">
-      <h2>意識した技法（任意）</h2>
+      <h2>Intended technique (optional)</h2>
       <select id="technique-tag">
-        <option value="不問" selected>不問（特に意識していない）</option>
-        <option value="前ボケ後ボケ">前ボケ後ボケ</option>
-        <option value="圧縮効果">圧縮効果</option>
-        <option value="ハイアングル">ハイアングル</option>
-        <option value="ローアングル">ローアングル</option>
-        <option value="空間を意識する">空間を意識する</option>
-        <option value="パースを活かす">パースを活かす</option>
-        <option value="パンフォーカス">パンフォーカス</option>
-        <option value="シンメトリー">シンメトリー</option>
-        <option value="リフレクション">リフレクション</option>
-        <option value="曇り・雨">曇り・雨</option>
-        <option value="魚眼レンズ">魚眼レンズ</option>
-        <option value="額縁">額縁</option>
-        <option value="広がりを感じる">広がりを感じる</option>
-        <option value="切り取り">切り取り</option>
-        <option value="日の丸">日の丸</option>
+        <option value="Not specified" selected>Not specified</option>
+        <option value="Foreground/background blur">Foreground/background blur</option>
+        <option value="Compression effect">Compression effect (telephoto)</option>
+        <option value="High angle">High angle</option>
+        <option value="Low angle">Low angle</option>
+        <option value="Sense of space">Sense of space</option>
+        <option value="Using perspective">Using perspective</option>
+        <option value="Deep focus">Deep focus (pan-focus)</option>
+        <option value="Symmetry">Symmetry</option>
+        <option value="Reflection">Reflection</option>
+        <option value="Overcast/rain">Overcast/rain</option>
+        <option value="Fisheye lens">Fisheye lens</option>
+        <option value="Frame within a frame">Frame within a frame</option>
+        <option value="Sense of expansiveness">Sense of expansiveness</option>
+        <option value="Tight crop">Tight crop / isolation</option>
+        <option value="Center composition (Hinomaru)">Center composition (Hinomaru)</option>
       </select>
 
-      <h2>撮影者コメント・質問（任意）</h2>
-      <textarea id="comment" placeholder="撮影意図、気になっている点、質問などがあれば書いてください" style="margin-bottom:20px;"></textarea>
+      <h2>Your comment / question (optional)</h2>
+      <textarea id="comment" placeholder="Your intent when shooting, anything you're unsure about, or questions" style="margin-bottom:20px;"></textarea>
 
       <div style="height:1px;background:#333;margin-bottom:16px;"></div>
-      <h2>写真の利用について</h2>
+      <h2>About using your photo</h2>
 
       <div class="rights-note">
-        人物・建物・商品・第三者の著作物等が写る写真は、投稿者が必要な許諾を得ているものとして扱います。
+        For photos containing people, buildings, products, or other third-party copyrighted works, we assume the submitter has obtained the necessary permissions.
       </div>
 
       <div class="consent-row">
         <input type="checkbox" id="marketing-consent">
         <div class="consent-label">
           <label for="marketing-consent" class="consent-label-main">
-            このチェックを入れた写真・コメント・講評結果だけを、SideKickの作例・広告・SNS投稿・販売ページ等で使用する場合があります。
-            <span class="consent-optional">任意</span>
+            If checked, this photo, comment, and critique result may be used in Sidekick's marketing (case studies, ads, social media posts, sales pages, etc.).
+            <span class="consent-optional">Optional</span>
           </label>
-          <div class="consent-label-sub">同意しない場合でも講評AIは利用できます。掲載時は必要に応じてトリミング・リサイズ・圧縮を行う場合があります。</div>
+          <div class="consent-label-sub">You can use the AI critique either way. If used, the photo may be cropped, resized, or compressed as needed.</div>
         </div>
       </div>
 
@@ -873,53 +876,53 @@
         <input type="checkbox" id="credit-consent" disabled>
         <div class="consent-label">
           <label for="credit-consent" class="consent-label-main">
-            掲載時に氏名・SNSアカウント名を表示してもよい
-            <span class="consent-optional">任意</span>
+            OK to show my name / social media handle if used
+            <span class="consent-optional">Optional</span>
           </label>
-          <div class="consent-label-sub">上の広告利用に同意した場合のみ有効です。未チェックの場合は匿名扱いとなります。</div>
+          <div class="consent-label-sub">Only applies if you agreed to marketing use above. If left unchecked, you'll be credited anonymously.</div>
         </div>
       </div>
     </div>
 
-    <button type="submit" id="submit-btn">講評を受ける</button>
-    <p class="submit-note">アップロードした画像は、講評AIによる回答生成のためAnthropicのClaude API（外部サービス）へ送信されます。</p>
+    <button type="submit" id="submit-btn">Get a critique</button>
+    <p class="submit-note">Uploaded photos are sent to Anthropic's Claude API (an external service) to generate the critique.</p>
   </form>
 
   <div id="loading">
     <div class="spinner"></div>
-    <p>講評を生成しています...</p>
+    <p>Generating your critique...</p>
   </div>
 
   <div id="error-msg"></div>
 
   <div id="result-area">
-    <h2>村田一朗からの講評</h2>
+    <h2>Ichiro Murata's critique</h2>
     <p id="result-text"></p>
-    <button id="copy-btn" onclick="copyResult()">コピー</button>
+    <button id="copy-btn" onclick="copyResult()">Copy</button>
   </div>
 
-  <!-- 追質問（講評後に表示。追質問も利用枚数を1カウント消費します） -->
+  <!-- follow-up (shown after critique; also consumes 1 ticket) -->
   <div id="followup-section">
-    <h3>この講評について聞く（1回につき利用枚数を1カウント消費します）</h3>
-    <textarea id="followup-question" rows="2" placeholder="例：なぜ主題が交点に乗っていないとダメなんですか？"></textarea>
-    <button type="button" id="followup-btn" onclick="submitFollowUp()">質問する</button>
-    <div id="followup-loading">回答を生成しています...</div>
+    <h3>Ask about this critique (consumes 1 ticket per question)</h3>
+    <textarea id="followup-question" rows="2" placeholder="e.g. Why does the subject have to sit on an intersection?"></textarea>
+    <button type="button" id="followup-btn" onclick="submitFollowUp()">Ask</button>
+    <div id="followup-loading">Generating an answer...</div>
     <div id="followup-error"></div>
     <div id="followup-result"></div>
   </div>
 
-  <!-- 次にできること（講評後に表示） -->
+  <!-- what you can do next (shown after critique) -->
   <div id="next-steps">
     <div class="steps-section">
-      <div class="steps-title">写真と向き合う、3つのステップ</div>
+      <div class="steps-title">Three steps for engaging with your photos</div>
       <div class="steps-flow">
 
         <div class="step-item">
           <div class="step-dot">1</div>
           <div class="step-content">
-            <div class="step-num">STEP 1 · 今ここ</div>
-            <div class="step-title">写真を見る — 講評AI</div>
-            <div class="step-desc">構図・視線誘導・余白を客観的に確認する。村田一朗の講評経験をもとに設計。</div>
+            <div class="step-num">STEP 1 · You are here</div>
+            <div class="step-title">See your photo — AI Critique</div>
+            <div class="step-desc">Get an objective look at composition, visual flow, and negative space. Built on Ichiro Murata's critique experience.</div>
           </div>
         </div>
 
@@ -927,12 +930,12 @@
           <div class="step-dot">2</div>
           <div class="step-content">
             <div class="step-num">STEP 2</div>
-            <div class="step-title">写真を仕上げる — SideKick</div>
-            <div class="step-desc">後処理の消耗を減らし、完成度を上げる。Photoshopスクリプトで仕上げを効率化。</div>
+            <div class="step-title">Finish your photo — SideKick</div>
+            <div class="step-desc">Cut down on post-processing fatigue and raise the finished quality. Photoshop scripts that speed up finishing work.</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
-              <a href="/sidekick-star.html" class="step-link">🌌 Star →</a>
-              <a href="/portrait.html" class="step-link">👤 Portrait →</a>
-              <a href="/sidekick.html" class="step-link">⚡ 全製品 →</a>
+              <a href="/en/sidekick-star.html" class="step-link">🌌 Star →</a>
+              <a href="/en/portrait.html" class="step-link">👤 Portrait →</a>
+              <a href="/en/sidekick.html" class="step-link">⚡ All products →</a>
             </div>
           </div>
         </div>
@@ -941,9 +944,9 @@
           <div class="step-dot">3</div>
           <div class="step-content">
             <div class="step-num">STEP 3</div>
-            <div class="step-title">撮る・考える — Workshop</div>
-            <div class="step-desc">撮影現場から仕上げまで、作品づくりの流れを体系的に学ぶ。</div>
-            <a href="/workshop.html" class="step-link">Workshop を見る →</a>
+            <div class="step-title">Shoot & think — Workshop</div>
+            <div class="step-desc">Learn the full flow of making a photograph, from the shoot to the finished piece. (Japanese-language workshop.)</div>
+            <a href="/workshop.html" class="step-link">See the Workshop →</a>
           </div>
         </div>
 
@@ -951,23 +954,22 @@
     </div>
   </div>
 
-  <!-- ブランドメッセージ -->
+  <!-- brand message -->
   <div style="text-align:center;padding:36px 0 12px;border-top:1px solid #252525;margin-top:12px;">
     <p style="font-size:0.84rem;color:#4a4a4a;line-height:2.4;max-width:380px;margin:0 auto;">
-      写真は<br>
-      撮ることだけでも、仕上げることだけでも、<br>
-      上達しません。<br><br>
-      見る・仕上げる・撮る。<br>
-      その3つを行き来することで、<br>
-      作品は少しずつ変わっていきます。
+      A photograph doesn't improve<br>
+      just by shooting it, or just by finishing it.<br><br>
+      Seeing, finishing, shooting.<br>
+      It's moving between all three<br>
+      that gradually changes the work.
     </p>
-    <p style="font-size:0.82rem;color:#666;margin-top:16px;font-weight:700;">Sidekick Lab は、そのための場所です。</p>
+    <p style="font-size:0.82rem;color:#666;margin-top:16px;font-weight:700;">Sidekick Lab is a place for that.</p>
   </div>
 
   <footer>
-    © 村田一朗 AIフォト講評 — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy.html">プライバシーポリシー</a> &nbsp;·&nbsp;
-    <a href="/terms.html">利用規約</a>
+    © Ichiro Murata Photo Critique AI — Sidekick Lab &nbsp;·&nbsp;
+    <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms.html">Terms of Service</a>
   </footer>
 </div>
 
@@ -983,12 +985,12 @@ let selectedFile = null;
 let usageLimit = 5;
 let usedCount = 0;
 
-// 追質問用に直近の講評コンテキストを保持（画像はサーバーに保存していないため）
+// keep the most recent review context for follow-ups (image isn't stored server-side unless consented)
 let lastReviewId = null;
 let lastImageBase64 = null;
 let lastMediaType = null;
 
-// ---- Auth 状態監視 ----
+// ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
   document.getElementById('loading-state').style.display = 'none';
 
@@ -999,7 +1001,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
 
   currentUser = user;
 
-  // ユーザーバーを表示
+  // show the user bar
   const bar = document.getElementById('user-bar');
   bar.style.display = 'flex';
   document.getElementById('user-name').textContent = user.displayName || user.email;
@@ -1015,18 +1017,18 @@ firebase.auth().onAuthStateChanged(async function(user) {
 async function loadUsageInfo(uid) {
   const db = firebase.firestore();
   try {
-    // planLimits 取得
+    // fetch planLimits
     const limitsDoc = await db.collection('config').doc('planLimits').get();
     const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
     const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-08-31');
     const now = new Date();
 
-    // ユーザーの roles 取得
+    // fetch user roles
     const userDoc = await db.collection('users').doc(uid).get();
     const roles = (userDoc.exists && userDoc.data().roles) || ['free'];
     const effectiveRole = getHighestRole(roles);
 
-    // 制限値と trackingKey を決定
+    // determine limit and trackingKey
     let trackingKey, isWeekly;
     if (now < campaignEnd) {
       trackingKey = uid + '_' + getWeekKey(now);
@@ -1044,33 +1046,33 @@ async function loadUsageInfo(uid) {
       isWeekly = true;
     }
 
-    // 使用量取得
+    // fetch usage
     const usageDoc = await db.collection('usageTracking').doc(trackingKey).get();
     usedCount = usageDoc.exists ? (usageDoc.data().count || 0) : 0;
 
-    // 利用状況バーを更新
+    // update usage bar
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
-    const label = isWeekly ? '今週の利用' : '今月の利用';
+    const label = isWeekly ? "This week's usage" : "This month's usage";
     document.getElementById('usage-label').textContent = label;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
-    // リセット日
+    // reset date
     if (isWeekly) {
       const monday = getNextMonday(now);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(monday) + '（月曜日）';
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(monday) + ' (Monday)';
     } else {
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(nextMonth);
     }
 
-    // 制限チェック
+    // limit check
     if (usedCount >= usageLimit) {
-      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      const resetInfo = isWeekly ? 'It will reset on Monday.' : 'It will reset on the 1st of next month.';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
+        `You've used this ${isWeekly ? "week's" : "month's"} limit (${usageLimit} tickets). ${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-form').style.display = 'block';
@@ -1078,19 +1080,19 @@ async function loadUsageInfo(uid) {
 
   } catch (err) {
     console.error('usage load error:', err);
-    // 取得失敗しても使えるようにフォームを表示
+    // show the form even if this fails, so the tool stays usable
     document.getElementById('main-form').style.display = 'block';
   }
 }
 
-// ---- Google ログイン / ログアウト ----
+// ---- Google sign-in / sign-out ----
 async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     await firebase.auth().signInWithPopup(provider);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
-      showError('ログインに失敗しました: ' + err.message);
+      showError('Sign-in failed: ' + err.message);
     }
   }
 }
@@ -1101,7 +1103,7 @@ function logout() {
   });
 }
 
-// ---- 同意チェックボックスの連動 ----
+// ---- consent checkbox linkage ----
 document.getElementById('marketing-consent').addEventListener('change', function() {
   const creditWrap = document.getElementById('credit-row-wrap');
   const creditCb = document.getElementById('credit-consent');
@@ -1115,7 +1117,7 @@ document.getElementById('marketing-consent').addEventListener('change', function
   }
 });
 
-// ---- 画像選択 ----
+// ---- image selection ----
 const uploadArea = document.getElementById('upload-area');
 uploadArea.addEventListener('dragover', e => { e.preventDefault(); uploadArea.classList.add('dragover'); });
 uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
@@ -1131,7 +1133,7 @@ function onFileSelected(input) {
 }
 
 function setFile(file) {
-  if (file.size > 10 * 1024 * 1024) { showError('ファイルサイズが大きすぎます（最大10MB）'); return; }
+  if (file.size > 10 * 1024 * 1024) { showError('File is too large (max 10MB)'); return; }
   selectedFile = file;
   const reader = new FileReader();
   reader.onload = e => {
@@ -1149,11 +1151,11 @@ function changeImage() {
   document.getElementById('file-input').value = '';
 }
 
-// ---- 送信 ----
+// ---- submit ----
 async function submitReview(e) {
   e.preventDefault();
-  if (!selectedFile) { showError('写真をアップロードしてください'); return; }
-  if (!currentUser) { showError('ログインが必要です'); return; }
+  if (!selectedFile) { showError('Please upload a photo'); return; }
+  if (!currentUser) { showError('Please sign in first'); return; }
 
   const btn = document.getElementById('submit-btn');
   btn.disabled = true;
@@ -1162,25 +1164,26 @@ async function submitReview(e) {
   document.getElementById('error-msg').style.display = 'none';
 
   try {
-    // 1. 圧縮
+    // 1. compress
     const compressed = await compressImage(selectedFile);
     const ab = await compressed.arrayBuffer();
 
-    // 2. SHA-256 ハッシュ（imageCache のキー）
+    // 2. SHA-256 hash (imageCache key)
     const imageHash = await sha256(ab);
 
-    // 3. base64 変換
+    // 3. base64 encode
     const imageBase64 = arrayBufferToBase64(ab);
 
-    // 4. Firebase ID トークン取得
+    // 4. get Firebase ID token
     const idToken = await currentUser.getIdToken(true);
 
-    // 5. API へ送信
+    // 5. send to API
     const res = await fetch('/api/review', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
+        lang: 'en',
         imageBase64,
         imageHash,
         mediaType: 'image/jpeg',
@@ -1195,7 +1198,7 @@ async function submitReview(e) {
 
     if (!res.ok) {
       if (res.status === 401) {
-        // 認証切れ → ログイン状態リセット
+        // token expired — reset sign-in state
         await firebase.auth().signOut();
         window.location.reload();
       } else if (res.status === 429) {
@@ -1203,7 +1206,7 @@ async function submitReview(e) {
         document.getElementById('limit-msg').textContent = data.error;
         document.getElementById('limit-state').style.display = 'block';
       } else {
-        showError(data.error || 'エラーが発生しました');
+        showError(data.error || 'An error occurred');
       }
       return;
     }
@@ -1213,7 +1216,7 @@ async function submitReview(e) {
     document.getElementById('next-steps').style.display = 'block';
     document.getElementById('result-area').scrollIntoView({ behavior: 'smooth' });
 
-    // 追質問用にコンテキストを保持し、追質問欄をリセットして表示
+    // keep context for follow-ups; reset and show the follow-up box
     lastReviewId = data.reviewId || null;
     lastImageBase64 = imageBase64;
     lastMediaType = 'image/jpeg';
@@ -1223,14 +1226,14 @@ async function submitReview(e) {
     document.getElementById('followup-error').style.display = 'none';
     document.getElementById('followup-section').style.display = lastReviewId ? 'block' : 'none';
 
-    // 使用量表示を更新
+    // update usage display
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
-    showError('通信エラー: ' + (err.message || err));
+    showError('Connection error: ' + (err.message || err));
   } finally {
     btn.disabled = false;
     document.getElementById('loading').style.display = 'none';
@@ -1247,8 +1250,8 @@ function copyResult() {
   const text = document.getElementById('result-text').textContent;
   navigator.clipboard.writeText(text).then(() => {
     const btn = document.getElementById('copy-btn');
-    btn.textContent = 'コピーしました！';
-    setTimeout(() => { btn.textContent = 'コピー'; }, 2000);
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
   });
 }
 
@@ -1256,7 +1259,7 @@ async function submitFollowUp() {
   const question = document.getElementById('followup-question').value.trim();
   if (!question) { return; }
   if (!lastReviewId) {
-    document.getElementById('followup-error').textContent = 'この講評には追質問できません（キャッシュされた結果のため元データがない場合があります）。新しく写真を送信し直してください。';
+    document.getElementById('followup-error').textContent = "You can't ask a follow-up on this critique (it may be a cached result with no source data). Please submit your photo again.";
     document.getElementById('followup-error').style.display = 'block';
     return;
   }
@@ -1274,6 +1277,7 @@ async function submitFollowUp() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
+        lang: 'en',
         followUp: true,
         reviewId: lastReviewId,
         question,
@@ -1293,18 +1297,18 @@ async function submitFollowUp() {
         document.getElementById('followup-error').textContent = data.error;
         document.getElementById('followup-error').style.display = 'block';
       } else {
-        document.getElementById('followup-error').textContent = data.error || 'エラーが発生しました';
+        document.getElementById('followup-error').textContent = data.error || 'An error occurred';
         document.getElementById('followup-error').style.display = 'block';
       }
       return;
     }
 
-    // 質問と回答をひとつのブロックとして追記する（textContentのみ使用しXSSを防ぐ）
+    // append question+answer as one block (textContent only, to prevent XSS)
     const qaBlock = document.createElement('div');
     qaBlock.className = 'followup-qa';
     const qEl = document.createElement('p');
     qEl.className = 'followup-q';
-    qEl.textContent = '質問：' + question;
+    qEl.textContent = 'Q: ' + question;
     const aEl = document.createElement('p');
     aEl.className = 'followup-a';
     aEl.textContent = data.result;
@@ -1314,14 +1318,14 @@ async function submitFollowUp() {
     document.getElementById('followup-result').style.display = 'block';
     document.getElementById('followup-question').value = '';
 
-    // 使用量表示を更新（追質問も1カウント消費）
+    // update usage display (a follow-up also consumes 1 ticket)
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
-    document.getElementById('followup-error').textContent = '通信エラー: ' + (err.message || err);
+    document.getElementById('followup-error').textContent = 'Connection error: ' + (err.message || err);
     document.getElementById('followup-error').style.display = 'block';
   } finally {
     btn.disabled = false;
@@ -1329,7 +1333,7 @@ async function submitFollowUp() {
   }
 }
 
-// ---- ユーティリティ ----
+// ---- utilities ----
 async function sha256(buffer) {
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
   return Array.from(new Uint8Array(hashBuffer))

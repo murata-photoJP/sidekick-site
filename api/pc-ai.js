@@ -1,7 +1,7 @@
 // PC AI API（Node.js runtime）
 // 「ZIP解凍・ファイル操作・インストール・エラー画面」など、写真ユーザー向けのPC操作サポートAI。
-// 利用回数はAI講評・カメラAI・撮影AIと共通の usageTracking / config/planLimits を流用する。
-// 画面のスクリーンショットが添付された場合はClaude Vision APIで解析する（AI講評と同じ方式、履歴には保存しない）。
+// 利用回数は講評AI・カメラAI・撮影AIと共通の usageTracking / config/planLimits を流用する。
+// 画面のスクリーンショットが添付された場合はClaude Vision APIで解析する（講評AIと同じ方式、履歴には保存しない）。
 
 const admin = require('firebase-admin');
 
@@ -14,24 +14,42 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 const LEVEL_GUIDE = {
-  beginner: `- 説明はもっとも丁寧に。禁止語リストの言い換えは省略せず、フルセンテンスで添える
+  ja: {
+    beginner: `- 説明はもっとも丁寧に。禁止語リストの言い換えは省略せず、フルセンテンスで添える
 - 右クリック・ダウンロード・フォルダ・保存場所がどこにあるか分からない前提で、迷わないよう1手順ずつ細かく分解する
 - ボタンを押した後に画面がどう変わるかも書く`,
-  intermediate: `- 一般的なPC用語（フォルダ、拡張子など）はそのまま使ってよいが、禁止語リストの言い換えは省略しない
+    intermediate: `- 一般的なPC用語（フォルダ、拡張子など）はそのまま使ってよいが、禁止語リストの言い換えは省略しない
 - 手順は要点を押さえる程度で簡潔に書いてよい`,
-  advanced: `- 前置きは短くしてよく、手順も簡潔にまとめてよい
+    advanced: `- 前置きは短くしてよく、手順も簡潔にまとめてよい
 - ただし禁止語リストの言い換えは省略しない（一言で済ませてよい）。専門用語だけで終わらせず、必要最低限の説明は必ず入れる`
+  },
+  en: {
+    beginner: `- Be the most thorough here. Don't skip the plain-language explanation for words on the jargon list — spell it out in a full sentence
+- Assume the user doesn't know where right-click, downloads, folders, or save locations are; break instructions into fine-grained steps so they never get lost
+- Describe how the screen changes after each button press`,
+    intermediate: `- General PC terms (folder, file extension, etc.) can be used as-is, but don't skip the plain-language explanation for words on the jargon list
+- Steps can be concise, hitting the main points`,
+    advanced: `- Preambles can be short and steps can be summarized concisely
+- However, don't skip the plain-language explanation for words on the jargon list (a short phrase is fine). Don't end on jargon alone — always include at least a minimal explanation`
+  }
 };
 
 const OS_GUIDE = {
-  windows: 'OSはWindowsと選択済み。Windows専用の手順のみを案内し、Macの操作は書かない。',
-  mac: 'OSはMacと選択済み。Mac専用の手順のみを案内し、Windowsの操作は書かない。',
-  unknown: 'OSが分からない場合のみ、WindowsとMacの両方をそれぞれ分けて説明する。'
+  ja: {
+    windows: 'OSはWindowsと選択済み。Windows専用の手順のみを案内し、Macの操作は書かない。',
+    mac: 'OSはMacと選択済み。Mac専用の手順のみを案内し、Windowsの操作は書かない。',
+    unknown: 'OSが分からない場合のみ、WindowsとMacの両方をそれぞれ分けて説明する。'
+  },
+  en: {
+    windows: 'The OS is already selected as Windows. Only give Windows-specific steps; do not describe Mac operation.',
+    mac: 'The OS is already selected as Mac. Only give Mac-specific steps; do not describe Windows operation.',
+    unknown: 'Only when the OS is unknown, explain both Windows and Mac separately.'
+  }
 };
 
-function buildSystemPrompt(level, osType) {
-  const levelGuide = LEVEL_GUIDE[level] || LEVEL_GUIDE.beginner;
-  const osGuide = OS_GUIDE[osType] || OS_GUIDE.unknown;
+function buildSystemPromptJa(level, osType) {
+  const levelGuide = LEVEL_GUIDE.ja[level] || LEVEL_GUIDE.ja.beginner;
+  const osGuide = OS_GUIDE.ja[osType] || OS_GUIDE.ja.unknown;
   return `# PC AI — System Prompt
 
 ## あなたは誰か
@@ -130,16 +148,142 @@ ${levelGuide}
 `;
 }
 
+function buildSystemPromptEn(level, osType) {
+  const levelGuide = LEVEL_GUIDE.en[level] || LEVEL_GUIDE.en.beginner;
+  const osGuide = OS_GUIDE.en[osType] || OS_GUIDE.en.unknown;
+  return `# PC AI — System Prompt
+
+## Who you are
+You are "PC AI" — a "person sitting next to you explaining things" for photography users who aren't comfortable with PCs, easier to follow than searching online. Not an explanation for engineers — your top priority is an explanation a PC beginner can read and feel reassured by.
+
+## Goal
+Aim for an answer that gets "that was as clear as having someone explain it to me in person," not just "I solved it without searching."
+
+## Scope
+What a ZIP file is / how to unzip a ZIP / finding downloaded files / folder operations / copy, move, delete / basic Windows & Mac operation / basic Photoshop operation / where to place a JSX file / installation steps / update steps / how to read an error screen / how to take a screenshot / checking browser downloads
+
+## Completely out of scope
+Do not answer these in detail. Fade out naturally with something like "I can help with PC operation" and don't go further. Never mention the name of any other service or AI.
+- Shooting technique / camera-body operation / photo critique / SideKick-specific operation
+
+## About the OS (important)
+${osGuide}
+Never mix up Windows and Mac operation.
+
+## Consideration for beginners (top priority)
+A beginner may not know where right-click, downloads, folders, or save locations are. Explain with that assumption. Don't explain using jargon alone.
+
+## Consideration for the user's state of mind
+A user who isn't comfortable with PCs may feel anxious, thinking "it's my fault" or "I messed up." Avoid any phrasing that blames the user, and aim for wording that reassures them they can move on to the next step.
+Examples: "Everything up to here is normal." "If you see this screen, you're fine." "You're almost there." "Let's check this step by step." "We can usually solve this together, so don't worry."
+That said, avoid over-encouraging or overly emotional language — keep the support natural and calm.
+
+## Banned words and how to phrase them instead (important)
+Never use the following words as bare jargon. Whenever you use one, always add a short plain-language explanation.
+- ZIP → e.g. "a ZIP (a box that bundles files together)"
+- JSX → e.g. "a Photoshop script (JSX file)"
+- Path → e.g. "path (information showing where a file is located)"
+- Directory → e.g. "directory (another word for folder)"
+- Explorer → e.g. "File Explorer (the Windows app for viewing files)"
+- Finder → e.g. "Finder (the Mac app for viewing files)"
+- Drag and drop → e.g. "drag and drop (grabbing something with the mouse and moving it)"
+This rule applies at every level without exception (don't skip it even at the advanced level — the explanation can just be shorter).
+
+## Answer format (always in this order, every time, including all of these)
+1. State the conclusion briefly first
+2. Show the steps one at a time, numbered. After each meaningful chunk of steps, add a short "once you've done this, move to the next part"
+3. Add a short note about common pitfalls
+4. Close with "If you're not sure, please send a screenshot of your screen"
+
+## When a screenshot is sent
+- Read the screen and infer the situation. Make good use of phrasing like "from what I can see on the screen..."
+- If an error message is shown, read it and relay its content
+- Explain what screen (app/window/dialog) is currently being viewed
+- Give specific guidance on what to click/do next
+- If you can't determine something from the screen content alone, it's fine to ask a confirming question instead of guessing
+
+## When information is insufficient (important)
+If you can't pin down the cause from the screen or question alone, don't guess and state it as fact. Ask only for the minimum necessary additional information. Ask at most 1-2 questions at a time, phrased so even a beginner can answer easily.
+
+Priority order:
+1. If there's a screenshot: use as much information as you can read from the screen, and ask only about whatever is still missing
+2. If there's no screenshot: ask either "which screen are you currently stuck on?" or "what message is being displayed?", or say "if you send a screenshot, I can check for you"
+
+## Rules for follow-up questions (important)
+Keep follow-up questions to a minimum. Don't ask many at once (at most 1-2).
+
+Bad example (asking multiple things at once):
+Lining up "Is it Windows?" "What version of Photoshop?" "Where did you download it from?" "Did you unzip the ZIP?" "What are you trying to do?" "Which screen?" all at once
+
+Good example:
+"From what I can see, everything up to here is normal. To check the cause next, could you tell me what error message is showing?"
+or
+"If you send a screenshot, I can guide you while looking at the screen."
+
+## About guessing (important)
+When information is insufficient, don't state a guess as if it were fact. Use phrasing like "a possible cause is...", "from what I can see on the screen...", "it's possible that...", and clearly distinguish uncertain content.
+
+## Warning for risky operations (always)
+Whenever you guide the user through any of the following, always add a one-line warning. Recommend a backup if appropriate.
+- Permanently deleting files
+- Factory reset / initialization
+- Registry changes
+- Operating on system folders
+
+## Confirmation before an operation (important)
+Before guiding the user through an operation that may be irreversible — delete, reset, overwrite, etc. — always pause once and briefly explain what will happen as a result.
+Conversely, if the operation you're guiding is safe (doesn't damage existing files, is reversible, etc.), add a reassuring line such as "this operation will not delete any data."
+
+## Adjusting for user level (only the level of detail changes; scope of answers is the same at every level)
+${levelGuide}
+
+## Absolutely never do this
+- Use a banned-list word (ZIP, JSX, path, directory, Explorer, Finder, drag and drop, etc.) without a plain-language explanation
+- Guide the user through a risky operation (delete, reset, registry change, system folder operation, etc.) without a warning
+- Mix up Windows and Mac operation
+- Go into depth on shooting technique, photo critique, or SideKick-specific operation
+- Mention the name of another service or AI
+- Redundantly introduce yourself as "an AI"
+- Ask 3 or more follow-up questions at once
+- State a guess as if it were fact without enough information
+`;
+}
+
+function buildSystemPrompt(level, osType, lang) {
+  return lang === 'en' ? buildSystemPromptEn(level, osType) : buildSystemPromptJa(level, osType);
+}
+
+const ERRORS = {
+  ja: {
+    missingFields: 'idToken と messages は必須です',
+    auth: '認証エラー。再ログインしてください。',
+    serverConfig: 'サーバー設定エラー',
+    apiError: (t) => `APIエラー: ${t}`,
+    caught: (m) => `エラー: ${m}`,
+    limit: (isWeekly, limit) => `今${isWeekly ? '週' : '月'}の利用上限（${limit}回）に達しました。${isWeekly ? '月曜日' : '翌月1日'}にリセットされます。`
+  },
+  en: {
+    missingFields: 'idToken and messages are required',
+    auth: 'Authentication error. Please sign in again.',
+    serverConfig: 'Server configuration error',
+    apiError: (t) => `API error: ${t}`,
+    caught: (m) => `Error: ${m}`,
+    limit: (isWeekly, limit) => `You've reached this ${isWeekly ? "week's" : "month's"} usage limit (${limit} tickets). It will reset ${isWeekly ? 'on Monday' : 'on the 1st of next month'}.`
+  }
+};
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const { idToken, osType, pcLevel, messages, imageBase64, mediaType } = req.body || {};
+    const { idToken, osType, pcLevel, messages, imageBase64, mediaType, lang: langInput } = req.body || {};
+    const lang = langInput === 'en' ? 'en' : 'ja';
+    const E = ERRORS[lang];
 
     if (!idToken || !Array.isArray(messages) || messages.length === 0) {
-      return res.status(400).json({ error: 'idToken と messages は必須です' });
+      return res.status(400).json({ error: E.missingFields });
     }
 
     // 1. Firebase ID トークン検証
@@ -148,14 +292,14 @@ module.exports = async function handler(req, res) {
       const decoded = await admin.auth().verifyIdToken(idToken);
       uid = decoded.uid;
     } catch {
-      return res.status(401).json({ error: '認証エラー。再ログインしてください。' });
+      return res.status(401).json({ error: E.auth });
     }
 
     // 2. ユーザーの roles を取得
     const userDoc = await db.collection('users').doc(uid).get();
     const roles = (userDoc.exists && userDoc.data().roles) || ['free'];
 
-    // 3. config/planLimits を取得（AI講評・カメラAI・撮影AIと共通の制限設定）
+    // 3. config/planLimits を取得（講評AI・カメラAI・撮影AIと共通の制限設定）
     const limitsDoc = await db.collection('config').doc('planLimits').get();
     const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
 
@@ -183,7 +327,7 @@ module.exports = async function handler(req, res) {
       limit = (val && val !== 'TBD') ? val : (planLimits.free_after?.monthlyReviews ?? 5);
     }
 
-    // 5. 使用量チェック（AI講評・カメラAI・撮影AIと共通のカウント）
+    // 5. 使用量チェック（講評AI・カメラAI・撮影AIと共通のカウント）
     const usageRef = db.collection('usageTracking').doc(trackingKey);
     const usageDoc = await usageRef.get();
     const usedCount = usageDoc.exists ? (usageDoc.data().count || 0) : 0;
@@ -191,7 +335,7 @@ module.exports = async function handler(req, res) {
     if (usedCount >= limit) {
       const isWeekly = trackingKey.includes('-W');
       return res.status(429).json({
-        error: `今${isWeekly ? '週' : '月'}の利用上限（${limit}回）に達しました。${isWeekly ? '月曜日' : '翌月1日'}にリセットされます。`,
+        error: E.limit(isWeekly, limit),
         limit,
         count: usedCount
       });
@@ -200,8 +344,9 @@ module.exports = async function handler(req, res) {
     // 6. Claude API 呼び出し
     const level = ['beginner', 'intermediate', 'advanced'].includes(pcLevel) ? pcLevel : 'beginner';
     const os = ['windows', 'mac'].includes(osType) ? osType : 'unknown';
-    const systemPrompt = buildSystemPrompt(level, os);
+    const systemPrompt = buildSystemPrompt(level, os, lang);
 
+    const defaultImageQuestion = lang === 'en' ? 'Please tell me about this screen.' : 'この画面について教えてください。';
     const claudeMessages = messages.map((m, i) => {
       const role = m.role === 'assistant' ? 'assistant' : 'user';
       const content = String(m.content || '').trim();
@@ -212,7 +357,7 @@ module.exports = async function handler(req, res) {
           role,
           content: [
             { type: 'image', source: { type: 'base64', media_type: mediaType || 'image/jpeg', data: imageBase64 } },
-            { type: 'text', text: content || 'この画面について教えてください。' }
+            { type: 'text', text: content || defaultImageQuestion }
           ]
         };
       }
@@ -220,7 +365,7 @@ module.exports = async function handler(req, res) {
     });
 
     const apiKey = process.env.ANTHROPIC_API_KEY || '';
-    if (!apiKey) return res.status(500).json({ error: 'サーバー設定エラー' });
+    if (!apiKey) return res.status(500).json({ error: E.serverConfig });
 
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -239,7 +384,7 @@ module.exports = async function handler(req, res) {
 
     if (!claudeRes.ok) {
       const errText = await claudeRes.text();
-      return res.status(500).json({ error: `APIエラー: ${errText}` });
+      return res.status(500).json({ error: E.apiError(errText) });
     }
 
     const claudeData = await claudeRes.json();
@@ -256,7 +401,8 @@ module.exports = async function handler(req, res) {
 
   } catch (err) {
     console.error('pc-ai error:', err);
-    return res.status(500).json({ error: `エラー: ${err.message}` });
+    const lang = (req.body && req.body.lang === 'en') ? 'en' : 'ja';
+    return res.status(500).json({ error: ERRORS[lang].caught(err.message) });
   }
 };
 

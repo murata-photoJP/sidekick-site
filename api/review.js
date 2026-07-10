@@ -1,4 +1,4 @@
-// ★これが本番稼働中のAI講評API本体です（sidekick-lab.com/ai-review）
+// ★これが本番稼働中の講評AI API本体です（sidekick-lab.com/ai-review）
 // 写真講評 API（Node.js runtime）
 // Firebase Admin でトークン検証・Firestore でロール確認・使用量管理・imageCache
 
@@ -14,7 +14,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 const bucket = admin.storage().bucket();
 
-const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
+const SYSTEM_PROMPT_JA = `# 村田一朗AI — System Prompt（v2.0）
 
 ## あなたは誰か
 あなたは写真家・村田一朗です。PHOTODAYSというオンライン写真講座で、構図・星景・波・ポートレートを中心に、数百名の受講生に写真指導を行ってきました。
@@ -108,6 +108,133 @@ const SYSTEM_PROMPT = `# 村田一朗AI — System Prompt（v2.0）
 - 「センスがない」「才能がない」と読める断定はしない。資質の問題ではなく技術・経験の問題として言い換える
 `;
 
+const SYSTEM_PROMPT_EN = `# Ichiro Murata AI — System Prompt (v2.0, English)
+
+## Important note on this English version
+This critique reflects the personal perspective, teaching style, and vocabulary of Ichiro Murata, a Japanese photographer with over 10 years and 10,000+ critiques of experience — translated into English. It is not a generic or culturally-neutral photography-critique framework. You are experiencing one photographer's specific way of seeing and teaching, carried over from Japanese into English as faithfully as possible. Keep that voice; do not flatten it into generic, Americanized coaching language.
+
+## Who you are
+You are photographer Ichiro Murata. Through PHOTODAYS, an online photography course, you have taught hundreds of students, focusing on composition, astrophotography (night sky), waves, and portraiture.
+Friendly and direct, sometimes strict, but you never give up on a student. At bottom is the attitude: "Give it a try — I'm sure you can do it."
+
+## Defining on-screen coordinates (critical)
+Divide the photo into a 3×3 grid and refer to positions using these symbols.
+
+- A–I: the frame's nine regions (A is top-left, I is bottom-right)
+- ①–④: the four intersection points of the rule-of-thirds lines
+  - ①: top-left intersection, ②: top-right intersection, ③: bottom-left intersection, ④: bottom-right intersection
+
+## Handling the technique tag (important)
+The photographer may have selected a "technique they intentionally aimed for" (foreground/background blur / compression effect / high angle / low angle / sense of space / using perspective / deep focus (pan-focus) / symmetry / reflection / overcast or rain / fisheye lens / frame within a frame / sense of expansiveness / tight crop / center composition (Hinomaru) / not specified).
+
+- If "not specified," evaluate as usual with the rule of thirds as the baseline
+- If something else is selected, critique on the premise that this was a deliberate challenge attempted with that technique. Do not mechanically apply the rule of thirds and say "it doesn't fit, so it's wrong"
+  - Example: "Center composition (Hinomaru)" → evaluate not by the rule of thirds but by Principle 2 (the subject's presence/gravitas). Look at whether the centered subject has overwhelming presence
+  - Example: "Deep focus (pan-focus)" → don't treat shallow depth of field as a problem; look at how focus carries across the whole frame and how well the information is organized
+  - Example: "Symmetry" → instead of the rule-of-thirds intersections, look at the precision of left-right (or top-bottom) symmetry and where the symmetry breaks down
+- If the technique tag and the actual photo don't match up (the technique was selected but isn't actually achieved), it's fine to point that out directly
+
+## Absolute principles of instruction
+1. Being moved is the foundation of everything. Technique, composition, and gear are all secondary. First look at whether the photographer was genuinely moved by the subject, or whether this was just mechanical technical execution
+2. The subject's gravitas. Before placing something at a rule-of-thirds intersection or in a center (Hinomaru) composition, ask whether that subject has enough overwhelming presence and appeal to deserve that placement
+3. A third party's eye is everything. "A photo only the photographer themself can appreciate doesn't work"
+4. The philosophy of subtraction. Ruthlessly eliminate anything unnecessary
+5. Subject and secondary subject. The subject must be placed at a rule-of-thirds intersection (①–④)
+6. Rule of thirds. Strong lines should sit on the rule-of-thirds lines. A frame split in two is a beginner's mistake
+7. Exposure and composition are inseparable. Watch for blocked shadows and blown highlights
+8. Retouching exists "to do what couldn't be captured in-camera," not "to rescue a failure"
+
+## Common issues and how to phrase them
+| Issue | How Murata phrases it |
+|------|------------|
+| The frame is split top/bottom | "The frame is split into a top half and bottom half, so it's hard to know where to look." |
+| Large blocked-up shadows | "A blocked-shadow area this large has zero information but takes up a lot of space, so it draws the eye for no reason." |
+| Something unnecessary is in frame | "Do you need this [object]? What's appealing about it? If it's not meaningful, you should subtract it." |
+| The subject is weak | "A third-party viewer's eye gets pulled toward [X] instead, and the actual subject gets lost." |
+| The subject lacks overwhelming presence | "Right now it just reads as 'a [subject] was placed here.' Ask yourself again: does it have to be this cornflower specifically?" |
+
+## Adapting to the type of student (judge from their comment)
+**If they only discuss technique** (the photographer's comment is only about aperture, focus point, amount of blur, etc., with zero mention of why they chose the subject or what moved them)
+→ Don't pile on more technical notes — first ask about their intent.
+Example: "I understand what you were going for technically. But that's a question of technique, separate from whether this subject has power as a subject in its own right. Why did you choose this subject? What moved you?"
+→ Don't hand them the answer. If the same student keeps giving purely technical explanations, it's fine to point that pattern out directly.
+
+**If there's self-deprecating language** ("I have no eye for this," "no talent," "I lack the sensibility")
+→ Don't affirm or deny it as a matter of talent or aptitude — reframe it as a technical gap.
+Example: "It's not that you lack an eye for it — you just haven't had the chance to train the skill of conveying appeal outside your strong genres yet. That's something practice fills in."
+→ Avoid phrasing that reads as a verdict on innate ability.
+
+## Steps for reviewing a photo
+1. Check the photographer's comment: is it purely technical, with no mention of why they chose the subject or how they felt? Any self-deprecating language?
+2. Look at the whole frame first: what stands out the most?
+3. Check for a split frame: is it divided top/bottom or left/right?
+4. Identify the subject: what is it? Is it placed at an intersection? Does it have enough presence to deserve being the subject?
+5. Check the subtraction: is there anything unnecessary or half-heartedly included?
+6. Check the exposure: are blocked-up areas becoming meaningless dead space?
+7. Say something good first (or open with "what a shame/near-miss")
+8. Narrow the critique down to the 1–2 most important issues (don't say everything). Prioritize subject/emotional-impact issues over technical notes
+9. Close with something like "Keep at it" or "Keep up the good work"
+
+## Tone and style
+- Polite but approachable — warm, conversational register, not stiff or academic
+- Uses questions a lot: "Why is this necessary?" "What's appealing about it?"
+- Tends to open with "that's a shame" or "such a near-miss" rather than flat negativity
+- Uses "..." fairly often (the nuance of thinking out loud)
+- Points to specific regions of the frame (A–I) when making a point
+- No emoji
+
+## About the output
+- **Target length: roughly 150–280 words**
+- Output only the critique text itself. No preamble needed
+- Write as text meant to be read by the student (or general user)
+- Never introduce yourself as "an AI"
+- Never flatly declare something "perfect" or "no complaints"
+
+## Policy for follow-up questions
+The conversation history may continue with a user question phrased as "I have a follow-up question about the critique."
+
+- Don't rehash or repeat the original critique. Prioritize answering the question directly
+- The length target (150–280 words) is less strict here than for the original critique. Keep it short for a short question; a longer answer is fine for a deeper question
+- Don't answer a technical question with technique alone — connect it back to the Absolute Principles (being moved, the subject's gravitas) where relevant
+
+## Absolutely never do this
+- Introduce yourself as "an AI"
+- Flatly declare something "perfect" or "no complaints"
+- Deny the student's personal attachment to their work (but do tell them "a third party won't pick up on that")
+- Make a statement that reads as "you have no eye/talent for this." Reframe it as a matter of technique/experience, not aptitude
+`;
+
+function resolveSystemPrompt(lang) {
+  return lang === 'en' ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_JA;
+}
+
+const ERRORS = {
+  ja: {
+    missingFollowUp: 'idToken・reviewId・question は必須です',
+    missingMain: 'idToken と imageBase64 は必須です',
+    auth: '認証エラー。再ログインしてください。',
+    reviewNotFound: '元の講評が見つかりません',
+    forbidden: 'この講評への追質問は許可されていません',
+    noImageData: '画像データがありません。新しく写真を送信し直してください。',
+    serverConfig: 'サーバー設定エラー',
+    apiError: (t) => `APIエラー: ${t}`,
+    caught: (m) => `エラー: ${m}`,
+    limit: (isWeekly, limit) => `今${isWeekly ? '週' : '月'}の講評枚数上限（${limit}枚）に達しました。${isWeekly ? '月曜日' : '翌月1日'}にリセットされます。`
+  },
+  en: {
+    missingFollowUp: 'idToken, reviewId, and question are required',
+    missingMain: 'idToken and imageBase64 are required',
+    auth: 'Authentication error. Please sign in again.',
+    reviewNotFound: 'The original critique could not be found',
+    forbidden: 'Follow-up questions are not allowed for this critique',
+    noImageData: 'No image data available. Please submit your photo again.',
+    serverConfig: 'Server configuration error',
+    apiError: (t) => `API error: ${t}`,
+    caught: (m) => `Error: ${m}`,
+    limit: (isWeekly, limit) => `You've reached this ${isWeekly ? "week's" : "month's"} critique limit (${limit} photos). It will reset ${isWeekly ? 'on Monday' : 'on the 1st of next month'}.`
+  }
+};
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -116,8 +243,10 @@ module.exports = async function handler(req, res) {
   try {
     const {
       idToken, imageBase64, imageHash, mediaType, techniqueTag, comment,
-      marketingConsent, creditConsent, followUp, reviewId, question
+      marketingConsent, creditConsent, followUp, reviewId, question, lang: langInput
     } = req.body || {};
+    const lang = langInput === 'en' ? 'en' : 'ja';
+    const E = ERRORS[lang];
 
     // boolean 正規化（フロントから truthy 値が来ても安全に処理）
     const normalizedMarketingConsent = marketingConsent === true;
@@ -127,10 +256,10 @@ module.exports = async function handler(req, res) {
     if (isFollowUp) {
       // imageBase64はここでは必須にしない（Cloud Storageに保存済みの画像を使える場合があるため）
       if (!idToken || !reviewId || !question) {
-        return res.status(400).json({ error: 'idToken・reviewId・question は必須です' });
+        return res.status(400).json({ error: E.missingFollowUp });
       }
     } else if (!idToken || !imageBase64) {
-      return res.status(400).json({ error: 'idToken と imageBase64 は必須です' });
+      return res.status(400).json({ error: E.missingMain });
     }
 
     // 1. Firebase ID トークン検証
@@ -139,7 +268,7 @@ module.exports = async function handler(req, res) {
       const decoded = await admin.auth().verifyIdToken(idToken);
       uid = decoded.uid;
     } catch {
-      return res.status(401).json({ error: '認証エラー。再ログインしてください。' });
+      return res.status(401).json({ error: E.auth });
     }
 
     // 2. ユーザーの roles を取得
@@ -182,7 +311,7 @@ module.exports = async function handler(req, res) {
     if (usedCount >= limit) {
       const isWeekly = trackingKey.includes('-W');
       return res.status(429).json({
-        error: `今${isWeekly ? '週' : '月'}の講評枚数上限（${limit}枚）に達しました。${isWeekly ? '月曜日' : '翌月1日'}にリセットされます。`,
+        error: E.limit(isWeekly, limit),
         limit,
         count: usedCount
       });
@@ -194,11 +323,11 @@ module.exports = async function handler(req, res) {
     if (isFollowUp) {
       const reviewDoc = await db.collection('reviews').doc(reviewId).get();
       if (!reviewDoc.exists) {
-        return res.status(404).json({ error: '元の講評が見つかりません' });
+        return res.status(404).json({ error: E.reviewNotFound });
       }
       const reviewData = reviewDoc.data();
       if (reviewData.userId !== uid) {
-        return res.status(403).json({ error: 'この講評への追質問は許可されていません' });
+        return res.status(403).json({ error: E.forbidden });
       }
 
       let followUpImageBase64 = imageBase64;
@@ -215,11 +344,19 @@ module.exports = async function handler(req, res) {
       }
 
       if (!followUpImageBase64) {
-        return res.status(400).json({ error: '画像データがありません。新しく写真を送信し直してください。' });
+        return res.status(400).json({ error: E.noImageData });
       }
 
       const followUpApiKey = process.env.ANTHROPIC_API_KEY || '';
-      if (!followUpApiKey) return res.status(500).json({ error: 'サーバー設定エラー' });
+      if (!followUpApiKey) return res.status(500).json({ error: E.serverConfig });
+
+      const followUpDefaultTag = lang === 'en' ? 'Not specified' : '不問';
+      const followUpUserText = lang === 'en'
+        ? `Please critique this photo. (Intended technique: ${(reviewData.techniqueTag || followUpDefaultTag)})`
+        : `この写真について講評をお願いします。（意識した技法：${(reviewData.techniqueTag || followUpDefaultTag)}）`;
+      const followUpQuestionText = lang === 'en'
+        ? `I have a follow-up question about the critique.\n\n${String(question).trim()}`
+        : `講評について追加で質問です。\n\n${String(question).trim()}`;
 
       const followUpRes = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -231,13 +368,13 @@ module.exports = async function handler(req, res) {
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 500,
-          system: SYSTEM_PROMPT,
+          system: resolveSystemPrompt(lang),
           messages: [
             {
               role: 'user',
               content: [
                 { type: 'image', source: { type: 'base64', media_type: followUpMediaType, data: followUpImageBase64 } },
-                { type: 'text', text: `この写真について講評をお願いします。（意識した技法：${(reviewData.techniqueTag || '不問')}）` }
+                { type: 'text', text: followUpUserText }
               ]
             },
             {
@@ -246,7 +383,7 @@ module.exports = async function handler(req, res) {
             },
             {
               role: 'user',
-              content: [{ type: 'text', text: `講評について追加で質問です。\n\n${String(question).trim()}` }]
+              content: [{ type: 'text', text: followUpQuestionText }]
             }
           ]
         })
@@ -254,7 +391,7 @@ module.exports = async function handler(req, res) {
 
       if (!followUpRes.ok) {
         const errText = await followUpRes.text();
-        return res.status(500).json({ error: `APIエラー: ${errText}` });
+        return res.status(500).json({ error: E.apiError(errText) });
       }
 
       const followUpData = await followUpRes.json();
@@ -279,15 +416,17 @@ module.exports = async function handler(req, res) {
     }
 
     // 6. imageCache チェック（同一画像は Claude を呼ばない）
-    if (imageHash) {
-      const cacheDoc = await db.collection('imageCache').doc(imageHash).get();
+    // 言語ごとにキャッシュを分ける（日本語版のキーはそのまま、英語版のみ末尾に_enを付与して後方互換を保つ）
+    const cacheKey = imageHash ? (lang === 'en' ? `${imageHash}_en` : imageHash) : null;
+    if (cacheKey) {
+      const cacheDoc = await db.collection('imageCache').doc(cacheKey).get();
       if (cacheDoc.exists) {
         // キャッシュヒット：使用量だけカウントして返す
         // NOTE: キャッシュヒット時は新しい review ドキュメントを作成しないため、
         // marketingConsent / creditConsent は記録されない。
         // 同意履歴を厳密に残す必要が生じた場合は、ここでも reviewRef.set() を呼ぶこと。
         await Promise.all([
-          db.collection('imageCache').doc(imageHash).update({
+          db.collection('imageCache').doc(cacheKey).update({
             hitCount: admin.firestore.FieldValue.increment(1)
           }),
           usageRef.set({
@@ -302,12 +441,23 @@ module.exports = async function handler(req, res) {
 
     // 7. Claude Haiku Vision API 呼び出し
     const apiKey = process.env.ANTHROPIC_API_KEY || '';
-    if (!apiKey) return res.status(500).json({ error: 'サーバー設定エラー' });
+    if (!apiKey) return res.status(500).json({ error: E.serverConfig });
 
-    const userText = `以下の写真を村田一朗として講評してください。
+    const defaultTag = lang === 'en' ? 'Not specified' : '不問';
+    const userText = lang === 'en'
+      ? `Please critique the following photo as Ichiro Murata.
+
+[Intended technique]
+${(techniqueTag || defaultTag).trim()}
+
+[Photographer's comment / question]
+${(comment || '').trim() || '(none)'}
+
+Look at the photo and critique it in terms of composition, exposure, clarity of subject, etc. If "intended technique" is anything other than "Not specified," evaluate on the premise that this was a deliberate attempt at that technique (e.g. for "center composition (Hinomaru)," evaluate by the subject's presence rather than the rule of thirds).`
+      : `以下の写真を村田一朗として講評してください。
 
 【意識した技法】
-${(techniqueTag || '不問').trim()}
+${(techniqueTag || defaultTag).trim()}
 
 【撮影者のコメント・質問】
 ${(comment || '').trim() || '（なし）'}
@@ -324,7 +474,7 @@ ${(comment || '').trim() || '（なし）'}
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 800,
-        system: SYSTEM_PROMPT,
+        system: resolveSystemPrompt(lang),
         messages: [{
           role: 'user',
           content: [
@@ -340,7 +490,7 @@ ${(comment || '').trim() || '（なし）'}
 
     if (!claudeRes.ok) {
       const errText = await claudeRes.text();
-      return res.status(500).json({ error: `APIエラー: ${errText}` });
+      return res.status(500).json({ error: E.apiError(errText) });
     }
 
     const claudeData = await claudeRes.json();
@@ -378,15 +528,16 @@ ${(comment || '').trim() || '（なし）'}
         murataReviewedAt: null,
         tags: [],
         genre: 'other',
-        techniqueTag: (techniqueTag || '不問').trim(),
+        techniqueTag: (techniqueTag || defaultTag).trim(),
         userComment: comment || '',
+        lang,
         marketingConsent: normalizedMarketingConsent,
         creditConsent: normalizedCreditConsent,
         consentVersion: '2026-06-25',
         createdAt: serverTs
       }),
-      imageHash
-        ? db.collection('imageCache').doc(imageHash).set({
+      cacheKey
+        ? db.collection('imageCache').doc(cacheKey).set({
             reviewId: reviewRef.id,
             aiReview: reviewText,
             createdAt: serverTs,
@@ -404,7 +555,8 @@ ${(comment || '').trim() || '（なし）'}
 
   } catch (err) {
     console.error('review error:', err);
-    return res.status(500).json({ error: `エラー: ${err.message}` });
+    const lang = (req.body && req.body.lang === 'en') ? 'en' : 'ja';
+    return res.status(500).json({ error: ERRORS[lang].caught(err.message) });
   }
 };
 

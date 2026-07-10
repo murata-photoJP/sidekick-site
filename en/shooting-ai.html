@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>カメラAI | Sidekick Lab</title>
+<link rel="canonical" href="https://www.sidekick-lab.com/en/shooting-ai">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/shooting-ai">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/shooting-ai">
+<title>Shooting AI | Sidekick Lab</title>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
@@ -23,7 +26,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
@@ -31,7 +34,7 @@
   }
   .container { max-width: 720px; margin: 0 auto; }
 
-  /* サイトナビ */
+  /* site nav */
   .site-nav {
     position: sticky; top: 0; z-index: 40;
     background: rgba(26,26,26,.92); backdrop-filter: blur(16px);
@@ -84,7 +87,7 @@
   }
   .logout-btn:hover { color: #aaa; border-color: #666; }
 
-  /* できること／できないこと */
+  /* can / can't */
   .ai-scope { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
   .ai-scope-card { background: #252525; border: 1px solid #383838; border-radius: 10px; padding: 18px; }
   .ai-scope-card.can { border-top: 2px solid #3a5a6a; }
@@ -95,6 +98,8 @@
   .ai-scope-list { list-style: none; padding: 0; font-size: 0.8rem; color: #888; line-height: 1.9; }
   .ai-scope-card.can .ai-scope-list li::before { content: '✓ '; color: #4e8cff; font-weight: 700; }
   .ai-scope-card.cant .ai-scope-list li::before { content: '— '; color: #6a5040; }
+  .ai-scope-card.cant a { color: #c88b50; text-decoration: none; }
+  .ai-scope-card.cant a:hover { text-decoration: underline; }
   @media(max-width: 500px) { .ai-scope { grid-template-columns: 1fr; } }
 
   #loading-state { text-align: center; padding: 60px 0; }
@@ -148,13 +153,13 @@
     padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
     color: #e8e8e8; font-size: 0.92rem; font-family: inherit;
   }
-  #camera-info-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  #camera-brand { flex: 1; min-width: 140px; }
-  #camera-model { flex: 2; min-width: 180px; }
   .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
-  #camera-level { width: 100%; }
+  #shooting-level { width: 100%; }
 
-  /* チャット */
+  #scene-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  #scene-row select { flex: 1; min-width: 130px; }
+
+  /* chat */
   #chat-log {
     display: flex; flex-direction: column; gap: 14px;
     margin-bottom: 16px; max-height: 55vh; overflow-y: auto; padding-right: 4px;
@@ -172,16 +177,36 @@
   }
   .chat-empty { color: #555; font-size: 0.85rem; text-align: center; padding: 24px 0; }
 
-  .difficulty-check {
-    align-self: flex-start; display: flex; gap: 8px; align-items: center; margin-top: -6px;
+  .camera-ai-link {
+    align-self: flex-start; font-size: 0.78rem; margin-top: -6px;
   }
-  .difficulty-label { font-size: 0.76rem; color: #666; }
-  .difficulty-btn {
-    font-size: 0.76rem; padding: 5px 12px; border-radius: 6px; border: 1px solid #444;
+  .camera-ai-link a {
+    color: #6db0e0; text-decoration: none; border: 1px solid #3a5a6a;
+    border-radius: 6px; padding: 5px 12px;
+  }
+  .camera-ai-link a:hover { text-decoration: underline; }
+
+  .chat-msg-image {
+    display: block; max-width: 100%; max-height: 260px; border-radius: 8px;
+    margin-bottom: 8px; object-fit: contain;
+  }
+
+  #image-attach-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .attach-btn {
+    font-size: 0.82rem; padding: 8px 14px; border-radius: 8px; border: 1px solid #444;
     background: #1a1a1a; color: #999; cursor: pointer;
   }
-  .difficulty-btn:hover { border-color: #666; color: #ccc; }
-  .difficulty-done { font-size: 0.76rem; color: #555; align-self: flex-start; }
+  .attach-btn:hover { border-color: #666; color: #ccc; }
+  #chat-image-preview-wrap { display: none; align-items: center; gap: 8px; }
+  #chat-image-preview {
+    width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #444;
+  }
+  #chat-image-remove-btn {
+    font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; border: 1px solid #444;
+    background: #1a1a1a; color: #999; cursor: pointer;
+  }
+  #chat-image-remove-btn:hover { border-color: #666; color: #ccc; }
+  .attach-note { font-size: 0.74rem; color: #555; margin: -4px 0 12px; }
 
   .chat-input-row { display: flex; gap: 8px; }
   #chat-input {
@@ -211,11 +236,11 @@
 
 <nav class="site-nav">
   <div class="site-nav-in">
-    <a href="/" class="site-brand">
+    <a href="/en" class="site-brand">
       <div class="site-brand-mk">S</div>
       <span>Sidekick Lab</span>
     </a>
-    <a href="/" class="site-nav-back">← トップに戻る</a>
+    <a href="/en" class="site-nav-back">← Back to home</a>
   </div>
 </nav>
 
@@ -224,47 +249,47 @@
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <span class="user-name" id="user-name"></span>
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
-    <h1>カメラAI</h1>
+    <h1>Shooting AI</h1>
     <p>
-      カメラ本体の取扱説明書レベルの質問に答えます。<br>
-      「この機能は何か」「どこで設定するか」を、機種に合わせて案内します。
+      Works backward from "the photo you want to take" to suggest a general shooting approach.<br>
+      Aims to get you to solid shooting know-how more easily than a web search.
     </p>
   </header>
 
   <div class="ai-scope">
     <div class="ai-scope-card can">
-      <div class="ai-scope-title">答えられること</div>
+      <div class="ai-scope-title">What it can answer</div>
       <ul class="ai-scope-list">
-        <li>本体設定・メニュー項目</li>
-        <li>ボタンカスタム・AFモード</li>
-        <li>記録形式・手ブレ補正</li>
-        <li>Wi-Fi / Bluetooth接続</li>
-        <li>SDカード・初期化</li>
+        <li>Landscape, portrait, astrophotography</li>
+        <li>Fireworks, waterfalls/rivers/sea, night scenes, macro</li>
+        <li>Kids, pets, wild birds, vehicles</li>
+        <li>Sports, panning, backlight</li>
+        <li>Tripods, ND/PL filters & other gear</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">深くは踏み込まないこと</div>
+      <div class="ai-scope-title">Out of scope</div>
       <ul class="ai-scope-list">
-        <li>作品講評・構図アドバイス</li>
-        <li>撮影地・場面ごとのおすすめ設定</li>
-        <li>SideKick / Photoshop操作</li>
-        <li>PCの一般操作</li>
+        <li><a href="/en/camera-ai.html">Camera-model-specific operation → Camera AI</a></li>
+        <li>General PC operation</li>
+        <li>How to use SideKick</li>
+        <li>Photo critique itself</li>
       </ul>
     </div>
   </div>
 
   <div id="loading-state">
     <div class="spinner"></div>
-    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+    <p style="color:#666;font-size:0.85rem;">Checking...</p>
   </div>
 
   <div id="login-state">
     <div class="login-card">
-      <h2>Googleアカウントでログイン</h2>
-      <p>カメラAIを使うにはGoogleアカウントが必要です。講評AIと共通のAIチケットでご利用いただけます。
-        <span class="campaign-note">週5AIチケットまで無料（〜2026年8月末）</span>
+      <h2>Sign in with Google</h2>
+      <p>You'll need a Google account to use Shooting AI. It shares AI tickets with Photo Critique AI and Camera AI.
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
@@ -273,72 +298,82 @@
           <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
         </svg>
-        Google アカウントでログイン
+        Sign in with Google
       </button>
     </div>
   </div>
 
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今週のAIチケットを使い切りました</h2>
+      <h2>You've used this week's AI tickets</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
 
   <div id="usage-bar">
-    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-label" id="usage-label">This week's usage</div>
     <div class="usage-track">
       <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
-      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
+      <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ 講評AIと共通のAIチケットです</div>
+    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI and Camera AI</div>
   </div>
 
   <div id="main-area">
     <div class="section">
-      <h2>カメラ情報（任意・入力すると回答が正確になります）</h2>
-      <div id="camera-info-row">
-        <select id="camera-brand" onchange="saveCameraProfile()">
-          <option value="">メーカー未選択</option>
-          <option>Canon</option>
-          <option>Nikon</option>
-          <option>SONY</option>
-          <option>FUJIFILM</option>
-          <option>OM SYSTEM / Olympus</option>
-          <option>Panasonic / LUMIX</option>
-          <option>PENTAX / RICOH</option>
-          <option>Leica</option>
-          <option>その他</option>
-        </select>
-        <input type="text" id="camera-model" placeholder="機種名（例: α7IV, EOS R6 Mark II）" onchange="saveCameraProfile()">
-      </div>
-      <label class="level-label" for="camera-level">説明のレベル</label>
-      <select id="camera-level" onchange="saveCameraProfile()">
-        <option value="beginner">初心者向け（専門用語を避けて丁寧に）</option>
-        <option value="intermediate">中級者向け（一般的な用語はそのまま使う）</option>
-        <option value="advanced">上級者向け（設定名・数値を簡潔に）</option>
+      <h2>Explanation level</h2>
+      <select id="shooting-level" onchange="saveShootingLevel()">
+        <option value="beginner">Beginner (explains from f-number, shutter speed, ISO)</option>
+        <option value="intermediate">Intermediate (settings plus the reason why)</option>
+        <option value="advanced">Advanced (concise, condition-based criteria)</option>
       </select>
     </div>
 
     <div class="section">
-      <h2>質問する</h2>
-      <div id="chat-log">
-        <div class="chat-empty" id="chat-empty">例：「AFエリアの切り替え方が分かりません」「Wi-Fiでスマホに転送する方法は？」</div>
+      <h2>What do you want to shoot?</h2>
+      <div id="scene-row">
+        <select id="scene-outdoor">
+          <option value="">Outdoor/Indoor not selected</option>
+          <option value="Outdoor">Outdoor</option>
+          <option value="Indoor">Indoor</option>
+        </select>
+        <select id="scene-time">
+          <option value="">Day/Night not selected</option>
+          <option value="Day">Day</option>
+          <option value="Night">Night</option>
+        </select>
+        <select id="scene-tripod">
+          <option value="">Handheld/Tripod not selected</option>
+          <option value="Handheld">Handheld</option>
+          <option value="Tripod available">Tripod available</option>
+        </select>
       </div>
-      <div id="chat-loading">回答を考えています...</div>
+      <div id="chat-log">
+        <div class="chat-empty" id="chat-empty">e.g. "I want waterfalls to look silky smooth" / "I want fireworks to look big" / "I want a starry sky with a person in frame"</div>
+      </div>
+      <div id="chat-loading">Thinking...</div>
       <div id="chat-error"></div>
+      <div id="image-attach-row">
+        <button type="button" class="attach-btn" onclick="document.getElementById('chat-image-input').click()">📷 Attach a photo</button>
+        <input type="file" id="chat-image-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onChatImageSelected(this)">
+        <div id="chat-image-preview-wrap">
+          <img id="chat-image-preview" src="" alt="Attached image preview">
+          <button type="button" id="chat-image-remove-btn" onclick="removeChatImage()">×</button>
+        </div>
+      </div>
+      <p class="attach-note">Attached images are sent to Anthropic's Claude API (an external service). JPG / PNG / WebP supported (max 10MB).</p>
       <div class="chat-input-row">
-        <textarea id="chat-input" rows="2" placeholder="カメラについて質問を入力してください"></textarea>
-        <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
+        <textarea id="chat-input" rows="2" placeholder="What do you want to shoot?"></textarea>
+        <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
-    © カメラAI — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy.html">プライバシーポリシー</a> &nbsp;·&nbsp;
-    <a href="/terms.html">利用規約</a>
+    © Shooting AI — Sidekick Lab &nbsp;·&nbsp;
+    <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms.html">Terms of Service</a>
   </footer>
 </div>
 
@@ -353,8 +388,10 @@ let currentUser = null;
 let usageLimit = 5;
 let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
+let selectedChatImageFile = null;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
-// ---- Auth 状態監視 ----
+// ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
   document.getElementById('loading-state').style.display = 'none';
 
@@ -374,33 +411,29 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.getElementById('user-avatar').style.display = 'none';
   }
 
-  await Promise.all([loadUsageInfo(user.uid), loadCameraProfile(user.uid)]);
+  await Promise.all([loadUsageInfo(user.uid), loadShootingLevel(user.uid)]);
 });
 
-async function loadCameraProfile(uid) {
+async function loadShootingLevel(uid) {
   try {
     const db = firebase.firestore();
     const userDoc = await db.collection('users').doc(uid).get();
     const data = userDoc.exists ? userDoc.data() : {};
-    document.getElementById('camera-brand').value = data.camera_brand || '';
-    document.getElementById('camera-model').value = data.camera_model || '';
-    document.getElementById('camera-level').value = data.camera_level || 'beginner';
+    document.getElementById('shooting-level').value = data.shooting_level || 'beginner';
   } catch (err) {
-    console.error('camera profile load error:', err);
+    console.error('shooting level load error:', err);
   }
 }
 
-async function saveCameraProfile() {
+async function saveShootingLevel() {
   if (!currentUser) return;
   try {
     const db = firebase.firestore();
     await db.collection('users').doc(currentUser.uid).set({
-      camera_brand: document.getElementById('camera-brand').value,
-      camera_model: document.getElementById('camera-model').value.trim(),
-      camera_level: document.getElementById('camera-level').value
+      shooting_level: document.getElementById('shooting-level').value
     }, { merge: true });
   } catch (err) {
-    console.error('camera profile save error:', err);
+    console.error('shooting level save error:', err);
   }
 }
 
@@ -438,22 +471,22 @@ async function loadUsageInfo(uid) {
 
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
-    document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-label').textContent = isWeekly ? "This week's usage" : "This month's usage";
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
     if (isWeekly) {
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(getNextMonday(now)) + '（月曜日）';
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(getNextMonday(now)) + ' (Monday)';
     } else {
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(nextMonth);
     }
 
     if (usedCount >= usageLimit) {
-      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      const resetInfo = isWeekly ? 'It will reset on Monday.' : 'It will reset on the 1st of next month.';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
+        `You've used this ${isWeekly ? "week's" : "month's"} limit (${usageLimit} tickets). ${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-area').style.display = 'block';
@@ -464,14 +497,14 @@ async function loadUsageInfo(uid) {
   }
 }
 
-// ---- Google ログイン / ログアウト ----
+// ---- Google sign-in / sign-out ----
 async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     await firebase.auth().signInWithPopup(provider);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
-      showChatError('ログインに失敗しました: ' + err.message);
+      showChatError('Sign-in failed: ' + err.message);
     }
   }
 }
@@ -482,13 +515,92 @@ function logout() {
   });
 }
 
-// ---- チャット ----
-function appendUserBubble(text) {
+// ---- Image attachment ----
+function onChatImageSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    showChatError('Supported formats are JPG / PNG / WebP');
+    input.value = '';
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showChatError('File is too large (max 10MB)');
+    input.value = '';
+    return;
+  }
+  selectedChatImageFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('chat-image-preview').src = e.target.result;
+    document.getElementById('chat-image-preview-wrap').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeChatImage() {
+  selectedChatImageFile = null;
+  document.getElementById('chat-image-preview-wrap').style.display = 'none';
+  document.getElementById('chat-image-input').value = '';
+}
+
+function compressImage(file, maxSizeMB = 3) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const maxPx = 2048;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let quality = 0.85;
+      const tryBlob = () => {
+        canvas.toBlob(blob => {
+          if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1; tryBlob();
+          } else {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          }
+        }, 'image/jpeg', quality);
+      };
+      tryBlob();
+    };
+    img.src = url;
+  });
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
+// ---- Chat ----
+function appendUserBubble(text, imageUrl) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
   const el = document.createElement('div');
   el.className = 'chat-msg user';
-  el.textContent = text;
+  if (imageUrl) {
+    const img = document.createElement('img');
+    img.className = 'chat-msg-image';
+    img.src = imageUrl;
+    img.alt = 'Attached image';
+    el.appendChild(img);
+  }
+  const textEl = document.createElement('div');
+  textEl.textContent = text;
+  el.appendChild(textEl);
   log.appendChild(el);
   log.scrollTop = log.scrollHeight;
 }
@@ -500,84 +612,67 @@ function appendAssistantBubble(text) {
   el.textContent = text;
   log.appendChild(el);
 
-  const check = document.createElement('div');
-  check.className = 'difficulty-check';
-  const label = document.createElement('span');
-  label.className = 'difficulty-label';
-  label.textContent = 'この説明は難しかったですか？';
-  const hardBtn = document.createElement('button');
-  hardBtn.type = 'button';
-  hardBtn.className = 'difficulty-btn';
-  hardBtn.textContent = '難しかった';
-  const okBtn = document.createElement('button');
-  okBtn.type = 'button';
-  okBtn.className = 'difficulty-btn';
-  okBtn.textContent = 'ちょうど良かった';
-
-  hardBtn.onclick = () => resolveDifficulty(check, true);
-  okBtn.onclick = () => resolveDifficulty(check, false);
-
-  check.appendChild(label);
-  check.appendChild(hardBtn);
-  check.appendChild(okBtn);
-  log.appendChild(check);
+  const link = document.createElement('div');
+  link.className = 'camera-ai-link';
+  link.innerHTML = '<a href="/en/camera-ai.html">Check model-specific operation with Camera AI →</a>';
+  log.appendChild(link);
 
   log.scrollTop = log.scrollHeight;
-}
-
-async function resolveDifficulty(checkEl, wasHard) {
-  const done = document.createElement('div');
-  done.className = 'difficulty-done';
-  if (wasHard) {
-    const levelSelect = document.getElementById('camera-level');
-    const order = ['advanced', 'intermediate', 'beginner'];
-    const idx = order.indexOf(levelSelect.value);
-    if (idx > -1 && idx < order.length - 1) {
-      levelSelect.value = order[idx + 1];
-      await saveCameraProfile();
-      done.textContent = '次の回答から、より分かりやすいレベルに調整します。';
-    } else {
-      done.textContent = 'すでに最も分かりやすいレベルです。';
-    }
-  } else {
-    done.textContent = 'フィードバックありがとうございます。';
-  }
-  checkEl.replaceWith(done);
 }
 
 async function sendChatMessage() {
   const input = document.getElementById('chat-input');
   const question = input.value.trim();
   if (!question) return;
-  if (!currentUser) { showChatError('ログインが必要です'); return; }
+  if (!currentUser) { showChatError('Please sign in first'); return; }
 
   const btn = document.getElementById('chat-send-btn');
   btn.disabled = true;
   document.getElementById('chat-loading').style.display = 'block';
   document.getElementById('chat-error').style.display = 'none';
 
-  appendUserBubble(question);
+  let imagePayload = null;
+  let attachedPreviewUrl = null;
+  if (selectedChatImageFile) {
+    try {
+      const compressed = await compressImage(selectedChatImageFile);
+      const ab = await compressed.arrayBuffer();
+      imagePayload = { mediaType: 'image/jpeg', data: arrayBufferToBase64(ab) };
+      attachedPreviewUrl = document.getElementById('chat-image-preview').src;
+    } catch (err) {
+      showChatError('Failed to process image: ' + (err.message || err));
+      btn.disabled = false;
+      document.getElementById('chat-loading').style.display = 'none';
+      return;
+    }
+  }
+
+  appendUserBubble(question, attachedPreviewUrl);
   chatMessages.push({ role: 'user', content: question });
   input.value = '';
+  removeChatImage();
 
   try {
     const idToken = await currentUser.getIdToken(true);
-    const res = await fetch('/api/camera-ai', {
+    const res = await fetch('/api/shooting-ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
-        cameraBrand: document.getElementById('camera-brand').value,
-        cameraModel: document.getElementById('camera-model').value.trim(),
-        cameraLevel: document.getElementById('camera-level').value,
-        messages: chatMessages
+        lang: 'en',
+        shootingLevel: document.getElementById('shooting-level').value,
+        sceneOutdoor: document.getElementById('scene-outdoor').value,
+        sceneTime: document.getElementById('scene-time').value,
+        sceneTripod: document.getElementById('scene-tripod').value,
+        messages: chatMessages,
+        image: imagePayload
       })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      chatMessages.pop(); // 失敗した質問は履歴から取り除く
+      chatMessages.pop(); // remove the failed question from history
       if (res.status === 401) {
         await firebase.auth().signOut();
         window.location.reload();
@@ -586,7 +681,7 @@ async function sendChatMessage() {
         document.getElementById('limit-msg').textContent = data.error;
         document.getElementById('limit-state').style.display = 'block';
       } else {
-        showChatError(data.error || 'エラーが発生しました');
+        showChatError(data.error || 'An error occurred');
       }
       return;
     }
@@ -595,13 +690,13 @@ async function sendChatMessage() {
     appendAssistantBubble(data.result);
 
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
     chatMessages.pop();
-    showChatError('通信エラー: ' + (err.message || err));
+    showChatError('Connection error: ' + (err.message || err));
   } finally {
     btn.disabled = false;
     document.getElementById('chat-loading').style.display = 'none';
@@ -621,7 +716,7 @@ function showChatError(msg) {
   el.style.display = 'block';
 }
 
-// ---- ユーティリティ ----
+// ---- Utilities ----
 function getHighestRole(roles) {
   const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
   for (const r of PRIORITY) { if (roles.includes(r)) return r; }
