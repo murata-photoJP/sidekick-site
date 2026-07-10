@@ -227,20 +227,24 @@
     .abt-hd{display:inline-block;margin-bottom:16px;transition:.15s;}
     .abt-hd:hover .h2{color:var(--accent2);}
 
-    /* ── AI entry ── */
+    /* ── AI Lab entry ── */
     .ai-entry{padding:52px 0;background:linear-gradient(135deg,rgba(224,90,0,.07) 0%,rgba(255,177,74,.03) 100%);border-top:1px solid rgba(255,138,0,.14);border-bottom:1px solid rgba(255,138,0,.07);position:relative;overflow:hidden;}
     .ai-entry::before{content:"";position:absolute;right:-60px;top:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(255,138,0,.06),transparent 70%);pointer-events:none;}
-    .ai-entry-inner{display:flex;align-items:center;gap:48px;position:relative;z-index:1;}
-    .ai-entry-text{flex:1;}
+    .ai-entry-hd{text-align:center;position:relative;z-index:1;margin-bottom:32px;}
     .ai-entry-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:999px;background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.25);color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.1em;margin-bottom:16px;}
-    .ai-entry-pts{display:flex;flex-wrap:wrap;gap:7px;margin:16px 0 0;}
-    .ai-entry-pt{display:inline-flex;align-items:center;gap:4px;padding:4px 11px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);font-size:12px;color:var(--sub);font-weight:600;}
-    .ai-entry-cta{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px;}
-    .ai-entry-note{font-size:12px;color:var(--muted);}
-    .ai-entry-visual{flex-shrink:0;width:220px;display:flex;flex-direction:column;gap:10px;}
-    .ai-ev-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:14px 16px;}
-    .ai-ev-label{font-size:10px;color:var(--muted);font-weight:700;letter-spacing:.06em;margin-bottom:4px;}
-    .ai-ev-val{font-size:13px;color:var(--sub);}
+    .ai-entry-note{font-size:clamp(14px,1.6vw,16px);font-weight:700;color:var(--red);margin-top:14px;}
+    .ai-hub-wrap{max-width:720px;margin:0 auto;position:relative;z-index:1;}
+    .ai-hub-card{display:flex;align-items:center;gap:22px;padding:30px 34px;background:rgba(255,255,255,.04);border-radius:var(--r-lg);border:1px solid rgba(255,255,255,.08);transition:.18s;}
+    .ai-hub-card:hover{border-color:rgba(255,138,0,.35);background:rgba(255,255,255,.06);transform:translateY(-3px);}
+    .ai-hub-icon{font-size:42px;line-height:1;flex-shrink:0;}
+    .ai-hub-text{flex:1;}
+    .ai-hub-name{font-size:20px;font-weight:800;margin-bottom:6px;}
+    .ai-hub-desc{font-size:13px;color:var(--sub);line-height:1.7;}
+    .ai-hub-btn{flex-shrink:0;pointer-events:none;}
+    @media(max-width:600px){
+      .ai-entry{padding:40px 0;}
+      .ai-hub-card{flex-direction:column;text-align:center;padding:28px 24px;}
+    }
 
     /* ── Footer ── */
     .footer{padding:48px 0 32px;border-top:1px solid rgba(255,255,255,.06);}
@@ -357,48 +361,6 @@
       </div>
     </div>
 
-    <!-- ── AI Critique entry ── -->
-    <section class="ai-entry">
-      <div class="wrap">
-        <div class="ai-entry-inner">
-          <div class="ai-entry-text">
-            <div class="ai-entry-badge">Sidekick Lab · Photo Critique AI</div>
-            <h2 class="h2">Ichiro Murata's critique style,<br><em>powered by AI.</em></h2>
-            <p class="lead" style="margin-top:12px;">
-              Built on over 10 years and 10,000+ critiques. Unlike generic AI, this system is designed specifically around composition, visual flow, and image structure — the way Murata actually evaluates photographs.<br>
-              <span style="font-size:13px;color:var(--muted);">Currently free to try — share your photo and see for yourself.</span>
-            </p>
-            <div class="ai-entry-pts">
-              <span class="ai-entry-pt">📐 Composition clarity</span>
-              <span class="ai-entry-pt">👁 Visual flow</span>
-              <span class="ai-entry-pt">⬜ Use of negative space</span>
-              <span class="ai-entry-pt">🌟 Subject impact</span>
-              <span class="ai-entry-pt">💡 Improvement suggestions</span>
-            </div>
-            <div class="ai-entry-cta">
-              <a href="ai-review.html" class="btn btn-p" onclick="gtag('event','cta_click',{cta_label:'ai_hub_review_en'})">Try Photo Critique AI →</a>
-              <span class="ai-entry-note">Sign in with Google · 5 photos per week</span>
-            </div>
-            <p style="font-size:13px;color:var(--muted);margin-top:14px;font-style:italic;">Also in the <a href="ai-lab.html" style="color:var(--accent2);">AI Lab</a>: Camera AI, Shooting AI, and PC AI — all free, all in English.</p>
-          </div>
-          <div class="ai-entry-visual">
-            <div class="ai-ev-card">
-              <div class="ai-ev-label">Critique Experience</div>
-              <div class="ai-ev-val">10+ years · 10,000+ critiques</div>
-            </div>
-            <div class="ai-ev-card">
-              <div class="ai-ev-label">Designed by</div>
-              <div class="ai-ev-val">Photographer Ichiro Murata</div>
-            </div>
-            <div class="ai-ev-card">
-              <div class="ai-ev-label">Price</div>
-              <div class="ai-ev-val">Free (5 photos/week)</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ── Services ── -->
     <section class="hub" id="services">
       <div class="wrap">
@@ -455,6 +417,37 @@
             </div>
           </a>
 
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         AI LAB — consolidated AI entry point
+    ══════════════════════════════════════ -->
+    <section class="ai-entry" id="ai-lab">
+      <div class="wrap">
+        <div class="ai-entry-hd">
+          <div class="ai-entry-badge">Sidekick Lab · AI Lab</div>
+          <h2 class="h2">AI Lab</h2>
+          <p class="lead" style="max-width:520px;margin:12px auto 0;">
+            Free AI tools for learning, choosing, and improving your photography.<br>
+            Experience Ichiro Murata's perspective through AI.
+          </p>
+          <p class="ai-entry-note">Sign in with Google in 30 seconds · Free up to 5 AI tickets per week across all tools (through end of August 2026)</p>
+        </div>
+
+        <div class="ai-hub-wrap">
+          <a href="ai-lab.html" class="ai-hub-card" onclick="gtag('event','cta_click',{cta_label:'ai_hub_review_en'})">
+            <div class="ai-hub-icon">🤖</div>
+            <div class="ai-hub-text">
+              <div class="ai-hub-name">Photo Critique AI / Camera AI / Shooting AI / PC AI</div>
+              <div class="ai-hub-desc">
+                Built on over 10 years and 10,000+ critiques, this AI critiques your composition, visual flow, and image structure.<br>
+                Camera AI, Shooting AI, and PC AI are also available from the same AI Lab.
+              </div>
+            </div>
+            <span class="btn btn-p ai-hub-btn">Try it free →</span>
+          </a>
         </div>
       </div>
     </section>
