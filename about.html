@@ -2,6 +2,22 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <!-- 言語自動判定：ブラウザが日本語以外なら英語版へ誘導（一度選んだ言語はlocalStorageで記憶し、以後は聞かない） -->
+  <script>
+    (function () {
+      try {
+        var pref = localStorage.getItem('sk_lang_pref');
+        if (pref === 'ja') return;
+        if (pref === 'en') { location.replace('/en/about.html'); return; }
+        var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+        var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+        if (!isJapanese) {
+          localStorage.setItem('sk_lang_pref', 'en');
+          location.replace('/en/about.html');
+        }
+      } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://www.sidekick-lab.com/about">
   <title>なぜ私は写真を撮るのか — 村田一朗 / Sidekick</title>
