@@ -221,6 +221,7 @@
     }
 
     .hero-card{
+      display:block;
       min-height:440px;
       border-radius:28px;
       position:relative;
@@ -234,6 +235,15 @@
         radial-gradient(circle at 18% 34%, rgba(255,255,255,.07), transparent 5%),
         radial-gradient(circle at 55% 55%, rgba(255,255,255,.04), transparent 8%),
         linear-gradient(135deg, var(--blue1), var(--blue2) 55%, var(--blue3));
+      text-decoration:none;
+      color:inherit;
+      cursor:pointer;
+      transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+
+    .hero-card:hover{
+      transform:translateY(-3px);
+      border-color:rgba(255,255,255,.2);
     }
 
     .hero-card::before{
@@ -1132,7 +1142,7 @@
           </div>
         </div>
 
-        <div class="hero-card">
+        <a class="hero-card" href="#features">
           <div class="hero-card-inner">
             <div class="hero-card-tag">Sidekick Star — 星景向け</div>
             <h2>星景向け</h2>
@@ -1141,7 +1151,7 @@
               実務ベースのワークフロー支援モジュール。
             </p>
           </div>
-        </div>
+        </a>
       </div>
     </section>
 
