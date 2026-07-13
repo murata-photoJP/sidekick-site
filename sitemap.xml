@@ -31,6 +31,31 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://www.sidekick-lab.com/ai-lab</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/ai-review</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/camera-ai</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/pc-ai</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/shooting-ai</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.sidekick-lab.com/gallery</loc>
     <lastmod>2026-06-21</lastmod>
     <priority>0.7</priority>
@@ -54,6 +79,11 @@
     <loc>https://www.sidekick-lab.com/changelog</loc>
     <lastmod>2026-06-21</lastmod>
     <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/terms</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.3</priority>
   </url>
   <url>
     <loc>https://www.sidekick-lab.com/legal</loc>
