@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="星景写真の露出設定（月齢別の目安）、必要な機材、撮影前の準備をまとめました。新月を基準にした露出早見表つき。初心者から中級者まで対応。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/astrophotography-camera-settings">
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- Phase A2: 打ち出の小槌ページ専用の共通ヘッダー。既存サイトの他ページには適用していない。
+     実在するURL（index.html調査に基づく）へリンクする。Productsは単独ページが無いため、
+     トップページのProductsセクション（index.html #products）へ接続する。 -->
+<header class="kzc-header">
+  <div class="kzc-header-inner">
+    <a href="/" class="kzc-brand">SideKick</a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="kzc-nav" aria-label="グローバルナビゲーション">
+      <ul id="kzc-nav-menu" class="kzc-nav-menu">
+        <li><a href="/#products">Products</a></li>
+        <li><a href="/knowledge" aria-current="page">打ち出の小槌</a></li>
+        <li><a href="/ai-lab">AI Lab</a></li>
+        <li><a href="/workshop">Workshop</a></li>
+        <li><a href="/about">About</a></li>
+      </ul>
+    </nav>
+
+    <div class="kzc-lang-switch">
+      <a href="/en/" lang="en" hreflang="en">EN</a>
+    </div>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1>星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</h1>
+    <p class="kzc-article-lead">星景写真の露出設定（月齢別の目安）、必要な機材、撮影前の準備をまとめました。新月を基準にした露出早見表つき。初心者から中級者まで対応。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      <span class="kzc-badge">初心者向け</span>
+      <time datetime="2026-07-17">更新日：2026-07-17</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <h1>星景写真の撮影設定・機材完全ガイド</h1>
+<p>星景写真は「勘」で撮ると仕上がりが安定しません。露出の考え方と機材の基本を押さえておくだけで、現場での迷いがかなり減ります。ここでは撮影設定と機材、撮影前の準備を実践的にまとめました。</p>
+<h2>露出設定の基本：新月を基準に考える</h2>
+<p>星景写真の露出は、月明かりの影響を基準にすると組み立てやすくなります。</p>
+<p>具体的な数値をここで示すよりも、まず現場でテスト撮影してみることをおすすめします。真っ黒にしか写らない場合は、単純に露出が足りていません。ISO感度を上げてみてください。光害の有無や機材によっても最適値は変わるため、一律の「正解」があるわけではないのです。</p>
+<p>大まかな考え方としては、月が明るくなるほど（三日月→半月→満月と）ISOを下げるかシャッタースピードを短くして、光が入りすぎないよう調整していきます。逆に天の川そのものを狙うときは、普段より明るめに振ります。</p>
+<p>半月や満月でも、<strong>月が昇る前・沈んだ後の時間帯</strong>なら新月とほぼ同じ条件で撮影できます。月の出入り時間を天文アプリで確認し、月が地平線下にある時間を狙うのがコツです。</p>
+<p>満月は月明かりが強すぎて天の川はほぼ見えなくなるため、無理に天の川を狙わず、月明かりを活かした風景写真に切り替える方が現実的です。</p>
+<p>月齢ごとの具体的な補正値（何段アンダーにするか、ISOをいくつにするか）は、現場での再現性に直結する部分なので、村田のワークショップに参加された方には実例つきでお伝えしています。再現性のある数値まで知りたい方はぜひ参加を検討してみてください。</p>
+<h2>比較明合成を前提にする場合の調整</h2>
+<p>星の軌跡（比較明合成）を狙うなら、1枚あたりの露出は短めにするのが基本です。</p>
+<ul>
+<li>シャッタースピード：数秒程度に短縮（軌跡が滑らかにつながりやすい）</li>
+<li>ISO：光害が少なければやや高めでも大丈夫です</li>
+<li>絞り：開放</li>
+<li>撮影間隔：0〜1秒（間隔が空きすぎると軌跡が途切れる）</li>
+<li>撮影枚数：n秒×100枚で合成したい時間の長さから逆算する</li>
+</ul>
+<p>地上風景を入れる場合は、地上が明るくなりすぎないよう気をつけます。月がフレームに入ると合成後に白飛びしやすいので、構図から外すか、さらに露出を抑えます。</p>
+<h2>撮影のコツ：星を流さない・ピントを外さない</h2>
+<ul>
+<li><strong>500ルール</strong>：シャッタースピードの目安は「500 ÷ 焦点距離（35mm換算）」。例えば24mmなら500÷24≈20秒が上限です。これを超えると星が線状に流れ始めます。より精密に計算したい場合は「NPFルール」もあり、PhotoPillsなどのアプリで自動計算できます。</li>
+<li><strong>ピント合わせ</strong>：オートフォーカスはほぼ使えません。ライブビューで明るい星を拡大表示し、星が最も小さく鋭くなる位置に手動で合わせます。レンズの無限遠マークは単なる飾りです。必ず微調整を。バーティノフマスクを使うとさらに確実です。</li>
+<li><strong>構図の比率</strong>：天の川をメインにするなら空:地上=4:1程度、風景全体のバランスを重視するなら2:1が目安です。</li>
+</ul>
+<h2>必要な機材</h2>
+<h3>カメラ</h3>
+<ul>
+<li><strong>フルサイズ</strong>：高感度性能に優れ、暗い環境でのノイズが少ない。広角レンズを活かした構図にも向く。</li>
+<li><strong>APS-C</strong>：軽量・コストパフォーマンスに優れ、機材を持ち運びやすい。</li>
+</ul>
+<h3>レンズ</h3>
+<ul>
+<li><strong>焦点距離14〜35mmの広角</strong>が基本。焦点距離が短いほど星の動きが目立ちにくく、シャッタースピードを長めに取れます。</li>
+<li><strong>F2.8以下の明るいレンズ</strong>が理想。光を多く取り込めるため、高ISOに頼らずノイズを抑えられます。</li>
+</ul>
+<h3>三脚</h3>
+<p>長秒露光が前提なので必須です。風の強い場所でも安定する重量・剛性のあるものを選び、広角での構図調整がしやすい自由雲台付きだと使いやすくなります。</p>
+<h3>その他のアイテム</h3>
+<ul>
+<li>リモートシャッター（またはスマホ連携アプリ）：シャッターを直接押す振動を防ぐ</li>
+<li>星図アプリ（Stellarium、PhotoPillsなど）：天の川や星座の位置、月の出入りを事前に確認</li>
+<li>ヘッドランプ（赤色ライト推奨）：暗闇に目を慣らしたまま足元を確認できる</li>
+<li>防寒具・予備バッテリー：夜間の冷え込みと、寒さによるバッテリー消耗に備える</li>
+</ul>
+<h3>レンズヒーター</h3>
+<p>夜露や霜でレンズが曇るのを防ぐため、モバイルバッテリーに接続して使うレンズヒーターを推奨します。特に「出目金」と呼ばれる前玉が突き出したレンズは、ワット数が小さい（＝発熱の弱い）ヒーターだとレンズの中心まで熱が回らず、中心部だけがボケてしまうことがあります。ワット数に余裕のあるタイプを選びましょう。</p>
+<h3>補足：使い捨てカイロを金属・ガラスに直接貼らない</h3>
+<p>夜露防止やバッテリーの性能低下対策として、使い捨てカイロを機材に貼る人もいますが、注意が必要です。使い捨てカイロは、貼った相手から熱を受け取ることで発熱を保つ仕組みのため、金属やガラス（レンズ鏡筒など）に直接貼ると熱を奪われてしまい、うまく発熱しなくなることがあります。</p>
+<h2>撮影前の準備チェックリスト</h2>
+<ol>
+<li><strong>場所選び</strong>：光害マップで暗いエリアを確認し、Google Mapsの衛星写真・ストリートビューで地形を事前チェック。可能なら昼間に下見をしておく。</li>
+<li><strong>天候・月齢確認</strong>：晴天予報と月の出入り時間、月齢をあわせて確認。新月前後、または月が沈んでいる時間帯を狙う。</li>
+<li><strong>天文現象の確認</strong>：天の川の見える方角・時期、流星群やISS通過なども事前に調べておくと構図の幅が広がる。</li>
+<li><strong>安全確認</strong>：私有地なら許可を取る、夜間の足場・野生動物・電波状況を事前に把握する、できれば複数人で行動する。</li>
+</ol>
+<h2>まとめ</h2>
+<p>星景写真の露出は「新月基準＋月齢による補正」で考えると迷いが減り、機材は広角・明るいレンズ・三脚さえ揃えば入門できます。あとは現場での積み重ねです。</p>
+<p>撮影後の比較明合成・天の川強調・飛行機軌跡除去といった仕上げ作業は、判断の型さえ決まれば自動化できる部分でもあります。SideKick Starは、まさにこの一連の仕上げ判断をPhotoshop上で再現するツールです。撮影に集中する時間を増やしたい方は、無料体験もあわせてご覧ください。</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context">
+    <p>この工程を毎回手作業で繰り返しているなら、SideKick Starで自動化できます。</p>
+    <p class="kzc-product-name">SideKick Star</p>
+    <p class="kzc-product-desc">星景写真の比較明合成・天の川強調・飛行機軌跡除去を自動化するツール。</p>
+    <p class="kzc-product-links">
+      <a href="/sidekick-star">SideKick Starの詳細を見る →</a>
+      
+      <a href="/ai-lab">無料で試してみる →</a>
+      
+    </p>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- Phase A2: 打ち出の小槌ページ専用の共通フッター。既存サイトの他ページには適用していない。
+     全記事リンク・全カテゴリ・マニュアル個別リンク・changelog・galleryは並べない
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのFooter統一方針）。英語版の打ち出の小槌は
+     まだ存在しないため、Language切替はサイト全体のEN版トップへのリンクにとどめる。 -->
+<footer class="kzc-footer">
+  <div class="kzc-footer-inner">
+    <nav class="kzc-footer-nav" aria-label="フッターナビゲーション">
+      <a href="/#products">Products</a>
+      <a href="/knowledge">打ち出の小槌</a>
+      <a href="/ai-lab">AI Lab</a>
+      <a href="/workshop">Workshop</a>
+      <a href="/about">About</a>
+      <a href="/faq">Support</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+      <a href="/en/" lang="en" hreflang="en">English</a>
+    </nav>
+    <p class="kzc-footer-copyright">&copy; SideKick / Ichiro Murata</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="{{ language|default('ja') }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}SideKick{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<link rel="canonical" href="{% block canonical %}{% endblock %}">
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+{% include "header.html" %}
+<main>
+{% block content %}{% endblock %}
+</main>
+{% include "footer.html" %}
+</body>
+</html>

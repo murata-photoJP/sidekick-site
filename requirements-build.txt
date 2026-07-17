@@ -1,0 +1,7 @@
+# 打ち出の小槌（knowledge）ビルド専用の依存関係。
+# 既存の package.json（Vercel Serverless Functions用のNode依存）とは無関係。
+#
+# PyYAMLはWeb側では使用しない（web-published.jsonはJSONのため）。
+# _統合KB側の依存としては別途 _統合KB/requirements.txt 等で管理する想定。
+Jinja2==3.1.6
+markdown-it-py==4.0.0

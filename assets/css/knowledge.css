@@ -1,0 +1,386 @@
+/* 打ち出の小槌（knowledge）専用CSS。既存ページのCSSは変更していない。
+   既存サイト（index.html等）のダークテーマ配色・タイポグラフィに合わせている。 */
+
+:root{
+  --kzc-bg:#09090c;
+  --kzc-card:#14161d;
+  --kzc-line:#22263080;
+  --kzc-text:#eef1f8;
+  --kzc-sub:#8c96aa;
+  --kzc-muted:#515969;
+  --kzc-accent:#ff8a00;
+  --kzc-accent2:#ffb14a;
+  --kzc-r:18px;
+  --kzc-max:860px;
+  --kzc-focus:#4e8cff;
+}
+
+.kzc-header, .kzc-footer, .kzc-hero, .kzc-article-list, .kzc-kozuchi-about,
+.kzc-article, main{
+  color:var(--kzc-text);
+}
+
+body{
+  background:var(--kzc-bg);
+  color:var(--kzc-text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+    "Hiragino Kaku Gothic ProN","Noto Sans JP",sans-serif;
+  line-height:1.75;
+  margin:0;
+}
+
+main{
+  max-width:var(--kzc-max);
+  margin:0 auto;
+  padding:32px 20px 64px;
+}
+
+a{ color:var(--kzc-accent2); }
+a:focus-visible, button:focus-visible{
+  outline:3px solid var(--kzc-focus);
+  outline-offset:2px;
+}
+
+/* ---------- Header ---------- */
+.kzc-header{
+  border-bottom:1px solid var(--kzc-line);
+  background:var(--kzc-bg);
+}
+.kzc-header-inner{
+  max-width:1100px;
+  margin:0 auto;
+  padding:14px 20px;
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.kzc-brand{
+  font-weight:800;
+  color:var(--kzc-text);
+  text-decoration:none;
+  margin-right:auto;
+}
+
+/* Desktop Navigation */
+.kzc-nav-menu{
+  list-style:none;
+  display:flex;
+  gap:20px;
+  margin:0;
+  padding:0;
+}
+.kzc-nav-menu a{
+  color:var(--kzc-sub);
+  text-decoration:none;
+  font-weight:700;
+  font-size:14px;
+}
+.kzc-nav-menu a[aria-current="page"]{
+  color:var(--kzc-accent2);
+}
+.kzc-lang-switch a{
+  color:var(--kzc-sub);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+  border:1px solid var(--kzc-line);
+  border-radius:8px;
+  padding:4px 10px;
+}
+
+/* Mobile Navigation: JS未動作時は常に展開表示のまま（progressive enhancement）。
+   トグルボタンはJSが有効になったときだけ表示する。 */
+.kzc-nav-toggle{
+  display:none;
+  background:transparent;
+  border:1px solid var(--kzc-line);
+  color:var(--kzc-text);
+  border-radius:8px;
+  padding:8px 14px;
+  font-size:14px;
+  min-height:44px;
+}
+body.kzc-js-nav .kzc-nav-toggle{
+  display:inline-flex;
+  align-items:center;
+}
+
+@media (max-width:640px){
+  .kzc-header-inner{ flex-wrap:wrap; }
+  .kzc-nav-menu{
+    flex-direction:column;
+    gap:14px;
+    width:100%;
+    padding-top:10px;
+  }
+  .kzc-nav-menu a{
+    display:block;
+    padding:10px 4px;
+    min-height:44px;
+  }
+  /* JSが動いているときだけ、data-open="false"で折りたたむ */
+  body.kzc-js-nav .kzc-nav-menu[data-open="false"]{
+    display:none;
+  }
+}
+
+/* ---------- Footer ---------- */
+.kzc-footer{
+  border-top:1px solid var(--kzc-line);
+  margin-top:48px;
+}
+.kzc-footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+  padding:28px 20px;
+}
+.kzc-footer-nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  margin-bottom:14px;
+}
+.kzc-footer-nav a{
+  color:var(--kzc-sub);
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+}
+.kzc-footer-copyright{
+  color:var(--kzc-muted);
+  font-size:12px;
+  margin:0;
+}
+
+/* ---------- Kozuchi Hero ---------- */
+.kzc-hero{
+  padding:24px 0 12px;
+  border-bottom:1px solid var(--kzc-line);
+  margin-bottom:24px;
+}
+.kzc-hero h1{
+  font-size:clamp(28px,4vw,40px);
+  margin:0 0 8px;
+}
+.kzc-hero-tagline{
+  color:var(--kzc-accent2);
+  font-weight:700;
+  font-size:16px;
+  margin:0 0 10px;
+}
+.kzc-hero-desc{
+  color:var(--kzc-sub);
+  font-size:15px;
+  max-width:640px;
+}
+
+/* ---------- Article List / Card ---------- */
+.kzc-article-list{
+  display:grid;
+  gap:20px;
+  margin-bottom:40px;
+}
+.kzc-card{
+  background:var(--kzc-card);
+  border:1px solid var(--kzc-line);
+  border-radius:var(--kzc-r);
+  padding:20px;
+}
+.kzc-card-thumb{ display:block; margin-bottom:12px; }
+.kzc-card-thumb img{
+  width:100%;
+  height:auto;
+  border-radius:calc(var(--kzc-r) - 6px);
+  display:block;
+}
+.kzc-card-category{
+  color:var(--kzc-accent2);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  margin:0 0 6px;
+}
+.kzc-card-title{
+  font-size:18px;
+  line-height:1.5;
+  margin:0 0 8px;
+  overflow-wrap:break-word;
+  word-break:break-word;
+}
+.kzc-card-title a{
+  color:var(--kzc-text);
+  text-decoration:none;
+}
+.kzc-card-desc{
+  color:var(--kzc-sub);
+  font-size:14px;
+  margin:0 0 10px;
+}
+.kzc-card-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--kzc-muted);
+  font-size:12px;
+  margin:0;
+}
+.kzc-empty{ color:var(--kzc-sub); }
+
+.kzc-badge{
+  display:inline-block;
+  background:var(--kzc-accent);
+  color:#111;
+  font-size:11px;
+  font-weight:800;
+  padding:2px 8px;
+  border-radius:999px;
+}
+
+/* ---------- Kozuchi About ---------- */
+.kzc-kozuchi-about{
+  border-top:1px solid var(--kzc-line);
+  padding-top:24px;
+  color:var(--kzc-sub);
+}
+.kzc-kozuchi-about h2{ color:var(--kzc-text); }
+
+/* ---------- Breadcrumb ---------- */
+.kzc-breadcrumb ol{
+  list-style:none;
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  padding:0;
+  margin:0 0 20px;
+  font-size:13px;
+  color:var(--kzc-muted);
+}
+.kzc-breadcrumb ol li:not(:last-child)::after{
+  content:"›";
+  margin-left:6px;
+}
+.kzc-breadcrumb a{ color:var(--kzc-sub); }
+.kzc-breadcrumb li[aria-current="page"]{ color:var(--kzc-text); }
+
+/* ---------- Article Header ---------- */
+.kzc-article-header h1{
+  font-size:clamp(26px,3.6vw,36px);
+  line-height:1.4;
+  margin:0 0 12px;
+  overflow-wrap:break-word;
+}
+.kzc-article-lead{
+  color:var(--kzc-sub);
+  font-size:16px;
+}
+.kzc-article-meta{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  color:var(--kzc-muted);
+  font-size:13px;
+}
+.kzc-category{
+  color:var(--kzc-accent2);
+  font-weight:700;
+}
+
+/* ---------- Author Short / Author Block ---------- */
+.kzc-author-short{
+  color:var(--kzc-sub);
+  font-size:13px;
+  border-bottom:1px solid var(--kzc-line);
+  padding-bottom:20px;
+  margin-bottom:24px;
+}
+.kzc-author-block{
+  border-top:1px solid var(--kzc-line);
+  padding-top:20px;
+  margin-top:32px;
+  color:var(--kzc-sub);
+  font-size:14px;
+}
+.kzc-author-block h2{ color:var(--kzc-text); font-size:16px; }
+
+/* ---------- Article Body ---------- */
+.kzc-article-body{
+  font-size:16px;
+  line-height:1.85;
+}
+.kzc-article-body h2{
+  font-size:22px;
+  margin-top:36px;
+  border-left:4px solid var(--kzc-accent);
+  padding-left:12px;
+}
+.kzc-article-body h3{ font-size:18px; margin-top:28px; }
+.kzc-article-body blockquote{
+  border-left:3px solid var(--kzc-accent2);
+  margin:20px 0;
+  padding:4px 16px;
+  color:var(--kzc-sub);
+  background:var(--kzc-card);
+  border-radius:0 8px 8px 0;
+}
+.kzc-article-body pre{
+  background:var(--kzc-card);
+  border:1px solid var(--kzc-line);
+  border-radius:10px;
+  padding:14px 16px;
+  overflow-x:auto;
+}
+.kzc-article-body code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:14px;
+}
+.kzc-article-body table{
+  border-collapse:collapse;
+  width:100%;
+  display:block;
+  overflow-x:auto;
+  margin:20px 0;
+}
+.kzc-article-body th, .kzc-article-body td{
+  border:1px solid var(--kzc-line);
+  padding:8px 12px;
+  text-align:left;
+  font-size:14px;
+}
+.kzc-article-body th{ color:var(--kzc-accent2); }
+.kzc-article-body img{ max-width:100%; height:auto; border-radius:10px; }
+
+/* ---------- Related Articles ---------- */
+.kzc-related-articles{
+  border-top:1px solid var(--kzc-line);
+  padding-top:20px;
+  margin-top:32px;
+}
+.kzc-related-articles ul{ list-style:none; padding:0; margin:0; }
+.kzc-related-articles li{ margin-bottom:16px; }
+.kzc-related-articles a{ font-weight:700; text-decoration:none; }
+.kzc-related-desc{ color:var(--kzc-sub); font-size:13px; margin:4px 0; }
+.kzc-related-category{ color:var(--kzc-muted); font-size:12px; }
+
+/* ---------- Product Context Block / CTA ---------- */
+.kzc-product-context, .kzc-cta{
+  background:var(--kzc-card);
+  border:1px solid var(--kzc-line);
+  border-radius:var(--kzc-r);
+  padding:20px;
+  margin-top:28px;
+}
+.kzc-product-name{ font-weight:800; margin:8px 0 4px; }
+.kzc-product-desc{ color:var(--kzc-sub); font-size:14px; }
+.kzc-product-links a{
+  margin-right:16px;
+  font-weight:700;
+  text-decoration:none;
+}
+.kzc-cta p{ margin:0 0 8px; }
+.kzc-cta a{ font-weight:700; text-decoration:none; }
+
+@media (max-width:480px){
+  main{ padding:24px 16px 48px; }
+}

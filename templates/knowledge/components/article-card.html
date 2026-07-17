@@ -1,0 +1,18 @@
+{# Article Card 部品。呼び出し側で `card`（article_card契約の1件）を渡すこと。
+   関連製品・concept・tag一覧・内部ID・confidence・記事数・空のサムネイル枠は表示しない。 #}
+<article class="kzc-card">
+  {% if card.thumbnail_url %}
+  <a href="{{ card.public_url }}" class="kzc-card-thumb">
+    <img src="{{ card.thumbnail_url }}" alt="" loading="lazy">
+  </a>
+  {% endif %}
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">{{ card.category_name }}</p>
+    <h3 class="kzc-card-title"><a href="{{ card.public_url }}">{{ card.title }}</a></h3>
+    <p class="kzc-card-desc">{{ card.meta_description }}</p>
+    <p class="kzc-card-meta">
+      {% if card.difficulty == "beginner" %}<span class="kzc-badge">初心者向け</span>{% endif %}
+      {% if card.updated_at %}<time datetime="{{ card.updated_at }}">{{ card.updated_at }}</time>{% endif %}
+    </p>
+  </div>
+</article>

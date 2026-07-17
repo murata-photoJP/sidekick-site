@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}｜打ち出の小槌 - SideKick{% endblock %}
+{% block meta_description %}{{ article.meta_description }}{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    {# Phase A2時点でもカテゴリページ(/knowledge/{category})はまだ存在しないため、リンクにしない。
+       カテゴリページを実装したら、次の行に戻す:
+       <li><a href="/knowledge/{{ article.category.slug }}">{{ article.category.name_ja }}</a></li> #}
+    <li>{{ article.category.name_ja }}</li>
+    <li aria-current="page">{{ article.title }}</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1>{{ article.title }}</h1>
+    <p class="kzc-article-lead">{{ article.meta_description }}</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">{{ article.category.name_ja }}</span>
+      {% if show_beginner_badge %}<span class="kzc-badge">初心者向け</span>{% endif %}
+      {% if article.updated_at %}<time datetime="{{ article.updated_at }}">更新日：{{ article.updated_at }}</time>{% endif %}
+    </p>
+  </header>
+
+  {# 短い著者情報。更新日はArticle Headerに既に表示済みのため、ここでは名前・役割のみで重複させない。 #}
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    {{ body_html|safe }}
+  </div>
+
+  {% if related_articles %}
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      {% for ra in related_articles %}
+      <li>
+        <a href="{{ ra.public_url }}">{{ ra.title }}</a>
+        <p class="kzc-related-desc">{{ ra.meta_description }}</p>
+        <span class="kzc-related-category">{{ ra.category_name }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if product_context %}
+  <section class="kzc-product-context">
+    <p>{{ product_context.bridge_text }}</p>
+    <p class="kzc-product-name">{{ product_context.name }}</p>
+    <p class="kzc-product-desc">{{ product_context.short_description }}</p>
+    <p class="kzc-product-links">
+      <a href="{{ product_context.detail_url }}">{{ product_context.name }}の詳細を見る →</a>
+      {% if product_context.trial_url %}
+      <a href="{{ product_context.trial_url }}">無料で試してみる →</a>
+      {% endif %}
+    </p>
+  </section>
+  {% elif cta %}
+  <section class="kzc-cta kzc-cta-{{ cta.type }}">
+    <p>{{ cta.text }}</p>
+    <p><a href="{{ cta.href }}">{{ cta.label }} →</a></p>
+  </section>
+  {% endif %}
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+  </footer>
+</article>
+{% endblock %}
