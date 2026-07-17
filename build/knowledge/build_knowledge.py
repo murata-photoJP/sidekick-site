@@ -26,6 +26,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -68,6 +69,17 @@ def render_markdown(text: str) -> str:
     そのままの生HTMLとしては出力されない（安全側のデフォルト）。"""
     md = MarkdownIt("commonmark", {"html": False}).enable(["table"])
     return md.render(text)
+
+
+LEADING_H1_RE = re.compile(r"^\s*#[ \t]+[^\n]*\n+")
+
+
+def strip_leading_h1(body_markdown: str) -> str:
+    """本文Markdownの先頭が単一の#見出し（h1）の場合は取り除く。
+    Article HeaderのH1（記事タイトル、front matterのtitle）と重複してしまうため
+    （実際の記事10本すべてが本文冒頭に`# タイトル`を含んでおり、そのままレンダリングすると
+    1ページにh1が2つできてしまうことが実記事の公開で判明した）。##以降（h2+）は対象外。"""
+    return LEADING_H1_RE.sub("", body_markdown, count=1)
 
 
 def check_heading_hierarchy(body_markdown: str) -> list[str]:
@@ -249,7 +261,7 @@ def render_article(env: Environment, article: dict, index: dict) -> str:
     if not body_markdown or not body_markdown.strip():
         raise BuildError(f"{article.get('id')}: body_markdownが空です")
 
-    body_html = render_markdown(body_markdown)
+    body_html = render_markdown(strip_leading_h1(body_markdown))
 
     try:
         template = env.get_template("article.html")
@@ -316,7 +328,7 @@ def render_all(index: dict, article_id: str | None) -> dict[Path, str]:
             raise BuildError(f"対象記事が見つかりません: {article_id!r}")
 
     for a in targets:
-        body = a.get("body_markdown") or ""
+        body = strip_leading_h1(a.get("body_markdown") or "")
         for w in check_heading_hierarchy(body):
             print(f"WARNING: {a.get('id')}: {w}")
         for w in check_image_alt_text(body):

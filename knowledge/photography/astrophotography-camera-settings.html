@@ -2,6 +2,23 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語トップへ誘導）。
+     打ち出の小槌の英語版はまだ無いため、他ページと同じくEN版トップへ誘導する。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで｜打ち出の小槌 - SideKick</title>
 <meta name="description" content="星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。">
@@ -9,30 +26,48 @@
 <link rel="stylesheet" href="/assets/css/knowledge.css">
 </head>
 <body>
-<!-- Phase A2: 打ち出の小槌ページ専用の共通ヘッダー。既存サイトの他ページには適用していない。
-     実在するURL（index.html調査に基づく）へリンクする。Productsは単独ページが無いため、
-     トップページのProductsセクション（index.html #products）へ接続する。 -->
-<header class="kzc-header">
-  <div class="kzc-header-inner">
-    <a href="/" class="kzc-brand">SideKick</a>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。 -->
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
 
     <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
       <span class="kzc-nav-toggle-label">メニュー</span>
     </button>
 
-    <nav class="kzc-nav" aria-label="グローバルナビゲーション">
-      <ul id="kzc-nav-menu" class="kzc-nav-menu">
-        <li><a href="/#products">Products</a></li>
-        <li><a href="/knowledge" aria-current="page">打ち出の小槌</a></li>
-        <li><a href="/ai-lab">AI Lab</a></li>
-        <li><a href="/workshop">Workshop</a></li>
-        <li><a href="/about">About</a></li>
-      </ul>
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star.html">⭐ Star</a>
+      <a href="/portrait.html">👤 Portrait</a>
+      <a href="/sky-effect.html">☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/workshop.html">📷 Workshop</a>
+      <a href="/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/sidekick.html" style="color:var(--muted);">Sidekickとは</a>
+      <a href="/about.html" style="color:var(--muted);">About</a>
+      <a href="/changelog.html" style="color:var(--muted);">更新履歴</a>
+      <a href="/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+      <a href="/en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
     </nav>
-
-    <div class="kzc-lang-switch">
-      <a href="/en/" lang="en" hreflang="en">EN</a>
-    </div>
   </div>
 </header>
 
@@ -104,8 +139,7 @@
   <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
 
   <div class="kzc-article-body">
-    <h1>星景写真の撮影設定・機材完全ガイド</h1>
-<p>星景写真は「勘」で撮ると仕上がりが安定しません。露出の考え方と機材の基本を押さえておくだけで、現場での迷いがかなり減ります。ここでは撮影設定と機材、撮影前の準備を実践的にまとめました。</p>
+    <p>星景写真は「勘」で撮ると仕上がりが安定しません。露出の考え方と機材の基本を押さえておくだけで、現場での迷いがかなり減ります。ここでは撮影設定と機材、撮影前の準備を実践的にまとめました。</p>
 <h2>露出設定の基本：新月を基準に考える</h2>
 <p>星景写真の露出は、月明かりの影響を基準にすると組み立てやすくなります。</p>
 <p>具体的な数値をここで示すよりも、まず現場でテスト撮影してみることをおすすめします。真っ黒にしか写らない場合は、単純に露出が足りていません。ISO感度を上げてみてください。光害の有無や機材によっても最適値は変わるため、一律の「正解」があるわけではないのです。</p>
@@ -195,24 +229,93 @@
 </article>
 
 </main>
-<!-- Phase A2: 打ち出の小槌ページ専用の共通フッター。既存サイトの他ページには適用していない。
-     全記事リンク・全カテゴリ・マニュアル個別リンク・changelog・galleryは並べない
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのFooter統一方針）。英語版の打ち出の小槌は
-     まだ存在しないため、Language切替はサイト全体のEN版トップへのリンクにとどめる。 -->
-<footer class="kzc-footer">
-  <div class="kzc-footer-inner">
-    <nav class="kzc-footer-nav" aria-label="フッターナビゲーション">
-      <a href="/#products">Products</a>
-      <a href="/knowledge">打ち出の小槌</a>
-      <a href="/ai-lab">AI Lab</a>
-      <a href="/workshop">Workshop</a>
-      <a href="/about">About</a>
-      <a href="/faq">Support</a>
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
-      <a href="/en/" lang="en" hreflang="en">English</a>
-    </nav>
-    <p class="kzc-footer-copyright">&copy; SideKick / Ichiro Murata</p>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab.html">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review.html">講評AI</a></li>
+            <li><a href="/camera-ai.html">カメラAI</a></li>
+            <li><a href="/shooting-ai.html">撮影AI</a></li>
+            <li><a href="/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop.html">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq.html">よくある質問</a></li>
+            <li><a href="/changelog.html">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/sidekick.html">Sidekickとは</a></li>
+            <li><a href="/gallery.html">Gallery</a></li>
+            <li><a href="/legal.html">特定商取引法</a></li>
+            <li><a href="/privacy.html">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal.html">特定商取引法に基づく表記</a>
+        <a href="/privacy.html">プライバシーポリシー</a>
+      </div>
+    </div>
   </div>
 </footer>
 </body>

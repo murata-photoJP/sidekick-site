@@ -1,27 +1,45 @@
-<!-- Phase A2: 打ち出の小槌ページ専用の共通ヘッダー。既存サイトの他ページには適用していない。
-     実在するURL（index.html調査に基づく）へリンクする。Productsは単独ページが無いため、
-     トップページのProductsセクション（index.html #products）へ接続する。 -->
-<header class="kzc-header">
-  <div class="kzc-header-inner">
-    <a href="/" class="kzc-brand">SideKick</a>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。 -->
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
 
     <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
       <span class="kzc-nav-toggle-label">メニュー</span>
     </button>
 
-    <nav class="kzc-nav" aria-label="グローバルナビゲーション">
-      <ul id="kzc-nav-menu" class="kzc-nav-menu">
-        <li><a href="/#products">Products</a></li>
-        <li><a href="/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>打ち出の小槌</a></li>
-        <li><a href="/ai-lab">AI Lab</a></li>
-        <li><a href="/workshop">Workshop</a></li>
-        <li><a href="/about">About</a></li>
-      </ul>
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star.html">⭐ Star</a>
+      <a href="/portrait.html">👤 Portrait</a>
+      <a href="/sky-effect.html">☁️ Sky</a>
+      <a href="/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 打ち出の小槌</a>
+      <a href="/workshop.html">📷 Workshop</a>
+      <a href="/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/sidekick.html" style="color:var(--muted);">Sidekickとは</a>
+      <a href="/about.html" style="color:var(--muted);">About</a>
+      <a href="/changelog.html" style="color:var(--muted);">更新履歴</a>
+      <a href="/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+      <a href="/en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
     </nav>
-
-    <div class="kzc-lang-switch">
-      <a href="/en/" lang="en" hreflang="en">EN</a>
-    </div>
   </div>
 </header>
 

@@ -309,8 +309,8 @@ def test_template_inheritance(tmp: Path) -> None:
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
     check("テンプレート継承: base.htmlのheadが出力される", "<!doctype html>" in html.lower())
-    check("テンプレート継承: header.htmlがincludeされる", "kzc-header" in html)
-    check("テンプレート継承: footer.htmlがincludeされる", "kzc-footer" in html)
+    check("テンプレート継承: header.htmlがincludeされる", '<header class="hdr">' in html)
+    check("テンプレート継承: footer.htmlがincludeされる", '<footer class="footer"' in html)
     check("テンプレート継承: article.htmlのブロックが反映される", "kzc-breadcrumb" in html)
 
 
@@ -737,6 +737,21 @@ def test_canonical_meta_h1_per_article(tmp: Path) -> None:
 
 
 @with_tmp
+def test_leading_h1_in_body_stripped(tmp: Path) -> None:
+    """実記事の公開で判明したバグの再発防止テスト: 本文Markdownが `# タイトル` から
+    始まる記事（実際の10記事すべてがこの形式）でも、Article HeaderのH1と重複しない
+    （h1が1ページに2つできない）ことを確認する。"""
+    index = make_index(body_markdown="# 記事タイトルの重複\n\n本文です。\n\n## 見出し2\n\nさらに本文。\n")
+    proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
+    html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+    check("先頭H1除去: 生成は成功する", proc.returncode == 0, proc.stdout + proc.stderr)
+    check("先頭H1除去: h1は1つだけになる（本文側のH1が除去される）", h1_count(html) == 1, h1_count(html))
+    check("先頭H1除去: 除去されたH1のテキストが本文に残らない",
+          "記事タイトルの重複" not in html.split("kzc-article-body")[1], html)
+    check("先頭H1除去: h2以降の見出しは残る", "<h2>見出し2</h2>" in html, html)
+
+
+@with_tmp
 def test_top_page_h1_and_meta(tmp: Path) -> None:
     articles, products = _six_article_fixture()
     index = make_index(articles=articles, products=products)
@@ -753,11 +768,14 @@ def test_top_page_h1_and_meta(tmp: Path) -> None:
 
 @with_tmp
 def test_header_main_five_items(tmp: Path) -> None:
+    """2026-07-17改訂: 打ち出の小槌専用の5項目ナビをやめ、既存サイトの実ヘッダーを
+    そのまま流用する方針に変更した。既存項目＋新規追加した「打ち出の小槌」の両方が
+    存在することを確認する（サイト全体としての一貫性を優先）。"""
     index = make_index()
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
-    for label in ("Products", "打ち出の小槌", "AI Lab", "Workshop", "About"):
-        check(f"Header: 「{label}」がナビに存在する", f">{label}<" in html, html)
+    for label in ("Star", "Portrait", "Sky", "打ち出の小槌", "Workshop", "About", "AI Lab"):
+        check(f"Header: 「{label}」がナビに存在する", label in html, html)
 
 
 @with_tmp
@@ -766,7 +784,7 @@ def test_header_aria_current(tmp: Path) -> None:
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
     check("Header: 打ち出の小槌にaria-current=pageが付く",
-          '<a href="/knowledge" aria-current="page">打ち出の小槌</a>' in html, html)
+          '<a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>' in html, html)
 
 
 @with_tmp
@@ -781,26 +799,47 @@ def test_mobile_nav_button_attributes(tmp: Path) -> None:
 @with_tmp
 def test_nav_links_present_without_js(tmp: Path) -> None:
     """JS無しでもHTML上にリンクが存在すること（displayをJSで制御しているだけで、
-    リンク自体を条件付きで生成していないことをHTML文字列で確認する）。"""
+    リンク自体を条件付きで生成していないことをHTML文字列で確認する）。
+    既存サイトの実ヘッダーを流用しているため、項目数は12（Star/Portrait/Sky/
+    打ち出の小槌/Workshop/Gallery/Sidekickとは/About/更新履歴/Support/AI Lab/EN）。"""
     index = make_index()
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
     nav_section = html.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
-    check("mobile nav: 5項目すべてHTML上にリンクとして存在する",
-          nav_section.count("<a ") == 5, nav_section)
+    check("mobile nav: 既存ナビ全項目がHTML上にリンクとして存在する",
+          nav_section.count("<a ") == 12, nav_section)
+
+
+@with_tmp
+def test_nav_links_are_root_relative(tmp: Path) -> None:
+    """打ち出の小槌ページは/knowledge/配下（1〜2階層下）にあるため、ナビのリンクは
+    相対パス（例: sidekick-star.html）ではなくルート相対パス（/sidekick-star.html）
+    である必要がある。相対パスのままだと、記事ページから見て誤ったURLになる。"""
+    index = make_index()
+    proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
+    html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+    nav_section = html.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
+    check("ナビ: sidekick-star.htmlへのリンクがルート相対（/sidekick-star.html）",
+          'href="/sidekick-star.html"' in nav_section, nav_section)
+    check("ナビ: 相対パス（先頭/無し）のhrefが残っていない",
+          'href="sidekick-star.html"' not in nav_section, nav_section)
 
 
 @with_tmp
 def test_footer_no_empty_links_no_fake_english(tmp: Path) -> None:
+    """2026-07-17改訂: 既存サイトの実フッターを流用。既存フッターに言語切替リンクは
+    無いため（言語切替はヘッダー側のみ）、フッターにEN版リンクが無いこと自体は正常。"""
     index = make_index()
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
-    footer = html.split("<footer class=\"kzc-footer\"")[1]
+    footer = html.split('<footer class="footer"')[1]
     check("Footer: 空のhref(href=\"\"や href=\"#\")が無い",
           'href=""' not in footer and 'href="#"' not in footer, footer)
     check("Footer: 存在しない英語記事ページへのリンクが無い（/en/knowledgeを含まない）",
           "/en/knowledge" not in footer, footer)
-    check("Footer: 実在するEN版トップへのリンクはある", 'href="/en/"' in footer, footer)
+    check("Footer: 打ち出の小槌への実リンクがある", 'href="/knowledge"' in footer, footer)
+    check("Footer: リンクがルート相対パスになっている",
+          'href="sidekick-star.html"' not in footer and 'href="/sidekick-star.html"' in footer, footer)
 
 
 def main() -> int:
@@ -831,10 +870,11 @@ def main() -> int:
         test_related_articles_present, test_related_articles_absent, test_related_articles_invalid_ref_ignored,
         test_product_context_present, test_product_context_absent,
         test_cta_none_hidden, test_cta_ai_lab_shown,
-        test_canonical_meta_h1_per_article, test_top_page_h1_and_meta,
+        test_canonical_meta_h1_per_article, test_leading_h1_in_body_stripped, test_top_page_h1_and_meta,
         # Phase A2: Header/Footer/Mobile
         test_header_main_five_items, test_header_aria_current, test_mobile_nav_button_attributes,
-        test_nav_links_present_without_js, test_footer_no_empty_links_no_fake_english,
+        test_nav_links_present_without_js, test_nav_links_are_root_relative,
+        test_footer_no_empty_links_no_fake_english,
     ]
     for t in tests:
         t()
