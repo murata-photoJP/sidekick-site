@@ -12,13 +12,13 @@
        カテゴリページを実装したら、次の行に戻す:
        <li><a href="/knowledge/{{ article.category.slug }}">{{ article.category.name_ja }}</a></li> #}
     <li>{{ article.category.name_ja }}</li>
-    <li aria-current="page">{{ article.title }}</li>
+    <li aria-current="page">{{ title_main }}</li>
   </ol>
 </nav>
 
 <article class="kzc-article">
   <header class="kzc-article-header">
-    <h1>{{ article.title }}</h1>
+    <h1 class="kzc-article-title">{{ title_main }}{% if title_sub %}<span class="kzc-title-sub">{{ title_sub }}</span>{% endif %}</h1>
     <p class="kzc-article-lead">{{ article.meta_description }}</p>
     <p class="kzc-article-meta">
       <span class="kzc-category">{{ article.category.name_ja }}</span>
@@ -51,7 +51,7 @@
 
   {% if product_context %}
   <section class="kzc-product-context">
-    <p>{{ product_context.bridge_text }}</p>
+    <p class="kzc-product-context-label">関連するSideKick製品</p>
     <p class="kzc-product-name">{{ product_context.name }}</p>
     <p class="kzc-product-desc">{{ product_context.short_description }}</p>
     <p class="kzc-product-links">

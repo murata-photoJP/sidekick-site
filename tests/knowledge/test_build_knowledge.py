@@ -585,6 +585,24 @@ def test_top_page_card_count_and_order(tmp: Path) -> None:
 
 
 @with_tmp
+def test_top_page_about_before_article_list(tmp: Path) -> None:
+    """2026-07-17改訂: 初めて訪れる人が先に「ここは何のサイトか」を知れるよう、
+    「打ち出の小槌とは」をHeroの直後・記事一覧より前に移動した。
+    Heroの説明文（記事一覧下のAboutと内容が重複していた）は削除した。"""
+    articles, products = _six_article_fixture()
+    index = make_index(articles=articles, products=products)
+    proc, output_dir = run_build(index, tmp)
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    idx_hero = html.index("kzc-hero")
+    idx_about = html.index("kzc-kozuchi-about")
+    idx_list = html.index("kzc-article-list")
+    check("トップ構成: Hero→打ち出の小槌とは→記事一覧の順になっている",
+          idx_hero < idx_about < idx_list, (idx_hero, idx_about, idx_list))
+    check("トップ構成: Heroの重複説明文が削除されている",
+          "撮影・現像・Photoshop・AIについて、一人の写真家が実際に困り" not in html, html)
+
+
+@with_tmp
 def test_top_page_no_draft_like_data(tmp: Path) -> None:
     """web-published.jsonにはpublished記事しか含まれない前提だが、
     トップページ側も渡されたarticle_cardsをそのまま信頼して良いことを確認する
@@ -703,6 +721,20 @@ def test_product_context_present(tmp: Path) -> None:
 
 
 @with_tmp
+def test_product_context_no_duplicate_bridge_text(tmp: Path) -> None:
+    """2026-07-17改訂: 自動生成の橋渡し文（本文の自然な製品言及と重複しがちだった）を廃止し、
+    中立的な参照ラベルのみにした。"""
+    articles, products = _six_article_fixture()
+    index = make_index(articles=articles, products=products)
+    proc, output_dir = run_build(index, tmp)
+    html = (output_dir / "photoshop" / "m-one.html").read_text(encoding="utf-8")
+    check("Product Context: 中立的なラベルが表示される",
+          "kzc-product-context-label" in html and "関連するSideKick製品" in html, html)
+    check("Product Context: 自動生成の橋渡し文が出ない",
+          "この工程を毎回手作業で繰り返しているなら" not in html, html)
+
+
+@with_tmp
 def test_product_context_absent(tmp: Path) -> None:
     index = make_index(related_products=[])
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
@@ -749,6 +781,34 @@ def test_leading_h1_in_body_stripped(tmp: Path) -> None:
     check("先頭H1除去: 除去されたH1のテキストが本文に残らない",
           "記事タイトルの重複" not in html.split("kzc-article-body")[1], html)
     check("先頭H1除去: h2以降の見出しは残る", "<h2>見出し2</h2>" in html, html)
+
+
+@with_tmp
+def test_title_split_main_and_sub(tmp: Path) -> None:
+    """2026-07-17改訂: 「メイン｜サブ」形式のタイトルをH1でメイン/サブに分けて表示する。
+    titleタグ・meta description・canonical等のSEO関連は変更しない。"""
+    index = make_index(title="メインタイトル｜サブタイトルの説明文")
+    proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
+    html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+    check("タイトル分割: h1は1つのまま", h1_count(html) == 1, h1_count(html))
+    check("タイトル分割: メイン部分がh1に含まれる", "メインタイトル" in html, html)
+    check("タイトル分割: サブ部分がkzc-title-subで囲まれる",
+          '<span class="kzc-title-sub">サブタイトルの説明文</span>' in html, html)
+    check("タイトル分割: <title>タグはフルタイトルのまま変更されない",
+          "<title>メインタイトル｜サブタイトルの説明文｜打ち出の小槌 - SideKick</title>" in html, html)
+    check("タイトル分割: パンくずの現在ページはメイン部分のみ",
+          '<li aria-current="page">メインタイトル</li>' in html, html)
+
+
+@with_tmp
+def test_title_without_separator_unchanged(tmp: Path) -> None:
+    """「｜」が無いタイトルは従来通り1本のまま表示する（後方互換）。"""
+    index = make_index(title="区切りが無いシンプルなタイトル")
+    proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
+    html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+    check("タイトル非分割: kzc-title-subが出ない", "kzc-title-sub" not in html, html)
+    check("タイトル非分割: h1にフルタイトルがそのまま出る",
+          "区切りが無いシンプルなタイトル" in html, html)
 
 
 @with_tmp
@@ -851,6 +911,7 @@ def main() -> int:
         test_utf8_no_mojibake, test_meta_description_and_canonical, test_author_block_present,
         test_internal_fields_not_leaked, test_output_url_matches_public_url,
         test_template_inheritance,
+        test_title_split_main_and_sub, test_title_without_separator_unchanged,
         test_heading_hierarchy_warning_on_skip, test_heading_hierarchy_no_warning_when_sequential,
         test_image_alt_warning_when_empty, test_image_alt_no_warning_when_present,
         test_validate_only_writes_nothing,
@@ -862,13 +923,15 @@ def main() -> int:
         # Phase A2: 非公開になった記事の古いHTML削除
         test_stale_html_removed_on_full_batch, test_stale_html_not_removed_on_single_article_run,
         test_stale_cleanup_skipped_when_build_fails, test_stale_cleanup_ignores_unrelated_output_dir,
+        test_top_page_about_before_article_list,
         # Phase A2: トップページ
         test_top_page_card_count_and_order, test_top_page_no_draft_like_data,
         test_top_page_no_empty_cards, test_top_page_zero_articles, test_top_page_no_internal_info,
         # Phase A2: 記事ページ
         test_breadcrumb_category_not_linked, test_short_author_info, test_no_duplicate_updated_at,
         test_related_articles_present, test_related_articles_absent, test_related_articles_invalid_ref_ignored,
-        test_product_context_present, test_product_context_absent,
+        test_product_context_present, test_product_context_no_duplicate_bridge_text,
+        test_product_context_absent,
         test_cta_none_hidden, test_cta_ai_lab_shown,
         test_canonical_meta_h1_per_article, test_leading_h1_in_body_stripped, test_top_page_h1_and_meta,
         # Phase A2: Header/Footer/Mobile

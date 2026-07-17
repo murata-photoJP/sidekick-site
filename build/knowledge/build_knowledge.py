@@ -49,15 +49,9 @@ FORBIDDEN_FIELDS = {
     "legacy_ids", "target_keyword", "secondary_keywords",
 }
 
-# 製品ごとの、文脈に自然な一言（機械的に同じ文言を使い回さない）。
-PRODUCT_BRIDGE_TEXT = {
-    "sidekick-star": "この工程を毎回手作業で繰り返しているなら、SideKick Starで自動化できます。",
-    "sidekick-portrait": "この工程を毎回手作業で繰り返しているなら、SideKick Portraitで自動化できます。",
-    "sidekick-sky-effect": "この工程を毎回手作業で繰り返しているなら、SideKick Sky Effectで自動化できます。",
-    "_default": "この工程を繰り返しているなら、SideKickで自動化できる部分があります。",
-}
-
 KOZUCHI_TAGLINE = "写真を撮り、困り、試したことを残しています。"
+
+TITLE_SEPARATOR = "｜"
 
 
 class BuildError(Exception):
@@ -80,6 +74,21 @@ def strip_leading_h1(body_markdown: str) -> str:
     （実際の記事10本すべてが本文冒頭に`# タイトル`を含んでおり、そのままレンダリングすると
     1ページにh1が2つできてしまうことが実記事の公開で判明した）。##以降（h2+）は対象外。"""
     return LEADING_H1_RE.sub("", body_markdown, count=1)
+
+
+def split_title(title: str) -> tuple[str, str | None]:
+    """記事タイトルを「メイン｜サブ」の形式で分割する（表示専用。SEO用のtitleタグ・
+    meta description・canonical等はfront matterのtitleをそのまま使い、一切変更しない）。
+    現在の全記事のtitleが「メイン｜サブ」形式のため、H1をメイン/サブタイトルに分けて
+    表示することで読みやすくする。区切り文字「｜」が無い記事はそのまま1本のタイトルとして返す
+    （後方互換）。"""
+    if TITLE_SEPARATOR not in title:
+        return title, None
+    main, _, sub = title.partition(TITLE_SEPARATOR)
+    main, sub = main.strip(), sub.strip()
+    if not main or not sub:
+        return title, None
+    return main, sub
 
 
 def check_heading_hierarchy(body_markdown: str) -> list[str]:
@@ -226,7 +235,12 @@ def resolve_related_articles(article: dict, articles_by_id: dict) -> list[dict]:
 
 def resolve_product_context(article: dict, products_by_id: dict) -> dict | None:
     """related_productsが存在し、かつproductsデータにdetail_urlがある場合のみ返す。
-    それ以外（related_productsが空／製品データが無い／detail_urlが無い）はNone。"""
+    それ以外（related_productsが空／製品データが無い／detail_urlが無い）はNone。
+
+    2026-07-17改訂: 自動生成の「橋渡し文」は廃止した。本文の書き手（村田さん）が
+    すでに文脈の中で自然に製品へ触れている記事が多く、機械的な橋渡し文がそれと
+    ほぼ同じ内容を重複して表示してしまう問題があったため。中立的な参照ブロックとして、
+    製品名・説明・リンクのみを提示する（見出しはテンプレート側で固定文言を付ける）。"""
     related = article.get("related_products") or []
     if not related:
         return None
@@ -238,7 +252,6 @@ def resolve_product_context(article: dict, products_by_id: dict) -> dict | None:
         "short_description": product["short_description"],
         "detail_url": product["detail_url"],
         "trial_url": product.get("trial_url") if article.get("cta_type") == "product-trial" else None,
-        "bridge_text": PRODUCT_BRIDGE_TEXT.get(product["product_id"], PRODUCT_BRIDGE_TEXT["_default"]),
     }
 
 
@@ -274,6 +287,7 @@ def render_article(env: Environment, article: dict, index: dict) -> str:
     related_articles = resolve_related_articles(article, articles_by_id)
     product_context = resolve_product_context(article, products_by_id)
     cta = resolve_cta(article, product_context)
+    title_main, title_sub = split_title(article["title"])
 
     canonical_url = SITE_ORIGIN + article["public_url"]
     return template.render(
@@ -286,6 +300,8 @@ def render_article(env: Environment, article: dict, index: dict) -> str:
         cta=cta,
         show_beginner_badge=(article.get("difficulty") == "beginner"),
         nav_current="knowledge",
+        title_main=title_main,
+        title_sub=title_sub,
     )
 
 

@@ -174,12 +174,7 @@ body.kzc-js-nav .kzc-nav-toggle{
   color:var(--kzc-accent2);
   font-weight:700;
   font-size:16px;
-  margin:0 0 10px;
-}
-.kzc-hero-desc{
-  color:var(--kzc-sub);
-  font-size:15px;
-  max-width:640px;
+  margin:0;
 }
 
 /* ---------- Article List / Card ---------- */
@@ -245,13 +240,15 @@ body.kzc-js-nav .kzc-nav-toggle{
   border-radius:999px;
 }
 
-/* ---------- Kozuchi About ---------- */
+/* ---------- Kozuchi About（2026-07-17: Heroの直後へ移動。Hero側のborder-bottomが
+   区切りを兼ねるため、ここではborder-topを付けず、記事一覧との間だけ区切る） ---------- */
 .kzc-kozuchi-about{
-  border-top:1px solid var(--kzc-line);
-  padding-top:24px;
+  padding-bottom:24px;
+  margin-bottom:24px;
+  border-bottom:1px solid var(--kzc-line);
   color:var(--kzc-sub);
 }
-.kzc-kozuchi-about h2{ color:var(--kzc-text); }
+.kzc-kozuchi-about h2{ color:var(--kzc-text); margin:0 0 8px; }
 
 /* ---------- Breadcrumb ---------- */
 .kzc-breadcrumb ol{
@@ -269,7 +266,9 @@ body.kzc-js-nav .kzc-nav-toggle{
   margin-left:6px;
 }
 .kzc-breadcrumb a{ color:var(--kzc-sub); }
-.kzc-breadcrumb li[aria-current="page"]{ color:var(--kzc-text); }
+/* 2026-07-17: 現在ページの項目は、直下のH1と内容・視覚的重みが重複するため、
+   本文と同じ明るい白ではなく他のパンくず項目と同じ色に揃えて控えめにする */
+.kzc-breadcrumb li[aria-current="page"]{ color:var(--kzc-sub); font-weight:400; }
 
 /* ---------- Article Header ---------- */
 .kzc-article-header h1{
@@ -277,6 +276,15 @@ body.kzc-js-nav .kzc-nav-toggle{
   line-height:1.4;
   margin:0 0 12px;
   overflow-wrap:break-word;
+}
+/* 2026-07-17追加: タイトルの「｜」区切り以降をサブタイトルとして視覚的に分離する。
+   SEO用のtitleタグ・meta description等は変更していない（表示のみの改善）。 */
+.kzc-title-sub{
+  display:block;
+  font-size:0.5em;
+  font-weight:500;
+  color:var(--kzc-sub);
+  margin-top:6px;
 }
 .kzc-article-lead{
   color:var(--kzc-sub);
@@ -378,6 +386,14 @@ body.kzc-js-nav .kzc-nav-toggle{
   border-radius:var(--kzc-r);
   padding:20px;
   margin-top:28px;
+}
+.kzc-product-context-label{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--kzc-muted);
+  margin:0;
 }
 .kzc-product-name{ font-weight:800; margin:8px 0 4px; }
 .kzc-product-desc{ color:var(--kzc-sub); font-size:14px; }

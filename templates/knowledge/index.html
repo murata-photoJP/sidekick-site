@@ -8,9 +8,15 @@
 <section class="kzc-hero">
   <h1>打ち出の小槌</h1>
   <p class="kzc-hero-tagline">{{ tagline }}</p>
-  <p class="kzc-hero-desc">
-    撮影・現像・Photoshop・AIについて、一人の写真家が実際に困り、試したことを記録しています。
+</section>
+
+<section class="kzc-kozuchi-about">
+  <h2>打ち出の小槌とは</h2>
+  <p>
+    写真家が現場で実際に困ったこと、試したこと、そこから分かったことを、
+    忘れないように残している場所です。必要な人に、そのまま公開しています。
   </p>
+  <p><a href="/about">Aboutを読む →</a></p>
 </section>
 
 <section class="kzc-article-list" aria-label="記事一覧">
@@ -21,14 +27,5 @@
   {% else %}
     <p class="kzc-empty">まだ公開されている記事がありません。</p>
   {% endif %}
-</section>
-
-<section class="kzc-kozuchi-about">
-  <h2>打ち出の小槌とは</h2>
-  <p>
-    写真家が現場で実際に困ったこと、試したこと、そこから分かったことを、
-    忘れないように残している場所です。必要な人に、そのまま公開しています。
-  </p>
-  <p><a href="/about">Aboutを読む →</a></p>
 </section>
 {% endblock %}
