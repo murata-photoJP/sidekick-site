@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-17T17:36:19.112662+09:00",
+  "generated_at": "2026-07-17T17:49:26.363477+09:00",
   "schema_version": 1,
   "articles": [
     {
@@ -17,7 +17,7 @@
         "name": "Astrophotography",
         "name_ja": "星景写真"
       },
-      "meta_description": "星景写真の露出設定（月齢別の目安）、必要な機材、撮影前の準備をまとめました。新月を基準にした露出早見表つき。初心者から中級者まで対応。",
+      "meta_description": "星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。",
       "difficulty": "beginner",
       "audience": [
         "星景写真初心者"
@@ -58,7 +58,7 @@
       "title": "星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで",
       "slug": "astrophotography-camera-settings",
       "language": "ja",
-      "meta_description": "星景写真の露出設定（月齢別の目安）、必要な機材、撮影前の準備をまとめました。新月を基準にした露出早見表つき。初心者から中級者まで対応。",
+      "meta_description": "星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。",
       "category_name": "写真",
       "published_at": "2026-07-17",
       "updated_at": "2026-07-17",
