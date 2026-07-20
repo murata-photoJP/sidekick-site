@@ -242,7 +242,7 @@
     </a>
     <div style="display:flex;align-items:center;gap:16px;">
       <a href="/en" class="site-nav-back">← Back to home</a>
-      <a href="../shooting-ai.html" class="site-nav-back" onclick="try{localStorage.setItem('sk_lang_pref','ja')}catch(e){}">🇯🇵 JA</a>
+      <a href="/shooting-ai" class="site-nav-back" onclick="try{localStorage.setItem('sk_lang_pref','ja')}catch(e){}">🇯🇵 JA</a>
     </div>
   </div>
 </nav>
@@ -275,7 +275,7 @@
     <div class="ai-scope-card cant">
       <div class="ai-scope-title">Out of scope</div>
       <ul class="ai-scope-list">
-        <li><a href="/en/camera-ai.html">Camera-model-specific operation → Camera AI</a></li>
+        <li><a href="/en/camera-ai">Camera-model-specific operation → Camera AI</a></li>
         <li>General PC operation</li>
         <li>How to use SideKick</li>
         <li>Photo critique itself</li>
@@ -375,8 +375,8 @@
 
   <footer>
     © Shooting AI — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy.html">Privacy Policy</a> &nbsp;·&nbsp;
-    <a href="/en/terms.html">Terms of Service</a>
+    <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms">Terms of Service</a>
   </footer>
 </div>
 
@@ -617,7 +617,7 @@ function appendAssistantBubble(text) {
 
   const link = document.createElement('div');
   link.className = 'camera-ai-link';
-  link.innerHTML = '<a href="/en/camera-ai.html">Check model-specific operation with Camera AI →</a>';
+  link.innerHTML = '<a href="/en/camera-ai">Check model-specific operation with Camera AI →</a>';
   log.appendChild(link);
 
   log.scrollTop = log.scrollHeight;

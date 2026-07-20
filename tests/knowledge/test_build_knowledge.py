@@ -877,16 +877,20 @@ def test_nav_links_present_without_js(tmp: Path) -> None:
 @with_tmp
 def test_nav_links_are_root_relative(tmp: Path) -> None:
     """打ち出の小槌ページは/knowledge/配下（1〜2階層下）にあるため、ナビのリンクは
-    相対パス（例: sidekick-star.html）ではなくルート相対パス（/sidekick-star.html）
-    である必要がある。相対パスのままだと、記事ページから見て誤ったURLになる。"""
+    相対パス（例: sidekick-star.html）ではなくルート相対パス（/sidekick-star）
+    である必要がある。相対パスのままだと、記事ページから見て誤ったURLになる。
+    2026-07-21: .html付きの絶対パス（/sidekick-star.html）もVercelのcleanUrls設定により
+    301リダイレクトを発生させることがGoogle Search Consoleで判明したため、.html無しを正とする。"""
     index = make_index()
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
     nav_section = html.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
-    check("ナビ: sidekick-star.htmlへのリンクがルート相対（/sidekick-star.html）",
-          'href="/sidekick-star.html"' in nav_section, nav_section)
+    check("ナビ: sidekick-star.htmlへのリンクがルート相対・拡張子無し（/sidekick-star）",
+          'href="/sidekick-star"' in nav_section, nav_section)
     check("ナビ: 相対パス（先頭/無し）のhrefが残っていない",
-          'href="sidekick-star.html"' not in nav_section, nav_section)
+          'href="sidekick-star.html"' not in nav_section and 'href="sidekick-star"' not in nav_section, nav_section)
+    check("ナビ: .html付きのリンクが残っていない",
+          'href="/sidekick-star.html"' not in nav_section, nav_section)
 
 
 @with_tmp
@@ -902,8 +906,10 @@ def test_footer_no_empty_links_no_fake_english(tmp: Path) -> None:
     check("Footer: 存在しない英語記事ページへのリンクが無い（/en/knowledgeを含まない）",
           "/en/knowledge" not in footer, footer)
     check("Footer: 打ち出の小槌への実リンクがある", 'href="/knowledge"' in footer, footer)
-    check("Footer: リンクがルート相対パスになっている",
-          'href="sidekick-star.html"' not in footer and 'href="/sidekick-star.html"' in footer, footer)
+    check("Footer: リンクがルート相対パス・拡張子無しになっている",
+          'href="sidekick-star.html"' not in footer
+          and 'href="/sidekick-star.html"' not in footer
+          and 'href="/sidekick-star"' in footer, footer)
 
 
 # ---------------------------------------------------------------------------

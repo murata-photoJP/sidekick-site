@@ -67,7 +67,7 @@ LABELS = {
         ),
         "about_body_2": "I'm sharing it as-is with anyone who might need it.",
         "about_link": "Read About →",
-        "about_href": "/en/about.html",
+        "about_href": "/en/about",
         "empty_list": "No articles have been published yet.",
         "breadcrumb_top": "Knowledge",
         "knowledge_top_url": "/en/knowledge",
@@ -87,7 +87,7 @@ LABELS = {
         ),
         "ai_lab_cta_text": "Explore this topic together with AI",
         "ai_lab_cta_label": "Check it out on AI Lab",
-        "ai_lab_href": "/en/ai-lab.html",
+        "ai_lab_href": "/en/ai-lab",
         "title_suffix": " | Knowledge - SideKick",
         "index_title": "Knowledge | SideKick",
         "index_meta_description": (
@@ -107,22 +107,22 @@ PRODUCT_EN_OVERRIDES = {
             "Automates star-trail Lighten composites, Milky Way enhancement, "
             "and aircraft-trail removal."
         ),
-        "detail_url": "/en/sidekick-star.html",
-        "trial_url": "/en/ai-lab.html",
+        "detail_url": "/en/sidekick-star",
+        "trial_url": "/en/ai-lab",
     },
     "sidekick-portrait": {
         "name": "SideKick Portrait",
         "short_description": "Automates portrait retouching (15 styles x 3 intensity levels).",
-        "detail_url": "/en/portrait.html",
-        "trial_url": "/en/ai-lab.html",
+        "detail_url": "/en/portrait",
+        "trial_url": "/en/ai-lab",
     },
     "sidekick-sky-effect": {
         "name": "SideKick Sky Effect",
         "short_description": (
             "Composites sky and ground using two different white balances for natural-looking finishing."
         ),
-        "detail_url": "/en/sky-effect.html",
-        "trial_url": "/en/ai-lab.html",
+        "detail_url": "/en/sky-effect",
+        "trial_url": "/en/ai-lab",
     },
 }
 
