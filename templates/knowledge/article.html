@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}{{ article.title }}｜打ち出の小槌 - SideKick{% endblock %}
+{% block title %}{{ article.title }}{% if language == 'en' %}{{ labels.title_suffix }}{% else %}｜打ち出の小槌 - SideKick{% endif %}{% endblock %}
 {% block meta_description %}{{ article.meta_description }}{% endblock %}
 {% block canonical %}{{ canonical_url }}{% endblock %}
 
 {% block content %}
 <nav aria-label="breadcrumb" class="kzc-breadcrumb">
   <ol>
-    <li><a href="/knowledge">打ち出の小槌</a></li>
+    <li><a href="{{ knowledge_top_url }}">{% if language == 'en' %}{{ labels.breadcrumb_top }}{% else %}打ち出の小槌{% endif %}</a></li>
     {# Phase A2時点でもカテゴリページ(/knowledge/{category})はまだ存在しないため、リンクにしない。
        カテゴリページを実装したら、次の行に戻す:
-       <li><a href="/knowledge/{{ article.category.slug }}">{{ article.category.name_ja }}</a></li> #}
-    <li>{{ article.category.name_ja }}</li>
+       <li><a href="/knowledge/{{ article.category.slug }}">{{ category_name }}</a></li> #}
+    <li>{{ category_name }}</li>
     <li aria-current="page">{{ title_main }}</li>
   </ol>
 </nav>
@@ -21,22 +21,22 @@
     <h1 class="kzc-article-title">{{ title_main }}{% if title_sub %}<span class="kzc-title-sub">{{ title_sub }}</span>{% endif %}</h1>
     <p class="kzc-article-lead">{{ article.meta_description }}</p>
     <p class="kzc-article-meta">
-      <span class="kzc-category">{{ article.category.name_ja }}</span>
-      {% if show_beginner_badge %}<span class="kzc-badge">初心者向け</span>{% endif %}
-      {% if article.updated_at %}<time datetime="{{ article.updated_at }}">更新日：{{ article.updated_at }}</time>{% endif %}
+      <span class="kzc-category">{{ category_name }}</span>
+      {% if show_beginner_badge %}<span class="kzc-badge">{% if language == 'en' %}{{ labels.beginner_badge }}{% else %}初心者向け{% endif %}</span>{% endif %}
+      {% if article.updated_at %}<time datetime="{{ article.updated_at }}">{% if language == 'en' %}{{ labels.updated_label }}{% else %}更新日：{% endif %}{{ article.updated_at }}</time>{% endif %}
     </p>
   </header>
 
   {# 短い著者情報。更新日はArticle Headerに既に表示済みのため、ここでは名前・役割のみで重複させない。 #}
-  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+  <p class="kzc-author-short">{% if language == 'en' %}{{ labels.author_short }}{% else %}村田一朗｜写真家・SideKick開発者{% endif %}</p>
 
   <div class="kzc-article-body">
     {{ body_html|safe }}
   </div>
 
   {% if related_articles %}
-  <section class="kzc-related-articles" aria-label="関連記事">
-    <h2>関連する記事</h2>
+  <section class="kzc-related-articles" aria-label="{% if language == 'en' %}related articles{% else %}関連記事{% endif %}">
+    <h2>{% if language == 'en' %}{{ labels.related_heading }}{% else %}関連する記事{% endif %}</h2>
     <ul>
       {% for ra in related_articles %}
       <li>
@@ -51,13 +51,20 @@
 
   {% if product_context %}
   <section class="kzc-product-context">
-    <p class="kzc-product-context-label">関連するSideKick製品</p>
+    <p class="kzc-product-context-label">{% if language == 'en' %}{{ labels.product_context_label }}{% else %}関連するSideKick製品{% endif %}</p>
     <p class="kzc-product-name">{{ product_context.name }}</p>
     <p class="kzc-product-desc">{{ product_context.short_description }}</p>
     <p class="kzc-product-links">
+      {% if language == 'en' %}
+      <a href="{{ product_context.detail_url }}">{{ labels.product_detail_link }}</a>
+      {% if product_context.trial_url %}
+      <a href="{{ product_context.trial_url }}">{{ labels.product_trial_link }}</a>
+      {% endif %}
+      {% else %}
       <a href="{{ product_context.detail_url }}">{{ product_context.name }}の詳細を見る →</a>
       {% if product_context.trial_url %}
       <a href="{{ product_context.trial_url }}">無料で試してみる →</a>
+      {% endif %}
       {% endif %}
     </p>
   </section>
@@ -70,12 +77,17 @@
 
   <footer class="kzc-article-footer">
     <section class="kzc-author-block">
-      <h2>この記事を書いた人</h2>
+      <h2>{% if language == 'en' %}{{ labels.author_block_heading }}{% else %}この記事を書いた人{% endif %}</h2>
+      {% if language == 'en' %}
+      <p>{{ labels.author_block_body }}</p>
+      <p><a href="{{ labels.about_href }}">{{ labels.about_link }}</a></p>
+      {% else %}
       <p>
         村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
         この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
       </p>
       <p><a href="/about">Aboutを読む →</a></p>
+      {% endif %}
     </section>
   </footer>
 </article>

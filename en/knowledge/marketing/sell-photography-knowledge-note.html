@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Sell Photography Knowledge on note: From Account Setup to Pricing Strategy | Knowledge - SideKick</title>
+<meta name="description" content="Learn how to monetize your photography and retouching expertise on note, from creating an account to implementing tiered pricing strategies and membership programs.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/marketing/sell-photography-knowledge-note">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/marketing/note-photo-content-sales">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/marketing/sell-photography-knowledge-note">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/marketing/note-photo-content-sales">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/marketing/note-photo-content-sales" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Marketing</li>
+    <li aria-current="page">How to Sell Photography Knowledge on note: From Account Setup to Pricing Strategy</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">How to Sell Photography Knowledge on note: From Account Setup to Pricing Strategy</h1>
+    <p class="kzc-article-lead">Learn how to monetize your photography and retouching expertise on note, from creating an account to implementing tiered pricing strategies and membership programs.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Marketing</span>
+      <span class="kzc-badge">Beginner-friendly</span>
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Your photography and retouching expertise is too valuable to keep hidden. note makes it simple to package your knowledge—text, images, video—and sell it as premium content without any technical setup. Here's a practical roadmap from account creation through pricing strategy.</p>
+<h2>1. Create Your Account</h2>
+<p>Set up an account on <a href="https://note.com/murata_photo">note</a> and build out a complete profile. Include sample images from your work and highlight your track record. This builds trust with potential buyers and signals credibility.</p>
+<h2>2. Prepare Your Content</h2>
+<ul>
+<li><strong>Formats supported</strong>: Text, images, audio, and video</li>
+<li><strong>Topics that work best</strong>: Specific, high-value content. Think shooting techniques, RAW processing and retouching workflows, or gear selection strategies</li>
+<li><strong>Pricing</strong>: Starting at 100 yen and up. Adjust based on your target audience</li>
+</ul>
+<h2>3. Create Your Article and Set It as Paid</h2>
+<ol>
+<li>Create your article from the &quot;Write Article&quot; menu and upload your content</li>
+<li>In the &quot;Publication Settings&quot; at the bottom of the article, select &quot;Paid Article&quot; and set your price</li>
+<li>Decide how much of the article (the opening section) remains free to read. This preview should give potential buyers a clear sense of the article's value before they purchase</li>
+</ol>
+<h2>4. Register Your Bank Account</h2>
+<p>Go to the &quot;Revenue&quot; tab and link your bank account. Keep in mind that note charges a withdrawal fee of 270 yen, so it's more efficient to let earnings accumulate before withdrawing.</p>
+<h2>5. Publish and Promote</h2>
+<ul>
+<li>Share across your social media channels</li>
+<li>Post in relevant photography communities and forums</li>
+<li>Publish free articles regularly to build your audience and create touchpoints with followers</li>
+</ul>
+<p>Remember to factor note's cut (10% of sales plus payment processing fees) into your pricing.</p>
+<h2>Design a Tiered Price Increase Strategy</h2>
+<p>Start with a lower initial price, then increase it in stages based on sales volume or time elapsed. This approach rewards early supporters while creating urgency for later buyers—&quot;Now's the time to grab it before the price goes up.&quot;</p>
+<p><strong>Example tiered pricing:</strong></p>
+<ul>
+<li>Units 1–50: 300 yen</li>
+<li>Units 51–100: 500 yen</li>
+<li>Units 101+: 800 yen</li>
+</ul>
+<p>Announce your pricing milestones (by sales count or date) in your article and on social media in advance. Messages like &quot;Price increases after 50 sales&quot; encourage immediate purchases. note doesn't have automatic volume-based pricing, so check your &quot;Revenue&quot; page regularly and update prices manually as you hit your targets.</p>
+<h2>Build Recurring Revenue with Memberships</h2>
+<p>note's membership feature lets you create a monthly subscription community. You can only run one membership per account, but you can set up multiple tiers (Basic Plan, Standard Plan, and Premium Plan, for example) to serve different audience segments.</p>
+<ul>
+<li><strong>Basic Plan</strong>: Core content (articles, shooting techniques, etc.)</li>
+<li><strong>Standard Plan</strong>: Live streams</li>
+<li><strong>Premium Plan</strong>: Bonus materials, one-on-one feedback</li>
+</ul>
+<p>Consistency is key to retention. Decide on an update schedule (&quot;one new post per week&quot;) and stick to it. Members unsubscribe quickly if content goes dormant, so establishing a publishing rhythm upfront makes operations smoother.</p>
+<h2>Practical Tips</h2>
+<ul>
+<li><strong>Using tables</strong>: note doesn't support direct table embedding, so use Markdown syntax (<code>| Column 1 | Column 2 |</code> format) or take a screenshot of a table from Excel or a spreadsheet tool</li>
+<li><strong>Sharing drafts</strong>: Use the &quot;Copy Draft URL&quot; feature to get feedback from others before publishing—only people with the link can view it</li>
+<li><strong>Create a series</strong>: Build an index article that ties multiple related posts together. This helps readers see the big picture and encourages them to purchase the whole series</li>
+</ul>
+<h2>Summary</h2>
+<p>The note sales workflow is straightforward: ①create your account → ②prepare content → ③set articles as paid → ④promote → ⑤design your price increases. Start with individual articles to gauge interest, then scale up to a membership program for steady recurring income.</p>
+<p>SideKick is a collection of the things I found could be automated to make my own shooting and retouching work easier. If you're interested, there's a free trial available—give it a try.</p>
+
+  </div>
+
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear | Knowledge - SideKick</title>
+<meta name="description" content="Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/astrophotography-settings-equipment-guide">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/astrophotography-camera-settings">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/astrophotography-settings-equipment-guide">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/astrophotography-camera-settings">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/astrophotography-camera-settings" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</h1>
+    <p class="kzc-article-lead">Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      <span class="kzc-badge">Beginner-friendly</span>
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Astrophotography isn't something you can wing on instinct and expect consistent results. Once you understand the fundamentals of exposure and know what equipment you actually need, you'll eliminate most of the uncertainty when you're out in the field. This guide covers practical camera settings, equipment essentials, and everything you should prepare before heading out.</p>
+<h2>Exposure Fundamentals: Use the New Moon as Your Reference Point</h2>
+<p>The easiest way to build a solid exposure strategy for astrophotography is to use moonlight as your baseline.</p>
+<p>Rather than giving you specific numbers right now, I recommend starting with test shots on location. If everything comes out pitch black, it's simple—you don't have enough exposure. Push your ISO higher. The optimal settings vary depending on light pollution, your specific equipment, and other factors, so there's no single universal answer.</p>
+<p>As a general principle: as the moon gets brighter (waxing crescent → half moon → full moon), dial back your ISO or shorten your shutter speed to prevent overexposure. Conversely, when you're targeting the Milky Way itself, you'll want to expose slightly brighter than usual.</p>
+<p>Here's a useful trick: even on a half or full moon night, if you time your shoot for <strong>after the moon sets or before it rises</strong>, you get nearly the same conditions as a new moon. Use an astronomy app to check moonrise and moonset times, and target the window when the moon is below the horizon.</p>
+<p>Full moon moonlight is usually too intense—the Milky Way becomes nearly invisible. Rather than fighting it, switch gears and shoot landscape photography that takes advantage of the moonlight itself.</p>
+<p>The specific exposure compensation values for each moon phase (exactly how many stops under to expose, precisely which ISO to use) directly affects reproducibility in the field. I share real-world examples with workshop participants. If you want exposure numbers you can reliably reproduce, I'd encourage you to consider attending a workshop.</p>
+<h2>Lighten composite (Star Trail Composites)</h2>
+<p>If you're planning to shoot star trails using Lighten composite, keep individual frame exposures short:</p>
+<ul>
+<li><strong>Shutter Speed:</strong> Keep it to just a few seconds (shorter gaps help trails blend smoothly)</li>
+<li><strong>ISO:</strong> If light pollution is minimal, you can run it a bit higher</li>
+<li><strong>Aperture:</strong> Wide open</li>
+<li><strong>Interval:</strong> 0–1 second (gaps larger than this create visible breaks in the trails)</li>
+<li><strong>Frame Count:</strong> Target duration ÷ shutter speed (n seconds) = number of frames</li>
+</ul>
+<p>For example, if your target composite duration is 60 minutes and your shutter speed is
+30 seconds: 3600 ÷ 30 = 120 frames. (The key is to convert all your time values to
+seconds first.)</p>
+<p>When you include ground scenery, watch that it doesn't overexpose. If the moon enters the frame, it tends to blow out in the composite, so either crop it out or reduce exposure further.</p>
+<h2>Shooting Technique: Preventing Star Trailing and Nailing Focus</h2>
+<ul>
+<li><strong>The 500 Rule:</strong> A good shutter speed target is &quot;500 ÷ focal length (35mm equivalent)&quot;. For example, at 24mm, that's 500 ÷ 24 ≈ 20 seconds as your maximum. Beyond that, stars begin to streak. For more precise calculations, the NPF Rule exists, and apps like PhotoPills can calculate it automatically.</li>
+<li><strong>Manual Focus:</strong> Autofocus won't work in darkness. Use live view, zoom in on a bright star, and manually adjust focus until the star appears smallest and sharpest. That infinity mark on your lens barrel is just decoration—fine-tune it. A Bahtinov mask makes this even more reliable.</li>
+<li><strong>Composition Ratio:</strong> For Milky Way-focused shots, aim for roughly 4:1 sky-to-ground. For balanced landscape work, 2:1 is a good target.</li>
+</ul>
+<h2>Essential Equipment</h2>
+<h3>Camera Body</h3>
+<ul>
+<li><strong>Full Frame:</strong> Superior high-ISO performance and lower noise in dark conditions. Great for maximizing wide-angle compositions.</li>
+<li><strong>APS-C:</strong> Lightweight, excellent value for money, and easier to carry long distances.</li>
+</ul>
+<h3>Lenses</h3>
+<ul>
+<li><strong>Focal length 14–35mm (wide angle)</strong> is the standard. Shorter focal lengths mean star motion is less noticeable, letting you use longer shutter speeds.</li>
+<li><strong>F2.8 or faster (faster aperture)</strong> is ideal. You gather more light, so you can keep ISO lower and minimize noise.</li>
+</ul>
+<h3>Tripod</h3>
+<p>Essential—long exposures demand rock-solid stability. Choose one heavy and rigid enough to stay put even in wind, and a ball head makes framing easier when you're shooting wide angles.</p>
+<h3>Additional Accessories</h3>
+<ul>
+<li><strong>Remote shutter release or smartphone shutter app:</strong> Prevents vibration from pressing the shutter button directly</li>
+<li><strong>Star charts (Stellarium, PhotoPills, etc.):</strong> Check Milky Way position, constellations, and moonrise/moonset times before you go</li>
+<li><strong>Headlamp with red-light mode:</strong> Navigate in the dark without destroying your night vision</li>
+<li><strong>Warm clothing and spare batteries:</strong> Night temperatures drop fast, and cold drains batteries quickly</li>
+</ul>
+<h3>Lens Heater</h3>
+<p>Dew and frost fog up lenses at night. Use a lens heater powered by a mobile battery. Watch out: bulbous front-element lens designs can be problematic. If your heater has low wattage, the heat won't reach the center of that protruding lens, and you'll get a blurry center surrounded by sharp edges. Choose a heater with higher wattage to be safe.</p>
+<h3>Important Note: Don't Stick Disposable Hand Warmers Directly on Metal or Glass</h3>
+<p>Some photographers tape disposable hand warmers to their gear to prevent dew and battery drain. Be careful: hand warmers work by absorbing heat from their surroundings to generate warmth. When you stick them directly on metal or glass (lens barrels, for example), they pull heat away instead of warming up, and won't activate properly.</p>
+<h2>Pre-Shoot Preparation Checklist</h2>
+<ol>
+<li><strong>Location scouting:</strong> Check a light pollution map to find dark areas. Preview terrain using Google Maps satellite view and Street View. If possible, visit the location during daylight.</li>
+<li><strong>Weather and moon phase:</strong> Confirm the weather forecast and check moonrise, moonset, and moon phase together. Target new moon dates or the time window when the moon is below the horizon.</li>
+<li><strong>Astronomical events:</strong> Research which direction the Milky Way is visible, when it's visible, and note any meteor showers or ISS passes. This broadens your compositional options.</li>
+<li><strong>Safety check:</strong> Get permission if shooting on private land. Assess nighttime footing hazards, wildlife activity, and cell reception beforehand. Ideally, go with at least one other person.</li>
+</ol>
+<h2>Wrap-Up</h2>
+<p>With astrophotography exposure, thinking &quot;new moon baseline plus moon-phase adjustments&quot; cuts down the guesswork. Equipment-wise, a wide-angle lens, fast aperture, and sturdy tripod are all you need to start. Everything else comes from practice in the field.</p>
+<p>Post-shoot work—Lighten composite, Milky Way enhancement, aircraft trail removal—becomes automated once you nail down your decision-making process. SideKick Star does exactly this: it replicates your finishing decisions right in Photoshop. If you want to spend more time shooting and less time in post, check out the free trial.</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context">
+    <p class="kzc-product-context-label">Related SideKick Product</p>
+    <p class="kzc-product-name">SideKick Star</p>
+    <p class="kzc-product-desc">Automates star-trail Lighten composites, Milky Way enhancement, and aircraft-trail removal.</p>
+    <p class="kzc-product-links">
+      
+      <a href="/en/sidekick-star.html">See details →</a>
+      
+      <a href="/en/ai-lab.html">Try it free →</a>
+      
+      
+    </p>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

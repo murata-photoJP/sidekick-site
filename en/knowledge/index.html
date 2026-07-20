@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge | SideKick</title>
+<meta name="description" content="A knowledge library photographers can turn to when they run into problems with shooting, developing, or Photoshop. A record of real problems and what was tried.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+
+<section class="kzc-hero">
+  <h1>Knowledge</h1>
+  <p class="kzc-hero-tagline">Taking photos, running into problems, and keeping a record of what I tried.</p>
+</section>
+
+<section class="kzc-kozuchi-about">
+  <h2>About Knowledge</h2>
+  <p>
+    This is where I keep a record of the problems I&#39;ve actually run into in the field, what I tried, and what I learned — so I don&#39;t forget.
+    I&#39;m sharing it as-is with anyone who might need it.
+  </p>
+  <p><a href="/en/about.html">Read About →</a></p>
+</section>
+
+<section class="kzc-article-list" aria-label="Article list">
+  
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Photography</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/photography/astrophotography-settings-equipment-guide">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</a></h3>
+    <p class="kzc-card-desc">Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.</p>
+    <p class="kzc-card-meta">
+      <span class="kzc-badge">Beginner-friendly</span>
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Photography</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/photography/coastal-water-photography-techniques">Coastal and Water Photography: Shooting Techniques for Compelling Images</a></h3>
+    <p class="kzc-card-desc">Master coastal photography techniques including ICM, long exposure, and silhouettes. Learn how to apply these methods to everyday subjects and create impactful monochrome images.</p>
+    <p class="kzc-card-meta">
+      
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Photoshop</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/photoshop/portrait-retouching-essential-considerations">5 Essential Considerations for Portrait Retouching</a></h3>
+    <p class="kzc-card-desc">Master portrait retouching with these 5 key techniques: preserving skin texture, enhancing eyes, color grading, background processing, and composition refinement.</p>
+    <p class="kzc-card-meta">
+      
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Photoshop</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/photoshop/dodge-burn-50-percent-gray-layer">Dodge and Burn Retouching Fundamentals: Creating Even Light with a 50% Gray Layer</a></h3>
+    <p class="kzc-card-desc">Master dodge and burn retouching using a 50% gray overlay layer. Learn brush settings, selection techniques, and Lab color methods to add even, natural lighting to portraits and landscapes without streaking.</p>
+    <p class="kzc-card-meta">
+      
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Photoshop</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/photoshop/lab-color-mode-photoshop-retouching">Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels</a></h3>
+    <p class="kzc-card-desc">Learn how to use Photoshop&#39;s Lab Color mode to separate luminosity from color information. Discover techniques for skin retouching, landscape enhancement, and professional color correction that go beyond RGB adjustments.</p>
+    <p class="kzc-card-meta">
+      
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Marketing</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/marketing/1x-photo-evaluation-retouching-trends-by-genre">What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends</a></h3>
+    <p class="kzc-card-desc">Discover the common elements that get photos featured and awarded on 1X.com. Learn genre-specific retouching strategies for portrait, landscape, astro, and monochrome photography.</p>
+    <p class="kzc-card-meta">
+      
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+      
+<article class="kzc-card">
+  
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Marketing</p>
+    <h3 class="kzc-card-title"><a href="/en/knowledge/marketing/sell-photography-knowledge-note">How to Sell Photography Knowledge on note: From Account Setup to Pricing Strategy</a></h3>
+    <p class="kzc-card-desc">Learn how to monetize your photography and retouching expertise on note, from creating an account to implementing tiered pricing strategies and membership programs.</p>
+    <p class="kzc-card-meta">
+      <span class="kzc-badge">Beginner-friendly</span>
+      <time datetime="2026-07-20">2026-07-20</time>
+    </p>
+  </div>
+</article>
+    
+  
+</section>
+
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -11,7 +11,7 @@
     <h3 class="kzc-card-title"><a href="{{ card.public_url }}">{{ card.title }}</a></h3>
     <p class="kzc-card-desc">{{ card.meta_description }}</p>
     <p class="kzc-card-meta">
-      {% if card.difficulty == "beginner" %}<span class="kzc-badge">初心者向け</span>{% endif %}
+      {% if card.difficulty == "beginner" %}<span class="kzc-badge">{% if language == 'en' %}{{ labels.beginner_badge }}{% else %}初心者向け{% endif %}</span>{% endif %}
       {% if card.updated_at %}<time datetime="{{ card.updated_at }}">{{ card.updated_at }}</time>{% endif %}
     </p>
   </div>

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends | Knowledge - SideKick</title>
+<meta name="description" content="Discover the common elements that get photos featured and awarded on 1X.com. Learn genre-specific retouching strategies for portrait, landscape, astro, and monochrome photography.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/marketing/1x-photo-evaluation-retouching-trends-by-genre">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/marketing/1x-photo-evaluation-trends">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/marketing/1x-photo-evaluation-retouching-trends-by-genre">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/marketing/1x-photo-evaluation-trends">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/marketing/1x-photo-evaluation-trends" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Marketing</li>
+    <li aria-current="page">What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends</h1>
+    <p class="kzc-article-lead">Discover the common elements that get photos featured and awarded on 1X.com. Learn genre-specific retouching strategies for portrait, landscape, astro, and monochrome photography.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Marketing</span>
+      
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>1X.com operates as a curated photography community with a selective review process. While each genre demands its own finishing approach, clear patterns emerge across all accepted work. By examining the trends in portrait, urban landscape, mountain, astrophotography, and monochrome—the platform's major categories—we can identify the universal principles that drive evaluation decisions.</p>
+<h2>Three Universal Elements of Valued Work</h2>
+<p>Across all genres, photographs that receive favorable evaluation share these characteristics:</p>
+<ol>
+<li><strong>Narrative Strength</strong>: Technical precision alone isn't enough. The most praised work communicates a clear intent—viewers understand what the photographer wanted to convey.</li>
+<li><strong>Light and Shadow Control</strong>: Dodge and burn techniques or tone curves are used to deliberately design how light falls across the frame. This intentional light sculpting is common in valued work.</li>
+<li><strong>Unified Color Palette</strong>: Each genre has established color preferences, and the most valued work respects these conventions while injecting personal style.</li>
+</ol>
+<h2>Genre-Specific Retouching Approaches</h2>
+<h3>Portrait Retouching</h3>
+<ul>
+<li>Avoid over-smoothing skin. Use frequency separation and dodge and burn to preserve texture while building dimension and form.</li>
+<li>Enhance eye impact through catch light emphasis and iris saturation increases.</li>
+<li>Cinematic color grading—teal and orange palettes are particularly favored—receives consistent praise.</li>
+<li>De-saturate and dim the background to make the subject stand forward.</li>
+</ul>
+<h3>Urban Landscape</h3>
+<ul>
+<li>Correcting building verticals and organizing perspective is highly valued.</li>
+<li>Blue-toned finishes and cool-plus-warm color combinations dominate the category.</li>
+<li>Atmospheric effects—mist, rain, and reflections—serve as bonus points in evaluation.</li>
+<li>Both completely depopulated images (emphasizing stillness) and carefully placed single figures (adding narrative) perform well.</li>
+</ul>
+<h3>Mountain and Alpine Landscape</h3>
+<ul>
+<li>Preserve tonal depth from sky through ridgeline to foreground by lifting shadows while protecting highlights.</li>
+<li>Stick to cool-to-neutral palettes (blues, greens, grays) with restrained saturation.</li>
+<li>Golden hour side-lighting and atmospheric perspective created by mist (distant areas pale and soft, foregrounds sharp and detailed) are standard approaches.</li>
+<li>Place human figures or structures small in the frame to emphasize scale through contrast.</li>
+</ul>
+<h3>Astrophotography</h3>
+<ul>
+<li>The critical challenge: balance noise reduction against detail preservation. Never sacrifice star grain or Milky Way structure for a cleaner image.</li>
+<li>Enhance the Milky Way's three-dimensionality through tone curves and levels adjustments, using cool tones (blues and purples) as your foundation.</li>
+<li>Expose the foreground and star field separately, then blend them so the foreground never falls into pure black.</li>
+<li>Compose with the horizon line low, allowing the star field to dominate the frame.</li>
+</ul>
+<h3>Monochrome Photography</h3>
+<ul>
+<li>Build on high contrast: aim for &quot;blacks that grip and whites that glow.&quot;</li>
+<li>Emphasize texture (rock grain, snow surfaces, architectural materials) through high-pass filters or clarity adjustments.</li>
+<li>Dodge and burn becomes especially critical for creating dimensional form through light and shadow separation.</li>
+<li>A subtle film grain overlay typically increases perceived polish.</li>
+</ul>
+<h2>Practical Strategy: Consistency Within Series</h2>
+<p>When shooting conditions are similar—same camera, lens, and lighting environment—applying identical retouching settings across multiple frames strengthens your series presentation. 1X rewards this visual consistency. If subjects differ meaningfully, simply fine-tune color temperature, exposure, and contrast on a per-image basis while maintaining the overall treatment.</p>
+<h2>Conclusion</h2>
+<p>The most valued work on 1X.com follows this formula: respect the genre conventions, control light deliberately, and express your perspective through careful subject selection and color choices. Start by mastering your genre's established preferences, then layer your distinctive voice on top.</p>
+<p>On 1X, your finishing approach can dramatically affect how a photo is evaluated. SideKick offers finishing-focused tools like Portrait and Sky Effect. There's a free trial available too, so give it a try.</p>
+
+  </div>
+
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

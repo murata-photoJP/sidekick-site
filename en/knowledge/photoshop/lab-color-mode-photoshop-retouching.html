@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels | Knowledge - SideKick</title>
+<meta name="description" content="Learn how to use Photoshop&#39;s Lab Color mode to separate luminosity from color information. Discover techniques for skin retouching, landscape enhancement, and professional color correction that go beyond RGB adjustments.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photoshop/lab-color-mode-photoshop-retouching">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photoshop/photoshop-lab-color-retouching">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photoshop/lab-color-mode-photoshop-retouching">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photoshop/photoshop-lab-color-retouching">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photoshop/photoshop-lab-color-retouching" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photoshop</li>
+    <li aria-current="page">Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels</h1>
+    <p class="kzc-article-lead">Learn how to use Photoshop&#39;s Lab Color mode to separate luminosity from color information. Discover techniques for skin retouching, landscape enhancement, and professional color correction that go beyond RGB adjustments.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photoshop</span>
+      
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Photoshop's Lab Color mode offers a unique advantage over RGB: it completely separates luminosity (L) from color information (a and b channels). This separation makes adjustments possible that are difficult or impossible in RGB—such as brightening an image without shifting color, or enhancing specific colors without affecting brightness.</p>
+<h2>Understanding the Three Lab Channels</h2>
+<ul>
+<li><strong>L Channel (Luminosity)</strong>: Controls brightness and contrast only, without touching color information. This lets you adjust tone purely on luminosity values.</li>
+<li><strong>a Channel (Green ↔ Red)</strong>: Governs the green-to-red color range. Particularly useful for skin tone correction and adjusting the saturation of red and pink subjects like autumn foliage.</li>
+<li><strong>b Channel (Blue ↔ Yellow)</strong>: Governs the blue-to-yellow color range. Ideal for enhancing skies, water, and warm sunset tones.</li>
+</ul>
+<h2>Channel-by-Channel Techniques</h2>
+<h3>L Channel: Pure Luminosity Control</h3>
+<ul>
+<li>Applying sharpening to the L channel alone emphasizes detail without introducing color fringing.</li>
+<li>Because it's isolated from color data, the L channel serves as an excellent foundation for high-quality black-and-white conversions.</li>
+<li>The clear separation of tonal values makes it straightforward to build selection masks based on brightness differences.</li>
+</ul>
+<h3>a Channel: Skin Tones and Red Subjects</h3>
+<ul>
+<li>Reducing the a channel value with tone curves neutralizes redness in skin tones, bringing them closer to natural, balanced skin color.</li>
+<li>Conversely, increasing a channel contrast intensifies reds and magentas, making autumn leaves and flowers pop without affecting other colors.</li>
+</ul>
+<h3>b Channel: Skies, Water, and White Balance</h3>
+<ul>
+<li>Pushing the b channel toward blue deepens the color of skies and ocean water, creating more saturated, dimensional results.</li>
+<li>Photos with overall yellow or warm casts respond well to b channel adjustment, providing white balance correction effects that feel more natural than RGB-only methods.</li>
+</ul>
+<h2>Practical Retouching Techniques</h2>
+<h3>Lab Color Saturation Boost</h3>
+<p>Convert your image to Lab, then apply an S-curve to both the a and b channels. This produces more natural color saturation increases compared to RGB saturation sliders—colors hold their integrity and rarely break apart or look artificial.</p>
+<h3>Separated Color and Luminosity Correction</h3>
+<p>RGB adjustments shift both color and brightness together. Lab lets you separate these: adjust the L channel for exposure, then increase saturation by pushing the a and b channels independently. This gives you granular control impossible in RGB.</p>
+<h3>Creating Masks from the L Channel</h3>
+<p>Because the L channel emphasizes tonal separation clearly, it's ideal for generating masks to control where color or tonal corrections apply.</p>
+<h2>Genre-Specific Applications</h2>
+<table>
+<thead>
+<tr>
+<th>Photography Genre</th>
+<th>Lab Approach</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Portrait</td>
+<td>Use a channel to neutralize skin redness; apply sharpening only to L channel to preserve skin smoothness</td>
+</tr>
+<tr>
+<td>Landscape</td>
+<td>Enhance sky color via b channel; intensify autumn foliage through a channel</td>
+</tr>
+<tr>
+<td>Black &amp; White</td>
+<td>Build conversions from the L channel for superior tonal quality</td>
+</tr>
+<tr>
+<td>Abstract / ICM</td>
+<td>Apply S-curve boosts to a and b channels for surreal, highly saturated color expression</td>
+</tr>
+</tbody>
+</table>
+<p>The degree of correction needed varies by genre. Portrait work shifts with skin individual differences—lighting temperature, natural color, makeup presence. Abstract and ICM work depend heavily on the original image's saturation and movement intensity. Landscape corrections change direction based on season and time of day: autumn reds need different handling than sunrise or sunset tones.</p>
+<h2>Important Considerations</h2>
+<ul>
+<li><strong>Non-destructive editing is trickier</strong>: Lab adjustment layers don't integrate as smoothly as RGB workflows. Establishing a consistent process before you start helps avoid issues later.</li>
+<li><strong>Colors shift when converting back to sRGB</strong>: Lab edits may appear different after converting back to RGB (sRGB) color space. Always preview the final output before exporting.</li>
+</ul>
+<h2>Conclusion</h2>
+<p>Lab Color mode's superpower is the ability to handle luminosity and color as completely independent variables. Use it for skin tone refinement, sky and water enhancement, and monochrome conversions—tasks where RGB reaches its limits. Start with L channel luminosity masks to see immediate results and build confidence with the workflow.</p>
+<p>This kind of nuanced, color-aware retouching is difficult to automate because every image presents different conditions. SideKick Portrait applies Lab mode processing where it's needed. There's a free trial available too, so give it a try.</p>
+
+  </div>
+
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

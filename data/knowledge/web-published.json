@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T21:37:32.776044+09:00",
+  "generated_at": "2026-07-20T23:23:07.169841+09:00",
   "schema_version": 1,
   "articles": [
     {
@@ -47,9 +47,60 @@
         "name": "星景写真入門",
         "order": 2
       },
+      "source_article_id": null,
       "body_markdown": "\n# 星景写真の撮影設定・機材完全ガイド\n\n星景写真は「勘」で撮ると仕上がりが安定しません。露出の考え方と機材の基本を押さえておくだけで、現場での迷いがかなり減ります。ここでは撮影設定と機材、撮影前の準備を実践的にまとめました。\n\n## 露出設定の基本：新月を基準に考える\n\n星景写真の露出は、月明かりの影響を基準にすると組み立てやすくなります。\n\n具体的な数値をここで示すよりも、まず現場でテスト撮影してみることをおすすめします。真っ黒にしか写らない場合は、単純に露出が足りていません。ISO感度を上げてみてください。光害の有無や機材によっても最適値は変わるため、一律の「正解」があるわけではないのです。\n\n大まかな考え方としては、月が明るくなるほど（三日月→半月→満月と）ISOを下げるかシャッタースピードを短くして、光が入りすぎないよう調整していきます。逆に天の川そのものを狙うときは、普段より明るめに振ります。\n\n半月や満月でも、**月が昇る前・沈んだ後の時間帯**なら新月とほぼ同じ条件で撮影できます。月の出入り時間を天文アプリで確認し、月が地平線下にある時間を狙うのがコツです。\n\n満月は月明かりが強すぎて天の川はほぼ見えなくなるため、無理に天の川を狙わず、月明かりを活かした風景写真に切り替える方が現実的です。\n\n月齢ごとの具体的な補正値（何段アンダーにするか、ISOをいくつにするか）は、現場での再現性に直結する部分なので、村田のワークショップに参加された方には実例つきでお伝えしています。再現性のある数値まで知りたい方はぜひ参加を検討してみてください。\n\n## 比較明合成を前提にする場合の調整\n\n星の軌跡（比較明合成）を狙うなら、1枚あたりの露出は短めにするのが基本です。\n\n- シャッタースピード：数秒程度に短縮（軌跡が滑らかにつながりやすい）\n- ISO：光害が少なければやや高めでも大丈夫です\n- 絞り：開放\n- 撮影間隔：0〜1秒（間隔が空きすぎると軌跡が途切れる）\n- 撮影枚数：合成したい時間の長さ÷シャッタースピード(n秒)=撮影枚数\n\n例）合成したい時間の長さを60分、シャッタースピードを30秒としたとき・・・\n3600÷30=120枚\n（時間をすべて秒で計算するのがポイントです）\n\n地上風景を入れる場合は、地上が明るくなりすぎないよう気をつけます。月がフレームに入ると合成後に白飛びしやすいので、構図から外すか、さらに露出を抑えます。\n\n## 撮影のコツ：星を流さない・ピントを外さない\n\n- **500ルール**：シャッタースピードの目安は「500 ÷ 焦点距離（35mm換算）」。例えば24mmなら500÷24≈20秒が上限です。これを超えると星が線状に流れ始めます。より精密に計算したい場合は「NPFルール」もあり、PhotoPillsなどのアプリで自動計算できます。\n- **ピント合わせ**：オートフォーカスはほぼ使えません。ライブビューで明るい星を拡大表示し、星が最も小さく鋭くなる位置に手動で合わせます。レンズの無限遠マークは単なる飾りです。必ず微調整を。バーティノフマスクを使うとさらに確実です。\n- **構図の比率**：天の川をメインにするなら空:地上=4:1程度、風景全体のバランスを重視するなら2:1が目安です。\n\n## 必要な機材\n\n### カメラ\n\n- **フルサイズ**：高感度性能に優れ、暗い環境でのノイズが少ない。広角レンズを活かした構図にも向く。\n- **APS-C**：軽量・コストパフォーマンスに優れ、機材を持ち運びやすい。\n\n### レンズ\n\n- **焦点距離14〜35mmの広角**が基本。焦点距離が短いほど星の動きが目立ちにくく、シャッタースピードを長めに取れます。\n- **F2.8以下の明るいレンズ**が理想。光を多く取り込めるため、高ISOに頼らずノイズを抑えられます。\n\n### 三脚\n\n長秒露光が前提なので必須です。風の強い場所でも安定する重量・剛性のあるものを選び、広角での構図調整がしやすい自由雲台付きだと使いやすくなります。\n\n### その他のアイテム\n\n- リモートシャッター（またはスマホ連携アプリ）：シャッターを直接押す振動を防ぐ\n- 星図アプリ（Stellarium、PhotoPillsなど）：天の川や星座の位置、月の出入りを事前に確認\n- ヘッドランプ（赤色ライト推奨）：暗闇に目を慣らしたまま足元を確認できる\n- 防寒具・予備バッテリー：夜間の冷え込みと、寒さによるバッテリー消耗に備える\n\n### レンズヒーター\n\n夜露や霜でレンズが曇るのを防ぐため、モバイルバッテリーに接続して使うレンズヒーターを推奨します。特に「出目金」と呼ばれる前玉が突き出したレンズは、ワット数が小さい（＝発熱の弱い）ヒーターだとレンズの中心まで熱が回らず、中心部だけがボケてしまうことがあります。ワット数に余裕のあるタイプを選びましょう。\n\n### 補足：使い捨てカイロを金属・ガラスに直接貼らない\n\n夜露防止やバッテリーの性能低下対策として、使い捨てカイロを機材に貼る人もいますが、注意が必要です。使い捨てカイロは、貼った相手から熱を受け取ることで発熱を保つ仕組みのため、金属やガラス（レンズ鏡筒など）に直接貼ると熱を奪われてしまい、うまく発熱しなくなることがあります。\n\n## 撮影前の準備チェックリスト\n\n1. **場所選び**：光害マップで暗いエリアを確認し、Google Mapsの衛星写真・ストリートビューで地形を事前チェック。可能なら昼間に下見をしておく。\n2. **天候・月齢確認**：晴天予報と月の出入り時間、月齢をあわせて確認。新月前後、または月が沈んでいる時間帯を狙う。\n3. **天文現象の確認**：天の川の見える方角・時期、流星群やISS通過なども事前に調べておくと構図の幅が広がる。\n4. **安全確認**：私有地なら許可を取る、夜間の足場・野生動物・電波状況を事前に把握する、できれば複数人で行動する。\n\n## まとめ\n\n星景写真の露出は「新月基準＋月齢による補正」で考えると迷いが減り、機材は広角・明るいレンズ・三脚さえ揃えば入門できます。あとは現場での積み重ねです。\n\n撮影後の比較明合成・天の川強調・飛行機軌跡除去といった仕上げ作業は、判断の型さえ決まれば自動化できる部分でもあります。SideKick Starは、まさにこの一連の仕上げ判断をPhotoshop上で再現するツールです。撮影に集中する時間を増やしたい方は、無料体験もあわせてご覧ください。\n",
       "images": [],
       "public_url": "/knowledge/photography/astrophotography-camera-settings"
+    },
+    {
+      "id": "SKB-ART-000014",
+      "title": "Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear",
+      "slug": "astrophotography-settings-equipment-guide",
+      "language": "en",
+      "category": {
+        "slug": "photography",
+        "name": "Photography",
+        "name_ja": "写真"
+      },
+      "subcategory": {
+        "slug": "astrophotography",
+        "name": "Astrophotography",
+        "name_ja": "星景写真"
+      },
+      "meta_description": "Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.",
+      "difficulty": "beginner",
+      "audience": [
+        "星景写真初心者"
+      ],
+      "tags": [
+        "星景写真",
+        "露出",
+        "撮影設定",
+        "機材"
+      ],
+      "concepts": [
+        "astrophotography",
+        "exposure",
+        "camera-settings",
+        "equipment"
+      ],
+      "related_products": [
+        "sidekick-star"
+      ],
+      "cta_type": "product-trial",
+      "created_at": "2026-07-19",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": {
+        "id": "astrophotography-basics",
+        "name": "星景写真入門",
+        "order": 2
+      },
+      "source_article_id": "SKB-ART-000003",
+      "body_markdown": "# Complete Guide to Astrophotography Camera Settings and Equipment\n\nAstrophotography isn't something you can wing on instinct and expect consistent results. Once you understand the fundamentals of exposure and know what equipment you actually need, you'll eliminate most of the uncertainty when you're out in the field. This guide covers practical camera settings, equipment essentials, and everything you should prepare before heading out.\n\n## Exposure Fundamentals: Use the New Moon as Your Reference Point\n\nThe easiest way to build a solid exposure strategy for astrophotography is to use moonlight as your baseline.\n\nRather than giving you specific numbers right now, I recommend starting with test shots on location. If everything comes out pitch black, it's simple—you don't have enough exposure. Push your ISO higher. The optimal settings vary depending on light pollution, your specific equipment, and other factors, so there's no single universal answer.\n\nAs a general principle: as the moon gets brighter (waxing crescent → half moon → full moon), dial back your ISO or shorten your shutter speed to prevent overexposure. Conversely, when you're targeting the Milky Way itself, you'll want to expose slightly brighter than usual.\n\nHere's a useful trick: even on a half or full moon night, if you time your shoot for **after the moon sets or before it rises**, you get nearly the same conditions as a new moon. Use an astronomy app to check moonrise and moonset times, and target the window when the moon is below the horizon.\n\nFull moon moonlight is usually too intense—the Milky Way becomes nearly invisible. Rather than fighting it, switch gears and shoot landscape photography that takes advantage of the moonlight itself.\n\nThe specific exposure compensation values for each moon phase (exactly how many stops under to expose, precisely which ISO to use) directly affects reproducibility in the field. I share real-world examples with workshop participants. If you want exposure numbers you can reliably reproduce, I'd encourage you to consider attending a workshop.\n\n## Lighten composite (Star Trail Composites)\n\nIf you're planning to shoot star trails using Lighten composite, keep individual frame exposures short:\n\n- **Shutter Speed:** Keep it to just a few seconds (shorter gaps help trails blend smoothly)\n- **ISO:** If light pollution is minimal, you can run it a bit higher\n- **Aperture:** Wide open\n- **Interval:** 0–1 second (gaps larger than this create visible breaks in the trails)\n- **Frame Count:** Target duration ÷ shutter speed (n seconds) = number of frames\n\nFor example, if your target composite duration is 60 minutes and your shutter speed is\n30 seconds: 3600 ÷ 30 = 120 frames. (The key is to convert all your time values to\nseconds first.)\n\nWhen you include ground scenery, watch that it doesn't overexpose. If the moon enters the frame, it tends to blow out in the composite, so either crop it out or reduce exposure further.\n\n## Shooting Technique: Preventing Star Trailing and Nailing Focus\n\n- **The 500 Rule:** A good shutter speed target is \"500 ÷ focal length (35mm equivalent)\". For example, at 24mm, that's 500 ÷ 24 ≈ 20 seconds as your maximum. Beyond that, stars begin to streak. For more precise calculations, the NPF Rule exists, and apps like PhotoPills can calculate it automatically.\n- **Manual Focus:** Autofocus won't work in darkness. Use live view, zoom in on a bright star, and manually adjust focus until the star appears smallest and sharpest. That infinity mark on your lens barrel is just decoration—fine-tune it. A Bahtinov mask makes this even more reliable.\n- **Composition Ratio:** For Milky Way-focused shots, aim for roughly 4:1 sky-to-ground. For balanced landscape work, 2:1 is a good target.\n\n## Essential Equipment\n\n### Camera Body\n\n- **Full Frame:** Superior high-ISO performance and lower noise in dark conditions. Great for maximizing wide-angle compositions.\n- **APS-C:** Lightweight, excellent value for money, and easier to carry long distances.\n\n### Lenses\n\n- **Focal length 14–35mm (wide angle)** is the standard. Shorter focal lengths mean star motion is less noticeable, letting you use longer shutter speeds.\n- **F2.8 or faster (faster aperture)** is ideal. You gather more light, so you can keep ISO lower and minimize noise.\n\n### Tripod\n\nEssential—long exposures demand rock-solid stability. Choose one heavy and rigid enough to stay put even in wind, and a ball head makes framing easier when you're shooting wide angles.\n\n### Additional Accessories\n\n- **Remote shutter release or smartphone shutter app:** Prevents vibration from pressing the shutter button directly\n- **Star charts (Stellarium, PhotoPills, etc.):** Check Milky Way position, constellations, and moonrise/moonset times before you go\n- **Headlamp with red-light mode:** Navigate in the dark without destroying your night vision\n- **Warm clothing and spare batteries:** Night temperatures drop fast, and cold drains batteries quickly\n\n### Lens Heater\n\nDew and frost fog up lenses at night. Use a lens heater powered by a mobile battery. Watch out: bulbous front-element lens designs can be problematic. If your heater has low wattage, the heat won't reach the center of that protruding lens, and you'll get a blurry center surrounded by sharp edges. Choose a heater with higher wattage to be safe.\n\n### Important Note: Don't Stick Disposable Hand Warmers Directly on Metal or Glass\n\nSome photographers tape disposable hand warmers to their gear to prevent dew and battery drain. Be careful: hand warmers work by absorbing heat from their surroundings to generate warmth. When you stick them directly on metal or glass (lens barrels, for example), they pull heat away instead of warming up, and won't activate properly.\n\n## Pre-Shoot Preparation Checklist\n\n1. **Location scouting:** Check a light pollution map to find dark areas. Preview terrain using Google Maps satellite view and Street View. If possible, visit the location during daylight.\n2. **Weather and moon phase:** Confirm the weather forecast and check moonrise, moonset, and moon phase together. Target new moon dates or the time window when the moon is below the horizon.\n3. **Astronomical events:** Research which direction the Milky Way is visible, when it's visible, and note any meteor showers or ISS passes. This broadens your compositional options.\n4. **Safety check:** Get permission if shooting on private land. Assess nighttime footing hazards, wildlife activity, and cell reception beforehand. Ideally, go with at least one other person.\n\n## Wrap-Up\n\nWith astrophotography exposure, thinking \"new moon baseline plus moon-phase adjustments\" cuts down the guesswork. Equipment-wise, a wide-angle lens, fast aperture, and sturdy tripod are all you need to start. Everything else comes from practice in the field.\n\nPost-shoot work—Lighten composite, Milky Way enhancement, aircraft trail removal—becomes automated once you nail down your decision-making process. SideKick Star does exactly this: it replicates your finishing decisions right in Photoshop. If you want to spend more time shooting and less time in post, check out the free trial.\n",
+      "images": [],
+      "public_url": "/en/knowledge/photography/astrophotography-settings-equipment-guide"
     },
     {
       "id": "SKB-ART-000009",
@@ -90,9 +141,103 @@
       "published_at": "2026-07-20",
       "related_articles": [],
       "series": null,
+      "source_article_id": null,
       "body_markdown": "\n# 海岸・水辺と身近な被写体で作品を撮るテクニック\n\n海岸や砂丘は、波・砂紋・光の反射といった要素が揃っていて、技法次第で表情が大きく変わるロケーションです。ここでは海岸での実践的な撮影技法と、その延長として「身近な被写体」をアート的に撮る視点を紹介します。\n\n## 海岸での撮影技法\n\n### ICM（意図的なカメラの動き）\n\nスローシャッター（1/4秒〜1秒程度）でカメラを意図的に動かし、波や砂の質感を抽象表現に変える技法です。水平・円弧・ジグザグなど、動かし方のパターンを変えると印象が変わります。\n\n### ロングエクスポージャー（長秒露光）\n\n三脚とNDフィルターを使い、シャッタースピードを1秒〜数秒に設定すると、波が滑らかになり幻想的な雰囲気になります。日中でもNDフィルターがあれば実現可能です。\n\n### 逆光シルエット・ローアングルリフレクション\n\n太陽が高い位置にある状態でシルエットを活かす、あるいは濡れた砂浜に映り込む空を低い位置から狙うと、鏡面反射のような効果が得られます。\n\n### 砂紋・テクスチャの活用\n\n- **ローアングル**：砂紋を強調。順光でソフトに、逆光で凹凸をダイナミックに\n- **望遠レンズ（85mm以上）**：圧縮効果でパターンを切り取る\n- **広角レンズ（16〜24mm）**：砂丘の立体感と空の対比を強調\n\n### 長秒露光のレンズ選び\n\n| 焦点距離 | 向いている表現 |\n|---|---|\n| 広角（16〜35mm） | 風の流れや砂の動きを広く捉える、遠近感を活かした構図 |\n| 標準（35〜50mm） | 自然な遠近感でシンプルに風の動きを見せる |\n| 望遠（70〜200mm） | 砂紋の一部を切り取り、静止部分とのコントラストを強調 |\n\nNDフィルターは日中ならND1000（10ストップ）相当が目安になります。三脚とレリーズ（またはセルフタイマー）で振動を防ぐことも忘れずに。撮影は朝夕の斜光が入る時間帯が、陰影が最も綺麗に出ます。\n\n## 身近な被写体をアート的に撮る視点\n\n海岸に限らず、「視点を変える」「光を意識する」「抽象化する」という考え方は、身の回りの何気ない被写体にも応用できます。\n\n- **水たまりの反射**：雨上がりの水たまりを使い、上下反転で幻想的な世界を作る\n- **錆びた金属・古びた壁**：クローズアップで時間の経過を感じさせる質感を強調\n- **影とシルエット**：朝夕の斜光で長い影を作り、幾何学的なパターンとして構図に取り込む\n- **アスファルトの質感**：ローアングル・斜光・雨上がりの反射など、条件次第でミニマルな作品になる\n\n## モノクロで映える被写体\n\n光と影、質感、形のコントラストが強いものは、モノクロにすると本領を発揮します。\n\n- 影・シルエット（逆光での人物や物）\n- アスファルトやコンクリートの質感（特に雨の日）\n- 霧・煙・水蒸気（立体感が際立つ）\n- 老朽化した建物や錆びた金属（「時間の経過」を感じさせる）\n- 電線・鉄塔・橋などの構造物（線の美しさを活かした幾何学的構図）\n\nモノクロ撮影で意識したいのは、**光と影のコントラスト**、**質感の選び方**、**要素を絞ったシンプルな構図**の3点です。色という情報がなくなる分、この3つが写真の印象を大きく左右します。\n\n## まとめ\n\n海岸での撮影は、ICM・長秒露光・逆光シルエットといった定番技法を押さえつつ、時間帯や地形（砂紋・砂丘・アスファルトなど）に応じてレンズと露出を選ぶのが基本です。そして「身近なものでも視点を変えれば作品になる」という発想は、遠征に行けない日の撮影練習としても有効です。\n\n星景写真も同じように、時間帯・光の条件を見極める判断の積み重ねです。撮影後の比較明合成や天の川強調といった仕上げ工程を効率化したい方は、SideKick Starの無料体験もあわせてご覧ください。\n",
       "images": [],
       "public_url": "/knowledge/photography/coastal-long-exposure-technique"
+    },
+    {
+      "id": "SKB-ART-000019",
+      "title": "Coastal and Water Photography: Shooting Techniques for Compelling Images",
+      "slug": "coastal-water-photography-techniques",
+      "language": "en",
+      "category": {
+        "slug": "photography",
+        "name": "Photography",
+        "name_ja": "写真"
+      },
+      "subcategory": {
+        "slug": "shooting-technique",
+        "name": "Shooting Technique",
+        "name_ja": "撮影技法"
+      },
+      "meta_description": "Master coastal photography techniques including ICM, long exposure, and silhouettes. Learn how to apply these methods to everyday subjects and create impactful monochrome images.",
+      "difficulty": "intermediate",
+      "audience": [
+        "写真中級者"
+      ],
+      "tags": [
+        "長秒露光",
+        "ICM",
+        "撮影技法"
+      ],
+      "concepts": [
+        "long-exposure",
+        "icm",
+        "shooting-technique"
+      ],
+      "related_products": [
+        "sidekick-star"
+      ],
+      "cta_type": "product-trial",
+      "created_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": null,
+      "source_article_id": "SKB-ART-000009",
+      "body_markdown": "# Coastal and Water Photography: Shooting Techniques for Compelling Images\n\nCoastal areas and dunes offer exceptional creative potential. With waves, sand patterns, and light reflections working together, these locations transform dramatically based on your chosen shooting techniques. This guide covers practical methods for coastal photography and how to apply these same principles to everyday subjects with an artistic eye.\n\n## Shooting Techniques for Coastal Photography\n\n### Intentional Camera Movement (ICM)\n\nUsing a slow shutter speed (1/4 second to 1 second), deliberately move your camera to transform waves and sand textures into abstract expressions. Vary your movement patterns—horizontal, circular, or zigzag motions—to create distinctly different moods in your images.\n\n### Long Exposure\n\nWith a tripod and ND filter, set your shutter speed to 1 second or longer. This technique smooths water into a dreamy, ethereal quality. Even in daylight, an ND filter makes this achievable without waiting for low light.\n\n### Backlighting Silhouettes and Low-Angle Reflections\n\nPosition yourself to capture silhouettes when the sun is high, or shoot from a low angle to capture the sky reflected in wet sand. This mirror-like reflection effect creates striking visual impact.\n\n### Utilizing Sand Patterns and Texture\n\n- **Low-angle perspective**: Emphasizes sand ripples—soft and diffused in front-lit conditions, dramatically dimensional in backlighting\n- **Telephoto lenses (85mm and longer)**: Compression effect isolates texture patterns\n- **Wide-angle lenses (16–24mm)**: Emphasizes dune dimensionality and sky contrast\n\n### Lens Selection for Long Exposure\n\n| Focal Length | Best For |\n|---|---|\n| Wide-angle (16–35mm) | Capturing broad wind-driven sand movement; leveraging depth and foreground-background relationships |\n| Standard (35–50mm) | Natural perspective that presents wind movement clearly and simply |\n| Telephoto (70–200mm) | Isolating sand pattern segments; emphasizing contrast between moving and still areas |\n\nFor daytime shooting, aim for ND1000 (10-stop equivalent) as a starting point. Use a tripod and remote release or self-timer to eliminate vibration. Shoot during golden hour—early morning or late evening—when directional light creates the most dimensional shadows.\n\n## Applying an Artistic Perspective to Everyday Subjects\n\nBeyond coastal work, the principles of \"changing perspective,\" \"controlling light,\" and \"abstracting forms\" apply to ordinary subjects everywhere.\n\n- **Puddle reflections**: Use rainwater to create inverted, dreamlike worlds\n- **Weathered metal and aged walls**: Close-up framing reveals the texture and character of time's passage\n- **Shadows and silhouettes**: Capture long, directional shadows during golden hour as geometric patterns within your composition\n- **Asphalt texture**: Low angles, directional light, and post-rain reflections transform plain pavement into minimalist art\n\n## Monochrome Subjects\n\nSubjects with strong light-and-shadow contrast, distinctive texture, and defined form truly excel in black and white.\n\n- Shadows and silhouettes (backlit figures and objects)\n- Asphalt and concrete texture (especially after rain)\n- Mist, smoke, and water vapor (enhanced dimensionality)\n- Deteriorating buildings and corroded metal (conveying the passage of time)\n- Power lines, towers, and bridges (geometric compositions highlighting linear beauty)\n\nWhen shooting monochrome, focus on three critical elements: **contrast between light and shadow**, **texture selection**, and **simplified, uncluttered composition**. Without color, these three factors become the primary drivers of visual impact.\n\n## Summary\n\nCoastal photography success comes from mastering core techniques—ICM, long exposure, and backlighting silhouettes—then adapting your lens choice and exposure based on time of day and terrain (sand patterns, dunes, or paved surfaces). Remember that shifting your perspective transforms any subject, even ordinary ones, into compelling work. This mindset is invaluable on days when travel to special locations isn't possible.\n\nStarscape photography follows the same principle: success builds through repeated decisions about timing and light conditions. If you want to streamline the post-processing workflow—particularly blending sequences or enhancing the Milky Way—explore the free trial of SideKick Star to see how it can accelerate your editing process.",
+      "images": [],
+      "public_url": "/en/knowledge/photography/coastal-water-photography-techniques"
+    },
+    {
+      "id": "SKB-ART-000020",
+      "title": "5 Essential Considerations for Portrait Retouching",
+      "slug": "portrait-retouching-essential-considerations",
+      "language": "en",
+      "category": {
+        "slug": "photoshop",
+        "name": "Photoshop",
+        "name_ja": "Photoshop"
+      },
+      "subcategory": {
+        "slug": "color-grading",
+        "name": "Color Grading",
+        "name_ja": "カラーグレーディング"
+      },
+      "meta_description": "Master portrait retouching with these 5 key techniques: preserving skin texture, enhancing eyes, color grading, background processing, and composition refinement.",
+      "difficulty": "intermediate",
+      "audience": [
+        "写真中級者",
+        "ポートレート撮影者"
+      ],
+      "tags": [
+        "ポートレートレタッチ",
+        "ダッジ＆バーン",
+        "カラーグレーディング"
+      ],
+      "concepts": [
+        "portrait-retouching",
+        "dodge-and-burn",
+        "color-grading"
+      ],
+      "related_products": [
+        "sidekick-portrait"
+      ],
+      "cta_type": "product-trial",
+      "created_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": {
+        "id": "portrait-retouching",
+        "name": "ポートレートレタッチ",
+        "order": 1
+      },
+      "source_article_id": "SKB-ART-000010",
+      "body_markdown": "# 5 Essential Considerations for Portrait Retouching\n\nPortrait retouching that merely smooths the skin often falls short of professional results. Here are five key considerations that will elevate your work from competent to compelling.\n\n## 1. Skin Retouching: Preserve Texture While Refining\n\nThe most common mistake in skin retouching is over-smoothing.\n\n- **Frequency Separation**: Maintains skin texture and pores while smoothing only the tonal layer, creating a natural appearance\n- **Dodge and Burn**: Controls subtle shadows and highlights to enhance three-dimensionality and natural contours\n\nCompletely removing skin texture results in an artificial, plastic appearance. The real skill lies in finding the balance—preserving genuine texture while refining imperfections.\n\n## 2. Eye Retouching: The Feature That Creates Impact\n\n- **Catchlight Enhancement**: Subtly strengthen light reflections in the eyes for vitality\n- **Iris Saturation**: A slight increase makes the eyes more compelling and draws viewer attention\n- **Eyelashes**: Gently enhance sharpness and contrast for definition\n\nThe eye is where a viewer's gaze naturally lands first. Strong eye retouching alone can dramatically transform the overall impression of a portrait, even if other areas receive minimal adjustment.\n\n## 3. Color Grading: Establishing Your Visual Language\n\n- Cinematic color treatments (teal & orange, matte tones, and others) are industry standards\n- Fine-tune color balance using tone curves and color adjustment layers\n- Always anchor your palette to a flattering skin tone and accurate white balance\n- Strong key/tonal choices (low-key or high-key lighting effects) can create memorable mood\n\nColor establishes the emotional world of your image. Aligning your color grading with your subject's intended mood—whether cool and clinical or warm and inviting—keeps your vision coherent and intentional.\n\n## 4. Background Processing: Make Your Subject Stand Out\n\n- Strengthen shallow depth of field where needed using selective masking and additional blur\n- Reduce saturation and luminosity of background elements to emphasize the subject\n- Remove distracting elements—reflections, noise, and compositional clutter—to maintain focus\n\nTreat the background as an active compositional tool, not an afterthought. Deliberate background refinement significantly elevates the perceived professionalism of your work.\n\n## 5. Composition and Cropping: Direct the Viewer's Eye\n\n- Consider the golden ratio and rule of thirds during final framing adjustments\n- Use negative space strategically to guide the viewer's eye and create visual flow\n\nDon't settle for your original crop. Revisiting composition during the final retouching stages often yields surprising improvements in impact and professionalism.\n\n## Final Polish Checklist\n\n- Add subtle film grain to create cohesion and a timeless quality that feels organic\n- Perform a final overall tonal review using tools like Camera Raw Filter to ensure unity across the entire image\n\nThe most admired portraits share common threads: expressive storytelling through pose and expression, skilled use of directional light (backlighting or side light), and a finished aesthetic that hints at mood and atmosphere. Technical precision matters, but ultimately your images succeed when they communicate what you intended to convey.\n\n## Summary\n\nStructure your portrait retouching workflow in this order for consistent excellence:\n\n1. Preserve skin texture while refining\n2. Create impact through eye enhancement\n3. Establish mood through color grading\n4. Elevate the subject by refining the background\n5. Perfect composition through final cropping\n\nThis approach ensures you address every element systematically without omissions.\n\nMany retouching decisions resist automation because they depend on image-specific conditions and artistic intent. SideKick Portrait automates the reproducible foundation work—consistent tonal and texture processing—while reserving the final expressive decisions for your creative judgment.",
+      "images": [],
+      "public_url": "/en/knowledge/photoshop/portrait-retouching-essential-considerations"
     },
     {
       "id": "SKB-ART-000010",
@@ -140,9 +285,56 @@
         "name": "ポートレートレタッチ",
         "order": 1
       },
+      "source_article_id": null,
       "body_markdown": "\n# ポートレートレタッチで意識すべき5つのポイント\n\nポートレートのレタッチは「肌を滑らかにする」だけでは物足りない仕上がりになりがちです。ここでは、作品としての完成度を上げるために意識したい5つのポイントを整理しました。\n\n## 1. 肌のレタッチ：質感を残したまま整える\n\n肌のレタッチで大事なのは「滑らかにしすぎない」ことです。\n\n- **周波数分離（Frequency Separation）**：肌のテクスチャを保ちながら、トーンだけをなめらかに整える\n- **ダッジ＆バーン**：自然な陰影をコントロールし、立体感を強調する\n\n質感を完全に消してしまうと、かえって不自然で作り物めいた印象になります。リアルな質感を残しつつ整える、というバランス感覚が仕上がりを左右します。\n\n## 2. 目の処理：印象を決める最重要パーツ\n\n- **キャッチライトの強調**：光のリフレクションを自然に増やす\n- **虹彩の彩度**：わずかに上げると印象的になる\n- **まつげ**：シャープネスとコントラストを軽く強調する\n\n目元は見る人の視線が最初に集まる部分なので、他をあまり触らなくても、目の処理だけで写真の印象が大きく変わります。\n\n## 3. カラーグレーディング：世界観を決める\n\n- シネマティックなトーン（ティール＆オレンジ、マットトーンなど）が使われることが多い\n- カラーバランスはトーンカーブや色調整レイヤーで微調整\n- 基本は「肌色が美しく見える」ホワイトバランスを軸にする\n- ローキー・ハイキー演出で強く印象付ける手もある\n\n色調は写真全体の世界観を決める要素なので、被写体の雰囲気（クールに見せたいか、温かみを出したいか）と合わせて決めると軸がぶれません。\n\n## 4. 背景処理：主役を引き立てる\n\n- ぼかしが足りない部分は選択マスクで手動でぼかしを強化\n- 背景の彩度・明度を落として被写体を引き立てる\n- 気になる要素（映り込み、ノイズ、ディストラクション）はクリーンアップで除去\n\n背景は「何もしない」のではなく、被写体を引き立てるために積極的に調整する対象だと考えると、仕上がりの完成度が変わります。\n\n## 5. 構図とトリミング：視線を設計する\n\n- 黄金比・三分割法を意識したリフレーミング\n- 視線の方向に余白を持たせるなど、視線誘導を意識したトリミング\n\n撮影時の構図をそのまま使うのではなく、レタッチの最終段階でもう一度トリミングを見直すと、作品としての完成度が一段階上がります。\n\n## 仕上げの最終チェック\n\n- 微細なグレイン（粒子）を加えると、フィルム風の質感が出て馴染みやすくなる\n- 最終的にCamera Rawフィルターなどで全体のトーンを見直し、統一感を整える\n\n評価される作品に共通するのは、ストーリーを感じさせる表情・構図、逆光やサイド光を活かした独自の光の使い方、そして抽象性・幻想性のある仕上げです。技術的な正しさだけでなく、「何を伝えたいか」が伝わるかどうかが最後の分かれ目になります。\n\n## まとめ\n\nポートレートレタッチは、①肌の質感を残す→②目で印象を作る→③カラーで世界観を決める→④背景で主役を引き立てる→⑤構図で視線を設計する、という順で見直すと、抜け漏れなく完成度を上げられます。\n\nこうした「どこを、どれだけ持ち上げるか」という繊細な判断は、写真ごとに条件が変わるため自動化が難しい領域です。SideKick Portraitは、この判断のうち再現性の高い部分（トーン・質感の基本処理）を自動化し、最終的な表情作りは撮影者自身の目に委ねる設計にしています。\n",
       "images": [],
       "public_url": "/knowledge/photoshop/portrait-retouching-key-points"
+    },
+    {
+      "id": "SKB-ART-000015",
+      "title": "Dodge and Burn Retouching Fundamentals: Creating Even Light with a 50% Gray Layer",
+      "slug": "dodge-burn-50-percent-gray-layer",
+      "language": "en",
+      "category": {
+        "slug": "photoshop",
+        "name": "Photoshop",
+        "name_ja": "Photoshop"
+      },
+      "subcategory": {
+        "slug": "dodge-and-burn",
+        "name": "Dodge and Burn",
+        "name_ja": "ダッジ＆バーン"
+      },
+      "meta_description": "Master dodge and burn retouching using a 50% gray overlay layer. Learn brush settings, selection techniques, and Lab color methods to add even, natural lighting to portraits and landscapes without streaking.",
+      "difficulty": "intermediate",
+      "audience": [
+        "写真中級者"
+      ],
+      "tags": [
+        "Photoshop",
+        "ダッジ＆バーン",
+        "Labカラー"
+      ],
+      "concepts": [
+        "photoshop",
+        "dodge-and-burn",
+        "lab-color"
+      ],
+      "related_products": [],
+      "cta_type": "product-detail",
+      "created_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": {
+        "id": "photoshop-retouching-basics",
+        "name": "Photoshopレタッチの基本技法",
+        "order": 1
+      },
+      "source_article_id": "SKB-ART-000007",
+      "body_markdown": "# Dodge and Burn Retouching Fundamentals\n\nDodge and Burn is a retouching technique that deliberately redesigns how light falls on an image by selectively brightening (dodging) or darkening (burning) specific areas. It's widely used for building dimension in portraits and emphasizing contrast in landscape photography.\n\n## Basic Method: The 50% Gray Overlay Layer\n\n1. **Create a new layer** (Shift+Ctrl+N) and select \"50% Gray\" from the fill options\n2. Set the layer mode to \"Overlay\" or \"Soft Light\" (Overlay produces a stronger effect)\n3. Select the Brush tool. **Painting white brightens the image; black darkens it.** A soft brush with 0% hardness and a flow rate of 5–10% is the most manageable setting\n4. Paint with light direction in mind. For portraits, brighten the cheekbones, bridge of the nose, forehead, and upper lip; darken the hollows of the cheeks, side of the nose, and jawline. For landscapes, this technique effectively emphasizes cloud edges and the edges of your subject\n5. Blend any unnatural areas with a subtle Gaussian Blur\n\nBecause this is non-destructive editing, you preserve the original image. You can also easily reduce the effect by lowering the layer's opacity. Colored dodge and burn—using warm or cool brushes instead of pure black and white—works well for correcting uneven skin tones.\n\n## Avoiding Brush Streaks\n\nPainting directly with the brush can create patchy, unnatural results. Here are several ways to prevent this:\n\n- **Lower flow significantly (3–5%)**—reduce flow rather than opacity, and build up the effect gradually using brush pressure\n- **Selection + blur**—loosely select the area you want to retouch, then feather the edge (Feather 20–50px) before brushing to blend it smoothly with the surrounding image\n- **Gradient tool instead of brush**—using a radial gradient instead of direct brushwork creates more uniform results\n- **Curves adjustment + mask**—create a Curves adjustment layer and use the layer mask for selective application, making corrections easier since you're not painting directly\n- **Frequency separation**—separate the image into high frequency (texture) and low frequency (color and light) layers, then apply dodge and burn only to the mid-frequency band for shadow and highlight work that appears seamless and natural\n\n## Improving Precision: Luminosity-Based Selections\n\nCreating selections from the original image's brightness allows you to target specific tonal ranges. This reduces unevenness and makes natural light adjustment easier.\n\n1. In the Channels panel, Ctrl+click the RGB (or blue) channel to create a selection from the bright areas\n2. To dodge the shadows instead, invert the selection (Ctrl+Shift+I)\n3. Feather the boundary (Feather 30–100px)\n4. Create a 50% gray overlay layer and brush within the selection (the selection prevents uneven coverage)\n\nFor even greater precision, use a luminosity mask on a Curves adjustment layer to target only the highlights or only the shadows.\n\n## Lab Color Mode Selection\n\nConverting to Lab Color mode isolates the L channel (luminosity), allowing you to make more accurate brightness selections while preventing color casts.\n\n1. Go to \"Image\" > \"Mode\" > \"Lab Color\"\n2. In the Channels panel, select the L channel and create a selection from it\n3. Return to RGB mode and apply dodge and burn using that selection\n\n## Choosing Your Approach\n\n- **Starting out**: Reduce flow and paint, or use a selection with feather\n- **Fine-tuning results**: Curves + mask, or frequency separation\n- **Eliminating overall unevenness**: Gaussian Blur, or gradient tool\n\nWhen using luminosity-based selections, always combine them with feathering or adjustment layers. Avoid applying the effect too strongly—excessive dodge and burn creates an over-processed HDR look. Control the strength with layer opacity.\n\n## Summary\n\nDodge and Burn is accessible once you master the \"50% gray layer + brush\" foundation, but achieving even, natural results requires additional refinement: flow adjustment, selections based on tonality, and frequency separation. Start with the basic technique, then when unevenness becomes a concern, combine it with luminosity-based selections.\n\nDeciding where and how much light to add varies subtly from image to image—it's actually a domain that's difficult to automate. SideKick is designed to separate processes that require this kind of delicate judgment from those that can be systematized, providing automated processing starting with tasks that are easier to standardize—such as comparative brightness compositing and Milky Way enhancement.",
+      "images": [],
+      "public_url": "/en/knowledge/photoshop/dodge-burn-50-percent-gray-layer"
     },
     {
       "id": "SKB-ART-000007",
@@ -188,9 +380,55 @@
         "name": "Photoshopレタッチの基本技法",
         "order": 1
       },
+      "source_article_id": null,
       "body_markdown": "\n# ダッジ＆バーンレタッチの基本\n\nダッジ＆バーン（Dodge & Burn）は、画像の一部を明るく（ダッジ）・暗く（バーン）することで、光の当たり方を意図的にデザインし直すレタッチ技法です。ポートレートの立体感づくりから風景写真の陰影強調まで、幅広く使われています。\n\n## 基本手順：50%グレーのオーバーレイレイヤー\n\n1. **新規レイヤーを作成**（Shift+Ctrl+N）し、塗りつぶしオプションで「50%グレー」を選択\n2. レイヤーモードを「オーバーレイ」または「ソフトライト」に設定（オーバーレイの方が変化が強く出ます）\n3. ブラシツールを選び、**白で描くと明るく、黒で描くと暗く**なります。硬さ0%のソフトブラシ、流量（Flow）5〜10%程度が扱いやすい設定です\n4. 光の流れを意識して描画します。ポートレートなら頬骨・鼻筋・おでこ・唇の山を明るく、頬のくぼみ・鼻の側面・フェイスラインを暗く。風景なら雲の輪郭や被写体のエッジを強調するのに有効です\n5. 不自然になった部分は、ガウスぼかしで軽くなじませます\n\n非破壊編集なので元画像を傷つけず、レイヤーの不透明度を下げれば効果を簡単に弱められるのも利点です。カラーのダッジ＆バーン（白黒ではなく暖色・寒色のブラシを使う）で、肌の色ムラ補正のような使い方もできます。\n\n## 筆ムラを防ぐ工夫\n\nブラシで直接なぞると、まだらな不自然さが出ることがあります。以下の方法で回避できます。\n\n- **流量を極端に下げる（3〜5%）**：不透明度ではなく流量を下げ、筆圧を活かして徐々に描き足す\n- **選択範囲＋グラデーション**：レタッチしたい部分をラフに選択し、境界をぼかす（Feather 20〜50px）ことで周囲になじませてからブラシをかける\n- **グラデーションツールでの塗りつぶし**：ブラシの代わりに円形グラデーションなどを使うと、均一な効果を出しやすい\n- **カーブ＋マスク**：調整レイヤーの「カーブ」を作成し、レイヤーマスクで部分適用する。直接描画しないため修正がしやすい\n- **周波数分離との併用**：画像を高周波（テクスチャ）・低周波（色・光）に分離し、中間の周波数帯だけにダッジ＆バーンを適用すると、ムラのない自然な陰影になる\n\n## 精度を上げる：明度ベースの選択範囲\n\n原画の明るさから選択範囲を作ると、狙った階調だけに効果をかけられるため、ムラを抑えつつ自然な光の調整がしやすくなります。\n\n1. チャンネルパネルでRGB（または青）チャンネルをCtrl+クリックすると、明るい部分が選択範囲として拾われる\n2. 暗部にダッジしたい場合は選択範囲を反転（Ctrl+Shift+I）\n3. 境界をぼかす（Feather 30〜100px）\n4. 50%グレーのオーバーレイレイヤーを作り、選択範囲内でブラシをかける（選択範囲があるためムラが出にくい）\n\nさらに精密にしたい場合は「階調マスク（Luminosity Mask）」を使い、カーブ調整レイヤーにマスクとして適用すると、ハイライトだけ・シャドウだけを狙って調整できます。\n\n## Labモードを使った選択\n\nLabモードに変換すると、Lチャンネル（明度）だけを分離できるため、色ムラを防ぎながらより正確な明度選択が可能になります。\n\n1. 「イメージ」→「モード」→「Labカラー」に変換\n2. チャンネルパネルでLチャンネルを選択し、そこから選択範囲を作成\n3. 元のRGBモードに戻し、その選択範囲を使ってダッジ＆バーンを適用\n\n## どの方法を選ぶか\n\n- **まず試すなら**：流量を下げてなぞる、または選択範囲＋ぼかし\n- **仕上がりを追い込みたいなら**：カーブ＋マスク、または周波数分離\n- **全体のムラを均したいなら**：ガウスぼかし、グラデーション\n\n明度ベースの選択を使う際は、選択範囲を作った後に必ずぼかしや調整レイヤーと組み合わせること。強くかけすぎるとHDR調になりすぎるため、不透明度でコントロールするのがポイントです。\n\n## まとめ\n\nダッジ＆バーンは「50%グレーレイヤー＋ブラシ」という基本さえ覚えれば誰でも使えますが、ムラなく自然に仕上げるには流量調整・選択範囲・周波数分離といった一段上の工夫が必要です。まずは基本手順を試し、ムラが気になったら明度ベースの選択範囲を組み合わせてみてください。\n\nこうした「光をどこにどれだけ足すか」という判断は、写真ごとに微妙に条件が変わるため、実は自動化が難しい領域でもあります。SideKickでは、このような繊細な判断が必要な工程とルール化しやすい工程を分けて設計しており、比較明合成や天の川強調のような判断が定型化しやすい部分から自動処理を提供しています。\n",
       "images": [],
       "public_url": "/knowledge/photoshop/photoshop-dodge-and-burn"
+    },
+    {
+      "id": "SKB-ART-000018",
+      "title": "Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels",
+      "slug": "lab-color-mode-photoshop-retouching",
+      "language": "en",
+      "category": {
+        "slug": "photoshop",
+        "name": "Photoshop",
+        "name_ja": "Photoshop"
+      },
+      "subcategory": {
+        "slug": "lab-color",
+        "name": "Lab Color",
+        "name_ja": "Labカラー"
+      },
+      "meta_description": "Learn how to use Photoshop's Lab Color mode to separate luminosity from color information. Discover techniques for skin retouching, landscape enhancement, and professional color correction that go beyond RGB adjustments.",
+      "difficulty": "advanced",
+      "audience": [
+        "写真中級者",
+        "写真上級者"
+      ],
+      "tags": [
+        "Photoshop",
+        "Labカラー"
+      ],
+      "concepts": [
+        "photoshop",
+        "lab-color"
+      ],
+      "related_products": [],
+      "cta_type": "product-detail",
+      "created_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": {
+        "id": "photoshop-retouching-basics",
+        "name": "Photoshopレタッチの基本技法",
+        "order": 2
+      },
+      "source_article_id": "SKB-ART-000008",
+      "body_markdown": "# Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels\n\nPhotoshop's Lab Color mode offers a unique advantage over RGB: it completely separates luminosity (L) from color information (a and b channels). This separation makes adjustments possible that are difficult or impossible in RGB—such as brightening an image without shifting color, or enhancing specific colors without affecting brightness.\n\n## Understanding the Three Lab Channels\n\n- **L Channel (Luminosity)**: Controls brightness and contrast only, without touching color information. This lets you adjust tone purely on luminosity values.\n- **a Channel (Green ↔ Red)**: Governs the green-to-red color range. Particularly useful for skin tone correction and adjusting the saturation of red and pink subjects like autumn foliage.\n- **b Channel (Blue ↔ Yellow)**: Governs the blue-to-yellow color range. Ideal for enhancing skies, water, and warm sunset tones.\n\n## Channel-by-Channel Techniques\n\n### L Channel: Pure Luminosity Control\n\n- Applying sharpening to the L channel alone emphasizes detail without introducing color fringing.\n- Because it's isolated from color data, the L channel serves as an excellent foundation for high-quality black-and-white conversions.\n- The clear separation of tonal values makes it straightforward to build selection masks based on brightness differences.\n\n### a Channel: Skin Tones and Red Subjects\n\n- Reducing the a channel value with tone curves neutralizes redness in skin tones, bringing them closer to natural, balanced skin color.\n- Conversely, increasing a channel contrast intensifies reds and magentas, making autumn leaves and flowers pop without affecting other colors.\n\n### b Channel: Skies, Water, and White Balance\n\n- Pushing the b channel toward blue deepens the color of skies and ocean water, creating more saturated, dimensional results.\n- Photos with overall yellow or warm casts respond well to b channel adjustment, providing white balance correction effects that feel more natural than RGB-only methods.\n\n## Practical Retouching Techniques\n\n### Lab Color Saturation Boost\n\nConvert your image to Lab, then apply an S-curve to both the a and b channels. This produces more natural color saturation increases compared to RGB saturation sliders—colors hold their integrity and rarely break apart or look artificial.\n\n### Separated Color and Luminosity Correction\n\nRGB adjustments shift both color and brightness together. Lab lets you separate these: adjust the L channel for exposure, then increase saturation by pushing the a and b channels independently. This gives you granular control impossible in RGB.\n\n### Creating Masks from the L Channel\n\nBecause the L channel emphasizes tonal separation clearly, it's ideal for generating masks to control where color or tonal corrections apply.\n\n## Genre-Specific Applications\n\n| Photography Genre | Lab Approach |\n|---|---|\n| Portrait | Use a channel to neutralize skin redness; apply sharpening only to L channel to preserve skin smoothness |\n| Landscape | Enhance sky color via b channel; intensify autumn foliage through a channel |\n| Black & White | Build conversions from the L channel for superior tonal quality |\n| Abstract / ICM | Apply S-curve boosts to a and b channels for surreal, highly saturated color expression |\n\nThe degree of correction needed varies by genre. Portrait work shifts with skin individual differences—lighting temperature, natural color, makeup presence. Abstract and ICM work depend heavily on the original image's saturation and movement intensity. Landscape corrections change direction based on season and time of day: autumn reds need different handling than sunrise or sunset tones.\n\n## Important Considerations\n\n- **Non-destructive editing is trickier**: Lab adjustment layers don't integrate as smoothly as RGB workflows. Establishing a consistent process before you start helps avoid issues later.\n- **Colors shift when converting back to sRGB**: Lab edits may appear different after converting back to RGB (sRGB) color space. Always preview the final output before exporting.\n\n## Conclusion\n\nLab Color mode's superpower is the ability to handle luminosity and color as completely independent variables. Use it for skin tone refinement, sky and water enhancement, and monochrome conversions—tasks where RGB reaches its limits. Start with L channel luminosity masks to see immediate results and build confidence with the workflow.\n\nThis kind of nuanced, color-aware retouching is difficult to automate because every image presents different conditions. SideKick Portrait applies Lab mode processing where it's needed. There's a free trial available too, so give it a try.",
+      "images": [],
+      "public_url": "/en/knowledge/photoshop/lab-color-mode-photoshop-retouching"
     },
     {
       "id": "SKB-ART-000008",
@@ -234,6 +472,7 @@
         "name": "Photoshopレタッチの基本技法",
         "order": 2
       },
+      "source_article_id": null,
       "body_markdown": "\n# Labカラーモードを使ったPhotoshopレタッチ入門\n\nPhotoshopのLabカラーモードは、明度（L）と色（a・b）を完全に分離して扱えるという、RGBにはない特徴を持っています。この分離があるおかげで、「色は変えずに明るさだけ調整する」「明るさは変えずに特定の色だけ強調する」といった、RGBでは難しい調整が可能になります。\n\n## Labの3チャンネルが担うもの\n\n- **Lチャンネル（明度）**：明るさとコントラストのみに影響。色情報に触れずにトーン操作ができる\n- **aチャンネル（緑⇔赤）**：緑〜赤の色相に関係。肌の色補正や紅葉の彩度調整に有効\n- **bチャンネル（青⇔黄）**：青〜黄の色相に関係。空や海、夕焼けの色強調に使いやすい\n\n## チャンネル別の使い方\n\n### Lチャンネル：明度だけを操作する\n\n- Lチャンネルだけにシャープネスをかけると、色ずれを起こさずディテールを強調できる\n- カラー情報の影響を受けないため、質の高いモノクロ変換のベースとしても使える\n- 明暗の差だけで選択範囲（マスク）を作りやすい\n\n### aチャンネル：肌・紅葉など赤み系の調整\n\n- トーンカーブでa成分を下げると、肌の赤みを抑えて自然な肌色に近づけられる\n- 逆にa成分のコントラストを強めると、紅葉や花など赤・ピンク系の色を際立たせられる\n\n### bチャンネル：空・海・ホワイトバランス\n\n- bチャンネルで青を強めると、深みのある空や海の色に仕上げられる\n- 全体が黄ばんで見える写真は、bチャンネルを調整するとホワイトバランス補正のような効果が得られる\n\n## 実践的なテクニック\n\n### Labカラーブースト（自然な彩度アップ）\n\nLabに変換し、a・bチャンネルそれぞれのトーンカーブをS字にすると、RGBで彩度を上げるよりも色の破綻が起きにくい、自然な彩度アップができます。\n\n### 色と明るさを分離した補正\n\nRGBでは色と明るさが同時に動いてしまいますが、Labなら「Lで露出を調整し、a・bで彩度だけを上げる」といった分離した補正が可能です。\n\n### Lチャンネルでのマスク作成\n\nLチャンネルは明暗の差がはっきり出るため、コントラストや色補正の範囲を指定するマスクの元として扱いやすいです。\n\n## ジャンル別の活用ポイント\n\n| 写真ジャンル | 活用ポイント |\n|---|---|\n| ポートレート | aチャンネルで肌の赤み補正、Lチャンネルで明度だけのシャープ処理 |\n| 風景 | bチャンネルで空の色強調、aチャンネルで紅葉強調 |\n| モノクロ | Lチャンネルベースの高品質な変換 |\n| 抽象・ICM | a・bチャンネルのS字ブーストで、非現実的で鮮やかな色調表現 |\n\n補正の強さをどれくらい変える必要があるかは、ジャンルによって差があります。ポートレートは肌の個人差（照明の色温度、血色、メイクの有無）で変わりやすく、抽象・ICM系は元画像の彩度や動きの強さで大きく変わります。風景は季節・時間帯（紅葉の赤、朝焼け・夕焼けの色）で調整方向が変わる、という具合です。\n\n## 使う上での注意点\n\n- **非破壊編集がやや難しい**：Lab上での調整レイヤーはRGBほど互換性が高くないため、作業手順を決めておくと安心です\n- **sRGBに戻すと見た目が変わる**：Labでの調整後、RGB（sRGB）に戻す際に色味が変化することがあるため、書き出し前に必ず確認しましょう\n\n## まとめ\n\nLabカラーモードは、「明るさ」と「色」を切り離して扱えることが最大の武器です。肌の赤み補正、空や海の色強調、モノクロ変換のベースなど、RGBだけでは手が届きにくい調整に強みがあります。まずはLチャンネルでの明度分離マスクから試すと、効果を実感しやすいはずです。\n\nこのような色と明るさを切り分けた繊細な判断は、写真ごとに条件が変わるため、実は自動化が難しい部分でもあります。SideKickポートレートは、必要に応じてLabモードを使った処理もしています。\n無料体験版もありますから、試してみてください。\n",
       "images": [],
       "public_url": "/knowledge/photoshop/photoshop-lab-color-retouching"
@@ -282,9 +521,102 @@
         "name": "写真で収益化する",
         "order": 2
       },
+      "source_article_id": null,
       "body_markdown": "\n# 1X.comで評価される写真の共通点\n\n1X.comは審査制の写真コミュニティで、掲載・Award獲得には一定の傾向があります。ジャンルごとに求められる仕上げは違いますが、横断して見ると共通する要素が見えてきます。ここでは、ポートレート・都市風景・山岳・星景・モノクロという主要ジャンルの傾向から、共通するポイントを整理しました。\n\n## ジャンルを問わず評価される3つの要素\n\n1. **ストーリー性**：技術的にきれいなだけでなく、「何を伝えたいか」が伝わる作品が評価されやすい\n2. **光と影のコントロール**：ダッジ＆バーンやトーンカーブで、光の当たり方を意図的にデザインしている作品が多い\n3. **統一感のある色調**：ジャンルごとに好まれる色調の傾向があり、それを外さずに個性を出す作品が評価されやすい\n\n## ジャンル別の傾向\n\n### ポートレート\n\n- 肌は「滑らかにしすぎない」のが基本。周波数分離やダッジ＆バーンでテクスチャを残しつつ立体感を出す\n- 目の処理（キャッチライトの強調、虹彩の彩度アップ）で印象を強める\n- シネマティックなカラーグレーディング（ティール＆オレンジなど）が好まれる傾向\n- 背景は彩度・明度を落として被写体を引き立てる\n\n### 都市風景\n\n- 建物の垂直をきちんと補正し、パースを整理した構図が評価されやすい\n- 青みがかったトーン（ブルートーン）や、寒色＋暖色アクセントの組み合わせが定番\n- 霧・雨・反射など「大気感」の演出が加点要素になりやすい\n- 人物を完全に排除して静けさを出す作品と、あえて1人だけ配置してストーリー性を持たせる作品の両方が評価される\n\n### 山岳風景\n\n- 空〜山肌〜前景まで豊かな階調で見せる（暗部を持ち上げつつ白飛びを抑える）\n- 寒色〜中間色（ブルー・グリーン・グレー）中心の配色、彩度は控えめに\n- 朝夕の斜光や霧による大気遠近法（遠景は淡く、前景はシャープに）が定番\n- 人物や小屋を小さく配置し、スケール感を対比で見せる\n\n### 星景\n\n- ノイズ処理とディテール保持のバランスが最重要。星の粒感や天の川の構造を潰さないこと\n- 天の川はトーンカーブ・レベル補正で立体感を強調し、寒色系（青・紫）ベースで仕上げる\n- 前景と星空は別々に露出を合わせ、前景が黒つぶれしないようにする\n- 地平線を低くして星空を広く見せる構図が定番\n\n### モノクロ全般\n\n- ハイコントラストを基本に、「黒が締まり、白が輝く」仕上げを意識\n- 質感（岩肌・雪面・建物の素材感）をハイパスや明瞭度で強調\n- 光と影で立体感を作るダッジ＆バーンが特に重要になる\n- 粒子感（フィルムグレイン）を軽く加えると、完成度が上がりやすい\n\n## 実務的なコツ：シリーズで統一感を出す\n\n撮影条件（カメラ・レンズ・光環境）が近い写真であれば、同じレタッチ設定を複数の写真に展開しても問題ありません。むしろ作品群としての統一感が出るため、1Xでは有利に働きます。被写体が違う場合は、色味・露出・コントラストのズレだけを個別に微調整するとよいでしょう。\n\n## まとめ\n\n1Xで評価される作品に共通するのは、「ジャンルごとの型を踏まえつつ、光のコントロールとストーリー性で個性を出す」ことです。まず狙うジャンルの傾向を押さえ、そこに自分なりの視点（被写体の選び方、色の選択）を足していくのが近道です。\n\n1Xでは仕上げの方法で大きく評価が変わります。SideKickにはポートレートやスカイエフェクトと言った仕上げに特化したものが有ります。\n無料体験版もありますから、試してみてください。\n",
       "images": [],
       "public_url": "/knowledge/marketing/1x-photo-evaluation-trends"
+    },
+    {
+      "id": "SKB-ART-000017",
+      "title": "What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends",
+      "slug": "1x-photo-evaluation-retouching-trends-by-genre",
+      "language": "en",
+      "category": {
+        "slug": "marketing",
+        "name": "Marketing",
+        "name_ja": "マーケティング"
+      },
+      "subcategory": {
+        "slug": "1x",
+        "name": "1X",
+        "name_ja": "1X"
+      },
+      "meta_description": "Discover the common elements that get photos featured and awarded on 1X.com. Learn genre-specific retouching strategies for portrait, landscape, astro, and monochrome photography.",
+      "difficulty": "intermediate",
+      "audience": [
+        "写真家",
+        "アート写真家"
+      ],
+      "tags": [
+        "1X",
+        "写真マーケティング",
+        "ポートレートレタッチ"
+      ],
+      "concepts": [
+        "1x",
+        "photo-marketing",
+        "portrait-retouching"
+      ],
+      "related_products": [],
+      "cta_type": "product-trial",
+      "created_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": {
+        "id": "photo-business",
+        "name": "写真で収益化する",
+        "order": 2
+      },
+      "source_article_id": "SKB-ART-000005",
+      "body_markdown": "# What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends\n\n1X.com operates as a curated photography community with a selective review process. While each genre demands its own finishing approach, clear patterns emerge across all accepted work. By examining the trends in portrait, urban landscape, mountain, astrophotography, and monochrome—the platform's major categories—we can identify the universal principles that drive evaluation decisions.\n\n## Three Universal Elements of Valued Work\n\nAcross all genres, photographs that receive favorable evaluation share these characteristics:\n\n1. **Narrative Strength**: Technical precision alone isn't enough. The most praised work communicates a clear intent—viewers understand what the photographer wanted to convey.\n2. **Light and Shadow Control**: Dodge and burn techniques or tone curves are used to deliberately design how light falls across the frame. This intentional light sculpting is common in valued work.\n3. **Unified Color Palette**: Each genre has established color preferences, and the most valued work respects these conventions while injecting personal style.\n\n## Genre-Specific Retouching Approaches\n\n### Portrait Retouching\n\n- Avoid over-smoothing skin. Use frequency separation and dodge and burn to preserve texture while building dimension and form.\n- Enhance eye impact through catch light emphasis and iris saturation increases.\n- Cinematic color grading—teal and orange palettes are particularly favored—receives consistent praise.\n- De-saturate and dim the background to make the subject stand forward.\n\n### Urban Landscape\n\n- Correcting building verticals and organizing perspective is highly valued.\n- Blue-toned finishes and cool-plus-warm color combinations dominate the category.\n- Atmospheric effects—mist, rain, and reflections—serve as bonus points in evaluation.\n- Both completely depopulated images (emphasizing stillness) and carefully placed single figures (adding narrative) perform well.\n\n### Mountain and Alpine Landscape\n\n- Preserve tonal depth from sky through ridgeline to foreground by lifting shadows while protecting highlights.\n- Stick to cool-to-neutral palettes (blues, greens, grays) with restrained saturation.\n- Golden hour side-lighting and atmospheric perspective created by mist (distant areas pale and soft, foregrounds sharp and detailed) are standard approaches.\n- Place human figures or structures small in the frame to emphasize scale through contrast.\n\n### Astrophotography\n\n- The critical challenge: balance noise reduction against detail preservation. Never sacrifice star grain or Milky Way structure for a cleaner image.\n- Enhance the Milky Way's three-dimensionality through tone curves and levels adjustments, using cool tones (blues and purples) as your foundation.\n- Expose the foreground and star field separately, then blend them so the foreground never falls into pure black.\n- Compose with the horizon line low, allowing the star field to dominate the frame.\n\n### Monochrome Photography\n\n- Build on high contrast: aim for \"blacks that grip and whites that glow.\"\n- Emphasize texture (rock grain, snow surfaces, architectural materials) through high-pass filters or clarity adjustments.\n- Dodge and burn becomes especially critical for creating dimensional form through light and shadow separation.\n- A subtle film grain overlay typically increases perceived polish.\n\n## Practical Strategy: Consistency Within Series\n\nWhen shooting conditions are similar—same camera, lens, and lighting environment—applying identical retouching settings across multiple frames strengthens your series presentation. 1X rewards this visual consistency. If subjects differ meaningfully, simply fine-tune color temperature, exposure, and contrast on a per-image basis while maintaining the overall treatment.\n\n## Conclusion\n\nThe most valued work on 1X.com follows this formula: respect the genre conventions, control light deliberately, and express your perspective through careful subject selection and color choices. Start by mastering your genre's established preferences, then layer your distinctive voice on top.\n\nOn 1X, your finishing approach can dramatically affect how a photo is evaluated. SideKick offers finishing-focused tools like Portrait and Sky Effect. There's a free trial available too, so give it a try.",
+      "images": [],
+      "public_url": "/en/knowledge/marketing/1x-photo-evaluation-retouching-trends-by-genre"
+    },
+    {
+      "id": "SKB-ART-000016",
+      "title": "How to Sell Photography Knowledge on note: From Account Setup to Pricing Strategy",
+      "slug": "sell-photography-knowledge-note",
+      "language": "en",
+      "category": {
+        "slug": "marketing",
+        "name": "Marketing",
+        "name_ja": "マーケティング"
+      },
+      "subcategory": {
+        "slug": "note",
+        "name": "note",
+        "name_ja": "note"
+      },
+      "meta_description": "Learn how to monetize your photography and retouching expertise on note, from creating an account to implementing tiered pricing strategies and membership programs.",
+      "difficulty": "beginner",
+      "audience": [
+        "写真家",
+        "クリエイター"
+      ],
+      "tags": [
+        "note",
+        "写真マーケティング"
+      ],
+      "concepts": [
+        "note",
+        "photo-marketing"
+      ],
+      "related_products": [],
+      "cta_type": "product-trial",
+      "created_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "published_at": "2026-07-20",
+      "related_articles": [],
+      "series": {
+        "id": "photo-business",
+        "name": "写真で収益化する",
+        "order": 1
+      },
+      "source_article_id": "SKB-ART-000004",
+      "body_markdown": "# How to Sell Photography Knowledge on note\n\nYour photography and retouching expertise is too valuable to keep hidden. note makes it simple to package your knowledge—text, images, video—and sell it as premium content without any technical setup. Here's a practical roadmap from account creation through pricing strategy.\n\n## 1. Create Your Account\n\nSet up an account on [note](https://note.com/murata_photo) and build out a complete profile. Include sample images from your work and highlight your track record. This builds trust with potential buyers and signals credibility.\n\n## 2. Prepare Your Content\n\n- **Formats supported**: Text, images, audio, and video\n- **Topics that work best**: Specific, high-value content. Think shooting techniques, RAW processing and retouching workflows, or gear selection strategies\n- **Pricing**: Starting at 100 yen and up. Adjust based on your target audience\n\n## 3. Create Your Article and Set It as Paid\n\n1. Create your article from the \"Write Article\" menu and upload your content\n2. In the \"Publication Settings\" at the bottom of the article, select \"Paid Article\" and set your price\n3. Decide how much of the article (the opening section) remains free to read. This preview should give potential buyers a clear sense of the article's value before they purchase\n\n## 4. Register Your Bank Account\n\nGo to the \"Revenue\" tab and link your bank account. Keep in mind that note charges a withdrawal fee of 270 yen, so it's more efficient to let earnings accumulate before withdrawing.\n\n## 5. Publish and Promote\n\n- Share across your social media channels\n- Post in relevant photography communities and forums\n- Publish free articles regularly to build your audience and create touchpoints with followers\n\nRemember to factor note's cut (10% of sales plus payment processing fees) into your pricing.\n\n## Design a Tiered Price Increase Strategy\n\nStart with a lower initial price, then increase it in stages based on sales volume or time elapsed. This approach rewards early supporters while creating urgency for later buyers—\"Now's the time to grab it before the price goes up.\"\n\n**Example tiered pricing:**\n- Units 1–50: 300 yen\n- Units 51–100: 500 yen\n- Units 101+: 800 yen\n\nAnnounce your pricing milestones (by sales count or date) in your article and on social media in advance. Messages like \"Price increases after 50 sales\" encourage immediate purchases. note doesn't have automatic volume-based pricing, so check your \"Revenue\" page regularly and update prices manually as you hit your targets.\n\n## Build Recurring Revenue with Memberships\n\nnote's membership feature lets you create a monthly subscription community. You can only run one membership per account, but you can set up multiple tiers (Basic Plan, Standard Plan, and Premium Plan, for example) to serve different audience segments.\n\n- **Basic Plan**: Core content (articles, shooting techniques, etc.)\n- **Standard Plan**: Live streams\n- **Premium Plan**: Bonus materials, one-on-one feedback\n\nConsistency is key to retention. Decide on an update schedule (\"one new post per week\") and stick to it. Members unsubscribe quickly if content goes dormant, so establishing a publishing rhythm upfront makes operations smoother.\n\n## Practical Tips\n\n- **Using tables**: note doesn't support direct table embedding, so use Markdown syntax (`| Column 1 | Column 2 |` format) or take a screenshot of a table from Excel or a spreadsheet tool\n- **Sharing drafts**: Use the \"Copy Draft URL\" feature to get feedback from others before publishing—only people with the link can view it\n- **Create a series**: Build an index article that ties multiple related posts together. This helps readers see the big picture and encourages them to purchase the whole series\n\n## Summary\n\nThe note sales workflow is straightforward: ①create your account → ②prepare content → ③set articles as paid → ④promote → ⑤design your price increases. Start with individual articles to gauge interest, then scale up to a membership program for steady recurring income.\n\nSideKick is a collection of the things I found could be automated to make my own shooting and retouching work easier. If you're interested, there's a free trial available—give it a try.",
+      "images": [],
+      "public_url": "/en/knowledge/marketing/sell-photography-knowledge-note"
     },
     {
       "id": "SKB-ART-000004",
@@ -328,6 +660,7 @@
         "name": "写真で収益化する",
         "order": 1
       },
+      "source_article_id": null,
       "body_markdown": "\n# 写真ノウハウをnoteで販売する方法\n\n撮影やレタッチのノウハウは、そのまま眠らせておくにはもったいない資産です。noteなら特別な準備なしで、テキスト・画像・動画を有料コンテンツとして販売できます。ここでは、アカウント開設から価格戦略まで、実際に使える手順をまとめました。\n\n## 1. アカウントを作る\n\n[note](https://note.com/murata_photo)でアカウントを登録し、プロフィールを充実させます。作例やこれまでの実績を書いておくと、購入者に信頼感を与えられます。\n\n## 2. 販売するコンテンツを準備する\n\n- **形式**：テキスト、画像、音声、動画に対応\n- **テーマ**：具体的で価値があるものを。撮影テクニック、現像・レタッチの手順、機材選びのノウハウなど\n- **価格**：100円以上から設定可能。ターゲット層に合わせて決める\n\n## 3. 記事を作成し、有料設定にする\n\n1. 「記事を書く」から記事を作成し、内容をアップロード\n2. 記事下部の「公開設定」から「有料記事」を選択、価格を設定\n3. 無料で読める範囲（冒頭部分）を決め、購入前に内容のイメージが伝わるようにする\n\n## 4. 受け取り口座を登録する\n\n「収益」タブから銀行口座を登録します。振込手数料（270円）がかかるため、ある程度収益がたまってから引き出すのが効率的です。\n\n## 5. 公開して宣伝する\n\n- SNSでシェアする\n- 関連するコミュニティやフォーラムで紹介する\n- 無料記事を定期的に投稿し、フォロワーとの接点を増やす\n\nnote側の取り分（売上の10%＋決済手数料）を踏まえて、価格設定を考えておきましょう。\n\n## 値上げのタイミングを設計する\n\n初期価格を低めに設定し、販売部数や期間に応じて段階的に値上げすると、早期購入者への感謝と、後から買う人への「今がお得」という訴求を両立できます。\n\n**段階的値上げの例**\n- 1〜50部：300円\n- 51〜100部：500円\n- 101部以降：800円\n\n値上げの基準（部数・期間）は事前に記事やSNSで明記し、「残り○部で値上げします」と告知すると購買を後押しできます。noteには部数連動で自動的に価格が変わる機能はないため、進捗は「収益」ページで定期的に確認し、手動で価格を更新します。\n\n## 会員制（メンバーシップ）で継続収益を作る\n\nnoteの「メンバーシップ機能」を使うと、月額課金制のコミュニティを作れます。1アカウントにつき1つまでですが、メンバーシップ内で複数プラン（ベーシック／スタンダード／プレミアムなど）を設定できるので、ターゲット層に応じた価格帯を用意できます。\n\n- **ベーシック**：基本コンテンツ（記事、撮影テクニックなど）\n- **スタンダード**：ライブ配信\n- **プレミアム**：追加特典、個別フィードバックなど\n\n継続してもらうには、定期的な更新（「毎週1本更新」など）が鍵になります。放置されると解約されやすいので、公開頻度をあらかじめ決めておくと運用しやすくなります。\n\n## 実務的なコツ\n\n- **表の掲載**：noteは表を直接貼り付けられないため、Markdown記法（`| 列1 | 列2 |`形式）か、Excel等で作った表をスクリーンショットで画像化するのが実用的\n- **下書きの共有**：「下書きURLをコピー」機能で、公開前に第三者にレビューしてもらえる（リンクを知っている人だけが閲覧可能）\n- **シリーズ化**：複数記事をまとめた目次記事を作ると、読者が全体像を把握しやすくなり、シリーズ購入にもつながる\n\n## まとめ\n\nnoteでの販売は、①アカウント作成→②コンテンツ準備→③有料記事設定→④宣伝→⑤値上げ設計、という流れで進めれば迷いません。単発記事で反応を見ながら、会員制のメンバーシップで継続収益へ育てていくのが王道です。\n\n私が作品作りやレタッチをしていくうえで自動化したら楽になりそうなものをまとめたのがSideKickです。興味が有ったら無料体験が有りますので試してみてください。\n",
       "images": [],
       "public_url": "/knowledge/marketing/note-photo-content-sales"
@@ -348,6 +681,19 @@
       "public_url": "/knowledge/photography/astrophotography-camera-settings"
     },
     {
+      "id": "SKB-ART-000014",
+      "title": "Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear",
+      "slug": "astrophotography-settings-equipment-guide",
+      "language": "en",
+      "meta_description": "Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.",
+      "category_name": "Photography",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "beginner",
+      "public_url": "/en/knowledge/photography/astrophotography-settings-equipment-guide"
+    },
+    {
       "id": "SKB-ART-000009",
       "title": "海岸・水辺と身近な被写体で作品を撮るテクニック",
       "slug": "coastal-long-exposure-technique",
@@ -359,6 +705,32 @@
       "thumbnail_url": null,
       "difficulty": "intermediate",
       "public_url": "/knowledge/photography/coastal-long-exposure-technique"
+    },
+    {
+      "id": "SKB-ART-000019",
+      "title": "Coastal and Water Photography: Shooting Techniques for Compelling Images",
+      "slug": "coastal-water-photography-techniques",
+      "language": "en",
+      "meta_description": "Master coastal photography techniques including ICM, long exposure, and silhouettes. Learn how to apply these methods to everyday subjects and create impactful monochrome images.",
+      "category_name": "Photography",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "intermediate",
+      "public_url": "/en/knowledge/photography/coastal-water-photography-techniques"
+    },
+    {
+      "id": "SKB-ART-000020",
+      "title": "5 Essential Considerations for Portrait Retouching",
+      "slug": "portrait-retouching-essential-considerations",
+      "language": "en",
+      "meta_description": "Master portrait retouching with these 5 key techniques: preserving skin texture, enhancing eyes, color grading, background processing, and composition refinement.",
+      "category_name": "Photoshop",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "intermediate",
+      "public_url": "/en/knowledge/photoshop/portrait-retouching-essential-considerations"
     },
     {
       "id": "SKB-ART-000010",
@@ -374,6 +746,19 @@
       "public_url": "/knowledge/photoshop/portrait-retouching-key-points"
     },
     {
+      "id": "SKB-ART-000015",
+      "title": "Dodge and Burn Retouching Fundamentals: Creating Even Light with a 50% Gray Layer",
+      "slug": "dodge-burn-50-percent-gray-layer",
+      "language": "en",
+      "meta_description": "Master dodge and burn retouching using a 50% gray overlay layer. Learn brush settings, selection techniques, and Lab color methods to add even, natural lighting to portraits and landscapes without streaking.",
+      "category_name": "Photoshop",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "intermediate",
+      "public_url": "/en/knowledge/photoshop/dodge-burn-50-percent-gray-layer"
+    },
+    {
       "id": "SKB-ART-000007",
       "title": "ダッジ＆バーンレタッチの基本｜50%グレーレイヤーでムラなく光を描く方法",
       "slug": "photoshop-dodge-and-burn",
@@ -385,6 +770,19 @@
       "thumbnail_url": null,
       "difficulty": "intermediate",
       "public_url": "/knowledge/photoshop/photoshop-dodge-and-burn"
+    },
+    {
+      "id": "SKB-ART-000018",
+      "title": "Photoshop Lab Color Mode Retouching: Master the L, a, and b Channels",
+      "slug": "lab-color-mode-photoshop-retouching",
+      "language": "en",
+      "meta_description": "Learn how to use Photoshop's Lab Color mode to separate luminosity from color information. Discover techniques for skin retouching, landscape enhancement, and professional color correction that go beyond RGB adjustments.",
+      "category_name": "Photoshop",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "advanced",
+      "public_url": "/en/knowledge/photoshop/lab-color-mode-photoshop-retouching"
     },
     {
       "id": "SKB-ART-000008",
@@ -413,6 +811,32 @@
       "public_url": "/knowledge/marketing/1x-photo-evaluation-trends"
     },
     {
+      "id": "SKB-ART-000017",
+      "title": "What Makes Photos Stand Out on 1X.com: Genre-Specific Retouching Trends",
+      "slug": "1x-photo-evaluation-retouching-trends-by-genre",
+      "language": "en",
+      "meta_description": "Discover the common elements that get photos featured and awarded on 1X.com. Learn genre-specific retouching strategies for portrait, landscape, astro, and monochrome photography.",
+      "category_name": "Marketing",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "intermediate",
+      "public_url": "/en/knowledge/marketing/1x-photo-evaluation-retouching-trends-by-genre"
+    },
+    {
+      "id": "SKB-ART-000016",
+      "title": "How to Sell Photography Knowledge on note: From Account Setup to Pricing Strategy",
+      "slug": "sell-photography-knowledge-note",
+      "language": "en",
+      "meta_description": "Learn how to monetize your photography and retouching expertise on note, from creating an account to implementing tiered pricing strategies and membership programs.",
+      "category_name": "Marketing",
+      "published_at": "2026-07-20",
+      "updated_at": "2026-07-20",
+      "thumbnail_url": null,
+      "difficulty": "beginner",
+      "public_url": "/en/knowledge/marketing/sell-photography-knowledge-note"
+    },
+    {
       "id": "SKB-ART-000004",
       "title": "写真ノウハウをnoteで販売する方法｜アカウント開設から値上げ戦略まで",
       "slug": "note-photo-content-sales",
@@ -430,7 +854,19 @@
     {
       "slug": "marketing",
       "name": "マーケティング",
+      "language": "en",
+      "published_count": 2
+    },
+    {
+      "slug": "marketing",
+      "name": "マーケティング",
       "language": "ja",
+      "published_count": 2
+    },
+    {
+      "slug": "photography",
+      "name": "写真",
+      "language": "en",
       "published_count": 2
     },
     {
@@ -438,6 +874,12 @@
       "name": "写真",
       "language": "ja",
       "published_count": 2
+    },
+    {
+      "slug": "photoshop",
+      "name": "Photoshop",
+      "language": "en",
+      "published_count": 3
     },
     {
       "slug": "photoshop",
@@ -463,10 +905,10 @@
     }
   ],
   "build_meta": {
-    "article_count": 7,
+    "article_count": 14,
     "language_counts": {
       "ja": 7,
-      "en": 0
+      "en": 7
     }
   }
 }

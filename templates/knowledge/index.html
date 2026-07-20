@@ -1,10 +1,35 @@
 {% extends "base.html" %}
 
-{% block title %}打ち出の小槌｜SideKick{% endblock %}
-{% block meta_description %}写真家が撮影・現像・Photoshopで困ったときに訪れる知識ライブラリ。実際に困り、試したことを残しています。{% endblock %}
+{% block title %}{% if language == 'en' %}{{ labels.index_title }}{% else %}打ち出の小槌｜SideKick{% endif %}{% endblock %}
+{% block meta_description %}{% if language == 'en' %}{{ labels.index_meta_description }}{% else %}写真家が撮影・現像・Photoshopで困ったときに訪れる知識ライブラリ。実際に困り、試したことを残しています。{% endif %}{% endblock %}
 {% block canonical %}{{ canonical_url }}{% endblock %}
 
 {% block content %}
+{% if language == 'en' %}
+<section class="kzc-hero">
+  <h1>{{ labels.site_name }}</h1>
+  <p class="kzc-hero-tagline">{{ labels.tagline }}</p>
+</section>
+
+<section class="kzc-kozuchi-about">
+  <h2>{{ labels.about_heading }}</h2>
+  <p>
+    {{ labels.about_body_1 }}
+    {{ labels.about_body_2 }}
+  </p>
+  <p><a href="{{ labels.about_href }}">{{ labels.about_link }}</a></p>
+</section>
+
+<section class="kzc-article-list" aria-label="Article list">
+  {% if cards %}
+    {% for card in cards %}
+      {% include "components/article-card.html" %}
+    {% endfor %}
+  {% else %}
+    <p class="kzc-empty">{{ labels.empty_list }}</p>
+  {% endif %}
+</section>
+{% else %}
 <section class="kzc-hero">
   <h1>打ち出の小槌</h1>
   <p class="kzc-hero-tagline">{{ tagline }}</p>
@@ -28,4 +53,5 @@
     <p class="kzc-empty">まだ公開されている記事がありません。</p>
   {% endif %}
 </section>
+{% endif %}
 {% endblock %}

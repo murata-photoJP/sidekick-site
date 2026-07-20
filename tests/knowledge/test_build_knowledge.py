@@ -386,9 +386,13 @@ def test_build_all_articles(tmp: Path) -> None:
     index = make_index(articles=articles, products=products)
     proc, output_dir = run_build(index, tmp)
     check("全記事生成: exit code 0", proc.returncode == 0, proc.stdout + proc.stderr)
-    check("全記事生成: 3記事+トップページ=4ファイル",
+    check("全記事生成: 3記事+日本語トップ=4ファイル（output_dir配下）",
           len(list(output_dir.rglob("*.html"))) == 4, list(output_dir.rglob("*.html")))
+    check("全記事生成: 英語トップ=1ファイル（output_dirの兄弟en/knowledge/配下）",
+          len(list((output_dir.parent / "en" / "knowledge").rglob("*.html"))) == 1)
     check("全記事生成: トップページが生成される", (output_dir / "index.html").exists())
+    check("全記事生成: 英語トップページも併せて生成される（記事が無くても空状態で生成）",
+          (output_dir.parent / "en" / "knowledge" / "index.html").exists())
     check("全記事生成: 各記事がそれぞれのカテゴリ配下に出力される",
           (output_dir / "photoshop" / "m-one.html").exists()
           and (output_dir / "photography" / "m-two.html").exists()
@@ -412,7 +416,7 @@ def test_validate_only_reports_all(tmp: Path) -> None:
     index = make_index(articles=articles, products=products)
     proc, output_dir = run_build(index, tmp, "--validate-only")
     check("validate-only(複数): exit code 0", proc.returncode == 0, proc.stdout + proc.stderr)
-    check("validate-only(複数): 4ページ分の報告がある", "4ページ" in proc.stdout, proc.stdout)
+    check("validate-only(複数): 5ページ分の報告がある", "5ページ" in proc.stdout, proc.stdout)
     check("validate-only(複数): 何も書き込まれない", not output_dir.exists())
 
 
@@ -902,6 +906,146 @@ def test_footer_no_empty_links_no_fake_english(tmp: Path) -> None:
           'href="sidekick-star.html"' not in footer and 'href="/sidekick-star.html"' in footer, footer)
 
 
+# ---------------------------------------------------------------------------
+# 英語Knowledge（2026-07-20新規）
+# ---------------------------------------------------------------------------
+
+def sample_en_article(**overrides) -> dict:
+    article = {
+        "id": "SKB-TEST-EN-000001",
+        "title": "Sample English Article",
+        "slug": "sample-en-article",
+        "language": "en",
+        "category": {"slug": "photoshop", "name": "Photoshop", "name_ja": "Photoshop"},
+        "subcategory": {"slug": "dodge-and-burn", "name": "Dodge and Burn", "name_ja": "ダッジ＆バーン"},
+        "meta_description": "A sample English article description.",
+        "difficulty": "beginner",
+        "audience": ["beginners"],
+        "tags": ["Photoshop"],
+        "concepts": ["photoshop"],
+        "related_products": [],
+        "cta_type": "none",
+        "created_at": "2026-07-20",
+        "updated_at": "2026-07-20",
+        "published_at": "2026-07-20",
+        "related_articles": [],
+        "series": None,
+        "body_markdown": "## Heading\n\nSample English body.\n",
+        "images": [],
+        "public_url": "/en/knowledge/photoshop/sample-en-article",
+        "source_article_id": "SKB-TEST-000001",
+    }
+    article.update(overrides)
+    return article
+
+
+def card_from_en_article(article: dict) -> dict:
+    return {
+        "id": article["id"], "title": article["title"], "slug": article["slug"],
+        "language": article["language"], "meta_description": article["meta_description"],
+        "category_name": article["category"]["name"],
+        "published_at": article["published_at"], "updated_at": article["updated_at"],
+        "thumbnail_url": None, "difficulty": article["difficulty"], "public_url": article["public_url"],
+    }
+
+
+@with_tmp
+def test_en_article_output_path_has_en_prefix(tmp: Path) -> None:
+    ja = sample_article()
+    en = sample_en_article()
+    index = make_index(articles=[ja, en])
+    proc, output_dir = run_build(index, tmp)
+    check("EN記事: exit code 0", proc.returncode == 0, proc.stdout + proc.stderr)
+    check("EN記事: en/配下に出力される", (output_dir.parent / "en" / "knowledge" / "photoshop" / "sample-en-article.html").exists())
+    check("EN記事: JA記事はプレフィックス無しのまま", (output_dir / "photoshop" / "sample-article.html").exists())
+    check("EN記事: 英語トップページも生成される", (output_dir.parent / "en" / "knowledge" / "index.html").exists())
+
+
+@with_tmp
+def test_en_article_hreflang_and_canonical(tmp: Path) -> None:
+    ja = sample_article()
+    en = sample_en_article()
+    index = make_index(articles=[ja, en])
+    proc, output_dir = run_build(index, tmp)
+    en_html = (output_dir.parent / "en" / "knowledge" / "photoshop" / "sample-en-article.html").read_text(encoding="utf-8")
+    ja_html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+
+    check("EN記事: canonicalが/en/knowledge配下", 'href="https://www.sidekick-lab.com/en/knowledge/photoshop/sample-en-article"' in en_html
+          and 'rel="canonical"' in en_html, en_html)
+    check("EN記事: hreflang=jaがJA記事URLを指す",
+          'hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photoshop/sample-article"' in en_html, en_html)
+    check("EN記事: hreflang=enが自分自身を指す",
+          'hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photoshop/sample-en-article"' in en_html, en_html)
+    check("JA記事: hreflang=enがEN記事URLを指す（相互リンク）",
+          'hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photoshop/sample-en-article"' in ja_html, ja_html)
+
+
+@with_tmp
+def test_ja_article_no_hreflang_when_no_en_counterpart(tmp: Path) -> None:
+    """対応する翻訳が存在しない場合は、hreflangタグ自体を出力しない
+    （存在しないURLを出力しないという明示要件）。"""
+    index = make_index()  # sample_article()のみ、EN記事なし
+    proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
+    html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+    check("JA記事(EN無し): hreflangタグが出力されない", 'rel="alternate" hreflang' not in html, html)
+
+
+@with_tmp
+def test_en_article_uses_english_labels(tmp: Path) -> None:
+    ja = sample_article(id="SKB-TEST-000001")
+    en = sample_en_article(related_articles=["SKB-TEST-000001"])
+    index = make_index(articles=[ja, en])
+    proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-EN-000001")
+    html = (output_dir.parent / "en" / "knowledge" / "photoshop" / "sample-en-article.html").read_text(encoding="utf-8")
+    check("EN記事: '更新日：'ではなく'Updated:'を使う", "Updated:" in html and "更新日：" not in html, html)
+    check("EN記事: '初心者向け'ではなく'Beginner-friendly'を使う",
+          "Beginner-friendly" in html and "初心者向け" not in html, html)
+    check("EN記事: 'この記事を書いた人'ではなく'About the Author'を使う",
+          "About the Author" in html and "この記事を書いた人" not in html, html)
+    check("EN記事: パンくずが'Knowledge'/'/en/knowledge'を使う",
+          '<a href="/en/knowledge">Knowledge</a>' in html, html)
+
+
+@with_tmp
+def test_en_index_top_page_labels_and_empty_state(tmp: Path) -> None:
+    index = make_index()  # EN記事なし
+    proc, output_dir = run_build(index, tmp)
+    en_index_html = (output_dir.parent / "en" / "knowledge" / "index.html").read_text(encoding="utf-8")
+    check("ENトップ: 'Knowledge'見出しがある", "<h1>Knowledge</h1>" in en_index_html, en_index_html)
+    check("ENトップ: EN記事0件のときの空状態メッセージが英語",
+          "No articles have been published yet." in en_index_html, en_index_html)
+    check("ENトップ: canonicalが/en/knowledge",
+          'href="https://www.sidekick-lab.com/en/knowledge"' in en_index_html, en_index_html)
+
+
+@with_tmp
+def test_lang_switch_link_points_to_matching_article(tmp: Path) -> None:
+    """2026-07-20追加: 言語切替リンク（🇺🇸 EN / 🇯🇵 JA）は、対応する翻訳記事が
+    存在する場合はその記事へ、存在しない場合はトップページへフォールバックする。"""
+    ja_with_en = sample_article(id="SKB-TEST-000001", slug="sample-article")
+    ja_without_en = sample_article(
+        id="SKB-TEST-000002", slug="sample-article-2", public_url="/knowledge/photoshop/sample-article-2",
+    )
+    en = sample_en_article()
+    index = make_index(articles=[ja_with_en, ja_without_en, en])
+    proc, output_dir = run_build(index, tmp)
+    check("言語切替: exit code 0", proc.returncode == 0, proc.stdout + proc.stderr)
+
+    ja_html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
+    check("言語切替(JA→対応EN記事あり): EN記事の正確なURLを指す",
+          'href="/en/knowledge/photoshop/sample-en-article"' in ja_html, ja_html)
+    check("言語切替(JA→対応EN記事あり): ENトップへのフォールバックは使わない",
+          '>EN</a>' not in ja_html.replace('href="/en/knowledge/photoshop/sample-en-article"', ''), ja_html)
+
+    ja_no_match_html = (output_dir / "photoshop" / "sample-article-2.html").read_text(encoding="utf-8")
+    check("言語切替(JA→対応EN記事なし): ENトップへフォールバックする",
+          'href="/en/knowledge"' in ja_no_match_html, ja_no_match_html)
+
+    en_html = (output_dir.parent / "en" / "knowledge" / "photoshop" / "sample-en-article.html").read_text(encoding="utf-8")
+    check("言語切替(EN→対応JA記事あり): JA記事の正確なURLを指す",
+          'href="/knowledge/photoshop/sample-article"' in en_html, en_html)
+
+
 def main() -> int:
     tests = [
         # Phase A1
@@ -938,6 +1082,10 @@ def main() -> int:
         test_header_main_five_items, test_header_aria_current, test_mobile_nav_button_attributes,
         test_nav_links_present_without_js, test_nav_links_are_root_relative,
         test_footer_no_empty_links_no_fake_english,
+        # 英語Knowledge（2026-07-20新規）
+        test_en_article_output_path_has_en_prefix, test_en_article_hreflang_and_canonical,
+        test_ja_article_no_hreflang_when_no_en_counterpart, test_en_article_uses_english_labels,
+        test_en_index_top_page_labels_and_empty_state, test_lang_switch_link_points_to_matching_article,
     ]
     for t in tests:
         t()

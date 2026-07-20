@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5 Essential Considerations for Portrait Retouching | Knowledge - SideKick</title>
+<meta name="description" content="Master portrait retouching with these 5 key techniques: preserving skin texture, enhancing eyes, color grading, background processing, and composition refinement.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photoshop/portrait-retouching-essential-considerations">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photoshop/portrait-retouching-key-points">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photoshop/portrait-retouching-essential-considerations">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photoshop/portrait-retouching-key-points">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photoshop/portrait-retouching-key-points" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photoshop</li>
+    <li aria-current="page">5 Essential Considerations for Portrait Retouching</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">5 Essential Considerations for Portrait Retouching</h1>
+    <p class="kzc-article-lead">Master portrait retouching with these 5 key techniques: preserving skin texture, enhancing eyes, color grading, background processing, and composition refinement.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photoshop</span>
+      
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Portrait retouching that merely smooths the skin often falls short of professional results. Here are five key considerations that will elevate your work from competent to compelling.</p>
+<h2>1. Skin Retouching: Preserve Texture While Refining</h2>
+<p>The most common mistake in skin retouching is over-smoothing.</p>
+<ul>
+<li><strong>Frequency Separation</strong>: Maintains skin texture and pores while smoothing only the tonal layer, creating a natural appearance</li>
+<li><strong>Dodge and Burn</strong>: Controls subtle shadows and highlights to enhance three-dimensionality and natural contours</li>
+</ul>
+<p>Completely removing skin texture results in an artificial, plastic appearance. The real skill lies in finding the balance—preserving genuine texture while refining imperfections.</p>
+<h2>2. Eye Retouching: The Feature That Creates Impact</h2>
+<ul>
+<li><strong>Catchlight Enhancement</strong>: Subtly strengthen light reflections in the eyes for vitality</li>
+<li><strong>Iris Saturation</strong>: A slight increase makes the eyes more compelling and draws viewer attention</li>
+<li><strong>Eyelashes</strong>: Gently enhance sharpness and contrast for definition</li>
+</ul>
+<p>The eye is where a viewer's gaze naturally lands first. Strong eye retouching alone can dramatically transform the overall impression of a portrait, even if other areas receive minimal adjustment.</p>
+<h2>3. Color Grading: Establishing Your Visual Language</h2>
+<ul>
+<li>Cinematic color treatments (teal &amp; orange, matte tones, and others) are industry standards</li>
+<li>Fine-tune color balance using tone curves and color adjustment layers</li>
+<li>Always anchor your palette to a flattering skin tone and accurate white balance</li>
+<li>Strong key/tonal choices (low-key or high-key lighting effects) can create memorable mood</li>
+</ul>
+<p>Color establishes the emotional world of your image. Aligning your color grading with your subject's intended mood—whether cool and clinical or warm and inviting—keeps your vision coherent and intentional.</p>
+<h2>4. Background Processing: Make Your Subject Stand Out</h2>
+<ul>
+<li>Strengthen shallow depth of field where needed using selective masking and additional blur</li>
+<li>Reduce saturation and luminosity of background elements to emphasize the subject</li>
+<li>Remove distracting elements—reflections, noise, and compositional clutter—to maintain focus</li>
+</ul>
+<p>Treat the background as an active compositional tool, not an afterthought. Deliberate background refinement significantly elevates the perceived professionalism of your work.</p>
+<h2>5. Composition and Cropping: Direct the Viewer's Eye</h2>
+<ul>
+<li>Consider the golden ratio and rule of thirds during final framing adjustments</li>
+<li>Use negative space strategically to guide the viewer's eye and create visual flow</li>
+</ul>
+<p>Don't settle for your original crop. Revisiting composition during the final retouching stages often yields surprising improvements in impact and professionalism.</p>
+<h2>Final Polish Checklist</h2>
+<ul>
+<li>Add subtle film grain to create cohesion and a timeless quality that feels organic</li>
+<li>Perform a final overall tonal review using tools like Camera Raw Filter to ensure unity across the entire image</li>
+</ul>
+<p>The most admired portraits share common threads: expressive storytelling through pose and expression, skilled use of directional light (backlighting or side light), and a finished aesthetic that hints at mood and atmosphere. Technical precision matters, but ultimately your images succeed when they communicate what you intended to convey.</p>
+<h2>Summary</h2>
+<p>Structure your portrait retouching workflow in this order for consistent excellence:</p>
+<ol>
+<li>Preserve skin texture while refining</li>
+<li>Create impact through eye enhancement</li>
+<li>Establish mood through color grading</li>
+<li>Elevate the subject by refining the background</li>
+<li>Perfect composition through final cropping</li>
+</ol>
+<p>This approach ensures you address every element systematically without omissions.</p>
+<p>Many retouching decisions resist automation because they depend on image-specific conditions and artistic intent. SideKick Portrait automates the reproducible foundation work—consistent tonal and texture processing—while reserving the final expressive decisions for your creative judgment.</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context">
+    <p class="kzc-product-context-label">Related SideKick Product</p>
+    <p class="kzc-product-name">SideKick Portrait</p>
+    <p class="kzc-product-desc">Automates portrait retouching (15 styles x 3 intensity levels).</p>
+    <p class="kzc-product-links">
+      
+      <a href="/en/portrait.html">See details →</a>
+      
+      <a href="/en/ai-lab.html">Try it free →</a>
+      
+      
+    </p>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dodge and Burn Retouching Fundamentals: Creating Even Light with a 50% Gray Layer | Knowledge - SideKick</title>
+<meta name="description" content="Master dodge and burn retouching using a 50% gray overlay layer. Learn brush settings, selection techniques, and Lab color methods to add even, natural lighting to portraits and landscapes without streaking.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photoshop/dodge-burn-50-percent-gray-layer">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photoshop/photoshop-dodge-and-burn">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photoshop/dodge-burn-50-percent-gray-layer">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photoshop/photoshop-dodge-and-burn">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photoshop/photoshop-dodge-and-burn" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photoshop</li>
+    <li aria-current="page">Dodge and Burn Retouching Fundamentals: Creating Even Light with a 50% Gray Layer</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Dodge and Burn Retouching Fundamentals: Creating Even Light with a 50% Gray Layer</h1>
+    <p class="kzc-article-lead">Master dodge and burn retouching using a 50% gray overlay layer. Learn brush settings, selection techniques, and Lab color methods to add even, natural lighting to portraits and landscapes without streaking.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photoshop</span>
+      
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Dodge and Burn is a retouching technique that deliberately redesigns how light falls on an image by selectively brightening (dodging) or darkening (burning) specific areas. It's widely used for building dimension in portraits and emphasizing contrast in landscape photography.</p>
+<h2>Basic Method: The 50% Gray Overlay Layer</h2>
+<ol>
+<li><strong>Create a new layer</strong> (Shift+Ctrl+N) and select &quot;50% Gray&quot; from the fill options</li>
+<li>Set the layer mode to &quot;Overlay&quot; or &quot;Soft Light&quot; (Overlay produces a stronger effect)</li>
+<li>Select the Brush tool. <strong>Painting white brightens the image; black darkens it.</strong> A soft brush with 0% hardness and a flow rate of 5–10% is the most manageable setting</li>
+<li>Paint with light direction in mind. For portraits, brighten the cheekbones, bridge of the nose, forehead, and upper lip; darken the hollows of the cheeks, side of the nose, and jawline. For landscapes, this technique effectively emphasizes cloud edges and the edges of your subject</li>
+<li>Blend any unnatural areas with a subtle Gaussian Blur</li>
+</ol>
+<p>Because this is non-destructive editing, you preserve the original image. You can also easily reduce the effect by lowering the layer's opacity. Colored dodge and burn—using warm or cool brushes instead of pure black and white—works well for correcting uneven skin tones.</p>
+<h2>Avoiding Brush Streaks</h2>
+<p>Painting directly with the brush can create patchy, unnatural results. Here are several ways to prevent this:</p>
+<ul>
+<li><strong>Lower flow significantly (3–5%)</strong>—reduce flow rather than opacity, and build up the effect gradually using brush pressure</li>
+<li><strong>Selection + blur</strong>—loosely select the area you want to retouch, then feather the edge (Feather 20–50px) before brushing to blend it smoothly with the surrounding image</li>
+<li><strong>Gradient tool instead of brush</strong>—using a radial gradient instead of direct brushwork creates more uniform results</li>
+<li><strong>Curves adjustment + mask</strong>—create a Curves adjustment layer and use the layer mask for selective application, making corrections easier since you're not painting directly</li>
+<li><strong>Frequency separation</strong>—separate the image into high frequency (texture) and low frequency (color and light) layers, then apply dodge and burn only to the mid-frequency band for shadow and highlight work that appears seamless and natural</li>
+</ul>
+<h2>Improving Precision: Luminosity-Based Selections</h2>
+<p>Creating selections from the original image's brightness allows you to target specific tonal ranges. This reduces unevenness and makes natural light adjustment easier.</p>
+<ol>
+<li>In the Channels panel, Ctrl+click the RGB (or blue) channel to create a selection from the bright areas</li>
+<li>To dodge the shadows instead, invert the selection (Ctrl+Shift+I)</li>
+<li>Feather the boundary (Feather 30–100px)</li>
+<li>Create a 50% gray overlay layer and brush within the selection (the selection prevents uneven coverage)</li>
+</ol>
+<p>For even greater precision, use a luminosity mask on a Curves adjustment layer to target only the highlights or only the shadows.</p>
+<h2>Lab Color Mode Selection</h2>
+<p>Converting to Lab Color mode isolates the L channel (luminosity), allowing you to make more accurate brightness selections while preventing color casts.</p>
+<ol>
+<li>Go to &quot;Image&quot; &gt; &quot;Mode&quot; &gt; &quot;Lab Color&quot;</li>
+<li>In the Channels panel, select the L channel and create a selection from it</li>
+<li>Return to RGB mode and apply dodge and burn using that selection</li>
+</ol>
+<h2>Choosing Your Approach</h2>
+<ul>
+<li><strong>Starting out</strong>: Reduce flow and paint, or use a selection with feather</li>
+<li><strong>Fine-tuning results</strong>: Curves + mask, or frequency separation</li>
+<li><strong>Eliminating overall unevenness</strong>: Gaussian Blur, or gradient tool</li>
+</ul>
+<p>When using luminosity-based selections, always combine them with feathering or adjustment layers. Avoid applying the effect too strongly—excessive dodge and burn creates an over-processed HDR look. Control the strength with layer opacity.</p>
+<h2>Summary</h2>
+<p>Dodge and Burn is accessible once you master the &quot;50% gray layer + brush&quot; foundation, but achieving even, natural results requires additional refinement: flow adjustment, selections based on tonality, and frequency separation. Start with the basic technique, then when unevenness becomes a concern, combine it with luminosity-based selections.</p>
+<p>Deciding where and how much light to add varies subtly from image to image—it's actually a domain that's difficult to automate. SideKick is designed to separate processes that require this kind of delicate judgment from those that can be systematized, providing automated processing starting with tasks that are easier to standardize—such as comparative brightness compositing and Milky Way enhancement.</p>
+
+  </div>
+
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

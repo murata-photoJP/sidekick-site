@@ -177,6 +177,45 @@
   </url>
 <!-- BEGIN AUTO-GENERATED KNOWLEDGE URLS (generate_knowledge_sitemap.py) -->
   <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/marketing/1x-photo-evaluation-retouching-trends-by-genre</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/marketing/sell-photography-knowledge-note</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/photography/astrophotography-settings-equipment-guide</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/photography/coastal-water-photography-techniques</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/photoshop/dodge-burn-50-percent-gray-layer</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/photoshop/lab-color-mode-photoshop-retouching</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/knowledge/photoshop/portrait-retouching-essential-considerations</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://www.sidekick-lab.com/knowledge</loc>
     <priority>0.6</priority>
   </url>

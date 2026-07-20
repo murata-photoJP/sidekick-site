@@ -2,8 +2,10 @@
 <html lang="{{ language|default('ja') }}">
 <head>
 <meta charset="utf-8">
-<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語トップへ誘導）。
-     打ち出の小槌の英語版はまだ無いため、他ページと同じくEN版トップへ誘導する。 -->
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
 <script>
   (function () {
     try {
@@ -23,13 +25,16 @@
 <title>{% block title %}SideKick{% endblock %}</title>
 <meta name="description" content="{% block meta_description %}{% endblock %}">
 <link rel="canonical" href="{% block canonical %}{% endblock %}">
+{% for hl, url in (hreflang_alternates or {}).items() %}
+<link rel="alternate" hreflang="{{ hl }}" href="{{ url }}">
+{% endfor %}
 <link rel="stylesheet" href="/assets/css/knowledge.css">
 </head>
 <body>
-{% include "header.html" %}
+{% if language == 'en' %}{% include "header_en.html" %}{% else %}{% include "header.html" %}{% endif %}
 <main>
 {% block content %}{% endblock %}
 </main>
-{% include "footer.html" %}
+{% if language == 'en' %}{% include "footer_en.html" %}{% else %}{% include "footer.html" %}{% endif %}
 </body>
 </html>

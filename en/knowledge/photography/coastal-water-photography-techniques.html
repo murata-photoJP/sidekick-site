@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coastal and Water Photography: Shooting Techniques for Compelling Images | Knowledge - SideKick</title>
+<meta name="description" content="Master coastal photography techniques including ICM, long exposure, and silhouettes. Learn how to apply these methods to everyday subjects and create impactful monochrome images.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/coastal-water-photography-techniques">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/coastal-long-exposure-technique">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/coastal-water-photography-techniques">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/coastal-long-exposure-technique">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star.html">⭐ Star</a>
+      <a href="/en/portrait.html">👤 Portrait</a>
+      <a href="/en/sky-effect.html">☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick.html" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about.html" style="color:var(--muted);">About</a>
+      <a href="/en/changelog.html" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab.html" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/coastal-long-exposure-technique" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Coastal and Water Photography: Shooting Techniques for Compelling Images</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Coastal and Water Photography: Shooting Techniques for Compelling Images</h1>
+    <p class="kzc-article-lead">Master coastal photography techniques including ICM, long exposure, and silhouettes. Learn how to apply these methods to everyday subjects and create impactful monochrome images.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-07-20">Updated: 2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Coastal areas and dunes offer exceptional creative potential. With waves, sand patterns, and light reflections working together, these locations transform dramatically based on your chosen shooting techniques. This guide covers practical methods for coastal photography and how to apply these same principles to everyday subjects with an artistic eye.</p>
+<h2>Shooting Techniques for Coastal Photography</h2>
+<h3>Intentional Camera Movement (ICM)</h3>
+<p>Using a slow shutter speed (1/4 second to 1 second), deliberately move your camera to transform waves and sand textures into abstract expressions. Vary your movement patterns—horizontal, circular, or zigzag motions—to create distinctly different moods in your images.</p>
+<h3>Long Exposure</h3>
+<p>With a tripod and ND filter, set your shutter speed to 1 second or longer. This technique smooths water into a dreamy, ethereal quality. Even in daylight, an ND filter makes this achievable without waiting for low light.</p>
+<h3>Backlighting Silhouettes and Low-Angle Reflections</h3>
+<p>Position yourself to capture silhouettes when the sun is high, or shoot from a low angle to capture the sky reflected in wet sand. This mirror-like reflection effect creates striking visual impact.</p>
+<h3>Utilizing Sand Patterns and Texture</h3>
+<ul>
+<li><strong>Low-angle perspective</strong>: Emphasizes sand ripples—soft and diffused in front-lit conditions, dramatically dimensional in backlighting</li>
+<li><strong>Telephoto lenses (85mm and longer)</strong>: Compression effect isolates texture patterns</li>
+<li><strong>Wide-angle lenses (16–24mm)</strong>: Emphasizes dune dimensionality and sky contrast</li>
+</ul>
+<h3>Lens Selection for Long Exposure</h3>
+<table>
+<thead>
+<tr>
+<th>Focal Length</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wide-angle (16–35mm)</td>
+<td>Capturing broad wind-driven sand movement; leveraging depth and foreground-background relationships</td>
+</tr>
+<tr>
+<td>Standard (35–50mm)</td>
+<td>Natural perspective that presents wind movement clearly and simply</td>
+</tr>
+<tr>
+<td>Telephoto (70–200mm)</td>
+<td>Isolating sand pattern segments; emphasizing contrast between moving and still areas</td>
+</tr>
+</tbody>
+</table>
+<p>For daytime shooting, aim for ND1000 (10-stop equivalent) as a starting point. Use a tripod and remote release or self-timer to eliminate vibration. Shoot during golden hour—early morning or late evening—when directional light creates the most dimensional shadows.</p>
+<h2>Applying an Artistic Perspective to Everyday Subjects</h2>
+<p>Beyond coastal work, the principles of &quot;changing perspective,&quot; &quot;controlling light,&quot; and &quot;abstracting forms&quot; apply to ordinary subjects everywhere.</p>
+<ul>
+<li><strong>Puddle reflections</strong>: Use rainwater to create inverted, dreamlike worlds</li>
+<li><strong>Weathered metal and aged walls</strong>: Close-up framing reveals the texture and character of time's passage</li>
+<li><strong>Shadows and silhouettes</strong>: Capture long, directional shadows during golden hour as geometric patterns within your composition</li>
+<li><strong>Asphalt texture</strong>: Low angles, directional light, and post-rain reflections transform plain pavement into minimalist art</li>
+</ul>
+<h2>Monochrome Subjects</h2>
+<p>Subjects with strong light-and-shadow contrast, distinctive texture, and defined form truly excel in black and white.</p>
+<ul>
+<li>Shadows and silhouettes (backlit figures and objects)</li>
+<li>Asphalt and concrete texture (especially after rain)</li>
+<li>Mist, smoke, and water vapor (enhanced dimensionality)</li>
+<li>Deteriorating buildings and corroded metal (conveying the passage of time)</li>
+<li>Power lines, towers, and bridges (geometric compositions highlighting linear beauty)</li>
+</ul>
+<p>When shooting monochrome, focus on three critical elements: <strong>contrast between light and shadow</strong>, <strong>texture selection</strong>, and <strong>simplified, uncluttered composition</strong>. Without color, these three factors become the primary drivers of visual impact.</p>
+<h2>Summary</h2>
+<p>Coastal photography success comes from mastering core techniques—ICM, long exposure, and backlighting silhouettes—then adapting your lens choice and exposure based on time of day and terrain (sand patterns, dunes, or paved surfaces). Remember that shifting your perspective transforms any subject, even ordinary ones, into compelling work. This mindset is invaluable on days when travel to special locations isn't possible.</p>
+<p>Starscape photography follows the same principle: success builds through repeated decisions about timing and light conditions. If you want to streamline the post-processing workflow—particularly blending sequences or enhancing the Milky Way—explore the free trial of SideKick Star to see how it can accelerate your editing process.</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context">
+    <p class="kzc-product-context-label">Related SideKick Product</p>
+    <p class="kzc-product-name">SideKick Star</p>
+    <p class="kzc-product-desc">Automates star-trail Lighten composites, Milky Way enhancement, and aircraft-trail removal.</p>
+    <p class="kzc-product-links">
+      
+      <a href="/en/sidekick-star.html">See details →</a>
+      
+      <a href="/en/ai-lab.html">Try it free →</a>
+      
+      
+    </p>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about.html">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab.html">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review.html">AI Review</a></li>
+            <li><a href="/en/camera-ai.html">Camera AI</a></li>
+            <li><a href="/en/shooting-ai.html">Shooting AI</a></li>
+            <li><a href="/en/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq.html">FAQ</a></li>
+            <li><a href="/en/changelog.html">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about.html">About</a></li>
+            <li><a href="/en/sidekick.html">What is Sidekick</a></li>
+            <li><a href="/en/gallery.html">Gallery</a></li>
+            <li><a href="/en/terms.html">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms.html">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

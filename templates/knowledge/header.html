@@ -8,7 +8,7 @@
 
 <div class="lang-banner" id="lang-banner">
   🇺🇸 This site is also available in English —
-  <a href="/en/">View English page →</a>
+  <a href="{{ lang_switch_url|default('/en/') }}">View English page →</a>
   <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
 </div>
 
@@ -38,7 +38,7 @@
       <a href="/changelog.html" style="color:var(--muted);">更新履歴</a>
       <a href="/faq.html" style="color:var(--muted);">Support</a>
       <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      <a href="/en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+      <a href="{{ lang_switch_url|default('/en/') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
     </nav>
   </div>
 </header>
