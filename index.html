@@ -171,6 +171,39 @@
       max-width:560px;margin:-20px auto 32px;line-height:1.8;opacity:0.7;
     }
 
+    /* ─────────────────────────────────────
+       BEFORE / AFTER — Sidekick Star 効果訴求
+       Heroの直後・Products直前。lp-star.htmlの
+       .ba-pair/.ba-half命名を踏襲し表記を統一。
+    ───────────────────────────────────── */
+    .ba-sec{padding:52px 0 60px;border-top:1px solid rgba(255,255,255,.07);}
+    .ba-hd{text-align:center;margin-bottom:32px;}
+    .ba-hd .lead{max-width:560px;margin:14px auto 0;}
+    .ba-pair{
+      display:grid;grid-template-columns:1fr 1fr;gap:14px;
+      margin-bottom:24px;
+    }
+    .ba-half{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+    .ba-half img{width:100%;height:auto;aspect-ratio:1600/1044;display:block;}
+    .ba-tag{
+      position:absolute;top:12px;left:12px;
+      padding:4px 12px;border-radius:999px;
+      font-size:11px;font-weight:800;letter-spacing:.08em;
+      background:rgba(9,9,12,.72);backdrop-filter:blur(4px);
+      border:1px solid rgba(255,255,255,.16);color:#fff;
+    }
+    .ba-tag.after{color:var(--accent2);border-color:rgba(255,138,0,.35);}
+    .ba-notes{
+      list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;
+      margin-bottom:28px;
+    }
+    .ba-notes li{
+      font-size:12px;font-weight:700;color:var(--sub);
+      display:flex;align-items:center;gap:6px;
+    }
+    .ba-notes li::before{content:"✓";color:var(--green);font-weight:800;}
+    .ba-cta{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;}
+
     /* ── Trust strip ── */
     .trust{
       border-top:1px solid rgba(255,255,255,.06);
@@ -390,6 +423,7 @@
       .supp-grid{grid-template-columns:repeat(2,1fr);}
       .abt-inner{grid-template-columns:1fr;}
       .abt-img{order:-1;}
+      .ba-pair{grid-template-columns:1fr;}
     }
     @media(max-width:600px){
       .hero{padding:48px 0 36px;}
@@ -398,6 +432,7 @@
       .supp-grid{grid-template-columns:repeat(2,1fr);}
       .why-row{padding:24px 20px;gap:16px;}
       .why-emoji{font-size:28px;width:36px;}
+      .ba-sec{padding:40px 0 44px;}
     }
   </style>
 
@@ -499,6 +534,47 @@
           <p class="hero-sub-en">
             Photoshop scripts &amp; AI photo critique for photographers.
           </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════
+         BEFORE / AFTER — Sidekick Star の効果を一目で
+    ══════════════════════════════════════ -->
+    <section class="ba-sec" id="star-before-after">
+      <div class="wrap">
+        <div class="ba-hd">
+          <div class="lbl">SIDEKICK STAR · BEFORE / AFTER</div>
+          <h2 class="h2">面倒な修正を、<br><em>撮影の時間に。</em></h2>
+          <p class="lead">
+            比較明合成後に残る飛行機の軌跡を、元画像の画素だけで自動除去。<br>
+            手作業で繰り返していた処理をPCに任せて、次の撮影へ。
+          </p>
+        </div>
+
+        <div class="ba-pair">
+          <div class="ba-half">
+            <img src="images/Star/web_before.jpg" width="1600" height="1044" decoding="async"
+                 alt="Sidekick Star 処理前 — 比較明合成の星空に飛行機・人工衛星の光跡が残っている状態">
+            <span class="ba-tag before">BEFORE</span>
+          </div>
+          <div class="ba-half">
+            <img src="images/Star/web_after.jpg" width="1600" height="1044" decoding="async"
+                 alt="Sidekick Star 処理後 — 飛行機の光跡が自動除去され、星の軌跡だけが残った状態">
+            <span class="ba-tag after">AFTER</span>
+          </div>
+        </div>
+
+        <ul class="ba-notes">
+          <li>生成AI不使用</li>
+          <li>画像の外部送信なし</li>
+          <li>Photoshop内で処理</li>
+        </ul>
+
+        <div class="ba-cta">
+          <a href="/register-dl.html?product=star&src=index" class="btn btn-p btn-lg"
+             onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">3か月無料で試す →</a>
+          <a href="/lp-star" class="btn btn-o btn-lg">詳しい作例を見る</a>
         </div>
       </div>
     </section>
