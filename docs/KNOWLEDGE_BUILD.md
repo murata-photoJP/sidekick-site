@@ -169,3 +169,19 @@ python tests/knowledge/test_build_knowledge.py
   （データ自体は`web-published.json`に既に含まれている）
 - Before/After・注意書き等のWeb独自Markdown記法への対応
 - 実際に`html/knowledge/`へ生成物を配置し、Vercelへデプロイする運用手順の確立
+
+> **2026-07-20追記（sitemap.xml自動反映）**：`sitemap.xml`はKnowledge記事の
+> URLを反映する工程が無く、最初の記事公開以降ずっと未反映のままだったことが
+> 判明した。`build/knowledge/generate_knowledge_sitemap.py`を新設し、
+> `web-published.json`からKnowledge記事のURLを機械的に導出して
+> `sitemap.xml`内のマーカーコメント区間だけを更新するようにした（それ以外の
+> 手動管理項目には触れない）。
+>
+> ```
+> python build/knowledge/generate_knowledge_sitemap.py \
+>   --index data/knowledge/web-published.json --sitemap sitemap.xml
+> ```
+>
+> Knowledge記事を公開・更新するたびに、`generate_web_published_index.py`→
+> `build_knowledge.py`→`generate_knowledge_sitemap.py`の順で実行する運用とする
+> （テスト: `tests/knowledge/test_generate_knowledge_sitemap.py`）。

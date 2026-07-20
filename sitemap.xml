@@ -175,4 +175,45 @@
     <lastmod>2026-07-14</lastmod>
     <priority>0.3</priority>
   </url>
+<!-- BEGIN AUTO-GENERATED KNOWLEDGE URLS (generate_knowledge_sitemap.py) -->
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/marketing/1x-photo-evaluation-trends</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/marketing/note-photo-content-sales</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/photography/astrophotography-camera-settings</loc>
+    <lastmod>2026-07-17</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/photography/coastal-long-exposure-technique</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/photoshop/photoshop-dodge-and-burn</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/photoshop/photoshop-lab-color-retouching</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/knowledge/photoshop/portrait-retouching-key-points</loc>
+    <lastmod>2026-07-20</lastmod>
+    <priority>0.5</priority>
+  </url>
+<!-- END AUTO-GENERATED KNOWLEDGE URLS -->
 </urlset>
