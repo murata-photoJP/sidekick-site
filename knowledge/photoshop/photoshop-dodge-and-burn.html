@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語トップへ誘導）。
+     打ち出の小槌の英語版はまだ無いため、他ページと同じくEN版トップへ誘導する。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ダッジ＆バーンレタッチの基本｜50%グレーレイヤーでムラなく光を描く方法｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="Photoshopの定番レタッチ技法「ダッジ＆バーン」の基本手順と、筆ムラを防ぐための実践的な工夫をまとめました。明度ベースの選択範囲やLabモードの活用法も解説。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photoshop/photoshop-dodge-and-burn">
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。 -->
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star.html">⭐ Star</a>
+      <a href="/portrait.html">👤 Portrait</a>
+      <a href="/sky-effect.html">☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/workshop.html">📷 Workshop</a>
+      <a href="/gallery.html" style="color:var(--muted);">Gallery</a>
+      <a href="/sidekick.html" style="color:var(--muted);">Sidekickとは</a>
+      <a href="/about.html" style="color:var(--muted);">About</a>
+      <a href="/changelog.html" style="color:var(--muted);">更新履歴</a>
+      <a href="/faq.html" style="color:var(--muted);">Support</a>
+      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+      <a href="/en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>Photoshop</li>
+    <li aria-current="page">ダッジ＆バーンレタッチの基本</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">ダッジ＆バーンレタッチの基本<span class="kzc-title-sub">50%グレーレイヤーでムラなく光を描く方法</span></h1>
+    <p class="kzc-article-lead">Photoshopの定番レタッチ技法「ダッジ＆バーン」の基本手順と、筆ムラを防ぐための実践的な工夫をまとめました。明度ベースの選択範囲やLabモードの活用法も解説。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photoshop</span>
+      
+      <time datetime="2026-07-20">更新日：2026-07-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>ダッジ＆バーン（Dodge &amp; Burn）は、画像の一部を明るく（ダッジ）・暗く（バーン）することで、光の当たり方を意図的にデザインし直すレタッチ技法です。ポートレートの立体感づくりから風景写真の陰影強調まで、幅広く使われています。</p>
+<h2>基本手順：50%グレーのオーバーレイレイヤー</h2>
+<ol>
+<li><strong>新規レイヤーを作成</strong>（Shift+Ctrl+N）し、塗りつぶしオプションで「50%グレー」を選択</li>
+<li>レイヤーモードを「オーバーレイ」または「ソフトライト」に設定（オーバーレイの方が変化が強く出ます）</li>
+<li>ブラシツールを選び、<strong>白で描くと明るく、黒で描くと暗く</strong>なります。硬さ0%のソフトブラシ、流量（Flow）5〜10%程度が扱いやすい設定です</li>
+<li>光の流れを意識して描画します。ポートレートなら頬骨・鼻筋・おでこ・唇の山を明るく、頬のくぼみ・鼻の側面・フェイスラインを暗く。風景なら雲の輪郭や被写体のエッジを強調するのに有効です</li>
+<li>不自然になった部分は、ガウスぼかしで軽くなじませます</li>
+</ol>
+<p>非破壊編集なので元画像を傷つけず、レイヤーの不透明度を下げれば効果を簡単に弱められるのも利点です。カラーのダッジ＆バーン（白黒ではなく暖色・寒色のブラシを使う）で、肌の色ムラ補正のような使い方もできます。</p>
+<h2>筆ムラを防ぐ工夫</h2>
+<p>ブラシで直接なぞると、まだらな不自然さが出ることがあります。以下の方法で回避できます。</p>
+<ul>
+<li><strong>流量を極端に下げる（3〜5%）</strong>：不透明度ではなく流量を下げ、筆圧を活かして徐々に描き足す</li>
+<li><strong>選択範囲＋グラデーション</strong>：レタッチしたい部分をラフに選択し、境界をぼかす（Feather 20〜50px）ことで周囲になじませてからブラシをかける</li>
+<li><strong>グラデーションツールでの塗りつぶし</strong>：ブラシの代わりに円形グラデーションなどを使うと、均一な効果を出しやすい</li>
+<li><strong>カーブ＋マスク</strong>：調整レイヤーの「カーブ」を作成し、レイヤーマスクで部分適用する。直接描画しないため修正がしやすい</li>
+<li><strong>周波数分離との併用</strong>：画像を高周波（テクスチャ）・低周波（色・光）に分離し、中間の周波数帯だけにダッジ＆バーンを適用すると、ムラのない自然な陰影になる</li>
+</ul>
+<h2>精度を上げる：明度ベースの選択範囲</h2>
+<p>原画の明るさから選択範囲を作ると、狙った階調だけに効果をかけられるため、ムラを抑えつつ自然な光の調整がしやすくなります。</p>
+<ol>
+<li>チャンネルパネルでRGB（または青）チャンネルをCtrl+クリックすると、明るい部分が選択範囲として拾われる</li>
+<li>暗部にダッジしたい場合は選択範囲を反転（Ctrl+Shift+I）</li>
+<li>境界をぼかす（Feather 30〜100px）</li>
+<li>50%グレーのオーバーレイレイヤーを作り、選択範囲内でブラシをかける（選択範囲があるためムラが出にくい）</li>
+</ol>
+<p>さらに精密にしたい場合は「階調マスク（Luminosity Mask）」を使い、カーブ調整レイヤーにマスクとして適用すると、ハイライトだけ・シャドウだけを狙って調整できます。</p>
+<h2>Labモードを使った選択</h2>
+<p>Labモードに変換すると、Lチャンネル（明度）だけを分離できるため、色ムラを防ぎながらより正確な明度選択が可能になります。</p>
+<ol>
+<li>「イメージ」→「モード」→「Labカラー」に変換</li>
+<li>チャンネルパネルでLチャンネルを選択し、そこから選択範囲を作成</li>
+<li>元のRGBモードに戻し、その選択範囲を使ってダッジ＆バーンを適用</li>
+</ol>
+<h2>どの方法を選ぶか</h2>
+<ul>
+<li><strong>まず試すなら</strong>：流量を下げてなぞる、または選択範囲＋ぼかし</li>
+<li><strong>仕上がりを追い込みたいなら</strong>：カーブ＋マスク、または周波数分離</li>
+<li><strong>全体のムラを均したいなら</strong>：ガウスぼかし、グラデーション</li>
+</ul>
+<p>明度ベースの選択を使う際は、選択範囲を作った後に必ずぼかしや調整レイヤーと組み合わせること。強くかけすぎるとHDR調になりすぎるため、不透明度でコントロールするのがポイントです。</p>
+<h2>まとめ</h2>
+<p>ダッジ＆バーンは「50%グレーレイヤー＋ブラシ」という基本さえ覚えれば誰でも使えますが、ムラなく自然に仕上げるには流量調整・選択範囲・周波数分離といった一段上の工夫が必要です。まずは基本手順を試し、ムラが気になったら明度ベースの選択範囲を組み合わせてみてください。</p>
+<p>こうした「光をどこにどれだけ足すか」という判断は、写真ごとに微妙に条件が変わるため、実は自動化が難しい領域でもあります。SideKickでは、このような繊細な判断が必要な工程とルール化しやすい工程を分けて設計しており、比較明合成や天の川強調のような判断が定型化しやすい部分から自動処理を提供しています。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photoshop/photoshop-lab-color-retouching">Labカラーモードを使ったPhotoshopレタッチ入門｜L・a・bチャンネルの活かし方</a>
+        <p class="kzc-related-desc">PhotoshopのLabカラーモード（明度L・a・bチャンネル）を使ったレタッチ手法を解説。肌の赤み補正、空や海の色強調、モノクロ変換まで、RGBとは違うアプローチを紹介します。</p>
+        <span class="kzc-related-category">Photoshop</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photoshop/portrait-retouching-key-points">ポートレートレタッチで意識すべき5つのポイント</a>
+        <p class="kzc-related-desc">ポートレート写真のレタッチで押さえておきたい5つのポイントを解説。肌の質感、目の処理、カラーグレーディング、背景処理、構図まで実践的に整理しました。</p>
+        <span class="kzc-related-category">Photoshop</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star.html">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait.html">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect.html">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab.html">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review.html">講評AI</a></li>
+            <li><a href="/camera-ai.html">カメラAI</a></li>
+            <li><a href="/shooting-ai.html">撮影AI</a></li>
+            <li><a href="/pc-ai.html">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop.html">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq.html">よくある質問</a></li>
+            <li><a href="/changelog.html">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about.html">About</a></li>
+            <li><a href="/sidekick.html">Sidekickとは</a></li>
+            <li><a href="/gallery.html">Gallery</a></li>
+            <li><a href="/legal.html">特定商取引法</a></li>
+            <li><a href="/privacy.html">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal.html">特定商取引法に基づく表記</a>
+        <a href="/privacy.html">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

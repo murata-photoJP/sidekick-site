@@ -20,9 +20,9 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>打ち出の小槌｜SideKick</title>
-<meta name="description" content="写真家が撮影・現像・Photoshopで困ったときに訪れる知識ライブラリ。実際に困り、試したことを残しています。">
-<link rel="canonical" href="https://www.sidekick-lab.com/knowledge">
+<title>Labカラーモードを使ったPhotoshopレタッチ入門｜L・a・bチャンネルの活かし方｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="PhotoshopのLabカラーモード（明度L・a・bチャンネル）を使ったレタッチ手法を解説。肌の赤み補正、空や海の色強調、モノクロ変換まで、RGBとは違うアプローチを紹介します。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photoshop/photoshop-lab-color-retouching">
 <link rel="stylesheet" href="/assets/css/knowledge.css">
 </head>
 <body>
@@ -115,123 +115,128 @@
 </script>
 <main>
 
-<section class="kzc-hero">
-  <h1>打ち出の小槌</h1>
-  <p class="kzc-hero-tagline">写真を撮り、困り、試したことを残しています。</p>
-</section>
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>Photoshop</li>
+    <li aria-current="page">Labカラーモードを使ったPhotoshopレタッチ入門</li>
+  </ol>
+</nav>
 
-<section class="kzc-kozuchi-about">
-  <h2>打ち出の小槌とは</h2>
-  <p>
-    写真家が現場で実際に困ったこと、試したこと、そこから分かったことを、
-    忘れないように残している場所です。必要な人に、そのまま公開しています。
-  </p>
-  <p><a href="/about">Aboutを読む →</a></p>
-</section>
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Labカラーモードを使ったPhotoshopレタッチ入門<span class="kzc-title-sub">L・a・bチャンネルの活かし方</span></h1>
+    <p class="kzc-article-lead">PhotoshopのLabカラーモード（明度L・a・bチャンネル）を使ったレタッチ手法を解説。肌の赤み補正、空や海の色強調、モノクロ変換まで、RGBとは違うアプローチを紹介します。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photoshop</span>
+      
+      <time datetime="2026-07-20">更新日：2026-07-20</time>
+    </p>
+  </header>
 
-<section class="kzc-article-list" aria-label="記事一覧">
   
-    
-      
-<article class="kzc-card">
-  
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">写真</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/photography/coastal-long-exposure-technique">海岸・水辺と身近な被写体で作品を撮るテクニック</a></h3>
-    <p class="kzc-card-desc">海岸や砂丘でのICM・長秒露光の技法から、アスファルトや水たまりなど身近な被写体をアート的に撮る視点まで、実践的な撮影テクニックをまとめました。</p>
-    <p class="kzc-card-meta">
-      
-      <time datetime="2026-07-20">2026-07-20</time>
-    </p>
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>PhotoshopのLabカラーモードは、明度（L）と色（a・b）を完全に分離して扱えるという、RGBにはない特徴を持っています。この分離があるおかげで、「色は変えずに明るさだけ調整する」「明るさは変えずに特定の色だけ強調する」といった、RGBでは難しい調整が可能になります。</p>
+<h2>Labの3チャンネルが担うもの</h2>
+<ul>
+<li><strong>Lチャンネル（明度）</strong>：明るさとコントラストのみに影響。色情報に触れずにトーン操作ができる</li>
+<li><strong>aチャンネル（緑⇔赤）</strong>：緑〜赤の色相に関係。肌の色補正や紅葉の彩度調整に有効</li>
+<li><strong>bチャンネル（青⇔黄）</strong>：青〜黄の色相に関係。空や海、夕焼けの色強調に使いやすい</li>
+</ul>
+<h2>チャンネル別の使い方</h2>
+<h3>Lチャンネル：明度だけを操作する</h3>
+<ul>
+<li>Lチャンネルだけにシャープネスをかけると、色ずれを起こさずディテールを強調できる</li>
+<li>カラー情報の影響を受けないため、質の高いモノクロ変換のベースとしても使える</li>
+<li>明暗の差だけで選択範囲（マスク）を作りやすい</li>
+</ul>
+<h3>aチャンネル：肌・紅葉など赤み系の調整</h3>
+<ul>
+<li>トーンカーブでa成分を下げると、肌の赤みを抑えて自然な肌色に近づけられる</li>
+<li>逆にa成分のコントラストを強めると、紅葉や花など赤・ピンク系の色を際立たせられる</li>
+</ul>
+<h3>bチャンネル：空・海・ホワイトバランス</h3>
+<ul>
+<li>bチャンネルで青を強めると、深みのある空や海の色に仕上げられる</li>
+<li>全体が黄ばんで見える写真は、bチャンネルを調整するとホワイトバランス補正のような効果が得られる</li>
+</ul>
+<h2>実践的なテクニック</h2>
+<h3>Labカラーブースト（自然な彩度アップ）</h3>
+<p>Labに変換し、a・bチャンネルそれぞれのトーンカーブをS字にすると、RGBで彩度を上げるよりも色の破綻が起きにくい、自然な彩度アップができます。</p>
+<h3>色と明るさを分離した補正</h3>
+<p>RGBでは色と明るさが同時に動いてしまいますが、Labなら「Lで露出を調整し、a・bで彩度だけを上げる」といった分離した補正が可能です。</p>
+<h3>Lチャンネルでのマスク作成</h3>
+<p>Lチャンネルは明暗の差がはっきり出るため、コントラストや色補正の範囲を指定するマスクの元として扱いやすいです。</p>
+<h2>ジャンル別の活用ポイント</h2>
+<table>
+<thead>
+<tr>
+<th>写真ジャンル</th>
+<th>活用ポイント</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ポートレート</td>
+<td>aチャンネルで肌の赤み補正、Lチャンネルで明度だけのシャープ処理</td>
+</tr>
+<tr>
+<td>風景</td>
+<td>bチャンネルで空の色強調、aチャンネルで紅葉強調</td>
+</tr>
+<tr>
+<td>モノクロ</td>
+<td>Lチャンネルベースの高品質な変換</td>
+</tr>
+<tr>
+<td>抽象・ICM</td>
+<td>a・bチャンネルのS字ブーストで、非現実的で鮮やかな色調表現</td>
+</tr>
+</tbody>
+</table>
+<p>補正の強さをどれくらい変える必要があるかは、ジャンルによって差があります。ポートレートは肌の個人差（照明の色温度、血色、メイクの有無）で変わりやすく、抽象・ICM系は元画像の彩度や動きの強さで大きく変わります。風景は季節・時間帯（紅葉の赤、朝焼け・夕焼けの色）で調整方向が変わる、という具合です。</p>
+<h2>使う上での注意点</h2>
+<ul>
+<li><strong>非破壊編集がやや難しい</strong>：Lab上での調整レイヤーはRGBほど互換性が高くないため、作業手順を決めておくと安心です</li>
+<li><strong>sRGBに戻すと見た目が変わる</strong>：Labでの調整後、RGB（sRGB）に戻す際に色味が変化することがあるため、書き出し前に必ず確認しましょう</li>
+</ul>
+<h2>まとめ</h2>
+<p>Labカラーモードは、「明るさ」と「色」を切り離して扱えることが最大の武器です。肌の赤み補正、空や海の色強調、モノクロ変換のベースなど、RGBだけでは手が届きにくい調整に強みがあります。まずはLチャンネルでの明度分離マスクから試すと、効果を実感しやすいはずです。</p>
+<p>このような色と明るさを切り分けた繊細な判断は、写真ごとに条件が変わるため、実は自動化が難しい部分でもあります。SideKickは、天の川強調や飛行機軌跡除去のようにルール化しやすい判断から自動処理を提供し、Labレタッチのような繊細な仕上げは撮影者自身の判断に委ねる設計にしています。</p>
+
   </div>
-</article>
-    
-      
-<article class="kzc-card">
+
   
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Photoshop</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/photoshop/portrait-retouching-key-points">ポートレートレタッチで意識すべき5つのポイント</a></h3>
-    <p class="kzc-card-desc">ポートレート写真のレタッチで押さえておきたい5つのポイントを解説。肌の質感、目の処理、カラーグレーディング、背景処理、構図まで実践的に整理しました。</p>
-    <p class="kzc-card-meta">
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
       
-      <time datetime="2026-07-20">2026-07-20</time>
-    </p>
-  </div>
-</article>
-    
+      <li>
+        <a href="/knowledge/photoshop/photoshop-dodge-and-burn">ダッジ＆バーンレタッチの基本｜50%グレーレイヤーでムラなく光を描く方法</a>
+        <p class="kzc-related-desc">Photoshopの定番レタッチ技法「ダッジ＆バーン」の基本手順と、筆ムラを防ぐための実践的な工夫をまとめました。明度ベースの選択範囲やLabモードの活用法も解説。</p>
+        <span class="kzc-related-category">Photoshop</span>
+      </li>
       
-<article class="kzc-card">
+    </ul>
+  </section>
   
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Photoshop</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/photoshop/photoshop-dodge-and-burn">ダッジ＆バーンレタッチの基本｜50%グレーレイヤーでムラなく光を描く方法</a></h3>
-    <p class="kzc-card-desc">Photoshopの定番レタッチ技法「ダッジ＆バーン」の基本手順と、筆ムラを防ぐための実践的な工夫をまとめました。明度ベースの選択範囲やLabモードの活用法も解説。</p>
-    <p class="kzc-card-meta">
-      
-      <time datetime="2026-07-20">2026-07-20</time>
-    </p>
-  </div>
-</article>
-    
-      
-<article class="kzc-card">
+
   
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Photoshop</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/photoshop/photoshop-lab-color-retouching">Labカラーモードを使ったPhotoshopレタッチ入門｜L・a・bチャンネルの活かし方</a></h3>
-    <p class="kzc-card-desc">PhotoshopのLabカラーモード（明度L・a・bチャンネル）を使ったレタッチ手法を解説。肌の赤み補正、空や海の色強調、モノクロ変換まで、RGBとは違うアプローチを紹介します。</p>
-    <p class="kzc-card-meta">
-      
-      <time datetime="2026-07-20">2026-07-20</time>
-    </p>
-  </div>
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+  </footer>
 </article>
-    
-      
-<article class="kzc-card">
-  
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">マーケティング</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/marketing/1x-photo-evaluation-trends">1X.comで評価される写真の共通点｜ジャンル別レタッチ傾向まとめ</a></h3>
-    <p class="kzc-card-desc">写真投稿サイト1X.comで評価されやすい作品の共通点を、ポートレート・都市風景・山岳・星景・モノクロのジャンル別に整理しました。</p>
-    <p class="kzc-card-meta">
-      
-      <time datetime="2026-07-20">2026-07-20</time>
-    </p>
-  </div>
-</article>
-    
-      
-<article class="kzc-card">
-  
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">マーケティング</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/marketing/note-photo-content-sales">写真ノウハウをnoteで販売する方法｜アカウント開設から値上げ戦略まで</a></h3>
-    <p class="kzc-card-desc">撮影テクニックやレタッチノウハウをnoteで販売する手順をまとめました。アカウント開設、価格設定、有料記事の作り方、値上げのタイミング、メンバーシップ（会員制）の活用法まで。</p>
-    <p class="kzc-card-meta">
-      <span class="kzc-badge">初心者向け</span>
-      <time datetime="2026-07-20">2026-07-20</time>
-    </p>
-  </div>
-</article>
-    
-      
-<article class="kzc-card">
-  
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">写真</p>
-    <h3 class="kzc-card-title"><a href="/knowledge/photography/astrophotography-camera-settings">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</a></h3>
-    <p class="kzc-card-desc">星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。</p>
-    <p class="kzc-card-meta">
-      <span class="kzc-badge">初心者向け</span>
-      <time datetime="2026-07-17">2026-07-17</time>
-    </p>
-  </div>
-</article>
-    
-  
-</section>
 
 </main>
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
