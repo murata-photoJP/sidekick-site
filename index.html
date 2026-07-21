@@ -183,7 +183,8 @@
       display:grid;grid-template-columns:1fr 1fr;gap:14px;
       margin-bottom:24px;
     }
-    .ba-half{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.08);}
+    .ba-half{position:relative;display:block;border-radius:var(--r);overflow:hidden;border:1px solid rgba(255,255,255,.08);transition:.18s;}
+    .ba-half:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.2);box-shadow:0 12px 32px rgba(0,0,0,.4);}
     .ba-half img{width:100%;height:auto;aspect-ratio:1600/1044;display:block;}
     .ba-tag{
       position:absolute;top:12px;left:12px;
@@ -553,16 +554,16 @@
         </div>
 
         <div class="ba-pair">
-          <div class="ba-half">
+          <a class="ba-half" href="sidekick-star.html" aria-label="Sidekick Starの製品ページを見る">
             <img src="images/Star/web_before.jpg" width="1600" height="1044" decoding="async"
                  alt="Sidekick Star 処理前 — 比較明合成の星空に飛行機・人工衛星の光跡が残っている状態">
             <span class="ba-tag before">BEFORE</span>
-          </div>
-          <div class="ba-half">
+          </a>
+          <a class="ba-half" href="sidekick-star.html" aria-label="Sidekick Starの製品ページを見る">
             <img src="images/Star/web_after.jpg" width="1600" height="1044" decoding="async"
                  alt="Sidekick Star 処理後 — 飛行機の光跡が自動除去され、星の軌跡だけが残った状態">
             <span class="ba-tag after">AFTER</span>
-          </div>
+          </a>
         </div>
 
         <ul class="ba-notes">
