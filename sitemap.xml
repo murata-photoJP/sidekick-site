@@ -255,4 +255,15 @@
     <priority>0.5</priority>
   </url>
 <!-- END AUTO-GENERATED KNOWLEDGE URLS -->
+<!-- BEGIN AUTO-GENERATED DEVELOPMENT LOG URLS (generate_development_log_sitemap.py) -->
+  <url>
+    <loc>https://www.sidekick-lab.com/development-log</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/development-log/2026-07-18</loc>
+    <lastmod>2026-07-18</lastmod>
+    <priority>0.4</priority>
+  </url>
+<!-- END AUTO-GENERATED DEVELOPMENT LOG URLS -->
 </urlset>

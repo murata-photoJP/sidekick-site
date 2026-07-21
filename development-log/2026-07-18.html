@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     開発日誌は今回は多言語化を行わないため、遷移先は常に /en/ のトップとする。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>英語を読めなくても、AI生成記事の公開可否を判断できる仕組み｜開発日誌 - SideKick</title>
+<meta name="description" content="SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。">
+<link rel="canonical" href="https://www.sidekick-lab.com/development-log/2026-07-18">
+<meta property="og:type" content="article">
+<meta property="og:title" content="英語を読めなくても、AI生成記事の公開可否を判断できる仕組み｜開発日誌 - SideKick">
+<meta property="og:description" content="SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。">
+<meta property="og:url" content="https://www.sidekick-lab.com/development-log/2026-07-18">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-07-18">
+
+<!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
+     （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。 -->
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star">⭐ Star</a>
+      <a href="/portrait">👤 Portrait</a>
+      <a href="/sky-effect">☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop">📷 Workshop</a>
+      <a href="/gallery" style="color:var(--muted);">Gallery</a>
+      <a href="/sidekick" style="color:var(--muted);">Sidekickとは</a>
+      <a href="/about" style="color:var(--muted);">About</a>
+      <a href="/development-log" style="color:var(--muted);" aria-current="page">開発日誌</a>
+      <a href="/changelog" style="color:var(--muted);">更新履歴</a>
+      <a href="/faq" style="color:var(--muted);">Support</a>
+      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+      <a href="/en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/development-log">開発日誌</a></li>
+    <li aria-current="page">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</h1>
+    <p class="kzc-article-lead">SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">AI Development</span>
+      <time datetime="2026-07-18">2026年7月18日</time>
+    </p>
+    
+    <p class="kzc-article-meta">
+      <span class="kzc-badge">Claude Code</span><span class="kzc-badge">AI Development</span>
+    </p>
+    
+  </header>
+
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>SideKickのKnowledge Baseは日本語で書いている。ここに英語版を用意しようとすると、ひとつ困ったことがある。私自身、英語の記事を読んで「これは公開してよい品質か」を正確に判断する自信がない。</p>
+<h2>何が問題だったのか</h2>
+<p>AIに英語記事を生成させること自体は難しくない。難しいのは、その後だ。生成された英語の文章が、日本語の原文と意味的に一致しているか、情報が抜けていないか、不自然な表現になっていないか。それを英語を母語としない自分が読んで判断するのは、精度に不安が残る。</p>
+<p>かといって、AIの判定を無条件に信用して自動公開するのは、SideKickの「最終判断は人間が行う」という方針に反する。</p>
+<h2>今回変えたこと</h2>
+<p>そこで、AIに「合格・不合格」を直接判断させるのではなく、AIには日本語で「何を確認したか」「何が気になったか」というレポートだけを書かせる設計にした。合否そのものは、そのレポートの内容をプログラム側が機械的に読み取って確定させる。</p>
+<p>さらに、AIが指摘を修正しようとして文章を書き換えすぎてしまうケースも想定し、修正前後の文章の類似度を計算し、変わりすぎていたら自動修正を止めて人間の判断に戻す仕組みも組み込んだ。</p>
+<h2>なぜこの方法にしたのか</h2>
+<p>AIの答えをそのまま信じるのではなく、「AIが確認した内容」を人間が読める形で残し、最終的な合否の計算は再現性のあるコードに任せる。こうすることで、英語を読めない自分でも、日本語のレポートを読めば公開してよいかどうかを判断できる。</p>
+<p>これはSideKickが一貫して大事にしている「AIは共同作業者であって、最終判断は人間が行う」という考え方の、ひとつの実装のかたちでもある。</p>
+<h2>まだ残っていること</h2>
+<p>この仕組みは、まだ本番のKnowledge Base記事には使っていない。次は実際の記事1本で、実際に動かして確認するところからになる。まだ試作段階であることは、そのまま書いておきたい。</p>
+
+  </div>
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
