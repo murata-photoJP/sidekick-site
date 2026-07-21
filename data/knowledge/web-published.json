@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-21T17:44:14.140149+09:00",
+  "generated_at": "2026-07-21T18:24:46.164317+09:00",
   "schema_version": 1,
   "articles": [
     {
@@ -853,7 +853,7 @@
   "categories": [
     {
       "slug": "photography",
-      "name": "写真",
+      "name": "Photography",
       "language": "en",
       "published_count": 2
     },
@@ -877,7 +877,7 @@
     },
     {
       "slug": "marketing",
-      "name": "マーケティング",
+      "name": "Marketing",
       "language": "en",
       "published_count": 2
     },

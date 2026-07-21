@@ -76,13 +76,18 @@ def sample_article(**overrides) -> dict:
 
 
 def card_from_article(article: dict, thumbnail_url: str | None = None) -> dict:
+    # 本番のbuild_article_card()と同じく、EN記事はcategory.name（英語名）、
+    # JA記事はname_jaを使う（2026-07-21修正: 従来は言語に関わらずname_ja固定
+    # だったため、make_index()にEN記事を渡すテストが本番と異なる前提で
+    # 通ってしまっていた）。
+    category_name = article["category"]["name"] if article["language"] == "en" else article["category"]["name_ja"]
     return {
         "id": article["id"],
         "title": article["title"],
         "slug": article["slug"],
         "language": article["language"],
         "meta_description": article["meta_description"],
-        "category_name": article["category"]["name_ja"],
+        "category_name": category_name,
         "published_at": article["published_at"],
         "updated_at": article["updated_at"],
         "thumbnail_url": thumbnail_url,
@@ -92,12 +97,16 @@ def card_from_article(article: dict, thumbnail_url: str | None = None) -> dict:
 
 
 def categories_from_articles(articles: list[dict]) -> list[dict]:
+    """本番のgenerate_web_published_index.py側と同じく、EN記事の集計行には
+    英語名(category.name)、JA記事の集計行には日本語名(name_ja)を入れる
+    （2026-07-21修正: 従来は言語に関わらずname_ja固定だったため、EN側の
+    カテゴリグループ化テストが本番と異なる前提で通ってしまっていた）。"""
     counts: dict[tuple, int] = {}
     names: dict[tuple, str] = {}
     for a in articles:
         key = (a["category"]["slug"], a["language"])
         counts[key] = counts.get(key, 0) + 1
-        names[key] = a["category"]["name_ja"]
+        names[key] = a["category"]["name"] if a["language"] == "en" else a["category"]["name_ja"]
     return [
         {"slug": slug, "name": names[(slug, lang)], "language": lang, "published_count": n}
         for (slug, lang), n in counts.items()
@@ -1126,6 +1135,30 @@ def test_en_article_uses_english_labels(tmp: Path) -> None:
 
 
 @with_tmp
+def test_en_category_grouping_uses_correct_slugs(tmp: Path) -> None:
+    """2026-07-21: 本番で発覚した不具合の再発防止テスト。categories配列のname
+    フィールドが言語に応じて正しく（EN記事ならcategory.name）入っている前提で、
+    EN記事がカテゴリ別に正しくグループ化される（カテゴリ数だけ分かれる。
+    大文字化けしたフォールバックslug群に化けない）ことを確認する。"""
+    en1 = sample_en_article(id="SKB-TEST-EN-000001", slug="en-one",
+                             category={"slug": "photography", "name": "Photography", "name_ja": "写真"},
+                             public_url="/en/knowledge/photography/en-one")
+    en2 = sample_en_article(id="SKB-TEST-EN-000002", slug="en-two",
+                             category={"slug": "marketing", "name": "Marketing", "name_ja": "マーケティング"},
+                             public_url="/en/knowledge/marketing/en-two")
+    index = make_index(articles=[en1, en2])
+    proc, output_dir = run_build(index, tmp)
+    check("EN カテゴリ分け: exit code 0", proc.returncode == 0, proc.stdout + proc.stderr)
+    en_html = (output_dir.parent / "en" / "knowledge" / "index.html").read_text(encoding="utf-8")
+    check("EN カテゴリ分け: 正しいslugでセクションが作られる(id=kzc-cat-photography)",
+          'id="kzc-cat-photography"' in en_html, en_html)
+    check("EN カテゴリ分け: 正しいslugでセクションが作られる(id=kzc-cat-marketing)",
+          'id="kzc-cat-marketing"' in en_html, en_html)
+    check("EN カテゴリ分け: 大文字化けしたフォールバックslugが出ない",
+          'id="kzc-cat-Photography"' not in en_html and 'id="kzc-cat-Marketing"' not in en_html, en_html)
+
+
+@with_tmp
 def test_en_index_top_page_labels_and_empty_state(tmp: Path) -> None:
     index = make_index()  # EN記事なし
     proc, output_dir = run_build(index, tmp)
@@ -1208,6 +1241,7 @@ def main() -> int:
         # 英語Knowledge（2026-07-20新規）
         test_en_article_output_path_has_en_prefix, test_en_article_hreflang_and_canonical,
         test_ja_article_no_hreflang_when_no_en_counterpart, test_en_article_uses_english_labels,
+        test_en_category_grouping_uses_correct_slugs,
         test_en_index_top_page_labels_and_empty_state, test_lang_switch_link_points_to_matching_article,
     ]
     for t in tests:
