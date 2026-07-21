@@ -2,8 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     開発日誌は今回は多言語化を行わないため、遷移先は常に /en/ のトップとする。 -->
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。 -->
 <script>
   (function () {
     try {
@@ -23,6 +22,11 @@
 <title>英語を読めなくても、AI生成記事の公開可否を判断できる仕組み｜開発日誌 - SideKick</title>
 <meta name="description" content="SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。">
 <link rel="canonical" href="https://www.sidekick-lab.com/development-log/2026-07-18">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log/2026-07-18">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log/2026-07-18">
+
 <meta property="og:type" content="article">
 <meta property="og:title" content="英語を読めなくても、AI生成記事の公開可否を判断できる仕組み｜開発日誌 - SideKick">
 <meta property="og:description" content="SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。">
@@ -50,7 +54,7 @@
 
 <div class="lang-banner" id="lang-banner">
   🇺🇸 This site is also available in English —
-  <a href="/en/">View English page →</a>
+  <a href="/en/development-log/2026-07-18">View English page →</a>
   <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
 </div>
 
@@ -81,7 +85,7 @@
       <a href="/changelog" style="color:var(--muted);">更新履歴</a>
       <a href="/faq" style="color:var(--muted);">Support</a>
       <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      <a href="/en/" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+      <a href="/en/development-log/2026-07-18" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
     </nav>
   </div>
 </header>
@@ -174,12 +178,14 @@
 
   <footer class="kzc-article-footer">
     <section class="kzc-author-block">
+      
       <h2>この記事を書いた人</h2>
       <p>
         村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
         この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
       </p>
       <p><a href="/about">Aboutを読む →</a></p>
+      
     </section>
     <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
   </footer>

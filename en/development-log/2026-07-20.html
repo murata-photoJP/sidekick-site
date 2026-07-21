@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Published the first English Knowledge articles after author review | Development Log - SideKick</title>
+<meta name="description" content="I published the first English-language articles for the Uchide no Kozuchi (Knowledge Base). The workflow I had built earlier — having AI translate articles and write Japanese-language review reports so I can make a publish decision without reading the English myself — ran on a real set of articles for the first time, and those articles are now live.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/development-log/2026-07-20">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log/2026-07-20">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log/2026-07-20">
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Published the first English Knowledge articles after author review | Development Log - SideKick">
+<meta property="og:description" content="I published the first English-language articles for the Uchide no Kozuchi (Knowledge Base). The workflow I had built earlier — having AI translate articles and write Japanese-language review reports so I can make a publish decision without reading the English myself — ran on a real set of articles for the first time, and those articles are now live.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/development-log/2026-07-20">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-07-20">
+
+<!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
+     （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/development-log/2026-07-20">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star">⭐ Star</a>
+      <a href="/en/portrait">👤 Portrait</a>
+      <a href="/en/sky-effect">☁️ Sky</a>
+      <a href="/en/knowledge" >📚 Knowledge</a>
+      <a href="/en/gallery" style="color:var(--muted);">Gallery</a>
+      <a href="/en/sidekick" style="color:var(--muted);">What is Sidekick</a>
+      <a href="/en/about" style="color:var(--muted);">About</a>
+      <a href="/en/development-log" style="color:var(--muted);" aria-current="page">Development Log</a>
+      <a href="/en/changelog" style="color:var(--muted);">Changelog</a>
+      <a href="/en/faq" style="color:var(--muted);">Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/development-log/2026-07-20" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/development-log">Development Log</a></li>
+    <li aria-current="page">Published the first English Knowledge articles after author review</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Published the first English Knowledge articles after author review</h1>
+    <p class="kzc-article-lead">I published the first English-language articles for the Uchide no Kozuchi (Knowledge Base). The workflow I had built earlier — having AI translate articles and write Japanese-language review reports so I can make a publish decision without reading the English myself — ran on a real set of articles for the first time, and those articles are now live.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">AI Development</span>
+      <time datetime="2026-07-20">July 20, 2026</time>
+    </p>
+    
+    <p class="kzc-article-meta">
+      <span class="kzc-badge">Claude Code</span><span class="kzc-badge">AI Development</span>
+    </p>
+    
+  </header>
+
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <h2>Background</h2>
+<p>I write Uchide no Kozuchi (SideKick's Knowledge Base) in Japanese. I want people who prefer English to be able to read the same content, but I don't feel confident enough in my own English reading ability to judge whether a translated article is ready to publish as-is.</p>
+<p>Some time ago I put together a prototype workflow: have AI translate the Japanese articles into English, then have the same AI write a review of the translation in Japanese, which I use as the basis for my publish decision. (I covered it in the development log from 2026-07-18.) This time, I actually ran that workflow on real production articles.</p>
+<h2>What I worked on this time</h2>
+<p>I chose a set of articles for the trial run, then had AI translate and review each one. During the review process, the AI flagged several places where its own translation had drifted from the original Japanese. In one article, the explanation of how to calculate the number of shots had been rewritten in a way that differed from the source. In another, the name of a paid plan didn't match the original.</p>
+<p>Because the AI summarised these issues in Japanese, I was able to notice them without reading through the English myself. For each problem I found, I corrected the Japanese source, then ran the translation and review again.</p>
+<p>In the end, all the articles in the trial set passed the checks, so I published them along with an English Knowledge index page. I also added links for switching between the Japanese and English versions, and put in place the multilingual setup needed for search engines.</p>
+<h2>Why I chose this approach</h2>
+<p>I didn't want to automatically publish AI translations without any check, but I also couldn't realistically read every English article myself. The approach I settled on was to have the AI report in Japanese on what it checked and what it was uncertain about, while keeping the final publish decision with me.</p>
+<p>This was a way of staying true to the principle SideKick consistently values: the final call is made by a person — even when the task is translation.</p>
+<h2>What changes for readers</h2>
+<p>Some of the Uchide no Kozuchi articles that were previously only available in Japanese can now be read in English as well. I haven't changed anything about the Japanese content or how the Japanese side works, so there is no impact for readers who use the Japanese version.</p>
+<h2>What comes next</h2>
+<p>What I published this time is just the initial group of articles. I plan to expand the coverage over time, but I intend to do that carefully, keeping both the AI review and the human check in place throughout.</p>
+<h2>Related features</h2>
+<ul>
+<li>Related feature: 打ち出の小槌 (Knowledge Base)</li>
+</ul>
+
+  </div>
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      
+      <h2>About the Author</h2>
+      <p>
+        Ichiro Murata is a photographer and the developer of SideKick. This article is written from his
+        hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize
+        past logs and draft the text, but the final review, edits, and publish decisions are always his own.
+      </p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+    <p><a href="/en/development-log">← Back to the development log list</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
+     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
+     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
+     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
