@@ -971,11 +971,12 @@
       'sky-effect.html':'skyeffect',
       'workshop.html':'workshop'
     };
-    document.querySelectorAll('.hub-card').forEach(function(card){
+    document.querySelectorAll('.hub-card, .ba-half').forEach(function(card){
       card.addEventListener('click',function(){
         var href = card.getAttribute('href') || '';
         var name = _cardMap[href] || href;
-        gtag('event','product_card_click',{product: name});
+        var loc = card.classList.contains('ba-half') ? 'before_after' : 'hub_card';
+        gtag('event','product_card_click',{product: name, location: loc});
       });
     });
 
