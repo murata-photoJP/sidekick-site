@@ -317,6 +317,31 @@ def test_long_dash_closing_fence_is_parsed_correctly(tmp_path: Path) -> None:
     assert plan["to_copy"][0]["slug"] == "2026-07-18"
 
 
+def test_en_subdirectory_excluded_from_ja_sync(tmp_path: Path) -> None:
+    """public/en/ は英語版専用ディレクトリのため、--source public でのJA同期には
+    含めない（同じ日付由来のslugがja/enで衝突するため、2026-07-21追加）。"""
+    source = tmp_path / "public"
+    dest = tmp_path / "content"
+    write_md(source / "2026" / "07" / "2026-07-18.md", **published_fields())
+    write_md(source / "en" / "2026" / "07" / "2026-07-18.md", **published_fields(title="EN title"))
+
+    plan = sdl.plan_sync(source, dest)
+
+    assert len(plan["to_copy"]) == 1
+    assert plan["to_copy"][0]["slug"] == "2026-07-18"
+
+
+def test_en_directory_can_be_synced_separately(tmp_path: Path) -> None:
+    source_en = tmp_path / "public" / "en"
+    dest_en = tmp_path / "content" / "en"
+    write_md(source_en / "2026" / "07" / "2026-07-18.md", **published_fields(title="EN title"))
+
+    result = sdl.apply_sync(sdl.plan_sync(source_en, dest_en), dest_en)
+
+    assert result["changed"] == 1
+    assert (dest_en / "2026" / "07" / "2026-07-18.md").exists()
+
+
 def test_invalid_explicit_slug_is_skipped(tmp_path: Path) -> None:
     source = tmp_path / "public"
     dest = tmp_path / "content"

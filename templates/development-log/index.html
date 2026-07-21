@@ -1,24 +1,29 @@
 {% extends "base.html" %}
 
-{% block title %}開発日誌｜SideKick{% endblock %}
-{% block meta_description %}SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。{% endblock %}
+{% block title %}{% if language == 'en' %}Development Log | SideKick{% else %}開発日誌｜SideKick{% endif %}{% endblock %}
+{% block meta_description %}{% if language == 'en' %}SideKick's development log. A record of the problems, experiments, and decisions behind building Photoshop scripts as a photographer.{% else %}SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。{% endif %}{% endblock %}
 {% block canonical %}{{ canonical_url }}{% endblock %}
 
 {% block content %}
 <section class="kzc-hero">
+  {% if language == 'en' %}
+  <h1>Development Log</h1>
+  <p class="kzc-hero-tagline">A record of what I ran into, tried, and chose while building SideKick.</p>
+  {% else %}
   <h1>開発日誌</h1>
   <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
+  {% endif %}
 </section>
 
 {% if entries %}
-<section class="kzc-article-list" aria-label="開発日誌一覧">
+<section class="kzc-article-list" aria-label="{% if language == 'en' %}Development log list{% else %}開発日誌一覧{% endif %}">
   {% for entry in entries %}
     {% include "components/devlog-card.html" %}
   {% endfor %}
 </section>
 {% else %}
-<section class="kzc-article-list" aria-label="開発日誌一覧">
-  <p class="kzc-empty">まだ公開されている開発日誌がありません。</p>
+<section class="kzc-article-list" aria-label="{% if language == 'en' %}Development log list{% else %}開発日誌一覧{% endif %}">
+  <p class="kzc-empty">{% if language == 'en' %}No development log entries have been published yet.{% else %}まだ公開されている開発日誌がありません。{% endif %}</p>
 </section>
 {% endif %}
 {% endblock %}

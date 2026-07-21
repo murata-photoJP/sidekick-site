@@ -358,3 +358,170 @@ def test_long_dash_closing_fence_does_not_leak_into_body(tmp_path: Path) -> None
 
 def test_format_date_ja() -> None:
     assert bdl.format_date_ja("2026-07-08") == "2026年7月8日"
+
+
+def test_format_date_en() -> None:
+    assert bdl.format_date_en("2026-07-08") == "July 8, 2026"
+
+
+# ---------------------------------------------------------------------------
+# 英語版（bilingual）
+# ---------------------------------------------------------------------------
+
+def write_en_md(path: Path, front_matter: dict | None = None, body: str | None = None) -> Path:
+    fm = {
+        "title": "EN Test Title",
+        "date": "2026-07-18",
+        "category": "AI Development",
+        "status": "published",
+        "summary": "EN summary.",
+        "source_slug": "2026-07-18",
+    }
+    if front_matter:
+        fm.update(front_matter)
+    lines = ["---"]
+    for k, v in fm.items():
+        lines.append(f'{k}: "{v}"')
+    lines.append("---")
+    text = "\n".join(lines) + "\n\n" + (body or "# Title\n\nBody text.\n")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    return path
+
+
+def test_en_entry_captures_source_slug(tmp_path: Path) -> None:
+    content_en = tmp_path / "content_en"
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    entries, warnings = bdl.load_entries(content_en, language="en")
+
+    assert entries[0]["source_slug"] == "2026-07-18"
+    assert entries[0]["date_display"] == "July 18, 2026"
+
+
+def test_hreflang_pairs_ja_and_en_by_source_slug(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    content_en = tmp_path / "content_en"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    ja_entries, _ = bdl.load_entries(content, language="ja")
+    en_entries, _ = bdl.load_entries(content_en, language="en")
+    by_slug = bdl.compute_hreflang_by_slug(ja_entries, en_entries)
+
+    assert by_slug["2026-07-18"]["ja"] == "https://www.sidekick-lab.com/development-log/2026-07-18"
+    assert by_slug["2026-07-18"]["en"] == "https://www.sidekick-lab.com/en/development-log/2026-07-18"
+
+
+def test_hreflang_absent_when_no_translation(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+
+    ja_entries, _ = bdl.load_entries(content, language="ja")
+    by_slug = bdl.compute_hreflang_by_slug(ja_entries, [])
+
+    assert by_slug == {}
+
+
+def test_en_article_output_path_has_en_prefix(tmp_path: Path) -> None:
+    content_en = tmp_path / "content_en"
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    en_entries, _ = bdl.load_entries(content_en, language="en")
+    html = bdl.render_all(en_entries, language="en")[Path("2026-07-18.html")]
+
+    assert 'href="https://www.sidekick-lab.com/en/development-log/2026-07-18"' in html
+    assert 'href="/en/development-log"' in html  # breadcrumb / back link
+
+
+def test_en_article_uses_english_labels(tmp_path: Path) -> None:
+    content_en = tmp_path / "content_en"
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    en_entries, _ = bdl.load_entries(content_en, language="en")
+    html = bdl.render_all(en_entries, language="en")[Path("2026-07-18.html")]
+
+    assert "Development Log" in html
+    assert "About the Author" in html
+    assert "この記事を書いた人" not in html
+    assert "村田一朗｜写真家" not in html
+
+
+def test_ja_article_gets_hreflang_when_en_translation_exists(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    content_en = tmp_path / "content_en"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    ja_entries, _ = bdl.load_entries(content, language="ja")
+    en_entries, _ = bdl.load_entries(content_en, language="en")
+    by_slug = bdl.compute_hreflang_by_slug(ja_entries, en_entries)
+    html = bdl.render_all(ja_entries, language="ja", hreflang_by_slug=by_slug)[Path("2026-07-18.html")]
+
+    assert 'hreflang="en"' in html
+    assert 'https://www.sidekick-lab.com/en/development-log/2026-07-18' in html
+
+
+def test_lang_switch_url_falls_back_to_top_when_no_translation(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+
+    ja_entries, _ = bdl.load_entries(content, language="ja")
+    html = bdl.render_all(ja_entries, language="ja")[Path("2026-07-18.html")]
+
+    assert '/en/development-log' in html
+
+
+def test_top_page_hreflang_present_when_both_languages_built(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+
+    ja_entries, _ = bdl.load_entries(content, language="ja")
+    html = bdl.render_all(ja_entries, language="ja", include_top_hreflang=True)[Path("index.html")]
+
+    assert 'hreflang="en"' in html
+    assert 'hreflang="ja"' in html
+
+
+def test_main_builds_both_languages_when_content_en_given(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    content_en = tmp_path / "content_en"
+    output = tmp_path / "out"
+    output_en = tmp_path / "out_en"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    rc = bdl.main([
+        "--content", str(content), "--output", str(output),
+        "--content-en", str(content_en), "--output-en", str(output_en),
+    ])
+
+    assert rc == 0
+    assert (output / "2026-07-18.html").exists()
+    assert (output_en / "2026-07-18.html").exists()
+
+
+def test_en_subdirectory_excluded_from_ja_content_load(tmp_path: Path) -> None:
+    """content/development-log/en/ が本番運用でJAディレクトリの直下にネストされる
+    構成でも、language='ja'での読み込みが英語記事を巻き込んでslug衝突しないこと
+    （実データ確認で発見、2026-07-21追加）。"""
+    content = tmp_path / "content"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_en_md(content / "en" / "2026" / "07" / "2026-07-18.md")
+
+    ja_entries, _ = bdl.load_entries(content, language="ja")
+
+    assert len(ja_entries) == 1
+    assert ja_entries[0]["slug"] == "2026-07-18"
+
+
+def test_main_requires_output_en_when_content_en_given(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    content_en = tmp_path / "content_en"
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_en_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    rc = bdl.main(["--content", str(content), "--output", str(tmp_path / "out"),
+                   "--content-en", str(content_en)])
+
+    assert rc == 1

@@ -46,8 +46,13 @@ def load_entries(content_dir: Path) -> list[dict]:
     if not content_dir.exists():
         raise SitemapError(f"content_dirが見つかりません: {content_dir}")
 
+    # content/development-log/en/ は英語版専用ディレクトリ。JA側（content_dir=
+    # content/development-log）を読む際にネストされたen/を一緒に拾わないよう除外する
+    # （sync_development_log.py・build_development_log.pyと同じ理由）。
     entries = []
-    for path in sorted(content_dir.rglob("*.md")):
+    for path in sorted(
+        p for p in content_dir.rglob("*.md") if p.relative_to(content_dir).parts[0] != "en"
+    ):
         rel_path = path.relative_to(content_dir)
         text = path.read_text(encoding="utf-8")
         m = FRONT_MATTER_RE.match(text)
@@ -71,15 +76,15 @@ def load_entries(content_dir: Path) -> list[dict]:
     return entries
 
 
-def build_urls(entries: list[dict]) -> list[dict]:
+def build_urls(entries: list[dict], *, prefix: str = "/development-log") -> list[dict]:
     urls = [{
-        "loc": f"{SITE_ORIGIN}/development-log/{e['slug']}",
+        "loc": f"{SITE_ORIGIN}{prefix}/{e['slug']}",
         "lastmod": e["date"],
         "priority": ARTICLE_PRIORITY,
     } for e in entries]
 
     if entries:
-        urls.append({"loc": f"{SITE_ORIGIN}/development-log", "lastmod": None, "priority": TOP_PRIORITY})
+        urls.append({"loc": f"{SITE_ORIGIN}{prefix}", "lastmod": None, "priority": TOP_PRIORITY})
 
     urls.sort(key=lambda u: u["loc"])
     return urls
@@ -122,9 +127,15 @@ def _atomic_write_text(path: Path, text: str) -> None:
         raise
 
 
-def generate(content_dir: Path, sitemap_path: Path, *, dry_run: bool = False) -> dict:
+def generate(content_dir: Path, sitemap_path: Path, *, content_en_dir: Path | None = None,
+             dry_run: bool = False) -> dict:
     entries = load_entries(content_dir)
-    urls = build_urls(entries)
+    urls = build_urls(entries, prefix="/development-log")
+
+    if content_en_dir is not None:
+        en_entries = load_entries(content_en_dir)
+        urls += build_urls(en_entries, prefix="/en/development-log")
+
     url_block = render_url_block(urls)
 
     if not sitemap_path.exists():
@@ -145,7 +156,8 @@ def generate(content_dir: Path, sitemap_path: Path, *, dry_run: bool = False) ->
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="開発日誌のURLをsitemap.xmlへ反映する")
-    p.add_argument("--content", required=True, help="content/development-log のパス")
+    p.add_argument("--content", required=True, help="content/development-log のパス（日本語）")
+    p.add_argument("--content-en", default=None, help="英語版記事のパス（省略時は英語版を含めない）")
     p.add_argument("--sitemap", required=True, help="更新対象のsitemap.xmlのパス")
     p.add_argument("--dry-run", action="store_true", help="実際には書き込まず、結果を表示するだけ")
     return p.parse_args(argv)
@@ -153,8 +165,10 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(sys.argv[1:] if argv is None else argv)
+    content_en_dir = Path(args.content_en) if args.content_en else None
     try:
-        result = generate(Path(args.content), Path(args.sitemap), dry_run=args.dry_run)
+        result = generate(Path(args.content), Path(args.sitemap),
+                           content_en_dir=content_en_dir, dry_run=args.dry_run)
     except SitemapError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1

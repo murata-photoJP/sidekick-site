@@ -25,6 +25,27 @@ sitemap.xml（マーカー区間のみ更新）
 Vercelが自動ビルド・公開
 ```
 
+英語版（2026-07-21追加、軽量版）は並行トラックとして以下の流れになる。
+
+```
+_DevelopmentLog/public/YYYY/MM/YYYY-MM-DD.md（ja, status: published）
+        ↓ _DevelopmentLog/scripts/translate_to_english.py（1回のAI翻訳）
+_DevelopmentLog/public/en/YYYY/MM/YYYY-MM-DD.md（+.txt、status: draft固定）
+        ↓ 村田さんが.txtを読んで確認（Google翻訳等での逆翻訳チェックを含む）
+        ↓ 確認後、statusを手動でpublishedへ変更
+        ↓ sync_development_log.py（--source public/en --dest content/development-log/en）
+content/development-log/en/YYYY/MM/YYYY-MM-DD.md
+        ↓ build_development_log.py（--content-en / --output-en）
+en/development-log/index.html, en/development-log/{slug}.html
+        ↓ generate_development_log_sitemap.py（--content-en）
+sitemap.xml（英語版URLも同じマーカー区間に追加）
+```
+
+英語版は`_統合KB`の英語版Knowledge Base機能（監査AI・複数ラウンド・過剰修正検知）を
+持ち込まない軽量版（村田さんの明示指示、2026-07-21）。AIによる翻訳監査レポートは
+生成せず、村田さんが`.txt`を読んで（必要ならGoogle翻訳等で逆翻訳して）明らかな
+誤りがないかを確認する運用とする。そのため生成直後は必ず`status: draft`。
+
 Vercel上のビルド環境からはPhotoshopのPresetsフォルダを参照できないため、
 **同期（sync）は必ずローカルで実行し、結果をこのリポジトリへコミットする**。
 Vercel側でローカル同期処理を実行しようとしないこと。
@@ -75,6 +96,28 @@ python build/development-log/generate_development_log_sitemap.py `
 # テスト
 python -m pytest tests/development-log -q
 ```
+
+英語版を含める場合は、同期・ビルド・sitemap反映のそれぞれに英語版の引数を加える。
+
+```powershell
+# 英語版の同期（_DevelopmentLog側。public/enはstatus: publishedの記事のみ対象）
+python build/development-log/sync_development_log.py `
+  --source "C:\Program Files\Adobe\Adobe Photoshop (Beta)\Presets\Scripts\自作\_DevelopmentLog\public\en" `
+  --dest content/development-log/en
+
+# ビルド（ja+en同時、hreflang・言語切替リンクも自動で対応付けられる）
+python build/development-log/build_development_log.py `
+  --content content/development-log --output development-log `
+  --content-en content/development-log/en --output-en en/development-log
+
+# sitemap反映（ja+en同時）
+python build/development-log/generate_development_log_sitemap.py `
+  --content content/development-log --content-en content/development-log/en --sitemap sitemap.xml
+```
+
+`content/development-log/en/`は`_DevelopmentLog/public/en/`と同様に「英語版専用」の
+予約ディレクトリとして扱う（`--content content/development-log`でのJA読み込み時は
+自動的に除外される）。
 
 パスに日本語・空白・括弧（`(Beta)`等）が含まれていても、上記のとおり
 ダブルクォートで括れば問題なく動作する（`pathlib`ベースで実装しており、
@@ -177,8 +220,14 @@ git push後はVercelが自動でビルド・公開する（本仕組み自体は
 - 一覧ページ：`/development-log` （`development-log/index.html`）
 - 個別記事：`/development-log/{slug}` （`development-log/{slug}.html`、フラットファイル。
   打ち出の小槌と同じ理由＝`vercel.json`の`trailingSlash: false`との整合）
-- テンプレート：`templates/development-log/`（`header.html`/`footer.html`のみ
-  `templates/knowledge/`のものをJinja2の検索パス経由でそのまま再利用）
+- 英語版：`/en/development-log`・`/en/development-log/{slug}`
+  （`en/development-log/index.html`・`en/development-log/{slug}.html`、
+  打ち出の小槌の`en/knowledge/`と同じ配置方針）
+- hreflang・言語切替リンク：英語記事front matterの`source_slug`で日本語版と対応付け、
+  対応する翻訳が無い記事にはhreflangを出さない（存在しないURLを出力しない）
+- テンプレート：`templates/development-log/`（`header.html`/`footer.html`/
+  `header_en.html`/`footer_en.html`は`templates/knowledge/`のものをJinja2の
+  検索パス経由でそのまま再利用）
 - CSS：新規追加なし。既存の`/assets/css/knowledge.css`とkzc-*クラスをそのまま利用
 
 ---
@@ -209,6 +258,12 @@ test_handles_japanese_space_and_parenthesis_in_path`）。
   RSSの仕組みが無いため、今回は必須要件ではないと判断した）
 - 記事別OGP画像・構造化データ（JSON-LD）は追加していない（打ち出の小槌の
   記事ページ自体がこれらを実装していないため、対象範囲を揃えた）
-- 実際の本番反映（`development-log/`への配置・`sitemap.xml`の実更新・
-  git commit・Vercelデプロイ）は、現時点で公開対象の記事が0件（既存の
-  開発日誌2本はいずれも`status: draft`）のため実施していない
+- 英語版の翻訳品質チェックは軽量版（村田さんが`.txt`を読んで確認、AIによる
+  監査レポートは無し）。`_統合KB`のような複数ラウンド監査・過剰修正検知は
+  意図的に持ち込んでいない
+
+## 14. 公開実績（2026-07-21時点）
+
+- 日本語：2026-07-18分・2026-07-20分を`/development-log`へ本番公開済み
+- 英語：上記2本を`_DevelopmentLog/scripts/translate_to_english.py`で翻訳し、
+  村田さんの確認後`/en/development-log`へ本番公開済み

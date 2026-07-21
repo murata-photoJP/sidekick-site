@@ -111,6 +111,34 @@ def test_unrelated_manual_entries_untouched(tmp_path: Path) -> None:
     assert "https://www.sidekick-lab.com/</loc>" in text
 
 
+def test_en_urls_included_with_en_prefix(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    content_en = tmp_path / "content" / "en"
+    sitemap = tmp_path / "sitemap.xml"
+    sitemap.write_text(MINIMAL_SITEMAP, encoding="utf-8")
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_md(content_en / "2026" / "07" / "2026-07-18.md")
+
+    result = gdls.generate(content, sitemap, content_en_dir=content_en)
+
+    text = sitemap.read_text(encoding="utf-8")
+    assert "https://www.sidekick-lab.com/en/development-log/2026-07-18" in text
+    assert "https://www.sidekick-lab.com/en/development-log</loc>" in text
+    assert result["url_count"] == 4  # ja記事+トップ、en記事+トップ
+
+
+def test_en_subdirectory_excluded_from_ja_pass(tmp_path: Path) -> None:
+    content = tmp_path / "content"
+    sitemap = tmp_path / "sitemap.xml"
+    sitemap.write_text(MINIMAL_SITEMAP, encoding="utf-8")
+    write_md(content / "2026" / "07" / "2026-07-18.md")
+    write_md(content / "en" / "2026" / "07" / "2026-07-18.md")
+
+    result = gdls.generate(content, sitemap)
+
+    assert result["url_count"] == 2  # 英語版を別途指定していないため、ja記事+トップのみ
+
+
 def test_missing_sitemap_raises(tmp_path: Path) -> None:
     content = tmp_path / "content"
     write_md(content / "2026" / "07" / "2026-07-18.md")

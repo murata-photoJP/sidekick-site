@@ -107,6 +107,18 @@ def format_date_ja(date_str: str) -> str:
     return f"{y}年{mo}月{d}日"
 
 
+EN_MONTH_NAMES = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+]
+
+
+def format_date_en(date_str: str) -> str:
+    m = DATE_RE.match(date_str)
+    y, mo, d = m.group(1), int(m.group(2)), int(m.group(3))
+    return f"{EN_MONTH_NAMES[mo - 1]} {d}, {y}"
+
+
 def strip_leading_h1(body_markdown: str) -> str:
     """本文冒頭が単一の#見出しの場合は取り除く（Article HeaderのH1と重複するため。
     打ち出の小槌build_knowledge.pyの同名関数と同じ理由・同じ挙動）。"""
@@ -151,7 +163,7 @@ def check_image_paths(body_markdown: str, rel_path: Path) -> list[str]:
     return warnings
 
 
-def load_entries(content_dir: Path) -> tuple[list[dict], list[str]]:
+def load_entries(content_dir: Path, *, language: str = "ja") -> tuple[list[dict], list[str]]:
     if not content_dir.exists():
         raise BuildError(f"content_dirが見つかりません: {content_dir}")
 
@@ -159,7 +171,15 @@ def load_entries(content_dir: Path) -> tuple[list[dict], list[str]]:
     warnings: list[str] = []
     slug_owners: dict[str, Path] = {}
 
-    for path in sorted(content_dir.rglob("*.md")):
+    # content/development-log/en/ は英語版記事専用のディレクトリ（sync_development_log.pyの
+    # collect_candidates()と同じ理由）。language="ja"でcontent_dir=content/development-logを
+    # 読む際に、ネストされたen/を一緒に拾ってslugが衝突しないよう除外する。
+    # language="en"の場合はcontent_dir自体がen/なので、この条件に該当するパスは無い。
+    md_paths = sorted(
+        p for p in content_dir.rglob("*.md")
+        if p.relative_to(content_dir).parts[0] != "en"
+    )
+    for path in md_paths:
         rel_path = path.relative_to(content_dir)
         try:
             text = path.read_text(encoding="utf-8")
@@ -194,16 +214,18 @@ def load_entries(content_dir: Path) -> tuple[list[dict], list[str]]:
 
         warnings.extend(check_image_paths(body, rel_path))
 
+        date_formatter = format_date_en if language == "en" else format_date_ja
         entries.append({
             "slug": slug,
             "title": data["title"],
             "date": data["date"],
-            "date_display": format_date_ja(str(data["date"])),
+            "date_display": date_formatter(str(data["date"])),
             "category": data.get("category") or None,
             "tags": data.get("tags") or [],
             "summary": data.get("summary") or None,
             "related_product": data.get("related_product") or None,
             "related_url": data.get("related_url") or None,
+            "source_slug": data.get("source_slug") or None,
             "body_markdown": body,
         })
 
@@ -220,7 +242,42 @@ def build_env() -> Environment:
     )
 
 
-def render_all(entries: list[dict]) -> dict[Path, str]:
+def compute_hreflang_by_slug(ja_entries: list[dict], en_entries: list[dict]) -> dict[str, dict[str, str]]:
+    """ja記事のslug・en記事のslugそれぞれから、対応する翻訳先の絶対URLを引ける
+    dictを作る。対応する翻訳が無い記事はキーに含めない（存在しないURLを
+    出力しないため、打ち出の小槌のcompute_hreflang_alternates()と同じ方針）。"""
+    by_slug: dict[str, dict[str, str]] = {}
+    en_by_source_slug = {e["source_slug"]: e for e in en_entries if e.get("source_slug")}
+
+    for ja in ja_entries:
+        en_match = en_by_source_slug.get(ja["slug"])
+        if not en_match:
+            continue
+        urls = {
+            "ja": SITE_ORIGIN + f"/development-log/{ja['slug']}",
+            "en": SITE_ORIGIN + f"/en/development-log/{en_match['slug']}",
+        }
+        by_slug[ja["slug"]] = urls
+        by_slug[en_match["slug"]] = urls
+
+    return by_slug
+
+
+def compute_lang_switch_url(entry: dict, language: str, hreflang_by_slug: dict[str, dict[str, str]]) -> str:
+    """Header/Footerの言語切替リンクの遷移先。対応する翻訳記事があればその記事へ、
+    無ければ切替先言語のDevelopment Logトップへフォールバックする
+    （存在しないURLにはしない、打ち出の小槌のcompute_lang_switch_url()と同じ方針）。"""
+    other = "ja" if language == "en" else "en"
+    urls = hreflang_by_slug.get(entry["slug"])
+    if urls and other in urls:
+        path = urls[other][len(SITE_ORIGIN):]
+        return path
+    return "/en/development-log" if language == "ja" else "/development-log"
+
+
+def render_all(entries: list[dict], *, language: str = "ja",
+                hreflang_by_slug: dict[str, dict[str, str]] | None = None,
+                include_top_hreflang: bool = False) -> dict[Path, str]:
     env = build_env()
 
     try:
@@ -229,26 +286,39 @@ def render_all(entries: list[dict]) -> dict[Path, str]:
     except TemplateNotFound as exc:
         raise BuildError(f"Jinja2テンプレートが見つかりません: {exc}") from exc
 
+    hreflang_by_slug = hreflang_by_slug or {}
+    top_url = "/en/development-log" if language == "en" else "/development-log"
     rendered: dict[Path, str] = {}
 
     for e in entries:
         body_html = render_markdown(strip_leading_h1(e["body_markdown"]))
         meta_description = e["summary"] or plain_text_excerpt(e["body_markdown"])
-        public_url = f"/development-log/{e['slug']}"
+        public_url = f"{top_url}/{e['slug']}"
         entry_ctx = dict(e, meta_description=meta_description)
         html = article_tpl.render(
             entry=entry_ctx,
             body_html=body_html,
             canonical_url=SITE_ORIGIN + public_url,
             nav_current="development-log",
+            language=language,
+            devlog_top_url=top_url,
+            hreflang_alternates=hreflang_by_slug.get(e["slug"], {}),
+            lang_switch_url=compute_lang_switch_url(e, language, hreflang_by_slug),
         )
         rendered[Path(f"{e['slug']}.html")] = html
 
-    list_entries = [dict(e, public_url=f"/development-log/{e['slug']}") for e in entries]
+    list_entries = [dict(e, public_url=f"{top_url}/{e['slug']}") for e in entries]
+    index_hreflang = (
+        {"ja": SITE_ORIGIN + "/development-log", "en": SITE_ORIGIN + "/en/development-log"}
+        if include_top_hreflang else {}
+    )
     index_html = index_tpl.render(
         entries=list_entries,
-        canonical_url=SITE_ORIGIN + "/development-log",
+        canonical_url=SITE_ORIGIN + top_url,
         nav_current="development-log",
+        language=language,
+        hreflang_alternates=index_hreflang,
+        lang_switch_url=("/development-log" if language == "en" else "/en/development-log"),
     )
     rendered[Path("index.html")] = index_html
 
@@ -296,10 +366,15 @@ def stage_and_commit(rendered: dict[Path, str], output_dir: Path) -> list[Path]:
 
 def parse_args(argv: list[str]) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="開発日誌 静的HTMLビルド")
-    p.add_argument("--content", required=True, help="content/development-log のパス")
+    p.add_argument("--content", required=True, help="content/development-log のパス（日本語）")
     p.add_argument("--output", required=True,
-                   help="出力先ディレクトリ。本番のdevelopment-log/を直接指定しないこと"
+                   help="日本語版の出力先ディレクトリ。本番のdevelopment-log/を直接指定しないこと"
                         "（ローカル確認用ディレクトリを指定し、確認後に手動で本番へコピーする運用）")
+    p.add_argument("--content-en", default=None,
+                   help="英語版記事のパス（省略時は英語版を生成しない）")
+    p.add_argument("--output-en", default=None,
+                   help="英語版の出力先ディレクトリ（--content-en指定時は必須。"
+                        "本番のen/development-log/を直接指定しないこと）")
     p.add_argument("--validate-only", action="store_true", help="書き込まず、生成可能かのみ確認する")
     return p.parse_args(argv)
 
@@ -307,9 +382,30 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(sys.argv[1:] if argv is None else argv)
 
+    if args.content_en and not args.output_en:
+        print("ERROR: --content-en を指定する場合は --output-en も指定してください", file=sys.stderr)
+        return 1
+
     try:
-        entries, warnings = load_entries(Path(args.content))
-        rendered = render_all(entries)
+        ja_entries, ja_warnings = load_entries(Path(args.content), language="ja")
+        en_entries: list[dict] = []
+        en_warnings: list[str] = []
+        if args.content_en:
+            en_entries, en_warnings = load_entries(Path(args.content_en), language="en")
+
+        hreflang_by_slug = compute_hreflang_by_slug(ja_entries, en_entries)
+        include_top_hreflang = bool(args.content_en)
+
+        rendered_ja = render_all(
+            ja_entries, language="ja", hreflang_by_slug=hreflang_by_slug,
+            include_top_hreflang=include_top_hreflang,
+        )
+        rendered_en = None
+        if args.content_en:
+            rendered_en = render_all(
+                en_entries, language="en", hreflang_by_slug=hreflang_by_slug,
+                include_top_hreflang=include_top_hreflang,
+            )
     except BuildError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
@@ -317,29 +413,45 @@ def main(argv: list[str] | None = None) -> int:
         print(f"ERROR: 予期しないエラー: {exc}", file=sys.stderr)
         return 1
 
-    for w in warnings:
+    for w in ja_warnings + en_warnings:
         print(f"WARNING: {w}")
 
     if args.validate_only:
-        print(f"[ok] validate-only: {len(rendered)}ページを生成可能です（記事{len(entries)}件）")
-        for rel_path in sorted(rendered):
+        print(f"[ok] validate-only（ja）: {len(rendered_ja)}ページを生成可能です（記事{len(ja_entries)}件）")
+        for rel_path in sorted(rendered_ja):
             print(f"  - {rel_path}")
+        if rendered_en is not None:
+            print(f"[ok] validate-only（en）: {len(rendered_en)}ページを生成可能です（記事{len(en_entries)}件）")
+            for rel_path in sorted(rendered_en):
+                print(f"  - {rel_path}")
         return 0
 
     output_dir = Path(args.output)
     try:
-        removed = stage_and_commit(rendered, output_dir)
+        removed = stage_and_commit(rendered_ja, output_dir)
+        removed_en: list[Path] = []
+        if rendered_en is not None:
+            removed_en = stage_and_commit(rendered_en, Path(args.output_en))
     except OSError as exc:
         print(f"ERROR: 出力先へ書き込めません: {exc}", file=sys.stderr)
         return 1
 
-    print(f"[done] {len(rendered)}ページを生成しました -> {output_dir}（記事{len(entries)}件）")
-    for rel_path in sorted(rendered):
+    print(f"[done] {len(rendered_ja)}ページを生成しました -> {output_dir}（記事{len(ja_entries)}件）")
+    for rel_path in sorted(rendered_ja):
         print(f"  - {rel_path}")
     if removed:
         print(f"[done] 非公開になった開発日誌の古いHTMLを{len(removed)}件削除しました")
         for p in sorted(removed):
             print(f"  - {p.relative_to(output_dir)}")
+
+    if rendered_en is not None:
+        print(f"[done] {len(rendered_en)}ページを生成しました -> {args.output_en}（記事{len(en_entries)}件）")
+        for rel_path in sorted(rendered_en):
+            print(f"  - {rel_path}")
+        if removed_en:
+            print(f"[done] 非公開になった開発日誌（英語）の古いHTMLを{len(removed_en)}件削除しました")
+            for p in sorted(removed_en):
+                print(f"  - {p.relative_to(Path(args.output_en))}")
     return 0
 
 

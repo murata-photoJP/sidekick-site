@@ -109,9 +109,15 @@ def resolve_slug(data: dict, rel_path: Path) -> str:
 
 
 def collect_candidates(source: Path) -> list[Path]:
+    """sourceの直下に'en'という名前のディレクトリがある場合は除外する。
+    _DevelopmentLog/public/en/ は英語版記事専用のディレクトリで、日本語版の同期
+    （--source public）を実行する際に一緒に取り込んでしまうと、同じファイル名
+    （日付）に由来するslugが日本語・英語の両方で衝突してしまうため
+    （2026-07-21追加、英語版開発日誌対応）。英語版は
+    `--source public/en --dest content/development-log/en` として別途同期する。"""
     if not source.exists():
         raise SyncError(f"同期元が見つかりません: {source}")
-    return sorted(source.rglob("*.md"))
+    return sorted(p for p in source.rglob("*.md") if p.relative_to(source).parts[0] != "en")
 
 
 def plan_sync(source: Path, dest: Path) -> dict:

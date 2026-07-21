@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ entry.title }}｜開発日誌 - SideKick{% endblock %}
+{% block title %}{{ entry.title }}{% if language == 'en' %} | Development Log - SideKick{% else %}｜開発日誌 - SideKick{% endif %}{% endblock %}
 {% block meta_description %}{{ entry.meta_description }}{% endblock %}
 {% block canonical %}{{ canonical_url }}{% endblock %}
 {% block og_type %}article{% endblock %}
@@ -11,7 +11,7 @@
 {% block content %}
 <nav aria-label="breadcrumb" class="kzc-breadcrumb">
   <ol>
-    <li><a href="/development-log">開発日誌</a></li>
+    <li><a href="{{ devlog_top_url }}">{% if language == 'en' %}Development Log{% else %}開発日誌{% endif %}</a></li>
     <li aria-current="page">{{ entry.title }}</li>
   </ol>
 </nav>
@@ -31,7 +31,7 @@
     {% endif %}
   </header>
 
-  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+  <p class="kzc-author-short">{% if language == 'en' %}Ichiro Murata · Photographer / SideKick Developer{% else %}村田一朗｜写真家・SideKick開発者{% endif %}</p>
 
   <div class="kzc-article-body">
     {{ body_html|safe }}
@@ -39,22 +39,32 @@
 
   {% if entry.related_product %}
   <section class="kzc-product-context">
-    <p class="kzc-product-context-label">関連するSideKick製品</p>
+    <p class="kzc-product-context-label">{% if language == 'en' %}Related SideKick Product{% else %}関連するSideKick製品{% endif %}</p>
     <p class="kzc-product-name">{{ entry.related_product }}</p>
-    {% if entry.related_url %}<p class="kzc-product-links"><a href="{{ entry.related_url }}">{{ entry.related_product }}の詳細を見る →</a></p>{% endif %}
+    {% if entry.related_url %}<p class="kzc-product-links"><a href="{{ entry.related_url }}">{% if language == 'en' %}See details →{% else %}{{ entry.related_product }}の詳細を見る →{% endif %}</a></p>{% endif %}
   </section>
   {% endif %}
 
   <footer class="kzc-article-footer">
     <section class="kzc-author-block">
+      {% if language == 'en' %}
+      <h2>About the Author</h2>
+      <p>
+        Ichiro Murata is a photographer and the developer of SideKick. This article is written from his
+        hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize
+        past logs and draft the text, but the final review, edits, and publish decisions are always his own.
+      </p>
+      <p><a href="/en/about">Read About →</a></p>
+      {% else %}
       <h2>この記事を書いた人</h2>
       <p>
         村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
         この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
       </p>
       <p><a href="/about">Aboutを読む →</a></p>
+      {% endif %}
     </section>
-    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+    <p><a href="{{ devlog_top_url }}">{% if language == 'en' %}← Back to the development log list{% else %}← 開発日誌の一覧へ戻る{% endif %}</a></p>
   </footer>
 </article>
 {% endblock %}
