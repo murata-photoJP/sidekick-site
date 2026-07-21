@@ -1,0 +1,13 @@
+{# 開発日誌カード部品。呼び出し側で `entry`（1記事分のdict）を渡すこと。
+   打ち出の小槌のarticle-card.htmlと同じクラス名を使い、CSSを新規追加せず統一感を保つ。 #}
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    {% if entry.category %}<p class="kzc-card-category">{{ entry.category }}</p>{% endif %}
+    <h3 class="kzc-card-title"><a href="{{ entry.public_url }}">{{ entry.title }}</a></h3>
+    {% if entry.summary %}<p class="kzc-card-desc">{{ entry.summary }}</p>{% endif %}
+    <p class="kzc-card-meta">
+      <time datetime="{{ entry.date }}">{{ entry.date_display }}</time>
+      {% if entry.related_product %}<span class="kzc-badge">{{ entry.related_product }}</span>{% endif %}
+    </p>
+  </div>
+</article>

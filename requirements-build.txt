@@ -1,7 +1,10 @@
-# 打ち出の小槌（knowledge）ビルド専用の依存関係。
+# 打ち出の小槌（knowledge）・開発日誌（development-log）ビルド専用の依存関係。
 # 既存の package.json（Vercel Serverless Functions用のNode依存）とは無関係。
 #
-# PyYAMLはWeb側では使用しない（web-published.jsonはJSONのため）。
-# _統合KB側の依存としては別途 _統合KB/requirements.txt 等で管理する想定。
+# 2026-07-21追記: 開発日誌（development-log）はKnowledgeと異なり、_統合KB側でJSONへ
+# 事前正規化されたデータを受け取るのではなく、_DevelopmentLogが生成するMarkdown＋YAML
+# front matterを直接読む。そのためPyYAMLを追加した（このマシンには既にインストール
+# 済みだったが、再現性のため明記する）。
 Jinja2==3.1.6
 markdown-it-py==4.0.0
+PyYAML==6.0.3

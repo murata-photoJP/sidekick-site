@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}{{ entry.title }}｜開発日誌 - SideKick{% endblock %}
+{% block meta_description %}{{ entry.meta_description }}{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block extra_meta %}
+<meta property="article:published_time" content="{{ entry.date }}">
+{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/development-log">開発日誌</a></li>
+    <li aria-current="page">{{ entry.title }}</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">{{ entry.title }}</h1>
+    {% if entry.summary %}<p class="kzc-article-lead">{{ entry.summary }}</p>{% endif %}
+    <p class="kzc-article-meta">
+      {% if entry.category %}<span class="kzc-category">{{ entry.category }}</span>{% endif %}
+      <time datetime="{{ entry.date }}">{{ entry.date_display }}</time>
+    </p>
+    {% if entry.tags %}
+    <p class="kzc-article-meta">
+      {% for tag in entry.tags %}<span class="kzc-badge">{{ tag }}</span>{% endfor %}
+    </p>
+    {% endif %}
+  </header>
+
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    {{ body_html|safe }}
+  </div>
+
+  {% if entry.related_product %}
+  <section class="kzc-product-context">
+    <p class="kzc-product-context-label">関連するSideKick製品</p>
+    <p class="kzc-product-name">{{ entry.related_product }}</p>
+    {% if entry.related_url %}<p class="kzc-product-links"><a href="{{ entry.related_url }}">{{ entry.related_product }}の詳細を見る →</a></p>{% endif %}
+  </section>
+  {% endif %}
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+  </footer>
+</article>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}開発日誌｜SideKick{% endblock %}
+{% block meta_description %}SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+
+{% block content %}
+<section class="kzc-hero">
+  <h1>開発日誌</h1>
+  <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
+</section>
+
+{% if entries %}
+<section class="kzc-article-list" aria-label="開発日誌一覧">
+  {% for entry in entries %}
+    {% include "components/devlog-card.html" %}
+  {% endfor %}
+</section>
+{% else %}
+<section class="kzc-article-list" aria-label="開発日誌一覧">
+  <p class="kzc-empty">まだ公開されている開発日誌がありません。</p>
+</section>
+{% endif %}
+{% endblock %}
