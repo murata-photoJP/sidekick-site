@@ -177,6 +177,46 @@ IDを並べるだけでよい（ビルドの再実行が必要）。ビルドス
 触れずに検証できるよう、`build_knowledge.py`に`--pickup-config <path>`を追加した
 （省略時は本番の`data/knowledge/pickup.json`を使う）。
 
+### 本番デプロイ後に発見・修正した不具合2件（2026-07-21）
+
+**1. EN側のカテゴリ表示順バグ**
+
+`_統合KB`の`generate_web_published_index.py`の`build_categories()`が、
+言語に関わらず`categories`配列の`name`フィールドに常に`name_ja`（日本語名）を
+入れていた（`build_article_card()`は元々言語別に出し分けていたが、こちらだけ
+取り残されていた既存バグ）。今回追加した`build_category_groups()`（本ファイル）が
+この`name`でslugを逆引きする実装だったため、EN記事だけ誤ったフォールバックslug
+（大文字化けした疑似slug、例：`Marketing`）が使われ、taxonomy順ソートが機能せず
+アルファベット順もどきの誤った順になっていた。`_統合KB`側で`e["language"] == "en"`
+のときは`category.name`（英語名）を使うよう修正。合わせて、本ファイルのテスト
+フィクスチャ（`card_from_article()`・`categories_from_articles()`）にも同じ
+言語分岐の抜けがあり、本番と異なる前提でテストが通っていたことが判明したため、
+本番コードと同じ前提に揃えた。
+
+**教訓**：Web側で言語別データ（EN/JA）を扱うロジックを追加する際は、上流
+（`_統合KB`側の集計・変換関数）が言語別に正しく出し分けているか確認すること。
+テストフィクスチャがそのズレを隠してしまうと、本番デプロイまで気づけない。
+
+**2. カテゴリnavの選択状態がスクロールで意図せず変わるバグ**
+
+初期実装では、カテゴリnavの現在位置ハイライトを`IntersectionObserver`による
+scroll-spy（画面に見えているセクションを自動でハイライト）で実装していた。
+しかし「Photoshop」等をクリックした直後でも、上部（先頭セクション）へ
+スクロールして戻ると、scroll-spyが「今見えているのは先頭のカテゴリ」と判定し、
+クリックした選択状態を無条件に上書きしてしまう不具合があった（本番で報告）。
+
+scroll-spyを完全に削除し、`hashchange`イベント1本で選択状態を管理する方式に
+変更した。クリック・ページ初期表示・ブラウザの戻る/進むのいずれも`hashchange`
+イベント経由で同じ関数（`slugFromHash()` → `setActive()`）に集約され、
+スクロールでは選択状態を一切変更しない。`aria-current`の値も`true`から、
+ARIA的により正確な`location`へ変更した（CSS側のセレクタも追随）。
+スムーズスクロール自体（CSSの`scroll-behavior:smooth`のみで実現、JS不要）は
+変更していない。
+
+再発防止として、`test_category_nav_active_state_is_hash_based_not_scrollspy`を
+追加し、生成HTMLに`new IntersectionObserver`が含まれないこと・`hashchange`が
+含まれることを静的に検証している。
+
 ## 複数記事一括生成
 
 ```bash
@@ -226,7 +266,7 @@ http://localhost:3333/build-output/knowledge/photoshop/{slug}.html
 python tests/knowledge/test_build_knowledge.py
 ```
 
-計172件（チェック単位）。HTMLの検証は正規表現・文字列検索
+計180件（チェック単位、2026-07-21時点）。HTMLの検証は正規表現・文字列検索
 （既存のPhase A1テストと同じ方式）で行っており、新しいHTMLパーサーライブラリは追加していない。
 
 カバーしている内容：複数記事の一括生成／1記事指定／validate-only／重複出力パス検知／
