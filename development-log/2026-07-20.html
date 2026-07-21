@@ -20,18 +20,20 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>開発日誌｜SideKick</title>
-<meta name="description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<link rel="canonical" href="https://www.sidekick-lab.com/development-log">
-<meta property="og:type" content="website">
-<meta property="og:title" content="開発日誌｜SideKick">
-<meta property="og:description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<meta property="og:url" content="https://www.sidekick-lab.com/development-log">
+<title>英語版Knowledge記事を、著者レビューを経て本番公開した｜開発日誌 - SideKick</title>
+<meta name="description" content="打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。">
+<link rel="canonical" href="https://www.sidekick-lab.com/development-log/2026-07-20">
+<meta property="og:type" content="article">
+<meta property="og:title" content="英語版Knowledge記事を、著者レビューを経て本番公開した｜開発日誌 - SideKick">
+<meta property="og:description" content="打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。">
+<meta property="og:url" content="https://www.sidekick-lab.com/development-log/2026-07-20">
 <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-07-20">
 
 <!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
      （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
@@ -128,42 +130,67 @@
 </script>
 <main>
 
-<section class="kzc-hero">
-  <h1>開発日誌</h1>
-  <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
-</section>
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/development-log">開発日誌</a></li>
+    <li aria-current="page">英語版Knowledge記事を、著者レビューを経て本番公開した</li>
+  </ol>
+</nav>
 
-
-<section class="kzc-article-list" aria-label="開発日誌一覧">
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-20">英語版Knowledge記事を、著者レビューを経て本番公開した</a></h3>
-    <p class="kzc-card-desc">打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。</p>
-    <p class="kzc-card-meta">
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">英語版Knowledge記事を、著者レビューを経て本番公開した</h1>
+    <p class="kzc-article-lead">打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">AI Development</span>
       <time datetime="2026-07-20">2026年7月20日</time>
-      
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-18">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</a></h3>
-    <p class="kzc-card-desc">SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-18">2026年7月18日</time>
-      
+    <p class="kzc-article-meta">
+      <span class="kzc-badge">Claude Code</span><span class="kzc-badge">AI Development</span>
     </p>
-  </div>
-</article>
-  
-</section>
+    
+  </header>
 
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>打ち出の小槌（SideKickのKnowledge Base）の英語版を、はじめて本番公開した。</p>
+<h2>背景</h2>
+<p>打ち出の小槌は日本語で書いている。英語で読みたい方にも同じ内容を届けたいが、私自身は英語の記事を読んで「これはこのまま公開してよい品質か」を正確に判断できる自信がない。</p>
+<p>以前、AIに翻訳させた英語記事を、AI自身が書く日本語のレビューをもとに判断する仕組みを試作していた（2026-07-18の開発ログで紹介した内容）。今回は、それを実際に本番記事へ動かしてみる番だった。</p>
+<h2>今回取り組んだこと</h2>
+<p>まず、試験運用の対象として選んだ記事群について、実際にAIへ翻訳とレビューをさせた。レビューの過程では、AIの訳文が原文と食い違っている箇所がいくつか見つかった。たとえば、ある記事では撮影枚数の計算方法が原文と違う説明に書き換わっていたし、別の記事では有料プランの名称が原文と一致していなかった。</p>
+<p>これらは、AIのレビューが日本語でまとめてくれたおかげで、英語を読み込まなくても気づくことができた。見つかった点は日本語の原文側を直し、翻訳と確認をやり直した。</p>
+<p>最終的に、試験運用した記事すべてが確認を通過したので、英語版のKnowledge一覧ページと合わせて本番公開した。あわせて、日本語版と英語版を行き来できるリンクや、検索エンジン向けの多言語対応も整えた。</p>
+<h2>なぜこの方法を選んだのか</h2>
+<p>AIの翻訳をそのまま信じて自動公開するのではなく、かといって英語が読めない自分がすべてを一から確認するのでもない。AIには「何を確認し、何が気になったか」を日本語でレポートさせ、公開してよいかどうかの最終判断は自分で行う、という形にした。</p>
+<p>これは、SideKickが一貫して大事にしている「最終判断は人間が行う」という考え方を、翻訳という場面でも崩さないための選び方だった。</p>
+<h2>利用者にとって何が変わるのか</h2>
+<p>これまで日本語でしか読めなかった打ち出の小槌の記事の一部が、英語でも読めるようになった。日本語版の内容や公開の仕組み自体には手を加えていないので、日本語で読んでいる方への影響はない。</p>
+<h2>今後の予定</h2>
+<p>今回公開したのは、最初にまとまった一部の記事だけになる。今後、対象記事を増やしていく予定だが、AIのレビューと人によるチェックを両方続けながら、慎重に広げていくつもりでいる。</p>
+<h2>関連する製品・機能</h2>
+<ul>
+<li>関連機能：打ち出の小槌（Knowledge Base）</li>
+</ul>
+
+  </div>
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+    </section>
+    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+  </footer>
+</article>
 
 </main>
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
