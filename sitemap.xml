@@ -271,6 +271,11 @@
     <priority>0.4</priority>
   </url>
   <url>
+    <loc>https://www.sidekick-lab.com/development-log/2026-07-21</loc>
+    <lastmod>2026-07-21</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
     <loc>https://www.sidekick-lab.com/en/development-log</loc>
     <priority>0.5</priority>
   </url>
@@ -282,6 +287,11 @@
   <url>
     <loc>https://www.sidekick-lab.com/en/development-log/2026-07-20</loc>
     <lastmod>2026-07-20</lastmod>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/development-log/2026-07-21</loc>
+    <lastmod>2026-07-21</lastmod>
     <priority>0.4</priority>
   </url>
 <!-- END AUTO-GENERATED DEVELOPMENT LOG URLS -->

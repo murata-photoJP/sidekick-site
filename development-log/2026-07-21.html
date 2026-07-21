@@ -19,23 +19,25 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>開発日誌｜SideKick</title>
-<meta name="description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<link rel="canonical" href="https://www.sidekick-lab.com/development-log">
+<title>開発日誌を公開したら、同じ直し忘れを4回繰り返した｜開発日誌 - SideKick</title>
+<meta name="description" content="この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。">
+<link rel="canonical" href="https://www.sidekick-lab.com/development-log/2026-07-21">
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log/2026-07-21">
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log/2026-07-21">
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="開発日誌｜SideKick">
-<meta property="og:description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<meta property="og:url" content="https://www.sidekick-lab.com/development-log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="開発日誌を公開したら、同じ直し忘れを4回繰り返した｜開発日誌 - SideKick">
+<meta property="og:description" content="この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。">
+<meta property="og:url" content="https://www.sidekick-lab.com/development-log/2026-07-21">
 <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-07-21">
 
 <!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
      （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
@@ -52,7 +54,7 @@
 
 <div class="lang-banner" id="lang-banner">
   🇺🇸 This site is also available in English —
-  <a href="/en/development-log">View English page →</a>
+  <a href="/en/development-log/2026-07-21">View English page →</a>
   <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
 </div>
 
@@ -83,7 +85,7 @@
       <a href="/changelog" style="color:var(--muted);">更新履歴</a>
       <a href="/faq" style="color:var(--muted);">Support</a>
       <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      <a href="/en/development-log" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+      <a href="/en/development-log/2026-07-21" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
     </nav>
   </div>
 </header>
@@ -132,57 +134,65 @@
 </script>
 <main>
 
-<section class="kzc-hero">
-  
-  <h1>開発日誌</h1>
-  <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
-  
-</section>
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/development-log">開発日誌</a></li>
+    <li aria-current="page">開発日誌を公開したら、同じ直し忘れを4回繰り返した</li>
+  </ol>
+</nav>
 
-
-<section class="kzc-article-list" aria-label="開発日誌一覧">
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-21">開発日誌を公開したら、同じ直し忘れを4回繰り返した</a></h3>
-    <p class="kzc-card-desc">この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。</p>
-    <p class="kzc-card-meta">
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">開発日誌を公開したら、同じ直し忘れを4回繰り返した</h1>
+    <p class="kzc-article-lead">この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Website</span>
       <time datetime="2026-07-21">2026年7月21日</time>
-      
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-20">英語版Knowledge記事を、著者レビューを経て本番公開した</a></h3>
-    <p class="kzc-card-desc">打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-20">2026年7月20日</time>
-      
+    <p class="kzc-article-meta">
+      <span class="kzc-badge">Claude Code</span>
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-18">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</a></h3>
-    <p class="kzc-card-desc">SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-18">2026年7月18日</time>
-      
-    </p>
-  </div>
-</article>
-  
-</section>
+  </header>
 
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>これまでこの開発日誌は、自分のPC上に記録するだけのものだった。今回、SideKick Labのサイト上で読めるようにした。日本語版と英語版、どちらも公開できたのだが、その道のりで同じ失敗を4回繰り返すことになった。</p>
+<h2>何が問題だったのか</h2>
+<p>SideKick Labのサイトは、ページごとに静的なHTMLファイルを持っている。共通のヘッダーやフッターは、いくつかのページ（打ち出の小槌など）ではテンプレートから自動生成しているが、それ以外の多くのページは、同じヘッダーのコードがページごとに個別に埋め込まれている。</p>
+<p>開発日誌のナビゲーションリンクを追加したとき、私はテンプレート側だけを直せば済むと思っていた。実際には違った。</p>
+<h2>今回変えたこと</h2>
+<p>まず、開発日誌の記事を生成・公開する仕組み自体は問題なく動いた。ところが実際にサイトを見てもらうと、ナビにリンクが出ていないページがあった。</p>
+<p>原因は二つあった。一つは、テンプレートを直しても、すでに生成済みの静的HTMLファイルには自動的には反映されないこと。もう一つは、ヘッダーのコードをページごとに個別に埋め込んでいるページが11個あり、そこにはテンプレートの変更がそもそも届かないことだった。</p>
+<p>該当するページを再生成し、埋め込みページを一つずつ直した。ところが今度は英語版でも同じ問題が起きた。英語のページも同じ構造だったからだ。結局、日本語と英語で合わせて4回、同じ種類の直し忘れを見つけては直す、を繰り返した。</p>
+<p>途中、記事データの読み込み処理にも小さな不具合があった。記事ファイルの区切り記号の書式がテンプレートと少し違っていたために、本文の先頭に余分な線が表示されてしまう問題だった。これも実際にデータを流してみて初めて気づいた。</p>
+<h2>なぜこの方法にしたのか</h2>
+<p>今回、ページ全体をテンプレート化して根本的に解決することもできたが、それはしなかった。対象となるページは21あり、中には作り込んだ販売ページも含まれている。今のタイミングで一気に手を入れるより、落ち着いて取り組める別の機会に回すことにした。</p>
+<p>今回は、見つかった反映漏れをその都度直し、実際にブラウザで確認しながら進めるやり方を選んだ。地味だが、今のリスクとのバランスでは妥当だと考えている。</p>
+<h2>まだ残っていること</h2>
+<p>ヘッダー・フッターの全面的なテンプレート化は、今回は見送った。次に同じ種類の修正をするときに、また同じ見落としをしないよう、確認の手順を記録に残した。</p>
+<p>英語版の翻訳は、AIに1回訳してもらい、私自身がGoogle翻訳などで読み返して明らかな誤りがないかを確認する、という軽い運用にしている。もっと厳密な仕組みも作れるが、日々更新するものにそこまでの手間をかけるのは現実的ではないと判断した。</p>
+
+  </div>
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+  </footer>
+</article>
 
 </main>
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
