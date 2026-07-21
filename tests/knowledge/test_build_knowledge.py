@@ -579,13 +579,126 @@ def test_stale_cleanup_ignores_unrelated_output_dir(tmp: Path) -> None:
 
 @with_tmp
 def test_top_page_card_count_and_order(tmp: Path) -> None:
+    """2026-07-21改訂: トップページはカテゴリナビ・新着記事・おすすめ記事・
+    カテゴリ別一覧の構成に変わった。カテゴリ別一覧（記事一覧セクション）自体の
+    カード件数と、その中でのカテゴリ並び順（web-published.json側のcategories
+    登録順）を検証する。新着記事セクションの並び順は
+    test_new_arrivals_top3_by_published_atで別途検証する。"""
     articles, products = _six_article_fixture()
     index = make_index(articles=articles, products=products)
     proc, output_dir = run_build(index, tmp)
     html = (output_dir / "index.html").read_text(encoding="utf-8")
-    check("トップ: Article Cardが3件表示される", html.count("kzc-card-title") == 3, html)
-    idx1, idx2, idx3 = (html.index("記事1"), html.index("記事2"), html.index("記事3"))
-    check("トップ: 更新日の新しい順に並ぶ", idx1 < idx2 < idx3, (idx1, idx2, idx3))
+    check("トップ: カテゴリ別一覧にArticle Cardが3件表示される", html.count("kzc-card-title") == 3, html)
+    all_section = html.split('id="kzc-all-articles"', 1)[1]
+    idx1, idx2, idx3 = (all_section.index("記事1"), all_section.index("記事2"), all_section.index("記事3"))
+    check("トップ: カテゴリ別一覧はcategoriesの登録順に並ぶ（photoshop→photography→marketing）",
+          idx1 < idx2 < idx3, (idx1, idx2, idx3))
+
+
+@with_tmp
+def test_category_nav_counts(tmp: Path) -> None:
+    articles, products = _six_article_fixture()
+    index = make_index(articles=articles, products=products)
+    proc, output_dir = run_build(index, tmp)
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    nav_section = html.split("kzc-cat-nav-list", 1)[1].split("</ul>", 1)[0]
+    check("カテゴリnav: すべて（3）が表示される", "すべて（3）" in nav_section, nav_section)
+    check("カテゴリnav: Photoshop（1）が表示される", "Photoshop（1）" in nav_section, nav_section)
+    check("カテゴリnav: 写真（1）が表示される", "写真（1）" in nav_section, nav_section)
+    check("カテゴリnav: マーケティング（1）が表示される", "マーケティング（1）" in nav_section, nav_section)
+    check("カテゴリnav: ハッシュリンクでカテゴリ別一覧へジャンプできる",
+          'href="#kzc-cat-photoshop"' in html, html)
+
+
+@with_tmp
+def test_new_arrivals_top3_by_published_at(tmp: Path) -> None:
+    """新着記事は公開日の新しい順に最大3件。公開日が完全に同一の記事は
+    記事IDの降順をタイブレークにして、実行のたびに順序が変わらないようにする
+    （2026-07-21、村田さんの明示要件）。"""
+    a1 = sample_article(id="SKB-N-001", slug="n-one", title="新着A",
+                         category={"slug": "photoshop", "name": "Photoshop", "name_ja": "Photoshop"},
+                         public_url="/knowledge/photoshop/n-one", published_at="2026-07-10")
+    a2 = sample_article(id="SKB-N-002", slug="n-two", title="新着B",
+                         category={"slug": "photoshop", "name": "Photoshop", "name_ja": "Photoshop"},
+                         public_url="/knowledge/photoshop/n-two", published_at="2026-07-20")
+    a3 = sample_article(id="SKB-N-003", slug="n-three", title="新着C",
+                         category={"slug": "photoshop", "name": "Photoshop", "name_ja": "Photoshop"},
+                         public_url="/knowledge/photoshop/n-three", published_at="2026-07-20")
+    a4 = sample_article(id="SKB-N-004", slug="n-four", title="新着D",
+                         category={"slug": "photoshop", "name": "Photoshop", "name_ja": "Photoshop"},
+                         public_url="/knowledge/photoshop/n-four", published_at="2026-07-15")
+    index = make_index(articles=[a1, a2, a3, a4])
+    proc, output_dir = run_build(index, tmp)
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    # おすすめ記事セクションの内容を巻き込まないよう、新着記事セクション自身の
+    # </section>までに区切る（fallback補完で除外対象の記事がおすすめ側に
+    # 出てくることがあるため、境界を厳密にする）。
+    new_section = html.split('id="kzc-new-heading"', 1)[1].split("</section>", 1)[0]
+    check("新着記事: 4件中3件だけ表示される", new_section.count("kzc-mini-card-title") == 3, new_section)
+    check("新着記事: 最も古い新着A(07-10)は表示されない", "新着A" not in new_section, new_section)
+    # 07-20同士(新着B/C)はID降順(SKB-N-003が先)、3件目は07-15の新着D。
+    idx_c, idx_b, idx_d = (new_section.index("新着C"), new_section.index("新着B"), new_section.index("新着D"))
+    check("新着記事: 同日タイブレークはID降順（新着C→新着B）、その後に07-15の新着D",
+          idx_c < idx_b < idx_d, (idx_c, idx_b, idx_d))
+
+
+def _five_article_fixture_distinct_dates() -> list[dict]:
+    """新着記事(上位3件)に入らない記事が2件残るよう、5記事・全て別の公開日にする
+    （pickupの自動補完が新着記事と重複しないことを検証するため）。"""
+    return [
+        sample_article(id=f"SKB-P-00{i}", slug=f"p-{i}", title=f"P記事{i}",
+                        category={"slug": "photoshop", "name": "Photoshop", "name_ja": "Photoshop"},
+                        public_url=f"/knowledge/photoshop/p-{i}", published_at=f"2026-07-{20 - i:02d}")
+        for i in range(1, 6)
+    ]
+
+
+@with_tmp
+def test_pickup_fallback_when_no_curation(tmp: Path) -> None:
+    """pickup.jsonが存在しない/空のとき、おすすめ記事は新着記事と重複しない
+    範囲で公開日の新しい記事から自動補完される。見出しは常にPICK UP/おすすめ記事
+    （閲覧数によるPOPULAR/人気記事ではない）。"""
+    articles = _five_article_fixture_distinct_dates()
+    index = make_index(articles=articles)
+    empty_pickup = tmp / "pickup.json"
+    empty_pickup.write_text(json.dumps({"ja": [], "en": []}), encoding="utf-8")
+    proc, output_dir = run_build(index, tmp, "--pickup-config", str(empty_pickup))
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    check("おすすめ記事: 見出しは常にPICK UP/おすすめ記事", "おすすめ記事" in html, html)
+    check("おすすめ記事: 人気記事という見出しは出ない（閲覧数データが無いため）",
+          "人気記事" not in html, html)
+    pickup_section = html.split('id="kzc-pickup-heading"', 1)[1].split("kzc-all-articles", 1)[0]
+    check("おすすめ記事: 手動選定が空でも自動補完で表示される（新着に無い残り2件）",
+          "P記事4" in pickup_section and "P記事5" in pickup_section, pickup_section)
+    check("おすすめ記事: 新着記事と重複しない（P記事1〜3は新着側なのでここには出ない）",
+          "P記事1" not in pickup_section and "P記事2" not in pickup_section
+          and "P記事3" not in pickup_section, pickup_section)
+
+
+@with_tmp
+def test_pickup_manual_curation_respected(tmp: Path) -> None:
+    articles, products = _six_article_fixture()
+    index = make_index(articles=articles, products=products)
+    pickup_path = tmp / "pickup.json"
+    pickup_path.write_text(json.dumps({"ja": ["SKB-M-003"], "en": []}, ensure_ascii=False), encoding="utf-8")
+    proc, output_dir = run_build(index, tmp, "--pickup-config", str(pickup_path))
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    pickup_section = html.split('id="kzc-pickup-heading"', 1)[1].split("kzc-all-articles", 1)[0]
+    check("おすすめ記事: 手動選定した記事3が優先的に含まれる", "記事3" in pickup_section, pickup_section)
+
+
+@with_tmp
+def test_category_listing_includes_new_and_pickup_articles(tmp: Path) -> None:
+    """新着記事・おすすめ記事に載った記事も、カテゴリ別一覧から除外されない
+    （セクション間で重複除外はしない、村田さんの明示要件）。"""
+    articles, products = _six_article_fixture()
+    index = make_index(articles=articles, products=products)
+    proc, output_dir = run_build(index, tmp)
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    all_section = html.split('id="kzc-all-articles"', 1)[1]
+    check("カテゴリ別一覧: 新着記事にも出た記事1がここにも表示される", "記事1" in all_section, all_section)
+    check("カテゴリ別一覧: 新着記事にも出た記事2がここにも表示される", "記事2" in all_section, all_section)
+    check("カテゴリ別一覧: 新着記事にも出た記事3がここにも表示される", "記事3" in all_section, all_section)
 
 
 @with_tmp
@@ -1077,6 +1190,10 @@ def main() -> int:
         # Phase A2: トップページ
         test_top_page_card_count_and_order, test_top_page_no_draft_like_data,
         test_top_page_no_empty_cards, test_top_page_zero_articles, test_top_page_no_internal_info,
+        # 2026-07-21: カテゴリnav・新着記事・おすすめ記事
+        test_category_nav_counts, test_new_arrivals_top3_by_published_at,
+        test_pickup_fallback_when_no_curation, test_pickup_manual_curation_respected,
+        test_category_listing_includes_new_and_pickup_articles,
         # Phase A2: 記事ページ
         test_breadcrumb_category_not_linked, test_short_author_info, test_no_duplicate_updated_at,
         test_related_articles_present, test_related_articles_absent, test_related_articles_invalid_ref_ignored,

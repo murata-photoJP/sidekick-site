@@ -1,0 +1,20 @@
+{# カテゴリナビ（チップ型）。呼び出し側で category_groups・total_count・nav_all_label を
+   渡すこと。純粋なa要素のハッシュリンクなので、JavaScriptが無くてもクリックで該当
+   カテゴリへジャンプできる（スムーズスクロールはCSSのscroll-behaviorのみで実現）。
+   現在位置のハイライトだけはJS（scroll-spy、progressive enhancement）で行う。
+   2026-07-21追加。 #}
+<nav class="kzc-cat-nav" aria-label="{{ nav_aria_label }}">
+  <ul class="kzc-cat-nav-list">
+    {% if language == 'en' %}
+    <li><a href="#kzc-all-articles" class="kzc-cat-chip" data-cat-nav="all">{{ nav_all_label }} ({{ total_count }})</a></li>
+    {% for g in category_groups %}
+    <li><a href="#kzc-cat-{{ g.slug }}" class="kzc-cat-chip" data-cat-nav="{{ g.slug }}">{{ g.name }} ({{ g.count }})</a></li>
+    {% endfor %}
+    {% else %}
+    <li><a href="#kzc-all-articles" class="kzc-cat-chip" data-cat-nav="all">{{ nav_all_label }}（{{ total_count }}）</a></li>
+    {% for g in category_groups %}
+    <li><a href="#kzc-cat-{{ g.slug }}" class="kzc-cat-chip" data-cat-nav="{{ g.slug }}">{{ g.name }}（{{ g.count }}）</a></li>
+    {% endfor %}
+    {% endif %}
+  </ul>
+</nav>

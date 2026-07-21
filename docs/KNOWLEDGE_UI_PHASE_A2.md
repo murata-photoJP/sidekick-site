@@ -27,10 +27,12 @@ templates/knowledge/
 ├── base.html                  ← <head>・header/footerのinclude・contentブロック
 ├── header.html                ← 共通ヘッダー（Products/打ち出の小槌/AI Lab/Workshop/About）
 ├── footer.html                ← 共通フッター
-├── index.html                 ← 打ち出の小槌トップ（Hero + Article List + About）
+├── index.html                 ← 打ち出の小槌トップ（Hero + カテゴリnav + 新着記事 + おすすめ記事 + カテゴリ別一覧）
 ├── article.html               ← 記事ページ
 └── components/
-    └── article-card.html      ← Article Card部品（トップページのArticle Listから include）
+    ├── article-card.html      ← Article Card部品（カテゴリ別一覧から include）
+    ├── mini-card.html          ← 小型カード部品（新着記事・おすすめ記事から include。2026-07-21追加）
+    └── category-nav.html       ← カテゴリnav（チップ型リンク）部品（2026-07-21追加）
 ```
 
 Jinja2の`extends`/`include`で分離しており、部品を増やしすぎないよう
@@ -103,6 +105,78 @@ Progressive enhancementで実装した。
 サムネイル等の設計が固まった段階で改めて検討）。更新日のみの表示・読了時間非表示は
 現状維持。
 
+## カテゴリnav・新着記事・おすすめ記事・カテゴリ別一覧（2026-07-21追加）
+
+記事数が増えるにつれ、Article Cardをpublish順に並べただけの一覧では見つけにくくなる
+という村田さんの指摘を受けて改修した。トップページの構成は次の順になった。
+
+```
+Hero → 打ち出の小槌とは → カテゴリnav → 新着記事(NEW) → おすすめ記事(PICK UP) → カテゴリ別一覧(記事一覧)
+```
+
+### カテゴリnav
+
+`web-published.json`の`categories`（`_統合KB`側が記事データから自動集計したもの）を
+そのまま使い、`build_category_groups()`（`build_knowledge.py`）でカテゴリ別に
+グループ化・件数集計する。カテゴリの追加・削除は記事データ側（`_統合KB`）に追随する
+だけで、Web側のコード変更は不要（新しいカテゴリの記事が公開されれば自動的にnavと
+一覧セクションが増える）。
+
+- 表示順は`web-published.json`の`categories`の並び順（slugのアルファベット順、
+  `generate_web_published_index.py`が`sorted()`で生成）にそのまま従う。村田さんの
+  例示（写真→Photoshop→マーケティング）とは順序が異なる場合があるが、これは
+  taxonomyの表示用`id`のような優先順位データが現状`web-published.json`に無いための
+  実装判断（優先順位を付けたい場合は`_統合KB`側にその情報を追加する必要がある）
+- リンクは`<a href="#kzc-cat-{slug}">`のハッシュリンクで、JavaScriptが無くても
+  クリックでその場へ移動できる（スムーズスクロールは`html{scroll-behavior:smooth}`
+  というCSSのみで実現、JS不要）
+- 現在位置のハイライト（`aria-current="true"`）だけはJS（`IntersectionObserver`による
+  scroll-spy、progressive enhancement）で行う。JSが動かない環境でもnav自体の
+  クリック機能には影響しない
+
+### 新着記事（NEW）
+
+`_recency_sort_key()`で`published_at`の新しい順に並べ、上位3件（`NEW_ARRIVALS_LIMIT`）を
+表示する。`published_at`が完全に同一の記事が複数あっても、記事IDの降順を
+タイブレークにして、ビルドのたびに順序が変わらないようにしている。
+
+### おすすめ記事（PICK UP）
+
+アクセス解析による実際の閲覧数を安全に取得できる仕組みが現状無いため
+（GA4等のAPI連携・サービスアカウント資格情報がリポジトリに存在しないことを確認済み）、
+架空の閲覧数・人気順位は作らない方針とした。見出しは常に「PICK UP／おすすめ記事」
+（「人気記事」ではない）。
+
+- **手動選定**：`data/knowledge/pickup.json`（サイト側だけで完結する設定ファイル。
+  `_統合KB`のパイプライン・記事frontmatterには一切触れない）に、言語ごとに
+  記事IDを配列で並べる。
+  ```json
+  { "ja": ["SKB-ART-000003", "SKB-ART-000005"], "en": [] }
+  ```
+  先頭から順に採用され、存在しないIDは無視される（fail-closed）。
+- **自動補完**：手動選定が無い/不足する場合、新着記事と重複しない範囲で
+  `published_at`の新しい記事から自動的に埋める（最大`PICKUP_LIMIT=3`件）。
+  補完後も0件なら、おすすめ記事セクション自体が非表示になる（空枠を出さない）。
+- ファイルが存在しない・壊れている・該当言語のキーが無い場合は空リスト扱いになり、
+  ビルド自体は失敗しない。
+
+**今後記事が増えたときの運用**：村田さんが`pickup.json`を直接編集し、見せたい記事の
+IDを並べるだけでよい（ビルドの再実行が必要）。ビルドスクリプトや`_統合KB`側の
+変更は不要。
+
+### カテゴリ別一覧（記事一覧）
+
+`build_category_groups()`でカテゴリごとに`article-card.html`を並べる。各カテゴリ内は
+新着記事と同じ`_recency_sort_key()`で新しい順。新着記事・おすすめ記事に載った記事も、
+このカテゴリ別一覧からは除外しない（セクション間で重複除外はしない、村田さんの
+明示要件）。
+
+### テスト分離のための`--pickup-config`引数
+
+`tests/knowledge/test_build_knowledge.py`が本番の`data/knowledge/pickup.json`に
+触れずに検証できるよう、`build_knowledge.py`に`--pickup-config <path>`を追加した
+（省略時は本番の`data/knowledge/pickup.json`を使う）。
+
 ## 複数記事一括生成
 
 ```bash
@@ -152,7 +226,7 @@ http://localhost:3333/build-output/knowledge/photoshop/{slug}.html
 python tests/knowledge/test_build_knowledge.py
 ```
 
-Phase A1の16件 + Phase A2で追加した96件（古いHTML削除15件、見出し階層・画像alt検証7件を含む） = 計112件。HTMLの検証は正規表現・文字列検索
+計172件（チェック単位）。HTMLの検証は正規表現・文字列検索
 （既存のPhase A1テストと同じ方式）で行っており、新しいHTMLパーサーライブラリは追加していない。
 
 カバーしている内容：複数記事の一括生成／1記事指定／validate-only／重複出力パス検知／
@@ -160,7 +234,11 @@ atomicなバッチ確定（失敗時に既存出力を壊さない）／article_
 トップページのカード件数・並び順・空表示／記事ページのbreadcrumb非リンク・著者情報重複無し・
 Related Articles/Product Context/CTAの条件表示／canonical・meta description・h1が1つ／
 Header主要5項目・aria-current・モバイルナビのaria属性・JS無しでもリンクが存在すること／
-Footerに空リンク・存在しない英語記事リンクが無いこと。
+Footerに空リンク・存在しない英語記事リンクが無いこと／
+**（2026-07-21追加）** カテゴリnavの件数表示・カテゴリ別一覧の並び順／新着記事top3と
+同日タイブレーク／おすすめ記事の手動選定反映・自動補完フォールバック・見出しが常に
+「おすすめ記事」であること／新着記事・おすすめ記事に載った記事もカテゴリ別一覧に
+残ること。
 
 ## 本番配置前の確認事項
 

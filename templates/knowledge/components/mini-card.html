@@ -1,0 +1,15 @@
+{# 新着記事・おすすめ記事セクション用の小型カード部品。
+   呼び出し側で `card`（article_card契約の1件）を渡すこと。
+   カード全体を1つのa要素にして、クリック可能範囲を明確にする
+   （2026-07-21追加。h3をa要素の中に置くのはHTML仕様上有効）。 #}
+<article class="kzc-mini-card">
+  <a href="{{ card.public_url }}" class="kzc-mini-card-link" aria-label="{{ card.title }}">
+    <p class="kzc-mini-card-category">{{ card.category_name }}</p>
+    <h3 class="kzc-mini-card-title">{{ card.title }}</h3>
+    <p class="kzc-mini-card-desc">{{ card.meta_description }}</p>
+    <p class="kzc-mini-card-meta">
+      {% if card.difficulty == "beginner" %}<span class="kzc-badge">{% if language == 'en' %}{{ labels.beginner_badge }}{% else %}初心者向け{% endif %}</span>{% endif %}
+      {% if card.published_at %}<time datetime="{{ card.published_at }}">{{ card.published_at }}</time>{% endif %}
+    </p>
+  </a>
+</article>

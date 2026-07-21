@@ -20,15 +20,56 @@
   <p><a href="{{ labels.about_href }}">{{ labels.about_link }}</a></p>
 </section>
 
-<section class="kzc-article-list" aria-label="Article list">
-  {% if cards %}
-    {% for card in cards %}
-      {% include "components/article-card.html" %}
+{% if cards %}
+{% with nav_aria_label = labels.category_nav_label, nav_all_label = labels.category_nav_all %}
+  {% include "components/category-nav.html" %}
+{% endwith %}
+
+{% if new_arrivals %}
+<section class="kzc-mini-section" aria-labelledby="kzc-new-heading">
+  <p class="kzc-eyebrow">{{ labels.new_arrivals_eyebrow }}</p>
+  <h2 id="kzc-new-heading">{{ labels.new_arrivals_heading }}</h2>
+  <div class="kzc-mini-grid">
+    {% for card in new_arrivals %}
+      {% include "components/mini-card.html" %}
     {% endfor %}
-  {% else %}
-    <p class="kzc-empty">{{ labels.empty_list }}</p>
-  {% endif %}
+  </div>
 </section>
+{% endif %}
+
+{% if pickup %}
+<section class="kzc-mini-section" aria-labelledby="kzc-pickup-heading">
+  <p class="kzc-eyebrow">{{ labels.pickup_eyebrow }}</p>
+  <h2 id="kzc-pickup-heading">{{ labels.pickup_heading }}</h2>
+  <div class="kzc-mini-grid">
+    {% for card in pickup %}
+      {% include "components/mini-card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="kzc-all-articles" id="kzc-all-articles" aria-labelledby="kzc-all-heading">
+  <h2 id="kzc-all-heading">{{ labels.all_articles_heading }}</h2>
+  {% for g in category_groups %}
+  <div class="kzc-cat-group" id="kzc-cat-{{ g.slug }}" data-cat-section="{{ g.slug }}">
+    <div class="kzc-cat-group-header">
+      <h3>{{ g.name }}</h3>
+      <span class="kzc-cat-group-count">{{ g.count }}{{ labels.article_count_suffix }}</span>
+    </div>
+    <div class="kzc-article-list" aria-label="{{ g.name }} article list">
+      {% for card in g.cards %}
+        {% include "components/article-card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</section>
+{% else %}
+<section class="kzc-article-list" aria-label="Article list">
+  <p class="kzc-empty">{{ labels.empty_list }}</p>
+</section>
+{% endif %}
 {% else %}
 <section class="kzc-hero">
   <h1>打ち出の小槌</h1>
@@ -44,14 +85,85 @@
   <p><a href="/about">Aboutを読む →</a></p>
 </section>
 
-<section class="kzc-article-list" aria-label="記事一覧">
-  {% if cards %}
-    {% for card in cards %}
-      {% include "components/article-card.html" %}
+{% if cards %}
+{% with nav_aria_label = "カテゴリ", nav_all_label = "すべて" %}
+  {% include "components/category-nav.html" %}
+{% endwith %}
+
+{% if new_arrivals %}
+<section class="kzc-mini-section" aria-labelledby="kzc-new-heading">
+  <p class="kzc-eyebrow">NEW</p>
+  <h2 id="kzc-new-heading">新着記事</h2>
+  <div class="kzc-mini-grid">
+    {% for card in new_arrivals %}
+      {% include "components/mini-card.html" %}
     {% endfor %}
-  {% else %}
-    <p class="kzc-empty">まだ公開されている記事がありません。</p>
-  {% endif %}
+  </div>
 </section>
+{% endif %}
+
+{% if pickup %}
+<section class="kzc-mini-section" aria-labelledby="kzc-pickup-heading">
+  <p class="kzc-eyebrow">PICK UP</p>
+  <h2 id="kzc-pickup-heading">おすすめ記事</h2>
+  <div class="kzc-mini-grid">
+    {% for card in pickup %}
+      {% include "components/mini-card.html" %}
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="kzc-all-articles" id="kzc-all-articles" aria-labelledby="kzc-all-heading">
+  <h2 id="kzc-all-heading">記事一覧</h2>
+  {% for g in category_groups %}
+  <div class="kzc-cat-group" id="kzc-cat-{{ g.slug }}" data-cat-section="{{ g.slug }}">
+    <div class="kzc-cat-group-header">
+      <h3>{{ g.name }}</h3>
+      <span class="kzc-cat-group-count">{{ g.count }}記事</span>
+    </div>
+    <div class="kzc-article-list" aria-label="{{ g.name }}の記事一覧">
+      {% for card in g.cards %}
+        {% include "components/article-card.html" %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</section>
+{% else %}
+<section class="kzc-article-list" aria-label="記事一覧">
+  <p class="kzc-empty">まだ公開されている記事がありません。</p>
+</section>
+{% endif %}
+{% endif %}
+
+{% if cards %}
+<script>
+(function () {
+  // カテゴリナビの現在位置ハイライト（progressive enhancement）。
+  // JS未動作時でもナビのリンク自体（ハッシュ付きa要素）は問題なく機能する。
+  if (!('IntersectionObserver' in window)) { return; }
+  var navLinks = document.querySelectorAll('.kzc-cat-chip[data-cat-nav]');
+  var sections = document.querySelectorAll('[data-cat-section]');
+  if (!navLinks.length || !sections.length) { return; }
+  var byId = {};
+  navLinks.forEach(function (a) { byId[a.getAttribute('data-cat-nav')] = a; });
+
+  function setActive(slug) {
+    navLinks.forEach(function (a) { a.removeAttribute('aria-current'); });
+    var link = byId[slug];
+    if (link) { link.setAttribute('aria-current', 'true'); }
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        setActive(entry.target.getAttribute('data-cat-section'));
+      }
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  sections.forEach(function (sec) { observer.observe(sec); });
+})();
+</script>
 {% endif %}
 {% endblock %}

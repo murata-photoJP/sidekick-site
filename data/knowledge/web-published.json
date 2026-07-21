@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-20T23:23:07.169841+09:00",
+  "generated_at": "2026-07-21T17:44:14.140149+09:00",
   "schema_version": 1,
   "articles": [
     {
@@ -852,18 +852,6 @@
   ],
   "categories": [
     {
-      "slug": "marketing",
-      "name": "マーケティング",
-      "language": "en",
-      "published_count": 2
-    },
-    {
-      "slug": "marketing",
-      "name": "マーケティング",
-      "language": "ja",
-      "published_count": 2
-    },
-    {
       "slug": "photography",
       "name": "写真",
       "language": "en",
@@ -886,6 +874,18 @@
       "name": "Photoshop",
       "language": "ja",
       "published_count": 3
+    },
+    {
+      "slug": "marketing",
+      "name": "マーケティング",
+      "language": "en",
+      "published_count": 2
+    },
+    {
+      "slug": "marketing",
+      "name": "マーケティング",
+      "language": "ja",
+      "published_count": 2
     }
   ],
   "products": [
