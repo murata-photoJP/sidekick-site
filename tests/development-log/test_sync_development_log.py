@@ -262,6 +262,19 @@ def test_handles_japanese_space_and_parenthesis_in_path(tmp_path: Path) -> None:
     assert (dest / "2026" / "07" / "2026-07-18.md").exists()
 
 
+def test_en_subdirectory_in_dest_not_flagged_as_orphaned(tmp_path: Path) -> None:
+    """dest（content/development-log）配下にネストされたen/は、JA同期の孤立ファイル
+    検出の対象外にする（実運用で発見した誤警告、2026-07-21追加）。"""
+    source = tmp_path / "public"
+    dest = tmp_path / "content"
+    write_md(source / "2026" / "07" / "2026-07-18.md", **published_fields())
+    write_md(dest / "en" / "2026" / "07" / "2026-07-18.md", **published_fields())
+
+    plan = sdl.plan_sync(source, dest)
+
+    assert plan["orphaned"] == []
+
+
 def test_missing_source_raises_sync_error(tmp_path: Path) -> None:
     with pytest.raises(sdl.SyncError):
         sdl.plan_sync(tmp_path / "does-not-exist", tmp_path / "content")

@@ -180,7 +180,14 @@ def plan_sync(source: Path, dest: Path) -> dict:
             "text": text,
         })
 
-    dest_existing = sorted(dest.rglob("*.md")) if dest.exists() else []
+    # 孤立ファイル検出でも、dest配下にネストされた英語版専用ディレクトリ（en/）は
+    # 対象外にする。JA同期（--dest content/development-log）実行時、そこに実在する
+    # 英語版ファイルを「同期元に無い孤立ファイル」と誤検知しないため
+    # （2026-07-21、実運用で発見）。
+    dest_existing = (
+        sorted(p for p in dest.rglob("*.md") if p.relative_to(dest).parts[0] != "en")
+        if dest.exists() else []
+    )
     expected_dest = {dest / item["rel_path"] for item in to_copy}
     orphaned = [p for p in dest_existing if p not in expected_dest]
 
