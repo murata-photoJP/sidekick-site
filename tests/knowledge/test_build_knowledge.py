@@ -620,6 +620,28 @@ def test_category_nav_counts(tmp: Path) -> None:
 
 
 @with_tmp
+def test_category_nav_active_state_is_hash_based_not_scrollspy(tmp: Path) -> None:
+    """2026-07-21修正: 上へスクロールして戻るだけで選択中カテゴリが意図せず
+    変わる不具合（IntersectionObserverによるscroll-spy由来）を修正した。
+    scrollイベント／IntersectionObserverでの自動切り替えを廃止し、
+    クリック・URLハッシュ（hashchangeイベント）だけで選択状態を更新するように
+    変更したことを、生成されたJSに対する静的チェックで確認する。"""
+    articles, products = _six_article_fixture()
+    index = make_index(articles=articles, products=products)
+    proc, output_dir = run_build(index, tmp)
+    html = (output_dir / "index.html").read_text(encoding="utf-8")
+    check("カテゴリnav選択状態: IntersectionObserverによるscroll-spyが無い（コード上の説明コメントは除く）",
+          "new IntersectionObserver" not in html, html)
+    check("カテゴリnav選択状態: hashchangeイベントで同期する",
+          "hashchange" in html, html)
+    check("カテゴリnav選択状態: aria-currentの値はlocation（true ではない）",
+          "'aria-current', 'location'" in html, html)
+    css = (Path(__file__).resolve().parents[2] / "assets" / "css" / "knowledge.css").read_text(encoding="utf-8")
+    check("カテゴリnav選択状態(CSS): aria-current=locationをスタイル対象にしている",
+          '[aria-current="location"]' in css, css[:200])
+
+
+@with_tmp
 def test_new_arrivals_top3_by_published_at(tmp: Path) -> None:
     """新着記事は公開日の新しい順に最大3件。公開日が完全に同一の記事は
     記事IDの降順をタイブレークにして、実行のたびに順序が変わらないようにする
@@ -1224,7 +1246,8 @@ def main() -> int:
         test_top_page_card_count_and_order, test_top_page_no_draft_like_data,
         test_top_page_no_empty_cards, test_top_page_zero_articles, test_top_page_no_internal_info,
         # 2026-07-21: カテゴリnav・新着記事・おすすめ記事
-        test_category_nav_counts, test_new_arrivals_top3_by_published_at,
+        test_category_nav_counts, test_category_nav_active_state_is_hash_based_not_scrollspy,
+        test_new_arrivals_top3_by_published_at,
         test_pickup_fallback_when_no_curation, test_pickup_manual_curation_respected,
         test_category_listing_includes_new_and_pickup_articles,
         # Phase A2: 記事ページ

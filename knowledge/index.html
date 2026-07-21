@@ -392,29 +392,37 @@
 
 <script>
 (function () {
-  // カテゴリナビの現在位置ハイライト（progressive enhancement）。
+  // カテゴリナビの選択状態表示（progressive enhancement）。
   // JS未動作時でもナビのリンク自体（ハッシュ付きa要素）は問題なく機能する。
-  if (!('IntersectionObserver' in window)) { return; }
+  //
+  // 2026-07-21改訂: 以前はIntersectionObserverによるscroll-spyで「今スクロールして
+  // 見えているカテゴリ」をハイライトしていたが、上へスクロールして戻っただけで
+  // 選択状態が意図せず変わってしまう不具合があった（村田さんの実機報告）。
+  // 「最後にクリックしたカテゴリ（=URLハッシュ）」を正として表示するナビへ変更し、
+  // スクロールでは選択状態を一切変更しないようにする。
   var navLinks = document.querySelectorAll('.kzc-cat-chip[data-cat-nav]');
-  var sections = document.querySelectorAll('[data-cat-section]');
-  if (!navLinks.length || !sections.length) { return; }
+  if (!navLinks.length) { return; }
   var byId = {};
   navLinks.forEach(function (a) { byId[a.getAttribute('data-cat-nav')] = a; });
 
   function setActive(slug) {
     navLinks.forEach(function (a) { a.removeAttribute('aria-current'); });
-    var link = byId[slug];
-    if (link) { link.setAttribute('aria-current', 'true'); }
+    var link = byId[slug] || byId['all'];
+    if (link) { link.setAttribute('aria-current', 'location'); }
   }
 
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        setActive(entry.target.getAttribute('data-cat-section'));
-      }
-    });
-  }, { rootMargin: '-45% 0px -50% 0px' });
-  sections.forEach(function (sec) { observer.observe(sec); });
+  function slugFromHash() {
+    var hash = location.hash.replace(/^#/, '');
+    if (!hash || hash === 'kzc-all-articles') { return 'all'; }
+    var m = hash.match(/^kzc-cat-(.+)$/);
+    return (m && byId[m[1]]) ? m[1] : 'all';
+  }
+
+  // クリックでのハッシュ変更（同一ページ内リンク）・戻る/進むによるハッシュ変更の
+  // どちらもhashchangeイベントで拾えるため、これだけで一元的に同期できる。
+  window.addEventListener('hashchange', function () { setActive(slugFromHash()); });
+  // 初期表示・リロード時にも、その時点のURLハッシュから復元する。
+  setActive(slugFromHash());
 })();
 </script>
 

@@ -439,8 +439,10 @@ html{ scroll-behavior:smooth; }
   color:var(--kzc-text);
   border-color:var(--kzc-accent2);
 }
-/* 現在位置（scroll-spyで付与）。色だけに頼らず、背景・太字・アウトラインでも区別する */
-.kzc-cat-chip[aria-current="true"]{
+/* 現在選択中のカテゴリ（クリック／URLハッシュで付与。2026-07-21改訂:
+   scrollでは変更しない「最後に選んだカテゴリ」を示すナビにした）。
+   色だけに頼らず、背景・太字・アウトラインでも区別する */
+.kzc-cat-chip[aria-current="location"]{
   background:var(--kzc-accent);
   border-color:var(--kzc-accent);
   color:#111;
