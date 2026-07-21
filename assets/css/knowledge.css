@@ -116,12 +116,18 @@ a:focus-visible, button:focus-visible{
   font-size:14px;
   min-height:44px;
 }
-body.kzc-js-nav .kzc-nav-toggle{
-  display:inline-flex;
-  align-items:center;
-}
 
 @media (max-width:640px){
+  /* 2026-07-22修正: ボタンの表示切り替え（display:inline-flex）がmax-width:640px
+     の外にあったため、JS動作後はPC幅でもボタンが表示され続け、かつ押しても
+     ナビが畳まれない（畳む処理自体がこのメディアクエリ内にしか無い）という
+     不具合があった。ボタンの表示・非表示もこのメディアクエリ内へ統一し、
+     モバイル幅でのみボタンが現れるようにした（村田さんが本番/knowledgeページで
+     発見・報告）。 */
+  body.kzc-js-nav .kzc-nav-toggle{
+    display:inline-flex;
+    align-items:center;
+  }
   .nav{
     flex-direction:column;
     align-items:flex-start;
