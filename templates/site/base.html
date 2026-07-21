@@ -1,0 +1,54 @@
+{# サイト共通ページ（templates/site/pages/配下）の共通レイアウト。2026-07-22新設。
+   打ち出の小槌・開発日誌のbase.html（templates/knowledge/base.html・
+   templates/development-log/base.html）と同じ設計方針（言語自動判定・
+   header.html/footer.htmlのinclude）を踏襲するが、<main>で本文を包まない点が異なる
+   （移行対象の既存ページ（例: workshop.html）が<main>タグを使わず、.wrapで
+   セクションごとに幅を制御する構成のため、本文を変更せずに移行できるようにした）。
+   ヘッダー/フッターは打ち出の小槌・開発日誌と同じtemplates/knowledge/header.html・
+   footer.htmlを再利用する（build_site.pyがFileSystemLoaderの検索パスに
+   templates/knowledge/も含める）。 #}
+<!doctype html>
+<html lang="{{ language|default('ja') }}">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}SideKick{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<link rel="canonical" href="{% block canonical %}{% endblock %}">
+{% if enable_ogp|default(false) %}
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+<meta property="og:description" content="{{ self.meta_description() }}">
+<meta property="og:url" content="{{ self.canonical() }}">
+<meta property="og:image" content="{{ og_image|default('https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg') }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ og_image|default('https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg') }}">
+{% endif %}
+<link rel="stylesheet" href="/assets/css/site-header.css">
+{% block extra_head %}{% endblock %}
+</head>
+<body{% block body_attrs %}{% endblock %}>
+{% if language == 'en' %}{% include "header_en.html" %}{% else %}{% include "header.html" %}{% endif %}
+{% block content %}{% endblock %}
+{% if language == 'en' %}{% include "footer_en.html" %}{% else %}{% include "footer.html" %}{% endif %}
+{% block extra_body_end %}{% endblock %}
+</body>
+</html>

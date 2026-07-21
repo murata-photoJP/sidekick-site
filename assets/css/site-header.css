@@ -1,0 +1,120 @@
+/* サイト共通ヘッダー/フッターCSS（2026-07-22新設）。
+   knowledge.css内の同名ルール（既存サイトindex.htmlのヘッダー/フッターCSSをそのまま流用したもの）
+   と内容は同一。打ち出の小槌・開発日誌以外のページ（templates/site/配下、Phase 4以降で
+   段階的にJinja2化する既存ページ）がheader.html/footer.htmlを共用する際に読み込む。
+
+   knowledge.cssをそのまま読み込まない理由: knowledge.cssはbody/mainにも
+   打ち出の小槌専用のレイアウト（max-width等）を適用しており、他ページの独自レイアウトと
+   衝突するため。ヘッダー/フッターの見た目を変えずに他ページへ展開するには、
+   ヘッダー/フッターのルールだけを独立させる必要があった。
+
+   既存のknowledge.css側は変更していない（本番の打ち出の小槌・開発日誌ページへの
+   影響を避けるため）。そのため現時点ではCSSの内容が2箇所に存在する重複状態であり、
+   将来的にknowledge.css側をこのファイルの読み込みに置き換える統合が望ましい
+   （残課題。今回のスコープ＝Workshop試験移行では対象外）。 */
+
+/* ---------- Header ---------- */
+.hdr{
+  position:sticky;top:0;z-index:40;
+  background:rgba(9,9,12,.9);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.hdr-in{display:flex;justify-content:space-between;align-items:center;gap:16px;min-height:64px;flex-wrap:wrap;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:15px;}
+.brand-mk{
+  width:36px;height:36px;border-radius:9px;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:grid;place-items:center;color:#111;font-weight:900;font-size:14px;flex-shrink:0;
+}
+.brand-name{font-size:15px;font-weight:800;}
+.brand-sub{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;display:block;margin-top:1px;}
+.nav{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.nav a{color:var(--sub);font-size:13px;font-weight:700;transition:.1s;}
+.nav a:hover{color:#fff}
+.nav a[aria-current="page"]{color:var(--accent2);}
+.nav-ai{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 15px;border-radius:9px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  color:var(--text);font-size:13px;font-weight:700;white-space:nowrap;
+  transition:.15s;
+}
+.nav-ai:hover{background:rgba(255,255,255,.12);}
+
+/* ヘッダー/フッターは、ページ本文が--maxをより狭い値に上書きしていても
+   常に1100px幅で表示する（Workshopページ本文は860px幅だが、ヘッダー/フッターは
+   既存サイト（index.html等）と同じ1100px幅で揃える）。 */
+.hdr .wrap, .footer .wrap{width:min(1100px,calc(100% - 40px));}
+
+/* ---------- Language banner ---------- */
+.lang-banner{
+  background:#1a56db;
+  padding:11px 20px;text-align:center;font-size:14px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  position:relative;color:#fff;
+}
+.lang-banner a{ color:#fff;text-decoration:underline;text-underline-offset:3px;opacity:.9; }
+.lang-banner a:hover{opacity:1;}
+.lang-banner-close{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  background:rgba(255,255,255,.2);border:none;color:#fff;font-size:14px;cursor:pointer;
+  line-height:1;padding:4px 8px;border-radius:4px;
+}
+.lang-banner-close:hover{background:rgba(255,255,255,.35);}
+
+/* Mobile Navigation: JS未動作時は常に展開表示のまま（progressive enhancement）。
+   「display:noneで隠すだけ」は踏襲せず、キーボード操作・aria-expanded対応の
+   トグルボタンを付与する。 */
+.kzc-nav-toggle{
+  display:none;
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--text);
+  border-radius:8px;
+  padding:8px 14px;
+  font-size:14px;
+  min-height:44px;
+}
+body.kzc-js-nav .kzc-nav-toggle{
+  display:inline-flex;
+  align-items:center;
+}
+
+@media (max-width:640px){
+  .nav{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:14px;
+    width:100%;
+    padding-top:10px;
+  }
+  .nav a, .nav-ai{
+    display:block;
+    padding:10px 4px;
+    min-height:44px;
+  }
+  /* JSが動いているときだけ、data-open="false"で折りたたむ */
+  body.kzc-js-nav #kzc-nav-menu[data-open="false"]{
+    display:none;
+  }
+}
+
+/* ---------- Footer ---------- */
+.footer{padding:48px 0 32px;border-top:1px solid rgba(255,255,255,.06);margin-top:48px;}
+.footer-in{display:flex;flex-wrap:wrap;gap:32px;margin-bottom:36px;}
+.footer-brand{flex:1 1 220px;max-width:280px;}
+.footer-brand .brand{margin-bottom:10px;}
+.footer-brand p{font-size:12px;color:var(--muted);line-height:1.7;}
+.footer-cols{flex:3 1 480px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:24px;}
+.footer-col h4{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:8px;}
+.footer-col ul li a{font-size:13px;color:var(--sub);transition:.1s;}
+.footer-col ul li a:hover{color:var(--text);}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.05);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.footer-copy{font-size:12px;color:var(--muted);}
+.footer-legal{display:flex;gap:16px;}
+.footer-legal a{font-size:12px;color:var(--muted);}
+.footer-legal a:hover{color:var(--sub);}
+@media(max-width:860px){.footer-brand{flex-basis:100%;max-width:none;}.footer-cols{flex-basis:100%;}}
+@media(max-width:500px){.footer-cols{grid-template-columns:repeat(2,1fr);}.footer-bottom{flex-direction:column;align-items:flex-start;}}
