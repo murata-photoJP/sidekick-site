@@ -39,6 +39,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined, TemplateNotFo
 REPO_ROOT = Path(__file__).resolve().parents[2]  # sidekick-site（html/）のルート
 TEMPLATES_DIR = REPO_ROOT / "templates" / "site"
 KNOWLEDGE_TEMPLATES_DIR = REPO_ROOT / "templates" / "knowledge"
+SITE_ORIGIN = "https://www.sidekick-lab.com"
 
 # ページ定義: 1エントリ = 1ページ。出力パスは既存サイトのURL・ファイル名と完全に
 # 一致させる（URLを変更しないため）。ナビゲーション項目自体はheader.html側に
@@ -58,6 +59,78 @@ PAGES: dict[str, dict] = {
         },
     },
 }
+
+
+def _register_page_pair(slug: str, *, ja_extra: dict | None = None, en_extra: dict | None = None) -> None:
+    """日本語版・英語版が対になっているページ（gallery/portrait/sidekick-star/sidekick/
+    sky-effect/changelog）をPAGESへ登録する。en_redirect_url・lang_switch_url・
+    hreflang_alternatesはURLの対応関係から機械的に決まるため、ページごとに書き並べず
+    ここで一括計算する（ナビゲーション定義と同じく、対応関係の変更点を一箇所に
+    集約する狙い）。"""
+    hreflang = {"ja": f"{SITE_ORIGIN}/{slug}", "en": f"{SITE_ORIGIN}/en/{slug}"}
+
+    ja_context = {
+        "language": "ja",
+        "nav_current": slug,
+        # 元の手書きページは/en/{slug}.htmlへ直接誘導していた（汎用/en/ではない）。
+        "en_redirect_url": f"/en/{slug}.html",
+        "lang_switch_url": f"/en/{slug}",
+        "hreflang_alternates": hreflang,
+    }
+    if ja_extra:
+        ja_context.update(ja_extra)
+    PAGES[slug] = {
+        "template": f"pages/{slug}.html",
+        "output": Path(f"{slug}.html"),
+        "context": ja_context,
+    }
+
+    en_context = {
+        "language": "en",
+        "nav_current": slug,
+        "lang_switch_url": f"/{slug}",
+        "hreflang_alternates": hreflang,
+    }
+    if en_extra:
+        en_context.update(en_extra)
+    PAGES[f"en/{slug}"] = {
+        "template": f"pages/en/{slug}.html",
+        "output": Path("en", f"{slug}.html"),
+        "context": en_context,
+    }
+
+
+_register_page_pair(
+    "gallery",
+    ja_extra={"enable_ogp": True},
+    en_extra={"enable_ogp": True},
+)
+_register_page_pair(
+    "changelog",
+    ja_extra={"enable_ogp": True},
+    en_extra={"enable_ogp": True},
+)
+_register_page_pair(
+    "portrait",
+    ja_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/portrait/style_beauty.jpg"},
+    en_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/portrait/style_beauty.jpg"},
+)
+# sidekick.htmlには元々OGPタグが無いため、enable_ogpは渡さない（現状維持）。
+# hreflang_alternatesは_register_page_pairの既定で両言語に付与される。元は英語版のみに
+# 付与されており日本語版には無い非対称な状態だったが、hreflangは本来相互参照であるべき
+# （片方向だとGoogleに無視されうる、Search Consoleのガイドライン通り）なので、
+# 日本語版にも対で付与するのは意図した改善（gallery/changelog/portraitも同様）。
+_register_page_pair("sidekick")
+_register_page_pair(
+    "sidekick-star",
+    ja_extra={"enable_ogp": True},
+    en_extra={"enable_ogp": True},
+)
+_register_page_pair(
+    "sky-effect",
+    ja_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/ogp_sky_effect.jpg"},
+    en_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/ogp_sky_effect.jpg"},
+)
 
 
 class BuildError(Exception):

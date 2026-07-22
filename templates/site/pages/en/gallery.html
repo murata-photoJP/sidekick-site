@@ -1,0 +1,251 @@
+{# Galleryページ（英語版、2026-07-22移行）。
+   移行元: html/en/gallery.html（手書き静的HTML）。本文（旧<header>〜旧<footer>の間）・
+   画像パス（../images/…の相対パスも含めそのまま）・リンク・文言は変更していない。
+   ヘッダー/フッターのみ、日本語版gallery.html移行と同じパターンでサイト共通の
+   header_en.html・footer_en.htmlへ切り替えた。それに伴い、旧ヘッダー/フッター専用
+   だったCSSは不要になったため削除した：.site-header／.header-inner／.brand／
+   .brand-mark／.brand-text／.brand-text small／.nav／.nav a／.nav a:hover／
+   .footer／.footer-inner／（640pxメディアクエリ内の）.nav{display:none}。
+   本文側で.brand・.navクラスは使われていないことを確認済み。
+
+   :root に --muted:#5e6677; と --line:#2a2f3a; を追加した（元ファイルに無かったため）。
+   他の変数は変更していない。
+
+   OGPタグは元ファイルに存在した（og:title は title ブロックと同一文言のためブロックを
+   省略しbase.htmlの既定値（self.title()）に任せた。og:description は meta description
+   と文言が異なる（meta descriptionの末尾「, available on Fine Art America.」がogには
+   無い）ため og_description ブロックを明示定義した。og:image・og:site_name
+   （Sidekick）・og:locale（en_US）はbase.htmlの既定値と一致するため申し送り不要）。
+
+   申し送り1: build_site.py にはまだ gallery ページのエントリが無い。本テンプレートを
+   使うには、PAGES に "en/gallery"（や任意のキー）を追加し、context として
+   language="en"・nav_current="gallery"・enable_ogp=true を渡す必要がある。
+
+   申し送り2: 元ファイルには以下のhreflang alternateタグがあったが、
+   templates/site/base.html（サイト共通ページ用）にはhreflang_alternatesを出力する
+   仕組みが無い（templates/knowledge/base.htmlやtemplates/development-log/base.html
+   には既にある）。今回の移行対象外のためbase.html自体は変更していないが、
+   このページのSEO上重要な情報のため書き残す：
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/gallery">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/gallery">
+   （日本語版gallery.htmlの元ファイルにはhreflangタグは無かった。英語版のみ付与されて
+   いた非対称な状態だった） #}
+{% extends "base.html" %}
+
+{% block title %}Gallery | Ichiro Murata — Fine Art Prints{% endblock %}
+
+{% block meta_description %}Star landscape photography gallery by Ichiro Murata. Fine art prints including 1X Award-winning works, available on Fine Art America.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/gallery{% endblock %}
+
+{% block og_description %}Star landscape photography gallery by Ichiro Murata. Fine art prints including 1X Award-winning works.{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --muted:#5e6677;
+      --line:#2a2f3a;
+      --max:1200px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:radial-gradient(circle at top right,rgba(255,138,0,.10),transparent 26%),var(--bg);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:50px;padding:0 24px;border-radius:14px;font-weight:800;transition:.2s ease;border:1px solid transparent;cursor:pointer;}
+    .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#121212;box-shadow:0 6px 28px rgba(255,138,0,.3);}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(255,138,0,.42);}
+    .btn-outline{background:transparent;border-color:rgba(255,255,255,.16);color:var(--text);}
+    .btn-outline:hover{border-color:rgba(255,255,255,.32);background:rgba(255,255,255,.04);}
+
+    .page-head{padding:72px 0 48px;}
+    .eyebrow{display:inline-flex;gap:8px;align-items:center;padding:7px 14px;border-radius:999px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.2);color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;margin-bottom:18px;}
+    .page-head h1{margin:0 0 12px;font-size:clamp(28px,4vw,42px);letter-spacing:-.025em;}
+    .page-head .lead{margin:0 0 28px;color:var(--sub);font-size:16px;max-width:640px;}
+
+    .faa-link-bar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:18px 22px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);}
+    .faa-link-bar span{color:var(--sub);font-size:14px;}
+    .faa-link-bar strong{color:var(--text);}
+
+    .gallery-section{padding:48px 0 80px;}
+    .section-label{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--sub);text-transform:uppercase;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,.07);}
+
+    .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:48px;}
+
+    .gallery-item{position:relative;border-radius:16px;overflow:hidden;background:var(--card);border:1px solid rgba(255,255,255,.07);box-shadow:0 8px 32px rgba(0,0,0,.45);transition:.25s ease;}
+    .gallery-item:hover{transform:translateY(-3px);box-shadow:0 16px 48px rgba(0,0,0,.6);border-color:rgba(255,138,0,.2);}
+    .gallery-item img{width:100%;aspect-ratio:4/3;object-fit:contain;background:#0d0d10;display:block;}
+    .gallery-item-info{padding:14px 16px 16px;}
+    .gallery-item-info h3{margin:0 0 4px;font-size:15px;letter-spacing:-.01em;}
+    .gallery-item-info p{margin:0 0 12px;font-size:13px;color:var(--sub);}
+    .gallery-item-info a{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--accent2);border-bottom:1px solid rgba(255,177,74,.3);padding-bottom:1px;transition:.15s;}
+    .gallery-item-info a:hover{color:#fff;border-color:rgba(255,255,255,.4);}
+
+    .award-highlight{grid-column:1 / -1;display:grid;grid-template-columns:1.4fr 1fr;gap:18px;}
+    .award-highlight .main-img img{aspect-ratio:3/2;border-radius:16px;width:100%;object-fit:cover;border:1px solid rgba(255,255,255,.07);}
+    .award-highlight .sub-imgs{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .award-highlight .sub-imgs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;border:1px solid rgba(255,255,255,.07);}
+    .award-highlight-text{grid-column:1/-1;margin-top:6px;}
+    .award-highlight-text p{margin:0;color:var(--sub);font-size:14px;font-style:italic;text-align:center;}
+
+    .faa-note{padding:28px;border-radius:20px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-top:0;}
+    .faa-note h3{margin:0 0 8px;font-size:17px;}
+    .faa-note p{margin:0;color:var(--sub);font-size:14px;line-height:1.8;}
+
+    @media(max-width:900px){
+      .gallery-grid{grid-template-columns:repeat(2,1fr);}
+      .award-highlight{grid-template-columns:1fr;grid-column:auto;}
+      .award-highlight .sub-imgs{grid-template-columns:repeat(4,1fr);}
+    }
+    @media(max-width:640px){
+      .gallery-grid{grid-template-columns:1fr;}
+      .award-highlight .sub-imgs{grid-template-columns:repeat(2,1fr);}
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+{% endblock %}
+
+{% block content %}
+
+<main>
+  <div class="wrap">
+
+    <div class="page-head">
+      <div class="eyebrow">🖼 GALLERY</div>
+      <h1>Ichiro Murata — Fine Art Prints</h1>
+      <p class="lead">
+        Star landscape photography including 1X Award-winning works, available as fine art prints.<br>
+        Print, canvas, acrylic and more formats available.
+      </p>
+
+      <div class="faa-link-bar">
+        <div>
+          <strong>Platform: </strong>
+          <span>Fine Art America (one of the world's largest art print marketplaces)</span>
+        </div>
+        <a class="btn btn-primary"
+           href="https://fineartamerica.com/profiles/ichiro-murata"
+           target="_blank" rel="noopener">
+          View FAA Profile →
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <section class="gallery-section">
+    <div class="wrap">
+
+      <div class="section-label">🏆 1X Award-Winning Works</div>
+
+      <div class="award-highlight">
+        <div class="main-img">
+          <img src="../images/awards/3102187.jpg"
+               alt="1X Award-winning star landscape — Ichiro Murata">
+        </div>
+        <div class="sub-imgs">
+          <img src="../images/awards/3083835.jpg" alt="1X Award work 1 — Ichiro Murata">
+          <img src="../images/awards/3086530.jpg" alt="1X Award work 2 — Ichiro Murata">
+          <img src="../images/awards/3095761.jpg" alt="1X Award work 3 — Ichiro Murata">
+          <img src="../images/awards/3095833.jpg" alt="1X Award work 4 — Ichiro Murata">
+        </div>
+        <div class="award-highlight-text">
+          <p>"Selected and awarded on 1X, one of the most curated photo platforms worldwide."</p>
+        </div>
+      </div>
+
+      <div class="section-label" style="margin-top:56px;">Prints Available (Fine Art America)</div>
+
+      <div class="gallery-grid">
+
+        <article class="gallery-item">
+          <img src="../images/awards/inner-structure-01.jpg"
+               alt="Inner Structure 01 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Inner Structure 01</h3>
+            <p>Abstract / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/inner-structure-01-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              Buy Print →
+            </a>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="../images/awards/quiet-line-02.jpg"
+               alt="Quiet Line 02 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Quiet Line 02</h3>
+            <p>Seascape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/quiet-line-02-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              Buy Print →
+            </a>
+          </div>
+        </article>
+
+        <article class="gallery-item">
+          <img src="../images/awards/quiet-line-01.jpg"
+               alt="Quiet Line 01 — Ichiro Murata">
+          <div class="gallery-item-info">
+            <h3>Quiet Line 01</h3>
+            <p>Seascape / Fine Art Print</p>
+            <a href="https://fineartamerica.com/featured/quiet-line-01-ichiro-murata.html"
+               target="_blank" rel="noopener">
+              Buy Print →
+            </a>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="faa-note">
+        <h3>Rotating selection</h3>
+        <p>
+          The works shown here rotate periodically due to Fine Art America's free plan limits.
+          For the full current collection, visit the
+          <a href="https://fineartamerica.com/profiles/ichiro-murata"
+             target="_blank" rel="noopener"
+             style="color:var(--accent2);">FAA profile page</a>.
+        </p>
+      </div>
+
+    </div>
+  </section>
+</main>
+
+{% endblock %}

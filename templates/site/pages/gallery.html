@@ -1,56 +1,37 @@
+{# Galleryページ（日本語版、2026-07-22移行）。
+   移行元: html/gallery.html（手書き静的HTML）。本文（旧<header>〜旧<footer>の間）・
+   画像パス・リンク・文言は変更していない。ヘッダー/フッターのみworkshop.htmlと同じ
+   パターンでサイト共通の.hdr/.footer（templates/knowledge/header.html・footer.html）へ
+   切り替えた。それに伴い、旧ヘッダー/フッター専用だったCSSは不要になったため削除した：
+   .site-header／.header-inner／.brand／.brand-mark／.brand-text／.brand-text small／
+   .nav／.nav a／.nav a:hover／.footer／.footer-inner／（640pxメディアクエリ内の）
+   .nav{display:none}。本文側で.brand・.navクラスは使われていないことを確認済み。
 
+   :root に --muted:#5e6677; と --line:#2a2f3a; を追加した（元ファイルに無かったため。
+   共通ヘッダー/フッターCSSが参照する）。他の変数は変更していない。
 
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/gallery.html'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/gallery.html');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gallery | Ichiro Murata — Fine Art Prints</title>
-<meta name="description" content="村田一朗の星景写真ギャラリー。1X Award受賞作品を含むファインアートプリントをFine Art Americaにて販売中。">
-<link rel="canonical" href="https://www.sidekick-lab.com/gallery">
+   OGPタグは元ファイルに存在した（og:title が title ブロックと異なる文言のため
+   og_title ブロックを明示定義。og:description は meta description と同一文言のため
+   ブロックを省略しbase.htmlの既定値（self.meta_description()）に任せた。og:image・
+   og:site_name（Sidekick）・og:locale（ja_JP）はbase.htmlの既定値と一致するため
+   申し送り不要）。
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/gallery">
+   申し送り: build_site.py にはまだ gallery ページのエントリが無い（現状 workshop の
+   み対応）。本テンプレートを使うには、PAGES に "gallery" を追加し、
+   context として language="ja"・nav_current="gallery"・enable_ogp=true・
+   en_redirect_url="/en/gallery" を渡す必要がある（en_redirect_url未指定だと
+   汎用/en/へ誘導されてしまい、元の挙動（/en/gallery.htmlへの直接誘導）と変わる）。 #}
+{% extends "base.html" %}
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/gallery">
+{% block title %}Gallery | Ichiro Murata — Fine Art Prints{% endblock %}
 
+{% block meta_description %}村田一朗の星景写真ギャラリー。1X Award受賞作品を含むファインアートプリントをFine Art Americaにて販売中。{% endblock %}
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sidekick">
-<meta property="og:locale" content="ja_JP">
-<meta property="og:title" content="Gallery | 村田一朗 星景写真 Fine Art Prints">
-<meta property="og:description" content="村田一朗の星景写真ギャラリー。1X Award受賞作品を含むファインアートプリントをFine Art Americaにて販売中。">
-<meta property="og:url" content="https://www.sidekick-lab.com/gallery">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Gallery | 村田一朗 星景写真 Fine Art Prints">
-<meta name="twitter:description" content="村田一朗の星景写真ギャラリー。1X Award受賞作品を含むファインアートプリントをFine Art Americaにて販売中。">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+{% block canonical %}https://www.sidekick-lab.com/gallery{% endblock %}
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+{% block og_title %}Gallery | 村田一朗 星景写真 Fine Art Prints{% endblock %}
 
+{% block extra_head %}
   <style>
     :root{
       --bg:#0b0b0d;
@@ -261,111 +242,9 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xem6v4pdup");
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
-     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
-     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
-     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
-     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
-     キーボード操作・aria-expanded対応のトグルボタンを付与している
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
-
-     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
-     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
-     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
-     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
-     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
-     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
-     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。 -->
-
-
-<div class="lang-banner" id="lang-banner">
-  🇺🇸 This site is also available in English —
-  <a href="/en/gallery">View English page →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
-      <span class="kzc-nav-toggle-label">メニュー</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
-      <a href="/sidekick-star" >⭐ Star</a>
-      <a href="/portrait" >👤 Portrait</a>
-      <a href="/sky-effect" >☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
-      <a href="/workshop" >📷 Workshop</a>
-      <a href="/gallery" style="color:var(--muted);" aria-current="page">Gallery</a>
-      <a href="/sidekick" style="color:var(--muted);" >Sidekickとは</a>
-      <a href="/about" style="color:var(--muted);" >About</a>
-      <a href="/development-log" style="color:var(--muted);" >開発日誌</a>
-      <a href="/changelog" style="color:var(--muted);" >更新履歴</a>
-      <a href="/faq" style="color:var(--muted);" >Support</a>
-      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
-      <a href="/en/gallery" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu");
-  if (!toggle || !menu) { return; }
-
-  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
-  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
 
 <main>
   <div class="wrap">
@@ -497,97 +376,4 @@
   </section>
 </main>
 
-
-<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
-     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
-            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
-            <li><a href="/ai-review">講評AI</a></li>
-            <li><a href="/camera-ai">カメラAI</a></li>
-            <li><a href="/shooting-ai">撮影AI</a></li>
-            <li><a href="/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
-            <li><a href="/workshop">📷 Workshop</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="/faq">よくある質問</a></li>
-            <li><a href="/development-log">開発日誌</a></li>
-            <li><a href="/changelog">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/about">About</a></li>
-            <li><a href="/sidekick">Sidekickとは</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/legal">特定商取引法</a></li>
-            <li><a href="/privacy">プライバシーポリシー</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
-      <div class="footer-legal">
-        <a href="/legal">特定商取引法に基づく表記</a>
-        <a href="/privacy">プライバシーポリシー</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

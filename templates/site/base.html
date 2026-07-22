@@ -11,18 +11,23 @@
 <html lang="{{ language|default('ja') }}">
 <head>
 <meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。 -->
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
+     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
+     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
+     汎用/en/に後退させないようパラメータ化した）。 -->
 <script>
   (function () {
     try {
       var pref = localStorage.getItem('sk_lang_pref');
       if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
+      if (pref === 'en') { location.replace('{{ en_redirect_url|default("/en/") }}'); return; }
       var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
       var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
       if (!isJapanese) {
         localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
+        location.replace('{{ en_redirect_url|default("/en/") }}');
       }
     } catch (e) { /* localStorageが使えない環境などは何もしない */ }
   })();
@@ -31,15 +36,22 @@
 <title>{% block title %}SideKick{% endblock %}</title>
 <meta name="description" content="{% block meta_description %}{% endblock %}">
 <link rel="canonical" href="{% block canonical %}{% endblock %}">
+{% for hl, url in (hreflang_alternates|default({})).items() %}
+<link rel="alternate" hreflang="{{ hl }}" href="{{ url }}">
+{% endfor %}
 {% if enable_ogp|default(false) %}
 <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:site_name" content="{% block og_site_name %}Sidekick{% endblock %}">
+<meta property="og:locale" content="{{ 'en_US' if language == 'en' else 'ja_JP' }}">
 <meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
-<meta property="og:description" content="{{ self.meta_description() }}">
+<meta property="og:description" content="{% block og_description %}{{ self.meta_description() }}{% endblock %}">
 <meta property="og:url" content="{{ self.canonical() }}">
 <meta property="og:image" content="{{ og_image|default('https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg') }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ self.og_title() }}">
+<meta name="twitter:description" content="{{ self.og_description() }}">
 <meta name="twitter:image" content="{{ og_image|default('https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg') }}">
 {% endif %}
 <link rel="stylesheet" href="/assets/css/site-header.css">

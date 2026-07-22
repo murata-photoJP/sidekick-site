@@ -1,56 +1,74 @@
+{# Sidekick Sky Effect 販売ページ（商品販売ページ、Phase 4移行、2026-07-22）。
+   移行元: html/sky-effect.html（手書き静的HTML）。本文・画像パス・リンク・文言・
+   JSロジック・価格表示・CTA文言は一切変更していない（商品ページのため特に厳守）。
+   ヘッダー/フッターのみ、独自の.site-header/.footerからサイト共通の.hdr/.footer
+   （templates/knowledge/header.html・footer.html）へ切り替えた（workshop.htmlと同じ方針）。
 
+   [削除したCSSセレクタ]（旧ヘッダー/フッター専用、新ヘッダー/フッターはsite-header.cssが
+   提供するため不要になった。本文中で.brand/.header-inner/.footer-inner/.site-headerが
+   使われていないことを確認済み）:
+     - .site-header
+     - .header-inner（元CSSでは1100px幅の上書きがこのセレクタ内にあった。お手本手順書は
+       「.site-header .wrap（1100px幅上書き）」という別セレクタを想定していたが、この
+       ページの実際のCSSでは.header-inner側に統合されていたため、.header-inner削除で対応）
+     - .brand / .brand-mark / .brand-text / .brand-text small
+     - .nav / .nav a / .nav a:hover,.nav a.active
+     - @media(max-width:640px) 内の .nav{display:none;}
+       （重要: これを残すと、新ヘッダーもclass="nav"を使うため、モバイル幅で新ナビが
+       丸ごと非表示になってしまう。旧ヘッダー専用の「nav自体を消す」設計は新ヘッダーの
+       トグルボタン式モバイルナビと相容れないため削除した）
+     - .footer / .footer-inner
 
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/sky-effect.html'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/sky-effect.html');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sidekick Sky Effect（サイドキック スカイエフェクト）| 空と地上をそれぞれの光で処理</title>
-<meta name="description" content="サイドキック スカイエフェクト（Sidekick Sky Effect）は、RAWから空用・地上用の2つのWBで現像して合成し、夕焼け・ブルーアワー・青空の思想で仕上げる空表現向けPhotoshopスクリプト。30日間無料試用あり。村田一朗が開発。">
-<link rel="canonical" href="https://www.sidekick-lab.com/sky-effect">
+   [追加したCSS変数]
+     --muted:#5e6677;（:root、--subの直後に追加。既存値は変更していない）
+     追加理由: assets/css/site-header.css が .brand-sub・.footer-brand p・.footer-col h4・
+     .footer-copy・.footer-legal a で var(--muted) を使用するが、このページの:rootには
+     --mutedが定義されていなかった（未定義変数は空文字扱いになり、該当箇所の文字色が
+     意図せず変わる可能性があった）。
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sky-effect">
+   [OGP — build_site.py申し送り事項]
+   作業時点（2026-07-22）でbuild_site.pyには gallery/changelog/portrait/sidekick を
+   一括登録する _register_page_pair(slug, ja_extra, en_extra) ヘルパーが既に追加されており
+   （並行して進んでいた別の移行作業）、sky-effectもこの規約に合わせて登録するのが
+   一貫性がある:
+     _register_page_pair(
+         "sky-effect",
+         ja_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/ogp_sky_effect.jpg"},
+         en_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/ogp_sky_effect.jpg"},
+     )
+   このヘルパーが nav_current・en_redirect_url・lang_switch_url・hreflang_alternates
+   （ja/en相互参照）を自動計算するため、個別に渡す必要は無い。
+   なお base.html は hreflang_alternates を {{ hreflang_alternates|default({}) }} で
+   参照するため、未指定でもエラーにはならない（安全側だが、上記ヘルパー経由での登録を推奨）。
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/sky-effect">
+   [既知の制約 — 元HTMLとの差分]
+     - 元HTMLの og:url は "https://www.sidekick-lab.com/sky-effect.html"（.html付き）だったが、
+       base.htmlはog:urlを{{ self.canonical() }}から生成するため、移行後は
+       "https://www.sidekick-lab.com/sky-effect"（.html無し）になる。これはcanonicalの値
+       そのものであり、サイト全体の絶対パス・.html無し方針（feedback_html_absolute_paths）
+       とも一致するため、意図的にそのままにした。
+     - 元HTMLの twitter:image は og:image と異なる値
+       （images/SkyEffects/Sidekick_SkyEffect_ブルーアワー/20260510_073607_880_0.0_SkyEffect.jpg）
+       だったが、base.htmlはog:imageとtwitter:imageに同じ{{ og_image }}を使う設計のため、
+       この差分は移行後に失われる（twitter:imageもogp_sky_effect.jpgになる）。
+       base.html自体は今回変更対象外のため、この制約は解消していない。要報告事項。
+     - 元HTMLの application/ld+json（SoftwareApplication構造化データ）は本テンプレートの
+       extra_head内にそのまま維持した（お手本の移行手順には明記が無かったが、削除すると
+       SEO上の構造化データが失われるため、既存要素として保持する判断をした）。
+#}
+{% extends "base.html" %}
 
+{% block title %}Sidekick Sky Effect（サイドキック スカイエフェクト）| 空と地上をそれぞれの光で処理{% endblock %}
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sidekick">
-<meta property="og:locale" content="ja_JP">
-<meta property="og:title" content="Sidekick Sky Effect | 空と地上をそれぞれの光で処理するPhotoshopツール">
-<meta property="og:description" content="RAWから空用・地上用2WBで現像して合成。夕焼け・ブルーアワー・青空の思想で空の雰囲気を一発変換。30日間無料試用あり。">
-<meta property="og:url" content="https://www.sidekick-lab.com/sky-effect">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/ogp_sky_effect.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sidekick Sky Effect | 空と地上をそれぞれの光で処理するPhotoshopツール">
-<meta name="twitter:description" content="RAWから空用・地上用2WBで現像して合成。夕焼け・ブルーアワー・青空の思想で空の雰囲気を一発変換。30日間無料試用あり。">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/ogp_sky_effect.jpg">
+{% block meta_description %}サイドキック スカイエフェクト（Sidekick Sky Effect）は、RAWから空用・地上用の2つのWBで現像して合成し、夕焼け・ブルーアワー・青空の思想で仕上げる空表現向けPhotoshopスクリプト。30日間無料試用あり。村田一朗が開発。{% endblock %}
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+{% block canonical %}https://www.sidekick-lab.com/sky-effect{% endblock %}
 
+{% block og_title %}Sidekick Sky Effect | 空と地上をそれぞれの光で処理するPhotoshopツール{% endblock %}
+
+{% block og_description %}RAWから空用・地上用2WBで現像して合成。夕焼け・ブルーアワー・青空の思想で空の雰囲気を一発変換。30日間無料試用あり。{% endblock %}
+
+{% block extra_head %}
   <style>
     :root{
       --bg:#0b0b0d;
@@ -376,111 +394,9 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xem6v4pdup");
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
-     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
-     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
-     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
-     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
-     キーボード操作・aria-expanded対応のトグルボタンを付与している
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
-
-     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
-     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
-     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
-     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
-     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
-     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
-     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。 -->
-
-
-<div class="lang-banner" id="lang-banner">
-  🇺🇸 This site is also available in English —
-  <a href="/en/sky-effect">View English page →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
-      <span class="kzc-nav-toggle-label">メニュー</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
-      <a href="/sidekick-star" >⭐ Star</a>
-      <a href="/portrait" >👤 Portrait</a>
-      <a href="/sky-effect" aria-current="page">☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
-      <a href="/workshop" >📷 Workshop</a>
-      <a href="/gallery" style="color:var(--muted);" >Gallery</a>
-      <a href="/sidekick" style="color:var(--muted);" >Sidekickとは</a>
-      <a href="/about" style="color:var(--muted);" >About</a>
-      <a href="/development-log" style="color:var(--muted);" >開発日誌</a>
-      <a href="/changelog" style="color:var(--muted);" >更新履歴</a>
-      <a href="/faq" style="color:var(--muted);" >Support</a>
-      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
-      <a href="/en/sky-effect" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu");
-  if (!toggle || !menu) { return; }
-
-  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
-  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
 
   <main>
 
@@ -938,98 +854,9 @@
     </div>
   </div>
 
+{% endblock %}
 
-<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
-     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
-            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
-            <li><a href="/ai-review">講評AI</a></li>
-            <li><a href="/camera-ai">カメラAI</a></li>
-            <li><a href="/shooting-ai">撮影AI</a></li>
-            <li><a href="/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
-            <li><a href="/workshop">📷 Workshop</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="/faq">よくある質問</a></li>
-            <li><a href="/development-log">開発日誌</a></li>
-            <li><a href="/changelog">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/about">About</a></li>
-            <li><a href="/sidekick">Sidekickとは</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/legal">特定商取引法</a></li>
-            <li><a href="/privacy">プライバシーポリシー</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
-      <div class="footer-legal">
-        <a href="/legal">特定商取引法に基づく表記</a>
-        <a href="/privacy">プライバシーポリシー</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+{% block extra_body_end %}
   <script>
     // ── ギャラリーデータ ───────────────────────────────
     var scenes = [
@@ -1195,6 +1022,4 @@
       btn.classList.add('active');
     }
   </script>
-
-</body>
-</html>
+{% endblock %}

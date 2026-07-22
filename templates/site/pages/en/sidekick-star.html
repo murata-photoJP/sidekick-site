@@ -1,56 +1,93 @@
+{# Sidekick Star product page (English version). Migrated 2026-07-22.
+   Source: html/en/sidekick-star.html (hand-written static HTML). This is a live commerce
+   page, so the body (<main>...</main>, pricing/CTA copy, image paths, links, JS logic) is
+   completely unchanged. Same migration pattern as templates/site/pages/workshop.html and
+   templates/site/pages/sidekick-star.html (JA sibling of this file): only the old
+   .site-header/.footer was swapped for the shared .hdr/.footer
+   (templates/knowledge/header_en.html / footer_en.html — see language note below on why
+   footer_en.html, not footer.html, is used for language==en pages).
 
+   [Removed CSS selectors] (duplicate the new shared header/footer, which get their own
+   rules from /assets/css/site-header.css; confirmed via grep that none of these classes
+   are reused in the body):
+     .site-header / .header-inner / .brand / .brand-mark / .brand-text /
+     .brand-text small / .nav / .nav a / .nav a:hover,.nav a.active /
+     .footer / .footer-inner / (inside the max-width:640px media query) .nav{display:none;}
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sidekick Star | Automate Astrophoto Stacking & Airplane Trail Removal in Photoshop</title>
-<meta name="description" content="Sidekick Star automates the repetitive decisions in astrophotography — light stacking, sky mask, light pollution correction. 3-month free trial. No credit card required.">
-<link rel="canonical" href="https://www.sidekick-lab.com/en/sidekick-star">
+   [Added CSS variable]: --muted:#5e6677; (missing from the original :root; all other
+   existing variables --bg/--card/--line/--text/--sub/--accent/--accent2/--white/etc. are
+   unchanged)
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sidekick-star">
+   [OGP actual values] (needed as build_site.py context args, enable_ogp: true):
+     - og_title: "Sidekick Star | Astrophotography Workflow Tool for Photoshop"
+       (differs from the <title> text; carried over unchanged from the original file)
+     - og_description: "Automate light stacking, sky mask, and light pollution correction.
+       Built by a 1X Award-winning astrophotographer. 3-month free trial."
+       (differs from meta description; carried over unchanged from the original file)
+     - og_image: no override needed (matches the base.html default, milkyway_03_after.jpg)
+     - Known, unavoidable minor content difference vs. the original: the original file's
+       twitter:description ("Automate light stacking, sky mask, and light pollution
+       correction. 3-month free trial.") was SHORTER than and worded differently from its
+       og:description. base.html hard-codes twitter:description to
+       {{ self.og_description() }} with no separate twitter_description block, so the
+       rendered page will show the longer og_description text for both og: and twitter:
+       tags. This is a base.html architectural limitation (base.html is out of scope for
+       this task), not a content change made here — flagged for Murata-san's awareness.
+     - The original also lacked explicit og:image:width/height meta tags; base.html always
+       emits 1200x630 when enable_ogp is true. This is a harmless addition, not a content
+       change.
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/sidekick-star">
+   [hreflang tags]: the original en/sidekick-star.html has
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sidekick-star">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/sidekick-star">
+   base.html has no dedicated block for these, so they are preserved as-is inside
+   extra_head (see below). The JA sidekick-star.html source has no equivalent hreflang
+   tags, so none were added to the JA template either — this preserves the pre-existing
+   asymmetry between the two source files rather than introducing a change.
 
+   [build_site.py hand-off notes] (this file itself is unchanged; the actual PAGES
+   registration is expected to look like this):
+     "sidekick-star-en": {
+         "template": "pages/en/sidekick-star.html",
+         "output": Path("en/sidekick-star.html"),
+         "context": {
+             "language": "en",
+             "nav_current": "sidekick-star",
+             "enable_ogp": True,
+             "lang_switch_url": "/sidekick-star",   # header_en.html's language banner and
+                                                      # JA-switch link default to
+                                                      # "/knowledge" otherwise, which would
+                                                      # be wrong for this page
+         },
+     },
+   IMPORTANT caveat found during this migration (not fixed here, base.html is out of
+   scope): base.html's language auto-redirect <script> (in <head>, shared by ALL pages
+   regardless of `language`) also runs on this English page. The original
+   en/sidekick-star.html never had this script at all — English visitors were never
+   auto-redirected. On this new template, a first-time non-Japanese visitor landing
+   directly on /en/sidekick-star with no stored `sk_lang_pref` will have the script set
+   pref='en' and call location.replace(en_redirect_url). Since no en_redirect_url is
+   passed above, it defaults to "/en/" (base.html's own default) — meaning a fresh
+   non-Japanese visitor to this exact product page would be bounced to the generic /en/
+   home page instead of staying put. This did not happen with the original hand-written
+   page. Recommend passing en_redirect_url="/en/sidekick-star" (self-referencing) in the
+   build_site.py context above once this page is registered, to at least make the
+   redirect a no-op rather than losing the visitor's landing page; a proper fix would be
+   for base.html to skip the auto-redirect script entirely when language == 'en', but that
+   requires editing base.html, which is outside this task's allowed file list. #}
+{% extends "base.html" %}
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sidekick">
-<meta property="og:locale" content="en_US">
-<meta property="og:title" content="Sidekick Star | Astrophotography Workflow Tool for Photoshop">
-<meta property="og:description" content="Automate light stacking, sky mask, and light pollution correction. Built by a 1X Award-winning astrophotographer. 3-month free trial.">
-<meta property="og:url" content="https://www.sidekick-lab.com/en/sidekick-star">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sidekick Star | Astrophotography Workflow Tool for Photoshop">
-<meta name="twitter:description" content="Automate light stacking, sky mask, and light pollution correction. Built by a 1X Award-winning astrophotographer. 3-month free trial.">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+{% block title %}Sidekick Star | Automate Astrophoto Stacking & Airplane Trail Removal in Photoshop{% endblock %}
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+{% block meta_description %}Sidekick Star automates the repetitive decisions in astrophotography — light stacking, sky mask, light pollution correction. 3-month free trial. No credit card required.{% endblock %}
 
+{% block canonical %}https://www.sidekick-lab.com/en/sidekick-star{% endblock %}
+
+{% block og_title %}Sidekick Star | Astrophotography Workflow Tool for Photoshop{% endblock %}
+
+{% block og_description %}Automate light stacking, sky mask, and light pollution correction. Built by a 1X Award-winning astrophotographer. 3-month free trial.{% endblock %}
+
+{% block extra_head %}
   <style>
     :root{
       --bg:#0b0b0d;
@@ -251,97 +288,9 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xem6v4pdup");
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
-     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
-     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
-     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
-     JA版のheader.htmlは変更していない。
-
-     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
-     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。 -->
-
-<div class="lang-banner" id="lang-banner-en">
-  🇯🇵 このサイトは日本語でもご覧いただけます —
-  <a href="/sidekick-star">日本語ページを見る →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/en/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
-      <span class="kzc-nav-toggle-label">Menu</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
-      <a href="/en/sidekick-star" aria-current="page">⭐ Star</a>
-      <a href="/en/portrait" >👤 Portrait</a>
-      <a href="/en/sky-effect" >☁️ Sky</a>
-      <a href="/en/knowledge" >📚 Knowledge</a>
-      <a href="/en/gallery" style="color:var(--muted);" >Gallery</a>
-      <a href="/en/sidekick" style="color:var(--muted);" >What is Sidekick</a>
-      <a href="/en/about" style="color:var(--muted);" >About</a>
-      <a href="/en/development-log" style="color:var(--muted);" >Development Log</a>
-      <a href="/en/changelog" style="color:var(--muted);" >Changelog</a>
-      <a href="/en/faq" style="color:var(--muted);" >Support</a>
-      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
-      <a href="/sidekick-star" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu-en");
-  if (!toggle || !menu) { return; }
-
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
   <main>
 
     <!-- Hero -->
@@ -846,87 +795,4 @@
     </section>
 
   </main>
-
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
-     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
-     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
-     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/en/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>Photoshop scripts and workshops<br>for photographers.</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Knowledge</h4>
-          <ul>
-            <li><a href="/en/knowledge">📚 Knowledge</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
-            <li><a href="/en/ai-review">AI Review</a></li>
-            <li><a href="/en/camera-ai">Camera AI</a></li>
-            <li><a href="/en/shooting-ai">Shooting AI</a></li>
-            <li><a href="/en/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="/en/faq">FAQ</a></li>
-            <li><a href="/en/development-log">Development Log</a></li>
-            <li><a href="/en/changelog">Changelog</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/en/about">About</a></li>
-            <li><a href="/en/sidekick">What is Sidekick</a></li>
-            <li><a href="/en/gallery">Gallery</a></li>
-            <li><a href="/en/terms">Terms</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
-      <div class="footer-legal">
-        <a href="/en/terms">Terms</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

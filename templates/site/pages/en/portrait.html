@@ -1,56 +1,46 @@
+{# Portraitページ（英語版、商品販売ページ）。移行元: html/en/portrait.html（手書き静的HTML）。
+   本文・画像パス・リンク・文言・JSロジック・価格表示・CTA文言は一切変更していない
+   （商品販売ページのため、1文字も変えない方針で作業）。
+   ヘッダー/フッターのみ、独自の.site-header/.footerからサイト共通の.hdr/.footer
+   （templates/knowledge/header_en.html・footer_en.html）へ切り替えた。それに伴い、旧ヘッダー/
+   フッター専用だったCSS（.site-header・.header-inner・.brand・.brand-mark・.brand-text・
+   .brand-text small・.nav・.nav a・.nav a:hover,.nav a.active・.footer・.footer-inner、
+   および@media(max-width:640px)内の.nav{display:none;}）は本文側で未使用なことを確認の上
+   削除した（新ヘッダー/フッターのCSSは/assets/css/site-header.cssから提供される）。
 
+   :root に --muted が無かったため --muted:#5e6677; を追加した（既存値は変更していない。
+   なお旧ナビ（footer側の"LP"等）が var(--muted) を使っていたが未定義だったため、この追加は
+   結果的に既存の見た目のバグを直すことになる）。
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sidekick Portrait | 15 Styles × 3 Strengths for Portrait Processing in Photoshop</title>
-<meta name="description" content="Sidekick Portrait outputs color, skin, and dimension as Photoshop layers — 15 styles × 3 strengths. Non-destructive by design. 90-day free trial, no credit card required.">
-<link rel="canonical" href="https://www.sidekick-lab.com/en/portrait">
+   OGP: 元ファイルのog:title/og:descriptionは<title>/meta descriptionと文言が異なるため、
+   og_title/og_descriptionブロックとして明示的に定義した。og:type・og:site_name・og:locale・
+   og:url はbase.html側が自動生成するため元ファイルの重複タグは含めていない
+   （og:url は元々 https://www.sidekick-lab.com/en/portrait.html だったが、base.htmlは
+   canonicalブロックの値を使うため https://www.sidekick-lab.com/en/portrait になる）。
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/portrait">
+   hreflang alternate（ja/en）は元ファイルにあったが、templates/site/base.html は
+   templates/knowledge/base.html・templates/development-log/base.html と異なり
+   hreflang_alternates変数に対応していない（base.html自体は今回変更しない指示のため）。
+   そのためextra_head内に元の2行をそのまま維持した。
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/portrait">
+   【build_site.py側で以下を渡す必要あり（このテンプレート自体は変更不要）】
+     - enable_ogp=True
+     - og_image="https://www.sidekick-lab.com/images/portrait/style_beauty.jpg"
+       （サイト既定og:image（milkyway_03_after.jpg）と異なるため。日本語版と同じ画像）
+     - language="en" #}
+{% extends "base.html" %}
 
+{% block title %}Sidekick Portrait | 15 Styles × 3 Strengths for Portrait Processing in Photoshop{% endblock %}
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sidekick">
-<meta property="og:locale" content="en_US">
-<meta property="og:title" content="Sidekick Portrait | 15 Styles for Portrait Processing in Photoshop">
-<meta property="og:description" content="Color, skin, and dimension output as editable Photoshop layers — 15 styles × 3 strengths. 90-day free trial.">
-<meta property="og:url" content="https://www.sidekick-lab.com/en/portrait">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/portrait/style_beauty.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Sidekick Portrait | 15 Styles for Portrait Processing in Photoshop">
-<meta name="twitter:description" content="Color, skin, and dimension output as editable Photoshop layers — 15 styles × 3 strengths. 90-day free trial.">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/portrait/style_beauty.jpg">
+{% block meta_description %}Sidekick Portrait outputs color, skin, and dimension as Photoshop layers — 15 styles × 3 strengths. Non-destructive by design. 90-day free trial, no credit card required.{% endblock %}
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+{% block canonical %}https://www.sidekick-lab.com/en/portrait{% endblock %}
 
+{% block og_title %}Sidekick Portrait | 15 Styles for Portrait Processing in Photoshop{% endblock %}
+
+{% block og_description %}Color, skin, and dimension output as editable Photoshop layers — 15 styles × 3 strengths. 90-day free trial.{% endblock %}
+
+{% block extra_head %}
   <style>
     :root{
       --bg:#0b0b0d;
@@ -257,97 +247,9 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xem6v4pdup");
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
-     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
-     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
-     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
-     JA版のheader.htmlは変更していない。
-
-     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
-     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。 -->
-
-<div class="lang-banner" id="lang-banner-en">
-  🇯🇵 このサイトは日本語でもご覧いただけます —
-  <a href="/portrait">日本語ページを見る →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/en/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
-      <span class="kzc-nav-toggle-label">Menu</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
-      <a href="/en/sidekick-star" >⭐ Star</a>
-      <a href="/en/portrait" aria-current="page">👤 Portrait</a>
-      <a href="/en/sky-effect" >☁️ Sky</a>
-      <a href="/en/knowledge" >📚 Knowledge</a>
-      <a href="/en/gallery" style="color:var(--muted);" >Gallery</a>
-      <a href="/en/sidekick" style="color:var(--muted);" >What is Sidekick</a>
-      <a href="/en/about" style="color:var(--muted);" >About</a>
-      <a href="/en/development-log" style="color:var(--muted);" >Development Log</a>
-      <a href="/en/changelog" style="color:var(--muted);" >Changelog</a>
-      <a href="/en/faq" style="color:var(--muted);" >Support</a>
-      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
-      <a href="/portrait" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu-en");
-  if (!toggle || !menu) { return; }
-
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
   <main>
 
     <!-- Hero -->
@@ -626,88 +528,9 @@
       <span class="lightbox-caption-idx" id="lightbox-idx"></span>
     </div>
   </div>
+{% endblock %}
 
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
-     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
-     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
-     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/en/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>Photoshop scripts and workshops<br>for photographers.</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Knowledge</h4>
-          <ul>
-            <li><a href="/en/knowledge">📚 Knowledge</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
-            <li><a href="/en/ai-review">AI Review</a></li>
-            <li><a href="/en/camera-ai">Camera AI</a></li>
-            <li><a href="/en/shooting-ai">Shooting AI</a></li>
-            <li><a href="/en/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="/en/faq">FAQ</a></li>
-            <li><a href="/en/development-log">Development Log</a></li>
-            <li><a href="/en/changelog">Changelog</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/en/about">About</a></li>
-            <li><a href="/en/sidekick">What is Sidekick</a></li>
-            <li><a href="/en/gallery">Gallery</a></li>
-            <li><a href="/en/terms">Terms</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
-      <div class="footer-legal">
-        <a href="/en/terms">Terms</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+{% block extra_body_end %}
   <script>
     var currentIdx = 0;
 
@@ -857,6 +680,4 @@
       });
     });
   </script>
-
-</body>
-</html>
+{% endblock %}
