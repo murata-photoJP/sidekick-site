@@ -141,6 +141,43 @@ _register_page_pair("about")  # OGPなし（元ファイルに存在しない）
 _register_page_pair("faq", en_extra={"enable_ogp": True})
 _register_page_pair("ai-lab")  # OGPなし（元ファイルに存在しない）
 
+# トップページ（index）はURLがルート（/、/en/）でslugベースの他ページと形式が違うため、
+# _register_page_pair()を使わずPAGESへ直接登録する。村田さんが本番で「Sidekick Lab」の
+# 折り返し表示・ナビ文字色不一致を発見・報告したことがきっかけで移行対象になった
+# （2026-07-22）。canonical・og:site_name（"Sidekick Lab"）はテンプレート側のblockで
+# 指定済みのため、ここではhreflang_alternatesと言語切替リンクの行き先だけを渡す。
+_INDEX_HREFLANG = {
+    "ja": f"{SITE_ORIGIN}/",
+    "en": f"{SITE_ORIGIN}/en/",
+}
+PAGES["index"] = {
+    "template": "pages/index.html",
+    "output": Path("index.html"),
+    "context": {
+        "language": "ja",
+        # トップページに対応するナビ項目は無い（ロゴ自体がホームリンク）ため、
+        # どのnav_current値とも一致しないNoneを渡す（元のindex.htmlもどのナビ項目も
+        # 「現在地」表示にならなかった、その挙動と一致）。
+        "nav_current": None,
+        "enable_ogp": True,
+        "hreflang_alternates": _INDEX_HREFLANG,
+        # en_redirect_url・lang_switch_urlは既定値"/en/"のままでよい（元ファイルの挙動と一致）。
+    },
+}
+PAGES["en/index"] = {
+    "template": "pages/en/index.html",
+    "output": Path("en", "index.html"),
+    "context": {
+        "language": "en",
+        "nav_current": None,
+        "enable_ogp": True,
+        "hreflang_alternates": _INDEX_HREFLANG,
+        # header_en.htmlのlang_switch_url既定値は"/knowledge"（打ち出の小槌向け）のため、
+        # トップページでは明示的にルート"/"を渡す必要がある。
+        "lang_switch_url": "/",
+    },
+}
+
 
 class BuildError(Exception):
     """ユーザーに分かりやすいエラーメッセージとして扱う例外。"""
