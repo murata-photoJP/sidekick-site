@@ -1,56 +1,84 @@
+{# Sidekick Star 販売ランディングページ（日本語版）。2026-07-23移行。
+   移行元: html/lp-star.html（手書き静的HTML、実際の商品LP）。商品LPのため、本文
+   （<main>〜</main>、価格・CTA文言・画像パス・リンク・JSロジック・JSON-LD構造化データ含む）は
+   一切変更していない（村田さんの明示要件）。sidekick-star.html（templates/site/pages/
+   sidekick-star.html）と同じ移行パターンを踏襲：ヘッダー/フッターのみ、独自の
+   .site-header/.footerからサイト共通の.hdr/.footer（templates/knowledge/header.html・
+   footer.html）へ切り替えた。
 
+   【今回の移行の背景】：村田さんが本番サイトで「LPページに英語ページへの切り替えが無い」と
+   報告。lp-star.htmlは他ページ移行時に対象から漏れており、旧.site-headerデザイン
+   （言語バナー・EN切替リンクが無い）のままだった。今回の移行でheader.html（言語バナー・
+   EN切替リンク付き）に切り替わり解消される。
 
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/lp-star.html'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/lp-star.html');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>飛行機軌跡除去・天の川現像を自動化 | Sidekick Star（サイドキック スター）</title>
-<meta name="description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。サイドキック スター（Sidekick Star）3ヶ月無料試用。20年の星景経験から生まれたツール。">
-<link rel="canonical" href="https://www.sidekick-lab.com/lp-star">
+   【削除したCSSセレクタ】（新ヘッダー/フッターと重複するため。/assets/css/site-header.css
+   が同名クラスを別定義で提供する。本文中でこれらのクラスが再利用されていないことをgrepで
+   確認済み）：
+     .site-header / .header-inner / .brand / .brand-mark / .brand-text /
+     .brand-text small / .nav / .nav a / .nav a:hover,.nav a.active /
+     .footer / .footer-inner
+   （「/* ── Header ── */」「/* ── Footer ── */」の見出しコメントも、対応するCSSごと削除した）
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/lp-star">
+   【CSS変数の状況】：元ファイルの:rootに--muted（#5e6677）と--line（#252a36）は
+   両方とも既に定義済みだった（sidekick-star.html移行時とは異なり、--mutedの追加は不要）。
+   既存の--bg/--bg2/--card/--card2/--text/--sub/--accent/--accent2/--red/--green/--blue/
+   --white等は変更していない。
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/lp-star">
+   【OGP実際値】：元ファイルのog:title・og:descriptionとも<title>・meta descriptionと
+   完全に同一文言だったため、base.htmlの既定（self.title()/self.meta_description()）に
+   任せ、og_title/og_descriptionブロックは省略した（指示どおり）。og:site_name「Sidekick」・
+   og:image（milkyway_03_after.jpg）も既定値と一致するため上書き不要。
 
+   【JSON-LD構造化データ】：元ファイルの<script type="application/ld+json">
+   （SoftwareApplication）は、base.htmlにもワークフロー上の指示にも対応するブロックが
+   無いため、extra_headへそのまま含めた（削除すると商品LPの構造化データが失われるため、
+   範囲外だが安全側に倒して保持。中のurlフィールドは元ファイルのまま
+   "https://www.sidekick-lab.com/lp-star.html"（.html付き）で、canonicalの新URLとは
+   表記が一致していない。これは移行前から存在した既存の不一致であり、本文・メタデータを
+   変更しない方針のため今回は修正していない。sidekick-star.html移行時と同じ扱い）。
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sidekick">
-<meta property="og:locale" content="ja_JP">
-<meta property="og:title" content="飛行機軌跡除去・天の川現像を自動化 | Sidekick Star（サイドキック スター）">
-<meta property="og:description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。サイドキック スター（Sidekick Star）3ヶ月無料試用。20年の星景経験から生まれたツール。">
-<meta property="og:url" content="https://www.sidekick-lab.com/lp-star">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="飛行機軌跡除去・天の川現像を自動化 | Sidekick Star（サイドキック スター）">
-<meta name="twitter:description" content="飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。サイドキック スター（Sidekick Star）3ヶ月無料試用。20年の星景経験から生まれたツール。">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+   【sticky-cta の扱い（本ページ固有の注意点）】：元ファイルは
+   <header>…</header><main>…</main><footer>…</footer><div class="sticky-cta">…</div><script>…</script>
+   という順序で、sticky CTAバー（div#sticky-cta）とそれを制御するインラインscriptが、
+   旧footerの「後ろ」（</body>の直前）に存在していた。作業指示は「新旧headerとfooterの
+   『間』を content ブロックへ」となっているが、この構成だとsticky-cta divが対象外になり
+   本文の一部（Heroが画面外に出たら表示される固定CTAバー）が失われてしまう。position:fixed
+   の独立したUIコンポーネントであり本文の外側に置いても表示上の意味は変わらないため、
+   元の相対順序（旧footerより後、</body>より前）を保つ形でextra_body_endへ
+   sticky-cta div + 制御scriptをまとめて1文字も変えずに移動した（contentブロックではなく
+   extra_body_end。base.htmlはfooter includeの直後にextra_body_endを描画するため、
+   「旧footerの直後」という元の位置関係を維持できる）。
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+   【build_site.py申し送り事項】（このファイル自体は変更していない。実際の登録は
+   別途build_site.pyのPAGES辞書に以下のようなエントリを追加する想定）：
+     "lp-star": {
+         "template": "pages/lp-star.html",
+         "output": Path("lp-star.html"),
+         "context": {
+             "language": "ja",
+             "nav_current": "lp-star",
+             "enable_ogp": True,
+             "en_redirect_url": "/en/lp-star",   # base.html言語自動判定スクリプトが
+                                                   # 汎用/en/ではなく英語版の本ページへ
+                                                   # 誘導するために必須（元ファイルの
+                                                   # location.replace('/en/lp-star.html')
+                                                   # と同等の挙動にするため）
+             "lang_switch_url": "/en/lp-star",    # header.htmlの言語バナー・EN切替
+                                                    # リンク用（省略時は汎用/en/になる）
+         },
+     },
+   header.html・header_en.htmlは共に既にnav_current == "lp-star"時のaria-current付与、
+   および/lp-star・/en/lp-starへのナビリンクを備えていることを確認済み（本ファイル作成にあたり
+   追加の変更は不要だった）。 #}
+{% extends "base.html" %}
 
+{% block title %}飛行機軌跡除去・天の川現像を自動化 | Sidekick Star（サイドキック スター）{% endblock %}
+
+{% block meta_description %}飛行機軌跡除去・天の川現像・比較明合成を自動化する Photoshop スクリプト。サイドキック スター（Sidekick Star）3ヶ月無料試用。20年の星景経験から生まれたツール。{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/lp-star{% endblock %}
+
+{% block extra_head %}
   <style>
     :root{
       --bg:#0a0a0d;
@@ -750,124 +778,9 @@
     "url": "https://www.sidekick-lab.com/lp-star.html"
   }
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
-     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
-     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
-     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
-     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
-     キーボード操作・aria-expanded対応のトグルボタンを付与している
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
-
-     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
-     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
-     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
-     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
-     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
-     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
-     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
-
-     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
-     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
-     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
-     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
-
-     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
-     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
-     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
-     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
-     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
-     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。 -->
-
-
-<div class="lang-banner" id="lang-banner">
-  🇺🇸 This site is also available in English —
-  <a href="/en/lp-star">View English page →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
-      <span class="kzc-nav-toggle-label">メニュー</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
-      <a href="/sidekick-star" >⭐ Star</a>
-      <a href="/portrait" >👤 Portrait</a>
-      <a href="/sky-effect" >☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
-      <a href="/workshop" >📷 Workshop</a>
-      <a href="/lp-star" aria-current="page">LP</a>
-      <a href="/gallery" >Gallery</a>
-      <a href="/sidekick" >Sidekickとは</a>
-      <a href="/about" >About</a>
-      <a href="/development-log" >開発日誌</a>
-      <a href="/changelog" >更新履歴</a>
-      <a href="/faq" >Support</a>
-      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
-      <a href="/en/lp-star" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu");
-  if (!toggle || !menu) { return; }
-
-  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
-  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
   <main>
 
     <!-- ══════════════════════════════════════════
@@ -1726,98 +1639,9 @@
     </section>
 
   </main>
+{% endblock %}
 
-<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
-     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
-            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
-            <li><a href="/ai-review">講評AI</a></li>
-            <li><a href="/camera-ai">カメラAI</a></li>
-            <li><a href="/shooting-ai">撮影AI</a></li>
-            <li><a href="/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
-            <li><a href="/workshop">📷 Workshop</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="/faq">よくある質問</a></li>
-            <li><a href="/development-log">開発日誌</a></li>
-            <li><a href="/changelog">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/about">About</a></li>
-            <li><a href="/sidekick">Sidekickとは</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/legal">特定商取引法</a></li>
-            <li><a href="/privacy">プライバシーポリシー</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
-      <div class="footer-legal">
-        <a href="/legal">特定商取引法に基づく表記</a>
-        <a href="/privacy">プライバシーポリシー</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+{% block extra_body_end %}
   <!-- Sticky CTA bar: Hero が画面外に出たら表示 -->
   <div class="sticky-cta" id="sticky-cta">
     <span class="sticky-cta-text"><strong>Sidekick Star</strong> — 3ヶ月無料・CC不要・¥9,800 買い切り</span>
@@ -1863,6 +1687,4 @@
       _stickyObs.observe(_hero);
     }
   </script>
-
-</body>
-</html>
+{% endblock %}

@@ -140,6 +140,16 @@ _register_page_pair("about")  # OGPなし（元ファイルに存在しない）
 # og:url（.html付き）はcanonicalと同じ形式に揃えるため引き継がない、他ページと同じ扱い）。
 _register_page_pair("faq", en_extra={"enable_ogp": True})
 _register_page_pair("ai-lab")  # OGPなし（元ファイルに存在しない）
+# lp-star.htmlは他ページ移行時に対象から漏れており、旧.site-headerのまま
+# （言語バナー・EN切替リンクが無い）だった。村田さんが本番で発見・報告し追加移行した
+# （2026-07-23）。OGPはJA/ENともtitle/meta descriptionと同一文言のため
+# og_title/og_descriptionブロックは省略（EN版のog_descriptionのみテンプレート側で
+# 明示定義済み）。
+_register_page_pair(
+    "lp-star",
+    ja_extra={"enable_ogp": True},
+    en_extra={"enable_ogp": True},
+)
 
 # トップページ（index）はURLがルート（/、/en/）でslugベースの他ページと形式が違うため、
 # _register_page_pair()を使わずPAGESへ直接登録する。村田さんが本番で「Sidekick Lab」の
