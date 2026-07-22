@@ -284,7 +284,14 @@
      2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
      なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
      アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
-     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。 -->
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。 -->
 
 
 <div class="lang-banner" id="lang-banner">
@@ -314,6 +321,7 @@
       <a href="/sky-effect" >☁️ Sky</a>
       <a href="/knowledge" >📚 打ち出の小槌</a>
       <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
       <a href="/gallery" >Gallery</a>
       <a href="/sidekick" >Sidekickとは</a>
       <a href="/about" >About</a>

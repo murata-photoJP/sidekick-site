@@ -18,7 +18,14 @@
      2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
      なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
      アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
-     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。 -->
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。 -->
 
 {% if show_lang_banner|default(true) %}
 <div class="lang-banner" id="lang-banner">
@@ -48,6 +55,7 @@
       <a href="/sky-effect" {% if nav_current == "sky-effect" %}aria-current="page"{% endif %}>☁️ Sky</a>
       <a href="/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 打ち出の小槌</a>
       <a href="/workshop" {% if nav_current == "workshop" %}aria-current="page"{% endif %}>📷 Workshop</a>
+      <a href="/lp-star" {% if nav_current == "lp-star" %}aria-current="page"{% endif %}>LP</a>
       <a href="/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
       <a href="/sidekick" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>Sidekickとは</a>
       <a href="/about" {% if nav_current == "about" %}aria-current="page"{% endif %}>About</a>
