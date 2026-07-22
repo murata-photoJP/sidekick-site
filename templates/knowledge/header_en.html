@@ -6,7 +6,10 @@
 
      2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
      英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
-     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。 -->
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。 -->
 
 <div class="lang-banner" id="lang-banner-en">
   🇯🇵 このサイトは日本語でもご覧いただけます —
@@ -33,12 +36,12 @@
       <a href="/en/portrait" {% if nav_current == "portrait" %}aria-current="page"{% endif %}>👤 Portrait</a>
       <a href="/en/sky-effect" {% if nav_current == "sky-effect" %}aria-current="page"{% endif %}>☁️ Sky</a>
       <a href="/en/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 Knowledge</a>
-      <a href="/en/gallery" style="color:var(--muted);" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
-      <a href="/en/sidekick" style="color:var(--muted);" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>What is Sidekick</a>
-      <a href="/en/about" style="color:var(--muted);" {% if nav_current == "about" %}aria-current="page"{% endif %}>About</a>
-      <a href="/en/development-log" style="color:var(--muted);" {% if nav_current == "development-log" %}aria-current="page"{% endif %}>Development Log</a>
-      <a href="/en/changelog" style="color:var(--muted);" {% if nav_current == "changelog" %}aria-current="page"{% endif %}>Changelog</a>
-      <a href="/en/faq" style="color:var(--muted);" {% if nav_current == "faq" %}aria-current="page"{% endif %}>Support</a>
+      <a href="/en/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
+      <a href="/en/sidekick" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>What is Sidekick</a>
+      <a href="/en/about" {% if nav_current == "about" %}aria-current="page"{% endif %}>About</a>
+      <a href="/en/development-log" {% if nav_current == "development-log" %}aria-current="page"{% endif %}>Development Log</a>
+      <a href="/en/changelog" {% if nav_current == "changelog" %}aria-current="page"{% endif %}>Changelog</a>
+      <a href="/en/faq" {% if nav_current == "faq" %}aria-current="page"{% endif %}>Support</a>
       <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
       <a href="{{ lang_switch_url|default('/knowledge') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
     </nav>

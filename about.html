@@ -250,7 +250,12 @@
      英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
      nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
      開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。 -->
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。 -->
 
 
 <div class="lang-banner" id="lang-banner">
@@ -280,12 +285,12 @@
       <a href="/sky-effect" >☁️ Sky</a>
       <a href="/knowledge" >📚 打ち出の小槌</a>
       <a href="/workshop" >📷 Workshop</a>
-      <a href="/gallery" style="color:var(--muted);" >Gallery</a>
-      <a href="/sidekick" style="color:var(--muted);" >Sidekickとは</a>
-      <a href="/about" style="color:var(--muted);" aria-current="page">About</a>
-      <a href="/development-log" style="color:var(--muted);" >開発日誌</a>
-      <a href="/changelog" style="color:var(--muted);" >更新履歴</a>
-      <a href="/faq" style="color:var(--muted);" >Support</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" aria-current="page">About</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
       <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
       
       <a href="/en/about" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>

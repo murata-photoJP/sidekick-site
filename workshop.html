@@ -4,7 +4,12 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。 -->
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
+     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
+     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
+     汎用/en/に後退させないようパラメータ化した）。 -->
 <script>
   (function () {
     try {
@@ -24,6 +29,7 @@
 <title>ワークショップ | 村田一朗 × 写真</title>
 <meta name="description" content="村田一朗が主催する写真ワークショップ。星景撮影・大判カメラ・町撮りフォトウォークなど。次回は2026年8月8日（土）大野山・夏の星空撮影実習。">
 <link rel="canonical" href="https://www.sidekick-lab.com/workshop">
+
 
 <link rel="stylesheet" href="/assets/css/site-header.css">
 
@@ -326,7 +332,12 @@
      英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
      nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
      開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。 -->
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。 -->
 
 
 
@@ -350,12 +361,12 @@
       <a href="/sky-effect" >☁️ Sky</a>
       <a href="/knowledge" >📚 打ち出の小槌</a>
       <a href="/workshop" aria-current="page">📷 Workshop</a>
-      <a href="/gallery" style="color:var(--muted);" >Gallery</a>
-      <a href="/sidekick" style="color:var(--muted);" >Sidekickとは</a>
-      <a href="/about" style="color:var(--muted);" >About</a>
-      <a href="/development-log" style="color:var(--muted);" >開発日誌</a>
-      <a href="/changelog" style="color:var(--muted);" >更新履歴</a>
-      <a href="/faq" style="color:var(--muted);" >Support</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
       <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
       
     </nav>

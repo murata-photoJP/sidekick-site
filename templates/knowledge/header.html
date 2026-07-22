@@ -13,7 +13,12 @@
      英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
      nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
      開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。 -->
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。 -->
 
 {% if show_lang_banner|default(true) %}
 <div class="lang-banner" id="lang-banner">
@@ -43,12 +48,12 @@
       <a href="/sky-effect" {% if nav_current == "sky-effect" %}aria-current="page"{% endif %}>☁️ Sky</a>
       <a href="/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 打ち出の小槌</a>
       <a href="/workshop" {% if nav_current == "workshop" %}aria-current="page"{% endif %}>📷 Workshop</a>
-      <a href="/gallery" style="color:var(--muted);" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
-      <a href="/sidekick" style="color:var(--muted);" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>Sidekickとは</a>
-      <a href="/about" style="color:var(--muted);" {% if nav_current == "about" %}aria-current="page"{% endif %}>About</a>
-      <a href="/development-log" style="color:var(--muted);" {% if nav_current == "development-log" %}aria-current="page"{% endif %}>開発日誌</a>
-      <a href="/changelog" style="color:var(--muted);" {% if nav_current == "changelog" %}aria-current="page"{% endif %}>更新履歴</a>
-      <a href="/faq" style="color:var(--muted);" {% if nav_current == "faq" %}aria-current="page"{% endif %}>Support</a>
+      <a href="/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
+      <a href="/sidekick" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>Sidekickとは</a>
+      <a href="/about" {% if nav_current == "about" %}aria-current="page"{% endif %}>About</a>
+      <a href="/development-log" {% if nav_current == "development-log" %}aria-current="page"{% endif %}>開発日誌</a>
+      <a href="/changelog" {% if nav_current == "changelog" %}aria-current="page"{% endif %}>更新履歴</a>
+      <a href="/faq" {% if nav_current == "faq" %}aria-current="page"{% endif %}>Support</a>
       <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
       {% if show_en_link|default(true) %}
       <a href="{{ lang_switch_url|default('/en/') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
