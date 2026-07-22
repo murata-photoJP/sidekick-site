@@ -1,56 +1,65 @@
+{# FAQページ（英語版、2026-07-22移行）。
+   移行元: html/en/faq.html（手書き静的HTML）。本文（旧<header class="hdr">〜旧<footer class="footer">の間）・
+   FAQ項目（全13件・6カテゴリ、うち末尾のcontact-boxはFAQ項目ではない）・画像パス・リンク・
+   文言は変更していない。ヘッダー/フッターのみ、日本語版faq.html移行と同じパターンでサイト共通の
+   header_en.html・footer_en.htmlへ切り替えた。それに伴い、旧ヘッダー/フッター専用だったCSSは
+   不要になったため削除した：
+   .hdr／.hdr-in／.brand／.brand-mk／.brand-sub／.nav／.nav a／
+   .nav a:hover,.nav a.active／.nav-dl／.nav-dl:hover／.footer／.footer-in、
+   および640pxメディアクエリ内の .nav a:not(.nav-dl){display:none;}
+   （同メディアクエリ内の .faq-a-inner{padding-left:22px;} は本文側で使用するため残した）。
+   本文側で.hdr・.brand・.nav・.nav-dl・.footerクラスは使われていないことを確認済み
+   （.contact-box は本文で使用するため削除していない）。
+   旧ヘッダーのナビ内にあった独自の「🇯🇵 JA」言語切替リンクと「▶ Free Download」ボタンも、
+   旧ヘッダーごと削除したことで自然に解消（共通header_en.htmlが同等機能を別の場所・別の形で提供）。
 
+   :root には元から --muted:#515969; と --line:#22263080; の両方が定義済みだった
+   （確認のみ、追加は不要）。他の変数（--card2・--r・--r-lg・--sh 等）も変更していない。
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>FAQ / Support — Sidekick</title>
-<meta name="description" content="Sidekick FAQ and troubleshooting. Answers to common questions about RAW processing, light-stacking, GPU/AI processing, airplane trail removal, and more.">
-<link rel="canonical" href="https://www.sidekick-lab.com/en/faq">
+   OGPタグは元ファイルに存在した。og:title は title ブロックと同一文言（"FAQ / Support — Sidekick"）
+   のためブロックを省略しbase.htmlの既定値（self.title()）に任せた。og:description は
+   meta description と文言が異なるため og_description ブロックを明示定義した。
+   og:site_name（Sidekick）・og:locale（en_US）・og:type（website）はbase.htmlの既定値と
+   一致するため申し送り不要。
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/faq">
+   【要報告】og:image は元ファイルに一切存在しなかった（gallery.html等と異なり、og:imageタグ
+   そのものが無かった）。enable_ogp=true にすると base.html の既定値
+   （https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg）が新規に付与される
+   ことになる（既存タグの値を引き継ぐのではなく、今回新たに追加される点に注意）。
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/faq">
+   【要報告】og:url も元ファイルでは "https://www.sidekick-lab.com/en/faq.html"
+   （末尾に.htmlが付いた旧URL形式）が明示されていたが、base.html側にog:urlのブロック化
+   機構が無く自動的に{{ self.canonical() }}が使われるため、移行後は
+   "https://www.sidekick-lab.com/en/faq"（.html無し、canonicalと同じ値）になる。
+   他ページのcanonical方針（拡張子無しURL）と整合するため、これは意図した挙動と考えられるが
+   念のため申し送る。
 
+   本文末尾の独自script（FAQアコーディオンの開閉トグル、旧<footer>の後・</body>の前に
+   あったもの）は extra_body_end ブロックへ移した。
 
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Sidekick">
-<meta property="og:locale" content="en_US">
-<meta property="og:title" content="FAQ / Support — Sidekick">
-<meta property="og:description" content="Answers to common questions about Sidekick — RAW processing, light-stacking, GPU/AI, airplane removal, and more.">
-<meta property="og:url" content="https://www.sidekick-lab.com/en/faq">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="FAQ / Support — Sidekick">
-<meta name="twitter:description" content="Answers to common questions about Sidekick — RAW processing, light-stacking, GPU/AI, airplane removal, and more.">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+   申し送り1: build_site.py にはまだ faq ページのエントリが無い。本テンプレートを使うには、
+   PAGES に "en/faq"（や任意のキー）を追加し、context として language="en"・
+   nav_current="faq"・enable_ogp=true を渡す必要がある。
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+   申し送り2: 元ファイルには以下のhreflang alternateタグがあった（日本語版faq.htmlには無く、
+   非対称だった）：
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/faq">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/faq">
+   templates/site/base.html は hreflang_alternates 変数を受け取れば自動出力する仕組みを
+   既に持っている（build_site.py側から渡す想定、テンプレート側は無変更でよい）ため、
+   build_site.py登録時にja/en両方のfaqページへhreflang_alternatesを渡すことを検討する
+   必要がある。 #}
+{% extends "base.html" %}
 
+{% block title %}FAQ / Support — Sidekick{% endblock %}
+
+{% block meta_description %}Sidekick FAQ and troubleshooting. Answers to common questions about RAW processing, light-stacking, GPU/AI processing, airplane trail removal, and more.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/faq{% endblock %}
+
+{% block og_description %}Answers to common questions about Sidekick — RAW processing, light-stacking, GPU/AI, airplane removal, and more.{% endblock %}
+
+{% block extra_head %}
   <style>
     :root{
       --bg:#09090c;
@@ -223,97 +232,9 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xem6v4pdup");
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
-     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
-     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
-     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
-     JA版のheader.htmlは変更していない。
-
-     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
-     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。 -->
-
-<div class="lang-banner" id="lang-banner-en">
-  🇯🇵 このサイトは日本語でもご覧いただけます —
-  <a href="/faq">日本語ページを見る →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/en/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
-      <span class="kzc-nav-toggle-label">Menu</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
-      <a href="/en/sidekick-star" >⭐ Star</a>
-      <a href="/en/portrait" >👤 Portrait</a>
-      <a href="/en/sky-effect" >☁️ Sky</a>
-      <a href="/en/knowledge" >📚 Knowledge</a>
-      <a href="/en/gallery" style="color:var(--muted);" >Gallery</a>
-      <a href="/en/sidekick" style="color:var(--muted);" >What is Sidekick</a>
-      <a href="/en/about" style="color:var(--muted);" >About</a>
-      <a href="/en/development-log" style="color:var(--muted);" >Development Log</a>
-      <a href="/en/changelog" style="color:var(--muted);" >Changelog</a>
-      <a href="/en/faq" style="color:var(--muted);" aria-current="page">Support</a>
-      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
-      <a href="/faq" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu-en");
-  if (!toggle || !menu) { return; }
-
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
 
   <main>
 
@@ -583,88 +504,9 @@
 
   </main>
 
+{% endblock %}
 
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
-     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
-     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
-     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/en/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>Photoshop scripts and workshops<br>for photographers.</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Knowledge</h4>
-          <ul>
-            <li><a href="/en/knowledge">📚 Knowledge</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
-            <li><a href="/en/ai-review">AI Review</a></li>
-            <li><a href="/en/camera-ai">Camera AI</a></li>
-            <li><a href="/en/shooting-ai">Shooting AI</a></li>
-            <li><a href="/en/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="/en/faq">FAQ</a></li>
-            <li><a href="/en/development-log">Development Log</a></li>
-            <li><a href="/en/changelog">Changelog</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/en/about">About</a></li>
-            <li><a href="/en/sidekick">What is Sidekick</a></li>
-            <li><a href="/en/gallery">Gallery</a></li>
-            <li><a href="/en/terms">Terms</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
-      <div class="footer-legal">
-        <a href="/en/terms">Terms</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
+{% block extra_body_end %}
   <script>
     document.querySelectorAll('.faq-q').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -675,6 +517,4 @@
       });
     });
   </script>
-
-</body>
-</html>
+{% endblock %}

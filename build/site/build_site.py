@@ -131,6 +131,15 @@ _register_page_pair(
     ja_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/ogp_sky_effect.jpg"},
     en_extra={"enable_ogp": True, "og_image": "https://www.sidekick-lab.com/images/ogp_sky_effect.jpg"},
 )
+# about.html/faq.html/ai-lab.htmlは、index.html等のヘッダー更新に追従できていなかった
+# 「古いヘッダー」（言語バナー・AI Labボタン・Sidekick Lab表記が無い）を使っていたページ群
+# （2026-07-22、村田さんが本番サイトで発見）。共通ヘッダーへの移行で解消する。
+_register_page_pair("about")  # OGPなし（元ファイルに存在しない）
+# faq.html(JA)は元々OGPなし。en/faq.htmlのみ元々OGPありだったため、EN側だけenable_ogpを渡す
+# （og:image・og:site_name・og:localeはbase.htmlの既定値を使う。元ファイルの
+# og:url（.html付き）はcanonicalと同じ形式に揃えるため引き継がない、他ページと同じ扱い）。
+_register_page_pair("faq", en_extra={"enable_ogp": True})
+_register_page_pair("ai-lab")  # OGPなし（元ファイルに存在しない）
 
 
 class BuildError(Exception):

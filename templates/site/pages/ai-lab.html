@@ -1,0 +1,212 @@
+{# AI Labページ（日本語版、2026-07-22移行）。
+   移行元: html/ai-lab.html（手書き静的HTML）。本文（旧<header>〜旧<footer>の間、<main>タグ含む）・
+   画像パス・リンク・文言・onclickのgtagイベント計測は変更していない。ヘッダー/フッターのみ、
+   gallery.html等と同じパターンでサイト共通の.hdr/.footer（templates/knowledge/header.html・
+   footer.html）へ切り替えた。
+
+   このai-lab.htmlは元々「取り残された旧ヘッダー」（言語バナー・AI Labボタン・
+   ブランド表記「Sidekick」（Labが無い）が無い/異なる版）を使っていたページで、今回の移行で
+   共通ヘッダーに切り替えることで他ページとの不整合を解消する（ヘッダー自身にも
+   🤖 AI Lab ボタンが表示されるが、自己参照は他ページと同じ挙動のため問題ない）。
+
+   それに伴い、旧ヘッダー/フッター専用だったCSSは不要になったため削除した：
+   .hdr／.hdr-in／.brand／.brand-mk／.brand-sub／.nav／.nav a／.nav a:hover／
+   .footer／.footer-in／（640pxメディアクエリ内の）.nav{display:none}・
+   .footer-in{flex-direction:column;align-items:flex-start;}（このメディアクエリ全体が
+   .nav/.footer-inのみを対象にしていたため丸ごと削除）。
+   本文側（.page-hero〜.ai-body配下）で.brand・.nav・.footer・.footer-inクラスは
+   使われていないことを確認済み。
+
+   :root には既に --muted:#515969; と --line:#22263080; の両方が定義済みだった
+   （gallery.html移行時と異なり追加不要。念のため確認済み）。他の変数は変更していない。
+
+   OGPタグは元ファイルに存在しなかった（確認済み。og:title等のブロックは書いていない）。
+
+   申し送り: build_site.py にはまだ ai-lab ページのエントリが無い。本テンプレートを
+   使うには、PAGES に "ai-lab" を追加し、context として language="ja"・
+   nav_current="ai-lab"（想定、既存のnav_current命名規則に合わせる）・
+   enable_ogp=false（またはブロック省略のためキー自体省略）・
+   en_redirect_url="/en/ai-lab" を渡す必要がある（元ファイルの言語自動判定が
+   `/en/ai-lab.html`へ直接誘導していたため、汎用/en/へ後退させないよう指定が必要）。 #}
+{% extends "base.html" %}
+
+{% block title %}AI Lab | Sidekick Lab{% endblock %}
+
+{% block meta_description %}村田一朗の視点をAIで体験できる4つの無料AIツール。講評AI・カメラAI・撮影AI・PC AIから、使いたいものを選んでください。{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/ai-lab{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Hero ── */
+    .page-hero{
+      padding:72px 0 56px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      text-align:center;
+    }
+    .page-hero-inner{max-width:600px;margin:0 auto;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(28px,4.5vw,44px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:16px;
+    }
+    .page-lead{color:var(--sub);font-size:clamp(15px,1.8vw,17px);line-height:1.85;}
+    .page-note{font-size:clamp(15px,1.8vw,17px);font-weight:700;color:#ff4444;margin-top:16px;}
+
+    /* ── AI card grid ── */
+    .ai-body{padding:56px 0 96px;}
+    .ai-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+    }
+    .ai-card{
+      display:flex;flex-direction:column;
+      padding:26px 24px;background:var(--card);border-radius:var(--r);
+      border:1px solid rgba(255,255,255,.08);transition:.18s;
+    }
+    .ai-card:hover{border-color:rgba(255,138,0,.3);transform:translateY(-3px);box-shadow:var(--sh);}
+    .ai-card.featured{
+      grid-column:1 / -1;
+      align-items:center;text-align:center;
+      padding:48px 40px;
+      border-color:rgba(255,138,0,.35);background:linear-gradient(135deg,rgba(255,138,0,.1),var(--card) 65%);
+    }
+    .ai-card.featured .ai-card-icon{font-size:56px;margin-bottom:18px;}
+    .ai-card.featured .ai-card-name{font-size:28px;margin-bottom:12px;}
+    .ai-card.featured .ai-card-desc{max-width:520px;margin:0 auto 26px;}
+    .ai-card.featured .ai-card-footer{border-top:none;padding-top:0;justify-content:center;gap:18px;font-size:14px;}
+    .ai-card.featured .ai-card-arr{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:48px;padding:0 26px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;
+      font-weight:800;font-size:14px;
+    }
+    .ai-card-icon{font-size:30px;line-height:1;margin-bottom:14px;}
+    .ai-card-name{font-size:17px;font-weight:800;margin-bottom:8px;}
+    .ai-card-desc{font-size:13px;color:var(--sub);line-height:1.7;flex:1;margin-bottom:18px;}
+    .ai-card-footer{
+      display:flex;align-items:center;justify-content:space-between;
+      border-top:1px solid rgba(255,255,255,.07);padding-top:14px;
+      font-size:12px;color:var(--muted);font-weight:700;
+    }
+    .ai-card-arr{color:var(--sub);transition:.15s;}
+    .ai-card:hover .ai-card-arr{color:var(--text);}
+    .ai-card.featured:hover .ai-card-arr{color:#111;}
+    @media(max-width:760px){
+      .ai-grid{grid-template-columns:1fr;}
+      .ai-card.featured{padding:36px 28px;}
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+{% endblock %}
+
+{% block content %}
+
+  <main>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">Sidekick Lab · AI Lab</div>
+          <h1 class="page-h1">使いたいAIを選んでください</h1>
+          <p class="page-lead">
+            村田一朗の視点をAIで体験できる、写真のためのAIツールです。<br>
+            まずは一番人気の「講評AI」がおすすめです。
+          </p>
+          <p class="page-note">Googleアカウントで30秒で開始 · 全ツール共通 週5AIチケットまで無料（〜2026年8月末）</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ai-body">
+      <div class="wrap">
+        <div class="ai-grid">
+
+          <a href="/ai-review" class="ai-card featured" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_review'})">
+            <div class="ai-card-icon">🤖</div>
+            <div class="ai-card-name">講評AI</div>
+            <div class="ai-card-desc">10年以上・1万件以上の講評経験をもとに、構図・視線誘導・画面整理をAIが講評します。</div>
+            <div class="ai-card-footer"><span>無料 · 一番人気</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+          <a href="/camera-ai" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_camera'})">
+            <div class="ai-card-icon">📷</div>
+            <div class="ai-card-name">カメラAI</div>
+            <div class="ai-card-desc">カメラの設定・操作について質問できます。機種に合わせて案内します。</div>
+            <div class="ai-card-footer"><span>無料</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+          <a href="/shooting-ai" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_shooting'})">
+            <div class="ai-card-icon">🎯</div>
+            <div class="ai-card-name">撮影AI</div>
+            <div class="ai-card-desc">撮りたい写真から逆算して、撮影方法を提案します。</div>
+            <div class="ai-card-footer"><span>無料</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+          <a href="/pc-ai" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_pc'})">
+            <div class="ai-card-icon">💻</div>
+            <div class="ai-card-name">PC AI</div>
+            <div class="ai-card-desc">ZIP解凍・ファイル操作・インストールなど、PCが苦手な人向けのサポートです。</div>
+            <div class="ai-card-footer"><span>無料</span><span class="ai-card-arr">試してみる →</span></div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{# AI Labページ（英語版、2026-07-22移行）。
+   移行元: html/en/ai-lab.html（手書き静的HTML）。本文（旧<header>〜旧<footer>の間、<main>タグ含む）・
+   画像パス・リンク・文言・onclickのgtagイベント計測は変更していない。ヘッダー/フッターのみ、
+   日本語版ai-lab.html移行と同じパターンでサイト共通のheader_en.html・footer_en.htmlへ切り替えた。
+
+   英語版のヘッダーには独自の「🇯🇵 JA」言語切替リンクがnav内にあったが、共通ヘッダー
+   （header_en.html）が別の場所・別の形で自動的に提供するため、旧ヘッダーごと削除して解消した。
+
+   それに伴い、旧ヘッダー/フッター専用だったCSSは不要になったため削除した：
+   .hdr／.hdr-in／.brand／.brand-mk／.brand-sub／.nav／.nav a／.nav a:hover／
+   .footer／.footer-in／（640pxメディアクエリ内の）.nav{display:none}・
+   .footer-in{flex-direction:column;align-items:flex-start;}（このメディアクエリ全体が
+   .nav/.footer-inのみを対象にしていたため丸ごと削除）。
+   本文側（.page-hero〜.ai-body配下）で.brand・.nav・.footer・.footer-inクラスは
+   使われていないことを確認済み。
+
+   :root には既に --muted:#515969; と --line:#22263080; の両方が定義済みだった
+   （追加不要。念のため確認済み）。他の変数は変更していない。
+
+   OGPタグは元ファイルに存在しなかった（確認済み。og:title等のブロックは書いていない）。
+
+   元ファイルには以下のhreflang alternateタグがあったが、templates/site/base.html
+   （サイト共通ページ用）にはhreflang_alternatesを出力する仕組みが無い（gallery.html
+   移行時と同じ状況。今回の移行対象外のためbase.html自体は変更していない）。
+   SEO上重要な情報のため書き残す：
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/ai-lab">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/ai-lab">
+   （日本語版ai-lab.htmlの元ファイルにはhreflangタグは無かった。英語版のみ付与されて
+   いた非対称な状態だった。gallery.htmlと同じパターン）。
+
+   申し送り: build_site.py にはまだ en/ai-lab ページのエントリが無い。本テンプレートを
+   使うには、PAGES に "en/ai-lab"（や任意のキー）を追加し、context として
+   language="en"・nav_current="ai-lab"（想定）・enable_ogp=false（またはキー自体省略）を
+   渡す必要がある。 #}
+{% extends "base.html" %}
+
+{% block title %}AI Lab | Sidekick Lab{% endblock %}
+
+{% block meta_description %}Free AI tools for photographers, built by Ichiro Murata. Ask Camera AI about your camera, Shooting AI for shooting advice, or PC AI for setup help.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/ai-lab{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+      --sh:0 20px 56px rgba(0,0,0,.5);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* Hero */
+    .page-hero{
+      padding:72px 0 56px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+      text-align:center;
+    }
+    .page-hero-inner{max-width:600px;margin:0 auto;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(28px,4.5vw,44px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:16px;
+    }
+    .page-lead{color:var(--sub);font-size:clamp(15px,1.8vw,17px);line-height:1.85;}
+    .page-note{font-size:clamp(15px,1.8vw,17px);font-weight:700;color:#ff4444;margin-top:16px;}
+
+    /* AI card grid */
+    .ai-body{padding:56px 0 96px;}
+    .ai-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
+    }
+    .ai-card{
+      display:flex;flex-direction:column;
+      padding:26px 24px;background:var(--card);border-radius:var(--r);
+      border:1px solid rgba(255,255,255,.08);transition:.18s;
+    }
+    .ai-card:hover{border-color:rgba(255,138,0,.3);transform:translateY(-3px);box-shadow:var(--sh);}
+    .ai-card.featured{
+      grid-column:1 / -1;
+      align-items:center;text-align:center;
+      padding:48px 40px;
+      border-color:rgba(255,138,0,.35);background:linear-gradient(135deg,rgba(255,138,0,.1),var(--card) 65%);
+    }
+    .ai-card.featured .ai-card-icon{font-size:56px;margin-bottom:18px;}
+    .ai-card.featured .ai-card-name{font-size:28px;margin-bottom:12px;}
+    .ai-card.featured .ai-card-desc{max-width:520px;margin:0 auto 26px;}
+    .ai-card.featured .ai-card-footer{border-top:none;padding-top:0;justify-content:center;gap:18px;font-size:14px;}
+    .ai-card.featured .ai-card-arr{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-height:48px;padding:0 26px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));color:#111;
+      font-weight:800;font-size:14px;
+    }
+    .ai-card.featured:hover .ai-card-arr{color:#111;}
+    .ai-card-icon{font-size:30px;line-height:1;margin-bottom:14px;}
+    .ai-card-name{font-size:17px;font-weight:800;margin-bottom:8px;}
+    .ai-card-desc{font-size:13px;color:var(--sub);line-height:1.7;flex:1;margin-bottom:18px;}
+    .ai-card-footer{
+      display:flex;align-items:center;justify-content:space-between;
+      border-top:1px solid rgba(255,255,255,.07);padding-top:14px;
+      font-size:12px;color:var(--muted);font-weight:700;
+    }
+    .ai-card-arr{color:var(--sub);transition:.15s;}
+    .ai-card:hover .ai-card-arr{color:var(--text);}
+    @media(max-width:760px){
+      .ai-grid{grid-template-columns:1fr;}
+    }
+  </style>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — coexists with GA4, no duplicate loading -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+{% endblock %}
+
+{% block content %}
+
+  <main>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">Sidekick Lab · AI Lab</div>
+          <h1 class="page-h1">Choose the AI you want to use</h1>
+          <p class="page-lead">
+            Free AI tools for photographers, built by Ichiro Murata.<br>
+            Start with the most popular one, Photo Critique AI.
+          </p>
+          <p class="page-note">Sign in with Google in 30 seconds · Free up to 5 AI tickets per week across all tools (through end of August 2026)</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ai-body">
+      <div class="wrap">
+        <div class="ai-grid">
+
+          <a href="/en/ai-review" class="ai-card featured" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_review'})">
+            <div class="ai-card-icon">🤖</div>
+            <div class="ai-card-name">Photo Critique AI</div>
+            <div class="ai-card-desc">Ichiro Murata's critique style — composition, visual flow, and image structure — experienced through AI. Translated from Japanese; see the page for details.</div>
+            <div class="ai-card-footer"><span>Free · Most popular</span><span class="ai-card-arr">Try it →</span></div>
+          </a>
+
+          <a href="/en/camera-ai" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_camera'})">
+            <div class="ai-card-icon">📷</div>
+            <div class="ai-card-name">Camera AI</div>
+            <div class="ai-card-desc">Ask about your camera's settings and operation. Guidance tailored to your model.</div>
+            <div class="ai-card-footer"><span>Free</span><span class="ai-card-arr">Try it →</span></div>
+          </a>
+
+          <a href="/en/shooting-ai" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_shooting'})">
+            <div class="ai-card-icon">🎯</div>
+            <div class="ai-card-name">Shooting AI</div>
+            <div class="ai-card-desc">Work backward from the photo you want to take to get a suggested shooting approach.</div>
+            <div class="ai-card-footer"><span>Free</span><span class="ai-card-arr">Try it →</span></div>
+          </a>
+
+          <a href="/en/pc-ai" class="ai-card" onclick="gtag('event','cta_click',{cta_label:'ai_lab_hub_pc'})">
+            <div class="ai-card-icon">💻</div>
+            <div class="ai-card-name">PC AI</div>
+            <div class="ai-card-desc">Support for unzipping files, file operations, and installation — for anyone not comfortable with PCs.</div>
+            <div class="ai-card-footer"><span>Free</span><span class="ai-card-arr">Try it →</span></div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+{% endblock %}
