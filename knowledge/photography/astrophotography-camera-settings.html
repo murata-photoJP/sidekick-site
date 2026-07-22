@@ -60,7 +60,15 @@
      元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
      （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
      about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
-     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。 -->
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
 
 
 <div class="lang-banner" id="lang-banner">
@@ -97,7 +105,7 @@
       <a href="/development-log" >開発日誌</a>
       <a href="/changelog" >更新履歴</a>
       <a href="/faq" >Support</a>
-      <a href="/#ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
       
       <a href="/en/knowledge/photography/astrophotography-settings-equipment-guide" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
       
