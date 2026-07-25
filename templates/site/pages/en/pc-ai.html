@@ -1,42 +1,93 @@
+{# PC AI page (English version). Migrated 2026-07-25.
+   Source: html/en/pc-ai.html (hand-written static HTML, mirrors html/pc-ai.html — a live,
+   working PC support AI tool). The body (PC AI tool UI, explanatory copy, Firebase auth
+   logic, usage-count display, API calls) is unchanged, character for character (Murata-san's
+   explicit requirement, since this is a live working tool).
 
+   [Difference from other migrated pages] Like its JA sibling (templates/site/pages/pc-ai.html),
+   this page originally had its own minimal <nav class="site-nav"> (logo + "Back to home" +
+   JA switch link) instead of <header class="hdr">, and defined zero CSS variables (nothing
+   starting with --). Because the shared header/footer CSS (/assets/css/site-header.css)
+   references var(--accent) etc., the :root block below was added.
 
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/pc-ai.html'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/pc-ai.html');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PC AI | Sidekick Lab</title>
-<meta name="description" content="ZIP解凍・ファイル操作・インストールなど、PCが苦手な人向けのサポートAIです。うまくいかないときは、画面のスクリーンショットを送って確認してもらえます。">
-<link rel="canonical" href="https://www.sidekick-lab.com/pc-ai">
+   [Removed CSS selectors] (used only inside the old <nav class="site-nav">, confirmed via
+   grep that none are reused in the body / .container section):
+     .site-nav / .site-nav-in / .site-brand / .site-brand-mk /
+     .site-nav-back / .site-nav-back:hover
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/pc-ai">
+   [Added CSS variables] (the original file had no :root block at all; the page's own
+   background/text colors (#1a1a1a / #e8e8e8 etc.) are unchanged, as this is a standalone
+   design, not the site-wide theme):
+     :root{
+       --accent:#ff8a00;
+       --accent2:#ffb14a;
+       --muted:#5e6677;
+       --sub:#8c96aa;
+       --text:#eef1f8;
+       --line:#2a2f3a;
+     }
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/pc-ai">
+   [Custom footer] The <footer> near the end of the page (copyright line + Privacy
+   Policy / Terms of Service links) is a different element from the old site-wide footer
+   that earlier migrations replaced. It was kept as-is inside {% block content %}, not
+   removed or replaced. base.html appends the shared site footer (footer_en.html) after
+   {% block content %} automatically, so the rendered page ends up with this page's own
+   small footer followed by the shared site footer — this is the intended behavior per
+   instructions.
 
+   [canonical / meta_description] Unlike the JA source (which had neither), the original
+   en/pc-ai.html already had both a canonical link and hreflang alternate tags (see below),
+   but NO meta description tag. Values used here:
+     - canonical: carried over unchanged from the original file:
+       "https://www.sidekick-lab.com/en/pc-ai"
+     - meta_description: none existed in the source, so one was newly written, summarizing
+       the header intro copy ("A support AI for photographers who aren't comfortable with
+       PCs — unzipping files, moving things around, installing software. If something isn't
+       working, send a screenshot and it can take a look.") into one concise sentence. No new
+       marketing copy was invented.
+     - OGP tags do not exist in the source, so no enable_ogp block was written.
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+   [hreflang] The original en/pc-ai.html had:
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/pc-ai">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/pc-ai">
+   base.html has no dedicated block for individual pages to set these directly (its
+   hreflang_alternates loop is driven by a context variable supplied at build_site.py
+   registration time, not controllable from within a single page template), so — following
+   the same precedent as templates/site/pages/en/sidekick-star.html — these two tags are
+   preserved as raw <link> tags inside extra_head instead. The JA sibling template
+   (templates/site/pages/pc-ai.html) has no equivalent hreflang tags, matching the original
+   pc-ai.html, which also had none; this preserves the pre-existing asymmetry between the
+   two source files rather than introducing a change.
 
+   [build_site.py hand-off notes] (this file itself is unchanged; actual registration is
+   expected to look like this):
+     "pc-ai-en": {
+         "template": "pages/en/pc-ai.html",
+         "output": Path("en/pc-ai.html"),
+         "context": {
+             "language": "en",
+             "nav_current": "pc-ai",
+             "lang_switch_url": "/pc-ai",   # header_en.html's language banner / JA-switch
+                                              # link default to "/knowledge" otherwise, which
+                                              # would be wrong for this page
+         },
+     },
+   Same caveat as en/sidekick-star.html: base.html's language auto-redirect <script> in
+   <head> runs on this English page too, even though the original en/pc-ai.html never had
+   such a script (English visitors were never auto-redirected there). Recommend passing
+   en_redirect_url="/en/pc-ai" (self-referencing) in the build_site.py context above once
+   this page is registered, so a first-time non-Japanese visitor landing directly on
+   /en/pc-ai is not bounced to the generic /en/ home page. Not fixed here — base.html is
+   outside this task's allowed file list. #}
+{% extends "base.html" %}
+
+{% block title %}PC AI | Sidekick Lab{% endblock %}
+
+{% block meta_description %}PC AI is a support tool for photographers who aren't comfortable with computers — help with unzipping files, installing software, and reading error screens, with optional screenshot review.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/pc-ai{% endblock %}
+
+{% block extra_head %}
 <style>
   :root{
     --accent:#ff8a00;
@@ -48,7 +99,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
@@ -82,7 +133,7 @@
   }
   .logout-btn:hover { color: #aaa; border-color: #666; }
 
-  /* できること／できないこと */
+  /* can / can't */
   .ai-scope { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
   .ai-scope-card { background: #252525; border: 1px solid #383838; border-radius: 10px; padding: 18px; }
   .ai-scope-card.can { border-top: 2px solid #3a5a6a; }
@@ -135,7 +186,7 @@
   .usage-reset { color: #666; font-size: 0.78rem; margin-top: 4px; }
   .usage-shared-note { color: #555; font-size: 0.75rem; margin-top: 6px; }
 
-  /* OS選択（初回必須） */
+  /* OS selection (required on first use) */
   #os-select-state { display: none; }
   .os-card {
     background: #252525; border: 1px solid #383838; border-radius: 12px;
@@ -170,7 +221,7 @@
   .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
   #pc-level { width: 100%; }
 
-  /* チャット */
+  /* chat */
   #chat-log {
     display: flex; flex-direction: column; gap: 14px;
     margin-bottom: 16px; max-height: 55vh; overflow-y: auto; padding-right: 4px;
@@ -202,7 +253,7 @@
   .difficulty-btn:hover { border-color: #666; color: #ccc; }
   .difficulty-done { font-size: 0.76rem; color: #555; align-self: flex-start; }
 
-  /* スクリーンショット添付 */
+  /* screenshot attachment */
   #screenshot-preview-row { display: none; align-items: center; gap: 10px; margin-bottom: 10px; }
   #screenshot-preview-img { width: 56px; height: 56px; object-fit: cover; border-radius: 6px; border: 1px solid #444; }
   #screenshot-preview-name { flex: 1; font-size: 0.8rem; color: #999; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -254,178 +305,55 @@
       y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
   })(window, document, "clarity", "script", "xem6v4pdup");
 </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
-     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
-     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
-     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
-     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
-     キーボード操作・aria-expanded対応のトグルボタンを付与している
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
-
-     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
-     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
-     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
-     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
-     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
-     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
-     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
-
-     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
-     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
-     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
-     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
-
-     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
-     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
-     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
-     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
-     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
-     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
-
-     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
-     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
-     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
-     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
-     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
-     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
-     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
-
-
-<div class="lang-banner" id="lang-banner">
-  🇺🇸 This site is also available in English —
-  <a href="/en/pc-ai">View English page →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
-      <span class="kzc-nav-toggle-label">メニュー</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
-      <a href="/sidekick-star" >⭐ Star</a>
-      <a href="/portrait" >👤 Portrait</a>
-      <a href="/sky-effect" >☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
-      <a href="/workshop" >📷 Workshop</a>
-      <a href="/lp-star" >LP</a>
-      <a href="/gallery" >Gallery</a>
-      <a href="/sidekick" >Sidekickとは</a>
-      <a href="/about" >About</a>
-      <a href="/development-log" >開発日誌</a>
-      <a href="/changelog" >更新履歴</a>
-      <a href="/faq" >Support</a>
-      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
-      <a href="/en/pc-ai" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu");
-  if (!toggle || !menu) { return; }
-
-  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
-  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
 <div class="container">
   <header>
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <span class="user-name" id="user-name"></span>
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
     <h1>PC AI</h1>
     <p>
-      ZIP解凍・ファイル操作・インストールなど、PCが苦手な人向けのサポートAIです。<br>
-      うまくいかないときは、画面のスクリーンショットを送っていただければ確認できます。
+      A support AI for photographers who aren't comfortable with PCs — unzipping files, moving things around, installing software.<br>
+      If something isn't working, send a screenshot and it can take a look.
     </p>
   </header>
 
   <div class="ai-scope">
     <div class="ai-scope-card can">
-      <div class="ai-scope-title">答えられること</div>
+      <div class="ai-scope-title">What it can answer</div>
       <ul class="ai-scope-list">
-        <li>ZIP解凍・ファイル操作</li>
-        <li>インストール・アップデート</li>
-        <li>JSXファイルの配置</li>
-        <li>エラー画面の読み方</li>
-        <li>ダウンロードの確認</li>
+        <li>Unzipping ZIPs & file operations</li>
+        <li>Installing & updating</li>
+        <li>Placing JSX files</li>
+        <li>Reading error screens</li>
+        <li>Checking your downloads</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">対象外のこと</div>
+      <div class="ai-scope-title">Out of scope</div>
       <ul class="ai-scope-list">
-        <li>撮影テクニック</li>
-        <li>カメラ本体の操作</li>
-        <li>写真講評</li>
-        <li>SideKickの詳しい使い方</li>
+        <li>Shooting technique</li>
+        <li>Camera-body operation</li>
+        <li>Photo critique</li>
+        <li>Detailed SideKick usage</li>
       </ul>
     </div>
   </div>
 
   <div id="loading-state">
     <div class="spinner"></div>
-    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+    <p style="color:#666;font-size:0.85rem;">Checking...</p>
   </div>
 
   <div id="login-state">
     <div class="login-card">
-      <h2>Googleアカウントでログイン</h2>
-      <p>PC AIを使うにはGoogleアカウントが必要です。講評AIと共通のAIチケットでご利用いただけます。
-        <span class="campaign-note">週5AIチケットまで無料（〜2026年8月末）</span>
+      <h2>Sign in with Google</h2>
+      <p>You'll need a Google account to use PC AI. It shares AI tickets with Photo Critique AI.
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
@@ -434,22 +362,22 @@
           <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
         </svg>
-        Google アカウントでログイン
+        Sign in with Google
       </button>
     </div>
   </div>
 
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今週のAIチケットを使い切りました</h2>
+      <h2>You've used this week's AI tickets</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
 
   <div id="os-select-state">
     <div class="os-card">
-      <h2>お使いのPCを選んでください</h2>
-      <p>Windows / Mac によって操作方法が異なるため、最初に選んでいただきます。<br>あとから設定画面で変更できます。</p>
+      <h2>Which computer are you using?</h2>
+      <p>Windows and Mac work differently, so please choose once up front.<br>You can change this later in settings.</p>
       <div class="os-choice-row">
         <button class="os-choice-btn" onclick="chooseOs('windows')">🖥️ Windows</button>
         <button class="os-choice-btn" onclick="chooseOs('mac')">💻 Mac</button>
@@ -458,57 +386,57 @@
   </div>
 
   <div id="usage-bar">
-    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-label" id="usage-label">This week's usage</div>
     <div class="usage-track">
       <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
-      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
+      <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ 講評AIと共通のAIチケットです</div>
+    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI</div>
   </div>
 
   <div id="main-area">
     <div class="section">
-      <h2>PC情報</h2>
+      <h2>PC info</h2>
       <div id="pc-info-row">
         <span id="pc-os-label">OS: -</span>
-        <button id="pc-os-change-btn" onclick="showOsSelect()">変更する</button>
+        <button id="pc-os-change-btn" onclick="showOsSelect()">Change</button>
       </div>
-      <label class="level-label" for="pc-level">説明のレベル</label>
+      <label class="level-label" for="pc-level">Explanation level</label>
       <select id="pc-level" onchange="savePcProfile()">
-        <option value="beginner">初心者向け（右クリックやフォルダから丁寧に）</option>
-        <option value="intermediate">中級者向け（一般的なPC用語はそのまま使う）</option>
-        <option value="advanced">上級者向け（手順を簡潔に）</option>
+        <option value="beginner">Beginner (careful, step-by-step — right-click, folders, etc.)</option>
+        <option value="intermediate">Intermediate (uses common PC terms as-is)</option>
+        <option value="advanced">Advanced (concise steps)</option>
       </select>
     </div>
 
     <div class="section">
-      <h2>質問する</h2>
+      <h2>Ask a question</h2>
       <div id="chat-log">
-        <div class="chat-empty" id="chat-empty">例：「ZIPファイルの解凍方法が分かりません」「JSXファイルをどこに置けばいいですか？」</div>
+        <div class="chat-empty" id="chat-empty">e.g. "I don't know how to unzip a ZIP file" / "Where should I put the JSX file?"</div>
       </div>
-      <div id="chat-loading">回答を考えています...</div>
+      <div id="chat-loading">Thinking...</div>
       <div id="chat-error"></div>
 
-      <div id="screenshot-hint">うまくいかない場合は、画面のスクリーンショットを添付できます</div>
+      <div id="screenshot-hint">If something isn't working, you can attach a screenshot of your screen</div>
       <div id="screenshot-preview-row">
         <img id="screenshot-preview-img" src="" alt="">
         <span id="screenshot-preview-name"></span>
-        <button id="screenshot-remove-btn" onclick="removeScreenshot()">削除</button>
+        <button id="screenshot-remove-btn" onclick="removeScreenshot()">Remove</button>
       </div>
       <div class="chat-input-row">
         <input type="file" id="screenshot-input" accept="image/*" style="display:none" onchange="onScreenshotSelected(this)">
-        <button id="screenshot-attach-btn" onclick="document.getElementById('screenshot-input').click()">📎 スクリーンショットを送る</button>
-        <textarea id="chat-input" rows="2" placeholder="PCについて質問を入力してください"></textarea>
-        <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
+        <button id="screenshot-attach-btn" onclick="document.getElementById('screenshot-input').click()">📎 Send a screenshot</button>
+        <textarea id="chat-input" rows="2" placeholder="Ask a question about your PC"></textarea>
+        <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
     © PC AI — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy">プライバシーポリシー</a> &nbsp;·&nbsp;
-    <a href="/terms">利用規約</a>
+    <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms">Terms of Service</a>
   </footer>
 </div>
 
@@ -525,7 +453,7 @@ let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
 let selectedScreenshotFile = null;
 
-// ---- Auth 状態監視 ----
+// ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
   document.getElementById('loading-state').style.display = 'none';
 
@@ -583,7 +511,7 @@ async function chooseOs(osType) {
     applyOsLabel(osType);
   } catch (err) {
     console.error('os save error:', err);
-    showChatError('OSの保存に失敗しました: ' + err.message);
+    showChatError('Failed to save OS: ' + err.message);
   }
 }
 
@@ -633,22 +561,22 @@ async function loadUsageInfo(uid) {
 
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
-    document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-label').textContent = isWeekly ? "This week's usage" : "This month's usage";
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
     if (isWeekly) {
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(getNextMonday(now)) + '（月曜日）';
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(getNextMonday(now)) + ' (Monday)';
     } else {
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(nextMonth);
     }
 
     if (usedCount >= usageLimit) {
-      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      const resetInfo = isWeekly ? 'It will reset on Monday.' : 'It will reset on the 1st of next month.';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
+        `You've used this ${isWeekly ? "week's" : "month's"} limit (${usageLimit} tickets). ${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-area').style.display = 'block';
@@ -659,14 +587,14 @@ async function loadUsageInfo(uid) {
   }
 }
 
-// ---- Google ログイン / ログアウト ----
+// ---- Google sign-in / sign-out ----
 async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     await firebase.auth().signInWithPopup(provider);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
-      showChatError('ログインに失敗しました: ' + err.message);
+      showChatError('Sign-in failed: ' + err.message);
     }
   }
 }
@@ -677,11 +605,11 @@ function logout() {
   });
 }
 
-// ---- スクリーンショット添付 ----
+// ---- Screenshot attachment ----
 function onScreenshotSelected(input) {
   const file = input.files[0];
   if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { showChatError('ファイルサイズが大きすぎます（最大10MB）'); return; }
+  if (file.size > 10 * 1024 * 1024) { showChatError('File is too large (max 10MB)'); return; }
   selectedScreenshotFile = file;
 
   const reader = new FileReader();
@@ -699,7 +627,7 @@ function removeScreenshot() {
   document.getElementById('screenshot-preview-row').style.display = 'none';
 }
 
-// ---- チャット ----
+// ---- Chat ----
 function appendUserBubble(text, thumbDataUrl) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
@@ -729,15 +657,15 @@ function appendAssistantBubble(text) {
   check.className = 'difficulty-check';
   const label = document.createElement('span');
   label.className = 'difficulty-label';
-  label.textContent = 'この説明は難しかったですか？';
+  label.textContent = 'Was this explanation hard to follow?';
   const hardBtn = document.createElement('button');
   hardBtn.type = 'button';
   hardBtn.className = 'difficulty-btn';
-  hardBtn.textContent = '説明をもっと簡単にする';
+  hardBtn.textContent = 'Make it simpler';
   const okBtn = document.createElement('button');
   okBtn.type = 'button';
   okBtn.className = 'difficulty-btn';
-  okBtn.textContent = 'ちょうど良かった';
+  okBtn.textContent = 'Just right';
 
   hardBtn.onclick = () => resolveDifficulty(check, true);
   okBtn.onclick = () => resolveDifficulty(check, false);
@@ -760,12 +688,12 @@ async function resolveDifficulty(checkEl, wasHard) {
     if (idx > -1 && idx < order.length - 1) {
       levelSelect.value = order[idx + 1];
       await savePcProfile();
-      done.textContent = '次の回答から、より分かりやすいレベルに調整します。';
+      done.textContent = "I'll use a simpler level starting with the next answer.";
     } else {
-      done.textContent = 'すでに最も分かりやすいレベルです。';
+      done.textContent = "This is already the simplest level.";
     }
   } else {
-    done.textContent = 'フィードバックありがとうございます。';
+    done.textContent = 'Thanks for the feedback.';
   }
   checkEl.replaceWith(done);
 }
@@ -775,14 +703,14 @@ async function sendChatMessage() {
   const question = input.value.trim();
   const hasScreenshot = !!selectedScreenshotFile;
   if (!question && !hasScreenshot) return;
-  if (!currentUser) { showChatError('ログインが必要です'); return; }
+  if (!currentUser) { showChatError('Please sign in first'); return; }
 
   const btn = document.getElementById('chat-send-btn');
   btn.disabled = true;
   document.getElementById('chat-loading').style.display = 'block';
   document.getElementById('chat-error').style.display = 'none';
 
-  const displayText = question || '(スクリーンショットを送信)';
+  const displayText = question || '(Screenshot sent)';
   let thumbDataUrl = null;
   let imageBase64 = null;
   let mediaType = 'image/jpeg';
@@ -796,14 +724,14 @@ async function sendChatMessage() {
       mediaType = 'image/jpeg';
     }
   } catch (err) {
-    showChatError('画像の処理に失敗しました: ' + (err.message || err));
+    showChatError('Failed to process image: ' + (err.message || err));
     btn.disabled = false;
     document.getElementById('chat-loading').style.display = 'none';
     return;
   }
 
   appendUserBubble(displayText, thumbDataUrl);
-  chatMessages.push({ role: 'user', content: hasScreenshot ? `${displayText}\n[スクリーンショットを送信済み]` : displayText });
+  chatMessages.push({ role: 'user', content: hasScreenshot ? `${displayText}\n[Screenshot already sent]` : displayText });
   input.value = '';
   removeScreenshot();
 
@@ -814,6 +742,7 @@ async function sendChatMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
+        lang: 'en',
         osType: document.getElementById('pc-os-label').textContent.includes('Windows') ? 'windows'
               : document.getElementById('pc-os-label').textContent.includes('Mac') ? 'mac' : '',
         pcLevel: document.getElementById('pc-level').value,
@@ -826,7 +755,7 @@ async function sendChatMessage() {
     const data = await res.json();
 
     if (!res.ok) {
-      chatMessages.pop(); // 失敗した質問は履歴から取り除く
+      chatMessages.pop(); // remove the failed question from history
       if (res.status === 401) {
         await firebase.auth().signOut();
         window.location.reload();
@@ -835,7 +764,7 @@ async function sendChatMessage() {
         document.getElementById('limit-msg').textContent = data.error;
         document.getElementById('limit-state').style.display = 'block';
       } else {
-        showChatError(data.error || 'エラーが発生しました');
+        showChatError(data.error || 'An error occurred');
       }
       return;
     }
@@ -844,13 +773,13 @@ async function sendChatMessage() {
     appendAssistantBubble(data.result);
 
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
     chatMessages.pop();
-    showChatError('通信エラー: ' + (err.message || err));
+    showChatError('Connection error: ' + (err.message || err));
   } finally {
     btn.disabled = false;
     document.getElementById('chat-loading').style.display = 'none';
@@ -870,7 +799,7 @@ function showChatError(msg) {
   el.style.display = 'block';
 }
 
-// ---- 画像処理ユーティリティ（ai-review.htmlと同一ロジック） ----
+// ---- Image processing utilities (same logic as ai-review.html) ----
 function arrayBufferToBase64(buffer) {
   const bytes = new Uint8Array(buffer);
   let binary = '';
@@ -912,7 +841,7 @@ function compressImage(file, maxSizeMB = 3) {
   });
 }
 
-// ---- ユーティリティ ----
+// ---- Utilities ----
 function getHighestRole(roles) {
   const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
   for (const r of PRIORITY) { if (roles.includes(r)) return r; }
@@ -944,97 +873,4 @@ function formatDate(date) {
   return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 }
 </script>
-
-<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
-     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
-            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
-            <li><a href="/ai-review">講評AI</a></li>
-            <li><a href="/camera-ai">カメラAI</a></li>
-            <li><a href="/shooting-ai">撮影AI</a></li>
-            <li><a href="/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
-            <li><a href="/workshop">📷 Workshop</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="/faq">よくある質問</a></li>
-            <li><a href="/development-log">開発日誌</a></li>
-            <li><a href="/changelog">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/about">About</a></li>
-            <li><a href="/sidekick">Sidekickとは</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/legal">特定商取引法</a></li>
-            <li><a href="/privacy">プライバシーポリシー</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
-      <div class="footer-legal">
-        <a href="/legal">特定商取引法に基づく表記</a>
-        <a href="/privacy">プライバシーポリシー</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

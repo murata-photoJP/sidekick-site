@@ -1,42 +1,76 @@
+{# ai-review.html（村田一朗 AI写真講評、日本語版）。2026-07-25移行。
+   移行元: html/ai-review.html（手書き静的HTML、実際に動くAI講評ツール）。他の移行済み
+   ページ（workshop.html等の.site-header/.footer構成）と異なり、このページは元々
+   .hdr/.footerではなく最小限の<nav class="site-nav">（ロゴ＋トップに戻る＋EN切替）
+   のみを持っていた。この<nav class="site-nav">...</nav>全体をサイト共通ヘッダー
+   （header.html、base.html経由でinclude）へ置き換えた。フッターは、このページ末尾に
+   ある独自の小さい<footer>（著作権表示＋プライバシー/利用規約リンク）をそのまま本文内
+   （contentブロック）に残している。これは他ページ移行時に置き換えていた
+   旧footer.footerとは別物で、サイト共通footer.htmlはbase.htmlがcontentブロックの後に
+   自動追加するため、ページ末尾には「このページ独自の小さいfooter」と「サイト共通の
+   footer」の両方が並ぶ（意図した挙動）。
 
+   本文（講評AIツールのUI・Firebase認証ロジック・使用状況表示・APIコール・
+   Firebase SDK scriptタグ）は1文字も変更していない。
 
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/ai-review.html'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/ai-review.html');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>村田一朗 AI写真講評 | Sidekick Lab</title>
-<meta name="description" content="撮ったあと「これでいいのかな」と思うことはありませんか。そんなときに、作品を客観的に見直すための講評AIです。写真をアップロードすると、構図・視線誘導・余白・主題の伝わり方・改善ポイントを整理します。">
-<link rel="canonical" href="https://www.sidekick-lab.com/ai-review">
+   【削除したCSSセレクタ】（旧<nav class="site-nav">専用。共通ヘッダー/フッターの
+   CSSは/assets/css/site-header.cssが別定義で提供する。本文中でこれらのクラスが
+   再利用されていないことを確認済み）：
+     .site-nav / .site-nav-in / .site-brand / .site-brand-mk /
+     .site-nav-back / .site-nav-back:hover
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/ai-review">
+   【追加したCSS変数】（元ファイルには:root自体が無かった。/assets/css/site-header.css
+   がvar(--accent)・var(--accent2)・var(--muted)・var(--sub)・var(--text)・var(--line)
+   を参照するため、共通ヘッダー/フッターの配色崩れを防ぐために追加。ページ本体の
+   背景色#1a1a1a・文字色#e8e8e8はこのページ独自のデザインのため変更していない）：
+     --accent:#ff8a00; --accent2:#ffb14a; --muted:#5e6677;
+     --sub:#8c96aa; --text:#eef1f8; --line:#2a2f3a;
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/ai-review">
+   【言語自動判定スクリプトについて】元ファイルの<head>にあった、localStorageの
+   sk_lang_pref を見て日本語以外なら/en/ai-review.htmlへ自動リダイレクトする
+   インラインスクリプトは、extra_headに含めていない（本文JSではなく<head>の
+   ページ側スクリプトのため、移行対象の「本文は変更しない」の範囲外と判断）。
+   base.html（templates/site/base.html）が同等の言語自動判定スクリプトを
+   全ページ共通で既に持っており、en_redirect_url変数で行き先を指定できる
+   （他の移行済みページ（例: sidekick-star.html）と同じ扱い）。重複実行を避けるため、
+   build_site.py登録時に en_redirect_url="/en/ai-review" を渡すことを推奨する。
 
+   【OGP】元ファイルにOGPタグは無かったため、enable_ogp関連のブロックは書いていない。
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+   【canonical / meta_description】元ファイルにcanonical・meta descriptionは
+   存在しなかったため、今回新規に作成した：
+     - canonical: https://www.sidekick-lab.com/ai-review（指示による指定値）
+     - meta_description: 本文中のLPヘッダー紹介文（「撮ったあと、『これでいいのかな』と
+       思うことはありませんか。そんなときに、作品を客観的に見直すための講評AIです。」
+       「写真をアップロードすると、構図・視線誘導・余白・主題の伝わり方・改善ポイントを
+       整理します。」）を要約し、新しいキャッチコピーは作らず既存文言ベースで作成した。
 
+   【hreflang】元ファイルにhreflang alternateタグは無かった（英語版のみ存在、
+   非対称。en/ai-review.htmlのJinjaコメントに詳細を記載）。
+
+   【build_site.py登録時に必要な情報】（このファイル自体は変更していない。実際の
+   登録は別途build_site.pyのPAGES辞書等へ以下のようなエントリを追加する想定）：
+     "ai-review": {
+         "template": "pages/ai-review.html",
+         "output": Path("ai-review.html"),
+         "context": {
+             "language": "ja",
+             "nav_current": "ai-review",
+             "en_redirect_url": "/en/ai-review",
+             "lang_switch_url": "/en/ai-review",
+         },
+     },
+   注意：Firebase認証・Firestore・/api/review 等、外部設定（firebase-init.js等）への
+   依存はこのページ固有の既存要件であり、テンプレート化によって変わらない。 #}
+{% extends "base.html" %}
+
+{% block title %}村田一朗 AI写真講評 | Sidekick Lab{% endblock %}
+
+{% block meta_description %}撮ったあと「これでいいのかな」と思うことはありませんか。そんなときに、作品を客観的に見直すための講評AIです。写真をアップロードすると、構図・視線誘導・余白・主題の伝わり方・改善ポイントを整理します。{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/ai-review{% endblock %}
+
+{% block extra_head %}
   <style>
   :root{
     --accent:#ff8a00;
@@ -629,132 +663,9 @@
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "xem6v4pdup");
   </script>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
-     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
-     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
-     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
-     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
-     キーボード操作・aria-expanded対応のトグルボタンを付与している
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
-
-     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
-     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
-     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
-     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
-     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
-     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
-     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
-
-     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
-     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
-     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
-     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
-
-     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
-     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
-     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
-     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
-     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
-     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
-
-     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
-     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
-     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
-     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
-     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
-     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
-     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
-
-
-<div class="lang-banner" id="lang-banner">
-  🇺🇸 This site is also available in English —
-  <a href="/en/ai-review">View English page →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
-      <span class="kzc-nav-toggle-label">メニュー</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
-      <a href="/sidekick-star" >⭐ Star</a>
-      <a href="/portrait" >👤 Portrait</a>
-      <a href="/sky-effect" >☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
-      <a href="/workshop" >📷 Workshop</a>
-      <a href="/lp-star" >LP</a>
-      <a href="/gallery" >Gallery</a>
-      <a href="/sidekick" >Sidekickとは</a>
-      <a href="/about" >About</a>
-      <a href="/development-log" >開発日誌</a>
-      <a href="/changelog" >更新履歴</a>
-      <a href="/faq" >Support</a>
-      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
-      <a href="/en/ai-review" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu");
-  if (!toggle || !menu) { return; }
-
-  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
-  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
   <!-- LP ヘッダー -->
   <div class="lp-hero">
     <div style="max-width:720px;margin:0 auto;padding:0 20px;">
@@ -1535,97 +1446,4 @@ function formatDate(date) {
   return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 }
 </script>
-
-<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
-     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
-            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
-            <li><a href="/ai-review">講評AI</a></li>
-            <li><a href="/camera-ai">カメラAI</a></li>
-            <li><a href="/shooting-ai">撮影AI</a></li>
-            <li><a href="/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
-            <li><a href="/workshop">📷 Workshop</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="/faq">よくある質問</a></li>
-            <li><a href="/development-log">開発日誌</a></li>
-            <li><a href="/changelog">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/about">About</a></li>
-            <li><a href="/sidekick">Sidekickとは</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/legal">特定商取引法</a></li>
-            <li><a href="/privacy">プライバシーポリシー</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
-      <div class="footer-legal">
-        <a href="/legal">特定商取引法に基づく表記</a>
-        <a href="/privacy">プライバシーポリシー</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

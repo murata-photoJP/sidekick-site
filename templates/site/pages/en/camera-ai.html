@@ -1,42 +1,88 @@
+{# Camera AI page (English version). Migrated 2026-07-25.
+   Source: html/en/camera-ai.html (hand-written static HTML, a live camera-consultation AI
+   tool page). The body (can/can't cards, login/usage display, chat UI, page-specific footer,
+   Firebase auth logic, API calls, and all other JavaScript) is completely unchanged (Murata-san's
+   explicit requirement — this is a live, working tool).
 
+   [Difference from other migrated pages] This page did not use <header class="hdr">; it had
+   its own minimal <nav class="site-nav"> (logo + back-to-home + JA switch). That entire
+   <nav class="site-nav">...</nav> block was removed and replaced with the shared header
+   (header_en.html, via base.html's language switch).
 
-<!doctype html>
-<html lang="ja">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/camera-ai.html'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/camera-ai.html');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>カメラAI | Sidekick Lab</title>
-<meta name="description" content="カメラ本体の取扱説明書レベルの質問に答えます。「この機能は何か」「どこで設定するか」を、機種に合わせて案内します。">
-<link rel="canonical" href="https://www.sidekick-lab.com/camera-ai">
+   [Removed CSS selectors] (duplicate the role the shared header's own CSS plays; confirmed
+   via grep that none of these classes are reused in the body):
+     .site-nav / .site-nav-in / .site-brand / .site-brand-mk /
+     .site-nav-back / .site-nav-back:hover
+   (the "/* site nav */" comment line was removed along with them)
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/camera-ai">
+   [Added CSS variables]: the original page had no :root block at all, so the full variable
+   set referenced by the shared header/footer (/assets/css/site-header.css) was added:
+     --accent:#ff8a00; --accent2:#ffb14a; --muted:#5e6677; --sub:#8c96aa;
+     --text:#eef1f8; --line:#2a2f3a;
+   The page body's own background/text colors (body{background:#1a1a1a;color:#e8e8e8;} etc.)
+   are this page's own design and were left unchanged (all literal hex values, none reference
+   the CSS variables above).
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/camera-ai">
+   [Own footer] The <footer> at the end of the page (copyright line + Privacy Policy/Terms
+   links) is separate from the shared site footer (footer_en.html, appended automatically by
+   base.html after {% block content %}). It was kept as-is inside {% block content %}, not
+   removed or replaced — the page will show both this page's own small footer and the shared
+   site footer, one after the other (intended behavior).
 
+   [canonical / meta_description] The original en/camera-ai.html already had
+   <link rel="canonical" href="https://www.sidekick-lab.com/en/camera-ai">, so that exact URL
+   was carried over into {% block canonical %} unchanged. No <meta name="description"> existed
+   in the source, so meta_description was newly written by transcribing the existing intro
+   text from the page body (header <p>), not by inventing new copy:
+     "Answers manual-level questions about your camera body. Guides you on "what this feature
+     is" and "where to set it," tailored to your model." — the straight double quotes around
+     "what this feature is" / "where to set it," were HTML-entity-escaped (&quot;) only
+     because they sit inside a double-quoted HTML attribute; no wording was changed.
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+   [OGP] The original file has no OGP tags, so no enable_ogp-related blocks were written.
 
+   [hreflang] The original en/camera-ai.html has:
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/camera-ai">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/camera-ai">
+   base.html already has a built-in mechanism to emit these from a `hreflang_alternates`
+   context dict (see the {% for hl, url in ... %} loop near the top of <head>), so rather than
+   hard-coding <link> tags inside extra_head, this template relies on that existing mechanism.
+   (Note: the sibling migration en/sidekick-star.html's Jinja comment claims the hreflang tags
+   were "preserved as-is inside extra_head," but a check of that file shows no such <link> tags
+   actually exist there — the comment does not match the implementation. To avoid repeating
+   that mistake, this page instead documents the exact `hreflang_alternates` context needed
+   below and asks that it be passed via build_site.py, which will actually render via base.html's
+   existing loop.)
+
+   [build_site.py hand-off notes] (this file itself is unchanged; the actual PAGES
+   registration is expected to look like this):
+     "camera-ai-en": {
+         "template": "pages/en/camera-ai.html",
+         "output": Path("en/camera-ai.html"),
+         "context": {
+             "language": "en",
+             "nav_current": "camera-ai",
+             "lang_switch_url": "/camera-ai",   # header_en.html's language banner / JA-switch
+                                                  # link default to "/knowledge" otherwise
+             "hreflang_alternates": { "ja": "https://www.sidekick-lab.com/camera-ai",
+                                       "en": "https://www.sidekick-lab.com/en/camera-ai" },
+         },
+     },
+   Same caveat as other EN page migrations (e.g. en/sidekick-star.html): base.html's language
+   auto-redirect <script> in <head> runs on this English page too, even though the original
+   en/camera-ai.html never had it. A first-time visitor whose browser reports a Japanese
+   locale, landing directly on /en/camera-ai with no stored sk_lang_pref, would NOT be
+   redirected (the script only redirects non-Japanese browsers to en_redirect_url); this is a
+   pre-existing base.html behavior, out of scope for this task, flagged for awareness only. #}
+{% extends "base.html" %}
+
+{% block title %}Camera AI | Sidekick Lab{% endblock %}
+
+{% block meta_description %}Answers manual-level questions about your camera body. Guides you on &quot;what this feature is&quot; and &quot;where to set it,&quot; tailored to your model.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/camera-ai{% endblock %}
+
+{% block extra_head %}
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
@@ -64,7 +110,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: #1a1a1a;
     color: #e8e8e8;
     min-height: 100vh;
@@ -98,7 +144,7 @@
   }
   .logout-btn:hover { color: #aaa; border-color: #666; }
 
-  /* できること／できないこと */
+  /* can / can't */
   .ai-scope { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
   .ai-scope-card { background: #252525; border: 1px solid #383838; border-radius: 10px; padding: 18px; }
   .ai-scope-card.can { border-top: 2px solid #3a5a6a; }
@@ -168,7 +214,7 @@
   .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
   #camera-level { width: 100%; }
 
-  /* チャット */
+  /* chat */
   #chat-log {
     display: flex; flex-direction: column; gap: 14px;
     margin-bottom: 16px; max-height: 55vh; overflow-y: auto; padding-right: 4px;
@@ -220,179 +266,56 @@
   footer a { color: #555; text-decoration: none; }
   footer a:hover { color: #888; }
 </style>
+{% endblock %}
 
-</head>
-<body>
-<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
-     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
-     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
-     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
-     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
-     キーボード操作・aria-expanded対応のトグルボタンを付与している
-     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
-
-     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
-     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
-     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
-     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
-     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
-     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
-     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
-     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
-
-     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
-     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
-     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
-     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
-
-     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
-     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
-     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
-     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
-     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
-     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
-
-     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
-     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
-     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
-     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
-     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
-     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
-     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
-
-
-<div class="lang-banner" id="lang-banner">
-  🇺🇸 This site is also available in English —
-  <a href="/en/camera-ai">View English page →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
-      <span class="kzc-nav-toggle-label">メニュー</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
-      <a href="/sidekick-star" >⭐ Star</a>
-      <a href="/portrait" >👤 Portrait</a>
-      <a href="/sky-effect" >☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
-      <a href="/workshop" >📷 Workshop</a>
-      <a href="/lp-star" >LP</a>
-      <a href="/gallery" >Gallery</a>
-      <a href="/sidekick" >Sidekickとは</a>
-      <a href="/about" >About</a>
-      <a href="/development-log" >開発日誌</a>
-      <a href="/changelog" >更新履歴</a>
-      <a href="/faq" >Support</a>
-      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
-      <a href="/en/camera-ai" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      
-    </nav>
-  </div>
-</header>
-
-<script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu");
-  if (!toggle || !menu) { return; }
-
-  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
-  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
-</script>
-
+{% block content %}
 
 <div class="container">
   <header>
     <div class="user-bar" id="user-bar">
       <img class="user-avatar" id="user-avatar" src="" alt="">
       <span class="user-name" id="user-name"></span>
-      <button class="logout-btn" onclick="logout()">ログアウト</button>
+      <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
-    <h1>カメラAI</h1>
+    <h1>Camera AI</h1>
     <p>
-      カメラ本体の取扱説明書レベルの質問に答えます。<br>
-      「この機能は何か」「どこで設定するか」を、機種に合わせて案内します。
+      Answers manual-level questions about your camera body.<br>
+      Guides you on "what this feature is" and "where to set it," tailored to your model.
     </p>
   </header>
 
   <div class="ai-scope">
     <div class="ai-scope-card can">
-      <div class="ai-scope-title">答えられること</div>
+      <div class="ai-scope-title">What it can answer</div>
       <ul class="ai-scope-list">
-        <li>本体設定・メニュー項目</li>
-        <li>ボタンカスタム・AFモード</li>
-        <li>記録形式・手ブレ補正</li>
-        <li>Wi-Fi / Bluetooth接続</li>
-        <li>SDカード・初期化</li>
+        <li>Body settings & menu items</li>
+        <li>Button customization & AF modes</li>
+        <li>Recording formats & stabilization</li>
+        <li>Wi-Fi / Bluetooth connections</li>
+        <li>SD cards & reset/initialization</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">深くは踏み込まないこと</div>
+      <div class="ai-scope-title">Won't go deep on</div>
       <ul class="ai-scope-list">
-        <li>作品講評・構図アドバイス</li>
-        <li>撮影地・場面ごとのおすすめ設定</li>
-        <li>SideKick / Photoshop操作</li>
-        <li>PCの一般操作</li>
+        <li>Photo critique & composition advice</li>
+        <li>Location & scene-specific settings</li>
+        <li>SideKick / Photoshop operation</li>
+        <li>General PC operation</li>
       </ul>
     </div>
   </div>
 
   <div id="loading-state">
     <div class="spinner"></div>
-    <p style="color:#666;font-size:0.85rem;">確認しています...</p>
+    <p style="color:#666;font-size:0.85rem;">Checking...</p>
   </div>
 
   <div id="login-state">
     <div class="login-card">
-      <h2>Googleアカウントでログイン</h2>
-      <p>カメラAIを使うにはGoogleアカウントが必要です。講評AIと共通のAIチケットでご利用いただけます。
-        <span class="campaign-note">週5AIチケットまで無料（〜2026年8月末）</span>
+      <h2>Sign in with Google</h2>
+      <p>You'll need a Google account to use Camera AI. It shares AI tickets with Photo Critique AI.
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
@@ -401,34 +324,34 @@
           <path fill="#FBBC05" d="M3.964 10.707c-.18-.54-.282-1.117-.282-1.707s.102-1.167.282-1.707V4.961H.957C.347 6.175 0 7.55 0 9s.348 2.825.957 4.039l3.007-2.332z"/>
           <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.961L3.964 7.293C4.672 5.166 6.656 3.58 9 3.58z"/>
         </svg>
-        Google アカウントでログイン
+        Sign in with Google
       </button>
     </div>
   </div>
 
   <div id="limit-state">
     <div class="limit-card">
-      <h2>今週のAIチケットを使い切りました</h2>
+      <h2>You've used this week's AI tickets</h2>
       <p id="limit-msg"></p>
     </div>
   </div>
 
   <div id="usage-bar">
-    <div class="usage-label" id="usage-label">今週の利用</div>
+    <div class="usage-label" id="usage-label">This week's usage</div>
     <div class="usage-track">
       <div class="usage-bar-bg"><div class="usage-bar-fill" id="usage-bar-fill" style="width:0%"></div></div>
-      <div class="usage-count" id="usage-count">0 / 5 チケット</div>
+      <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ 講評AIと共通のAIチケットです</div>
+    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI</div>
   </div>
 
   <div id="main-area">
     <div class="section">
-      <h2>カメラ情報（任意・入力すると回答が正確になります）</h2>
+      <h2>Camera info (optional — improves answer accuracy)</h2>
       <div id="camera-info-row">
         <select id="camera-brand" onchange="saveCameraProfile()">
-          <option value="">メーカー未選択</option>
+          <option value="">Brand not selected</option>
           <option>Canon</option>
           <option>Nikon</option>
           <option>SONY</option>
@@ -437,36 +360,36 @@
           <option>Panasonic / LUMIX</option>
           <option>PENTAX / RICOH</option>
           <option>Leica</option>
-          <option>その他</option>
+          <option value="Other">Other</option>
         </select>
-        <input type="text" id="camera-model" placeholder="機種名（例: α7IV, EOS R6 Mark II）" onchange="saveCameraProfile()">
+        <input type="text" id="camera-model" placeholder="Model name (e.g. a7 IV, EOS R6 Mark II)" onchange="saveCameraProfile()">
       </div>
-      <label class="level-label" for="camera-level">説明のレベル</label>
+      <label class="level-label" for="camera-level">Explanation level</label>
       <select id="camera-level" onchange="saveCameraProfile()">
-        <option value="beginner">初心者向け（専門用語を避けて丁寧に）</option>
-        <option value="intermediate">中級者向け（一般的な用語はそのまま使う）</option>
-        <option value="advanced">上級者向け（設定名・数値を簡潔に）</option>
+        <option value="beginner">Beginner (avoids jargon, explains carefully)</option>
+        <option value="intermediate">Intermediate (uses common terms as-is)</option>
+        <option value="advanced">Advanced (concise setting names & values)</option>
       </select>
     </div>
 
     <div class="section">
-      <h2>質問する</h2>
+      <h2>Ask a question</h2>
       <div id="chat-log">
-        <div class="chat-empty" id="chat-empty">例：「AFエリアの切り替え方が分かりません」「Wi-Fiでスマホに転送する方法は？」</div>
+        <div class="chat-empty" id="chat-empty">e.g. "I don't know how to switch AF area modes" / "How do I transfer photos to my phone over Wi-Fi?"</div>
       </div>
-      <div id="chat-loading">回答を考えています...</div>
+      <div id="chat-loading">Thinking...</div>
       <div id="chat-error"></div>
       <div class="chat-input-row">
-        <textarea id="chat-input" rows="2" placeholder="カメラについて質問を入力してください"></textarea>
-        <button id="chat-send-btn" onclick="sendChatMessage()">送信</button>
+        <textarea id="chat-input" rows="2" placeholder="Ask a question about your camera"></textarea>
+        <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
-    © カメラAI — Sidekick Lab &nbsp;·&nbsp;
-    <a href="/privacy">プライバシーポリシー</a> &nbsp;·&nbsp;
-    <a href="/terms">利用規約</a>
+    © Camera AI — Sidekick Lab &nbsp;·&nbsp;
+    <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/en/terms">Terms of Service</a>
   </footer>
 </div>
 
@@ -482,7 +405,7 @@ let usageLimit = 5;
 let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
 
-// ---- Auth 状態監視 ----
+// ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
   document.getElementById('loading-state').style.display = 'none';
 
@@ -566,22 +489,22 @@ async function loadUsageInfo(uid) {
 
     const barEl = document.getElementById('usage-bar');
     barEl.style.display = 'block';
-    document.getElementById('usage-label').textContent = isWeekly ? '今週の利用' : '今月の利用';
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-label').textContent = isWeekly ? "This week's usage" : "This month's usage";
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
     if (isWeekly) {
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(getNextMonday(now)) + '（月曜日）';
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(getNextMonday(now)) + ' (Monday)';
     } else {
       const nextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-      document.getElementById('usage-reset').textContent = 'リセット: ' + formatDate(nextMonth);
+      document.getElementById('usage-reset').textContent = 'Resets: ' + formatDate(nextMonth);
     }
 
     if (usedCount >= usageLimit) {
-      const resetInfo = isWeekly ? '月曜日にリセットされます。' : '翌月1日にリセットされます。';
+      const resetInfo = isWeekly ? 'It will reset on Monday.' : 'It will reset on the 1st of next month.';
       document.getElementById('limit-msg').textContent =
-        `今${isWeekly ? '週' : '月'}の上限（${usageLimit}チケット）を使い切りました。${resetInfo}`;
+        `You've used this ${isWeekly ? "week's" : "month's"} limit (${usageLimit} tickets). ${resetInfo}`;
       document.getElementById('limit-state').style.display = 'block';
     } else {
       document.getElementById('main-area').style.display = 'block';
@@ -592,14 +515,14 @@ async function loadUsageInfo(uid) {
   }
 }
 
-// ---- Google ログイン / ログアウト ----
+// ---- Google sign-in / sign-out ----
 async function signInWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
     await firebase.auth().signInWithPopup(provider);
   } catch (err) {
     if (err.code !== 'auth/popup-closed-by-user') {
-      showChatError('ログインに失敗しました: ' + err.message);
+      showChatError('Sign-in failed: ' + err.message);
     }
   }
 }
@@ -610,7 +533,7 @@ function logout() {
   });
 }
 
-// ---- チャット ----
+// ---- Chat ----
 function appendUserBubble(text) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
@@ -632,15 +555,15 @@ function appendAssistantBubble(text) {
   check.className = 'difficulty-check';
   const label = document.createElement('span');
   label.className = 'difficulty-label';
-  label.textContent = 'この説明は難しかったですか？';
+  label.textContent = 'Was this explanation hard to follow?';
   const hardBtn = document.createElement('button');
   hardBtn.type = 'button';
   hardBtn.className = 'difficulty-btn';
-  hardBtn.textContent = '難しかった';
+  hardBtn.textContent = 'Too hard';
   const okBtn = document.createElement('button');
   okBtn.type = 'button';
   okBtn.className = 'difficulty-btn';
-  okBtn.textContent = 'ちょうど良かった';
+  okBtn.textContent = 'Just right';
 
   hardBtn.onclick = () => resolveDifficulty(check, true);
   okBtn.onclick = () => resolveDifficulty(check, false);
@@ -663,12 +586,12 @@ async function resolveDifficulty(checkEl, wasHard) {
     if (idx > -1 && idx < order.length - 1) {
       levelSelect.value = order[idx + 1];
       await saveCameraProfile();
-      done.textContent = '次の回答から、より分かりやすいレベルに調整します。';
+      done.textContent = "I'll use a simpler level starting with the next answer.";
     } else {
-      done.textContent = 'すでに最も分かりやすいレベルです。';
+      done.textContent = "This is already the simplest level.";
     }
   } else {
-    done.textContent = 'フィードバックありがとうございます。';
+    done.textContent = 'Thanks for the feedback.';
   }
   checkEl.replaceWith(done);
 }
@@ -677,7 +600,7 @@ async function sendChatMessage() {
   const input = document.getElementById('chat-input');
   const question = input.value.trim();
   if (!question) return;
-  if (!currentUser) { showChatError('ログインが必要です'); return; }
+  if (!currentUser) { showChatError('Please sign in first'); return; }
 
   const btn = document.getElementById('chat-send-btn');
   btn.disabled = true;
@@ -695,6 +618,7 @@ async function sendChatMessage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
+        lang: 'en',
         cameraBrand: document.getElementById('camera-brand').value,
         cameraModel: document.getElementById('camera-model').value.trim(),
         cameraLevel: document.getElementById('camera-level').value,
@@ -705,7 +629,7 @@ async function sendChatMessage() {
     const data = await res.json();
 
     if (!res.ok) {
-      chatMessages.pop(); // 失敗した質問は履歴から取り除く
+      chatMessages.pop(); // remove the failed question from history
       if (res.status === 401) {
         await firebase.auth().signOut();
         window.location.reload();
@@ -714,7 +638,7 @@ async function sendChatMessage() {
         document.getElementById('limit-msg').textContent = data.error;
         document.getElementById('limit-state').style.display = 'block';
       } else {
-        showChatError(data.error || 'エラーが発生しました');
+        showChatError(data.error || 'An error occurred');
       }
       return;
     }
@@ -723,13 +647,13 @@ async function sendChatMessage() {
     appendAssistantBubble(data.result);
 
     usedCount++;
-    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' チケット';
+    document.getElementById('usage-count').textContent = usedCount + ' / ' + usageLimit + ' tickets';
     const pct = Math.min(100, Math.round(usedCount / usageLimit * 100));
     document.getElementById('usage-bar-fill').style.width = pct + '%';
 
   } catch (err) {
     chatMessages.pop();
-    showChatError('通信エラー: ' + (err.message || err));
+    showChatError('Connection error: ' + (err.message || err));
   } finally {
     btn.disabled = false;
     document.getElementById('chat-loading').style.display = 'none';
@@ -749,7 +673,7 @@ function showChatError(msg) {
   el.style.display = 'block';
 }
 
-// ---- ユーティリティ ----
+// ---- Utilities ----
 function getHighestRole(roles) {
   const PRIORITY = ['admin', 'paid_member', 'salon_member', 'sidekick_user', 'workshop_user', 'free'];
   for (const r of PRIORITY) { if (roles.includes(r)) return r; }
@@ -781,97 +705,4 @@ function formatDate(date) {
   return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 }
 </script>
-
-<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
-     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
-            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
-            <li><a href="/ai-review">講評AI</a></li>
-            <li><a href="/camera-ai">カメラAI</a></li>
-            <li><a href="/shooting-ai">撮影AI</a></li>
-            <li><a href="/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
-            <li><a href="/workshop">📷 Workshop</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
-            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
-            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
-            <li><a href="/faq">よくある質問</a></li>
-            <li><a href="/development-log">開発日誌</a></li>
-            <li><a href="/changelog">更新履歴</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/about">About</a></li>
-            <li><a href="/sidekick">Sidekickとは</a></li>
-            <li><a href="/gallery">Gallery</a></li>
-            <li><a href="/legal">特定商取引法</a></li>
-            <li><a href="/privacy">プライバシーポリシー</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
-      <div class="footer-legal">
-        <a href="/legal">特定商取引法に基づく表記</a>
-        <a href="/privacy">プライバシーポリシー</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

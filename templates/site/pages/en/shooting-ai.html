@@ -1,58 +1,93 @@
+{# Shooting AI (English version). Migrated 2026-07-25.
+   Source: html/en/shooting-ai.html (a live shooting-advice AI tool page, includes Firebase
+   auth, usage-tracking display, and API calls). Like its JA sibling
+   (templates/site/pages/shooting-ai.html), this page has its own minimal .site-nav instead
+   of the shared .hdr header. The body (tool UI, copy, Firebase auth logic, usage display,
+   API calls, and the page's own trailing <footer>) is completely unchanged (Murata-san's
+   explicit requirement — this is a live tool).
 
+   [Removed CSS selectors] (replaced by the shared header/footer —
+   templates/knowledge/header_en.html / footer_en.html, /assets/css/site-header.css;
+   confirmed these classes are not reused elsewhere in the body):
+     .site-nav / .site-nav-in / .site-brand / .site-brand-mk /
+     .site-nav-back / .site-nav-back:hover
+   (the original file's "/* site nav */" comment block as a whole)
 
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
-     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
-     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
-     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
-     汎用/en/に後退させないようパラメータ化した）。 -->
-<script>
-  (function () {
-    try {
-      var pref = localStorage.getItem('sk_lang_pref');
-      if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
-      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
-      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
-      if (!isJapanese) {
-        localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
-      }
-    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
-  })();
-</script>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Camera AI | Sidekick Lab</title>
-<meta name="description" content="Answers manual-level questions about your camera body. Guides you on &quot;what this feature is&quot; and &quot;where to set it,&quot; tailored to your model.">
-<link rel="canonical" href="https://www.sidekick-lab.com/en/camera-ai">
+   [Added CSS variables]: the original file had no :root block at all. Added
+   --accent/--accent2/--muted/--sub/--text/--line because the shared header/footer CSS
+   (/assets/css/site-header.css) references them. The page's own background/text colors
+   (hard-coded #1a1a1a etc.) are unchanged.
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/camera-ai">
+   [No duplicate language-redirect script]: unlike the JA source (html/shooting-ai.html),
+   this EN source never had a language auto-redirect <script> in <head> to begin with — it
+   already relied on the visitor staying put once here. base.html's own <head> script (which
+   now runs on ALL pages including this one) handles the ja/en auto-redirect logic globally;
+   no page-level script was needed or added here, matching the established pattern from
+   other migrated pages (e.g. en/sidekick-star.html).
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/camera-ai">
+   [Custom footer]: the small <footer> near the end of the original file
+   (© Shooting AI — Sidekick Lab ... Privacy Policy / Terms of Service links) is NOT the
+   same thing as the shared `.footer` that other migrated pages replaced. It was kept
+   as-is inside {% block content %}. base.html appends the shared site footer
+   (footer_en.html) automatically after {% block content %}, so the rendered page ends up
+   with this page's own small footer followed by the shared site footer — intentional,
+   per the migration instructions.
 
+   [canonical / hreflang]: the original file already had these:
+     <link rel="canonical" href="https://www.sidekick-lab.com/en/shooting-ai">
+     <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/shooting-ai">
+     <link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/shooting-ai">
+   canonical is set via {% block canonical %} below (using the original value verbatim).
+   The hreflang tags are NOT hardcoded in this template. base.html already emits them from
+   a top-level `hreflang_alternates` context dict (see base.html's `{% for hl, url in
+   (hreflang_alternates|default({})).items() %}` loop). build_site.py's existing
+   `_register_page_pair(slug)` helper (used by sidekick-star/gallery/portrait/etc.) computes
+   exactly this pair automatically as {"ja": SITE_ORIGIN+"/shooting-ai", "en":
+   SITE_ORIGIN+"/en/shooting-ai"} — identical to the values above. Registering this page via
+   `_register_page_pair("shooting-ai")` will reproduce them without any template-side
+   hardcoding; adding raw <link> tags here as well would double them up. (Note: an earlier
+   sidekick-star migration's Jinja comment describes hreflang tags as "preserved inside
+   extra_head", but the actual en/sidekick-star.html template has no such tags either —
+   that comment is stale relative to the code; this file follows what the code actually
+   does, not that stale comment.) The JA source (html/shooting-ai.html) never had hreflang
+   tags at all, but `_register_page_pair()` adds the pair symmetrically to both language
+   versions by design — the same intentional improvement already applied to
+   gallery/changelog/portrait (see build_site.py's comment there: unidirectional hreflang
+   can be ignored by Google, so both sides get it).
 
-<link rel="stylesheet" href="/assets/css/site-header.css">
+   [meta_description]: the original file had no <meta name="description">. Per the task
+   instructions, one was created (not invented) from the page's own intro copy (the <p>
+   inside <header>, original lines 258-261) rather than a new tagline:
+     Works backward from "the photo you want to take" to suggest a general shooting
+     approach. Aims to get you to solid shooting know-how more easily than a web search.
+   The straight double quotes around "the photo you want to take" were HTML-entity-escaped
+   (&quot;) in the actual block below — no wording was changed — because base.html emits
+   this block's raw content directly inside a double-quoted HTML attribute
+   (`<meta name="description" content="{% block meta_description %}...">`), and Jinja's
+   autoescape only escapes `{{ expr }}` output, not literal block content. Leaving the raw
+   quotes in place would have broken the attribute (same fix already applied in the sibling
+   migration templates/site/pages/en/camera-ai.html).
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-K73T3Y352W');
-</script>
-<!-- Microsoft Clarity -->
-<script type="text/javascript">
-  (function(c,l,a,r,i,t,y){
-      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-  })(window, document, "clarity", "script", "xem6v4pdup");
-</script>
+   [OGP]: the original file has no OGP tags, so no enable_ogp-related blocks are written.
+
+   [build_site.py hand-off notes] (this file itself is unchanged; registering both language
+   versions together via the existing helper is expected to be sufficient, no extra_head
+   hreflang and no ja_extra/en_extra needed since there's no OGP):
+     _register_page_pair("shooting-ai")
+   This alone supplies, per language, matching values to what the original files already
+   had: hreflang_alternates (both), en_redirect_url "/en/shooting-ai.html" (JA side, matches
+   the redirect target the original JA page's now-removed inline script used), and
+   lang_switch_url "/shooting-ai" (EN side) / "/en/shooting-ai" (JA side).
+#}
+{% extends "base.html" %}
+
+{% block title %}Shooting AI | Sidekick Lab{% endblock %}
+
+{% block meta_description %}Works backward from &quot;the photo you want to take&quot; to suggest a general shooting approach. Aims to get you to solid shooting know-how more easily than a web search.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/shooting-ai{% endblock %}
+
+{% block extra_head %}
 <style>
   :root{
     --accent:#ff8a00;
@@ -109,6 +144,8 @@
   .ai-scope-list { list-style: none; padding: 0; font-size: 0.8rem; color: #888; line-height: 1.9; }
   .ai-scope-card.can .ai-scope-list li::before { content: '✓ '; color: #4e8cff; font-weight: 700; }
   .ai-scope-card.cant .ai-scope-list li::before { content: '— '; color: #6a5040; }
+  .ai-scope-card.cant a { color: #c88b50; text-decoration: none; }
+  .ai-scope-card.cant a:hover { text-decoration: underline; }
   @media(max-width: 500px) { .ai-scope { grid-template-columns: 1fr; } }
 
   #loading-state { text-align: center; padding: 60px 0; }
@@ -162,11 +199,11 @@
     padding: 12px 14px; background: #1a1a1a; border: 1px solid #444; border-radius: 6px;
     color: #e8e8e8; font-size: 0.92rem; font-family: inherit;
   }
-  #camera-info-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
-  #camera-brand { flex: 1; min-width: 140px; }
-  #camera-model { flex: 2; min-width: 180px; }
   .level-label { font-size: 0.82rem; color: #888; display: block; margin-bottom: 6px; }
-  #camera-level { width: 100%; }
+  #shooting-level { width: 100%; }
+
+  #scene-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+  #scene-row select { flex: 1; min-width: 130px; }
 
   /* chat */
   #chat-log {
@@ -186,16 +223,36 @@
   }
   .chat-empty { color: #555; font-size: 0.85rem; text-align: center; padding: 24px 0; }
 
-  .difficulty-check {
-    align-self: flex-start; display: flex; gap: 8px; align-items: center; margin-top: -6px;
+  .camera-ai-link {
+    align-self: flex-start; font-size: 0.78rem; margin-top: -6px;
   }
-  .difficulty-label { font-size: 0.76rem; color: #666; }
-  .difficulty-btn {
-    font-size: 0.76rem; padding: 5px 12px; border-radius: 6px; border: 1px solid #444;
+  .camera-ai-link a {
+    color: #6db0e0; text-decoration: none; border: 1px solid #3a5a6a;
+    border-radius: 6px; padding: 5px 12px;
+  }
+  .camera-ai-link a:hover { text-decoration: underline; }
+
+  .chat-msg-image {
+    display: block; max-width: 100%; max-height: 260px; border-radius: 8px;
+    margin-bottom: 8px; object-fit: contain;
+  }
+
+  #image-attach-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .attach-btn {
+    font-size: 0.82rem; padding: 8px 14px; border-radius: 8px; border: 1px solid #444;
     background: #1a1a1a; color: #999; cursor: pointer;
   }
-  .difficulty-btn:hover { border-color: #666; color: #ccc; }
-  .difficulty-done { font-size: 0.76rem; color: #555; align-self: flex-start; }
+  .attach-btn:hover { border-color: #666; color: #ccc; }
+  #chat-image-preview-wrap { display: none; align-items: center; gap: 8px; }
+  #chat-image-preview {
+    width: 44px; height: 44px; object-fit: cover; border-radius: 6px; border: 1px solid #444;
+  }
+  #chat-image-remove-btn {
+    font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; border: 1px solid #444;
+    background: #1a1a1a; color: #999; cursor: pointer;
+  }
+  #chat-image-remove-btn:hover { border-color: #666; color: #ccc; }
+  .attach-note { font-size: 0.74rem; color: #555; margin: -4px 0 12px; }
 
   .chat-input-row { display: flex; gap: 8px; }
   #chat-input {
@@ -220,105 +277,25 @@
   footer a { color: #555; text-decoration: none; }
   footer a:hover { color: #888; }
 </style>
-
-</head>
-<body>
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
-     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
-     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
-     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
-     JA版のheader.htmlは変更していない。
-
-     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
-     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
-     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
-
-     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
-     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
-
-     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
-     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。 -->
-
-<div class="lang-banner" id="lang-banner-en">
-  🇯🇵 このサイトは日本語でもご覧いただけます —
-  <a href="/camera-ai">日本語ページを見る →</a>
-  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
-</div>
-
-<header class="hdr">
-  <div class="wrap hdr-in">
-    <a href="/en/" class="brand">
-      <div class="brand-mk">S</div>
-      <div>
-        <div class="brand-name">Sidekick Lab</div>
-        <span class="brand-sub">by Ichiro Murata</span>
-      </div>
-    </a>
-
-    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
-      <span class="kzc-nav-toggle-label">Menu</span>
-    </button>
-
-    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
-      <a href="/en/sidekick-star" >⭐ Star</a>
-      <a href="/en/portrait" >👤 Portrait</a>
-      <a href="/en/sky-effect" >☁️ Sky</a>
-      <a href="/en/knowledge" >📚 Knowledge</a>
-      <a href="/en/lp-star" >LP</a>
-      <a href="/en/gallery" >Gallery</a>
-      <a href="/en/sidekick" >What is Sidekick</a>
-      <a href="/en/about" >About</a>
-      <a href="/en/development-log" >Development Log</a>
-      <a href="/en/changelog" >Changelog</a>
-      <a href="/en/faq" >Support</a>
-      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
-      <a href="/camera-ai" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
-    </nav>
-  </div>
-</header>
-
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
 <script>
-(function () {
-  var body = document.body;
-  var toggle = document.querySelector(".kzc-nav-toggle");
-  var menu = document.getElementById("kzc-nav-menu-en");
-  if (!toggle || !menu) { return; }
-
-  body.classList.add("kzc-js-nav");
-
-  function closeMenu() {
-    menu.setAttribute("data-open", "false");
-    toggle.setAttribute("aria-expanded", "false");
-  }
-  function openMenu() {
-    menu.setAttribute("data-open", "true");
-    toggle.setAttribute("aria-expanded", "true");
-  }
-
-  closeMenu();
-
-  toggle.addEventListener("click", function () {
-    var isOpen = toggle.getAttribute("aria-expanded") === "true";
-    if (isOpen) { closeMenu(); } else { openMenu(); }
-  });
-
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
-      closeMenu();
-      toggle.focus();
-    }
-  });
-
-  document.addEventListener("click", function (e) {
-    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
-    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
-      closeMenu();
-    }
-  });
-})();
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
 </script>
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "xem6v4pdup");
+</script>
+{% endblock %}
 
-
+{% block content %}
 <div class="container">
   <header>
     <div class="user-bar" id="user-bar">
@@ -326,10 +303,10 @@
       <span class="user-name" id="user-name"></span>
       <button class="logout-btn" onclick="logout()">Log out</button>
     </div>
-    <h1>Camera AI</h1>
+    <h1>Shooting AI</h1>
     <p>
-      Answers manual-level questions about your camera body.<br>
-      Guides you on "what this feature is" and "where to set it," tailored to your model.
+      Works backward from "the photo you want to take" to suggest a general shooting approach.<br>
+      Aims to get you to solid shooting know-how more easily than a web search.
     </p>
   </header>
 
@@ -337,20 +314,20 @@
     <div class="ai-scope-card can">
       <div class="ai-scope-title">What it can answer</div>
       <ul class="ai-scope-list">
-        <li>Body settings & menu items</li>
-        <li>Button customization & AF modes</li>
-        <li>Recording formats & stabilization</li>
-        <li>Wi-Fi / Bluetooth connections</li>
-        <li>SD cards & reset/initialization</li>
+        <li>Landscape, portrait, astrophotography</li>
+        <li>Fireworks, waterfalls/rivers/sea, night scenes, macro</li>
+        <li>Kids, pets, wild birds, vehicles</li>
+        <li>Sports, panning, backlight</li>
+        <li>Tripods, ND/PL filters & other gear</li>
       </ul>
     </div>
     <div class="ai-scope-card cant">
-      <div class="ai-scope-title">Won't go deep on</div>
+      <div class="ai-scope-title">Out of scope</div>
       <ul class="ai-scope-list">
-        <li>Photo critique & composition advice</li>
-        <li>Location & scene-specific settings</li>
-        <li>SideKick / Photoshop operation</li>
+        <li><a href="/en/camera-ai">Camera-model-specific operation → Camera AI</a></li>
         <li>General PC operation</li>
+        <li>How to use SideKick</li>
+        <li>Photo critique itself</li>
       </ul>
     </div>
   </div>
@@ -363,7 +340,7 @@
   <div id="login-state">
     <div class="login-card">
       <h2>Sign in with Google</h2>
-      <p>You'll need a Google account to use Camera AI. It shares AI tickets with Photo Critique AI.
+      <p>You'll need a Google account to use Shooting AI. It shares AI tickets with Photo Critique AI and Camera AI.
         <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
@@ -392,51 +369,61 @@
       <div class="usage-count" id="usage-count">0 / 5 tickets</div>
     </div>
     <div class="usage-reset" id="usage-reset"></div>
-    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI</div>
+    <div class="usage-shared-note">※ Shares AI tickets with Photo Critique AI and Camera AI</div>
   </div>
 
   <div id="main-area">
     <div class="section">
-      <h2>Camera info (optional — improves answer accuracy)</h2>
-      <div id="camera-info-row">
-        <select id="camera-brand" onchange="saveCameraProfile()">
-          <option value="">Brand not selected</option>
-          <option>Canon</option>
-          <option>Nikon</option>
-          <option>SONY</option>
-          <option>FUJIFILM</option>
-          <option>OM SYSTEM / Olympus</option>
-          <option>Panasonic / LUMIX</option>
-          <option>PENTAX / RICOH</option>
-          <option>Leica</option>
-          <option value="Other">Other</option>
-        </select>
-        <input type="text" id="camera-model" placeholder="Model name (e.g. a7 IV, EOS R6 Mark II)" onchange="saveCameraProfile()">
-      </div>
-      <label class="level-label" for="camera-level">Explanation level</label>
-      <select id="camera-level" onchange="saveCameraProfile()">
-        <option value="beginner">Beginner (avoids jargon, explains carefully)</option>
-        <option value="intermediate">Intermediate (uses common terms as-is)</option>
-        <option value="advanced">Advanced (concise setting names & values)</option>
+      <h2>Explanation level</h2>
+      <select id="shooting-level" onchange="saveShootingLevel()">
+        <option value="beginner">Beginner (explains from f-number, shutter speed, ISO)</option>
+        <option value="intermediate">Intermediate (settings plus the reason why)</option>
+        <option value="advanced">Advanced (concise, condition-based criteria)</option>
       </select>
     </div>
 
     <div class="section">
-      <h2>Ask a question</h2>
+      <h2>What do you want to shoot?</h2>
+      <div id="scene-row">
+        <select id="scene-outdoor">
+          <option value="">Outdoor/Indoor not selected</option>
+          <option value="Outdoor">Outdoor</option>
+          <option value="Indoor">Indoor</option>
+        </select>
+        <select id="scene-time">
+          <option value="">Day/Night not selected</option>
+          <option value="Day">Day</option>
+          <option value="Night">Night</option>
+        </select>
+        <select id="scene-tripod">
+          <option value="">Handheld/Tripod not selected</option>
+          <option value="Handheld">Handheld</option>
+          <option value="Tripod available">Tripod available</option>
+        </select>
+      </div>
       <div id="chat-log">
-        <div class="chat-empty" id="chat-empty">e.g. "I don't know how to switch AF area modes" / "How do I transfer photos to my phone over Wi-Fi?"</div>
+        <div class="chat-empty" id="chat-empty">e.g. "I want waterfalls to look silky smooth" / "I want fireworks to look big" / "I want a starry sky with a person in frame"</div>
       </div>
       <div id="chat-loading">Thinking...</div>
       <div id="chat-error"></div>
+      <div id="image-attach-row">
+        <button type="button" class="attach-btn" onclick="document.getElementById('chat-image-input').click()">📷 Attach a photo</button>
+        <input type="file" id="chat-image-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="onChatImageSelected(this)">
+        <div id="chat-image-preview-wrap">
+          <img id="chat-image-preview" src="" alt="Attached image preview">
+          <button type="button" id="chat-image-remove-btn" onclick="removeChatImage()">×</button>
+        </div>
+      </div>
+      <p class="attach-note">Attached images are sent to Anthropic's Claude API (an external service). JPG / PNG / WebP supported (max 10MB).</p>
       <div class="chat-input-row">
-        <textarea id="chat-input" rows="2" placeholder="Ask a question about your camera"></textarea>
+        <textarea id="chat-input" rows="2" placeholder="What do you want to shoot?"></textarea>
         <button id="chat-send-btn" onclick="sendChatMessage()">Send</button>
       </div>
     </div>
   </div>
 
   <footer>
-    © Camera AI — Sidekick Lab &nbsp;·&nbsp;
+    © Shooting AI — Sidekick Lab &nbsp;·&nbsp;
     <a href="/privacy">Privacy Policy</a> &nbsp;·&nbsp;
     <a href="/en/terms">Terms of Service</a>
   </footer>
@@ -453,6 +440,8 @@ let currentUser = null;
 let usageLimit = 5;
 let usedCount = 0;
 let chatMessages = []; // {role:'user'|'assistant', content:string}
+let selectedChatImageFile = null;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 // ---- Auth state ----
 firebase.auth().onAuthStateChanged(async function(user) {
@@ -474,33 +463,29 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.getElementById('user-avatar').style.display = 'none';
   }
 
-  await Promise.all([loadUsageInfo(user.uid), loadCameraProfile(user.uid)]);
+  await Promise.all([loadUsageInfo(user.uid), loadShootingLevel(user.uid)]);
 });
 
-async function loadCameraProfile(uid) {
+async function loadShootingLevel(uid) {
   try {
     const db = firebase.firestore();
     const userDoc = await db.collection('users').doc(uid).get();
     const data = userDoc.exists ? userDoc.data() : {};
-    document.getElementById('camera-brand').value = data.camera_brand || '';
-    document.getElementById('camera-model').value = data.camera_model || '';
-    document.getElementById('camera-level').value = data.camera_level || 'beginner';
+    document.getElementById('shooting-level').value = data.shooting_level || 'beginner';
   } catch (err) {
-    console.error('camera profile load error:', err);
+    console.error('shooting level load error:', err);
   }
 }
 
-async function saveCameraProfile() {
+async function saveShootingLevel() {
   if (!currentUser) return;
   try {
     const db = firebase.firestore();
     await db.collection('users').doc(currentUser.uid).set({
-      camera_brand: document.getElementById('camera-brand').value,
-      camera_model: document.getElementById('camera-model').value.trim(),
-      camera_level: document.getElementById('camera-level').value
+      shooting_level: document.getElementById('shooting-level').value
     }, { merge: true });
   } catch (err) {
-    console.error('camera profile save error:', err);
+    console.error('shooting level save error:', err);
   }
 }
 
@@ -582,13 +567,92 @@ function logout() {
   });
 }
 
+// ---- Image attachment ----
+function onChatImageSelected(input) {
+  const file = input.files[0];
+  if (!file) return;
+  if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
+    showChatError('Supported formats are JPG / PNG / WebP');
+    input.value = '';
+    return;
+  }
+  if (file.size > 10 * 1024 * 1024) {
+    showChatError('File is too large (max 10MB)');
+    input.value = '';
+    return;
+  }
+  selectedChatImageFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    document.getElementById('chat-image-preview').src = e.target.result;
+    document.getElementById('chat-image-preview-wrap').style.display = 'flex';
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeChatImage() {
+  selectedChatImageFile = null;
+  document.getElementById('chat-image-preview-wrap').style.display = 'none';
+  document.getElementById('chat-image-input').value = '';
+}
+
+function compressImage(file, maxSizeMB = 3) {
+  return new Promise(resolve => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const canvas = document.createElement('canvas');
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const maxPx = 2048;
+      if (w > maxPx || h > maxPx) {
+        if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+        else { w = Math.round(w * maxPx / h); h = maxPx; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      let quality = 0.85;
+      const tryBlob = () => {
+        canvas.toBlob(blob => {
+          if (blob.size > maxSizeMB * 1024 * 1024 && quality > 0.3) {
+            quality -= 0.1; tryBlob();
+          } else {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+          }
+        }, 'image/jpeg', quality);
+      };
+      tryBlob();
+    };
+    img.src = url;
+  });
+}
+
+function arrayBufferToBase64(buffer) {
+  const bytes = new Uint8Array(buffer);
+  let binary = '';
+  const chunkSize = 8192;
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + chunkSize));
+  }
+  return btoa(binary);
+}
+
 // ---- Chat ----
-function appendUserBubble(text) {
+function appendUserBubble(text, imageUrl) {
   const log = document.getElementById('chat-log');
   document.getElementById('chat-empty')?.remove();
   const el = document.createElement('div');
   el.className = 'chat-msg user';
-  el.textContent = text;
+  if (imageUrl) {
+    const img = document.createElement('img');
+    img.className = 'chat-msg-image';
+    img.src = imageUrl;
+    img.alt = 'Attached image';
+    el.appendChild(img);
+  }
+  const textEl = document.createElement('div');
+  textEl.textContent = text;
+  el.appendChild(textEl);
   log.appendChild(el);
   log.scrollTop = log.scrollHeight;
 }
@@ -600,49 +664,12 @@ function appendAssistantBubble(text) {
   el.textContent = text;
   log.appendChild(el);
 
-  const check = document.createElement('div');
-  check.className = 'difficulty-check';
-  const label = document.createElement('span');
-  label.className = 'difficulty-label';
-  label.textContent = 'Was this explanation hard to follow?';
-  const hardBtn = document.createElement('button');
-  hardBtn.type = 'button';
-  hardBtn.className = 'difficulty-btn';
-  hardBtn.textContent = 'Too hard';
-  const okBtn = document.createElement('button');
-  okBtn.type = 'button';
-  okBtn.className = 'difficulty-btn';
-  okBtn.textContent = 'Just right';
-
-  hardBtn.onclick = () => resolveDifficulty(check, true);
-  okBtn.onclick = () => resolveDifficulty(check, false);
-
-  check.appendChild(label);
-  check.appendChild(hardBtn);
-  check.appendChild(okBtn);
-  log.appendChild(check);
+  const link = document.createElement('div');
+  link.className = 'camera-ai-link';
+  link.innerHTML = '<a href="/en/camera-ai">Check model-specific operation with Camera AI →</a>';
+  log.appendChild(link);
 
   log.scrollTop = log.scrollHeight;
-}
-
-async function resolveDifficulty(checkEl, wasHard) {
-  const done = document.createElement('div');
-  done.className = 'difficulty-done';
-  if (wasHard) {
-    const levelSelect = document.getElementById('camera-level');
-    const order = ['advanced', 'intermediate', 'beginner'];
-    const idx = order.indexOf(levelSelect.value);
-    if (idx > -1 && idx < order.length - 1) {
-      levelSelect.value = order[idx + 1];
-      await saveCameraProfile();
-      done.textContent = "I'll use a simpler level starting with the next answer.";
-    } else {
-      done.textContent = "This is already the simplest level.";
-    }
-  } else {
-    done.textContent = 'Thanks for the feedback.';
-  }
-  checkEl.replaceWith(done);
 }
 
 async function sendChatMessage() {
@@ -656,22 +683,41 @@ async function sendChatMessage() {
   document.getElementById('chat-loading').style.display = 'block';
   document.getElementById('chat-error').style.display = 'none';
 
-  appendUserBubble(question);
+  let imagePayload = null;
+  let attachedPreviewUrl = null;
+  if (selectedChatImageFile) {
+    try {
+      const compressed = await compressImage(selectedChatImageFile);
+      const ab = await compressed.arrayBuffer();
+      imagePayload = { mediaType: 'image/jpeg', data: arrayBufferToBase64(ab) };
+      attachedPreviewUrl = document.getElementById('chat-image-preview').src;
+    } catch (err) {
+      showChatError('Failed to process image: ' + (err.message || err));
+      btn.disabled = false;
+      document.getElementById('chat-loading').style.display = 'none';
+      return;
+    }
+  }
+
+  appendUserBubble(question, attachedPreviewUrl);
   chatMessages.push({ role: 'user', content: question });
   input.value = '';
+  removeChatImage();
 
   try {
     const idToken = await currentUser.getIdToken(true);
-    const res = await fetch('/api/camera-ai', {
+    const res = await fetch('/api/shooting-ai', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         idToken,
         lang: 'en',
-        cameraBrand: document.getElementById('camera-brand').value,
-        cameraModel: document.getElementById('camera-model').value.trim(),
-        cameraLevel: document.getElementById('camera-level').value,
-        messages: chatMessages
+        shootingLevel: document.getElementById('shooting-level').value,
+        sceneOutdoor: document.getElementById('scene-outdoor').value,
+        sceneTime: document.getElementById('scene-time').value,
+        sceneTripod: document.getElementById('scene-tripod').value,
+        messages: chatMessages,
+        image: imagePayload
       })
     });
 
@@ -754,87 +800,4 @@ function formatDate(date) {
   return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
 }
 </script>
-
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
-     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
-     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
-     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer-in">
-
-      <div class="footer-brand">
-        <a href="/en/" class="brand">
-          <div class="brand-mk">S</div>
-          <div>
-            <div class="brand-name">Sidekick Lab</div>
-            <span class="brand-sub">by Ichiro Murata</span>
-          </div>
-        </a>
-        <p>Photoshop scripts and workshops<br>for photographers.</p>
-      </div>
-
-      <div class="footer-cols">
-
-        <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
-            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
-            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
-            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Knowledge</h4>
-          <ul>
-            <li><a href="/en/knowledge">📚 Knowledge</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
-            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
-            <li><a href="/en/ai-review">AI Review</a></li>
-            <li><a href="/en/camera-ai">Camera AI</a></li>
-            <li><a href="/en/shooting-ai">Shooting AI</a></li>
-            <li><a href="/en/pc-ai">PC AI</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Support</h4>
-          <ul>
-            <li><a href="/en/faq">FAQ</a></li>
-            <li><a href="/en/development-log">Development Log</a></li>
-            <li><a href="/en/changelog">Changelog</a></li>
-            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
-            <li><a href="/en/about">About</a></li>
-            <li><a href="/en/sidekick">What is Sidekick</a></li>
-            <li><a href="/en/gallery">Gallery</a></li>
-            <li><a href="/en/terms">Terms</a></li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="footer-bottom">
-      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
-      <div class="footer-legal">
-        <a href="/en/terms">Terms</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-</body>
-</html>
+{% endblock %}

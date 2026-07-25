@@ -150,6 +150,15 @@ _register_page_pair(
     ja_extra={"enable_ogp": True},
     en_extra={"enable_ogp": True},
 )
+# AI Lab配下の実働ツール4ページ（ai-review/camera-ai/shooting-ai/pc-ai）は、他ページと
+# 違う独自の最小ナビ(.site-nav)のままで、日本語版に英語切替が無いことを村田さんが報告
+# （2026-07-23）。まず日本語版へ🇺🇸 ENリンクだけを直接追加したが、村田さんから他ページと
+# 同じ共通ヘッダーへ完全移行するよう指示があったため、改めて移行した（2026-07-25）。
+# いずれも元ファイルにOGPが無いためenable_ogpは渡さない。
+_register_page_pair("camera-ai")
+_register_page_pair("pc-ai")
+_register_page_pair("shooting-ai")
+_register_page_pair("ai-review")
 
 # トップページ（index）はURLがルート（/、/en/）でslugベースの他ページと形式が違うため、
 # _register_page_pair()を使わずPAGESへ直接登録する。村田さんが本番で「Sidekick Lab」の
