@@ -19,25 +19,25 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>After publishing the dev journal, I repeated the same mistake four times | Development Log - SideKick</title>
-<meta name="description" content="I set up this dev journal so it can be published on the SideKick Lab site. Both the Japanese and English versions went live, but along the way I ran into the same kind of missed update four separate times. It was a pitfall that comes with running a static site.">
-<link rel="canonical" href="https://www.sidekick-lab.com/en/development-log/2026-07-21">
+<title>Moving to shared templates one page at a time | Development Log - SideKick</title>
+<meta name="description" content="I am moving the SideKick Lab site to shared templates without replacing every page at once, checking the layout and navigation as I go.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/development-log/2026-07-25">
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log/2026-07-21">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log/2026-07-25">
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log/2026-07-21">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log/2026-07-25">
 
 <meta property="og:type" content="article">
-<meta property="og:title" content="After publishing the dev journal, I repeated the same mistake four times | Development Log - SideKick">
-<meta property="og:description" content="I set up this dev journal so it can be published on the SideKick Lab site. Both the Japanese and English versions went live, but along the way I ran into the same kind of missed update four separate times. It was a pitfall that comes with running a static site.">
-<meta property="og:url" content="https://www.sidekick-lab.com/en/development-log/2026-07-21">
+<meta property="og:title" content="Moving to shared templates one page at a time | Development Log - SideKick">
+<meta property="og:description" content="I am moving the SideKick Lab site to shared templates without replacing every page at once, checking the layout and navigation as I go.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/development-log/2026-07-25">
 <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 
-<meta property="article:published_time" content="2026-07-21">
+<meta property="article:published_time" content="2026-07-25">
 
 <!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
      （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
@@ -62,7 +62,7 @@
 
 <div class="lang-banner" id="lang-banner-en">
   🇯🇵 このサイトは日本語でもご覧いただけます —
-  <a href="/development-log/2026-07-21">日本語ページを見る →</a>
+  <a href="/development-log/2026-07-25">日本語ページを見る →</a>
   <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
 </div>
 
@@ -93,7 +93,7 @@
       <a href="/en/changelog" >Changelog</a>
       <a href="/en/faq" >Support</a>
       <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
-      <a href="/development-log/2026-07-21" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+      <a href="/development-log/2026-07-25" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
     </nav>
   </div>
 </header>
@@ -143,21 +143,21 @@
 <nav aria-label="breadcrumb" class="kzc-breadcrumb">
   <ol>
     <li><a href="/en/development-log">Development Log</a></li>
-    <li aria-current="page">After publishing the dev journal, I repeated the same mistake four times</li>
+    <li aria-current="page">Moving to shared templates one page at a time</li>
   </ol>
 </nav>
 
 <article class="kzc-article">
   <header class="kzc-article-header">
-    <h1 class="kzc-article-title">After publishing the dev journal, I repeated the same mistake four times</h1>
-    <p class="kzc-article-lead">I set up this dev journal so it can be published on the SideKick Lab site. Both the Japanese and English versions went live, but along the way I ran into the same kind of missed update four separate times. It was a pitfall that comes with running a static site.</p>
+    <h1 class="kzc-article-title">Moving to shared templates one page at a time</h1>
+    <p class="kzc-article-lead">I am moving the SideKick Lab site to shared templates without replacing every page at once, checking the layout and navigation as I go.</p>
     <p class="kzc-article-meta">
       <span class="kzc-category">Website</span>
-      <time datetime="2026-07-21">July 21, 2026</time>
+      <time datetime="2026-07-25">July 25, 2026</time>
     </p>
     
     <p class="kzc-article-meta">
-      <span class="kzc-badge">Claude Code</span>
+      <span class="kzc-badge">Design</span><span class="kzc-badge">Testing</span><span class="kzc-badge">Update</span>
     </p>
     
   </header>
@@ -165,21 +165,19 @@
   <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
 
   <div class="kzc-article-body">
-    <p>Until now, this dev journal existed only as notes on my own computer. This time, I made it readable on the SideKick Lab site. Both the Japanese and English versions went live — but getting there meant repeating the same mistake four times.</p>
-<h2>What went wrong</h2>
-<p>The SideKick Lab site uses individual static HTML files for each page. The shared header and footer are auto-generated from a template on some pages (such as the Uchide no Kozuchi page), but on many other pages the same header code is embedded individually, page by page.</p>
-<p>When I added the navigation link for the dev journal, I assumed fixing the template side would be enough. It wasn't.</p>
-<h2>What I changed this time</h2>
-<p>The mechanism for generating and publishing the dev journal articles itself worked without problems. But when I actually looked at the site, there were pages where the nav link wasn't showing up.</p>
-<p>There were two causes. One was that even after fixing the template, the change doesn't automatically carry over to already-generated static HTML files. The other was that eleven pages have the header code embedded individually, so template changes simply don't reach them in the first place.</p>
-<p>I regenerated the affected pages and fixed the individually embedded pages one by one. Then the same problem turned up in the English version, because it had the same structure. In the end, between Japanese and English, I went through the same cycle of spotting and fixing the same kind of missed update four times over.</p>
-<p>Partway through, there was also a small bug in how the article data was being loaded. The separator format in the article files was slightly different from what the template expected, which caused an extra line to appear at the top of the body text. I only noticed it once I actually ran real data through the system.</p>
-<h2>Why I took this approach</h2>
-<p>I could have solved this properly by templating the entire page structure, but I chose not to. There are 21 pages involved, and some of them are carefully built sales pages. Rather than touching everything at once right now, I decided to set that work aside for a calmer moment.</p>
-<p>This time, I chose to fix each missed update as I found it and verify in the browser as I went. It's not a flashy approach, but given the current level of risk, I think it was a reasonable tradeoff.</p>
-<h2>What's still left</h2>
-<p>I've put off a full templating of the header and footer for now. To avoid making the same kind of oversight next time I do a similar fix, I've written down a checklist of steps to follow.</p>
-<p>For the English translations, my current light-touch workflow is to have an AI do a first-pass translation, then read it back myself using Google Translate or similar to catch any obvious errors. A more rigorous process would be possible, but for something I update daily, that level of effort didn't seem practical.</p>
+    <h2>The differences between pages had been growing</h2>
+<p>Over time, I have gradually added pages with different roles to SideKick Lab, including product pages, AI Lab, and the Development Log. In the process, the header and footer began to vary from page to page, which meant checking several places whenever I needed to update the same piece of navigation.</p>
+<p>If I updated only one part of the site, an older version could remain on another page. For visitors, this could make the menu or language switcher look different depending on which page they opened.</p>
+<h2>I chose not to replace everything at once</h2>
+<p>I am now moving the header and footer to a shared template. However, I chose not to change every page in one operation.</p>
+<p>Each page has a different purpose. A product page, an article, and a page used to complete a purchase or download do not necessarily need the same navigation. I decided to migrate one page first, check its layout and links, and then continue with the next group.</p>
+<p>This time, in addition to the home page and the individual AI Lab tool pages, I moved the Legal Notice and Privacy Policy pages to the shared structure. I also prepared English versions of those legal pages and added a way to move between the Japanese and English versions.</p>
+<h2>What changes for visitors</h2>
+<p>Using a shared structure should make it easier to avoid missed updates when I add new navigation or language links. For visitors, it brings the site closer to a consistent experience where information can be found in the same way from any page.</p>
+<p>At the same time, applying the same navigation to pages in the middle of a purchase or download could make the intended task less clear. For that reason, visual consistency is not the goal by itself. I am deciding where to use the shared structure according to the role of each page.</p>
+<h2>The migration is still in progress</h2>
+<p>The migration of the whole site is not complete yet. I will continue expanding it gradually while checking that the existing content and navigation have not been broken.</p>
+<p>This work reminded me that moving to a shared structure is less about changing everything at once and more about checking the role of each page as I go.</p>
 
   </div>
 

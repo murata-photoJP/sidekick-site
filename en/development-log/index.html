@@ -152,6 +152,19 @@
 <article class="kzc-card">
   <div class="kzc-card-body">
     <p class="kzc-card-category">Website</p>
+    <h3 class="kzc-card-title"><a href="/en/development-log/2026-07-25">Moving to shared templates one page at a time</a></h3>
+    <p class="kzc-card-desc">I am moving the SideKick Lab site to shared templates without replacing every page at once, checking the layout and navigation as I go.</p>
+    <p class="kzc-card-meta">
+      <time datetime="2026-07-25">July 25, 2026</time>
+      
+    </p>
+  </div>
+</article>
+  
+    
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    <p class="kzc-card-category">Website</p>
     <h3 class="kzc-card-title"><a href="/en/development-log/2026-07-21">After publishing the dev journal, I repeated the same mistake four times</a></h3>
     <p class="kzc-card-desc">I set up this dev journal so it can be published on the SideKick Lab site. Both the Japanese and English versions went live, but along the way I ran into the same kind of missed update four separate times. It was a pitfall that comes with running a static site.</p>
     <p class="kzc-card-meta">
@@ -191,10 +204,7 @@
 
 
 </main>
-<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用フッター。footer.html（JA版）と
-     同じ構造・CSSクラスを使うが、/en/配下に実在しないページ（Workshop・Legal・Privacy・
-     manual PDF等）へはリンクしない（英語ページが無いページへ英語フッターからリンクする
-     方が利用者を混乱させるため）。JA版のfooter.htmlは変更していない。 -->
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
 <footer class="footer">
   <div class="wrap">
     <div class="footer-in">
@@ -256,6 +266,8 @@
             <li><a href="/en/sidekick">What is Sidekick</a></li>
             <li><a href="/en/gallery">Gallery</a></li>
             <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -267,6 +279,8 @@
       <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
       <div class="footer-legal">
         <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
       </div>
     </div>
   </div>
