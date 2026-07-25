@@ -15,12 +15,12 @@
     try {
       var pref = localStorage.getItem('sk_lang_pref');
       if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
+      if (pref === 'en') { location.replace('/en/legal.html'); return; }
       var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
       var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
       if (!isJapanese) {
         localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
+        location.replace('/en/legal.html');
       }
     } catch (e) { /* localStorageが使えない環境などは何もしない */ }
   })();
@@ -29,6 +29,10 @@
 <title>特定商取引法に基づく表記 | Sidekick</title>
 <meta name="description" content="Sidekickの特定商取引法に基づく表記ページです。">
 <link rel="canonical" href="https://www.sidekick-lab.com/legal">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/legal">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/legal">
 
 
 <link rel="stylesheet" href="/assets/css/site-header.css">
@@ -194,6 +198,12 @@
      経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
 
 
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/legal">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
 
 <header class="hdr">
   <div class="wrap hdr-in">
@@ -223,7 +233,9 @@
       <a href="/changelog" >更新履歴</a>
       <a href="/faq" >Support</a>
       <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      
+
+      <a href="/en/legal" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
     </nav>
   </div>
 </header>

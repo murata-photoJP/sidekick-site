@@ -71,9 +71,9 @@
       <a href="/changelog" {% if nav_current == "changelog" %}aria-current="page"{% endif %}>更新履歴</a>
       <a href="/faq" {% if nav_current == "faq" %}aria-current="page"{% endif %}>Support</a>
       <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
-      {% if show_en_link|default(true) %}
+{% if show_en_link|default(true) %}
       <a href="{{ lang_switch_url|default('/en/') }}" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
-      {% endif %}
+{% endif %}
     </nav>
   </div>
 </header>
