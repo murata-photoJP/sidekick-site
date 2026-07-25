@@ -99,3 +99,28 @@ def test_main_unknown_page_returns_error(tmp_path: Path, capsys: pytest.CaptureF
     exit_code = bs.main(["--output", str(tmp_path), "--page", "no-such-page"])
     assert exit_code == 1
     assert not list(tmp_path.glob("*.html"))
+
+
+@pytest.mark.parametrize(
+    ("page_key", "output_path", "title", "canonical", "alternate"),
+    [
+        ("en/privacy", Path("en/privacy.html"), "<title>Privacy Policy | Sidekick</title>",
+         "https://www.sidekick-lab.com/en/privacy", "https://www.sidekick-lab.com/privacy"),
+        ("en/legal", Path("en/legal.html"), "<title>Legal Notice | Sidekick</title>",
+         "https://www.sidekick-lab.com/en/legal", "https://www.sidekick-lab.com/legal"),
+    ],
+)
+def test_english_legal_pages_have_metadata_and_language_links(
+    page_key: str,
+    output_path: Path,
+    title: str,
+    canonical: str,
+    alternate: str,
+) -> None:
+    html = bs.render_all(page_key)[output_path]
+    assert title in html
+    assert f'<link rel="canonical" href="{canonical}">' in html
+    assert f'<link rel="alternate" hreflang="ja" href="{alternate}">' in html
+    assert '<html lang="en">' in html
+    assert 'href="/en/privacy"' in html
+    assert 'href="/en/legal"' in html

@@ -1,0 +1,54 @@
+{# English reference translation of the Japanese privacy policy. #}
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy | Sidekick{% endblock %}
+{% block meta_description %}Privacy Policy for Sidekick products and services.{% endblock %}
+{% block canonical %}https://www.sidekick-lab.com/en/privacy{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{--bg:#0b0b0d;--card:#17191f;--text:#f5f7fb;--sub:#b8c0cc;--accent:#ff8a00;--accent2:#ffb14a;--muted:#5e6677;--max:900px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:radial-gradient(circle at top right,rgba(255,138,0,.10),transparent 28%),var(--bg);color:var(--text);line-height:1.7}
+    a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+    .page-hero{padding:64px 0 40px;border-bottom:1px solid rgba(255,255,255,.06)}.page-hero h1{margin:0 0 10px;font-size:clamp(24px,4vw,36px);letter-spacing:-.02em}.page-hero p{margin:0;color:var(--sub);font-size:14px}
+    .privacy-body{padding:48px 0 80px}.privacy-section{margin-bottom:36px}.privacy-section h2{margin:0 0 14px;font-size:18px;color:var(--accent2);border-left:3px solid var(--accent);padding-left:12px}
+    .privacy-section p,.privacy-section ul{margin:0 0 10px;color:var(--sub);font-size:15px;line-height:1.85}.privacy-section ul{padding-left:20px}.privacy-section li{margin-bottom:6px}.updated{margin:0 0 20px;color:var(--sub);font-size:13px}
+    .translation-note{margin:0 0 36px;padding:14px 18px;background:rgba(255,138,0,.06);border:1px solid rgba(255,138,0,.18);border-radius:12px;color:var(--sub);font-size:13px}
+    .contact-box{margin-top:36px;padding:20px 24px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;font-size:14px;color:var(--sub);line-height:1.8}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-K73T3Y352W');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","xem6v4pdup");</script>
+{% endblock %}
+
+{% block content %}
+  <main>
+    <section class="page-hero"><div class="wrap"><h1>Privacy Policy</h1><p>プライバシーポリシー</p></div></section>
+    <section class="privacy-body"><div class="wrap">
+      <p class="updated">Last updated: March 2026</p>
+      <p class="translation-note">This page is an English translation of the <a href="/privacy">original Japanese policy</a>. If there is any inconsistency, the Japanese version prevails.</p>
+
+      <div class="privacy-section"><h2>1. Basic Policy</h2><p>Sidekick (“the Service”) respects users’ privacy and is committed to protecting personal information. This policy explains how the Service collects and uses information.</p></div>
+      <div class="privacy-section"><h2>2. Information We Collect</h2><p>The Service may collect the following information:</p><ul>
+        <li>Your name and email address when you contact us</li>
+        <li>Information processed through our payment provider, Stripe, when you make a purchase (the Service does not retain your credit card information)</li>
+        <li>Website access logs, including IP address, browser information, and pages viewed</li>
+      </ul></div>
+      <div class="privacy-section"><h2>3. How We Use Information</h2><p>We use collected information only for the following purposes:</p><ul>
+        <li>Providing and supporting purchased products</li>
+        <li>Responding to inquiries</li>
+        <li>Analyzing website usage to improve the Service</li>
+        <li>Sending important notices, such as service changes and issue notifications</li>
+      </ul><p>We do not use personal information for purposes other than those listed above.</p></div>
+      <div class="privacy-section"><h2>4. Disclosure to Third Parties</h2><p>Except where required by law, the Service does not provide collected personal information to third parties without the individual’s consent. The following services are used, and information is processed in accordance with their respective terms:</p><ul>
+        <li><strong style="color:var(--text)">Stripe</strong>: Payment processing (<a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe Privacy Policy</a>)</li>
+        <li><strong style="color:var(--text)">Google Drive</strong>: File delivery</li>
+      </ul></div>
+      <div class="privacy-section"><h2>5. Cookies</h2><p>This website may use cookies for analytics. You can disable cookies in your browser settings, although doing so may affect some features of the Service.</p></div>
+      <div class="privacy-section"><h2>6. Storage and Management of Personal Information</h2><p>We take appropriate security measures to store collected personal information. Personal information that is no longer needed will be deleted promptly.</p></div>
+      <div class="privacy-section"><h2>7. Requests for Disclosure, Correction, or Deletion</h2><p>If an individual requests disclosure, correction, or deletion of their personal information, we will respond within a reasonable period. Please contact us using the details below.</p></div>
+      <div class="privacy-section"><h2>8. Changes to This Policy</h2><p>We may change this policy as necessary. Changes will be announced on this page.</p></div>
+      <div class="contact-box"><strong style="color:var(--text)">Contact</strong><br>Sidekick — Ichiro Murata<br>Email: <a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a><br><span style="font-size:13px">We normally reply within two business days.</span></div>
+    </div></section>
+  </main>
+{% endblock %}
