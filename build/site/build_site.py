@@ -160,6 +160,20 @@ _register_page_pair("pc-ai")
 _register_page_pair("shooting-ai")
 _register_page_pair("ai-review")
 
+# legal.html・privacy.htmlは英語版が存在しない（村田さんの明示要件）ため、workshopと
+# 同じくPAGESへ直接登録し、show_lang_banner・show_en_linkをfalseにする。
+for _slug in ("legal", "privacy"):
+    PAGES[_slug] = {
+        "template": f"pages/{_slug}.html",
+        "output": Path(f"{_slug}.html"),
+        "context": {
+            "language": "ja",
+            "nav_current": None,
+            "show_lang_banner": False,
+            "show_en_link": False,
+        },
+    }
+
 # トップページ（index）はURLがルート（/、/en/）でslugベースの他ページと形式が違うため、
 # _register_page_pair()を使わずPAGESへ直接登録する。村田さんが本番で「Sidekick Lab」の
 # 折り返し表示・ナビ文字色不一致を発見・報告したことがきっかけで移行対象になった
