@@ -175,7 +175,7 @@ for _slug in ("legal", "privacy"):
 # 指定済みのため、ここではhreflang_alternatesと言語切替リンクの行き先だけを渡す。
 _INDEX_HREFLANG = {
     "ja": f"{SITE_ORIGIN}/",
-    "en": f"{SITE_ORIGIN}/en/",
+    "en": f"{SITE_ORIGIN}/en",
 }
 PAGES["index"] = {
     "template": "pages/index.html",
@@ -188,7 +188,11 @@ PAGES["index"] = {
         "nav_current": None,
         "enable_ogp": True,
         "hreflang_alternates": _INDEX_HREFLANG,
-        # en_redirect_url・lang_switch_urlは既定値"/en/"のままでよい（元ファイルの挙動と一致）。
+        # 2026-08-05: header.htmlのlang_switch_url既定値"/en/"はcommit c2206e5
+        # （GSCリダイレクトエラー対策で/en/を/enに統一）に追従できておらず、
+        # 明示指定のないindex.htmlだけ末尾スラッシュ付きの/en/へ戻っていたため、
+        # 他ページと同じ形式で明示的に上書きする。
+        "lang_switch_url": "/en",
     },
 }
 PAGES["en/index"] = {
