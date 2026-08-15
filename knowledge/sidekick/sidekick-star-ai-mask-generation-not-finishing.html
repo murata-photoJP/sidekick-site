@@ -2,7 +2,10 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。 -->
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
 <script>
   (function () {
     try {
@@ -19,26 +22,10 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>開発日誌｜SideKick</title>
-<meta name="description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<link rel="canonical" href="https://www.sidekick-lab.com/development-log">
+<title>SideKick StarのAIマスク生成が終わらないときに確認したいこと｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="SideKick StarのAIマスク生成が完了しないまま止まって見えることがあります。何が起きているのか、試せる対処、開発側で行った改善についてまとめました。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/sidekick/sidekick-star-ai-mask-generation-not-finishing">
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log">
-
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="開発日誌｜SideKick">
-<meta property="og:description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<meta property="og:url" content="https://www.sidekick-lab.com/development-log">
-<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
-
-<!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
-     （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
 <link rel="stylesheet" href="/assets/css/knowledge.css">
 </head>
 <body>
@@ -82,7 +69,7 @@
 
 <div class="lang-banner" id="lang-banner">
   🇺🇸 This site is also available in English —
-  <a href="/en/development-log">View English page →</a>
+  <a href="/en/knowledge">View English page →</a>
   <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
 </div>
 
@@ -105,18 +92,18 @@
       <a href="/sidekick-star" >⭐ Star</a>
       <a href="/portrait" >👤 Portrait</a>
       <a href="/sky-effect" >☁️ Sky</a>
-      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
       <a href="/workshop" >📷 Workshop</a>
       <a href="/lp-star" >LP</a>
       <a href="/gallery" >Gallery</a>
       <a href="/sidekick" >Sidekickとは</a>
       <a href="/about" >About</a>
-      <a href="/development-log" aria-current="page">開発日誌</a>
+      <a href="/development-log" >開発日誌</a>
       <a href="/changelog" >更新履歴</a>
       <a href="/faq" >Support</a>
       <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
 
-      <a href="/en/development-log" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
 
     </nav>
   </div>
@@ -166,83 +153,81 @@
 </script>
 <main>
 
-<section class="kzc-hero">
-  
-  <h1>開発日誌</h1>
-  <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
-  
-</section>
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>SideKick</li>
+    <li aria-current="page">SideKick StarのAIマスク生成が終わらないときに確認したいこと</li>
+  </ol>
+</nav>
 
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">SideKick StarのAIマスク生成が終わらないときに確認したいこと</h1>
+    <p class="kzc-article-lead">SideKick StarのAIマスク生成が完了しないまま止まって見えることがあります。何が起きているのか、試せる対処、開発側で行った改善についてまとめました。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">SideKick</span>
+      <span class="kzc-badge">初心者向け</span>
+      <time datetime="2026-08-15">更新日：2026-08-15</time>
+    </p>
+  </header>
 
-<section class="kzc-article-list" aria-label="開発日誌一覧">
   
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">SideKick</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-08-12">AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた</a></h3>
-    <p class="kzc-card-desc">SideKick StarのAIマスク生成が、特定の環境で処理途中のまま終わらなくなる不具合が起きた。有力に見えた原因をひとつずつ確かめては違うと分かり、最終的に別の対策で解決した記録。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-08-12">2026年8月12日</time>
-      <span class="kzc-badge">SideKick Star</span>
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-25">共通テンプレートへの移行を、ページごとに確認しながら進める</a></h3>
-    <p class="kzc-card-desc">SideKick Labのページ構成を一度に置き換えず、表示や導線を確かめながら共通テンプレートへ移行しています。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-25">2026年7月25日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-21">開発日誌を公開したら、同じ直し忘れを4回繰り返した</a></h3>
-    <p class="kzc-card-desc">この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-21">2026年7月21日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-20">英語版Knowledge記事を、著者レビューを経て本番公開した</a></h3>
-    <p class="kzc-card-desc">打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-20">2026年7月20日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-18">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</a></h3>
-    <p class="kzc-card-desc">SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-18">2026年7月18日</time>
-      
-    </p>
-  </div>
-</article>
-  
-</section>
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
 
+  <div class="kzc-article-body">
+    <p>SideKick Starには、空や被写体をAIで自動判定してマスクを作る機能があります。ごくまれに、この処理が完了の合図を返さないまま止まって見えることがあります。ここでは、何が起きているのか、そして実際に試せることをまとめます。</p>
+<h2>何が起きているのか</h2>
+<p>AIマスク生成は、Photoshop本体とは別の裏側のプロセスとして処理を起動し、完了したら結果を受け取る、という仕組みで動いています。</p>
+<p>この裏側の処理がうまく起動できていないと、Photoshop側は「まだ処理中」と判断したまま、いつまでも完了を待ち続けてしまうことがあります。処理が重いために時間がかかっているのではなく、そもそも起動でつまずいているケースがある、という点がこの問題の分かりにくいところです。</p>
+<h2>まず試してほしいこと</h2>
+<p>処理が止まって見えるときは、次を確認してみてください。</p>
+<ul>
+<li><strong>少し時間を置いてから再試行する</strong>：直前に大量の写真をまとめて処理していた場合、その直後は処理エンジンが一時的に不安定になりやすいことが分かっています。数分待ってからやり直すと、問題なく完了することがあります。</li>
+<li><strong>SideKick Starを最新版に更新する</strong>：起動処理の安定性は継続的に見直しています。古いバージョンのままだと、すでに解消済みの問題に再び当たってしまう可能性があります。</li>
+<li><strong>タスクマネージャーで裏側の処理が動いているか確認する</strong>：処理が本当に止まっているのか、単に時間がかかっているだけなのかを見分ける手がかりになります。</li>
+</ul>
+<h2>開発側で行った改善</h2>
+<p>この問題を調べる過程では、いくつかの原因を疑っては違うと分かる、という確認を重ねました。最終的に、大量のファイル操作を連続して行った直後に処理エンジンが一時的に不安定になりやすい、という状況が分かっています。</p>
+<p>これを踏まえ、起動に失敗した場合は自動的に間隔を空けながら再試行する仕組みを組み込みました。実際に、まとまった枚数の実データで最後まで処理が完了することを確認しています。</p>
+<p>ただし、起動の失敗そのものが完全になくなったわけではありません。起きたときに、より確実に回復できるようになった、という位置づけです。</p>
+<h2>それでも解決しない場合</h2>
+<p>上記を試しても改善しない場合は、発生した状況（処理していた枚数、直前に行っていた作業、Photoshopのバージョンなど）を添えてお問い合わせください。原因の特定には、実際に発生した環境の情報が役立ちます。</p>
+<h2>まとめ</h2>
+<p>AIマスク生成が止まって見える場合、多くは裏側の処理がうまく起動できていないことが原因です。時間を置いての再試行や最新版への更新でまず様子を見つつ、繰り返し発生する場合は状況を添えて連絡してください。こうした自動処理の裏側は、写真の枚数や環境によって挙動が変わりやすいため、実際の利用状況をもとに継続して見直しています。</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context">
+    <p class="kzc-product-context-label">関連するSideKick製品</p>
+    <p class="kzc-product-name">SideKick Star</p>
+    <p class="kzc-product-desc">星景写真の比較明合成・天の川強調・飛行機軌跡除去を自動化するツール。</p>
+    <p class="kzc-product-links">
+      
+      <a href="/sidekick-star">SideKick Starの詳細を見る →</a>
+      
+      
+    </p>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
 
 </main>
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。

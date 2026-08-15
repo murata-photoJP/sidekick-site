@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-21T18:24:46.164317+09:00",
+  "generated_at": "2026-08-15T14:56:09.410290+09:00",
   "schema_version": 1,
   "articles": [
     {
@@ -478,6 +478,46 @@
       "public_url": "/knowledge/photoshop/photoshop-lab-color-retouching"
     },
     {
+      "id": "SKB-ART-000021",
+      "title": "SideKick StarのAIマスク生成が終わらないときに確認したいこと",
+      "slug": "sidekick-star-ai-mask-generation-not-finishing",
+      "language": "ja",
+      "category": {
+        "slug": "sidekick",
+        "name": "SideKick",
+        "name_ja": "SideKick"
+      },
+      "subcategory": {
+        "slug": "troubleshooting",
+        "name": "Troubleshooting",
+        "name_ja": "トラブルシューティング"
+      },
+      "meta_description": "SideKick StarのAIマスク生成が完了しないまま止まって見えることがあります。何が起きているのか、試せる対処、開発側で行った改善についてまとめました。",
+      "difficulty": "beginner",
+      "audience": [
+        "SideKick Star利用者"
+      ],
+      "tags": [
+        "SideKick Star"
+      ],
+      "concepts": [
+        "sidekick-star"
+      ],
+      "related_products": [
+        "sidekick-star"
+      ],
+      "cta_type": "none",
+      "created_at": "2026-08-15",
+      "updated_at": "2026-08-15",
+      "published_at": "2026-08-15",
+      "related_articles": [],
+      "series": null,
+      "source_article_id": null,
+      "body_markdown": "# SideKick StarのAIマスク生成が終わらないときに確認したいこと\n\nSideKick Starには、空や被写体をAIで自動判定してマスクを作る機能があります。ごくまれに、この処理が完了の合図を返さないまま止まって見えることがあります。ここでは、何が起きているのか、そして実際に試せることをまとめます。\n\n## 何が起きているのか\n\nAIマスク生成は、Photoshop本体とは別の裏側のプロセスとして処理を起動し、完了したら結果を受け取る、という仕組みで動いています。\n\nこの裏側の処理がうまく起動できていないと、Photoshop側は「まだ処理中」と判断したまま、いつまでも完了を待ち続けてしまうことがあります。処理が重いために時間がかかっているのではなく、そもそも起動でつまずいているケースがある、という点がこの問題の分かりにくいところです。\n\n## まず試してほしいこと\n\n処理が止まって見えるときは、次を確認してみてください。\n\n- **少し時間を置いてから再試行する**：直前に大量の写真をまとめて処理していた場合、その直後は処理エンジンが一時的に不安定になりやすいことが分かっています。数分待ってからやり直すと、問題なく完了することがあります。\n- **SideKick Starを最新版に更新する**：起動処理の安定性は継続的に見直しています。古いバージョンのままだと、すでに解消済みの問題に再び当たってしまう可能性があります。\n- **タスクマネージャーで裏側の処理が動いているか確認する**：処理が本当に止まっているのか、単に時間がかかっているだけなのかを見分ける手がかりになります。\n\n## 開発側で行った改善\n\nこの問題を調べる過程では、いくつかの原因を疑っては違うと分かる、という確認を重ねました。最終的に、大量のファイル操作を連続して行った直後に処理エンジンが一時的に不安定になりやすい、という状況が分かっています。\n\nこれを踏まえ、起動に失敗した場合は自動的に間隔を空けながら再試行する仕組みを組み込みました。実際に、まとまった枚数の実データで最後まで処理が完了することを確認しています。\n\nただし、起動の失敗そのものが完全になくなったわけではありません。起きたときに、より確実に回復できるようになった、という位置づけです。\n\n## それでも解決しない場合\n\n上記を試しても改善しない場合は、発生した状況（処理していた枚数、直前に行っていた作業、Photoshopのバージョンなど）を添えてお問い合わせください。原因の特定には、実際に発生した環境の情報が役立ちます。\n\n## まとめ\n\nAIマスク生成が止まって見える場合、多くは裏側の処理がうまく起動できていないことが原因です。時間を置いての再試行や最新版への更新でまず様子を見つつ、繰り返し発生する場合は状況を添えて連絡してください。こうした自動処理の裏側は、写真の枚数や環境によって挙動が変わりやすいため、実際の利用状況をもとに継続して見直しています。\n",
+      "images": [],
+      "public_url": "/knowledge/sidekick/sidekick-star-ai-mask-generation-not-finishing"
+    },
+    {
       "id": "SKB-ART-000005",
       "title": "1X.comで評価される写真の共通点｜ジャンル別レタッチ傾向まとめ",
       "slug": "1x-photo-evaluation-trends",
@@ -798,6 +838,19 @@
       "public_url": "/knowledge/photoshop/photoshop-lab-color-retouching"
     },
     {
+      "id": "SKB-ART-000021",
+      "title": "SideKick StarのAIマスク生成が終わらないときに確認したいこと",
+      "slug": "sidekick-star-ai-mask-generation-not-finishing",
+      "language": "ja",
+      "meta_description": "SideKick StarのAIマスク生成が完了しないまま止まって見えることがあります。何が起きているのか、試せる対処、開発側で行った改善についてまとめました。",
+      "category_name": "SideKick",
+      "published_at": "2026-08-15",
+      "updated_at": "2026-08-15",
+      "thumbnail_url": null,
+      "difficulty": "beginner",
+      "public_url": "/knowledge/sidekick/sidekick-star-ai-mask-generation-not-finishing"
+    },
+    {
       "id": "SKB-ART-000005",
       "title": "1X.comで評価される写真の共通点｜ジャンル別レタッチ傾向まとめ",
       "slug": "1x-photo-evaluation-trends",
@@ -876,6 +929,12 @@
       "published_count": 3
     },
     {
+      "slug": "sidekick",
+      "name": "SideKick",
+      "language": "ja",
+      "published_count": 1
+    },
+    {
       "slug": "marketing",
       "name": "Marketing",
       "language": "en",
@@ -905,9 +964,9 @@
     }
   ],
   "build_meta": {
-    "article_count": 14,
+    "article_count": 15,
     "language_counts": {
-      "ja": 7,
+      "ja": 8,
       "en": 7
     }
   }

@@ -19,23 +19,21 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>開発日誌｜SideKick</title>
-<meta name="description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<link rel="canonical" href="https://www.sidekick-lab.com/development-log">
+<title>AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた｜開発日誌 - SideKick</title>
+<meta name="description" content="SideKick StarのAIマスク生成が、特定の環境で処理途中のまま終わらなくなる不具合が起きた。有力に見えた原因をひとつずつ確かめては違うと分かり、最終的に別の対策で解決した記録。">
+<link rel="canonical" href="https://www.sidekick-lab.com/development-log/2026-08-12">
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log">
-
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="開発日誌｜SideKick">
-<meta property="og:description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<meta property="og:url" content="https://www.sidekick-lab.com/development-log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた｜開発日誌 - SideKick">
+<meta property="og:description" content="SideKick StarのAIマスク生成が、特定の環境で処理途中のまま終わらなくなる不具合が起きた。有力に見えた原因をひとつずつ確かめては違うと分かり、最終的に別の対策で解決した記録。">
+<meta property="og:url" content="https://www.sidekick-lab.com/development-log/2026-08-12">
 <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-12">
 
 <!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
      （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
@@ -166,83 +164,75 @@
 </script>
 <main>
 
-<section class="kzc-hero">
-  
-  <h1>開発日誌</h1>
-  <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
-  
-</section>
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/development-log">開発日誌</a></li>
+    <li aria-current="page">AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた</li>
+  </ol>
+</nav>
 
-
-<section class="kzc-article-list" aria-label="開発日誌一覧">
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">SideKick</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-08-12">AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた</a></h3>
-    <p class="kzc-card-desc">SideKick StarのAIマスク生成が、特定の環境で処理途中のまま終わらなくなる不具合が起きた。有力に見えた原因をひとつずつ確かめては違うと分かり、最終的に別の対策で解決した記録。</p>
-    <p class="kzc-card-meta">
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた</h1>
+    <p class="kzc-article-lead">SideKick StarのAIマスク生成が、特定の環境で処理途中のまま終わらなくなる不具合が起きた。有力に見えた原因をひとつずつ確かめては違うと分かり、最終的に別の対策で解決した記録。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">SideKick</span>
       <time datetime="2026-08-12">2026年8月12日</time>
-      <span class="kzc-badge">SideKick Star</span>
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-25">共通テンプレートへの移行を、ページごとに確認しながら進める</a></h3>
-    <p class="kzc-card-desc">SideKick Labのページ構成を一度に置き換えず、表示や導線を確かめながら共通テンプレートへ移行しています。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-25">2026年7月25日</time>
-      
+    <p class="kzc-article-meta">
+      <span class="kzc-badge">Update</span><span class="kzc-badge">Testing</span>
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-21">開発日誌を公開したら、同じ直し忘れを4回繰り返した</a></h3>
-    <p class="kzc-card-desc">この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-21">2026年7月21日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-20">英語版Knowledge記事を、著者レビューを経て本番公開した</a></h3>
-    <p class="kzc-card-desc">打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-20">2026年7月20日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-18">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</a></h3>
-    <p class="kzc-card-desc">SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-18">2026年7月18日</time>
-      
-    </p>
-  </div>
-</article>
-  
-</section>
+  </header>
 
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>SideKick Starには、空や被写体をAIで自動判定してマスクを作る機能がある。この処理を裏側で起動する仕組みに、特定の環境で処理が完了しないまま止まってしまう不具合があった。原因は一つではなく、有力に見えた仮説を順番に確かめては違うと分かる、という時間のかかる調査になった。</p>
+<h2>何が起きていたのか</h2>
+<p>処理そのものは正しく動くはずなのに、一部の環境で完了の合図がいつまでも返ってこない。処理が固まっているのか、単に時間がかかっているだけなのか、外からは区別がつかない状態だった。</p>
+<p>調べていくと、まず日本語を含むファイルパスの環境で、処理を裏側で起動する方法自体が失敗していることが分かった。しかも、その失敗を監視する側の仕組みがそれに気づかず、いつまでも完了を待ち続けてしまう作りになっていた。</p>
+<h2>疑って、違うと分かったこと</h2>
+<p>起動方法をより確実な方式に直しても、同じ問題が別の環境で再発した。ここから、いくつかの仮説を順番に検証していくことになった。</p>
+<p>最初に疑ったのは、セキュリティソフトによる検疫や監視だった。裏側でファイルを操作するプログラムを実行しようとすると、こうしたソフトに引っかかることがあるためだ。対策を施してみたが、解決しなかった。</p>
+<p>次に、処理の起動方法自体を別の方式へ切り替える案を検討した。試してみると、今度はファイルパスに特定の文字が含まれる場合に新しいバグが見つかり、この案は採用しなかった。</p>
+<p>ファイルの書き込み自体を監視する仕組みを組み込んで確かめたところ、そもそも書き込みが行われていないケースがあることが分かった。処理が「固まっている」のではなく、「うまく起動できていない」ということが、ここでようやく具体的に見えてきた。</p>
+<p>起動の仕方そのものが、セキュリティソフトの検知対象になっている可能性を疑い、Windowsに標準で備わっているタスク管理の仕組みを使って処理を起動する方式に切り替えた。ここまでで一定の改善は見られたが、念のためセキュリティソフトを一時的に停止した状態でも試したところ、同じ問題が再現した。つまり、セキュリティソフトが原因という説は、最終的に撤回することになった。</p>
+<h2>なぜこの方法を選んだのか</h2>
+<p>最終的にたどり着いた見立ては、「大量のファイル操作を連続して行った直後に、処理エンジン側が一時的に不安定になる」というものだった。特定の一つの原因を完全に断定できたわけではないが、複数の環境・複数の条件で再現性を確認しながら、この見立てに沿って対処する方が現実的だと判断した。</p>
+<p>対策としては、起動に失敗した場合の再試行を強化した。一度や二度の失敗ですぐに諦めるのではなく、間隔を空けながら複数回試すようにしている。特定の原因を一つに絞り込んで根本から断つより、実際に起きている状況に対して粘り強く対処する方針を選んだ形になる。</p>
+<h2>利用者にとって何が変わるのか</h2>
+<p>この修正により、AIマスク生成の起動が失敗しても、処理が完全に止まってしまう可能性は下がった。実際に、まとまった枚数の実データで処理が最後まで完了することを確認している。</p>
+<p>ただし、起動失敗そのものが起きなくなったわけではない。起きたときに、より確実に回復できるようになった、という位置づけになる。</p>
+<h2>まだ残っていること</h2>
+<p>「大量のファイル操作の直後に処理エンジンが不安定になる」という見立ては、今のところ複数の状況証拠から導いたものであり、完全に立証できているわけではない。今後、同じような現象が別の形で出てきた場合は、この見立て自体を見直す可能性がある。</p>
+<p>原因の特定に時間がかかった分、有力に見えた仮説を一つずつ確かめては違うと分かる、という地道な過程を経て今の対策にたどり着いた。派手な解決策があったわけではなく、可能性を一つずつ削っていった結果として今の形になっている。</p>
+
+  </div>
+
+  
+  <section class="kzc-product-context">
+    <p class="kzc-product-context-label">関連するSideKick製品</p>
+    <p class="kzc-product-name">SideKick Star</p>
+    <p class="kzc-product-links"><a href="/sidekick-star">SideKick Starの詳細を見る →</a></p>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+  </footer>
+</article>
 
 </main>
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
