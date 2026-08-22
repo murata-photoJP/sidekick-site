@@ -1145,7 +1145,7 @@ async function loadUsageInfo(uid) {
     // planLimits 取得
     const limitsDoc = await db.collection('config').doc('planLimits').get();
     const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
-    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-08-31');
+    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-09-30');
     const now = new Date();
 
     // ユーザーの roles 取得

@@ -315,7 +315,7 @@
     <div class="login-card">
       <h2>Sign in with Google</h2>
       <p>You'll need a Google account to use Camera AI. It shares AI tickets with Photo Critique AI.
-        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026)</span>
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of September 2026)</span>
       </p>
       <button class="google-btn" onclick="signInWithGoogle()">
         <svg width="18" height="18" viewBox="0 0 18 18">
@@ -460,7 +460,7 @@ async function loadUsageInfo(uid) {
   try {
     const limitsDoc = await db.collection('config').doc('planLimits').get();
     const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
-    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-08-31');
+    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-09-30');
     const now = new Date();
 
     const userDoc = await db.collection('users').doc(uid).get();

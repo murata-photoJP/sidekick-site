@@ -811,7 +811,7 @@ Keep at it — you're on the right track.</p>
       <h2>Sign in with Google</h2>
       <p>
         You'll need a Google account to use the AI photo critique.
-        <span class="campaign-note">Free up to 5 AI tickets per week (through end of August 2026).</span>
+        <span class="campaign-note">Free up to 5 AI tickets per week (through end of September 2026).</span>
       </p>
 
       <button class="google-btn" onclick="signInWithGoogle()">
@@ -1063,7 +1063,7 @@ async function loadUsageInfo(uid) {
     // fetch planLimits
     const limitsDoc = await db.collection('config').doc('planLimits').get();
     const planLimits = limitsDoc.exists ? limitsDoc.data() : {};
-    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-08-31');
+    const campaignEnd = planLimits.campaignEndDate ? new Date(planLimits.campaignEndDate) : new Date('2026-09-30');
     const now = new Date();
 
     // fetch user roles
