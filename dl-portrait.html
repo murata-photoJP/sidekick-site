@@ -235,7 +235,7 @@ firebase.auth().onAuthStateChanged(function(user) {
   const emailBypass = localStorage.getItem('sk_dl_authorized') === '1';
 
   if (!user && !emailBypass) {
-    window.location.replace('/register-dl.html?product=portrait&src=dl-portrait');
+    window.location.replace('/register-dl?product=portrait&src=dl-portrait');
     return;
   }
 

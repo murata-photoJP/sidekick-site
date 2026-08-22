@@ -362,12 +362,12 @@ const LANG = (params.get('lang') || '').toLowerCase() === 'en' || /-en$/.test(SR
   : 'ja';
 
 const DL_PAGES = {
-  star:     '/dl-star.html',
-  portrait: '/dl-portrait.html',
-  sky:      '/dl-sky.html',
-  ai:       '/dl-ai.html'
+  star:     '/dl-star',
+  portrait: '/dl-portrait',
+  sky:      '/dl-sky',
+  ai:       '/dl-ai'
 };
-const DL_PAGE = DL_PAGES[PRODUCT] || '/dl-star.html';
+const DL_PAGE = DL_PAGES[PRODUCT] || '/dl-star';
 
 const PRODUCT_NAMES = {
   star:     'Sidekick_Star',

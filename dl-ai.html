@@ -250,7 +250,7 @@ firebase.auth().onAuthStateChanged(function(user) {
 
   if (!user && !emailBypass) {
     // 未ログイン → DLゲートへ
-    window.location.replace('/register-dl.html?product=ai&src=dl-ai');
+    window.location.replace('/register-dl?product=ai&src=dl-ai');
     return;
   }
 
