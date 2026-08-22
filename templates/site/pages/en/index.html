@@ -8,8 +8,9 @@
    実際にはこのページの相対パス解決は<base>が無くても同じ結果になる（ドキュメント自身の
    URLが暗黙のbaseになるため）が、既存動作を変えないためそのまま残した。
 
-   canonical・hreflangはルートURL（/、/en/）のため、他ページと違いbuild_site.py側で
+   canonical・hreflangはルートURL（/、/en）のため、他ページと違いbuild_site.py側で
    個別に指定している（JA版index.htmlの移行と同じ理由）。
+   末尾スラッシュは付けない（vercel.json の trailingSlash: false に合わせる）。
 
    削除したCSSセレクタ（本文側で.hdr/.brand/.nav/.nav-ai/.lang-switch/.footer*
    クラスが使われていないことを確認済み）：
@@ -38,7 +39,13 @@
 
 {% block meta_description %}Photoshop scripts that automate astrophotography, portrait retouching, and sky finishing — built by award-winning photographer Ichiro Murata.{% endblock %}
 
-{% block canonical %}https://www.sidekick-lab.com/en/{% endblock %}
+{# 2026-08-22: 末尾スラッシュを外した。
+   vercel.json は trailingSlash: false で、build_site.py の _INDEX_HREFLANG も
+   既に "/en"（スラッシュなし）。commit c2206e5 の GSC リダイレクト対策で
+   サイト全体を /en へ統一した際、このテンプレートだけ /en/ のまま残っていた。
+   生成物 en/index.html は手作業で /en に直されており、
+   リビルドすると canonical が /en/ へ巻き戻る状態だった。 #}
+{% block canonical %}https://www.sidekick-lab.com/en{% endblock %}
 
 {% block og_site_name %}Sidekick Lab{% endblock %}
 
