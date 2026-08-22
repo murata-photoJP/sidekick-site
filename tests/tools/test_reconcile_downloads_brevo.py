@@ -291,3 +291,58 @@ def test_add_contactがLANGを新設属性側で扱っている():
     assert "legacyAttributes" in source
     # フォールバックは従来属性だけを送る
     assert "attributes: legacyAttributes" in source
+
+# --------------------------------------------------------------------
+# Firestore 書き込みのサーバー移行（2026-08-22）
+# --------------------------------------------------------------------
+def test_register_dlはFirestoreに直接書かない():
+    """ブラウザからの Firestore 書き込みは匿名認証とルールに依存して壊れやすい。
+
+    2026-08-22、匿名認証プロバイダが未有効（Google のみ登録）だったため
+    signInAnonymously() が失敗し、書き込みが permission-denied で拒否されていた。
+    クライアントが失敗を握りつぶす作りだったため誰も気づけなかった。
+    サーバー側（Admin SDK）へ移したので、この依存が復活していないことを固定する。
+    """
+    source = (REPO / "register-dl.html").read_text(encoding="utf-8")
+    for forbidden in ["firebase.firestore(", "signInAnonymously",
+                      "collection('downloads')", 'collection("downloads")']:
+        assert forbidden not in source, f"register-dl.html に {forbidden} が復活している"
+    # Firestore/Auth の SDK 自体も読み込まない
+    for sdk in ["firebase-firestore-compat", "firebase-auth-compat", "firebase-app-compat"]:
+        assert sdk not in source, f"register-dl.html が {sdk} を読み込んでいる"
+
+
+def test_add_contactがFirestoreへ記録する():
+    source = (REPO / "api" / "add-contact.js").read_text(encoding="utf-8")
+    assert "require('firebase-admin')" in source
+    assert "collection('downloads')" in source
+    assert "serverTimestamp" in source
+
+
+def test_register_dlが送信完了を待ってから遷移する():
+    """送信を待たずに遷移するとリクエストが中断され、記録が失われうる。"""
+    source = (REPO / "register-dl.html").read_text(encoding="utf-8")
+    assert "await fetch('/api/add-contact'" in source
+    assert "AbortController" in source, "無応答時に待ち続けない仕組みが必要"
+    assert source.index("await fetch('/api/add-contact'") < source.index("window.location.href = DL_PAGE")
+
+
+def test_同意情報がサーバーへ渡る():
+    """同意日時・同意バージョンは Firestore に残す必要がある（法的な根拠になる）。"""
+    source = (REPO / "register-dl.html").read_text(encoding="utf-8")
+    assert "consentVersion: CONSENT_VERSION" in source
+    assert "consentedAt: consentTimestamp" in source
+    api = (REPO / "api" / "add-contact.js").read_text(encoding="utf-8")
+    assert "body.consentVersion" in api
+    assert "body.consentedAt" in api
+
+
+def test_失敗が無言で消えない():
+    """今回の不具合の本質は「失敗が誰にも見えないこと」だった。"""
+    api = (REPO / "api" / "add-contact.js").read_text(encoding="utf-8")
+    # サーバーはどちらが失敗したかを必ず返す
+    assert "firestore: firestore.ok ? 'ok' : 'failed'" in api
+    assert "brevo: brevo.ok ?" in api
+    # クライアントは失敗をコンソールに残す
+    source = (REPO / "register-dl.html").read_text(encoding="utf-8")
+    assert "result.ok !== true" in source

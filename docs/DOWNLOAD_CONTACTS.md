@@ -12,15 +12,30 @@
 ```
 register-dl.html?product=star&src=lp-star
         │  同意チェック + メールアドレス入力
-        ├──→ Firestore  downloads コレクション（1DL = 1ドキュメント、履歴が全部残る）
-        └──→ /api/add-contact → Brevo コンタクト（1メールアドレス = 1件、属性で状態を持つ）
+        ↓  POST /api/add-contact（応答を待ってから遷移。上限8秒）
+   api/add-contact.js（サーバー）
+        ├──→ Firestore  downloads（Admin SDK。1DL = 1ドキュメント）
+        └──→ Brevo コンタクト（1メールアドレス = 1件、属性で状態を持つ）
 ```
 
-どちらの書き込みも**失敗を握りつぶして**ダウンロード導線を優先する設計。
-そのため「Firestore には居るが Brevo には居ない」人が発生しうる。
-定期的に `tools/reconcile_downloads_brevo.py` で突合すること（下記4）。
+**2026-08-22 に、Firestore への書き込みをブラウザからサーバーへ移した。**
+以前は `register-dl.html` が直接 Firestore に書いており、
+匿名認証とセキュリティルール（`request.auth != null`）に依存していた。
+Firebase の匿名認証プロバイダが有効になっておらず（Google のみ登録）、
+`signInAnonymously()` が `auth/admin-restricted-operation` で失敗し続けた結果、
+書き込みが `permission-denied` で拒否されていた。
+クライアントが失敗を握りつぶす作りだったため、誰も気づけなかった。
+
+Admin SDK はセキュリティルールを通らないので、匿名認証もルールも不要になった。
+**ブラウザに Firestore の書き込み権限を持たせる必要そのものが無くなっている。**
+
+片方が失敗しても、もう片方は実行される。DL 導線も止めない。
+ただし**どちらが失敗したかは必ずレスポンスと Vercel のログに残る**
+（`{ok, firestore, brevo}`）。無言で消えることはない。
 
 **正はいつも Firestore。** Brevo は配信のための投影と考える。
+
+定期的に `tools/reconcile_downloads_brevo.py` で突合すること（下記4）。
 
 ---
 

@@ -341,11 +341,11 @@
 
 </div>
 
-<!-- Firebase SDK (Firestore ログ用) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script src="/firebase-init.js"></script>
+<!-- Firebase SDK は読み込まない。
+     2026-08-22 以前はこのページから直接 Firestore に書いていたが、
+     匿名認証（未有効）とセキュリティルールに依存するため書き込みが拒否されていた。
+     現在は /api/add-contact がサーバー側（Admin SDK）で記録する。
+     dl-*.html は引き続き firebase.auth() を使うので、そちらの読み込みは残っている。 -->
 
 <script>
 const CONSENT_VERSION = 'download-2026-06-25';
@@ -459,45 +459,44 @@ async function submitEmail() {
   document.getElementById('processing-state').style.display = 'block';
 
   try {
-    const db = firebase.firestore();
-    const now = firebase.firestore.FieldValue.serverTimestamp();
+    // Firestore への記録も Brevo への登録も、サーバー側（/api/add-contact）が行う。
+    // ブラウザから直接 Firestore に書く方式は、匿名認証とセキュリティルールに
+    // 依存していて壊れやすかったため 2026-08-22 に廃止した。
+    //
+    // 送信を待たずに遷移すると、リクエストが中断されて記録が失われうる。
+    // かといって無応答時に待ち続けると DL できなくなるので、上限を決めて待つ。
+    const controller = new AbortController();
+    const timer = setTimeout(function() { controller.abort(); }, 8000);
 
-    let uid = 'email-' + Date.now();
     try {
-      const anon = await firebase.auth().signInAnonymously();
-      uid = anon.user.uid;
-    } catch(e) { /* 匿名 Auth 未有効でも続行 */ }
-
-    try {
-      await db.collection('downloads').add({
-        userId: uid,
-        email: email,
-        productName: PRODUCT_NAME,
-        downloadedAt: now,
-        version: CURRENT_VERSION,
-        lang: LANG,
-        sourcePage: SRC,
-        leadSource: SRC,
-        consentVersion: CONSENT_VERSION,
-        consentedAt: consentTimestamp,
-        authMethod: 'email-only'
+      const res = await fetch('/api/add-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        body: JSON.stringify({
+          email: email,
+          firstName: '',
+          product: PRODUCT_NAME,
+          productKey: PRODUCT,       // star / portrait / sky / ai（製品別属性の作成に使う）
+          version: CURRENT_VERSION,  // 空文字はバージョン未確定
+          lang: LANG,                // ja / en（配信言語の出し分けに使う）
+          leadSource: SRC,
+          interest: 'photography',
+          consentVersion: CONSENT_VERSION,
+          consentedAt: consentTimestamp
+        })
       });
-    } catch(e) { console.warn('Firestore write skipped:', e.message); }
-
-    fetch('/api/add-contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: email,
-        firstName: '',
-        product: PRODUCT_NAME,
-        productKey: PRODUCT,       // star / portrait / sky / ai（製品別属性の作成に使う）
-        version: CURRENT_VERSION,  // 空文字はバージョン未確定
-        lang: LANG,                // ja / en（配信言語の出し分けに使う）
-        leadSource: SRC,
-        interest: 'photography'
-      })
-    }).catch(function() {});
+      // 記録に失敗しても DL は止めない。ただし黙って消さず、必ず痕跡を残す。
+      const result = await res.json().catch(function() { return {}; });
+      if (result.ok !== true) {
+        console.warn('DL登録が一部失敗しました:',
+          'firestore=' + result.firestore, 'brevo=' + result.brevo);
+      }
+    } catch(e) {
+      console.warn('DL登録の送信に失敗しました:', e.name === 'AbortError' ? 'timeout' : e.message);
+    } finally {
+      clearTimeout(timer);
+    }
 
     localStorage.setItem('sk_dl_authorized', '1');
     window.location.href = DL_PAGE;
