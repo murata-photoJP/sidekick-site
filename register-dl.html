@@ -354,6 +354,13 @@ const params = new URLSearchParams(window.location.search);
 const PRODUCT = params.get('product') || 'star';
 const SRC     = params.get('src')     || 'direct';
 
+// 言語。/en/ の各ページは ?lang=en を付けて呼ぶ（templates/site/pages/en/*.html）。
+// lang が無い場合の保険として src の末尾 '-en' も見る（キャッシュされた旧ページ対策）。
+// 日本語の告知メールが英語圏のダウンロード者へ飛ぶのを防ぐために記録する。
+const LANG = (params.get('lang') || '').toLowerCase() === 'en' || /-en$/.test(SRC)
+  ? 'en'
+  : 'ja';
+
 const DL_PAGES = {
   star:     '/dl-star.html',
   portrait: '/dl-portrait.html',
@@ -415,7 +422,20 @@ function applyProductHeader() {
 }
 applyProductHeader();
 
-const CURRENT_VERSION = '3.16';
+// 製品別バージョン。リリースのたびにここだけ更新する。
+// 以前は全製品共通の '3.16' を記録していたため、Portrait/SkyEffect/AI にも
+// Star と同じ値が入っていた。アップデート告知の宛先を「今どのバージョンを
+// 持っているか」で絞るには製品ごとに分ける必要がある。
+// 値が未確定の製品は空文字のままにする（誤った値を記録するより空の方が安全）。
+// star / portrait / sky は Effects_All_In_One_Fixed3.16Oq16_A5 の同一コードベース。
+// ai (SideKickAI.exe) は別系統で、実行ファイルにバージョン情報が無いため未確定。
+const PRODUCT_VERSIONS = {
+  star:     '3.16',
+  portrait: '3.16',
+  sky:      '3.16',
+  ai:       ''
+};
+const CURRENT_VERSION = PRODUCT_VERSIONS[PRODUCT] || '';
 
 function onConsentChange() {
   updateEmailBtn();
@@ -455,6 +475,7 @@ async function submitEmail() {
         productName: PRODUCT_NAME,
         downloadedAt: now,
         version: CURRENT_VERSION,
+        lang: LANG,
         sourcePage: SRC,
         leadSource: SRC,
         consentVersion: CONSENT_VERSION,
@@ -470,6 +491,9 @@ async function submitEmail() {
         email: email,
         firstName: '',
         product: PRODUCT_NAME,
+        productKey: PRODUCT,       // star / portrait / sky / ai（製品別属性の作成に使う）
+        version: CURRENT_VERSION,  // 空文字はバージョン未確定
+        lang: LANG,                // ja / en（配信言語の出し分けに使う）
         leadSource: SRC,
         interest: 'photography'
       })
