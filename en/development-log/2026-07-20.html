@@ -8,12 +8,11 @@
     try {
       var pref = localStorage.getItem('sk_lang_pref');
       if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
+      if (pref === 'en') { return; }
       var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
       var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
       if (!isJapanese) {
         localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
       }
     } catch (e) { /* localStorageが使えない環境などは何もしない */ }
   })();
