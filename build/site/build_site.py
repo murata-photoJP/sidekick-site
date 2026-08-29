@@ -140,6 +140,20 @@ _register_page_pair("about")  # OGPなし（元ファイルに存在しない）
 # og:url（.html付き）はcanonicalと同じ形式に揃えるため引き継がない、他ページと同じ扱い）。
 _register_page_pair("faq", en_extra={"enable_ogp": True})
 _register_page_pair("ai-lab")  # OGPなし（元ファイルに存在しない）
+# 人物ページ（2026-08-30新設）。「村田一朗 / Ichiro Murata」で検索した人、および過去の
+# メーカー・出版社・イベントのページで名前を知った人の受け皿。/aboutが「なぜ写真を撮るのか」
+# という物語なのに対し、こちらはPerson Entityの正本（何をしてきた人か／根拠はどこか）。
+# 新規ページなので移行元の手書きHTMLは無く、テンプレートが最初から正本になる。
+# OGPあり（人物ページはSNSで共有される前提。og_imageはbase.htmlの既定画像を使う）。
+# en_redirect_urlだけ既定（/en/{slug}.html）を上書きする。既定値は「移行前の手書きページが
+# .html付きURLへ誘導していた」既存挙動の保存が目的だが、本ページは新規で保存すべき既存挙動が
+# 無い。vercel.jsonがcleanUrls:trueのため.html付きは1回リダイレクトを挟むだけになる
+# （commit c2206e5 で内部リンクから.htmlを外した方針と同じ）。
+_register_page_pair(
+    "ichiro-murata",
+    ja_extra={"enable_ogp": True, "en_redirect_url": "/en/ichiro-murata"},
+    en_extra={"enable_ogp": True},
+)
 # lp-star.htmlは他ページ移行時に対象から漏れており、旧.site-headerのまま
 # （言語バナー・EN切替リンクが無い）だった。村田さんが本番で発見・報告し追加移行した
 # （2026-07-23）。OGPはJA/ENともtitle/meta descriptionと同一文言のため

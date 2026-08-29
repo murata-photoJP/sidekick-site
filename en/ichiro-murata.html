@@ -1,0 +1,698 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
+     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
+     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
+     汎用/en/に後退させないようパラメータ化した）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ichiro Murata — Photographer / Developer of Sidekick</title>
+<meta name="description" content="Ichiro Murata is a Japanese mountain and star-landscape photographer, and the developer of the Sidekick Photoshop scripts. Magazine work, PENTAX / RICOH sample images and CP+ talks, photography teaching, 1986 image-processing research, and photo software released on Vector — with public sources.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/ichiro-murata">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/ichiro-murata">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/ichiro-murata">
+
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sidekick">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Ichiro Murata — Photographer / Developer of Sidekick">
+<meta property="og:description" content="Ichiro Murata is a Japanese mountain and star-landscape photographer, and the developer of the Sidekick Photoshop scripts. Magazine work, PENTAX / RICOH sample images and CP+ talks, photography teaching, 1986 image-processing research, and photo software released on Vector — with public sources.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/ichiro-murata">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ichiro Murata — Photographer / Developer of Sidekick">
+<meta name="twitter:description" content="Ichiro Murata is a Japanese mountain and star-landscape photographer, and the developer of the Sidekick Photoshop scripts. Magazine work, PENTAX / RICOH sample images and CP+ talks, photography teaching, 1986 image-processing research, and photo software released on Vector — with public sources.">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<link rel="stylesheet" href="/assets/css/site-header.css">
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .crumb{padding:18px 0 0;font-size:12px;color:var(--muted);}
+    .crumb a{color:var(--sub);}
+    .crumb a:hover{color:var(--text);}
+    .crumb span{margin:0 6px;}
+
+    .page-hero{
+      padding:40px 0 52px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:720px;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(30px,5vw,52px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:8px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-en{font-size:13px;color:var(--muted);letter-spacing:.1em;margin-bottom:18px;}
+    .page-role{font-size:14px;font-weight:700;color:var(--sub);margin-bottom:22px;}
+    .now-card{
+      padding:18px 22px;border-radius:14px;
+      background:var(--card);border:1px solid rgba(255,138,0,.18);
+      border-left:3px solid var(--accent);
+      font-size:15px;line-height:1.85;color:var(--text);
+    }
+    .now-card a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+
+    .sec{padding:56px 0 0;}
+    .sec:last-of-type{padding-bottom:80px;}
+    .sec-h2{font-size:clamp(19px,2.2vw,24px);font-weight:800;letter-spacing:-.02em;margin:0 0 6px;}
+    .sec-note{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.8;}
+    .sec-body{max-width:820px;}
+    .sec-body p{font-size:15px;line-height:1.95;color:var(--sub);margin-bottom:16px;}
+    .sec-body p strong{color:var(--text);font-weight:700;}
+
+    .tl{border-left:1px solid rgba(255,255,255,.1);margin-left:6px;padding-left:0;}
+    .tl-row{display:grid;grid-template-columns:130px 1fr;gap:18px;padding:14px 0 14px 22px;position:relative;}
+    .tl-row::before{
+      content:"";position:absolute;left:-4px;top:22px;
+      width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.75;
+    }
+    .tl-year{font-size:12px;font-weight:800;color:var(--accent2);letter-spacing:.04em;padding-top:2px;}
+    .tl-what{font-size:14.5px;line-height:1.8;color:var(--sub);}
+    .tl-what strong{color:var(--text);font-weight:700;}
+    @media(max-width:640px){.tl-row{grid-template-columns:1fr;gap:4px;}}
+
+    .src-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+    @media(max-width:800px){.src-grid{grid-template-columns:1fr;}}
+    .src-card{background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:22px 24px;}
+    .src-title{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--accent2);margin-bottom:14px;}
+    .src-list{list-style:none;}
+    .src-list li{font-size:13.5px;line-height:1.75;color:var(--sub);padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);}
+    .src-list li:last-child{border-bottom:none;}
+    .src-list a{color:var(--text);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,177,74,.4);}
+    .src-list a:hover{text-decoration-color:var(--accent2);}
+    .src-meta{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;}
+    .ia-tag{
+      display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;
+      padding:1px 6px;border-radius:5px;margin-left:6px;vertical-align:1px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted);
+    }
+
+    .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    @media(max-width:800px){.prod-grid{grid-template-columns:1fr;}}
+    .prod{display:block;background:var(--card);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:22px;transition:.12s;}
+    .prod:hover{border-color:rgba(255,138,0,.3);background:var(--card2);}
+    .prod-name{font-size:15px;font-weight:800;margin-bottom:6px;}
+    .prod-desc{font-size:13px;color:var(--sub);line-height:1.75;}
+    .prod-more{font-size:12px;color:var(--accent2);font-weight:700;margin-top:12px;}
+
+    .disc{
+      margin-top:44px;padding:20px 24px;border-radius:14px;
+      background:var(--card2);border:1px solid rgba(255,255,255,.06);
+      font-size:12.5px;line-height:1.9;color:var(--muted);
+    }
+    .disc strong{color:var(--sub);}
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Ichiro Murata",
+    "alternateName": "村田一朗",
+    "url": "https://www.sidekick-lab.com/en/ichiro-murata",
+    "jobTitle": "Photographer / Software developer",
+    "description": "Japanese mountain and star-landscape photographer. Magazine writing and product reviews, sample images and CP+ talks for PENTAX / RICOH, and photography teaching — now developing the Sidekick Photoshop scripts for photographers.",
+    "knowsAbout": ["Astrophotography", "Mountain photography", "Image processing", "Adobe Photoshop", "Photography education"],
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "Tokai University"
+    },
+    "sameAs": [
+      "https://x.com/murata_photo",
+      "https://1x.com/murata",
+      "https://500px.com/ichiromurata"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Sidekick Lab",
+        "item": "https://www.sidekick-lab.com/en"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Ichiro Murata",
+        "item": "https://www.sidekick-lab.com/en/ichiro-murata"
+      }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/ichiro-murata">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" >📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/ichiro-murata" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+
+  <main>
+
+    <div class="wrap">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/en">Sidekick Lab</a><span>/</span>Ichiro Murata
+      </nav>
+    </div>
+
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">Person</div>
+          <h1 class="page-h1">Ichiro <em>Murata</em></h1>
+          <div class="page-en">村田 一朗</div>
+          <div class="page-role">Photographer / Developer of Sidekick</div>
+          <div class="now-card">
+            He currently develops and publishes
+            <a href="/en/sidekick">Sidekick</a>, a series of Photoshop scripts for photographers.
+            Based in Kamakura, Japan, he continues to shoot mountain and star landscapes —
+            mainly in the Northern Japan Alps — and to teach photography courses and workshops.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">Profile</h2>
+          <p class="sec-note">Born 1964 in Tokyo. Graduated from the Department of Marine Engineering, School of Marine Science and Technology, Tokai University.</p>
+          <p>
+            While still a student he joined the Takagi Laboratory at the University of Tokyo's
+            Institute of Industrial Science as an external research student, working on
+            extracting the movement of warm water masses from NOAA weather-satellite thermal infrared imagery.
+            He <strong>presented the results at the Television Society of Japan's national convention in 1986</strong>.
+            He then spent roughly twenty years at an electronics manufacturer designing ICs for consumer televisions.
+          </p>
+          <p>
+            He began shooting mountain photography in the 1990s and
+            <strong>won the 35th Gakujin Photo Award for 1997</strong>.
+            As a member of the Japan Alpine Photographers Association he has shown work in its group exhibitions.
+            He went independent in 2006, and from 2010 expanded into star-landscape photography.
+          </p>
+          <p>
+            Alongside magazine writing and product reviews,
+            <strong>sample images and CP+ talks for PENTAX / RICOH</strong>,
+            and teaching photography courses and workshops,
+            he has consistently <strong>built the tools that were missing</strong> for his own shooting and processing.
+            In the 2000s he released and sold photo software on Vector, and in 2012 a magazine feature
+            published both his compositing method and the program itself.
+            The Sidekick series is a continuation of that habit.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">Selected background</h2>
+          <p class="sec-note">
+            Focused on items verifiable from third-party public sources — manufacturers, publishers,
+            the National Diet Library, J-STAGE and Vector. Sources are listed in the next section.
+          </p>
+
+          <div class="tl">
+            <div class="tl-row">
+              <div class="tl-year">1986</div>
+              <div class="tl-what"><strong>Presented at the Television Society of Japan</strong> — "Tracking sea-surface water-mass movement in NOAA satellite imagery" (co-authored)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">1986 – c.2006</div>
+              <div class="tl-what">Designed and shipped ICs (video / chroma / deflection) for consumer televisions</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">1990s –</div>
+              <div class="tl-what">Started <strong>mountain photography</strong> on a large-format camera; later a member of the Japan Alpine Photographers Association</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">1997</div>
+              <div class="tl-what"><strong>35th Gakujin Photo Award</strong></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2000s</div>
+              <div class="tl-what">Released and sold the photo tools "<strong>Tsubame</strong>" and "<strong>Kita-Tsubame</strong>" as shareware on Vector</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2003 – 2015</div>
+              <div class="tl-what">
+                Magazine work — portfolios, articles and product reviews.
+                <strong>20 issues confirmed from publishers' own tables of contents</strong>
+                (Digital Photo 7, Photo Technic Digital 12, Digital Camera Magazine 1)
+              </div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2010</div>
+              <div class="tl-what">31st Japan Alpine Photographers Association exhibition (FUJIFILM Photo Salon). Began publishing <strong>star-landscape</strong> work around this time</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2012</div>
+              <div class="tl-what">Digital Camera Magazine feature — compositing method and the <strong>program itself published in print</strong></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2014</div>
+              <div class="tl-what">Exhibition "The World of PENTAX K-3" (RICOH IMAGING SQUARE Shinjuku, 24 photographers)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2015 –</div>
+              <div class="tl-what"><strong>Teaching</strong> — Photo Advice (2015), RICOH Photo Academy (2021), photography school instructor (2025 –)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2016 – 2018</div>
+              <div class="tl-what">Wrote the <strong>official PENTAX K-1 / K-1 Mark II Impressions</strong> (Japanese and English)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2017 – 2020</div>
+              <div class="tl-what">Spoke at the <strong>CP+</strong> RICOH IMAGING booth (2017 / 2018 / 2019; 2020 delivered as video)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2018</div>
+              <div class="tl-what">Solo photobook '<strong>Tsubakuro</strong>' (Photo Advice)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2023</div>
+              <div class="tl-what">Co-authored a landscape photography book (Genkosha)</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2025 –</div>
+              <div class="tl-what">Develops and publishes the <strong>Sidekick</strong> Photoshop scripts for photographers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 class="sec-h2">Selected work and public sources</h2>
+        <p class="sec-note">
+          All of the following are published by parties other than this site.
+          Items marked <span class="ia-tag">Archive</span> are no longer online and are linked
+          through the Internet Archive. Japanese-language pages unless noted.
+        </p>
+
+        <div class="src-grid">
+
+          <div class="src-card">
+            <div class="src-title">Research &amp; software</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://doi.org/10.11485/ncrtv.22.0_375" target="_blank" rel="noopener">Tracking sea-surface water-mass movement in NOAA satellite imagery (1986)</a>
+                <span class="src-meta">Television Society of Japan, national convention proceedings 22 / J-STAGE</span>
+              </li>
+              <li>
+                <a href="https://www.vector.co.jp/soft/win95/hardware/se184727.html" target="_blank" rel="noopener">Photo tool "Tsubame"</a>
+                <span class="src-meta">Vector — author, specification and commercial terms</span>
+              </li>
+              <li>
+                <a href="https://www.vector.co.jp/soft/win95/hardware/se302071.html" target="_blank" rel="noopener">Photo tool "Kita-Tsubame"</a>
+                <span class="src-meta">Vector — later version supporting all cameras</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/community/squareginza/workshop/profile.html" target="_blank" rel="noopener">Instructor profile</a>
+                <span class="src-meta">RICOH IMAGING — notes his self-built releases, power supplies and stacking software</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="src-card">
+            <div class="src-title">Awards, books &amp; work</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://ndlsearch.ndl.go.jp/books/R000000004-I4376683" target="_blank" rel="noopener">35th Gakujin Photo Award — commemorative portfolio (Gakujin no. 608, 1998)</a>
+                <span class="src-meta">National Diet Library Search</span>
+              </li>
+              <li>
+                <a href="https://ndlsearch.ndl.go.jp/books/R100000001-I25114735222" target="_blank" rel="noopener">Photobook 'Tsubakuro' (2018, solo)</a>
+                <span class="src-meta">National Diet Library Search</span>
+              </li>
+              <li>
+                <a href="https://www.genkosha.co.jp/book/b10094992.html" target="_blank" rel="noopener">Landscape photography book (2023, co-authored)</a>
+                <span class="src-meta">Genkosha</span>
+              </li>
+              <li>
+                <a href="https://book.impress.co.jp/books/1115102041" target="_blank" rel="noopener">PENTAX K-3 II Complete Guide (2015)</a>
+                <span class="src-meta">Impress</span>
+              </li>
+              <li>
+                <a href="https://fujifilmsquare.jp/photosalon/tokyo/s2/10040902.html" target="_blank" rel="noopener">31st Japan Alpine Photographers Association exhibition (2010)</a>
+                <span class="src-meta">FUJIFILM Photo Salon</span>
+              </li>
+              <li>
+                <a href="https://1x.com/murata/overview" target="_blank" rel="noopener">1x.com profile — 7 Awarded photos (as of August 2026)</a>
+                <span class="src-meta">Count published by 1x.com itself. English.</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="src-card">
+            <div class="src-title">PENTAX / RICOH work</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/english/products/k-1/special/impressions/impressions11.html" target="_blank" rel="noopener">PENTAX K-1 Impressions</a>
+                <span class="src-meta">RICOH IMAGING official. English.</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/star_lens/special/sp_da11-18/impression/" target="_blank" rel="noopener">HD PENTAX-DA★11-18mm — "A photographer's eye"</a>
+                <span class="src-meta">RICOH IMAGING official</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/o-gps2/ex/index.html" target="_blank" rel="noopener">O-GPS2 star-landscape sample images</a>
+                <span class="src-meta">RICOH IMAGING official</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/wg-6/feature/02.html" target="_blank" rel="noopener">WG-6 product page sample images</a>
+                <span class="src-meta">RICOH IMAGING official</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/news/cpplus2019/" target="_blank" rel="noopener">CP+ 2019 seminars</a>
+                <span class="src-meta">RICOH IMAGING official — also spoke in 2017, 2018 and 2020</span>
+              </li>
+              <li>
+                <a href="https://web.archive.org/web/2015/http://www.ricoh-imaging.co.jp/japan/community/squareshinjuku/2014/03/20140326.html" target="_blank" rel="noopener">Exhibition "The World of PENTAX K-3" (2014)</a><span class="ia-tag">Archive</span>
+                <span class="src-meta">RICOH IMAGING SQUARE Shinjuku</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="src-card">
+            <div class="src-title">Magazines, media &amp; teaching</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://dc.watch.impress.co.jp/docs/review/special/1199195.html" target="_blank" rel="noopener">Getting started with star-landscape photography (2019)</a>
+                <span class="src-meta">Dejikame Watch / Impress</span>
+              </li>
+              <li>
+                <a href="https://dc.watch.impress.co.jp/docs/review/special/1154287.html" target="_blank" rel="noopener">The PENTAX K-1 Mark II seen from star-landscape shooting (2018)</a>
+                <span class="src-meta">Dejikame Watch / Impress</span>
+              </li>
+              <li>
+                <a href="https://web.archive.org/web/2014id_/http://www.genkosha.co.jp/pd/backnumber/1880.html" target="_blank" rel="noopener">Photo Technic Digital — back-issue contents</a><span class="ia-tag">Archive</span>
+                <span class="src-meta">Genkosha — 12 issues between 2011 and 2015</span>
+              </li>
+              <li>
+                <a href="https://web.archive.org/web/20040622233846/http://www.sbpnet.jp/digitalphoto/magazine/detail.asp?magid=905" target="_blank" rel="noopener">Digital Photo Senka, September 2003 — contents</a><span class="ia-tag">Archive</span>
+                <span class="src-meta">SoftBank Publishing</span>
+              </li>
+              <li>
+                <a href="https://photo-advice.jp/zissen_star.html" target="_blank" rel="noopener">Instructor, "Night sky photography" practical course (2015)</a>
+                <span class="src-meta">Photo Advice</span>
+              </li>
+              <li>
+                <a href="https://school.ricoh-imaging.co.jp/rim_academy/tokyo/workshop/2021/03/-423-521.html" target="_blank" rel="noopener">Instructor, "Star landscapes from your balcony" workshop (2021)</a>
+                <span class="src-meta">RICOH Photo Academy</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <div class="wrap">
+        <h2 class="sec-h2">What he builds now</h2>
+        <p class="sec-note">
+          Photoshop scripts made out of the work he kept repeating himself, after shooting and while processing.
+          The thinking behind them is on <a href="/en/sidekick" style="color:var(--accent2);">What is Sidekick</a>;
+          why he photographs at all is on <a href="/en/about" style="color:var(--accent2);">Why I take photographs</a>.
+        </p>
+        <div class="prod-grid">
+          <a class="prod" href="/en/sidekick-star">
+            <div class="prod-name">⭐ Sidekick Star</div>
+            <div class="prod-desc">Light stacking, sky masks and airplane-trail removal for star landscapes.</div>
+            <div class="prod-more">View the product →</div>
+          </a>
+          <a class="prod" href="/en/portrait">
+            <div class="prod-name">👤 Sidekick Portrait</div>
+            <div class="prod-desc">Batch the repetitive parts of portrait retouching.</div>
+            <div class="prod-more">View the product →</div>
+          </a>
+          <a class="prod" href="/en/ai-lab">
+            <div class="prod-name">🤖 AI Lab (free)</div>
+            <div class="prod-desc">Photo Critique AI, Camera AI, Shooting AI and PC AI — in the browser.</div>
+            <div class="prod-more">Open AI Lab →</div>
+          </a>
+        </div>
+
+        <div class="disc">
+          <strong>About how this page is written.</strong>
+          It sticks to items that can be checked against sources published outside this site.
+          Figures that change over time, such as the 1x.com count, carry the date they were observed.<br>
+          His relationships with PENTAX / RICOH, publishers and photography schools are all
+          <strong>work he was commissioned to do in the past</strong>. None of them constitutes an
+          endorsement, evaluation or approval of Sidekick by those organisations.
+          Whether Sidekick actually works for you is best judged from the product pages, the manuals,
+          the <a href="/en/faq" style="color:var(--sub);text-decoration:underline;">FAQ</a>,
+          and the 90-day free trial.
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

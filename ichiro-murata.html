@@ -1,0 +1,771 @@
+
+
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
+     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
+     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
+     汎用/en/に後退させないようパラメータ化した）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/ichiro-murata'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/ichiro-murata');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>村田一朗（Ichiro Murata）— 写真家 / Sidekick 開発者</title>
+<meta name="description" content="写真家・村田一朗（Ichiro Murata）の経歴と、第三者が確認できる公開資料。山岳・星景写真、写真誌への執筆、PENTAX / RICOH の製品作例と CP+ 登壇、写真教育、1986年の画像処理研究、Vector で公開した写真用ソフト。現在は Photoshop スクリプト「Sidekick」を開発。">
+<link rel="canonical" href="https://www.sidekick-lab.com/ichiro-murata">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/ichiro-murata">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/ichiro-murata">
+
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sidekick">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="村田一朗（Ichiro Murata）— 写真家 / Sidekick 開発者">
+<meta property="og:description" content="写真家・村田一朗（Ichiro Murata）の経歴と、第三者が確認できる公開資料。山岳・星景写真、写真誌への執筆、PENTAX / RICOH の製品作例と CP+ 登壇、写真教育、1986年の画像処理研究、Vector で公開した写真用ソフト。現在は Photoshop スクリプト「Sidekick」を開発。">
+<meta property="og:url" content="https://www.sidekick-lab.com/ichiro-murata">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="村田一朗（Ichiro Murata）— 写真家 / Sidekick 開発者">
+<meta name="twitter:description" content="写真家・村田一朗（Ichiro Murata）の経歴と、第三者が確認できる公開資料。山岳・星景写真、写真誌への執筆、PENTAX / RICOH の製品作例と CP+ 登壇、写真教育、1986年の画像処理研究、Vector で公開した写真用ソフト。現在は Photoshop スクリプト「Sidekick」を開発。">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<link rel="stylesheet" href="/assets/css/site-header.css">
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+      --r-lg:26px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    /* ── Breadcrumb ── */
+    .crumb{padding:18px 0 0;font-size:12px;color:var(--muted);}
+    .crumb a{color:var(--sub);}
+    .crumb a:hover{color:var(--text);}
+    .crumb span{margin:0 6px;}
+
+    /* ── Hero ── */
+    .page-hero{
+      padding:40px 0 52px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:720px;}
+    .kicker{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:5px 14px;border-radius:999px;
+      background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.22);
+      color:var(--accent2);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(30px,5vw,52px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.1;
+      margin-bottom:8px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-en{
+      font-size:13px;color:var(--muted);letter-spacing:.1em;
+      margin-bottom:18px;
+    }
+    .page-role{
+      font-size:14px;font-weight:700;color:var(--sub);margin-bottom:22px;
+    }
+    .now-card{
+      padding:18px 22px;border-radius:14px;
+      background:var(--card);border:1px solid rgba(255,138,0,.18);
+      border-left:3px solid var(--accent);
+      font-size:15px;line-height:1.85;color:var(--text);
+    }
+    .now-card a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+
+    /* ── Section ── */
+    .sec{padding:56px 0 0;}
+    .sec:last-of-type{padding-bottom:80px;}
+    .sec-h2{
+      font-size:clamp(19px,2.2vw,24px);
+      font-weight:800;letter-spacing:-.02em;
+      margin:0 0 6px;
+    }
+    .sec-note{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.8;}
+    .sec-body{max-width:820px;}
+    .sec-body p{font-size:15px;line-height:1.95;color:var(--sub);margin-bottom:16px;}
+    .sec-body p strong{color:var(--text);font-weight:700;}
+
+    /* ── Timeline ── */
+    .tl{border-left:1px solid rgba(255,255,255,.1);margin-left:6px;padding-left:0;}
+    .tl-row{
+      display:grid;grid-template-columns:118px 1fr;gap:18px;
+      padding:14px 0 14px 22px;position:relative;
+    }
+    .tl-row::before{
+      content:"";position:absolute;left:-4px;top:22px;
+      width:7px;height:7px;border-radius:50%;
+      background:var(--accent);opacity:.75;
+    }
+    .tl-year{font-size:12px;font-weight:800;color:var(--accent2);letter-spacing:.04em;padding-top:2px;}
+    .tl-what{font-size:14.5px;line-height:1.8;color:var(--sub);}
+    .tl-what strong{color:var(--text);font-weight:700;}
+    @media(max-width:640px){
+      .tl-row{grid-template-columns:1fr;gap:4px;}
+    }
+
+    /* ── Sources ── */
+    .src-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+    @media(max-width:800px){.src-grid{grid-template-columns:1fr;}}
+    .src-card{
+      background:var(--card);border:1px solid rgba(255,255,255,.07);
+      border-radius:var(--r);padding:22px 24px;
+    }
+    .src-title{
+      font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--accent2);margin-bottom:14px;
+    }
+    .src-list{list-style:none;}
+    .src-list li{
+      font-size:13.5px;line-height:1.75;color:var(--sub);
+      padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05);
+    }
+    .src-list li:last-child{border-bottom:none;}
+    .src-list a{color:var(--text);text-decoration:underline;text-underline-offset:3px;
+      text-decoration-color:rgba(255,177,74,.4);}
+    .src-list a:hover{text-decoration-color:var(--accent2);}
+    .src-meta{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;}
+    .ia-tag{
+      display:inline-block;font-size:10px;font-weight:800;letter-spacing:.04em;
+      padding:1px 6px;border-radius:5px;margin-left:6px;vertical-align:1px;
+      background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:var(--muted);
+    }
+
+    /* ── Products ── */
+    .prod-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+    @media(max-width:800px){.prod-grid{grid-template-columns:1fr;}}
+    .prod{
+      display:block;background:var(--card);border:1px solid rgba(255,255,255,.07);
+      border-radius:var(--r);padding:22px;transition:.12s;
+    }
+    .prod:hover{border-color:rgba(255,138,0,.3);background:var(--card2);}
+    .prod-name{font-size:15px;font-weight:800;margin-bottom:6px;}
+    .prod-desc{font-size:13px;color:var(--sub);line-height:1.75;}
+    .prod-more{font-size:12px;color:var(--accent2);font-weight:700;margin-top:12px;}
+
+    /* ── Disclaimer ── */
+    .disc{
+      margin-top:44px;padding:20px 24px;border-radius:14px;
+      background:var(--card2);border:1px solid rgba(255,255,255,.06);
+      font-size:12.5px;line-height:1.9;color:var(--muted);
+    }
+    .disc strong{color:var(--sub);}
+  </style>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "村田一朗",
+    "alternateName": "Ichiro Murata",
+    "url": "https://www.sidekick-lab.com/ichiro-murata",
+    "jobTitle": "写真家 / ソフトウェア開発者",
+    "description": "山岳・星景写真を中心に活動する写真家。写真誌への執筆、PENTAX / RICOH の製品作例・CP+ 登壇、写真教育を経て、現在は写真家向けPhotoshopスクリプト「Sidekick」シリーズを開発している。",
+    "knowsAbout": ["星景写真", "山岳写真", "画像処理", "Adobe Photoshop", "写真教育"],
+    "alumniOf": {
+      "@type": "CollegeOrUniversity",
+      "name": "東海大学"
+    },
+    "sameAs": [
+      "https://x.com/murata_photo",
+      "https://1x.com/murata",
+      "https://500px.com/ichiromurata"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Sidekick Lab",
+        "item": "https://www.sidekick-lab.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "村田一朗",
+        "item": "https://www.sidekick-lab.com/ichiro-murata"
+      }
+    ]
+  }
+  </script>
+
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/ichiro-murata">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/ichiro-murata" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+
+  <main>
+
+    <div class="wrap">
+      <nav class="crumb" aria-label="パンくずリスト">
+        <a href="/">Sidekick Lab</a><span>/</span>村田一朗
+      </nav>
+    </div>
+
+    <!-- ── Hero ── -->
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="kicker">Person</div>
+          <h1 class="page-h1">村田 <em>一朗</em></h1>
+          <div class="page-en">ICHIRO MURATA</div>
+          <div class="page-role">写真家 / Sidekick 開発者</div>
+          <div class="now-card">
+            現在、写真家向けのPhotoshopスクリプト
+            「<a href="/sidekick">Sidekick</a>」シリーズを開発・公開しています。
+            神奈川県鎌倉市を拠点に、北アルプスを中心とした山岳・星景写真の撮影と、
+            写真教室・ワークショップでの講師も続けています。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── プロフィール ── -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">プロフィール</h2>
+          <p class="sec-note">1964年、東京生まれ。東海大学 海洋学部 海洋工学科 卒業。</p>
+          <p>
+            大学在学中に外部研究生として東京大学生産技術研究所・高木幹雄研究室に参加し、
+            気象衛星NOAAの熱赤外画像から海面の温水塊の動きを抽出する研究を行った。
+            その成果を<strong>1986年、テレビジョン学会全国大会で発表</strong>している。
+            卒業後は電機メーカーで家庭用テレビ向けICの設計に約20年携わった。
+          </p>
+          <p>
+            1990年代から山岳写真を撮り始め、<strong>1997年度に第35回 岳人写真賞</strong>を受賞。
+            日本山岳写真集団の同人として団体展に出展してきた。
+            2006年に独立し、2010年以降は星景写真へと領域を広げている。
+          </p>
+          <p>
+            写真誌への執筆・製品レビュー、<strong>PENTAX / RICOH の製品作例と CP+ での登壇</strong>、
+            写真教室・ワークショップでの講師と、写真に関わる仕事を続けながら、
+            <strong>撮影や現像で足りない道具は自分で作ってきた</strong>。
+            2000年代には写真用ソフトを Vector で公開・販売し、
+            2012年には雑誌の特集で画像合成の手法とプログラムそのものを公開している。
+            現在の Sidekick シリーズは、その延長線上にある。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 主な経歴 ── -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">主な経歴</h2>
+          <p class="sec-note">
+            第三者の公開資料（メーカー公式・出版社・国立国会図書館・J-STAGE・Vector など）で
+            確認できるものを中心に挙げています。出典は次の「主な仕事・外部資料」にまとめています。
+          </p>
+
+          <div class="tl">
+            <div class="tl-row">
+              <div class="tl-year">1986</div>
+              <div class="tl-what"><strong>テレビジョン学会全国大会で発表</strong>「NOAA衛星画像における海面水塊変動の追跡法」（共著）</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">1986 – 2006頃</div>
+              <div class="tl-what">電機メーカーで家庭用テレビ向けIC（映像・色・同期）の設計・量産に従事</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">1990年代 –</div>
+              <div class="tl-what">大判カメラで<strong>山岳写真</strong>を撮り始める。のち日本山岳写真集団 同人</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">1997年度</div>
+              <div class="tl-what"><strong>第35回 岳人写真賞</strong> 受賞</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2000年代</div>
+              <div class="tl-what">写真用ソフト「<strong>燕</strong>」「<strong>北燕</strong>」を Vector でシェアウェアとして公開・販売</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2003 – 2015</div>
+              <div class="tl-what">
+                写真誌への作品掲載・執筆・製品レビュー。<strong>出版社公式の目次で20号を確認</strong>
+                （デジタルフォト誌7号／フォトテクニック デジタル12号／デジタルカメラマガジン1号）
+              </div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2010</div>
+              <div class="tl-what">第31回 日本山岳写真集団展（富士フイルムフォトサロン）出展。この頃から<strong>星景写真</strong>の作品発表を開始</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2012</div>
+              <div class="tl-what">デジタルカメラマガジンの特集で、画像合成の手法と<strong>専用プログラムを誌面で公開</strong></div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2014</div>
+              <div class="tl-what">写真展「PENTAX K-3の世界」（リコーイメージングスクエア新宿、写真家24名）出展</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2015 –</div>
+              <div class="tl-what"><strong>写真教育</strong>。写真教室フォトアドバイス（2015）、リコーフォトアカデミー（2021）、写真学校での講師（2025 –）</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2016 – 2018</div>
+              <div class="tl-what"><strong>PENTAX K-1 / K-1 Mark II 公式 Impressions</strong> を執筆（日英）</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2017 – 2020</div>
+              <div class="tl-what"><strong>CP+</strong> リコーイメージングブースで登壇（2017 / 2018 / 2019、2020は動画配信）</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2018</div>
+              <div class="tl-what">写真集『<strong>燕 Tsubakuro</strong>』（単著、フォトアドバイス）刊行</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2023</div>
+              <div class="tl-what">『必要最小限のルールで風景写真の傑作をものにする本』（玄光社、共著）</div>
+            </div>
+            <div class="tl-row">
+              <div class="tl-year">2025 –</div>
+              <div class="tl-what">写真家向けPhotoshopスクリプト「<strong>Sidekick</strong>」シリーズを開発・公開</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 主な仕事・外部資料 ── -->
+    <section class="sec">
+      <div class="wrap">
+        <h2 class="sec-h2">主な仕事・外部資料</h2>
+        <p class="sec-note">
+          いずれも当サイト以外が公開している資料です。
+          <span class="ia-tag">Archive</span> の付いたものは、元ページが公開終了しており
+          Internet Archive の保存版を参照しています。
+        </p>
+
+        <div class="src-grid">
+
+          <div class="src-card">
+            <div class="src-title">研究・ソフトウェア開発</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://doi.org/10.11485/ncrtv.22.0_375" target="_blank" rel="noopener">NOAA衛星画像における海面水塊変動の追跡法（1986）</a>
+                <span class="src-meta">テレビジョン学会全国大会講演予稿集 22 / J-STAGE</span>
+              </li>
+              <li>
+                <a href="https://www.vector.co.jp/soft/win95/hardware/se184727.html" target="_blank" rel="noopener">写真用ソフト「燕」</a>
+                <span class="src-meta">Vector（作者名・仕様・販売形態）</span>
+              </li>
+              <li>
+                <a href="https://www.vector.co.jp/soft/win95/hardware/se302071.html" target="_blank" rel="noopener">写真用ソフト「北燕」</a>
+                <span class="src-meta">Vector（全デジカメ対応の発展版）</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/community/squareginza/workshop/profile.html" target="_blank" rel="noopener">講師プロフィール</a>
+                <span class="src-meta">リコーイメージング（自作のレリーズ・電源・合成ソフトの記載）</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="src-card">
+            <div class="src-title">受賞・書籍・作品</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://ndlsearch.ndl.go.jp/books/R000000004-I4376683" target="_blank" rel="noopener">第35回 岳人写真賞 受賞記念作品集（岳人 通号608 / 1998）</a>
+                <span class="src-meta">国立国会図書館サーチ</span>
+              </li>
+              <li>
+                <a href="https://ndlsearch.ndl.go.jp/books/R100000001-I25114735222" target="_blank" rel="noopener">写真集『燕 Tsubakuro』（2018 / 単著）</a>
+                <span class="src-meta">国立国会図書館サーチ</span>
+              </li>
+              <li>
+                <a href="https://www.genkosha.co.jp/book/b10094992.html" target="_blank" rel="noopener">必要最小限のルールで風景写真の傑作をものにする本（2023 / 共著）</a>
+                <span class="src-meta">玄光社</span>
+              </li>
+              <li>
+                <a href="https://book.impress.co.jp/books/1115102041" target="_blank" rel="noopener">PENTAX K-3 II 完全ガイド（2015）</a>
+                <span class="src-meta">インプレス</span>
+              </li>
+              <li>
+                <a href="https://fujifilmsquare.jp/photosalon/tokyo/s2/10040902.html" target="_blank" rel="noopener">第31回 日本山岳写真集団展（2010）</a>
+                <span class="src-meta">富士フイルムフォトサロン</span>
+              </li>
+              <li>
+                <a href="https://1x.com/murata/overview" target="_blank" rel="noopener">1x.com プロフィール（Awarded 7作品 / 2026年8月時点）</a>
+                <span class="src-meta">1x.com が公開しているカウント</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="src-card">
+            <div class="src-title">PENTAX / RICOH の仕事</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/k-1/special/impressions/impressions11.html" target="_blank" rel="noopener">PENTAX K-1 Impressions</a>
+                <span class="src-meta">リコーイメージング公式</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/star_lens/special/sp_da11-18/impression/" target="_blank" rel="noopener">HD PENTAX-DA★11-18mm「写真家の眼」</a>
+                <span class="src-meta">リコーイメージング公式</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/o-gps2/ex/index.html" target="_blank" rel="noopener">O-GPS2 星景作例</a>
+                <span class="src-meta">リコーイメージング公式</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/products/wg-6/feature/02.html" target="_blank" rel="noopener">WG-6 製品ページ 作例</a>
+                <span class="src-meta">リコーイメージング公式</span>
+              </li>
+              <li>
+                <a href="https://www.ricoh-imaging.co.jp/japan/news/cpplus2019/" target="_blank" rel="noopener">CP+ 2019 セミナー</a>
+                <span class="src-meta">リコーイメージング公式（2017 / 2018 / 2020 も登壇）</span>
+              </li>
+              <li>
+                <a href="https://web.archive.org/web/2015/http://www.ricoh-imaging.co.jp/japan/community/squareshinjuku/2014/03/20140326.html" target="_blank" rel="noopener">写真展「PENTAX K-3の世界」（2014）</a><span class="ia-tag">Archive</span>
+                <span class="src-meta">リコーイメージングスクエア新宿</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="src-card">
+            <div class="src-title">写真誌・媒体・教育</div>
+            <ul class="src-list">
+              <li>
+                <a href="https://dc.watch.impress.co.jp/docs/review/special/1199195.html" target="_blank" rel="noopener">ここからはじめる星景写真（2019）</a>
+                <span class="src-meta">デジカメ Watch / インプレス</span>
+              </li>
+              <li>
+                <a href="https://dc.watch.impress.co.jp/docs/review/special/1154287.html" target="_blank" rel="noopener">星景撮影からみたPENTAX K-1 Mark IIの魅力とは（2018）</a>
+                <span class="src-meta">デジカメ Watch / インプレス</span>
+              </li>
+              <li>
+                <a href="https://web.archive.org/web/2014id_/http://www.genkosha.co.jp/pd/backnumber/1880.html" target="_blank" rel="noopener">フォトテクニック デジタル バックナンバー目次</a><span class="ia-tag">Archive</span>
+                <span class="src-meta">玄光社（2011 – 2015 の12号に掲載）</span>
+              </li>
+              <li>
+                <a href="https://web.archive.org/web/20040622233846/http://www.sbpnet.jp/digitalphoto/magazine/detail.asp?magid=905" target="_blank" rel="noopener">デジタルフォト専科 2003年9月号 目次</a><span class="ia-tag">Archive</span>
+                <span class="src-meta">ソフトバンクパブリッシング</span>
+              </li>
+              <li>
+                <a href="https://photo-advice.jp/zissen_star.html" target="_blank" rel="noopener">写真実践講座「星空撮影」講師（2015）</a>
+                <span class="src-meta">写真教室フォトアドバイス</span>
+              </li>
+              <li>
+                <a href="https://school.ricoh-imaging.co.jp/rim_academy/tokyo/workshop/2021/03/-423-521.html" target="_blank" rel="noopener">ワークショップ「ベランダで始める星景写真」講師（2021）</a>
+                <span class="src-meta">リコーフォトアカデミー</span>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Sidekick へ ── -->
+    <section class="sec">
+      <div class="wrap">
+        <h2 class="sec-h2">現在つくっているもの</h2>
+        <p class="sec-note">
+          撮影と現像のなかで自分が繰り返していた作業を、Photoshopスクリプトにしたものです。
+          考え方は「<a href="/sidekick" style="color:var(--accent2);">Sidekickとは</a>」に、
+          写真を撮る理由は「<a href="/about" style="color:var(--accent2);">なぜ私は写真を撮るのか</a>」にまとめています。
+        </p>
+        <div class="prod-grid">
+          <a class="prod" href="/sidekick-star">
+            <div class="prod-name">⭐ Sidekick Star</div>
+            <div class="prod-desc">星景写真の比較明合成・スカイマスク・飛行機軌跡除去を自動化。</div>
+            <div class="prod-more">製品ページを見る →</div>
+          </a>
+          <a class="prod" href="/portrait">
+            <div class="prod-name">👤 Sidekick Portrait</div>
+            <div class="prod-desc">ポートレートの繰り返しレタッチ工程をまとめて処理。</div>
+            <div class="prod-more">製品ページを見る →</div>
+          </a>
+          <a class="prod" href="/ai-lab">
+            <div class="prod-name">🤖 AI Lab（無料）</div>
+            <div class="prod-desc">講評AI・カメラAI・撮影AI・PC AI。ブラウザから試せます。</div>
+            <div class="prod-more">AI Lab を見る →</div>
+          </a>
+        </div>
+
+        <div class="disc">
+          <strong>このページの書き方について。</strong>
+          掲載しているのは、当サイト以外の公開資料で確認できる事項を中心にしています。
+          1x.com の作品数など変動する数値には時点を付けています。<br>
+          PENTAX / RICOH、出版社、写真教室との関係は、いずれも<strong>過去にお受けした仕事</strong>であり、
+          Sidekick に対する各社の推薦・評価・公認を意味するものではありません。
+          Sidekick が実際にどう動くかについては、製品ページ・マニュアル・
+          <a href="/faq" style="color:var(--sub);text-decoration:underline;">よくある質問</a>・
+          90日間の無料試用でご確認ください。
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
