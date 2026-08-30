@@ -525,3 +525,71 @@ def test_main_requires_output_en_when_content_en_given(tmp_path: Path) -> None:
                    "--content-en", str(content_en)])
 
     assert rc == 1
+
+
+# ---------------------------------------------------------------------------
+# テンプレート↔本番HTML 乖離検出（2026-08-30追加）
+# ---------------------------------------------------------------------------
+
+def _normalize_html_devlog(text: str) -> str:
+    """BOM と CRLF を正規化（内容の差ではない）。"""
+    return text.lstrip('﻿').replace('\r\n', '\n')
+
+
+def test_production_devlog_html_matches_template() -> None:
+    """本番に存在するdev-logページについて、テンプレートレンダリング結果 == 本番HTMLを検証する。
+
+    失敗した場合は build_development_log.py を再実行して再ビルドすること。
+    """
+    content_dir = REPO_ROOT / "content" / "development-log"
+    content_en_dir = content_dir / "en"
+
+    if not content_dir.exists():
+        pytest.skip("content/development-log が存在しない")
+
+    ja_entries, _ = bdl.load_entries(content_dir, language="ja")
+    en_entries: list = []
+    if content_en_dir.exists():
+        en_entries, _ = bdl.load_entries(content_en_dir, language="en")
+
+    hreflang = bdl.compute_hreflang_by_slug(ja_entries, en_entries)
+    rendered_ja = bdl.render_all(ja_entries, language="ja",
+                                 hreflang_by_slug=hreflang, include_top_hreflang=True)
+    rendered_en = bdl.render_all(en_entries, language="en",
+                                 hreflang_by_slug=hreflang, include_top_hreflang=True)
+
+    failures: list[str] = []
+
+    for rel_path, built_html in rendered_ja.items():
+        prod_path = REPO_ROOT / "development-log" / rel_path
+        if not prod_path.exists():
+            continue
+        prod = _normalize_html_devlog(prod_path.read_text(encoding="utf-8-sig"))
+        built = _normalize_html_devlog(built_html)
+        if prod != built:
+            n_prod = len(prod.splitlines())
+            n_built = len(built.splitlines())
+            failures.append(
+                f"  development-log/{rel_path}: 差分あり (本番={n_prod}行,"
+                f" テンプレート={n_built}行, ずれ={abs(n_prod - n_built)}行)"
+            )
+
+    for rel_path, built_html in rendered_en.items():
+        prod_path = REPO_ROOT / "en" / "development-log" / rel_path
+        if not prod_path.exists():
+            continue
+        prod = _normalize_html_devlog(prod_path.read_text(encoding="utf-8-sig"))
+        built = _normalize_html_devlog(built_html)
+        if prod != built:
+            n_prod = len(prod.splitlines())
+            n_built = len(built.splitlines())
+            failures.append(
+                f"  en/development-log/{rel_path}: 差分あり (本番={n_prod}行,"
+                f" テンプレート={n_built}行, ずれ={abs(n_prod - n_built)}行)"
+            )
+
+    assert not failures, (
+        "テンプレート↔本番dev-log HTML の乖離を検出しました。"
+        "build_development_log.py を再実行して再ビルドしてください:\n"
+        + "\n".join(failures)
+    )

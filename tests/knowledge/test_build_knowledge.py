@@ -1220,6 +1220,57 @@ def test_lang_switch_link_points_to_matching_article(tmp: Path) -> None:
           'href="/knowledge/photoshop/sample-article"' in en_html, en_html)
 
 
+# ---------------------------------------------------------------------------
+# テンプレート↔本番HTML 乖離検出（2026-08-30追加）
+# ---------------------------------------------------------------------------
+
+def _normalize_html_kb(text: str) -> str:
+    """BOM と CRLF を正規化（内容の差ではない）。"""
+    return text.lstrip('﻿').replace('\r\n', '\n')
+
+
+def test_production_knowledge_html_matches_template() -> None:
+    """本番に存在するKnowledgeページについて、テンプレートレンダリング結果 == 本番HTMLを検証する。
+
+    失敗した場合は build_knowledge.py --output . を実行して再ビルドすること。
+    """
+    sys.path.insert(0, str(REPO_ROOT / "build" / "knowledge"))
+    import build_knowledge as bk  # noqa: PLC0415
+
+    index_path = REPO_ROOT / "data" / "knowledge" / "web-published.json"
+    if not index_path.exists():
+        check("テンプレート↔本番Knowledge乖離検出: インデックスファイルが存在する", False,
+              f"({index_path} が見つからない)")
+        return
+
+    index = bk.load_index(index_path)
+    rendered = bk.render_all(index, None)
+
+    failures: list[str] = []
+    for rel_path, built_html in rendered.items():
+        # EN は Path("..", "en", "knowledge", ...) 形式なので resolve で正規化
+        prod_path = (REPO_ROOT / "knowledge" / rel_path).resolve()
+        if not prod_path.exists():
+            continue  # 本番に存在しないページはスキップ（spec: 本番存在分のみ検証）
+        prod = _normalize_html_kb(prod_path.read_text(encoding="utf-8-sig"))
+        built = _normalize_html_kb(built_html)
+        if prod != built:
+            n_prod = len(prod.splitlines())
+            n_built = len(built.splitlines())
+            failures.append(
+                f"  {rel_path}: 差分あり (本番={n_prod}行, テンプレート={n_built}行,"
+                f" ずれ={abs(n_prod - n_built)}行)"
+            )
+
+    if failures:
+        msg = ("テンプレート↔本番Knowledge HTML の乖離を検出しました。"
+               "build_knowledge.py --output . を実行して再ビルドしてください:\n"
+               + "\n".join(failures))
+        check("テンプレート↔本番Knowledge乖離検出", False, msg)
+    else:
+        check("テンプレート↔本番Knowledge乖離検出", True)
+
+
 def main() -> int:
     tests = [
         # Phase A1
@@ -1266,6 +1317,8 @@ def main() -> int:
         test_ja_article_no_hreflang_when_no_en_counterpart, test_en_article_uses_english_labels,
         test_en_category_grouping_uses_correct_slugs,
         test_en_index_top_page_labels_and_empty_state, test_lang_switch_link_points_to_matching_article,
+        # テンプレート↔本番HTML 乖離検出（2026-08-30追加）
+        test_production_knowledge_html_matches_template,
     ]
     for t in tests:
         t()

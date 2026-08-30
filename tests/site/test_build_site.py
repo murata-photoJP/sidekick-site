@@ -124,3 +124,39 @@ def test_english_legal_pages_have_metadata_and_language_links(
     assert '<html lang="en">' in html
     assert 'href="/en/privacy"' in html
     assert 'href="/en/legal"' in html
+
+
+# ---------------------------------------------------------------------------
+# テンプレート↔本番HTML 乖離検出（2026-08-30追加）
+# ---------------------------------------------------------------------------
+
+def _normalize_html(text: str) -> str:
+    """BOM と CRLF を正規化（内容の差ではない）。"""
+    return text.lstrip('﻿').replace('\r\n', '\n')
+
+
+def test_production_html_matches_template_render() -> None:
+    """登録済み全ページについて、テンプレートレンダリング結果 == 本番HTMLを検証する。
+
+    失敗した場合は build_site.py --output . を実行して再ビルドすること。
+    """
+    rendered = bs.render_all(None)
+    failures: list[str] = []
+    for page_key, page_def in bs.PAGES.items():
+        prod_path = REPO_ROOT / page_def["output"]
+        if not prod_path.exists():
+            failures.append(f"  {page_key}: 本番ファイルが存在しない ({page_def['output']})")
+            continue
+        prod = _normalize_html(prod_path.read_text(encoding="utf-8-sig"))
+        built = _normalize_html(rendered[page_def["output"]])
+        if prod != built:
+            n_prod = len(prod.splitlines())
+            n_built = len(built.splitlines())
+            failures.append(
+                f"  {page_key}: 差分あり (本番={n_prod}行, テンプレート={n_built}行,"
+                f" ずれ={abs(n_prod - n_built)}行)"
+            )
+    assert not failures, (
+        "テンプレート↔本番HTML の乖離を検出しました。build_site.py --output . を実行して再ビルドしてください:\n"
+        + "\n".join(failures)
+    )
