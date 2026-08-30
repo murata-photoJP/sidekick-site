@@ -41,8 +41,9 @@ def check(name: str, cond: bool, detail: str = "") -> None:
     else:
         FAIL.append(name)
         _safe_print(f"FAIL: {name} {detail}")
-        # pytest から実行した場合に失敗を伝える（main()側は try/except で継続する）
-        assert cond, f"{name} {detail}"
+        # ここではassertしない。1つのcheck()の失敗で関数の残りのcheck()が
+        # 実行されなくなるのを避けるため（診断性のため）。関数全体としての
+        # 失敗は with_tmp() が関数終了時にまとめて判定する。
 
 
 # ---------------------------------------------------------------------------
@@ -163,13 +164,39 @@ def run_build(index_data: dict, tmp: Path, *extra: str, index_filename: str = "w
     return proc, output_dir
 
 
+def _raise_if_new_failures(fail_before: int, fn_name: str) -> None:
+    """fail_before以降に新たに積まれたFAILがあれば、まとめて1回だけassertする。
+
+    途中のcheck()を打ち切らずに関数内の全checkを実行したうえで、
+    最後にまとめて落とすための共通処理（with_tmp / with_checks から使う）。
+    """
+    new_failures = FAIL[fail_before:]
+    if new_failures:
+        raise AssertionError(
+            f"{len(new_failures)} check(s) failed in {fn_name}: "
+            + "; ".join(new_failures)
+        )
+
+
 def with_tmp(fn):
     def wrapper():
         tmp = Path(tempfile.mkdtemp(prefix="knowledge_build_test_"))
+        fail_before = len(FAIL)
         try:
             fn(tmp)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
+        _raise_if_new_failures(fail_before, fn.__name__)
+    return wrapper
+
+
+def with_checks(fn):
+    """tmpディレクトリを使わないテスト関数向け。with_tmpと同様、関数内の
+    check()をすべて実行したうえで、失敗があれば関数の最後にまとめて落とす。"""
+    def wrapper():
+        fail_before = len(FAIL)
+        fn()
+        _raise_if_new_failures(fail_before, fn.__name__)
     return wrapper
 
 
@@ -1243,6 +1270,7 @@ def _normalize_html_kb(text: str) -> str:
     return text.lstrip('﻿').replace('\r\n', '\n')
 
 
+@with_checks
 def test_production_knowledge_html_matches_template() -> None:
     """本番に存在するKnowledgeページについて、テンプレートレンダリング結果 == 本番HTMLを検証する。
 
