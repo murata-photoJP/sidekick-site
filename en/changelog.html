@@ -20,6 +20,7 @@
       var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
       if (!isJapanese) {
         localStorage.setItem('sk_lang_pref', 'en');
+        
       }
     } catch (e) { /* localStorageが使えない環境などは何もしない */ }
   })();
@@ -837,6 +838,7 @@
             <li><a href="/en/about">About</a></li>
             <li><a href="/en/sidekick">What is Sidekick</a></li>
             <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
             <li><a href="/en/terms">Terms</a></li>
             <li><a href="/en/legal">Legal Notice</a></li>
             <li><a href="/en/privacy">Privacy Policy</a></li>
