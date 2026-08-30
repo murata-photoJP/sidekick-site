@@ -182,6 +182,15 @@ for _slug in ("legal", "privacy"):
         en_extra={"nav_current": None},
     )
 
+# terms は AI Lab 利用規約。legal/privacy と同じ扱い（グローバルナビに項目なし）。
+# en_redirect_url を明示して .html 付きのデフォルト（/en/terms.html）を上書きする
+# （cleanUrls:true 環境での余分なリダイレクト1回を防ぐため）。2026-08-30移行。
+_register_page_pair(
+    "terms",
+    ja_extra={"nav_current": None, "en_redirect_url": "/en/terms"},
+    en_extra={"nav_current": None},
+)
+
 # トップページ（index）はURLがルート（/、/en/）でslugベースの他ページと形式が違うため、
 # _register_page_pair()を使わずPAGESへ直接登録する。村田さんが本番で「Sidekick Lab」の
 # 折り返し表示・ナビ文字色不一致を発見・報告したことがきっかけで移行対象になった
