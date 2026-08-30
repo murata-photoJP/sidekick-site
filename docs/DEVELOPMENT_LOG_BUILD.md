@@ -1,13 +1,19 @@
 # 開発日誌（Development Log）ビルド — 実装記録
 
-`_DevelopmentLog`（Photoshop Presetsフォルダ配下、別git repo）が生成する公開用の
-開発日誌を、このWebリポジトリで閲覧できるようにする仕組み。打ち出の小槌
-（`docs/KNOWLEDGE_BUILD.md`）と同じ設計方針（Python + Jinja2 + markdown-it-py、
-atomicなステージング書き込み、sitemapはマーカーコメント方式）を踏襲するが、
-入力が事前正規化されたJSONではなく、Markdown＋YAML front matterを直接読む点が異なる。
+`_DevelopmentLog`（Photoshop Presetsフォルダ配下）が生成する公開用の
+開発日誌を、このWebリポジトリで閲覧できるようにする仕組み。`_DevelopmentLog`に
+`.git`は無く、`自作`リポジトリ（`C:\Program Files\Adobe\Adobe Photoshop (Beta)\Presets\Scripts\自作`）
+の一部として追跡されている（2026-08-30時点、79ファイル）。別リポジトリではないが、
+Vercelのビルド環境からはPhotoshopのPresetsフォルダを参照できないため、同期（sync）が
+必要になる（詳細は50行目）。打ち出の小槌（`docs/KNOWLEDGE_BUILD.md`）と同じ設計方針
+（Python + Jinja2 + markdown-it-py、atomicなステージング書き込み、sitemapはマーカー
+コメント方式）を踏襲するが、入力が事前正規化されたJSONではなく、Markdown＋YAML
+front matterを直接読む点が異なる。
 
 「更新履歴」（`changelog.html`）とは別コンテンツとして扱う。`changelog.html`は
-手書きの静的HTMLでビルド処理を持たず、今回の実装はそれに一切触れていない。
+`build/site/build_site.py`側の別テンプレート・別ビルド処理を持ち（2026-08-30時点で
+テンプレート化済み）、今回の開発日誌の実装（`build/development-log/`配下）は
+それに一切触れていない。
 
 ---
 
@@ -238,7 +244,7 @@ git push後はVercelが自動でビルド・公開する（本仕組み自体は
 python -m pytest tests/development-log -q
 ```
 
-同期・ビルド・sitemap反映のそれぞれについて、tempfile上の独立した
+2026-08-30時点で71件。同期・ビルド・sitemap反映のそれぞれについて、tempfile上の独立した
 ディレクトリで完結するテストを用意した（本番の`_DevelopmentLog`・
 `content/development-log`・`sitemap.xml`には一切触れない）。日本語・空白・
 括弧を含むWindowsパスでの動作も確認済み（`test_sync_development_log.py::
@@ -251,9 +257,10 @@ test_handles_japanese_space_and_parenthesis_in_path`）。
 
 ## 13. 残課題（今回見送った項目）
 
-- トップページ（`index.html`）への「最新の開発日誌」導線は追加していない
-  （`index.html`は手書きの静的HTMLでテンプレート化されておらず、今回の
-  スコープでは一覧ページとナビゲーション導線のみとした）
+- トップページ（`index.html`）への「最新の開発日誌」導線は追加していない。
+  `index.html`は2026-07-22にJinja2テンプレート化されており（`templates/site/pages/index.html`、
+  `build_site.py`のPAGESに登録済み）、テンプレート化されていないという技術的な制約は
+  解消している。導線を追加するかどうかは未判断のまま残っている
 - RSS（開発日誌専用・既存サイト共通とも）は追加していない（既存サイトに
   RSSの仕組みが無いため、今回は必須要件ではないと判断した）
 - 記事別OGP画像・構造化データ（JSON-LD）は追加していない（打ち出の小槌の
@@ -262,8 +269,10 @@ test_handles_japanese_space_and_parenthesis_in_path`）。
   監査レポートは無し）。`_統合KB`のような複数ラウンド監査・過剰修正検知は
   意図的に持ち込んでいない
 
-## 14. 公開実績（2026-07-21時点）
+## 14. 公開実績（2026-08-30時点）
 
-- 日本語：2026-07-18分・2026-07-20分を`/development-log`へ本番公開済み
-- 英語：上記2本を`_DevelopmentLog/scripts/translate_to_english.py`で翻訳し、
-  村田さんの確認後`/en/development-log`へ本番公開済み
+- 日本語：6本を`/development-log`へ本番公開済み（2026-07-18・07-20・07-21・07-25・08-12・08-30）
+- 英語：4本を`/en/development-log`へ本番公開済み（2026-07-18・07-20・07-21・07-25）。
+  08-12分・08-30分の2本が未翻訳のまま英語版が遅れている状態になっている
+- 2026-08-30、村田さんが「英語版は今後も継続する（既存の軽量運用のまま）」と判断。
+  遅れている2本の翻訳・公開はTask Bで対応中（本ドキュメント更新時点では未完了）
