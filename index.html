@@ -296,7 +296,7 @@
     ───────────────────────────────────── */
     .supp{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);background:var(--bg2);}
     .supp-hd{text-align:center;margin-bottom:36px;}
-    .supp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+    .supp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
     .supp-card{
       display:flex;flex-direction:column;align-items:center;text-align:center;
       padding:28px 16px;background:var(--card);border-radius:var(--r);
@@ -388,6 +388,7 @@
     @media(max-width:860px){
       .hub-grid{grid-template-columns:1fr;}
       .supp-grid{grid-template-columns:repeat(2,1fr);}
+      .supp-grid>*:nth-child(5){grid-column:1 / -1;}
       .abt-inner{grid-template-columns:1fr;}
       .abt-img{order:-1;}
       .ba-pair{grid-template-columns:1fr;}
@@ -828,6 +829,11 @@
             <div class="supp-icon">📋</div>
             <div class="supp-name">更新履歴</div>
             <div class="supp-desc">バージョンアップの内容</div>
+          </a>
+          <a href="/development-log" class="supp-card">
+            <div class="supp-icon">📝</div>
+            <div class="supp-name">開発日誌</div>
+            <div class="supp-desc">開発の判断や試行錯誤の記録</div>
           </a>
           <a href="mailto:murata.photo@gmail.com" class="supp-card">
             <div class="supp-icon">✉️</div>

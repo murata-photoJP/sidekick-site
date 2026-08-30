@@ -232,7 +232,7 @@
     /* ── Support ── */
     .supp{padding:56px 0;border-top:1px solid rgba(255,255,255,.07);}
     .supp-hd{text-align:center;margin-bottom:36px;}
-    .supp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+    .supp-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
     .supp-card{display:flex;flex-direction:column;align-items:center;text-align:center;padding:28px 16px;background:var(--card);border-radius:var(--r);border:1px solid rgba(255,255,255,.07);transition:.15s;}
     .supp-card:hover{border-color:rgba(255,255,255,.16);transform:translateY(-2px);}
     .supp-icon{font-size:28px;margin-bottom:10px;line-height:1;}
@@ -272,6 +272,7 @@
     @media(max-width:860px){
       .hub-grid{grid-template-columns:1fr;}
       .supp-grid{grid-template-columns:repeat(2,1fr);}
+      .supp-grid>*:nth-child(5){grid-column:1 / -1;}
       .abt-inner{grid-template-columns:1fr;}
       .abt-img{order:-1;}
       .ai-entry-visual{display:none;}
@@ -634,6 +635,11 @@
             <div class="supp-icon">📋</div>
             <div class="supp-name">Changelog</div>
             <div class="supp-desc">Version history &amp; updates</div>
+          </a>
+          <a href="/en/development-log" class="supp-card">
+            <div class="supp-icon">📝</div>
+            <div class="supp-name">Development Log</div>
+            <div class="supp-desc">Decisions, dead ends, and lessons learned</div>
           </a>
           <a href="mailto:murata.photo@gmail.com" class="supp-card">
             <div class="supp-icon">✉️</div>
