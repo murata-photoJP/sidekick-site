@@ -41,6 +41,8 @@ def check(name: str, cond: bool, detail: str = "") -> None:
     else:
         FAIL.append(name)
         _safe_print(f"FAIL: {name} {detail}")
+        # pytest から実行した場合に失敗を伝える（main()側は try/except で継続する）
+        assert cond, f"{name} {detail}"
 
 
 # ---------------------------------------------------------------------------
@@ -1008,14 +1010,22 @@ def test_mobile_nav_button_attributes(tmp: Path) -> None:
 def test_nav_links_present_without_js(tmp: Path) -> None:
     """JS無しでもHTML上にリンクが存在すること（displayをJSで制御しているだけで、
     リンク自体を条件付きで生成していないことをHTML文字列で確認する）。
-    既存サイトの実ヘッダーを流用しているため、項目数は12（Star/Portrait/Sky/
-    打ち出の小槌/Workshop/Gallery/Sidekickとは/About/更新履歴/Support/AI Lab/EN）。"""
+    期待リンク数はテンプレート header.html の nav セクションから動的に取得するため、
+    ナビ項目が増減してもテストを更新する必要がない。
+    現在のナビ項目（2026-08-30時点）:
+      Star / Portrait / Sky / 打ち出の小槌 / Workshop / LP / Gallery /
+      Sidekickとは / About / 開発日誌 / 更新履歴 / Support / AI Lab / EN（計14件）。"""
+    header_tmpl = (REPO_ROOT / "templates" / "knowledge" / "header.html").read_text(encoding="utf-8")
+    tmpl_nav = header_tmpl.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
+    expected_count = tmpl_nav.count("<a ")
+
     index = make_index()
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")
     html = (output_dir / "photoshop" / "sample-article.html").read_text(encoding="utf-8")
     nav_section = html.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
     check("mobile nav: 既存ナビ全項目がHTML上にリンクとして存在する",
-          nav_section.count("<a ") == 12, nav_section)
+          nav_section.count("<a ") == expected_count,
+          f"(期待={expected_count}, 実際={nav_section.count('<a ')} — header.htmlと同数であること)")
 
 
 @with_tmp
@@ -1321,7 +1331,10 @@ def main() -> int:
         test_production_knowledge_html_matches_template,
     ]
     for t in tests:
-        t()
+        try:
+            t()
+        except AssertionError:
+            pass  # FAIL は check() で既に積まれている。集計は継続する。
     _safe_print(f"\n{len(PASS)} passed, {len(FAIL)} failed")
     return 1 if FAIL else 0
 
