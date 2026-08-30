@@ -19,23 +19,21 @@
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>開発日誌｜SideKick</title>
-<meta name="description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<link rel="canonical" href="https://www.sidekick-lab.com/development-log">
+<title>テンプレートと本番がずれても、テストは何も言わなかった｜開発日誌 - SideKick</title>
+<meta name="description" content="サイト改修の作業中に、テンプレートを直しても本番のHTMLには反映されていなかった不具合が3件、実行方法によって結果が変わってしまうテストが1件見つかった。いずれも直した瞬間には何も起きず、次に誰かが動かしたときに初めて症状が出る、という共通点があった。">
+<link rel="canonical" href="https://www.sidekick-lab.com/development-log/2026-08-30">
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/development-log">
-
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/development-log">
-
-<meta property="og:type" content="website">
-<meta property="og:title" content="開発日誌｜SideKick">
-<meta property="og:description" content="SideKickの開発日誌。写真家がPhotoshopスクリプトを作り、困り、試し、改善していく過程の記録です。">
-<meta property="og:url" content="https://www.sidekick-lab.com/development-log">
+<meta property="og:type" content="article">
+<meta property="og:title" content="テンプレートと本番がずれても、テストは何も言わなかった｜開発日誌 - SideKick">
+<meta property="og:description" content="サイト改修の作業中に、テンプレートを直しても本番のHTMLには反映されていなかった不具合が3件、実行方法によって結果が変わってしまうテストが1件見つかった。いずれも直した瞬間には何も起きず、次に誰かが動かしたときに初めて症状が出る、という共通点があった。">
+<meta property="og:url" content="https://www.sidekick-lab.com/development-log/2026-08-30">
 <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-30">
 
 <!-- 開発日誌はKnowledgeと視覚的な統一感を保つため、既存の共通スタイルシートをそのまま利用する
      （新規CSSファイルは追加せず、既存のkzc-*クラスを流用する）。 -->
@@ -166,96 +164,78 @@
 </script>
 <main>
 
-<section class="kzc-hero">
-  
-  <h1>開発日誌</h1>
-  <p class="kzc-hero-tagline">SideKickを作りながら、何に困り、何を試し、何を選んだかの記録です。</p>
-  
-</section>
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/development-log">開発日誌</a></li>
+    <li aria-current="page">テンプレートと本番がずれても、テストは何も言わなかった</li>
+  </ol>
+</nav>
 
-
-<section class="kzc-article-list" aria-label="開発日誌一覧">
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-08-30">テンプレートと本番がずれても、テストは何も言わなかった</a></h3>
-    <p class="kzc-card-desc">サイト改修の作業中に、テンプレートを直しても本番のHTMLには反映されていなかった不具合が3件、実行方法によって結果が変わってしまうテストが1件見つかった。いずれも直した瞬間には何も起きず、次に誰かが動かしたときに初めて症状が出る、という共通点があった。</p>
-    <p class="kzc-card-meta">
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">テンプレートと本番がずれても、テストは何も言わなかった</h1>
+    <p class="kzc-article-lead">サイト改修の作業中に、テンプレートを直しても本番のHTMLには反映されていなかった不具合が3件、実行方法によって結果が変わってしまうテストが1件見つかった。いずれも直した瞬間には何も起きず、次に誰かが動かしたときに初めて症状が出る、という共通点があった。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Website</span>
       <time datetime="2026-08-30">2026年8月30日</time>
-      
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">SideKick</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-08-12">AIマスク生成が終わらない原因を、疑わしい順に一つずつ確かめた</a></h3>
-    <p class="kzc-card-desc">SideKick StarのAIマスク生成が、特定の環境で処理途中のまま終わらなくなる不具合が起きた。有力に見えた原因をひとつずつ確かめては違うと分かり、最終的に別の対策で解決した記録。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-08-12">2026年8月12日</time>
-      <span class="kzc-badge">SideKick Star</span>
+    <p class="kzc-article-meta">
+      <span class="kzc-badge">Testing</span><span class="kzc-badge">Update</span>
     </p>
-  </div>
-</article>
-  
     
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-25">共通テンプレートへの移行を、ページごとに確認しながら進める</a></h3>
-    <p class="kzc-card-desc">SideKick Labのページ構成を一度に置き換えず、表示や導線を確かめながら共通テンプレートへ移行しています。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-25">2026年7月25日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">Website</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-21">開発日誌を公開したら、同じ直し忘れを4回繰り返した</a></h3>
-    <p class="kzc-card-desc">この開発日誌そのものをSideKick Labサイトで公開できるようにした。日本語版・英語版とも公開できたが、その過程で同じ種類の反映漏れを4回繰り返した。静的サイトならではの落とし穴だった。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-21">2026年7月21日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-20">英語版Knowledge記事を、著者レビューを経て本番公開した</a></h3>
-    <p class="kzc-card-desc">打ち出の小槌（Knowledge Base）の英語版を公開した。AIに翻訳させた記事を、英語を読み切らずに公開判断できる仕組みを実際に動かし、最初の記事群を本番へ出した。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-20">2026年7月20日</time>
-      
-    </p>
-  </div>
-</article>
-  
-    
-<article class="kzc-card">
-  <div class="kzc-card-body">
-    <p class="kzc-card-category">AI Development</p>
-    <h3 class="kzc-card-title"><a href="/development-log/2026-07-18">英語を読めなくても、AI生成記事の公開可否を判断できる仕組み</a></h3>
-    <p class="kzc-card-desc">SideKickのKnowledge Baseで、日本語記事から英語版記事を自動生成する機能を試作している。AI自身に日本語で監査レポートを書かせることで、英語を読まなくても品質判断ができる設計にした。</p>
-    <p class="kzc-card-meta">
-      <time datetime="2026-07-18">2026年7月18日</time>
-      
-    </p>
-  </div>
-</article>
-  
-</section>
+  </header>
 
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>サイトの改修作業をしている最中に、本題とは別のところで4件の不具合を見つけた。いずれも「直したはずなのに直っていない」「テストが通っているのに壊れている」という種類のもので、共通しているのは、症状が出るのは次に誰かが再ビルドしたり再実行したりしたときであって、原因を作った時点では何も起きない、という点だった。今回はその4件と、そこから得た教訓を記録しておく。</p>
+<h2>テンプレートを直したのに、本番はそのままだった</h2>
+<p>3つのページで、同じ構造の問題が見つかった。ページの見た目は、共通のテンプレートから生成する仕組みになっているが、何らかの理由でテンプレート側だけを直して、実際に配信されている本番のHTMLを作り直すのを忘れる、ということが起きていた。</p>
+<p>プロフィールページでは、6日前に本番側だけを直接修正していたため、次にテンプレートから作り直すと、その修正がまるごと巻き戻る状態になっていた。更新履歴ページでは逆に、新しく追加した4件の項目がテンプレート側に反映されておらず、全ページを作り直すと本番の履歴が消えてしまう状態だった。</p>
+<p>いちばん長く気づかれなかったのは、英語版の「打ち出の小槌」のフッターだった。5週間にわたって、プライバシーポリシーと利用規約へのリンクが無いフッターを配信し続けていた。原因を調べていたとき、テンプレートのコメントに「英語ページが存在しないページへはリンクしない」という古い方針が書かれているのを見つけて、一瞬「これは仕様どおりなのでは」と誤解しかけた。実際にはその方針はすでに撤回されていて、コメントだけが消し忘れられていた。Gitの履歴でそのコメントがいつからあるか、方針自体がいつ変わったかを確認して、誤読を避けることができた。</p>
+<h2>「全部PASS」が意味していなかったこと</h2>
+<p>今回いちばん書く価値があると思っているのは、この件だ。</p>
+<p>同じテストを2つの方法で実行すると、結果が食い違っていた。一方の実行方法ではすべて成功と表示されるのに、もう一方では失敗が出る。原因を調べると、テストの中身を確認する処理が、問題を見つけてもリストに記録するだけで、実行環境に対して「失敗した」と伝える処理を書き忘れていた。そのため、片方の実行方法から見ると、何を検査していようと必ず成功したことになっていた。</p>
+<p>実際に検査が抜け落ちていた先では、ヘッダーのナビゲーション項目の数を、決め打ちの数値でチェックしていた。開発日誌のページを追加した時点で数が1つ増え、その後もう1ページ復活させて2つ増えていたが、その食い違いは5週間以上、誰にも気づかれていなかった。</p>
+<p>そして今回の作業中も、「テストは全部成功している、意図しない変更は無い」という報告を何度もしていた。その「全部成功」は、実際には壊れていた検査については何も保証していなかった。テストが通っていることと、テストが機能していることは別だ、というごく基本的なことを、今回あらためて思い知らされた。</p>
+<h2>差分の要約が、見えない変更を隠していた</h2>
+<p>フッターへのリンク追加を確認したとき、変更内容を要約して「意図しない変更の混入は無い」と判断したが、実際には英語版21ページの先頭にあった、目に見えない制御文字が同時に取り除かれていた。差分を要約する際に、空白の増減を無視する方法を使っていたため、その1文字だけの変更が、他の空行の変化に紛れて見えなくなっていた。</p>
+<p>結果として実害は無かった。すべてのページですでに文字コードを別の方法で宣言しており、その制御文字自体が無くても問題は起きない構成だったからだ。問題なのは、実害の有無ではなく、「意図しない変更は無い」と言い切ってしまったことだった。</p>
+<h2>見えてきた共通点</h2>
+<p>4件に共通しているのは、次のようなことだ。</p>
+<ul>
+<li>「成功」と表示するスクリプトは、意図した結果になったことまでは保証しない</li>
+<li>「全部成功」と出るテストは、検査そのものが機能していることまでは保証しない</li>
+<li>差分を要約する処理は、何を無視しているかを意識していないと、無視したものはそのまま見えなくなる</li>
+<li>どの不具合も、症状が出るのは次に誰かが動かしたときで、原因を作った瞬間には何も起きない</li>
+</ul>
+<p>だからこそ、定期的に「テンプレートと本番が一致しているか」「テストは本当に失敗できるのか」を確かめる仕組みが必要だと考え、今回それを実際に作った。</p>
+<h2>今回入れた対策</h2>
+<p>テンプレートと本番のHTMLが食い違っていないかを検出するテストを、サイト全体・打ち出の小槌・開発日誌の3つの区分に分けて追加した。あわせて、検査の失敗が実行結果へきちんと伝わるように直し、ナビゲーション項目の数についても、決め打ちの数値をやめて、テンプレートから実際の項目数を数える方式に変えた。</p>
+<p>ただし、この対策にも限界がある。項目数を数える処理は、テンプレートの文字列を単純に数える方式のため、条件によって出したり消したりするリンクがある場合、その条件分岐までは正しく解釈できない。英語版のリンクを出さない設定でページを作る場合には、この数え方はそのままでは使えない。これはコード上に明記して残してある。</p>
+<p>また、検査の失敗が実行結果へ伝わるようにしたことで、1つの確認処理の中で最初の失敗が見つかった時点で、それより後の検査が実行されなくなった。すべての問題を一度に洗い出せるわけではなく、直しては再実行する、という手順が必要になる。</p>
+<h2>まだ残っていること</h2>
+<p>今回見つかった4件はいずれも直したが、同じ種類の「テンプレートと本番のずれ」や「機能していない検査」が、今回確認した範囲の外に残っている可能性は否定できない。今回作った検出の仕組みも万能ではないため、しばらくは実際に運用しながら、抜けがないかを確かめていく必要がある。</p>
+
+  </div>
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+    <p><a href="/development-log">← 開発日誌の一覧へ戻る</a></p>
+  </footer>
+</article>
 
 </main>
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
