@@ -1014,7 +1014,11 @@ def test_nav_links_present_without_js(tmp: Path) -> None:
     ナビ項目が増減してもテストを更新する必要がない。
     現在のナビ項目（2026-08-30時点）:
       Star / Portrait / Sky / 打ち出の小槌 / Workshop / LP / Gallery /
-      Sidekickとは / About / 開発日誌 / 更新履歴 / Support / AI Lab / EN（計14件）。"""
+      Sidekickとは / About / 開発日誌 / 更新履歴 / Support / AI Lab / EN（計14件）。
+    注意: テンプレートを文字列でカウントするため、Jinja2 の条件分岐内リンクも
+    含めてカウントされる。show_en_link=False でビルドするページ（Workshopなど）では
+    期待値と実際のリンク数がずれるため、このテストは適用できない。
+    打ち出の小槌は show_en_link=True（既定）なので現状は正しく動作する。"""
     header_tmpl = (REPO_ROOT / "templates" / "knowledge" / "header.html").read_text(encoding="utf-8")
     tmpl_nav = header_tmpl.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
     expected_count = tmpl_nav.count("<a ")
