@@ -1,5 +1,7 @@
 # 打ち出の小槌（Knowledge）ビルド — Phase A1
 
+> デプロイ前の全体チェック手順は`docs/DEPLOY_CHECKLIST.md`を参照。
+
 `_統合KB`が生成した`web-published.json`を読み、Markdown本文をHTML化し、
 Jinja2テンプレートへ流し込んで静的HTMLを生成する仕組み。Phase A1の範囲は
 「記事1本のHTML生成が動くこと」まで。一覧ページ・複数記事の一括生成・

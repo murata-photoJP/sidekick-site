@@ -1,5 +1,7 @@
 # 更新履歴（Changelog）— Codex運用ルール
 
+> デプロイ前の全体チェック手順は`docs/DEPLOY_CHECKLIST.md`を参照。
+
 ## 1. 目的
 
 この文書は、SideKick Labのユーザー向け更新履歴をCodexで安全に更新するための手順を定める。

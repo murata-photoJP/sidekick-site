@@ -1,5 +1,7 @@
 # 開発日誌（Development Log）ビルド — 実装記録
 
+> デプロイ前の全体チェック手順は`docs/DEPLOY_CHECKLIST.md`を参照。
+
 `_DevelopmentLog`（Photoshop Presetsフォルダ配下）が生成する公開用の
 開発日誌を、このWebリポジトリで閲覧できるようにする仕組み。`_DevelopmentLog`に
 `.git`は無く、`自作`リポジトリ（`C:\Program Files\Adobe\Adobe Photoshop (Beta)\Presets\Scripts\自作`）
