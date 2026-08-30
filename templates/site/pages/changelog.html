@@ -266,6 +266,61 @@
 
       <!-- ▼ 新しいエントリを追加 ▼ -->
 
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-08-22</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>流星群機能が新規インストール環境で動作しない問題を修正</h2>
+          <ul>
+            <li>配布 zip から新しくインストールしたユーザーが「流星群を作成」を実行できなかった問題を修正しました。複数の原因が重なっていたため、それらをまとめて解消しています</li>
+            <li>流星処理に必要な Python 実行環境と推論コードを zip に同梱するよう変更しました。Python が別途インストールされていない環境でも動作します</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-08-15</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>AIマスク生成の安定性向上・RawDev再開処理の改善</h2>
+          <ul>
+            <li>AIを使ったスカイマスク生成の内部起動方式を刷新しました。特定の環境で処理が止まることがあった問題が改善されています</li>
+            <li>RawDev（現像バッチ処理）の途中再開判定を改善しました。前回バッチで完了済みのファイルは不要な再処理をスキップするようになりました</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-08-07</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>比較明合成のメモリ使用量を改善</h2>
+          <ul>
+            <li>比較明合成の処理中に Photoshop のヒストリー数を最小限に絞るようにしました。RAM が 16GB 前後の環境で途中停止しやすかった問題の改善が期待できます</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="entry" data-type="sidekick">
+        <div class="entry-date">
+          <time>2026-08-02</time>
+        </div>
+        <div class="entry-body">
+          <span class="entry-tag tag-sidekick">SIDEKICK STAR</span>
+          <h2>飛行機除去AIの処理改善・安定性修正</h2>
+          <ul>
+            <li>飛行機除去AIの内部処理を見直し、同じ画像を何度も読み込んでいた無駄を解消しました。処理が速くなり、メモリ使用量も改善されています</li>
+            <li>飛行機除去が全コマ失敗した場合に、Photoshopによるフォールバック合成が正しく動作しなかった問題を修正しました</li>
+          </ul>
+        </div>
+      </div>
+
       <div class="entry" data-type="site">
         <div class="entry-date">
           <time>2026-07-25</time>
