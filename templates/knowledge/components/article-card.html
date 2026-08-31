@@ -1,5 +1,17 @@
 {# Article Card 部品。呼び出し側で `card`（article_card契約の1件）を渡すこと。
-   関連製品・concept・tag一覧・内部ID・confidence・記事数・空のサムネイル枠は表示しない。 #}
+   関連製品・concept・tag一覧・内部ID・confidence・記事数・空のサムネイル枠は表示しない。
+
+   ── 見出しレベルについて（2026-09-01） ──
+   カードタイトルの見出しレベルは、この部品が置かれるページの文書構造で決まるため、
+   呼び出し側が `card_heading_level` で指定する。部品側で固定しない。
+
+     Story一覧・開発日誌一覧 : h1 の直下にカードが並ぶ    -> 2
+     打ち出の小槌の「すべての記事」: h1 > h2 > h3(カテゴリ) の下 -> 3
+
+   既定値は 3。指定を忘れた呼び出し側があっても、2026-09-01以前と同じ出力に
+   なる安全網として置いている（新しい呼び出し側を追加するときは明示的に渡すこと）。
+   `.kzc-card-title` はクラスで指定しており、CSSは margin / font-size / line-height を
+   すべて明示しているため、タグ名が変わっても見た目は変わらない。 #}
 <article class="kzc-card">
   {% if card.thumbnail_url %}
   <a href="{{ card.public_url }}" class="kzc-card-thumb">
@@ -8,7 +20,7 @@
   {% endif %}
   <div class="kzc-card-body">
     <p class="kzc-card-category">{{ card.category_name }}</p>
-    <h3 class="kzc-card-title"><a href="{{ card.public_url }}">{{ card.title }}</a></h3>
+    <h{{ card_heading_level|default(3) }} class="kzc-card-title"><a href="{{ card.public_url }}">{{ card.title }}</a></h{{ card_heading_level|default(3) }}>
     <p class="kzc-card-desc">{{ card.meta_description }}</p>
     <p class="kzc-card-meta">
       {% if card.difficulty == "beginner" %}<span class="kzc-badge">{% if language == 'en' %}{{ labels.beginner_badge }}{% else %}初心者向け{% endif %}</span>{% endif %}

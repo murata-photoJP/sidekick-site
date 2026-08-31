@@ -17,7 +17,7 @@
 
 {% if entries %}
 <section class="kzc-article-list" aria-label="{% if language == 'en' %}Development log list{% else %}開発日誌一覧{% endif %}">
-  {% for entry in entries %}
+  {# h1「開発日誌」直下のためh2。根拠は components/devlog-card.html #}{% set card_heading_level = 2 %}{% for entry in entries %}
     {% include "components/devlog-card.html" %}
   {% endfor %}
 </section>

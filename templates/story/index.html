@@ -42,7 +42,7 @@
 
 {% if entries %}
 <section class="kzc-article-list" aria-label="{% if language == 'en' %}Story list{% else %}Story一覧{% endif %}">
-  {% for entry in entries %}
+  {# h1「Story」直下のためh2。根拠は components/story-card.html #}{% set card_heading_level = 2 %}{% for entry in entries %}
     {% include "components/story-card.html" %}
   {% endfor %}
 </section>

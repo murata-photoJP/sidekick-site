@@ -58,7 +58,7 @@
       <span class="kzc-cat-group-count">{{ g.count }}{{ labels.article_count_suffix }}</span>
     </div>
     <div class="kzc-article-list" aria-label="{{ g.name }} article list">
-      {% for card in g.cards %}
+      {# h1>h2「すべての記事」>h3(カテゴリ)の下のためh3。根拠は components/article-card.html #}{% set card_heading_level = 3 %}{% for card in g.cards %}
         {% include "components/article-card.html" %}
       {% endfor %}
     </div>
@@ -123,7 +123,7 @@
       <span class="kzc-cat-group-count">{{ g.count }}記事</span>
     </div>
     <div class="kzc-article-list" aria-label="{{ g.name }}の記事一覧">
-      {% for card in g.cards %}
+      {# h1>h2「すべての記事」>h3(カテゴリ)の下のためh3。根拠は components/article-card.html #}{% set card_heading_level = 3 %}{% for card in g.cards %}
         {% include "components/article-card.html" %}
       {% endfor %}
     </div>
