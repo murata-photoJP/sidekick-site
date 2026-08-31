@@ -190,17 +190,17 @@ A minute or two, I think.
 
 What on earth had I been doing, endlessly turning that camera at Yabitsu Pass?
 
-## The Juliana's Tokyo calibration
+## The Juliana Tokyo calibration
 
 You wave the camera in a figure eight.
 
 Watching that motion, I gave it a name of my own:
 
-**the "Juliana's Tokyo calibration."**
+**the "Juliana Tokyo calibration."**
 
-(Juliana's Tokyo was a Tokyo nightclub of the early 1990s, remembered for dancers waving large folding fans.)
+(Juliana Tokyo was a famous Tokyo nightclub in the early 1990s, remembered in Japan for dancers waving large folding fans.)
 
-Obviously Juliana's Tokyo was not a going concern in 2011 when the O-GPS1 was released.
+Obviously Juliana Tokyo was not a going concern in 2011 when the O-GPS1 was released.
 
 That was long before.
 
@@ -330,7 +330,7 @@ Using a specification to its maximum is not the same as mastering a tool.
 
 ## Isn't a portable star tracker better?
 
-If all you want is to track the stars, a portable equatorial mount is an option.
+If all you want is to track the stars, a portable star tracker (equatorial mount) is an option.
 
 I bought one later, too.
 
@@ -340,7 +340,7 @@ So is the O-GPS1 unnecessary?
 
 In my case, it did not work out that way.
 
-If anything, I have barely used the portable mount.
+If anything, I have barely used the portable star tracker.
 
 I use it for things like solar eclipses.
 
@@ -386,9 +386,9 @@ Shoot.
 
 And repeat.
 
-You can do this with a portable mount too, of course.
+You can do this with a portable star tracker too, of course.
 
-But with an equatorial mount you have to re-align the polar axis every time you move the tripod.
+But with a portable star tracker you have to re-align the polar axis every time you move the tripod.
 
 With the O-GPS1,
 
@@ -398,7 +398,7 @@ In the mountains, that difference is enormous.
 
 ## Not maximum performance — usable performance
 
-Compare tracking accuracy alone and the dedicated equatorial mount is surely better.
+Compare tracking accuracy alone and the dedicated star tracker is surely better.
 
 But what I want is not
 
@@ -502,7 +502,7 @@ If the calibration is a nuisance, think about how to shorten it.
 
 If it can track for five minutes but one minute is better, shoot for one.
 
-If a dedicated equatorial mount is more accurate but you are moving around, choose the O-GPS1.
+If a dedicated star tracker is more accurate but you are moving around, choose the O-GPS1.
 
 And in the end, decide where to stand yourself.
 
