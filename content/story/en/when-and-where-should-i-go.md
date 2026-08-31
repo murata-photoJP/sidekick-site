@@ -514,7 +514,7 @@ Let the computer do it.
 
 Sidekick Planner may in the end be the same thing.
 
-There is no need for a person to sit with maps and ephemeris data, endlessly working out what could be calculated.
+There is no need for a person to sit with maps and astronomical data, endlessly working out what could be calculated.
 
 Let the computer do that part.
 
@@ -583,5 +583,3 @@ In that case,
 **make that 'here' easy to find.**
 
 That is Sidekick Planner.
-
-— To be continued
