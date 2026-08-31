@@ -16,6 +16,8 @@ I never set out to do lighten composites.
 
 Back then I did not even know the term "lighten composite" existed.
 
+(The Japanese name for it translates as "lighten composite": in Photoshop it comes down to stacking the frames with the Lighten blend mode, so that only the brightest pixels from each frame survive.)
+
 It did not start with stars, either.
 
 It started with a climber's headlamp, photographed on Mt. Tsubakuro.
@@ -430,7 +432,7 @@ Once I started the processing, I did not need to be sitting at the computer.
 
 I could leave it running and go out shooting for another ten days.
 
-Sometimes I would come back from a shoot and it still was not finished — which is funny in its own way.
+Sometimes I would come back from a shoot and it still was not finished.
 
 Even so, it beat working through the frames one at a time by hand.
 
