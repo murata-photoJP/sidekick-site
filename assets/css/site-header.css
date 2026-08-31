@@ -118,7 +118,10 @@
 .footer-brand .brand{margin-bottom:10px;}
 .footer-brand p{font-size:12px;color:var(--muted);line-height:1.7;}
 .footer-cols{flex:3 1 480px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:24px;}
-.footer-col h4{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+/* 2026-09-01: assets/css/knowledge.css と同じ修正（共通フッターの列ラベルを
+   <h4> から <p class="footer-col-label"> へ変更）。宣言の中身は変更していない。
+   margin-top を指定しない理由も knowledge.css の同じ箇所のコメントを参照。 */
+.footer-col .footer-col-label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
 .footer-col ul{list-style:none;}
 .footer-col ul li{margin-bottom:8px;}
 .footer-col ul li a{font-size:13px;color:var(--sub);transition:.1s;}

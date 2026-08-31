@@ -165,7 +165,15 @@ a:focus-visible, button:focus-visible{
 .footer-brand .brand{margin-bottom:10px;}
 .footer-brand p{font-size:12px;color:var(--muted);line-height:1.7;}
 .footer-cols{flex:3 1 480px;display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:24px;}
-.footer-col h4{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+/* 2026-09-01: 共通フッターの列ラベルを <h4> から <p class="footer-col-label"> へ
+   変更したことに伴うセレクタ更新（見出し階層の飛び越し解消。経緯は
+   templates/knowledge/footer.html のコメントを参照）。宣言の中身は変更していない。
+   margin-top を意図的に指定していない: 各ページ独自の `*{margin:0}` リセットの
+   有無で現在の値が 0px / 14.63px に割れており、共有ルールで固定するとどちらかの
+   ページ群の見た目が 14.63px 動く。指定しなければリセット有り(20ページ)は 0px の
+   まま完全一致し、リセット無し(64ページ)のみ h4(1.33em)→p(1em) で 3.63px 縮む。
+   これが全ページ通じて最小の差になる。 */
+.footer-col .footer-col-label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
 .footer-col ul{list-style:none;}
 .footer-col ul li{margin-bottom:8px;}
 .footer-col ul li a{font-size:13px;color:var(--sub);transition:.1s;}

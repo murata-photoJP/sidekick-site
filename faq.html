@@ -526,6 +526,7 @@
   </main>
 
 
+
 <!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
      リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
 <footer class="footer">
@@ -546,8 +547,8 @@
       <div class="footer-cols">
 
         <div class="footer-col">
-          <h4>Products</h4>
-          <ul>
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
             <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
             <li><a href="/portrait">👤 Sidekick Portrait</a></li>
             <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
@@ -558,15 +559,15 @@
         </div>
 
         <div class="footer-col">
-          <h4>打ち出の小槌</h4>
-          <ul>
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
             <li><a href="/knowledge">📚 打ち出の小槌</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
-          <h4>AI Lab</h4>
-          <ul>
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
             <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
             <li><a href="/ai-review">講評AI</a></li>
             <li><a href="/camera-ai">カメラAI</a></li>
@@ -576,15 +577,15 @@
         </div>
 
         <div class="footer-col">
-          <h4>Workshop</h4>
-          <ul>
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
             <li><a href="/workshop">📷 Workshop</a></li>
           </ul>
         </div>
 
         <div class="footer-col">
-          <h4>サポート</h4>
-          <ul>
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
             <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
             <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
             <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
@@ -596,8 +597,8 @@
         </div>
 
         <div class="footer-col">
-          <h4>Sidekick Lab</h4>
-          <ul>
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
             <li><a href="/about">About</a></li>
             <li><a href="/sidekick">Sidekickとは</a></li>
             <li><a href="/story">Story</a></li>
