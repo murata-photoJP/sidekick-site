@@ -66,6 +66,19 @@
 }
 
 /* ---------- 記事末尾の導線 ---------- */
+/* 2026-08-31追加: knowledge.css の .kzc-product-context-label は text-transform:uppercase
+   を持つ。打ち出の小槌・開発日誌のラベル（「関連するSideKick製品」等）はラテン文字が
+   無いか英語のみなので問題にならないが、Storyの日本語ラベル
+   「この話につながる現在のSidekick」は Sidekick だけが SIDEKICK に化ける
+   （村田さんの公開前レビューで指摘）。
+
+   日本語ページに限って解除する。html[lang] は base.html が language 変数から出力して
+   いるため、英語版（"THE SIDEKICK THIS STORY LEADS TO"、こちらは意図どおり）や
+   打ち出の小槌・開発日誌には一切影響しない。 */
+html[lang="ja"] .kzc-story-related .kzc-product-context-label{
+  text-transform:none;
+}
+
 .kzc-story-related ul{ list-style:none; padding:0; margin:8px 0 0; }
 .kzc-story-related li{ margin-bottom:8px; }
 .kzc-story-related a{ font-weight:700; }
