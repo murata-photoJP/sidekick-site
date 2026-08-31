@@ -1,0 +1,53 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="{{ language|default('ja') }}">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      {% if language|default('ja') == 'en' %}if (pref === 'en') { return; }{% else %}if (pref === 'en') { location.replace('{{ lang_switch_url|default("/en/story") }}'); return; }{% endif %}
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        {% if language|default('ja') != 'en' %}location.replace('{{ lang_switch_url|default("/en/story") }}');{% endif %}
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}SideKick{% endblock %}</title>
+<meta name="description" content="{% block meta_description %}{% endblock %}">
+<link rel="canonical" href="{% block canonical %}{% endblock %}">
+{% for hl, url in (hreflang_alternates or {}).items() %}
+<link rel="alternate" hreflang="{{ hl }}" href="{{ url }}">
+{% endfor %}
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="{{ 'en_US' if language == 'en' else 'ja_JP' }}">
+<meta property="og:title" content="{% block og_title %}{{ self.title() }}{% endblock %}">
+<meta property="og:description" content="{{ self.meta_description() }}">
+<meta property="og:url" content="{{ self.canonical() }}">
+<meta property="og:image" content="{{ og_image|default('https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg') }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{{ og_image|default('https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg') }}">
+{% block extra_meta %}{% endblock %}
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+{% if language == 'en' %}{% include "header_en.html" %}{% else %}{% include "header.html" %}{% endif %}
+<main>
+{% block content %}{% endblock %}
+</main>
+{% if language == 'en' %}{% include "footer_en.html" %}{% else %}{% include "footer.html" %}{% endif %}
+</body>
+</html>

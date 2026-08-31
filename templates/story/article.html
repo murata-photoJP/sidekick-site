@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}{{ entry.title }}{% if language == 'en' %} | Story - Sidekick Lab{% else %}｜Story - Sidekick Lab{% endif %}{% endblock %}
+{% block meta_description %}{{ entry.meta_description }}{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block extra_meta %}
+<meta property="article:published_time" content="{{ entry.date }}">
+{% endblock %}
+
+{% block content %}
+<nav aria-label="{% if language == 'en' %}breadcrumb{% else %}パンくずリスト{% endif %}" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="{{ story_top_url }}">Story</a></li>
+    <li aria-current="page">{{ entry.title }}</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    {% if entry.series %}
+    <p class="kzc-story-series">
+      <span class="kzc-story-series-name">{{ entry.series }}</span>
+      {% if entry.series_part and entry.series_total == 2 %}
+      <span class="kzc-story-series-part">{% if entry.series_part == 1 %}{% if language == 'en' %}Part 1 of 2{% else %}前編{% endif %}{% else %}{% if language == 'en' %}Part 2 of 2{% else %}後編{% endif %}{% endif %}</span>
+      {% elif entry.series_part %}
+      <span class="kzc-story-series-part">{% if language == 'en' %}Part {{ entry.series_part }}{% if entry.series_total %} of {{ entry.series_total }}{% endif %}{% else %}第{{ entry.series_part }}回{% if entry.series_total %}／全{{ entry.series_total }}回{% endif %}{% endif %}</span>
+      {% endif %}
+    </p>
+    {% endif %}
+
+    <h1 class="kzc-article-title">{{ entry.title }}</h1>
+    {% if entry.subtitle %}<p class="kzc-story-subtitle">{{ entry.subtitle }}</p>{% endif %}
+    {% if entry.summary %}<p class="kzc-article-lead">{{ entry.summary }}</p>{% endif %}
+    <p class="kzc-article-meta">
+      <time datetime="{{ entry.date }}">{{ entry.date_display }}</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">{% if language == 'en' %}Ichiro Murata · Photographer / Sidekick Developer{% else %}村田一朗｜写真家・Sidekick開発者{% endif %}</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    {{ body_html|safe }}
+  </div>
+
+  {% if entry.series and entry.series_next %}
+  <p class="kzc-story-series">
+    {% if language == 'en' %}Continues in{% else %}この話の続き{% endif %}
+    <a href="{{ story_top_url }}/{{ entry.series_next.slug }}">{{ entry.series_next.title }} →</a>
+  </p>
+  {% elif entry.series and entry.series_prev %}
+  <p class="kzc-story-series">
+    {% if language == 'en' %}This is the second half of{% else %}この話の前編{% endif %}
+    <a href="{{ story_top_url }}/{{ entry.series_prev.slug }}">← {{ entry.series_prev.title }}</a>
+  </p>
+  {% endif %}
+
+  {% if entry.related_links %}
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">{% if language == 'en' %}The Sidekick this story leads to{% else %}この話につながる現在のSidekick{% endif %}</p>
+    <ul>
+      {% for link in entry.related_links %}
+      <li><a href="{{ link.url }}">{{ link.label }} →</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="{% if language == 'en' %}Other stories{% else %}前後のStory{% endif %}">
+      <div class="kzc-story-nav-prev">
+        {% if entry.prev_entry %}
+        <a href="{{ story_top_url }}/{{ entry.prev_entry.slug }}">
+          <span class="kzc-story-nav-label">{% if language == 'en' %}Previous{% else %}前の話{% endif %}</span>
+          ← {{ entry.prev_entry.title }}
+        </a>
+        {% endif %}
+      </div>
+      <div class="kzc-story-nav-next">
+        {% if entry.next_entry %}
+        <a href="{{ story_top_url }}/{{ entry.next_entry.slug }}">
+          <span class="kzc-story-nav-label">{% if language == 'en' %}Next{% else %}次の話{% endif %}</span>
+          {{ entry.next_entry.title }} →
+        </a>
+        {% endif %}
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      {% if language == 'en' %}
+      <h2>About the Author</h2>
+      <p>
+        Ichiro Murata is a photographer and the developer of Sidekick. These stories are written from his
+        own experience of shooting, retouching, teaching, and building tools. Names of manufacturers,
+        magazines, and events appear here as work he was involved in — they are not endorsements of
+        Sidekick by those companies.
+      </p>
+      <p><a href="/en/ichiro-murata">More about Ichiro Murata →</a></p>
+      {% else %}
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、Sidekickの開発者です。ここに書かれているのは、実際の撮影・現像・講評・
+        道具作りの経験です。文中に出てくるメーカー・雑誌・イベントの名前は、過去に関わった仕事として
+        登場するものであり、それらの企業によるSidekickの推薦・公認を意味するものではありません。
+      </p>
+      <p><a href="/ichiro-murata">村田一朗について →</a></p>
+      {% endif %}
+    </section>
+    <p><a href="{{ story_top_url }}">{% if language == 'en' %}← Back to all stories{% else %}← Storyの一覧へ戻る{% endif %}</a></p>
+  </footer>
+</article>
+{% endblock %}

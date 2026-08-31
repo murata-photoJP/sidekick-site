@@ -1,0 +1,605 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/story/before-i-knew-lighten-composite'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/story/before-i-knew-lighten-composite');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「比較明合成」を知らなかった私が、星をつなぐまで｜Story - Sidekick Lab</title>
+<meta name="description" content="「比較明合成」という言葉を知らないまま、燕岳で撮った登山者のヘッドライトから、明るい部分だけを残す合成方法にたどり着いた。そこから星の連続写真、『デジタルフォト』2010年4月号「無限軌道」、処理を自動化するソフトまでの記録。">
+<link rel="canonical" href="https://www.sidekick-lab.com/story/before-i-knew-lighten-composite">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/before-i-knew-lighten-composite">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/before-i-knew-lighten-composite">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="「比較明合成」を知らなかった私が、星をつなぐまで｜Story - Sidekick Lab">
+<meta property="og:description" content="「比較明合成」という言葉を知らないまま、燕岳で撮った登山者のヘッドライトから、明るい部分だけを残す合成方法にたどり着いた。そこから星の連続写真、『デジタルフォト』2010年4月号「無限軌道」、処理を自動化するソフトまでの記録。">
+<meta property="og:url" content="https://www.sidekick-lab.com/story/before-i-knew-lighten-composite">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/story/before-i-knew-lighten-composite">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" aria-current="page">Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/story/before-i-knew-lighten-composite" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="パンくずリスト" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/story">Story</a></li>
+    <li aria-current="page">「比較明合成」を知らなかった私が、星をつなぐまで</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+
+    <h1 class="kzc-article-title">「比較明合成」を知らなかった私が、星をつなぐまで</h1>
+    <p class="kzc-story-subtitle">――始まりは、燕岳を歩く登山者のヘッドライトだった</p>
+    <p class="kzc-article-lead">「比較明合成」という言葉を知らないまま、燕岳で撮った登山者のヘッドライトから、明るい部分だけを残す合成方法にたどり着いた。そこから星の連続写真、『デジタルフォト』2010年4月号「無限軌道」、処理を自動化するソフトまでの記録。</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">村田一朗｜写真家・Sidekick開発者</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>比較明合成をやろうと思ったことは、一度もありませんでした。</p>
+<p>そもそも当時の私は、「比較明合成」という言葉さえ知りませんでした。</p>
+<p>きっかけは星でもありません。</p>
+<p>燕岳で撮った、登山者のヘッドライトでした。</p>
+<h2>始まりは、提出する写真がなかったこと</h2>
+<p>2000年代後半、私は「ニコン・ヤマケイ写真塾」にゲスト講師として参加していました。</p>
+<p>専任講師は山岳写真家の菊池哲男さんです。</p>
+<p>燕岳で行われた回でも、私は講師として参加していたので、自分の作品を撮ることにはそれほど集中していませんでした。</p>
+<p>ところが下山したあと、ニコンの担当者から写真を一枚提出してほしいと言われました。</p>
+<p>困りました。</p>
+<p>まともに自分の写真を撮っていなかったからです。</p>
+<p>撮影した画像を探してみると、夜明け前だったと思いますが、イルカ岩の近くをヘッドライトを着けた登山者が横切った写真がありました。</p>
+<p>写真としては使えそうでした。</p>
+<p>ただ、ヘッドライトの光跡が短い。</p>
+<p>もう少し光の線が長ければ、ずっと面白い写真になる。</p>
+<p>幸い、露出を変えながら何枚か撮っていたので、前後のカットにも別の位置にヘッドライトの光が写っていました。</p>
+<p>そこでPhotoshopに2枚の写真をレイヤーとして重ね、描画モードをいろいろ試してみました。</p>
+<p>すると、2枚の写真の明るい部分――ヘッドライトの光跡だけを、一枚の写真に残せる組み合わせがありました。</p>
+<p>「これでピンチを切り抜けた！」</p>
+<p>そのとき考えたのは、それだけです。</p>
+<p>新しい撮影技法を発見したとも思っていません。</p>
+<p>まして「比較明合成」などという名前があることも知りませんでした。</p>
+<h2>「これ、星でもできるんじゃないか？」</h2>
+<p>その後、山を歩いているときだったと思います。</p>
+<p>ふと、あのPhotoshopでやったことを思い出しました。</p>
+<p>当時、Nikon D3の登場などによってデジタルカメラの高感度性能が大きく向上し、デジタルでも星をかなり撮れるようになってきていました。</p>
+<p>私自身も星の撮影を試していました。</p>
+<p>そこで思いました。</p>
+<p>短い露出で星を何枚も連続して撮る。</p>
+<p>それを、あのヘッドライトと同じ方法で重ねたらどうなるだろう。</p>
+<p>星がつながるんじゃないか？</p>
+<p>試してみることにしました。</p>
+<p>最初は30分から1時間程度だったと思います。</p>
+<p>連続して星を撮り、自宅へ戻ってPhotoshopで重ねてみました。</p>
+<p>星はつながりました。</p>
+<p>今振り返ると、これが私にとっての「0次テスト」です。</p>
+<h2>調べてみると、先にやっている人がいた</h2>
+<p>ここは誤解のないように書いておきたいと思います。</p>
+<p>私が比較明合成を発明したわけではありません。</p>
+<p>星がつながることが分かってから、私はインターネットで情報を集め始めました。</p>
+<p>すると、すでに同じような方法で星景写真を撮っている人たちがいました。</p>
+<p>その一人が、東山正宜さんです。</p>
+<p>私は天文写真の世界の人間ではありませんでしたから、分からないことだらけでした。</p>
+<p>そこで、ネットで見つけた天文関係の方に一人ひとりメールを送り、質問をしました。</p>
+<p>正直に言えば、反応はかなり冷たいものでした。</p>
+<p>そんな中で、熱心に返信をくれた人が一人いました。</p>
+<p>東山正宜さんでした。</p>
+<p>質問をすると、きちんと答えてくれる。</p>
+<p>また質問すると、また答えてくれる。</p>
+<p>実際にメールでやり取りしたのは、ほんの数週間だったと思います。</p>
+<p>私に比較明合成そのものを教えた人、という意味ではありません。</p>
+<p>その方法には、私はその前に偶然たどり着いていました。</p>
+<p>でも、それを星景写真として深めていこうとしたとき、分からないことを教えてくれた。</p>
+<p>だから私にとって東山正宜さんは、ある意味では師匠です。</p>
+<p>東山さんは都市の中で星を撮る「都市星景」の人でした。</p>
+<p>私は山へ向かっていました。</p>
+<p>直接仕事を奪い合うような関係ではなかったことも、あれほど惜しまず教えてくれた理由の一つだったのかもしれない――と私は勝手に思っています。</p>
+<p>もちろん、それ以前に東山さん自身の人柄があってのことですが。</p>
+<p>ほんの数週間のことだったと思います。</p>
+<p>でも、あのときのことを私は決して忘れないでしょう。</p>
+<h2>方法が分かっても、写真は撮れなかった</h2>
+<p>比較明合成の方法が分かった。</p>
+<p>これで撮りたい写真が撮れる。</p>
+<p>……とはなりませんでした。</p>
+<p>むしろ、そこからが大変でした。</p>
+<p>私が撮りたかったのは、都市の夜景の上を星が動いていく写真ではありません。</p>
+<p>北アルプスの山の上で、夜から朝まで星が動き続ける写真です。</p>
+<p>そこにAC100Vはありません。</p>
+<p>冬なら猛烈に寒い。</p>
+<p>そして何時間もカメラを動かし続けなければならない。</p>
+<p>最初の本格的なテストでは、バッテリーが2～3時間程度しか持ちませんでした。</p>
+<p>それだけではありません。</p>
+<p>Nikon D3には、一度の連続撮影を最大130コマまでとする制限がありました。</p>
+<p>普通に写真を撮っている限り、130枚も連続して撮ることはまずありません。</p>
+<p>だから、ほとんどの撮影者にとって問題にならない仕様です。</p>
+<p>でも30秒露光を夜から朝まで続けたい人間にとっては、重大な問題でした。</p>
+<p>11月なら、星を撮れる時間は最大で12時間ほどあります。</p>
+<p>仮に30秒露光を隙間なく12時間続ければ、理論上は1,440枚です。</p>
+<p>130枚では全然足りません。</p>
+<p>一つ問題を解決すると、次の問題が出てきました。</p>
+<h2>バッテリーが持たないなら、電源を作る</h2>
+<p>実は、カメラの電源を自分で何とかすること自体は、D3が最初ではありませんでした。</p>
+<p>Nikon D1の頃からです。</p>
+<p>D1のバッテリーは高価でしたし、今のカメラと比べるとかなり厳しいものでした。</p>
+<p>特に冬山では大変でした。</p>
+<p>フル充電して持っていったバッテリーが、厳冬期には2～3枚撮っただけで終わったことさえあります。</p>
+<p>当時、D1を使っていたプロの中には、純正バッテリーの外装と端子だけを利用してケーブルを引き出し、7.2Vのラジコン用バッテリーから給電する人たちがいました。</p>
+<p>ラジコン用バッテリーなら、当時は2,000円前後で買えた記憶があります。</p>
+<p>私も同じようなことをしました。</p>
+<p>D3になると、バッテリー性能は劇的に良くなりました。</p>
+<p>普通に撮影するなら、もうそんな仕掛けは必要ありません。</p>
+<p>でも、私がやろうとしていたのは普通の撮影ではありませんでした。</p>
+<p>氷点下の山の上で、夜から朝までカメラを動かしたい。</p>
+<p>2～3時間では足りません。</p>
+<p>最終的には、単3形のeneloopを直列につなぎ、それをさらに並列化した外部電源を作りました。</p>
+<p>バッテリーそのものがガンガンに凍っているような状態でも動いてくれました。</p>
+<p>実際にマイナス30℃近い環境で、14時間ほどカメラを動かしたこともあります。</p>
+<h2>撮れるようになったら、今度は画像が待っていた</h2>
+<p>電源を解決する。</p>
+<p>連続撮影を解決する。</p>
+<p>そうすると、ようやく一晩撮れるようになります。</p>
+<p>ところが家に帰ると、今度は大量の画像が待っています。</p>
+<p>当時の最初のテストでは現在ほどの枚数ではありませんでしたが、それでも数百枚規模です。</p>
+<p>Photoshopで画像を一枚開く。</p>
+<p>コピーする。</p>
+<p>合成する画像へ貼り付ける。</p>
+<p>レイヤーとして重ねる。</p>
+<p>次の画像を開く。</p>
+<p>またコピーする。</p>
+<p>貼り付ける。</p>
+<p>それを延々と繰り返します。</p>
+<p>途中で同じ画像を2回入れることもある。</p>
+<p>一枚飛ばすこともある。</p>
+<p>間違いに気づけば、どこまで戻ればいいのか確認する。</p>
+<p>飛行機が横切れば、その光跡も手作業で消します。</p>
+<p>こんなことを延々とやっていました。</p>
+<h2>「こんなことをしていたら、一生が終わる」</h2>
+<p>そのとき、昔読んだ松本零士さんの漫画を思い出しました。</p>
+<p>作品名はもう思い出せません。</p>
+<p>『1000年女王』だったような気もしますが、確信はありません。</p>
+<p>大量の本を整理する仕事を命じられた人物がいた。</p>
+<p>これを一冊ずつ整理していたら、一生が終わってしまう。</p>
+<p>だったら本を整理する機械を作ればいい。</p>
+<p>そんな話だったと記憶しています。</p>
+<p>私がやっていることも同じじゃないかと思いました。</p>
+<p>何百枚、何千枚という画像を自分の手で重ね続けるのではなく、</p>
+<p><strong>重ねる仕組みを作ればいい。</strong></p>
+<p>そこから、処理を自動化するソフトを作り始めました。</p>
+<h2>欲しかったのはソフトではない</h2>
+<p>比較明合成を自動化しました。</p>
+<p>さらに、単純に星を線としてつなぐだけではなく、軌跡の先を細くして、流星や彗星のように見せる処理も作りました。</p>
+<p>私はこれを「コメット処理」と呼んでいました。</p>
+<p>当時はこの処理がソフトの大きな特徴だったので、ソフト自体を「Comet」と名付けました。</p>
+<p>撮影側にも必要なものを作りました。</p>
+<p>電源を作る。</p>
+<p>長時間撮影を続ける仕組みを作る。</p>
+<p>撮影した大量の画像を比較明合成する。</p>
+<p>コメット処理をする。</p>
+<p>後には、飛行機の光跡を自動的に取り除く処理まで作ることになります。</p>
+<p>でも、私は電子工作がしたかったわけではありません。</p>
+<p>撮影制御装置が欲しかったわけでもありません。</p>
+<p>比較明合成ソフトが欲しかったわけでもありません。</p>
+<p><strong>欲しかったのは、そのどれでもありませんでした。</strong></p>
+<p><strong>欲しかったのは、北アルプスの稜線で、夜から朝まで星が動き続ける一枚の写真でした。</strong></p>
+<p>その一枚を撮ろうとすると、必要な道具がなかった。</p>
+<p>だから作った。</p>
+<p>それだけでした。</p>
+<h2>『デジタルフォト』2010年4月号「無限軌道」</h2>
+<p>最初の本格テストで撮った写真を、『デジタルフォト』へ持っていきました。</p>
+<p>掲載が決まりました。</p>
+<p>ただ、最初のテストだけでは表紙とギャラリーを構成するには作品が足りません。</p>
+<p>そこで、もう一度撮影へ向かいました。</p>
+<p>その頃には、比較明合成の自動化やコメット処理も、実際の作品制作に使えるところまで進んでいたと思います。</p>
+<p>そして2010年。</p>
+<p>『デジタルフォト』4月号で、山岳星景作品「無限軌道」を発表しました。</p>
+<p>ギャラリーだけではなく、表紙にも使ってもらいました。</p>
+<p>当時、編集長から、</p>
+<p>「思いっきりトンカチで頭を殴られた気がする」</p>
+<p>というようなことを言われたのを覚えています。</p>
+<p>比較明合成そのものは、すでに天文写真の世界には存在していました。</p>
+<p>東山さんをはじめ、私より先に取り組んでいた人もいました。</p>
+<p>それでも一般の写真の世界では、まだ広く知られた表現ではなかったのだと思います。</p>
+<p>後から考えると、比較明合成という方法だけではなく、山の中で長時間撮り続けた星景作品そのものが珍しかったのかもしれません。</p>
+<p>誌面にはカメラやレンズの情報は掲載されましたが、何枚をどう合成したのかといった制作方法の核心部分は掲載されませんでした。</p>
+<p>私の記憶では、そこは編集部の判断でした。</p>
+<h2>消せなかった飛行機を「night noise」にした</h2>
+<p>「無限軌道」の中に、night noiseという作品があります。</p>
+<p>この頃、飛行機の光跡はまだ手作業で消していました。</p>
+<p>ところが一枚だけ、締切までに処理が終わりませんでした。</p>
+<p>時間切れです。</p>
+<p>だったら、その消せなかった光も含めて作品にしてしまおう。</p>
+<p>そう考えてnight noiseと名付けました。</p>
+<p>この名前には、昔聴いていたレコードの記憶もあります。</p>
+<p>1980年代、Windham Hill Recordsから出ていた『Nightnoise』というLPをよく聴いていました。</p>
+<p>技術的には「消せなかったもの」だった。</p>
+<p>でもタイトルを付けた瞬間、それも写真の一部になりました。</p>
+<h2>一冊の雑誌から、PENTAXへ</h2>
+<p>『デジタルフォト』4月号が発売されてしばらくした頃、編集長から電話がありました。</p>
+<p>PENTAXの人が私と話したがっている。</p>
+<p>電話番号を教えてもいいか。</p>
+<p>そんな内容でした。</p>
+<p>もちろん構わないと答えました。</p>
+<p>その後PENTAXの方から連絡をいただきました。</p>
+<p>正確な言葉までは覚えていませんが、私の記憶では、</p>
+<p>「星を撮るならPENTAXで撮ってほしい。Nikonさんとの関係もあるだろうから、そちらを使い続けても構わない」</p>
+<p>という趣旨の話でした。</p>
+<p>最初に使ったPENTAXはK-5でした。</p>
+<p>そこから、私とPENTAXとの長い関係が始まりました。</p>
+<p>最初からPENTAXの仕事をしようとして星景写真を始めたわけではありません。</p>
+<p>Nikonの写真塾で提出する写真がなくて困った。</p>
+<p>ヘッドライトの軌跡を少し長くしたかった。</p>
+<p>その小さな出来事から始まったものが、何年か後には別のカメラメーカーとの仕事につながっていました。</p>
+<p>人生は分からないものです。</p>
+<h2>東山さんと、ようやく顔を合わせる</h2>
+<p>メールで助けてもらった東山さんとは、その後、実際にお会いしました。</p>
+<p>正確な初対面がいつだったのかは、もう記憶が曖昧です。</p>
+<p>ただ、CP+で私自身がPENTAXブースに出演するようになるより前だったと思います。</p>
+<p>おそらく2012年、銀座RING CUBEで開催された東山さんの写真展「都会の星」か、そのときのトークショーだったのではないかと思います。</p>
+<p>もしかすると、それ以前にもお会いしていたかもしれません。</p>
+<p>そこは断言できません。</p>
+<p>ただ、メールで質問ばかりしていた相手と、何年か後に実際に顔を合わせたことは覚えています。</p>
+<p>東山さんは都市で星を撮り続け、私は山で星を撮っていました。</p>
+<p>同じ比較明合成でも、撮っているものはずいぶん違いました。</p>
+<h2>それでもCometは、快適な道具ではなかった</h2>
+<p>Cometもその後、何年も改良しました。</p>
+<p>やがて飛行機の光跡を自動的に取り除く機能も作りました。</p>
+<p>異なる日に撮った画像を分けて処理することもできました。</p>
+<p>一晩に5,000枚ほど撮るようになると、7日なら35,000枚です。</p>
+<p>そのくらいになると、処理だけで10日ほどかかることもありました。</p>
+<p>でも、これは手作業で10日かかるのとは意味が違います。</p>
+<p>処理をスタートさせたら、私はPCの前にいる必要がありません。</p>
+<p>処理させたまま、また10日間撮影に出掛けることができました。</p>
+<p>場合によっては、撮影から帰ってきてもまだ処理が終わっていない（笑）。</p>
+<p>それでも、人間が一枚ずつ作業するよりはずっといい。</p>
+<p>ただし問題もありました。</p>
+<p>特に飛行機除去のパラメータはかなりピーキーでした。</p>
+<p>少し値を変える。</p>
+<p>結果を確認したい。</p>
+<p>でも結果が出るのは一日後。</p>
+<p>違っていたら、また変更する。</p>
+<p>そして、また一日待つ。</p>
+<p>自動で動くようにはなりました。</p>
+<p>でも、そのとき私は別のことも学びました。</p>
+<p><strong>自動で動くことと、道具として使いやすいことは違う。</strong></p>
+<h2>16年後も、やっていることはあまり変わっていない</h2>
+<p>現在、私は写真家向けのソフトウェア「Sidekick」を開発しています。</p>
+<p>星景写真用のSidekick Starもその一つです。</p>
+<p>ただし、CometがそのままSidekick Starへ進化したわけではありません。</p>
+<p>別のソフトです。</p>
+<p>CometにあってSidekick Starにはない機能もあります。</p>
+<p>逆もあります。</p>
+<p>だから、製品として一直線につながっているわけではありません。</p>
+<p>でも、振り返ってみると、やっていることはあまり変わっていません。</p>
+<p>撮りたい写真を思いつく。</p>
+<p>実際に撮りに行く。</p>
+<p>問題にぶつかる。</p>
+<p>どうすれば解決できるか考える。</p>
+<p>必要な道具がなければ作る。</p>
+<p>そして、もう一度撮りに行く。</p>
+<p>D1のバッテリーでもそうでした。</p>
+<p>山岳星景の撮影制御でもそうでした。</p>
+<p>Cometでもそうでした。</p>
+<p>今のSidekickでも同じです。</p>
+<p>昔は、一枚の写真を完成させるために、とんでもない時間をPCの前で使っていました。</p>
+<p>今では一晩に5,000枚ほど撮影することもありますが、当時とは処理の仕方がまったく違います。</p>
+<p>もちろんコンピューターそのものが何桁も速くなったこともあります。</p>
+<p>でも、私にとって一番大きいのは処理時間の数字ではありません。</p>
+<p>処理をコンピューターに任せている間、写真家は別のことができる。</p>
+<p>寝てもいい。</p>
+<p>酒を飲んでいてもいい。</p>
+<p>そして何より、</p>
+<p><strong>もう一度、撮影に行くことができます。</strong></p>
+<p>コンピューターにできる仕事を、写真家がやる必要はない。</p>
+<p>その時間で、次の写真を撮りに行けばいい。</p>
+<p>たぶん私は、ずっとそのために道具を作ってきたのだと思います。</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">この話につながる現在のSidekick</p>
+    <ul>
+      
+      <li><a href="/sidekick-star">Sidekick Star →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="前後のStory">
+      <div class="kzc-story-nav-prev">
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+        <a href="/story/make-your-own-tools">
+          <span class="kzc-story-nav-label">次の話</span>
+          撮るための道具は、自分で作ればいい →
+        </a>
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、Sidekickの開発者です。ここに書かれているのは、実際の撮影・現像・講評・
+        道具作りの経験です。文中に出てくるメーカー・雑誌・イベントの名前は、過去に関わった仕事として
+        登場するものであり、それらの企業によるSidekickの推薦・公認を意味するものではありません。
+      </p>
+      <p><a href="/ichiro-murata">村田一朗について →</a></p>
+      
+    </section>
+    <p><a href="/story">← Storyの一覧へ戻る</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

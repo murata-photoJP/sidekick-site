@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{% if language == 'en' %}Story | Sidekick Lab{% else %}Story｜Sidekick Lab{% endif %}{% endblock %}
+{% block meta_description %}{% if language == 'en' %}Long-form pieces by photographer Ichiro Murata: photography, engineering, building his own tools, work with camera makers, and the background behind Sidekick.{% else %}写真家・村田一朗が、写真、技術、道具作り、メーカーとの仕事、撮影現場で考えてきたこと、そして現在のSidekickにつながる背景を書いた読み物です。{% endif %}{% endblock %}
+{% block canonical %}{{ canonical_url }}{% endblock %}
+
+{% block content %}
+<section class="kzc-hero">
+  <h1>Story</h1>
+  {% if language == 'en' %}
+  <p class="kzc-hero-tagline">Where these tools came from.</p>
+  {% else %}
+  <p class="kzc-hero-tagline">この道具が、どこから来たのか。</p>
+  {% endif %}
+</section>
+
+<div class="kzc-story-intro">
+  {% if language == 'en' %}
+  <p>
+    This is where photographer Ichiro Murata writes at length about photography, engineering,
+    building his own tools, the work he has done with camera makers and magazines, and what he has
+    thought about while standing in the field at night.
+  </p>
+  <p>
+    It is not a product manual, and it is not the
+    <a href="/en/development-log">Development Log</a> — that one records what is being built and
+    decided right now. These pieces are about what came before: the experience that Sidekick was
+    eventually built out of.
+  </p>
+  {% else %}
+  <p>
+    写真家・村田一朗が、写真、技術、道具作り、メーカーや雑誌との仕事、そして撮影現場で
+    考えてきたことを、長めに書いている場所です。
+  </p>
+  <p>
+    製品の説明ではありません。<a href="/development-log">開発日誌</a>とも役割が違います。
+    開発日誌が「いま何を作り、何を判断しているか」の記録なのに対して、こちらは
+    「なぜ、こういう道具を作ることになったのか」という背景の話です。
+  </p>
+  {% endif %}
+</div>
+
+{% if entries %}
+<section class="kzc-article-list" aria-label="{% if language == 'en' %}Story list{% else %}Story一覧{% endif %}">
+  {% for entry in entries %}
+    {% include "components/story-card.html" %}
+  {% endfor %}
+</section>
+{% else %}
+<section class="kzc-article-list" aria-label="{% if language == 'en' %}Story list{% else %}Story一覧{% endif %}">
+  <p class="kzc-empty">{% if language == 'en' %}No stories have been published yet.{% else %}まだ公開されているStoryがありません。{% endif %}</p>
+</section>
+{% endif %}
+{% endblock %}

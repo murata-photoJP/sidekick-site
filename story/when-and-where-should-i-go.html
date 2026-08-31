@@ -1,0 +1,655 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/story/when-and-where-should-i-go'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/story/when-and-where-should-i-go');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「いつ、どこへ行けばいい？」から始まった｜Story - Sidekick Lab</title>
+<meta name="description" content="Sidekick Plannerは、撮影に失敗したから作ったのではない。「ここに立てと言われれば撮れる。でも、この『ここ』が分からない」。その「ここ」を簡単に探せるようにしたい、というところから始まった。">
+<link rel="canonical" href="https://www.sidekick-lab.com/story/when-and-where-should-i-go">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/when-and-where-should-i-go">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/when-and-where-should-i-go">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="「いつ、どこへ行けばいい？」から始まった｜Story - Sidekick Lab">
+<meta property="og:description" content="Sidekick Plannerは、撮影に失敗したから作ったのではない。「ここに立てと言われれば撮れる。でも、この『ここ』が分からない」。その「ここ」を簡単に探せるようにしたい、というところから始まった。">
+<meta property="og:url" content="https://www.sidekick-lab.com/story/when-and-where-should-i-go">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/story/when-and-where-should-i-go">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" aria-current="page">Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/story/when-and-where-should-i-go" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="パンくずリスト" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/story">Story</a></li>
+    <li aria-current="page">「いつ、どこへ行けばいい？」から始まった</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+
+    <h1 class="kzc-article-title">「いつ、どこへ行けばいい？」から始まった</h1>
+    <p class="kzc-story-subtitle">――Sidekick Plannerを作ろうと思った理由</p>
+    <p class="kzc-article-lead">Sidekick Plannerは、撮影に失敗したから作ったのではない。「ここに立てと言われれば撮れる。でも、この『ここ』が分からない」。その「ここ」を簡単に探せるようにしたい、というところから始まった。</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">村田一朗｜写真家・Sidekick開発者</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>Sidekick Plannerを作ろうと思ったきっかけは、私自身がダイヤモンド富士やパール富士を撮り続けていたからではありません。</p>
+<p>むしろ、私はどちらもそれほど撮っていません。</p>
+<p>ダイヤモンド富士は、富士山の山頂に太陽が重なる。</p>
+<p>パール富士は、富士山の山頂に月が重なる。</p>
+<p>条件が合えば、とても印象的な写真になります。</p>
+<p>でも、その写真を撮るために必要なのは、撮影技術だけではありません。</p>
+<p><strong>いつ、どこへ行けばいいのか。</strong></p>
+<p>そこが分からなければ、始まりません。</p>
+<p>私がそれを強く意識したのは、10年以上前だったと思います。</p>
+<h2>「今度、一緒にパール富士を撮りに行かない？」</h2>
+<p>当時、Twitterで知り合った人に、パール富士を長く撮っているベテランがいました。</p>
+<p>その人から、</p>
+<p><strong>「今度、一緒にパール富士を撮りに行かない？」</strong></p>
+<p>と誘われました。</p>
+<p>私はついて行きました。</p>
+<p>指定された場所へ行く。</p>
+<p>カメラを準備する。</p>
+<p>時間を待つ。</p>
+<p>月が来る。</p>
+<p>そして、無事にパール富士を撮ることができました。</p>
+<p>別に撮影そのものが難しかったわけではありません。</p>
+<p>むしろ、その場に立ってみて思いました。</p>
+<p><strong>ここに立てと言われれば、撮れる。</strong></p>
+<p>露出をどうするか。</p>
+<p>どのレンズを使うか。</p>
+<p>どう構図を作るか。</p>
+<p>写真家として、その場でやるべきことは分かります。</p>
+<p>でも、一つ大きな問題がありました。</p>
+<p><strong>そもそも、どうやってこの場所を見つけたんだ？</strong></p>
+<h2>撮り方ではなく、そこへ行くまでが難しい</h2>
+<p>パール富士を撮りたい。</p>
+<p>それなら、月と富士山が重なる場所へ行けばいい。</p>
+<p>言葉にすると簡単です。</p>
+<p>でも実際には、</p>
+<p>月がどこから昇るのか。</p>
+<p>その時刻に富士山との位置関係はどうなるのか。</p>
+<p>どの方向から見れば山頂に重なるのか。</p>
+<p>その位置まで実際に行けるのか。</p>
+<p>そうしたことを考えなければなりません。</p>
+<p>撮影現場に着いてからなら、私には撮りようがあります。</p>
+<p>でも、</p>
+<p><strong>いつ、どこへ行けばいいのか。</strong></p>
+<p>そこを自分で求めるのは簡単ではありませんでした。</p>
+<p>だったら、</p>
+<p><strong>簡単にできないのか？</strong></p>
+<p>それがSidekick Plannerの出発点です。</p>
+<p>本当に、それだけです。</p>
+<h2>「撮れなかったから作った」わけではない</h2>
+<p>こういう話を書くと、</p>
+<p>「何度もパール富士の撮影に失敗したから、それを解決するソフトを作った」</p>
+<p>という話にした方が、物語としては分かりやすいかもしれません。</p>
+<p>でも、実際は違います。</p>
+<p>私はパール富士を撮り続けていたわけではありません。</p>
+<p>ダイヤモンド富士を何度も追いかけていたわけでもありません。</p>
+<p>失敗を繰り返して、</p>
+<p>「もう失敗したくない」</p>
+<p>と思って作ったソフトでもありません。</p>
+<p>むしろ逆です。</p>
+<p>詳しい人について行ったら、撮れた。</p>
+<p>そこで、</p>
+<p><strong>「この人が知っている『いつ、どこへ行けばいい』を、自分でも求められないのか？」</strong></p>
+<p>と思った。</p>
+<p>それだけでした。</p>
+<h2>計算できるはずだ</h2>
+<p>考えてみれば、太陽や月がどこにあるのかは、完全な偶然ではありません。</p>
+<p>日時が決まれば、位置を計算できます。</p>
+<p>富士山の場所も分かっています。</p>
+<p>撮影地点も地図上の座標で表せます。</p>
+<p>なら、</p>
+<p><strong>計算できるはずです。</strong></p>
+<p>この考え方自体は、私にとって特別なものではありませんでした。</p>
+<p>前に書いたように、会社員時代にはテレビの同期回路を設計していました。</p>
+<p>「たぶん、この辺に信号が出ている」</p>
+<p>では嫌だったので、正確に測れる治具を作りました。</p>
+<p>星景写真では、何千枚もの画像を人間が一枚ずつ処理するのが馬鹿らしくなって、コンピューターにやらせる仕組みを作りました。</p>
+<p>今回も同じです。</p>
+<p>太陽や月の位置を人間が勘で探す必要がないのなら、</p>
+<p><strong>コンピューターに計算させればいい。</strong></p>
+<h2>ただ、答えは一つではなかった</h2>
+<p>ところが実際に考え始めると、単純ではありません。</p>
+<p>例えば、</p>
+<p>「富士山の山頂に太陽が重なる場所」</p>
+<p>といっても、一点だけではありません。</p>
+<p>日が変われば場所が変わります。</p>
+<p>時刻によっても変わります。</p>
+<p>撮影地点と富士山の距離も違います。</p>
+<p>太陽の大きさも、構図の中では重要になります。</p>
+<p>そして地図上では良さそうに見えても、</p>
+<p><strong>そこに人間が立てるとは限りません。</strong></p>
+<p>道路なのか。</p>
+<p>山の中なのか。</p>
+<p>海なのか。</p>
+<p>建物の中なのか。</p>
+<p>撮影場所として成立するのか。</p>
+<p>さらに、地形があります。</p>
+<p>計算上では富士山と太陽が重なっていても、途中に山があれば見えません。</p>
+<p>考え始めると、</p>
+<p>「太陽の位置を計算すれば終わり」</p>
+<p>という話ではありませんでした。</p>
+<p>でも、私はこういう話が嫌いではありません。</p>
+<p>問題が増えたら、</p>
+<p><strong>一つずつ分ければいい。</strong></p>
+<h2>分かることと、分からないことを分ける</h2>
+<p>ここで重要なのは、全部をコンピューターに決めさせようとしないことだと思っています。</p>
+<p>例えば、</p>
+<p>「この日時、この場所からなら、太陽と富士山はこういう位置関係になる」</p>
+<p>これは計算できます。</p>
+<p>月も計算できます。</p>
+<p>地形の高さも、データがあれば調べられます。</p>
+<p>撮影地点の候補も、条件を決めれば探すことができます。</p>
+<p>そういうものは、コンピューターにやらせればいい。</p>
+<p>でも、</p>
+<p><strong>そこでいい写真が撮れるか。</strong></p>
+<p>これは別の話です。</p>
+<h2>新月で快晴なら、天の川はきれいなのか</h2>
+<p>星景写真を撮っていると、それはよく分かります。</p>
+<p>新月。</p>
+<p>山の上。</p>
+<p>光害が少ない。</p>
+<p>天気予報は快晴。</p>
+<p>条件だけ見れば、天の川はきれいに見えるはずです。</p>
+<p>私は燕山荘に何泊もして、毎晩星を撮ったことがあります。</p>
+<p>毎晩、快晴。</p>
+<p>月の条件もいい。</p>
+<p>ところが、</p>
+<p><strong>天の川の見え方は毎晩違いました。</strong></p>
+<p>空気の透明度が違う。</p>
+<p>水蒸気の量も違う。</p>
+<p>同じ「快晴」でも、写真にすると全く同じではありません。</p>
+<p>天気予報が間違っているわけではありません。</p>
+<p>天体計算が間違っているわけでもありません。</p>
+<p>ただ、</p>
+<p><strong>計算で分かることと、現場でしか分からないことは違う。</strong></p>
+<h2>「明日の朝、どこで撮ります？」</h2>
+<p>山小屋に泊まっていると、写真仲間から聞かれることがあります。</p>
+<p>「村田さん、明日の朝、一緒に撮らせてもらっていいですか？」</p>
+<p>「いいですよ」</p>
+<p>そこまではいい。</p>
+<p>すると当然、次に聞かれます。</p>
+<p>「じゃあ、どこへ行きます？」</p>
+<p>でも私は、</p>
+<p><strong>「明日の朝起きて、外に出てみないと分からない」</strong></p>
+<p>と答えることがあります。</p>
+<p>適当に言っているわけではありません。</p>
+<p>地図は見ています。</p>
+<p>日の出の方向も分かっています。</p>
+<p>天気予報も見ています。</p>
+<p>山の地形も知っています。</p>
+<p>かなり考えています。</p>
+<p>それでも、</p>
+<p><strong>最後は朝にならないと分からない。</strong></p>
+<h2>右へ行くか、左へ行くか</h2>
+<p>朝、小屋を出る。</p>
+<p>空を見る。</p>
+<p>雲を見る。</p>
+<p>光を見る。</p>
+<p>風を見る。</p>
+<p>昨日とは違う。</p>
+<p>予報とも少し違う。</p>
+<p>そこで初めて、</p>
+<p>「今日はこっちかな」</p>
+<p>と思う。</p>
+<p>小屋を出て右へ行くのか。</p>
+<p>左へ行くのか。</p>
+<p>それすら、その瞬間に決めることがあります。</p>
+<p>理屈で考えていないわけではありません。</p>
+<p>むしろ、かなり考えています。</p>
+<p>でも、最後の判断は、</p>
+<p><strong>「なんとなく、こっち」</strong></p>
+<p>だったりします。</p>
+<p>私は理系の人間ですが、写真を撮るときには、最後のところを右脳が担当しているような気がします。</p>
+<h2>宝くじをどこで買うか</h2>
+<p>少し変な例えですが、私は写真について、</p>
+<p><strong>「宝くじをどこで買うか」と「宝くじが当たったか」は別の話</strong></p>
+<p>だと思っています。</p>
+<p>宝くじを売っていない場所へ行っても、買えません。</p>
+<p>まず売っている場所を探す必要があります。</p>
+<p>そこまでは調べられます。</p>
+<p>でも、その売り場で買えば当たるとは限りません。</p>
+<p>写真も似ています。</p>
+<p>ダイヤモンド富士が成立しない場所へ行っても、ダイヤモンド富士は撮れません。</p>
+<p>月がそこを通らない日に行っても、パール富士にはなりません。</p>
+<p>なら、</p>
+<p><strong>成立する日時と場所は、先に調べておけばいい。</strong></p>
+<p>そこはPlannerがやればいい。</p>
+<p>でも、その場所へ行けば作品が撮れるのか。</p>
+<p>それは別の問題です。</p>
+<h2>Plannerが決めるのは、写真ではない</h2>
+<p>Sidekick Plannerを作っていると、</p>
+<p>「これで撮影場所を決めるんですか？」</p>
+<p>という話になりそうですが、私自身は少し違う感覚を持っています。</p>
+<p>Plannerが教えるのは、</p>
+<p><strong>写真の正解ではありません。</strong></p>
+<p>例えば、</p>
+<p>この日に。</p>
+<p>この辺りから。</p>
+<p>この方向を見ると。</p>
+<p>この位置に太陽や月が来る。</p>
+<p>そういう、</p>
+<p><strong>計算できる条件</strong></p>
+<p>です。</p>
+<p>その候補を見て、</p>
+<p>「面白そうだ」</p>
+<p>と思うのか。</p>
+<p>実際に行くのか。</p>
+<p>現場で少し場所を変えるのか。</p>
+<p>天気を見て中止するのか。</p>
+<p>予定していた写真を捨てて、全く違うものを撮るのか。</p>
+<p>そこは写真家が決めればいい。</p>
+<h2>パール富士を撮らない人間が、Plannerを作っている</h2>
+<p>少し面白いのは、Plannerを作っている私自身が、今でもダイヤモンド富士やパール富士を熱心に追いかけているわけではないことです。</p>
+<p>作ったのだから、毎日のようにPlannerを使って撮影へ行っているのかというと、そうでもありません。</p>
+<p>なぜなのか。</p>
+<p>よく分かりません。</p>
+<p>たぶん、そこは右脳が担当しているのでしょう。</p>
+<p>「今日はこれを撮りたい」</p>
+<p>と思ったら撮る。</p>
+<p>思わなければ行かない。</p>
+<p>Plannerが、</p>
+<p>「今日はここへ行けば撮れます」</p>
+<p>と教えてくれても、</p>
+<p><strong>撮りたいと思わなければ行きません。</strong></p>
+<p>それでいいと思っています。</p>
+<p>Plannerは、写真家に命令するためのソフトではありません。</p>
+<h2>分かることは、先に分かっていた方がいい</h2>
+<p>だからといって、計算する意味がないわけではありません。</p>
+<p>むしろ逆です。</p>
+<p><strong>分かることなら、先に分かっていた方がいい。</strong></p>
+<p>太陽がそこを通らないことを、現地へ行ってから知る必要はありません。</p>
+<p>月が富士山と重ならないことを、一晩待って確認する必要もありません。</p>
+<p>途中の山に遮られて見えないことが計算で分かるなら、先に知っておけばいい。</p>
+<p>人間がやらなくてもいいことは、コンピューターにやらせる。</p>
+<p>その分、</p>
+<p>人間は現場でしかできないことをすればいい。</p>
+<p>空を見る。</p>
+<p>光を見る。</p>
+<p>雲を見る。</p>
+<p>風を感じる。</p>
+<p>構図を決める。</p>
+<p>シャッターを切る。</p>
+<p>あるいは、</p>
+<p><strong>今日は撮らない</strong></p>
+<p>と決める。</p>
+<h2>「いつ、どこへ行けばいい？」をなくしたかった</h2>
+<p>最初にパール富士へ連れて行ってもらった日。</p>
+<p>私は撮れました。</p>
+<p>撮影そのものには、それほど困りませんでした。</p>
+<p>困ったのは、その前です。</p>
+<p><strong>どうして、この人は今日ここへ来れば撮れると分かったんだ？</strong></p>
+<p>そこでした。</p>
+<p>今なら、その問いに対する私なりの答えがあります。</p>
+<p>分かる部分は計算する。</p>
+<p>地図にする。</p>
+<p>候補を探す。</p>
+<p>見える形にする。</p>
+<p>そして、</p>
+<p><strong>写真家が判断できるところまで持っていく。</strong></p>
+<p>その先は、写真家の仕事です。</p>
+<h2>写真を撮る時間を増やす</h2>
+<p>大学4年の頃、高木幹雄先生から聞いた言葉を、何度か書いてきました。</p>
+<p>正確な引用ではありませんが、</p>
+<p><strong>自動化できるものはコンピューターにやらせればいい。人間の頭はクリエイティブなことをするためにある。</strong></p>
+<p>という趣旨の話です。</p>
+<p>比較明合成でもそうでした。</p>
+<p>人間が一か月かけて画像を重ねる必要はない。</p>
+<p>コンピューターにやらせればいい。</p>
+<p>Sidekick Plannerも、結局は同じなのかもしれません。</p>
+<p>人間が地図と天体データを見ながら、延々と計算できることを調べる必要はありません。</p>
+<p>そこはコンピューターにやらせればいい。</p>
+<p>でも、写真そのものまでコンピューターに決めてもらう必要はありません。</p>
+<p><strong>Plannerで分かることは、Plannerに計算させる。</strong></p>
+<p><strong>Plannerでは分からないものを見るために、写真家は現場へ行く。</strong></p>
+<p>それでいい。</p>
+<h2>最後は、自分で決める</h2>
+<p>Sidekick Plannerは、</p>
+<p>「ここへ行けば、いい写真が撮れます」</p>
+<p>と保証するソフトではありません。</p>
+<p>そんなことは、たぶん誰にもできません。</p>
+<p>同じ場所。</p>
+<p>同じ時刻。</p>
+<p>同じ機材。</p>
+<p>それでも写真は変わります。</p>
+<p>雲が変わる。</p>
+<p>光が変わる。</p>
+<p>空気が変わる。</p>
+<p>そして何より、</p>
+<p><strong>撮る人が違う。</strong></p>
+<p>だからPlannerがやるべきことは、写真の正解を出すことではないと思っています。</p>
+<p>撮りたいものがある。</p>
+<p>でも、</p>
+<p><strong>いつ、どこへ行けばいいのか分からない。</strong></p>
+<p>なら、そこまでは計算すればいい。</p>
+<p>その場所に立った後は、</p>
+<p>空を見ればいい。</p>
+<p>光を見ればいい。</p>
+<p>ファインダーを見ればいい。</p>
+<p>そして最後は、</p>
+<p><strong>自分で決めればいい。</strong></p>
+<p>Sidekick Plannerは、10年以上前にパール富士へ連れて行ってもらったときの、</p>
+<p><strong>「ここに立てと言われれば撮れる。でも、この『ここ』が分からない」</strong></p>
+<p>という、とても単純な疑問から始まりました。</p>
+<p>だったら、</p>
+<p><strong>その「ここ」を簡単に探せるようにすればいい。</strong></p>
+<p>それが、Sidekick Plannerです。</p>
+<p>――つづく</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">この話につながる現在のSidekick</p>
+    <ul>
+      
+      <li><a href="/planner">Sidekick Planner（開発中） →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="前後のStory">
+      <div class="kzc-story-nav-prev">
+        
+        <a href="/story/the-earth-keeps-turning">
+          <span class="kzc-story-nav-label">前の話</span>
+          ← 地球の自転は止められない
+        </a>
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、Sidekickの開発者です。ここに書かれているのは、実際の撮影・現像・講評・
+        道具作りの経験です。文中に出てくるメーカー・雑誌・イベントの名前は、過去に関わった仕事として
+        登場するものであり、それらの企業によるSidekickの推薦・公認を意味するものではありません。
+      </p>
+      <p><a href="/ichiro-murata">村田一朗について →</a></p>
+      
+    </section>
+    <p><a href="/story">← Storyの一覧へ戻る</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

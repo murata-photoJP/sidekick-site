@@ -1,0 +1,661 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Good Tools Get Simpler Over Time | Story - Sidekick Lab</title>
+<meta name="description" content="My elaborate first intervalometer broke, and the last one I built was simple enough to fit inside a battery box. Being able to build something is not the same as needing to — and why I decided not to automate certain things even though I could.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/story/good-tools-get-simpler">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/good-tools-get-simpler">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/good-tools-get-simpler">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Good Tools Get Simpler Over Time | Story - Sidekick Lab">
+<meta property="og:description" content="My elaborate first intervalometer broke, and the last one I built was simple enough to fit inside a battery box. Being able to build something is not the same as needing to — and why I decided not to automate certain things even though I could.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/story/good-tools-get-simpler">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/story/good-tools-get-simpler">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" >📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" aria-current="page">Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/story/good-tools-get-simpler" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/story">Story</a></li>
+    <li aria-current="page">Good Tools Get Simpler Over Time</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+    <p class="kzc-story-series">
+      <span class="kzc-story-series-name">Making My Own Tools</span>
+      
+      <span class="kzc-story-series-part">Part 2 of 2</span>
+      
+    </p>
+    
+
+    <h1 class="kzc-article-title">Good Tools Get Simpler Over Time</h1>
+    <p class="kzc-story-subtitle">— Being able to build something is not the same as needing to</p>
+    <p class="kzc-article-lead">My elaborate first intervalometer broke, and the last one I built was simple enough to fit inside a battery box. Being able to build something is not the same as needing to — and why I decided not to automate certain things even though I could.</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">August 31, 2026</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>Last time I wrote about how, if what I need does not exist, I build it.</p>
+<p>I wrote software for computers.</p>
+<p>At work I built measurement jigs.</p>
+<p>And once I started photographing digitally, I ended up building external power supplies too.</p>
+<p>Put that way, it might look as though I designed and built the optimal thing from the outset every time something was needed.</p>
+<p>Of course that is not what happened.</p>
+<p>If anything, the opposite.</p>
+<p>The first version of a thing is usually a nuisance.</p>
+<p>You build it because you need it.</p>
+<p>You carry it out into the field.</p>
+<p>You use it.</p>
+<p>It breaks.</p>
+<p>You find the parts that are inconvenient.</p>
+<p>Times change and better components or products appear.</p>
+<p>And so you build it again.</p>
+<p>For the same purpose, I have built a number of different things.</p>
+<p>Some of them ended up far simpler than the first one.</p>
+<h2>The first intervalometer was quite elaborate</h2>
+<p>Once I started making long exposures of the stars, I needed to trigger the camera at fixed intervals, on and on.</p>
+<p>These days cameras have built-in interval shooting, or you can control them from a smartphone.</p>
+<p>Back then it was not so easy.</p>
+<p>So I built my own release system.</p>
+<p>The first one was a fairly elaborate circuit built with CMOS logic.</p>
+<p>And it did not simply fire the shutter at a fixed interval.</p>
+<p>Only the very first frame of the session was triggered by the camera body's own interval timer.</p>
+<p>That was used as a trigger, after which an external circuit took over the releases.</p>
+<p>Why go to all that trouble?</p>
+<p>Because I was later renaming the files using the date and time down to the second — and the milliseconds as well.</p>
+<p>If the start of a session reads</p>
+<p><strong>18:00:00</strong></p>
+<p>it feels good.</p>
+<p>That is all it was.</p>
+<p>And was the camera's own clock, which determined that 18:00:00, actually accurate?</p>
+<p>On that point:</p>
+<p><strong>close enough is fine.</strong></p>
+<p>Even now I find it a strange thing to have cared about.</p>
+<p>But for me, &quot;how many milliseconds accurate is the clock&quot; and &quot;does the session start neatly on the zero second&quot; were evidently two different questions.</p>
+<p>Be fussy where it matters.</p>
+<p>Do not worry about the parts that do not.</p>
+<h2>It broke</h2>
+<p>That release system worked very well.</p>
+<p>When I built it, I was still an employee at a company.</p>
+<p>Companies have oscilloscopes.</p>
+<p>I could build the circuit, look at the waveform, check the timing, and adjust it.</p>
+<p>Later on, though, it broke — a little.</p>
+<p>By then I had left the company and gone freelance.</p>
+<p>Naturally, there was no oscilloscope to hand.</p>
+<p>If I wanted to fix it, one option was to buy a cheap oscilloscope.</p>
+<p>But I thought:</p>
+<p><strong>Am I really going to buy an oscilloscope for this?</strong></p>
+<p>It was not worth it.</p>
+<p>In that case, better to build something simpler.</p>
+<h2>In the end, it fit inside a battery box</h2>
+<p>After that I built several simplified releases, I think.</p>
+<p>Along the way I came across an interesting component.</p>
+<p>It was a three-terminal part originally intended for things like making an LED blink.</p>
+<p>The oscillation frequency was fixed by the part number, and there were versions at 1 Hz, 2 Hz, 4 Hz, 8 Hz — something around there.</p>
+<p>I no longer remember the exact part numbers or frequencies.</p>
+<p>But looking at it I thought:</p>
+<p><strong>&quot;This will do.&quot;</strong></p>
+<p>One battery.</p>
+<p>One of those three-terminal parts.</p>
+<p>And the wiring to the camera.</p>
+<p>I may have added a resistor.</p>
+<p>That was more or less all of it.</p>
+<p>I do not remember making a proper circuit board either.</p>
+<p>I stuffed the part and the wiring into the empty space in a battery box and fixed it in place with adhesive so it would not move.</p>
+<p>Done.</p>
+<p>It is incomparably simpler than the CMOS circuit I built first.</p>
+<p>But the job it does is the same.</p>
+<p><strong>Fire the camera's shutter at the interval you need.</strong></p>
+<p>If it can do that, it is enough.</p>
+<h2>Complicated is not the same as superior</h2>
+<p>Because I had been an engineer, I can build a complicated circuit when one is needed.</p>
+<p>But complicated circuits bring complicated problems.</p>
+<p>More components.</p>
+<p>More places that can fail.</p>
+<p>Adjustment becomes necessary.</p>
+<p>Repairing it may require test equipment.</p>
+<p>Whereas a battery and a three-terminal part have almost nothing in them that can break.</p>
+<p>For a tool you carry out to a location, that is sometimes the better option.</p>
+<p>Building something technically advanced and</p>
+<p><strong>being a good tool are not the same thing.</strong></p>
+<p>This was not something I understood from the start.</p>
+<p>Build, use, break, build again.</p>
+<p>It is something I came to understand gradually while doing that.</p>
+<h2>If building it is a hassle, buy it</h2>
+<p>Of course I did not build everything myself every time.</p>
+<p>When making my own was too much trouble, I also used Nikon's MC-36 release.</p>
+<p>It is a release with a built-in interval timer.</p>
+<p>I was not using it in the ordinary way, though.</p>
+<p>To get around a camera-side limit that becomes a problem in long continuous sessions, I used it with a particular configuration.</p>
+<p>Later, when I began teaching nightscape photography courses at Photo Advice, I shared that method as well.</p>
+<p>What was interesting is that you did not even need to buy an actual MC-36.</p>
+<p>There were Chinese-made compatible units.</p>
+<p>The price was about a tenth of the original, as I recall.</p>
+<p>And they were sold with connectors for Nikon and other manufacturers such as Canon.</p>
+<p>In the course I introduced the compatible unit and the settings.</p>
+<p>But one of the people who bought one apparently became unsure about the settings and contacted Nikon.</p>
+<p>I heard that when they explained the settings I had taught and asked their question, they were not given much of a hearing.</p>
+<p>Which is understandable.</p>
+<p>It is probably not a use the manufacturer had in mind.</p>
+<p>But:</p>
+<p><strong>if it works, that is fine.</strong></p>
+<p>There is no need to build one yourself.</p>
+<h2>I wanted a specific connector. They wouldn't sell me one</h2>
+<p>Something similar happened back when I was building external power supplies.</p>
+<p>Cameras had a socket for connecting an AC adapter.</p>
+<p>The problem was that connector.</p>
+<p>It was not a common DC plug but a proprietary part.</p>
+<p>To get hold of one by normal means, you had to buy the original AC adapter and</p>
+<p><strong>cut the cable off.</strong></p>
+<p>That was the only way.</p>
+<p>But buying an entire AC adapter for a single connector is terrible value.</p>
+<p>I once asked someone at the manufacturer.</p>
+<p>Might there be one lying around in-house — pulled from a repair, or a part due to be scrapped?</p>
+<p>They looked for me.</p>
+<p>Later they told me:</p>
+<p>&quot;We couldn't find one.&quot;</p>
+<p>A shame.</p>
+<p>But that is not a reason to be annoyed with the manufacturer.</p>
+<p>If it isn't there, it isn't there.</p>
+<p>So think of another way.</p>
+<h2>The power supply changed many times too</h2>
+<p>The external power supply itself did not stay the same either.</p>
+<p>First, radio-control battery packs.</p>
+<p>Then eneloop cells.</p>
+<p>For long sessions in the cold I wired them in series to reach the voltage I needed, and then those strings in parallel to gain capacity.</p>
+<p>I once ran a setup for about fourteen hours in conditions close to minus thirty degrees Celsius.</p>
+<p>Even with the cells frozen solid, it kept going.</p>
+<p>But today there is no need to build anything like that.</p>
+<p>There are USB-PD power banks.</p>
+<p>There are trigger cables to pull out the voltage you need.</p>
+<p>So use those.</p>
+<p>There is no reason to defend a method I once struggled to build myself.</p>
+<p><strong>If a new off-the-shelf product is easier, I switch to it.</strong></p>
+<h2>The &quot;air filter&quot;</h2>
+<p>I approach lenses in much the same way.</p>
+<p>As a rule I choose lenses that perform well.</p>
+<p>For mountain photography in particular, that is not somewhere I want to compromise.</p>
+<p>But I almost never use the hood that comes with a lens.</p>
+<p>Hoods are bulky in the mountains.</p>
+<p>They add weight.</p>
+<p>So even when I buy a new lens, the hood goes back in the box.</p>
+<p>I generally do not use protective filters either.</p>
+<p>But I do want to protect the filter thread at the front of the lens.</p>
+<p>If you knock it against a rock and deform it, you may not be able to fit a filter afterwards.</p>
+<p>So sometimes I remove the glass from a protective filter and mount just the ring.</p>
+<p>I call this, entirely on my own,</p>
+<p><strong>an &quot;air filter.&quot;</strong></p>
+<p>Obviously it does nothing at all if a stone flies into the front element.</p>
+<p>But in my experience in the mountains, the probability of a stone striking the front element directly is far lower than the probability of knocking the lens barrel against something.</p>
+<p>In that case, the ring alone is enough.</p>
+<p>And if the front element does get scratched?</p>
+<p>I have it repaired, or if necessary buy the lens again.</p>
+<p>I reckon that is cheaper than owning an expensive protective filter for every lens I have.</p>
+<p>This is not a general claim that protective filters are unnecessary.</p>
+<p><strong>Given how I work, that is the judgement I have made.</strong></p>
+<p>That is all.</p>
+<h2>If I'm not carrying a hood, I don't compromise on the lens</h2>
+<p>Of course, not using a hood can make ghosting and flare more likely.</p>
+<p>Which is exactly why the performance of the lens itself matters.</p>
+<p>When light does get in, I block it by hand.</p>
+<p>Sometimes I carry a flat piece of something for the purpose.</p>
+<p>But usually, when I need it, I do not have it with me.</p>
+<p>So in the end I often shade the lens with my hand.</p>
+<p>At the same time, I sometimes find a slightly quirky lens — a Chinese 50mm f/1.0, say — genuinely interesting.</p>
+<p>That is</p>
+<p><strong>because it's play.</strong></p>
+<p>Having a high-performance lens and then using a quirky one for fun is enjoyable.</p>
+<p>But if</p>
+<p><strong>that is all you have,</strong></p>
+<p>then for me it is a different matter.</p>
+<p>High performance is not automatically right.</p>
+<p>Cheap and interesting is not automatically right either.</p>
+<p>What you need changes depending on what you are using it for.</p>
+<h2>I once made all of Photoshop scriptable</h2>
+<p>I have gone through similar trial and error in software.</p>
+<p>This was before Sidekick.</p>
+<p>I once made Photoshop's main functions controllable from JSX.</p>
+<p>Tone curves.</p>
+<p>Saturation.</p>
+<p>And the other functions needed for image processing, one after another, callable from a program.</p>
+<p>What I wanted was automatic development.</p>
+<p>Analyse the image.</p>
+<p>Look at the result and decide:</p>
+<p>&quot;For this photograph, soften the contrast a little with a tone curve.&quot;</p>
+<p>&quot;Raise the saturation slightly.&quot;</p>
+<p>Then choose the right function, set the right parameters, and process it automatically.</p>
+<p>That is how far I wanted to go.</p>
+<p>Driving Photoshop from a program, I got a long way.</p>
+<p>But it stopped after that.</p>
+<h2>I couldn't decide &quot;what to do&quot;</h2>
+<p>The problem was not Photoshop.</p>
+<p>I could move a tone curve.</p>
+<p>I could change saturation.</p>
+<p>I could call whatever function was needed.</p>
+<p>But:</p>
+<p><strong>what should be done to this photograph?</strong></p>
+<p>That was the part I could not get a computer to judge.</p>
+<p>I think the limits of AI at the time were part of it.</p>
+<p>In the end that system was never finished.</p>
+<p>I started building it and stopped.</p>
+<p>Looking back, I had once tried to solve, at that time, a problem I would later take up again in Sidekick Portrait.</p>
+<p>That software did not evolve into Sidekick Portrait, though.</p>
+<p>I tried it once, and stopped at the point of realizing that</p>
+<p><strong>automating operations and automating judgement are entirely different things.</strong></p>
+<p>That is all it was.</p>
+<h2>I could automate it. But I don't</h2>
+<p>The reverse happens too.</p>
+<p>I photograph waves.</p>
+<p>There are parts of wave photography that could be automated.</p>
+<p>Technically, it can be done.</p>
+<p>So would it not be easier to automate it?</p>
+<p>But I have not.</p>
+<p>When I photograph waves, even though it may look like I am simply pressing the shutter, I am making fine adjustments on the spot.</p>
+<p>Watch the wave with my own eyes.</p>
+<p>Watch the next wave.</p>
+<p>Adjust slightly depending on the state of it.</p>
+<p>And repeat.</p>
+<p>If I automated that, I would lose the ability to watch and adjust in real time.</p>
+<p>That is not all.</p>
+<p>Handing it to the camera also makes my own shooting less attentive.</p>
+<p>And the hit rate drops as a result.</p>
+<p>So:</p>
+<p><strong>I could automate it, but I don't.</strong></p>
+<h2>&quot;Just let the computer do it&quot; was not enough</h2>
+<p>Last time I wrote that when I was doing research in Professor Takagi's laboratory at the Institute of Industrial Science, University of Tokyo, in my fourth year, I heard him say something to the effect of:</p>
+<p><strong>Anything that can be automated should be given to the computer. The human mind is there to do creative work.</strong></p>
+<p>I still think that is fundamentally right.</p>
+<p>There is no need for a person to stack thousands of images by hand for a lighten composite.</p>
+<p>Let the computer do it.</p>
+<p>Nor is there any need for a person to endlessly repeat, over thousands of frames, work a computer can handle.</p>
+<p>But photographing waves taught me something as well.</p>
+<p><strong>Not everything a person does is &quot;drudgery that should be replaced by a computer.&quot;</strong></p>
+<p>Even something that looks like simple repetition may involve looking, sensing, judging, and adjusting along the way.</p>
+<p>Take that away too, and the photographs become dull.</p>
+<h2>Clear every night is not the same night every night</h2>
+<p>The same is true of nightscape photography.</p>
+<p>Take a new moon.</p>
+<p>A place where the Milky Way is clearly visible.</p>
+<p>A forecast of clear skies.</p>
+<p>On paper, the conditions are perfect.</p>
+<p>I once stayed several nights at Enzanso, photographing stars every night.</p>
+<p>Utterly clear, every day.</p>
+<p>And yet,</p>
+<p><strong>the Milky Way looked different every night.</strong></p>
+<p>How clear the air is.</p>
+<p>How much water vapour there is.</p>
+<p>There are conditions that &quot;fine&quot; in a forecast does not capture.</p>
+<p>You can calculate that it is a new moon.</p>
+<p>You can calculate where the Milky Way will be.</p>
+<p>You know sunset and sunrise.</p>
+<p>But that alone does not determine the photograph you get that night.</p>
+<p>The calculation is not wrong.</p>
+<p><strong>It is that some things can be known by calculation and some things can only be known on site.</strong></p>
+<h2>Everyone with a nose for it went outside</h2>
+<p>This was during one of those stays at Enzanso.</p>
+<p>That day we were inside cloud the whole time.</p>
+<p>You could barely see the mountains.</p>
+<p>Then, towards evening, the cloud began to break up a little.</p>
+<p>I went out to shoot.</p>
+<p>The manager of Enzanso went out too.</p>
+<p>Photographers and cameramen —</p>
+<p><strong>everyone with a nose for it went out to shoot.</strong></p>
+<p>The cloud never cleared completely.</p>
+<p>But now and then it opened, just for a moment.</p>
+<p>And you could see towards Mt. Yari.</p>
+<p>The evening sun struck it.</p>
+<p>A sea of cloud spread from directly below Mt. Yari all the way to the foot of Mt. Tsubakuro, where I was standing.</p>
+<p>The conditions were extraordinary.</p>
+<p>After the sun went down, the manager of Enzanso came over.</p>
+<p>&quot;Where on earth were you shooting?&quot;</p>
+<p>I hadn't been nearby, he said.</p>
+<p>And then:</p>
+<p>&quot;I've been here since I was a child, and I've never seen conditions like that.&quot;</p>
+<p>With conditions that good, where exactly had Murata been shooting from?</p>
+<p>I imagine the manager suspected</p>
+<p><strong>that I had found a better spot than his and shot from there.</strong></p>
+<p>I did shoot, of course.</p>
+<p>I think I got it, and got it well.</p>
+<p>Probably no worse than the manager did.</p>
+<p>But we never compared.</p>
+<p>So which of us did better, I do not know.</p>
+<h2>In the end it comes down to where you stand</h2>
+<p>Same mountain.</p>
+<p>Same hour.</p>
+<p>Same evening light.</p>
+<p>Same sea of cloud.</p>
+<p>Even so,</p>
+<p><strong>where you stand changes the photograph.</strong></p>
+<p>Can that spot be determined entirely by calculation?</p>
+<p>I do not think so.</p>
+<p>I look at maps.</p>
+<p>I look at the positions of the sun and moon.</p>
+<p>I look at forecasts a great deal.</p>
+<p>I think hard about everything that can be reasoned out.</p>
+<p>But when a fellow photographer at a mountain hut asks me:</p>
+<p>&quot;Murata-san, may I shoot alongside you tomorrow morning?&quot;</p>
+<p>and I answer:</p>
+<p>&quot;Of course,&quot;</p>
+<p>and they ask:</p>
+<p>&quot;So where are we going?&quot;</p>
+<p>I sometimes answer:</p>
+<p><strong>&quot;I won't know until I wake up tomorrow and step outside.&quot;</strong></p>
+<p>Do I turn right out of the hut, or left?</p>
+<p>Even that I cannot know without looking outside.</p>
+<p>Look at the cloud.</p>
+<p>Look at the light.</p>
+<p>Look at the air.</p>
+<p>And in the end, sometimes I decide with</p>
+<p><strong>&quot;this way, somehow.&quot;</strong></p>
+<h2>Don't build it. Don't automate it. Don't let it decide.</h2>
+<p>When I was younger, if what I needed did not exist, I built it.</p>
+<p>I built complicated circuits.</p>
+<p>I wrote software.</p>
+<p>In time I understood that if something simpler will do, simpler is better.</p>
+<p>And further, that</p>
+<p><strong>there is no need to build everything you are capable of building.</strong></p>
+<p>Nor to automate everything that can be automated.</p>
+<p>And now I think that</p>
+<p><strong>letting a computer calculate and letting a computer decide the photograph are different things.</strong></p>
+<p>If a computer can do in one night the image processing that would take a person a month, let it.</p>
+<p>If it can accurately calculate when and where a celestial object will be, let it calculate.</p>
+<p>But:</p>
+<p>Do you want to take that photograph.</p>
+<p>Are you going there today.</p>
+<p>Do you go right or left once you are on site.</p>
+<p>Do you look at the light in front of you and abandon the photograph you had planned.</p>
+<p>None of that needs to be decided for you by a computer.</p>
+<p>A tool is not there to take photographs in place of a person.</p>
+<p><strong>It only needs to take on the tedious parts so that a person can take photographs.</strong></p>
+<p>Sidekick, which I am building now, is in the end that kind of tool too.</p>
+<p>— To be continued</p>
+
+  </div>
+
+  
+  <p class="kzc-story-series">
+    This is the second half of
+    <a href="/en/story/make-your-own-tools">← If the Tool You Need Doesn&#39;t Exist, Build It</a>
+  </p>
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">The Sidekick this story leads to</p>
+    <ul>
+      
+      <li><a href="/en/sidekick">What is Sidekick →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="Other stories">
+      <div class="kzc-story-nav-prev">
+        
+        <a href="/en/story/make-your-own-tools">
+          <span class="kzc-story-nav-label">Previous</span>
+          ← If the Tool You Need Doesn&#39;t Exist, Build It
+        </a>
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+        <a href="/en/story/the-earth-keeps-turning">
+          <span class="kzc-story-nav-label">Next</span>
+          You Can&#39;t Stop the Earth from Turning →
+        </a>
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>About the Author</h2>
+      <p>
+        Ichiro Murata is a photographer and the developer of Sidekick. These stories are written from his
+        own experience of shooting, retouching, teaching, and building tools. Names of manufacturers,
+        magazines, and events appear here as work he was involved in — they are not endorsements of
+        Sidekick by those companies.
+      </p>
+      <p><a href="/en/ichiro-murata">More about Ichiro Murata →</a></p>
+      
+    </section>
+    <p><a href="/en/story">← Back to all stories</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,119 @@
+/* Story（2026-08-31新設）専用の追加スタイル。knowledge.css を読み込んだ上に重ねる。
+
+   打ち出の小槌・開発日誌は knowledge.css だけで足りていたが、Story は
+   (1) 1本が1万5千〜2万字と長い、(2) 一文一段落が続く文体、(3) サブタイトル・
+   前後編・記事間の順序という Story にしか無いUI要素、の3点があるため、
+   その分だけをここへ足す。knowledge.css 自体は変更していない
+   （打ち出の小槌・開発日誌の既存表示に影響を出さないため）。 */
+
+/* ---------- 長文の可読性 ---------- */
+/* knowledge.css の --kzc-max:860px は記事一覧・カード向けの幅。
+   本文だけは日本語の1行が長くなりすぎないよう、さらに内側で幅を絞る
+   （全角約34〜38文字／1行）。英語版も同じ指定で概ね65〜75文字に収まる。 */
+.kzc-story-body{
+  max-width:38em;
+}
+/* 一文一段落が続くため、段落同士の間隔を既定より少し広く取る。 */
+.kzc-story-body p{
+  margin:0 0 1.35em;
+}
+/* 節の切れ目を分かりやすくする（見出し前の余白を本文間より明確に大きく）。 */
+.kzc-story-body h2{
+  margin-top:52px;
+}
+/* 本文中の太字だけの段落は、著者が意図的に置いた「効かせどころ」なので、
+   周囲の地の文から少し浮かせる。 */
+.kzc-story-body p > strong:only-child{
+  display:block;
+  padding:2px 0;
+  font-size:1.05em;
+  color:var(--kzc-text);
+}
+
+/* ---------- サブタイトル ---------- */
+.kzc-story-subtitle{
+  color:var(--kzc-sub);
+  font-size:clamp(15px,2vw,18px);
+  font-weight:600;
+  line-height:1.6;
+  margin:0 0 14px;
+}
+
+/* ---------- 前後編（シリーズ） ---------- */
+.kzc-story-series{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  background:var(--kzc-card);
+  border:1px solid var(--kzc-line);
+  border-radius:var(--kzc-r);
+  padding:12px 16px;
+  margin:0 0 20px;
+  font-size:13px;
+  color:var(--kzc-sub);
+}
+.kzc-story-series-name{
+  font-weight:800;
+  color:var(--kzc-accent2);
+}
+.kzc-story-series-part{
+  border:1px solid var(--kzc-line);
+  border-radius:999px;
+  padding:2px 10px;
+  font-weight:700;
+  color:var(--kzc-text);
+}
+
+/* ---------- 記事末尾の導線 ---------- */
+.kzc-story-related ul{ list-style:none; padding:0; margin:8px 0 0; }
+.kzc-story-related li{ margin-bottom:8px; }
+.kzc-story-related a{ font-weight:700; }
+
+.kzc-story-nav{
+  display:grid;
+  gap:12px;
+  border-top:1px solid var(--kzc-line);
+  margin-top:32px;
+  padding-top:20px;
+}
+@media (min-width:640px){
+  .kzc-story-nav{ grid-template-columns:1fr 1fr; }
+  .kzc-story-nav .kzc-story-nav-next{ text-align:right; }
+}
+.kzc-story-nav a{
+  display:block;
+  color:var(--kzc-accent2);
+  font-weight:700;
+}
+.kzc-story-nav-label{
+  display:block;
+  color:var(--kzc-muted);
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:2px;
+}
+
+/* ---------- 一覧ページ ---------- */
+.kzc-story-intro{
+  color:var(--kzc-sub);
+  font-size:15px;
+  line-height:1.9;
+  max-width:38em;
+  margin:0 0 28px;
+}
+.kzc-story-intro p{ margin:0 0 12px; }
+.kzc-story-intro p:last-child{ margin-bottom:0; }
+
+.kzc-card-order{
+  color:var(--kzc-muted);
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.06em;
+  margin:0 0 6px;
+}
+.kzc-card-subtitle{
+  color:var(--kzc-sub);
+  font-size:14px;
+  margin:0 0 8px;
+}

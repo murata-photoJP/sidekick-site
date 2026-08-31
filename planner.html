@@ -1,0 +1,601 @@
+
+
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
+     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
+     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
+     汎用/en/に後退させないようパラメータ化した）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/planner'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/planner');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidekick Planner（開発中）— 撮りたい天体と風景が重なる「いつ・どこ」を探す</title>
+<meta name="description" content="Sidekick Planner は、撮りたい天体と風景が重なる「いつ・どこ」を探す、写真家のための撮影計画ツールです。現在開発中。太陽・月の撮影地点候補と成立日時の検索、天の川の方向・高度・可視時間の案内を、Windows PC 向けに開発しています。">
+<link rel="canonical" href="https://www.sidekick-lab.com/planner">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/planner">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/planner">
+
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sidekick">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="Sidekick Planner（開発中）— 撮りたい天体と風景が重なる「いつ・どこ」を探す">
+<meta property="og:description" content="Sidekick Planner は、撮りたい天体と風景が重なる「いつ・どこ」を探す、写真家のための撮影計画ツールです。現在開発中。太陽・月の撮影地点候補と成立日時の検索、天の川の方向・高度・可視時間の案内を、Windows PC 向けに開発しています。">
+<meta property="og:url" content="https://www.sidekick-lab.com/planner">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sidekick Planner（開発中）— 撮りたい天体と風景が重なる「いつ・どこ」を探す">
+<meta name="twitter:description" content="Sidekick Planner は、撮りたい天体と風景が重なる「いつ・どこ」を探す、写真家のための撮影計画ツールです。現在開発中。太陽・月の撮影地点候補と成立日時の検索、天の川の方向・高度・可視時間の案内を、Windows PC 向けに開発しています。">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<link rel="stylesheet" href="/assets/css/site-header.css">
+
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .crumb{padding:18px 0 0;font-size:12px;color:var(--muted);}
+    .crumb a{color:var(--sub);}
+    .crumb a:hover{color:var(--text);}
+    .crumb span{margin:0 6px;}
+
+    /* ── Hero ── */
+    .page-hero{
+      padding:40px 0 52px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:760px;}
+    .status-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 15px;border-radius:999px;
+      background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.35);
+      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(30px,5vw,50px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.15;
+      margin-bottom:16px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-lead{
+      font-size:clamp(16px,2.2vw,19px);
+      line-height:1.9;color:var(--text);font-weight:600;
+      margin-bottom:22px;
+    }
+    .dev-note{
+      padding:18px 22px;border-radius:14px;
+      background:var(--card);border:1px solid rgba(255,138,0,.2);
+      border-left:3px solid var(--accent);
+      font-size:14px;line-height:1.9;color:var(--sub);
+    }
+    .dev-note strong{color:var(--text);}
+    .dev-note a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+
+    /* ── Section ── */
+    .sec{padding:56px 0 0;}
+    .sec:last-of-type{padding-bottom:80px;}
+    .sec-h2{
+      font-size:clamp(19px,2.2vw,24px);
+      font-weight:800;letter-spacing:-.02em;
+      margin:0 0 6px;
+    }
+    .sec-note{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.8;}
+    .sec-body{max-width:820px;}
+    .sec-body p{font-size:15px;line-height:1.95;color:var(--sub);margin-bottom:16px;}
+    .sec-body p strong{color:var(--text);font-weight:700;}
+    .sec-body p:last-child{margin-bottom:0;}
+
+    /* ── 状態リスト ── */
+    .state-grid{display:grid;gap:16px;margin-top:8px;}
+    @media (min-width:760px){ .state-grid{grid-template-columns:1fr 1fr;} }
+    .state{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--r);padding:20px 22px;
+    }
+    .state-label{
+      font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .state-now .state-label{color:var(--accent2);}
+    .state-plan .state-label{color:var(--sub);}
+    .state-undecided .state-label{color:var(--muted);}
+    .state ul{list-style:none;margin:0;padding:0;}
+    .state li{
+      font-size:14px;line-height:1.8;color:var(--sub);
+      padding-left:18px;position:relative;margin-bottom:8px;
+    }
+    .state li:last-child{margin-bottom:0;}
+    .state li::before{
+      content:"";position:absolute;left:0;top:11px;
+      width:6px;height:6px;border-radius:50%;background:var(--muted);
+    }
+    .state-now li::before{background:var(--accent);}
+
+    /* ── 思想 ── */
+    .principle{
+      background:var(--card2);border:1px solid var(--line);
+      border-radius:var(--r);padding:24px 26px;margin-top:8px;
+    }
+    .principle p{font-size:15px;line-height:1.95;color:var(--sub);margin-bottom:14px;}
+    .principle p:last-child{margin-bottom:0;}
+    .principle strong{color:var(--text);}
+
+    /* ── Story導線 ── */
+    .story-link{
+      display:block;
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--r);padding:22px 24px;margin-top:8px;
+      transition:.15s;
+    }
+    .story-link:hover{border-color:rgba(255,138,0,.35);}
+    .story-link-label{
+      font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:8px;
+    }
+    .story-link-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px;}
+    .story-link-sub{font-size:14px;color:var(--sub);margin-bottom:10px;}
+    .story-link-more{font-size:13px;font-weight:700;color:var(--accent2);}
+
+    .disc{
+      margin-top:32px;padding:18px 20px;
+      background:var(--card);border:1px solid var(--line);border-radius:14px;
+      font-size:13px;line-height:1.9;color:var(--muted);
+    }
+    .disc strong{color:var(--sub);}
+    .disc a{color:var(--sub);text-decoration:underline;}
+  </style>
+
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/planner">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/planner" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+
+  <main>
+
+    <div class="wrap">
+      <nav class="crumb" aria-label="パンくずリスト">
+        <a href="/">Sidekick Lab</a><span>/</span>Sidekick Planner
+      </nav>
+    </div>
+
+    <!-- ── Hero ── -->
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="status-badge">現在開発中</div>
+          <h1 class="page-h1">Sidekick <em>Planner</em></h1>
+          <p class="page-lead">
+            撮りたい天体と風景が重なる「いつ・どこ」を探す、<br>
+            写真家のための撮影計画ツール。
+          </p>
+          <div class="dev-note">
+            <strong>このページは製品ページではありません。</strong>
+            Sidekick Planner は現在開発中で、配布物・購入方法・提供時期はまだ決まっていません。
+            このページに書いているのは、2026年8月31日時点で実際に動いているもの、
+            および Version 1 で予定している範囲だけです。
+            なぜこれを作っているのかは、
+            <a href="/story/when-and-where-should-i-go">Story「『いつ、どこへ行けばいい？』から始まった」</a>
+            に書きました。
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 何をするソフトなのか ── -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">何をするソフトなのか</h2>
+          <p class="sec-note">写真の正解を出すソフトではありません。</p>
+          <p>
+            富士山の山頂に太陽が重なる。月が重なる。天の川が思った位置に来る。
+            そういう写真を撮ろうとすると、必要になるのは撮影技術だけではありません。
+            <strong>いつ、どこへ行けばいいのか</strong>が分からなければ、そもそも始まりません。
+          </p>
+          <p>
+            天体の位置、地点の座標、あいだにある地形。
+            これらは日時と場所が決まれば計算できます。
+            計算できることはコンピューターに任せて、
+            <strong>写真家が現場で判断するための候補を見つける</strong>。
+            Sidekick Planner がやろうとしているのは、そこまでです。
+          </p>
+          <p>
+            その先――実際に行くのか、現場で少し場所を変えるのか、
+            天気を見て中止するのか、予定していた写真を捨てて別のものを撮るのか――は、
+            写真家が決めることだと考えています。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 現在の状態 ── -->
+    <section class="sec">
+      <div class="wrap">
+        <h2 class="sec-h2">現在の状態（2026年8月31日時点）</h2>
+        <p class="sec-note">
+          「検討中のこと」を製品仕様の約束として書かないため、
+          実際に動いているものと、これから決めることを分けて書いています。
+        </p>
+        <div class="state-grid">
+
+          <div class="state state-now">
+            <p class="state-label">検証用プロトタイプで動いているもの</p>
+            <ul>
+              <li>ダイヤモンド／パールの、撮影地点候補と成立日時の二方向検索</li>
+              <li>「星景／太陽・月」ジャンル（恒星・星座・惑星の基本セット、天の川）</li>
+              <li>地図上での地点指定と、候補の一覧表示</li>
+              <li>標高データと3D都市モデルを使った、対象方向の地形・建物シルエット表示</li>
+              <li>選んだ日時・地点での構図プレビュー</li>
+            </ul>
+          </div>
+
+          <div class="state state-plan">
+            <p class="state-label">Version 1 で予定している範囲</p>
+            <ul>
+              <li>Windows PC 向けのアプリケーションとして提供する</li>
+              <li>太陽・月について、撮影地点候補と成立日時の二方向検索を扱う</li>
+              <li>天の川は、方向・高度・傾き・見え始め／見え終わりの案内に限定する</li>
+              <li>日本国内・日本時間の表示を対象にする</li>
+              <li>計算はローカルで行い、外部のAI APIは使わない</li>
+              <li>結果はテキスト／CSVで出力し、共有そのものはOSに任せる</li>
+            </ul>
+          </div>
+
+          <div class="state state-undecided">
+            <p class="state-label">まだ決まっていないこと</p>
+            <ul>
+              <li>提供時期・提供形態・価格</li>
+              <li>データの配布方式、更新方法</li>
+              <li>動作環境の詳細な要件</li>
+            </ul>
+          </div>
+
+          <div class="state state-undecided">
+            <p class="state-label">Version 1 では対象にしないこと</p>
+            <ul>
+              <li>Web版・スマートフォン版（将来の検討対象）</li>
+              <li>天の川のアーチ構図、精密な構図検索（Version 2 以降）</li>
+              <li>雲量予報の地図オーバーレイ（利用条件と費用の面から見送り）</li>
+              <li>アプリ内での共有機能</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 考え方 ── -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">計算できることと、計算できないこと</h2>
+          <div class="principle">
+            <p>
+              新月で、光害が少なくて、天気予報が快晴。
+              条件だけ見れば完璧です。それでも、
+              <strong>天の川の見え方は毎晩違います。</strong>
+              空気の透明度も、水蒸気の量も違うからです。
+            </p>
+            <p>
+              天気予報が間違っているわけでも、天体計算が間違っているわけでもありません。
+              <strong>計算で分かることと、現場でしか分からないことがある</strong>——それだけです。
+            </p>
+            <p>
+              だから Sidekick Planner は、「ここへ行けばいい写真が撮れます」と保証しません。
+              分かることは先に計算しておいて、
+              <strong>写真家が判断できるところまで持っていく。</strong>
+              その先を見るために、写真家は現場へ行きます。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Story導線 ── -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">なぜ、これを作ろうと思ったのか</h2>
+          <p class="sec-note">きっかけは、10年以上前に一度だけ撮ったパール富士でした。</p>
+          <a class="story-link" href="/story/when-and-where-should-i-go">
+            <div class="story-link-label">Story 5</div>
+            <div class="story-link-title">「いつ、どこへ行けばいい？」から始まった</div>
+            <div class="story-link-sub">――Sidekick Plannerを作ろうと思った理由</div>
+            <div class="story-link-more">この話を読む →</div>
+          </a>
+
+          <div class="disc">
+            <strong>このページの書き方について。</strong>
+            Sidekick Planner は開発中のソフトウェアです。
+            ここに書いた「予定している範囲」は現時点の開発方針であり、
+            提供を約束するものではありません。実装の都合で変わることがあります。
+            提供時期・価格・購入方法は決まり次第、
+            <a href="/changelog">更新履歴</a>と<a href="/development-log">開発日誌</a>でお知らせします。<br>
+            Story に登場するメーカー・雑誌・イベントは、村田一朗が<strong>過去にお受けした仕事</strong>として
+            出てくるものであり、Sidekick Planner に対する各社の推薦・評価・公認を意味するものではありません。
+            また、計算結果の正確さを保証するものでもありません。
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

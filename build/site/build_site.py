@@ -154,6 +154,17 @@ _register_page_pair(
     ja_extra={"enable_ogp": True, "en_redirect_url": "/en/ichiro-murata"},
     en_extra={"enable_ogp": True},
 )
+# Sidekick Planner 開発中ページ（2026-08-31新設）。Story 5「『いつ、どこへ行けばいい？』から
+# 始まった」を読んだ人が「Sidekick Plannerとは何か」を探したときの受け皿。完成製品ページでは
+# なく、開発中であることを明示する（Storyの公開と同時に用意する、村田さんの要件）。
+# 移行元の手書きHTMLは無く、テンプレートが最初から正本になる（ichiro-murataと同じ）。
+# OGPあり（Storyから共有される前提）。en_redirect_urlは既定の.html付きを上書きする
+# （cleanUrls:true環境での余分なリダイレクトを防ぐ、terms/ichiro-murataと同じ扱い）。
+_register_page_pair(
+    "planner",
+    ja_extra={"enable_ogp": True, "en_redirect_url": "/en/planner"},
+    en_extra={"enable_ogp": True},
+)
 # lp-star.htmlは他ページ移行時に対象から漏れており、旧.site-headerのまま
 # （言語バナー・EN切替リンクが無い）だった。村田さんが本番で発見・報告し追加移行した
 # （2026-07-23）。OGPはJA/ENともtitle/meta descriptionと同一文言のため

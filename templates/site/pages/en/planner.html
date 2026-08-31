@@ -1,0 +1,339 @@
+{# Sidekick Planner in-development page (English, added 2026-08-31).
+
+   Mirrors templates/site/pages/planner.html. Same structure, same CSS, same
+   deliberate omissions — see the Japanese template's comment block for the list of
+   things intentionally left out (price, availability, auth/update/signing method,
+   web and mobile versions, arch composition search, cloud-cover overlay). All of
+   those are undecided or out of scope for Version 1, and writing them here would
+   read as a product promise.
+
+   The Japanese page is the source of truth; keep both in step when either changes. #}
+{% extends "base.html" %}
+
+{% block title %}Sidekick Planner (in development) — Find the when and where{% endblock %}
+
+{% block meta_description %}Sidekick Planner is a shot-planning tool for photographers: it looks for the "when and where" at which the sky object you want and the landscape you want line up. Currently in development for Windows PC, covering sun and moon location/date search and Milky Way direction, altitude and visibility guidance.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/planner{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#09090c;
+      --card:#14161d;
+      --card2:#1a1d26;
+      --line:#22263080;
+      --text:#eef1f8;
+      --sub:#8c96aa;
+      --muted:#515969;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --max:1100px;
+      --r:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:var(--bg);color:var(--text);line-height:1.7;
+      -webkit-font-smoothing:antialiased;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;}
+
+    .crumb{padding:18px 0 0;font-size:12px;color:var(--muted);}
+    .crumb a{color:var(--sub);}
+    .crumb a:hover{color:var(--text);}
+    .crumb span{margin:0 6px;}
+
+    /* -- Hero -- */
+    .page-hero{
+      padding:40px 0 52px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% 0%,rgba(255,138,0,.05),transparent),
+        var(--bg);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero-inner{max-width:760px;}
+    .status-badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 15px;border-radius:999px;
+      background:rgba(255,138,0,.1);border:1px solid rgba(255,138,0,.35);
+      color:var(--accent2);font-size:12px;font-weight:800;letter-spacing:.06em;
+      margin-bottom:20px;
+    }
+    .page-h1{
+      font-size:clamp(30px,5vw,50px);
+      font-weight:800;letter-spacing:-.03em;line-height:1.15;
+      margin-bottom:16px;
+    }
+    .page-h1 em{
+      font-style:normal;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    }
+    .page-lead{
+      font-size:clamp(16px,2.2vw,19px);
+      line-height:1.9;color:var(--text);font-weight:600;
+      margin-bottom:22px;
+    }
+    .dev-note{
+      padding:18px 22px;border-radius:14px;
+      background:var(--card);border:1px solid rgba(255,138,0,.2);
+      border-left:3px solid var(--accent);
+      font-size:14px;line-height:1.9;color:var(--sub);
+    }
+    .dev-note strong{color:var(--text);}
+    .dev-note a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+
+    /* -- Section -- */
+    .sec{padding:56px 0 0;}
+    .sec:last-of-type{padding-bottom:80px;}
+    .sec-h2{
+      font-size:clamp(19px,2.2vw,24px);
+      font-weight:800;letter-spacing:-.02em;
+      margin:0 0 6px;
+    }
+    .sec-note{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.8;}
+    .sec-body{max-width:820px;}
+    .sec-body p{font-size:15px;line-height:1.95;color:var(--sub);margin-bottom:16px;}
+    .sec-body p strong{color:var(--text);font-weight:700;}
+    .sec-body p:last-child{margin-bottom:0;}
+
+    /* -- Status lists -- */
+    .state-grid{display:grid;gap:16px;margin-top:8px;}
+    @media (min-width:760px){ .state-grid{grid-template-columns:1fr 1fr;} }
+    .state{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--r);padding:20px 22px;
+    }
+    .state-label{
+      font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      margin-bottom:10px;
+    }
+    .state-now .state-label{color:var(--accent2);}
+    .state-plan .state-label{color:var(--sub);}
+    .state-undecided .state-label{color:var(--muted);}
+    .state ul{list-style:none;margin:0;padding:0;}
+    .state li{
+      font-size:14px;line-height:1.8;color:var(--sub);
+      padding-left:18px;position:relative;margin-bottom:8px;
+    }
+    .state li:last-child{margin-bottom:0;}
+    .state li::before{
+      content:"";position:absolute;left:0;top:11px;
+      width:6px;height:6px;border-radius:50%;background:var(--muted);
+    }
+    .state-now li::before{background:var(--accent);}
+
+    /* -- Principle -- */
+    .principle{
+      background:var(--card2);border:1px solid var(--line);
+      border-radius:var(--r);padding:24px 26px;margin-top:8px;
+    }
+    .principle p{font-size:15px;line-height:1.95;color:var(--sub);margin-bottom:14px;}
+    .principle p:last-child{margin-bottom:0;}
+    .principle strong{color:var(--text);}
+
+    /* -- Story link -- */
+    .story-link{
+      display:block;
+      background:var(--card);border:1px solid var(--line);
+      border-radius:var(--r);padding:22px 24px;margin-top:8px;
+      transition:.15s;
+    }
+    .story-link:hover{border-color:rgba(255,138,0,.35);}
+    .story-link-label{
+      font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+      color:var(--muted);margin-bottom:8px;
+    }
+    .story-link-title{font-size:17px;font-weight:800;color:var(--text);margin-bottom:6px;}
+    .story-link-sub{font-size:14px;color:var(--sub);margin-bottom:10px;}
+    .story-link-more{font-size:13px;font-weight:700;color:var(--accent2);}
+
+    .disc{
+      margin-top:32px;padding:18px 20px;
+      background:var(--card);border:1px solid var(--line);border-radius:14px;
+      font-size:13px;line-height:1.9;color:var(--muted);
+    }
+    .disc strong{color:var(--sub);}
+    .disc a{color:var(--sub);text-decoration:underline;}
+  </style>
+{% endblock %}
+
+{% block content %}
+  <main>
+
+    <div class="wrap">
+      <nav class="crumb" aria-label="breadcrumb">
+        <a href="/en">Sidekick Lab</a><span>/</span>Sidekick Planner
+      </nav>
+    </div>
+
+    <!-- -- Hero -- -->
+    <section class="page-hero">
+      <div class="wrap">
+        <div class="page-hero-inner">
+          <div class="status-badge">In development</div>
+          <h1 class="page-h1">Sidekick <em>Planner</em></h1>
+          <p class="page-lead">
+            A shot-planning tool for photographers that finds the<br>
+            when and where your sky object and your landscape line up.
+          </p>
+          <div class="dev-note">
+            <strong>This is not a product page.</strong>
+            Sidekick Planner is currently in development. There is no release yet, and
+            availability, pricing, and how it will be distributed are not decided.
+            What is written here is limited to what actually runs as of 31 August 2026,
+            plus the scope planned for Version 1.
+            Why it is being built is described in
+            <a href="/en/story/when-and-where-should-i-go">Story: "It Started with 'When and Where Should I Go?'"</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- What it does -- -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">What this software does</h2>
+          <p class="sec-note">It is not software that produces the right answer for a photograph.</p>
+          <p>
+            The sun sitting on the summit of Mt. Fuji. The moon sitting there. The Milky Way
+            arriving where you wanted it. Taking photographs like those requires more than
+            shooting technique. Without knowing
+            <strong>when and where to go</strong>, nothing begins.
+          </p>
+          <p>
+            The position of a celestial object, the coordinates of a location, the terrain in
+            between: once the date, time, and place are fixed, all of that can be calculated.
+            Leave what can be calculated to the computer, and
+            <strong>find the candidates a photographer can then judge for themselves.</strong>
+            That is as far as Sidekick Planner tries to go.
+          </p>
+          <p>
+            What comes after — whether you actually go, whether you shift position once you are
+            there, whether you call it off because of the weather, whether you abandon the planned
+            photograph and shoot something else — is for the photographer to decide.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- Current status -- -->
+    <section class="sec">
+      <div class="wrap">
+        <h2 class="sec-h2">Current status (as of 31 August 2026)</h2>
+        <p class="sec-note">
+          So that things still under consideration are not read as product commitments,
+          what actually runs today is listed separately from what is still to be decided.
+        </p>
+        <div class="state-grid">
+
+          <div class="state state-now">
+            <p class="state-label">Running in the validation prototype</p>
+            <ul>
+              <li>Two-way search for sun/moon alignments: candidate locations, and the dates and times they occur</li>
+              <li>A "nightscape / sun and moon" genre (a core set of stars, constellations, and planets, plus the Milky Way)</li>
+              <li>Picking a point on the map and listing the resulting candidates</li>
+              <li>Terrain and building silhouettes toward the target, from elevation data and 3D city models</li>
+              <li>A composition preview for the chosen date, time, and location</li>
+            </ul>
+          </div>
+
+          <div class="state state-plan">
+            <p class="state-label">Scope planned for Version 1</p>
+            <ul>
+              <li>Delivered as an application for Windows PC</li>
+              <li>Two-way search — candidate locations and occurrence times — for the sun and moon</li>
+              <li>Milky Way limited to direction, altitude, tilt, and start/end of visibility</li>
+              <li>Targeted at locations in Japan, with times shown in Japan Standard Time</li>
+              <li>Calculation runs locally; no external AI APIs are used</li>
+              <li>Results exported as text/CSV, with sharing left to the operating system</li>
+            </ul>
+          </div>
+
+          <div class="state state-undecided">
+            <p class="state-label">Not yet decided</p>
+            <ul>
+              <li>Availability, distribution model, and price</li>
+              <li>How data is distributed and updated</li>
+              <li>Detailed system requirements</li>
+            </ul>
+          </div>
+
+          <div class="state state-undecided">
+            <p class="state-label">Out of scope for Version 1</p>
+            <ul>
+              <li>Web and smartphone versions (candidates for the future)</li>
+              <li>Milky Way arch compositions and precise composition search (Version 2 onwards)</li>
+              <li>Cloud-cover forecast map overlays (set aside on licensing and cost grounds)</li>
+              <li>In-app sharing features</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- -- Principle -- -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">What can be calculated, and what cannot</h2>
+          <div class="principle">
+            <p>
+              A new moon, little light pollution, a forecast of clear skies. On conditions alone,
+              it is perfect. And even so,
+              <strong>the Milky Way looks different every night,</strong>
+              because the transparency of the air and the amount of water vapour differ.
+            </p>
+            <p>
+              The forecast is not wrong. The astronomical calculation is not wrong. It is simply
+              that <strong>some things can be known by calculation and some can only be known on
+              site.</strong>
+            </p>
+            <p>
+              So Sidekick Planner does not promise that "go here and you will get a good photograph."
+              It calculates what can be known in advance and
+              <strong>takes it as far as the point where a photographer can make a judgement.</strong>
+              To see what lies beyond that, the photographer goes to the location.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- Story link -- -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">Why I decided to build it</h2>
+          <p class="sec-note">It started with a single Pearl Fuji shoot, more than ten years ago.</p>
+          <a class="story-link" href="/en/story/when-and-where-should-i-go">
+            <div class="story-link-label">Story 5</div>
+            <div class="story-link-title">It Started with "When and Where Should I Go?"</div>
+            <div class="story-link-sub">— Why I decided to build Sidekick Planner</div>
+            <div class="story-link-more">Read this story →</div>
+          </a>
+
+          <div class="disc">
+            <strong>About how this page is written.</strong>
+            Sidekick Planner is software under development. The "planned scope" above reflects the
+            current development direction; it is not a commitment to deliver, and it may change for
+            implementation reasons. Availability, pricing, and how to obtain it will be announced in
+            the <a href="/en/changelog">Changelog</a> and the
+            <a href="/en/development-log">Development Log</a> once decided.<br>
+            Manufacturers, magazines, and events named in the Story pages appear there as
+            <strong>work Ichiro Murata was commissioned to do in the past</strong>. They do not imply
+            endorsement, evaluation, or approval of Sidekick Planner by those companies, and they are
+            not a guarantee of the accuracy of its calculations.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+{% endblock %}

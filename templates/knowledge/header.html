@@ -33,7 +33,16 @@
      アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
      リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
      報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
-     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
 
 {% if show_lang_banner|default(true) %}
 <div class="lang-banner" id="lang-banner">
@@ -67,6 +76,7 @@
       <a href="/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
       <a href="/sidekick" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>Sidekickとは</a>
       <a href="/about" {% if nav_current == "about" %}aria-current="page"{% endif %}>About</a>
+      <a href="/story" {% if nav_current == "story" %}aria-current="page"{% endif %}>Story</a>
       <a href="/development-log" {% if nav_current == "development-log" %}aria-current="page"{% endif %}>開発日誌</a>
       <a href="/changelog" {% if nav_current == "changelog" %}aria-current="page"{% endif %}>更新履歴</a>
       <a href="/faq" {% if nav_current == "faq" %}aria-current="page"{% endif %}>Support</a>

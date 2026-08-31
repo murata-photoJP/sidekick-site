@@ -1,0 +1,562 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connecting the Stars Before I Knew What It Was Called | Story - Sidekick Lab</title>
+<meta name="description" content="I had never heard the term &#34;lighten composite&#34; when I stacked two frames of a climber&#39;s headlamp on Mt. Tsubakuro and found a way to keep only the bright parts. From there: continuous star exposures, &#34;Infinite Track&#34; in Digital Photo, April 2010, and software to automate the work.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/story/before-i-knew-lighten-composite">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/before-i-knew-lighten-composite">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/before-i-knew-lighten-composite">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Connecting the Stars Before I Knew What It Was Called | Story - Sidekick Lab">
+<meta property="og:description" content="I had never heard the term &#34;lighten composite&#34; when I stacked two frames of a climber&#39;s headlamp on Mt. Tsubakuro and found a way to keep only the bright parts. From there: continuous star exposures, &#34;Infinite Track&#34; in Digital Photo, April 2010, and software to automate the work.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/story/before-i-knew-lighten-composite">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/story/before-i-knew-lighten-composite">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" >📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" aria-current="page">Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/story/before-i-knew-lighten-composite" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/story">Story</a></li>
+    <li aria-current="page">Connecting the Stars Before I Knew What It Was Called</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+
+    <h1 class="kzc-article-title">Connecting the Stars Before I Knew What It Was Called</h1>
+    <p class="kzc-story-subtitle">— It started with a climber&#39;s headlamp on Mt. Tsubakuro</p>
+    <p class="kzc-article-lead">I had never heard the term &#34;lighten composite&#34; when I stacked two frames of a climber&#39;s headlamp on Mt. Tsubakuro and found a way to keep only the bright parts. From there: continuous star exposures, &#34;Infinite Track&#34; in Digital Photo, April 2010, and software to automate the work.</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">August 31, 2026</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>I never set out to do lighten composites.</p>
+<p>Back then I did not even know the term &quot;lighten composite&quot; existed.</p>
+<p>It did not start with stars, either.</p>
+<p>It started with a climber's headlamp, photographed on Mt. Tsubakuro.</p>
+<h2>It started because I had no photo to hand in</h2>
+<p>In the late 2000s I was taking part in the &quot;Nikon–Yama-Kei Photo School&quot; as a guest instructor.</p>
+<p>The lead instructor was the mountain photographer Tetsuo Kikuchi.</p>
+<p>At the session held on Mt. Tsubakuro I was there as an instructor, so I was not concentrating much on shooting my own work.</p>
+<p>After we came down, though, someone from Nikon asked me to submit one photograph.</p>
+<p>That was a problem.</p>
+<p>I had not really shot anything of my own.</p>
+<p>Looking through the images I had taken, I found one — before dawn, I think — where a climber wearing a headlamp had crossed near Iruka-iwa, the &quot;dolphin rock.&quot;</p>
+<p>It looked usable as a photograph.</p>
+<p>The trouble was that the light trail from the headlamp was short.</p>
+<p>If the line of light were a little longer, it would be a far more interesting picture.</p>
+<p>Fortunately I had shot several frames while varying the exposure, so the adjacent frames had the headlamp's light in other positions.</p>
+<p>So I layered two of the photographs in Photoshop and tried various blend modes.</p>
+<p>And there was a combination that kept only the bright parts of the two photographs — only the headlamp's light trail — in a single image.</p>
+<p>&quot;That gets me out of trouble.&quot;</p>
+<p>That was all I thought at the time.</p>
+<p>I did not think I had discovered a new shooting technique.</p>
+<p>Still less did I know that it had a name.</p>
+<h2>&quot;Wait — could this work for stars?&quot;</h2>
+<p>Some time later, while walking in the mountains I think, I found myself remembering what I had done in Photoshop.</p>
+<p>Around then, cameras like the Nikon D3 had greatly improved high-ISO performance, and it was becoming genuinely possible to photograph stars digitally.</p>
+<p>I had been trying star photography myself.</p>
+<p>And I thought:</p>
+<p>Take many short exposures of the stars, one after another.</p>
+<p>Then stack them the same way I stacked the headlamp frames.</p>
+<p>Wouldn't the stars join up into lines?</p>
+<p>I decided to try it.</p>
+<p>The first attempt was maybe thirty minutes to an hour, as I recall.</p>
+<p>I shot the stars continuously, went home, and stacked the frames in Photoshop.</p>
+<p>The stars joined up.</p>
+<p>Looking back, that was my &quot;test zero.&quot;</p>
+<h2>When I looked into it, others had got there first</h2>
+<p>I want to be careful about this part.</p>
+<p>I did not invent the lighten composite.</p>
+<p>Once I knew the stars would join up, I started gathering information online.</p>
+<p>There were already people shooting nightscape photographs with more or less the same method.</p>
+<p>One of them was Masanori Higashiyama.</p>
+<p>I was not from the world of astrophotography, so there was a great deal I did not understand.</p>
+<p>So I emailed the astronomy people I found online, one by one, and asked questions.</p>
+<p>To be honest, the responses were fairly cold.</p>
+<p>Among them, one person answered enthusiastically.</p>
+<p>That was Masanori Higashiyama.</p>
+<p>I asked a question, and he answered it properly.</p>
+<p>I asked another, and he answered that one too.</p>
+<p>The actual email exchange lasted only a few weeks, I think.</p>
+<p>He was not the person who taught me the lighten composite itself.</p>
+<p>I had already stumbled onto that method before then.</p>
+<p>But when I tried to take it further as nightscape photography, he was the one who taught me what I did not know.</p>
+<p>So in a sense, Masanori Higashiyama is my teacher.</p>
+<p>He was a photographer of &quot;urban nightscapes&quot; — shooting stars from inside the city.</p>
+<p>I was heading for the mountains.</p>
+<p>The fact that we were not competing for the same work may have been one reason he was so generous with what he knew — though that is only my own guess.</p>
+<p>And of course it was, before anything else, a matter of the kind of person he is.</p>
+<p>It was only a few weeks, I believe.</p>
+<p>But I do not think I will ever forget it.</p>
+<h2>Knowing the method did not mean I could take the photograph</h2>
+<p>I understood how the lighten composite worked.</p>
+<p>Now I could take the photograph I wanted.</p>
+<p>…That is not how it went.</p>
+<p>If anything, the hard part started there.</p>
+<p>What I wanted was not stars moving above a city skyline.</p>
+<p>It was stars moving from dusk until dawn, above the ridgelines of the Northern Japan Alps.</p>
+<p>There is no mains power up there.</p>
+<p>In winter it is brutally cold.</p>
+<p>And the camera has to keep working for hours.</p>
+<p>In my first serious test, the battery lasted only two or three hours.</p>
+<p>That was not the only problem.</p>
+<p>The Nikon D3 had a limit of 130 frames in a single continuous burst.</p>
+<p>In ordinary photography you almost never shoot 130 frames in a row.</p>
+<p>So for most photographers it is not an issue at all.</p>
+<p>But for someone who wants to keep making thirty-second exposures from dusk until dawn, it was a serious one.</p>
+<p>In November there are up to about twelve hours in which you can photograph stars.</p>
+<p>If you ran thirty-second exposures back to back for twelve hours, that is 1,440 frames in theory.</p>
+<p>130 frames is nowhere near enough.</p>
+<p>Solve one problem, and the next one appears.</p>
+<h2>If the battery won't last, build a power supply</h2>
+<p>In fact, dealing with camera power myself did not start with the D3.</p>
+<p>It started back with the Nikon D1.</p>
+<p>D1 batteries were expensive, and compared with today's cameras they were pretty unforgiving.</p>
+<p>Winter mountains were especially hard.</p>
+<p>There were times in midwinter when a fully charged battery I had carried up died after two or three frames.</p>
+<p>At the time, some of the professionals using the D1 would take just the shell and terminals of an original battery, run a cable out of it, and power the camera from a 7.2V radio-control battery pack.</p>
+<p>An RC battery cost around 2,000 yen back then, as I remember.</p>
+<p>I did something similar.</p>
+<p>With the D3, battery performance improved dramatically.</p>
+<p>For ordinary shooting, you no longer needed any of that.</p>
+<p>But what I was doing was not ordinary shooting.</p>
+<p>I wanted to run a camera from dusk until dawn on a mountain below freezing.</p>
+<p>Two or three hours was not enough.</p>
+<p>In the end I built an external power supply from AA eneloop cells wired in series, and then those strings wired in parallel.</p>
+<p>It kept working even when the cells themselves were frozen solid.</p>
+<p>I once ran a camera for about fourteen hours in conditions close to minus thirty degrees Celsius.</p>
+<h2>Once I could shoot, the images were waiting for me</h2>
+<p>Solve the power.</p>
+<p>Solve the continuous shooting.</p>
+<p>Then, finally, you can shoot through the night.</p>
+<p>And when you get home, a huge number of images is waiting.</p>
+<p>Those early tests were nothing like today's volumes, but they were still in the hundreds.</p>
+<p>Open an image in Photoshop.</p>
+<p>Copy it.</p>
+<p>Paste it into the composite image.</p>
+<p>Stack it as a layer.</p>
+<p>Open the next image.</p>
+<p>Copy it again.</p>
+<p>Paste it.</p>
+<p>And repeat, endlessly.</p>
+<p>Sometimes you put the same image in twice.</p>
+<p>Sometimes you skip one.</p>
+<p>When you notice a mistake, you have to work out how far back to go.</p>
+<p>If an aircraft crossed the frame, you erase its trail by hand as well.</p>
+<p>I kept doing this, on and on.</p>
+<h2>&quot;If I keep doing this, my life will be over&quot;</h2>
+<p>At some point I remembered a Leiji Matsumoto manga I had read long ago.</p>
+<p>I can no longer recall which one.</p>
+<p>I have a feeling it was <em>Queen Millennia</em>, but I am not certain.</p>
+<p>Someone had been ordered to sort an enormous number of books.</p>
+<p>Sorting them one at a time would take a lifetime.</p>
+<p>So instead, build a machine that sorts books.</p>
+<p>That is how I remember the story.</p>
+<p>And I thought: is this not exactly what I am doing?</p>
+<p>Rather than stacking hundreds or thousands of images with my own hands,</p>
+<p><strong>build the thing that does the stacking.</strong></p>
+<p>That is where I started writing software to automate the process.</p>
+<h2>What I wanted was not software</h2>
+<p>I automated the lighten composite.</p>
+<p>Beyond simply joining the stars into lines, I also built a process that tapered the end of each trail so it looked like a meteor or a comet.</p>
+<p>I called this &quot;comet processing.&quot;</p>
+<p>At the time that process was the software's main distinguishing feature, so I named the software itself &quot;Comet.&quot;</p>
+<p>I built what I needed on the shooting side too.</p>
+<p>Build a power supply.</p>
+<p>Build a way to keep shooting for hours.</p>
+<p>Composite the huge number of resulting images.</p>
+<p>Apply the comet processing.</p>
+<p>Later I would even build a process that removed aircraft trails automatically.</p>
+<p>But I did not want to do electronics.</p>
+<p>I did not want a camera control device.</p>
+<p>I did not want lighten-composite software.</p>
+<p><strong>What I wanted was none of those things.</strong></p>
+<p><strong>What I wanted was a single photograph in which, on a ridgeline of the Northern Japan Alps, the stars keep moving from dusk until dawn.</strong></p>
+<p>To take that one photograph, the tools I needed did not exist.</p>
+<p>So I built them.</p>
+<p>That was all it was.</p>
+<h2><em>Digital Photo</em>, April 2010: &quot;Infinite Track&quot;</h2>
+<p>I brought the photographs from that first serious test to <em>Digital Photo</em>.</p>
+<p>They decided to run them.</p>
+<p>But the first test alone did not give them enough work for a cover and a gallery.</p>
+<p>So I went out to shoot again.</p>
+<p>By that point, I think the automated lighten composite and the comet processing had come far enough to be used in actual work.</p>
+<p>And then, in 2010.</p>
+<p>In the April issue of <em>Digital Photo</em>, I published the mountain nightscape series &quot;Infinite Track.&quot;</p>
+<p>They used it not only in the gallery but on the cover.</p>
+<p>I remember the editor-in-chief saying something to the effect of:</p>
+<p>&quot;It feels like being hit over the head with a hammer.&quot;</p>
+<p>The lighten composite itself already existed in the world of astrophotography.</p>
+<p>Higashiyama and others had been working with it before me.</p>
+<p>Even so, I think it was not yet widely known as an approach in general photography.</p>
+<p>Looking back, it may not have been only the compositing method — perhaps nightscape work shot over many hours deep in the mountains was itself unusual.</p>
+<p>The magazine printed the camera and lens information, but not the heart of how the work was made — how many frames, composited how.</p>
+<p>As I remember it, that was the editorial team's decision.</p>
+<h2>The aircraft I couldn't remove became &quot;night noise&quot;</h2>
+<p>Among the works in &quot;Infinite Track&quot; there is one called night noise.</p>
+<p>At that time I was still erasing aircraft trails by hand.</p>
+<p>On one frame, I did not finish before the deadline.</p>
+<p>I ran out of time.</p>
+<p>So I decided to make the light I could not remove part of the work itself.</p>
+<p>That is how it came to be called night noise.</p>
+<p>The name also carries a memory of a record I used to listen to.</p>
+<p>In the 1980s I often played an LP called <em>Nightnoise</em>, released on Windham Hill Records.</p>
+<p>Technically it was &quot;the thing I failed to remove.&quot;</p>
+<p>But the moment it had a title, it became part of the photograph.</p>
+<h2>From one magazine to PENTAX</h2>
+<p>Some time after the April issue of <em>Digital Photo</em> went on sale, the editor-in-chief called me.</p>
+<p>Someone from PENTAX wanted to talk to me.</p>
+<p>Was it all right to pass on my phone number?</p>
+<p>That was the gist of it.</p>
+<p>Of course, I said.</p>
+<p>PENTAX got in touch afterwards.</p>
+<p>I do not remember the exact words, but as I recall the message was something like:</p>
+<p>&quot;If you're going to shoot stars, we'd like you to shoot them with PENTAX. You have your relationship with Nikon, so you're welcome to keep using that as well.&quot;</p>
+<p>The first PENTAX I used was the K-5.</p>
+<p>That was the beginning of a long relationship between PENTAX and me.</p>
+<p>I had not started shooting nightscapes in order to work with PENTAX.</p>
+<p>I was stuck for a photograph to hand in at a Nikon photo school.</p>
+<p>I wanted a headlamp trail to be a little longer.</p>
+<p>Something that began with that small incident had, several years later, led to work with a different camera manufacturer.</p>
+<p>You never know where life goes.</p>
+<h2>Finally meeting Higashiyama in person</h2>
+<p>I did eventually meet Higashiyama, the man who had helped me by email.</p>
+<p>I am no longer clear on exactly when we first met face to face.</p>
+<p>I believe it was before I began appearing at the PENTAX booth at CP+ myself.</p>
+<p>It was probably in 2012, at his exhibition &quot;Stars over the City&quot; at Ginza RING CUBE, or at the talk event held then.</p>
+<p>It is possible we had met even earlier.</p>
+<p>I cannot say for certain.</p>
+<p>What I do remember is meeting, years later, the person I had done nothing but pester with questions over email.</p>
+<p>He went on photographing stars in the city, and I went on photographing them in the mountains.</p>
+<p>The same lighten composite, but what we were photographing was quite different.</p>
+<h2>Even so, Comet was not a comfortable tool</h2>
+<p>I kept improving Comet for years afterwards.</p>
+<p>Eventually I built a function that removed aircraft trails automatically.</p>
+<p>It could also process images shot on different nights separately.</p>
+<p>Once I was shooting around 5,000 frames a night, seven nights meant 35,000 frames.</p>
+<p>At that scale, processing alone could take about ten days.</p>
+<p>But that is not the same as ten days of manual work.</p>
+<p>Once I started the processing, I did not need to be sitting at the computer.</p>
+<p>I could leave it running and go out shooting for another ten days.</p>
+<p>Sometimes I would come back from a shoot and it still was not finished — which is funny in its own way.</p>
+<p>Even so, it beat working through the frames one at a time by hand.</p>
+<p>There were problems, though.</p>
+<p>The aircraft-removal parameters in particular were very touchy.</p>
+<p>Change a value slightly.</p>
+<p>You want to see the result.</p>
+<p>But the result arrives a day later.</p>
+<p>If it is wrong, change it again.</p>
+<p>And wait another day.</p>
+<p>It did run automatically.</p>
+<p>But at that point I learned something else as well.</p>
+<p><strong>Running automatically and being a good tool are not the same thing.</strong></p>
+<h2>Sixteen years later, I am doing much the same thing</h2>
+<p>These days I develop software for photographers called Sidekick.</p>
+<p>Sidekick Star, for nightscape photography, is one of them.</p>
+<p>But Comet did not simply evolve into Sidekick Star.</p>
+<p>They are different pieces of software.</p>
+<p>There are things Comet had that Sidekick Star does not.</p>
+<p>And the other way around.</p>
+<p>So they are not a single product line running in a straight line.</p>
+<p>Still, looking back, what I am doing has not changed much.</p>
+<p>I think of a photograph I want to take.</p>
+<p>I go out to take it.</p>
+<p>I run into a problem.</p>
+<p>I think about how to solve it.</p>
+<p>If the tool I need does not exist, I build it.</p>
+<p>And then I go out to shoot again.</p>
+<p>That was true of the D1's battery.</p>
+<p>It was true of the shooting control for mountain nightscapes.</p>
+<p>It was true of Comet.</p>
+<p>It is the same with Sidekick now.</p>
+<p>I used to spend an absurd amount of time in front of a computer to finish one photograph.</p>
+<p>Now I sometimes shoot around 5,000 frames in a night, but the way I process them is completely different from back then.</p>
+<p>Part of that is simply that computers have become orders of magnitude faster.</p>
+<p>But for me, the number that matters most is not the processing time.</p>
+<p>While the computer is doing the work, the photographer can do something else.</p>
+<p>You can sleep.</p>
+<p>You can have a drink.</p>
+<p>And above all,</p>
+<p><strong>you can go out and shoot again.</strong></p>
+<p>There is no need for a photographer to do work a computer can do.</p>
+<p>Use that time to go and take the next photograph.</p>
+<p>I think that is probably what I have been building tools for all along.</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">The Sidekick this story leads to</p>
+    <ul>
+      
+      <li><a href="/en/sidekick-star">Sidekick Star →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="Other stories">
+      <div class="kzc-story-nav-prev">
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+        <a href="/en/story/make-your-own-tools">
+          <span class="kzc-story-nav-label">Next</span>
+          If the Tool You Need Doesn&#39;t Exist, Build It →
+        </a>
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>About the Author</h2>
+      <p>
+        Ichiro Murata is a photographer and the developer of Sidekick. These stories are written from his
+        own experience of shooting, retouching, teaching, and building tools. Names of manufacturers,
+        magazines, and events appear here as work he was involved in — they are not endorsements of
+        Sidekick by those companies.
+      </p>
+      <p><a href="/en/ichiro-murata">More about Ichiro Murata →</a></p>
+      
+    </section>
+    <p><a href="/en/story">← Back to all stories</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

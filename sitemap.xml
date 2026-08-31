@@ -71,6 +71,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.sidekick-lab.com/planner</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://www.sidekick-lab.com/workshop</loc>
     <lastmod>2026-06-21</lastmod>
     <priority>0.6</priority>
@@ -168,6 +173,11 @@
   <url>
     <loc>https://www.sidekick-lab.com/en/ichiro-murata</loc>
     <lastmod>2026-08-30</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/planner</loc>
+    <lastmod>2026-08-31</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
@@ -340,4 +350,64 @@
     <priority>0.4</priority>
   </url>
 <!-- END AUTO-GENERATED DEVELOPMENT LOG URLS -->
+<!-- BEGIN AUTO-GENERATED STORY URLS (generate_story_sitemap.py) -->
+  <url>
+    <loc>https://www.sidekick-lab.com/story</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/story/before-i-knew-lighten-composite</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/story/good-tools-get-simpler</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/story/make-your-own-tools</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/story/the-earth-keeps-turning</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/story/when-and-where-should-i-go</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/story</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/story/before-i-knew-lighten-composite</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/story/good-tools-get-simpler</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/story/make-your-own-tools</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/story/the-earth-keeps-turning</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/story/when-and-where-should-i-go</loc>
+    <lastmod>2026-08-31</lastmod>
+    <priority>0.6</priority>
+  </url>
+<!-- END AUTO-GENERATED STORY URLS -->
 </urlset>

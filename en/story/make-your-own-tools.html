@@ -1,0 +1,539 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>If the Tool You Need Doesn&#39;t Exist, Build It | Story - Sidekick Lab</title>
+<meta name="description" content="From a PC-8001mkII and cassette tapes to university research, measurement jigs in my engineering job, and external power supplies for digital cameras. A look back at a habit I have had for a long time: if the tool I need isn&#39;t sold anywhere, I build it.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/story/make-your-own-tools">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/make-your-own-tools">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/make-your-own-tools">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="If the Tool You Need Doesn&#39;t Exist, Build It | Story - Sidekick Lab">
+<meta property="og:description" content="From a PC-8001mkII and cassette tapes to university research, measurement jigs in my engineering job, and external power supplies for digital cameras. A look back at a habit I have had for a long time: if the tool I need isn&#39;t sold anywhere, I build it.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/story/make-your-own-tools">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/story/make-your-own-tools">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" >📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" aria-current="page">Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/story/make-your-own-tools" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/story">Story</a></li>
+    <li aria-current="page">If the Tool You Need Doesn&#39;t Exist, Build It</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+    <p class="kzc-story-series">
+      <span class="kzc-story-series-name">Making My Own Tools</span>
+      
+      <span class="kzc-story-series-part">Part 1 of 2</span>
+      
+    </p>
+    
+
+    <h1 class="kzc-article-title">If the Tool You Need Doesn&#39;t Exist, Build It</h1>
+    <p class="kzc-story-subtitle">— I was making strange things long before I became a photographer</p>
+    <p class="kzc-article-lead">From a PC-8001mkII and cassette tapes to university research, measurement jigs in my engineering job, and external power supplies for digital cameras. A look back at a habit I have had for a long time: if the tool I need isn&#39;t sold anywhere, I build it.</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">August 31, 2026</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>&quot;What do you do when the tool you need isn't for sale?&quot;</p>
+<p>These days you would search Amazon first. If it isn't there, you look on Google. If it still isn't there, you might go as far as overseas sites.</p>
+<p>And if you still cannot find it, you give up.</p>
+<p>That is probably the normal order of things.</p>
+<p>In my case it seems to have been a little different, and it has been that way for a long time.</p>
+<p>If something on the market will do the job, use it.</p>
+<p>If something made for another purpose will do the job, that is fine too.</p>
+<p>And if neither works, build it.</p>
+<p>It is not that I was consciously following a principle from the start.</p>
+<p>Looking back, though, that is what I have been doing all along.</p>
+<h2>The PC-8001mkII and cassette tapes</h2>
+<p>When I was a university student I used an NEC PC-8001mkII.</p>
+<p>Computers back then were nothing like today's.</p>
+<p>You even used cassette tape to store data.</p>
+<p>There was an official cassette recorder for it, and the catalogue said — as you would expect — that it was optimized for use with the computer.</p>
+<p>I did not use it.</p>
+<p>I was something of an audio enthusiast at the time, so there was a much better cassette deck at home.</p>
+<p>&quot;This will do, won't it?&quot;</p>
+<p>I connected an ordinary audio cassette deck, not a computer one, and used that.</p>
+<p>It caused me no trouble at all. Not once.</p>
+<p>Digital recording was much the same story.</p>
+<p>Before DAT arrived, one way to record music digitally was to combine a PCM processor with a VTR.</p>
+<p>I liked audio, but I also liked anime.</p>
+<p>I used a Sony F11 VTR to make digital recordings.</p>
+<p>For the time, that was not an especially unusual way to do it.</p>
+<p>But thinking about it now, it is a strange thing.</p>
+<p><strong>In order to record music digitally, I was writing it down as a video signal.</strong></p>
+<p>If it got the job done, what the machine was originally for did not matter much.</p>
+<h2>The first software I wrote was probably a word processor</h2>
+<p>I wrote programs on the PC-8001mkII too.</p>
+<p>What was the first one?</p>
+<p>It was more than forty years ago, so I no longer remember clearly.</p>
+<p>I think it was probably something like a word processor.</p>
+<p>I was not trying to produce impressive documents.</p>
+<p><strong>I wanted to make track lists for my cassette tapes.</strong></p>
+<p>That was all.</p>
+<p>There were commercial word processors, I am sure. But they were probably too expensive to buy just for what I wanted to do.</p>
+<p>As I remember it, I got hold of two or three cheap pieces of software and put together what I needed while referring to how each of them worked.</p>
+<p>After that I made something like a database for managing music tracks.</p>
+<p>And something like a lookup table for a board game.</p>
+<p>I was not trying to master programming as such.</p>
+<p><strong>There was a result I wanted, and I wrote programs to get it.</strong></p>
+<p>I think it started around then.</p>
+<h2>&quot;Murata's is completely different from everyone else's&quot;</h2>
+<p>At Tokai University's School of Marine Science and Technology — in my third year, I think — I took lectures from Professor Hajime Fukushima.</p>
+<p>It was a programming class, and the language was FORTRAN, as I recall.</p>
+<p>At one point we were given an assignment:</p>
+<p>&quot;Write a program and bring it in.&quot;</p>
+<p>I thought it through myself, wrote a program, and handed it in.</p>
+<p>Later, Professor Fukushima said something to me about that program.</p>
+<p>It was more than forty years ago so these are not his exact words, but the gist was this:</p>
+<p>&quot;It was bizarre code. When I first looked at it, I couldn't believe it would run at all. I'd never seen code like it. But it does run, and when you look closely the logic holds up. The other students — I don't know whether they showed each other their work or not — all write in more or less the same way. Murata's is completely different. At the very least, there's no doubt that Murata worked all of it out himself.&quot;</p>
+<p>I am still not sure whether that was praise.</p>
+<p>But Professor Fukushima</p>
+<p><strong>did not treat &quot;different from everyone else&quot; as a mistake in itself.</strong></p>
+<p>Does it actually run?</p>
+<p>Does the logic hold together?</p>
+<p>That, I think, is what he was looking at.</p>
+<p>As a child in Japan, I was often scolded with:</p>
+<p>&quot;Why can't you do it the same way as everyone else?&quot;</p>
+<p>When my father was posted to New York and I lived in the United States from fifth grade through first year of junior high, I had the opposite experience.</p>
+<p>One of the local kids once asked me:</p>
+<p>&quot;Ichiro, what do you do on Saturdays?&quot;</p>
+<p>I answered with something like &quot;the same as everyone else.&quot;</p>
+<p>And he said:</p>
+<p>&quot;That can't be right.&quot;</p>
+<p>In his family, they went to church together on Sundays. But a Japanese family would be different. So what he was asking was what my family actually did.</p>
+<p><strong>&quot;The same as everyone else&quot; was not an answer.</strong></p>
+<p>I learned that such a world existed too.</p>
+<p>I am not going to claim that these experiences made me who I became.</p>
+<p>But looking back, I may always have cared less about &quot;how is this normally done&quot; and more about</p>
+<p><strong>&quot;does this actually work?&quot;</strong></p>
+<h2>To the Institute of Industrial Science, University of Tokyo</h2>
+<p>Around the time I became a fourth-year student, I ended up doing research in Professor Mikio Takagi's laboratory at the Institute of Industrial Science, University of Tokyo.</p>
+<p>I was sent there from Tokai University as something like an external research student, as I remember.</p>
+<p>Why me? I still do not really know.</p>
+<p>It was certainly not because I was selected for outstanding grades.</p>
+<p>When Professor Fukushima told me about it, I remember him checking:</p>
+<p>&quot;Come to think of it, Murata — you haven't failed any required courses, have you? Are your grades all right?&quot;</p>
+<p>That does not sound much like a question from someone who had scrutinized my transcript beforehand.</p>
+<p>What I worked on in the Takagi laboratory was tracking the movement of surface water masses using NOAA satellite imagery.</p>
+<p>And there is something Professor Takagi said that I still remember.</p>
+<p>Not a precise quotation, but the sense of it was:</p>
+<p><strong>Anything that can be automated should be given to the computer. The human mind is there to do creative work. It is not there to do drudgery.</strong></p>
+<p>The research itself also pointed in that direction — how to get a computer to do processing that people had been doing by hand.</p>
+<p>To say that those words determined the rest of my life would make the story too neat.</p>
+<p>I have not walked through life thinking about them.</p>
+<p>But now, forty years later, when I line up the things I have built,</p>
+<p>&quot;I have done a fair amount of exactly that,&quot;</p>
+<p>is what I find myself thinking.</p>
+<h2>&quot;If you can't measure it, build something that can&quot;</h2>
+<p>After university I went to work in circuit design.</p>
+<p>The work covered mixed analogue and digital LSI, from planning through design, bring-up, and volume production.</p>
+<p>At one point I was responsible for circuitry involved in television sync signals.</p>
+<p>You design the circuit and simulate it.</p>
+<p>So far, so good.</p>
+<p>The problem is the circuit once it actually exists.</p>
+<p>Where does the signal appear relative to the master clock?</p>
+<p>Within a span of about one sixtieth of a second, I wanted to confirm positions to the microsecond.</p>
+<p>But what you have on the bench is an oscilloscope.</p>
+<p>Looking at the waveform tells you:</p>
+<p>&quot;Probably around here.&quot;</p>
+<p>What I wanted to know was not &quot;probably.&quot;</p>
+<p>Nor was it a problem that buying an expensive instrument would solve. At least at the time, I could not find anything that would make the measurement I needed as it was.</p>
+<p>So:</p>
+<p><strong>build something that can measure it.</strong></p>
+<p>Feed in a reference clock and a reset signal from outside, and follow the timing with counters.</p>
+<p>I built a dedicated measurement jig.</p>
+<p>It took about a month, I think.</p>
+<p>Work happened to be relatively quiet, and my manager understood what I was doing.</p>
+<p>With it, things I could previously only call &quot;probably correct&quot; could be confirmed as numbers.</p>
+<p>That job had nothing whatsoever to do with photography.</p>
+<p>But thinking about it now, the idea that</p>
+<p><strong>if you cannot measure it, create a state in which you can</strong></p>
+<p>does not feel much different from how I still work.</p>
+<h2>I built it with 3 bits, and was told to make it 2</h2>
+<p>In my company years I also had the opposite experience.</p>
+<p>I was designing a circuit that controlled an IC over I²C-BUS.</p>
+<p>Three functions had to be assigned.</p>
+<p>They were separate functions, so I designed it using three bits.</p>
+<p>At the design review, though, I was told:</p>
+<p>&quot;There's no point using three bits. Two bits gives you four combinations, so make it two.&quot;</p>
+<p>I thought three bits was better, but there was nothing to be done.</p>
+<p>I changed it to two.</p>
+<p>In due course the IC was completed and a release meeting was held.</p>
+<p>At which someone further up the chain became angry:</p>
+<p>&quot;Why is this two bits? Why didn't you make it three?&quot;</p>
+<p>The person who had demanded the change to two bits spent hours explaining.</p>
+<p>Partway through, he looked to me for rescue.</p>
+<p>But all I could say was:</p>
+<p><strong>&quot;I did say we should use three bits from the start, didn't I?&quot;</strong></p>
+<p>Meeting the specification and being a natural design are not necessarily the same thing.</p>
+<p>This was not something I only understood later — I understood it perfectly well at the time. But a company is not something you build on your own.</p>
+<p>That is how it goes.</p>
+<h2>I started shooting photographs digitally</h2>
+<p>In time I began photographing with digital cameras.</p>
+<p>This was the era of the Nikon D1.</p>
+<p>Early digital SLRs had problems that are hard to imagine now.</p>
+<p>One of them was the battery.</p>
+<p>Winter mountains were especially hard.</p>
+<p>In bad conditions, a fully charged original battery could become unusable after only a few frames.</p>
+<p>And original batteries were not cheap.</p>
+<p>At the time, professionals using the D1 had worked out tricks such as using the battery's casing and terminals to draw power from an external pack.</p>
+<p>I built one too.</p>
+<p>At first I used things like radio-control battery packs.</p>
+<p>Later I built a supply from eneloop cells in series, and then those strings in parallel.</p>
+<p>Much later still, I moved to USB-PD power banks and trigger cables.</p>
+<p>The batteries changed.</p>
+<p>The cameras changed.</p>
+<p>But what I was doing stayed the same.</p>
+<p><strong>If the camera won't keep running for as long as I want to shoot, make it run.</strong></p>
+<p>That is all.</p>
+<p>A photographer friend who had bought a D1 once told me:</p>
+<p>&quot;I bought the same D1 as you. And you were right about the battery.&quot;</p>
+<p>Later I built one of my external supplies and gave it to him.</p>
+<p>He was pleased with it.</p>
+<p>Something I built because I was stuck also solved someone else's problem.</p>
+<p>Come to think of it, I had experiences like that from around this time too.</p>
+<h2>Of course, I break things too</h2>
+<p>Written this way, it may look as though everything I built went well.</p>
+<p>It did not.</p>
+<p>Much later, I built an external power supply for a mid-range LUMIX.</p>
+<p>I did not modify the body itself.</p>
+<p>It worked by modifying the battery side to accept power from outside.</p>
+<p>And there:</p>
+<p><strong>I got plus and minus the wrong way round.</strong></p>
+<p>It took an instant.</p>
+<p>A camera I had only just bought was dead.</p>
+<p>&quot;Ah…&quot;</p>
+<p>is presumably what I thought.</p>
+<p>But also:</p>
+<p><strong>Well, these things happen.</strong></p>
+<p>If you build things yourself, sometimes you fail.</p>
+<p>There are probably a good many programs I started and never finished.</p>
+<p>As for code I wrote that turned out to be useless, there is no end of it.</p>
+<p>Tools break out in the field, too.</p>
+<p>And as times change, an approach that once made sense stops being worth it.</p>
+<p>When that happens, you build it again.</p>
+<h2>I assumed nobody would buy Tsubame</h2>
+<p>In the 2000s I started writing software for photography as well.</p>
+<p>Tsubame, and then Kita-Tsubame.</p>
+<p>These were not programs only for my own use; I released them as paid shareware.</p>
+<p>But at first I assumed</p>
+<p><strong>nobody would buy them.</strong></p>
+<p>It was software written by some person nobody had heard of.</p>
+<p>And at the time, nowhere near as many people were using digital cameras as today.</p>
+<p>Unexpectedly, though, people did buy them.</p>
+<p>And then the emails come.</p>
+<p>&quot;This part is awkward to use…&quot;</p>
+<p>I see.</p>
+<p>Something that works fine for me turns out to have problems when someone else uses it.</p>
+<p>What I could fix, I fixed.</p>
+<p>Building something for yourself and building something for other people are different.</p>
+<p>That obvious fact was also something I started to experience around then.</p>
+<h2>Building tools is not the point</h2>
+<p>Lining up all these old stories, I may look like someone who has always just enjoyed making things.</p>
+<p>I see it a little differently.</p>
+<p>If I do not have to build something, there is no need to build it.</p>
+<p>If something on the market will do, buy it.</p>
+<p>If something made for another purpose can be repurposed, that is fine too.</p>
+<p>If none of that achieves the goal, build it.</p>
+<p>And having built something once is no reason to cling to it.</p>
+<p>If it breaks, repair it.</p>
+<p>If repairing it is not worth the effort, build something simpler.</p>
+<p>If the times change, switch to a different method.</p>
+<p>What mattered to me, I think, was</p>
+<p><strong>not &quot;what did you use,&quot; but &quot;can you take the photograph with it.&quot;</strong></p>
+<p>And there is one more thing that becomes clear further down this road.</p>
+<p><strong>Being able to build something does not mean you should.</strong></p>
+<p><strong>Being able to automate something does not mean you should automate it.</strong></p>
+<p>It took me a little longer to notice that.</p>
+<p>— To be continued</p>
+
+  </div>
+
+  
+  <p class="kzc-story-series">
+    Continues in
+    <a href="/en/story/good-tools-get-simpler">Good Tools Get Simpler Over Time →</a>
+  </p>
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">The Sidekick this story leads to</p>
+    <ul>
+      
+      <li><a href="/en/sidekick">What is Sidekick →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="Other stories">
+      <div class="kzc-story-nav-prev">
+        
+        <a href="/en/story/before-i-knew-lighten-composite">
+          <span class="kzc-story-nav-label">Previous</span>
+          ← Connecting the Stars Before I Knew What It Was Called
+        </a>
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+        <a href="/en/story/good-tools-get-simpler">
+          <span class="kzc-story-nav-label">Next</span>
+          Good Tools Get Simpler Over Time →
+        </a>
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>About the Author</h2>
+      <p>
+        Ichiro Murata is a photographer and the developer of Sidekick. These stories are written from his
+        own experience of shooting, retouching, teaching, and building tools. Names of manufacturers,
+        magazines, and events appear here as work he was involved in — they are not endorsements of
+        Sidekick by those companies.
+      </p>
+      <p><a href="/en/ichiro-murata">More about Ichiro Murata →</a></p>
+      
+    </section>
+    <p><a href="/en/story">← Back to all stories</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Knowledge</h4>
+          <ul>
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

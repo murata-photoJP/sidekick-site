@@ -1,0 +1,714 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/story/good-tools-get-simpler'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/story/good-tools-get-simpler');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>いい道具は、だんだん簡単になる｜Story - Sidekick Lab</title>
+<meta name="description" content="凝った作りのレリーズ装置は壊れ、最後は電池ボックスに入るほど単純になった。作れることと作るべきことは違う。自動化できるのに、あえて自動化しないと決めた理由。">
+<link rel="canonical" href="https://www.sidekick-lab.com/story/good-tools-get-simpler">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/good-tools-get-simpler">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/good-tools-get-simpler">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="いい道具は、だんだん簡単になる｜Story - Sidekick Lab">
+<meta property="og:description" content="凝った作りのレリーズ装置は壊れ、最後は電池ボックスに入るほど単純になった。作れることと作るべきことは違う。自動化できるのに、あえて自動化しないと決めた理由。">
+<meta property="og:url" content="https://www.sidekick-lab.com/story/good-tools-get-simpler">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/story/good-tools-get-simpler">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" aria-current="page">Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/story/good-tools-get-simpler" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="パンくずリスト" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/story">Story</a></li>
+    <li aria-current="page">いい道具は、だんだん簡単になる</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+    <p class="kzc-story-series">
+      <span class="kzc-story-series-name">道具を作るということ</span>
+      
+      <span class="kzc-story-series-part">後編</span>
+      
+    </p>
+    
+
+    <h1 class="kzc-article-title">いい道具は、だんだん簡単になる</h1>
+    <p class="kzc-story-subtitle">――作れることと、作るべきことは違う</p>
+    <p class="kzc-article-lead">凝った作りのレリーズ装置は壊れ、最後は電池ボックスに入るほど単純になった。作れることと作るべきことは違う。自動化できるのに、あえて自動化しないと決めた理由。</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">村田一朗｜写真家・Sidekick開発者</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>前回、私は「必要なものがなければ作る」という話を書きました。</p>
+<p>パソコンのソフトも作った。</p>
+<p>仕事では測定治具も作った。</p>
+<p>写真をデジタルで撮るようになってからは、外部電源まで作るようになりました。</p>
+<p>こう書くと、何か必要になるたびに、最初から最適なものを設計して作っていたように見えるかもしれません。</p>
+<p>もちろん、そんなことはありません。</p>
+<p>むしろ逆です。</p>
+<p>最初に作ったものは、たいてい面倒です。</p>
+<p>必要だから作る。</p>
+<p>現場へ持っていく。</p>
+<p>使ってみる。</p>
+<p>壊れる。</p>
+<p>不便なところが見つかる。</p>
+<p>時代が変わって、もっといい部品や製品が出てくる。</p>
+<p>そうすると、また作り直す。</p>
+<p>同じ目的のために、いくつも違うものを作ってきました。</p>
+<p>その中には、最初に作ったものよりずっと単純になったものもあります。</p>
+<h2>最初のレリーズは、かなり凝っていた</h2>
+<p>星を長時間撮影するようになると、カメラを一定間隔で延々とレリーズする必要が出てきました。</p>
+<p>今ならカメラ本体にインターバル撮影機能があったり、スマートフォンから制御できたりします。</p>
+<p>でも、当時はそう簡単ではありません。</p>
+<p>そこで、レリーズシステムを自分で作りました。</p>
+<p>最初に作ったものは、CMOSを使ったかなり凝った回路でした。</p>
+<p>しかも、ただ一定間隔でシャッターを切ればいい、という作りではありませんでした。</p>
+<p>撮影の最初の1コマだけは、カメラ本体のインターバルタイマーを使ってレリーズする。</p>
+<p>それをトリガーにして、その後のレリーズを外部回路が引き継ぐ。</p>
+<p>なぜ、そんな面倒なことをしたのか。</p>
+<p>撮影したファイルを、後で撮影日時分秒、さらにミリ秒まで使ったファイル名にリネームしていたからです。</p>
+<p>撮影開始が、</p>
+<p><strong>18:00:00</strong></p>
+<p>となっていると気持ちがいい。</p>
+<p>それだけです。</p>
+<p>では、その18:00:00を決めているカメラ本体の時計が、本当に正確だったのか。</p>
+<p>そこは、</p>
+<p><strong>だいたい合っていればいい。</strong></p>
+<p>今考えても、妙なところにこだわっています。</p>
+<p>でも私にとっては、「時計が何ミリ秒正確か」と「撮影の開始点が00秒できれいに揃っているか」は別の問題だったのでしょう。</p>
+<p>必要なところにはこだわる。</p>
+<p>意味がないと思ったところは気にしない。</p>
+<h2>壊れた</h2>
+<p>このレリーズシステムは、かなり調子よく動いていました。</p>
+<p>作った当時、私はまだ会社員でした。</p>
+<p>会社にはオシロスコープがあります。</p>
+<p>回路を組んで、波形を見て、タイミングを確認して、調整することができました。</p>
+<p>ところが、後になって少し壊れました。</p>
+<p>その頃には私は会社を辞めて、フリーになっています。</p>
+<p>当然、手元にオシロスコープはありません。</p>
+<p>直そうと思えば、安いオシロスコープを買うという方法もありました。</p>
+<p>でも、</p>
+<p><strong>このためにオシロスコープを買うのか？</strong></p>
+<p>と考えました。</p>
+<p>割に合いません。</p>
+<p>だったら、もっと簡単なものを作った方がいい。</p>
+<h2>最後は、電池ボックスの中に入った</h2>
+<p>それから、いくつか簡易的なレリーズを作ったと思います。</p>
+<p>そんな中で、面白い部品を見つけました。</p>
+<p>もともとはLEDをチラチラと点滅させるような用途の、3端子の部品です。</p>
+<p>型番によって発振周波数が固定されていて、1Hz、2Hz、4Hz、8Hzだったか、そのあたりの種類がありました。</p>
+<p>正確な型番や周波数は、もう覚えていません。</p>
+<p>でも、これを見て、</p>
+<p><strong>「これでいいじゃん」</strong></p>
+<p>と思いました。</p>
+<p>電池を一つ。</p>
+<p>その3端子の部品を一つ。</p>
+<p>あとはカメラへの配線。</p>
+<p>抵抗くらいは入れたかもしれません。</p>
+<p>ほとんど、それだけです。</p>
+<p>きれいな基板を作った記憶もありません。</p>
+<p>電池ボックスの空いたところに部品と配線をぐちゃっと入れて、動かないようにボンドで固定しました。</p>
+<p>完成です。</p>
+<p>最初に作ったCMOSの回路とは比べものにならないほど単純です。</p>
+<p>でも、やっている仕事は同じです。</p>
+<p><strong>必要な間隔でカメラのシャッターを切る。</strong></p>
+<p>それができればいい。</p>
+<h2>複雑な方が偉いわけではない</h2>
+<p>技術者だったこともあって、必要なら複雑な回路を作ることはできます。</p>
+<p>でも、複雑な回路には、複雑な回路なりの問題があります。</p>
+<p>部品が増える。</p>
+<p>故障する場所も増える。</p>
+<p>調整が必要になる。</p>
+<p>直すには測定器が必要になるかもしれない。</p>
+<p>一方、電池と3端子の部品だけなら、壊れるところ自体がほとんどありません。</p>
+<p>撮影現場へ持っていく道具なら、そちらの方がいいこともあります。</p>
+<p>技術的に高度なものを作ることと、</p>
+<p><strong>道具として優れていることは同じではありません。</strong></p>
+<p>これは、最初から分かっていたことではありません。</p>
+<p>作って、使って、壊して、また作る。</p>
+<p>そうしているうちに、だんだん分かってきたことです。</p>
+<h2>作るのが面倒なら、買えばいい</h2>
+<p>もちろん、毎回自分で作っていたわけでもありません。</p>
+<p>自作するのが面倒なときには、ニコンのMC-36というレリーズも使っていました。</p>
+<p>インターバルタイマーを内蔵したレリーズです。</p>
+<p>ただし、普通の使い方をしていたわけではありません。</p>
+<p>長時間の連続撮影で問題になるカメラ側の制限を回避するため、設定を工夫して使っていました。</p>
+<p>後にフォトアドバイスで星景写真の講座をするようになると、この方法も紹介しました。</p>
+<p>面白かったのは、MC-36そのものを買う必要さえなかったことです。</p>
+<p>中国製の互換品がありました。</p>
+<p>値段は正規品の1/10くらいだったと思います。</p>
+<p>しかもニコンだけでなく、キヤノンなど各メーカーの端子に対応したものが販売されていました。</p>
+<p>講座では、その互換品と設定方法を紹介しました。</p>
+<p>ところが、購入した人の一人が設定方法をよく分からなくなり、ニコンへ問い合わせたらしいのです。</p>
+<p>私が教えた設定方法を説明して質問したところ、相手にしてもらえなかった、と聞きました。</p>
+<p>それはそうでしょう。</p>
+<p>たぶん、メーカーが想定した使い方ではありません。</p>
+<p>でも、</p>
+<p><strong>使えるなら、それでいい。</strong></p>
+<p>自作する必要もありません。</p>
+<h2>専用部品が欲しい。でも売ってくれない</h2>
+<p>外部電源を作っていた頃にも、似たことがありました。</p>
+<p>カメラにはACアダプターを接続するための端子がありました。</p>
+<p>問題は、そのコネクターです。</p>
+<p>一般的なDCプラグではなく、専用品でした。</p>
+<p>普通に手に入れようと思ったら、純正のACアダプターを買って、</p>
+<p><strong>ケーブルをぶった切る。</strong></p>
+<p>それしかありません。</p>
+<p>でも、コネクター一つのためにACアダプターを買うのは、あまりにもコストパフォーマンスが悪い。</p>
+<p>メーカーの人に聞いたことがあります。</p>
+<p>修理品から外したものとか、廃棄する部品とか、社内に転がっていませんか？</p>
+<p>探してくれました。</p>
+<p>後日、</p>
+<p>「見つかりませんでした」</p>
+<p>と言われました。</p>
+<p>残念。</p>
+<p>だからといってメーカーに腹を立てるような話でもありません。</p>
+<p>ないものは、ない。</p>
+<p>では別の方法を考えればいい。</p>
+<h2>電源も、何度も変わった</h2>
+<p>外部電源そのものも、ずっと同じものを使ってきたわけではありません。</p>
+<p>最初はラジコン用のバッテリー。</p>
+<p>その後はエネループ。</p>
+<p>寒冷地で長時間使うため、直列にして必要な電圧を作り、それをさらに並列にして容量を稼いだこともあります。</p>
+<p>実際に、マイナス30度近い環境で14時間ほど動かしたこともあります。</p>
+<p>電池がガンガンに凍っていても、動いていました。</p>
+<p>でも、今ならそんなものを作る必要はありません。</p>
+<p>PD対応のモバイルバッテリーがあります。</p>
+<p>必要な電圧を取り出すトリガーケーブルもあります。</p>
+<p>なら、それを使えばいい。</p>
+<p>昔、自分で苦労して作った方式を守る理由はありません。</p>
+<p><strong>新しい既製品の方が楽なら、そちらへ乗り換えます。</strong></p>
+<h2>「空気フィルター」</h2>
+<p>レンズも似たような考え方で使っています。</p>
+<p>私は基本的に、レンズそのものは高性能なものを選びます。</p>
+<p>特に山岳写真では、そこをあまり妥協したくありません。</p>
+<p>でも、レンズを買うと付いてくるフードは、ほとんど使いません。</p>
+<p>山ではかさばります。</p>
+<p>重くもなります。</p>
+<p>だから新品のレンズを買っても、フードは箱に戻してしまいます。</p>
+<p>保護フィルターも、基本的には使いません。</p>
+<p>ただ、レンズ先端のフィルターをねじ込む部分は守りたい。</p>
+<p>岩などにぶつけて変形すると、後からフィルターを付けられなくなることがあります。</p>
+<p>そこで、保護フィルターからガラスだけ外して、枠だけ付けることがあります。</p>
+<p>私は勝手に、</p>
+<p><strong>「空気フィルター」</strong></p>
+<p>と呼んでいます。</p>
+<p>もちろん、前玉に石が飛んできたら何の役にも立ちません。</p>
+<p>でも山で使っていて、前玉に石が直撃する確率と、レンズの筐体を何かにぶつける確率なら、私には後者の方がずっと高い。</p>
+<p>それなら枠だけあればいい。</p>
+<p>もし前玉に傷が付いたら？</p>
+<p>修理するか、必要ならレンズを買い直します。</p>
+<p>高価な保護フィルターを所有するすべてのレンズに付けるより、その方が安いと考えています。</p>
+<p>これは「保護フィルターなんか必要ない」という一般論ではありません。</p>
+<p><strong>私の使い方なら、そう判断している。</strong></p>
+<p>それだけです。</p>
+<h2>フードを持たないなら、レンズには妥協しない</h2>
+<p>もちろん、フードを使わなければゴーストやフレアが出やすくなることがあります。</p>
+<p>だからこそ、レンズそのものの性能は重要です。</p>
+<p>どうしても光が入るときには、ハレ切りをします。</p>
+<p>板状のものを持っていくこともあります。</p>
+<p>でも大抵、必要なときには持っていません。</p>
+<p>結局、手でハレ切りすることが多い。</p>
+<p>一方で、中国製の50mm F1.0のような、少し癖のあるレンズが面白いと思うこともあります。</p>
+<p>それは、</p>
+<p><strong>遊びだからです。</strong></p>
+<p>高性能なレンズを持ったうえで、癖のあるレンズを遊びで使うのは楽しい。</p>
+<p>でも、</p>
+<p><strong>それしか持っていない</strong></p>
+<p>となると、私にとっては話が違います。</p>
+<p>高性能であることが正義なのでもない。</p>
+<p>安くて面白ければいいのでもない。</p>
+<p>何のために使うのかで、必要なものが変わります。</p>
+<h2>Photoshopを全部動かせるようにしてみた</h2>
+<p>ソフトウェアでも、似たような試行錯誤をしています。</p>
+<p>Sidekickを作るより前のことです。</p>
+<p>Photoshopの主要な機能を、JSXから操作できるようにしたことがあります。</p>
+<p>トーンカーブ。</p>
+<p>彩度。</p>
+<p>そのほか、画像処理に必要になる主要な機能を、プログラムから呼び出せるようにしていきました。</p>
+<p>やりたかったのは、自動現像です。</p>
+<p>画像を解析する。</p>
+<p>その結果を見て、</p>
+<p>「この写真なら、トーンカーブで少しコントラストを弱めよう」</p>
+<p>「彩度を少し上げよう」</p>
+<p>と判断する。</p>
+<p>そして適切な機能を選び、適切なパラメータを設定して、自動的に処理する。</p>
+<p>そこまでやりたかった。</p>
+<p>Photoshopをプログラムから動かすところまでは、かなりできました。</p>
+<p>でも、その先で止まりました。</p>
+<h2>「何をするか」が決められない</h2>
+<p>問題はPhotoshopではありませんでした。</p>
+<p>トーンカーブを動かすことはできる。</p>
+<p>彩度を変えることもできる。</p>
+<p>必要な機能を呼び出すこともできる。</p>
+<p>でも、</p>
+<p><strong>この写真に何をすべきなのか。</strong></p>
+<p>そこをコンピューターに判断させることができませんでした。</p>
+<p>当時のAIの限界もあったのだと思います。</p>
+<p>結局、そのシステムは完成しませんでした。</p>
+<p>作りかけて、やめました。</p>
+<p>後から振り返れば、Sidekick Portraitで再び取り組むことになる問題を、その頃に一度解こうとしていたことになります。</p>
+<p>ただし、そのソフトがSidekick Portraitへそのまま進化したわけではありません。</p>
+<p>一度やってみて、</p>
+<p><strong>操作を自動化することと、判断を自動化することは全く違う。</strong></p>
+<p>というところで止まった。</p>
+<p>それだけです。</p>
+<h2>自動化できる。でも、しない</h2>
+<p>逆のこともあります。</p>
+<p>私は波を撮ります。</p>
+<p>波の撮影にも、自動化できる部分があります。</p>
+<p>技術的にはできる。</p>
+<p>だったら、自動化した方が楽ではないか。</p>
+<p>でも、やっていません。</p>
+<p>波を撮っていると、単純にシャッターを切っているように見えても、その場で細かな調整をしています。</p>
+<p>肉眼で波を見る。</p>
+<p>次の波を見る。</p>
+<p>状態に応じて微調整する。</p>
+<p>その繰り返しです。</p>
+<p>そこを自動化してしまうと、リアルタイムで見ながら調整できなくなります。</p>
+<p>それだけではありません。</p>
+<p>カメラに任せることで、自分自身の撮影も散漫になります。</p>
+<p>結果としてヒット率が下がる。</p>
+<p>だから、</p>
+<p><strong>自動化できるけれど、自動化しない。</strong></p>
+<h2>コンピューターに任せればいい、では足りなかった</h2>
+<p>大学4年の頃、東京大学生産技術研究所の高木研究室で研究していたとき、高木先生から、</p>
+<p><strong>自動化できるものはコンピューターにやらせるべきだ。人間の頭はクリエイティブなことをするためにある。</strong></p>
+<p>という趣旨の話を聞いたことは、前回書きました。</p>
+<p>今でも、その考え方は基本的に正しいと思っています。</p>
+<p>比較明合成で何千枚もの画像を人間が一枚ずつ重ねる必要はありません。</p>
+<p>コンピューターにやらせればいい。</p>
+<p>撮影した何千枚もの画像から、コンピューターが処理できる作業を人間が延々と繰り返す必要もない。</p>
+<p>でも、波の撮影をしていて分かったこともあります。</p>
+<p><strong>人間がやっていることのすべてが、「コンピューターに置き換えるべき雑用」ではありません。</strong></p>
+<p>一見、単純な繰り返しに見えても、その途中で見て、感じて、判断して、微調整していることがあります。</p>
+<p>そこまで取り除くと、写真がつまらなくなる。</p>
+<h2>毎晩快晴でも、毎晩同じではない</h2>
+<p>これは星景写真でも同じです。</p>
+<p>例えば新月。</p>
+<p>天の川がよく見える場所。</p>
+<p>天気予報は快晴。</p>
+<p>条件だけ見れば完璧です。</p>
+<p>燕山荘に何泊もして、毎晩星を撮っていたことがあります。</p>
+<p>毎日、ド快晴。</p>
+<p>でも、</p>
+<p><strong>天の川の見え方は、毎晩違います。</strong></p>
+<p>空気がどれだけ澄んでいるか。</p>
+<p>水蒸気がどれだけあるか。</p>
+<p>天気予報の「晴れ」だけでは表せない条件があります。</p>
+<p>新月であることも計算できます。</p>
+<p>天の川がどこにあるかも計算できます。</p>
+<p>日の入りや日の出も分かります。</p>
+<p>でも、それだけでその夜の写真が決まるわけではありません。</p>
+<p>計算が間違っているのではありません。</p>
+<p><strong>計算で分かることと、現場でしか分からないことがある。</strong></p>
+<h2>鼻の利く人は、みんな外へ出た</h2>
+<p>燕山荘に何泊もしていた頃のことです。</p>
+<p>その日は一日中ガスの中でした。</p>
+<p>山はほとんど見えません。</p>
+<p>ところが夕方になって、少しずつガスが切れ始めました。</p>
+<p>私は撮影に出ました。</p>
+<p>燕山荘の社長も出ました。</p>
+<p>写真家やカメラマンなど、</p>
+<p><strong>鼻の利く人は、みんな撮影に出ました。</strong></p>
+<p>ガスは完全には切れません。</p>
+<p>でも時々、ほんの一瞬抜ける。</p>
+<p>すると槍ヶ岳方面が見える。</p>
+<p>夕日が当たる。</p>
+<p>槍ヶ岳の直下から、自分が立っている燕岳の足元まで雲海が広がっていました。</p>
+<p>ものすごい条件でした。</p>
+<p>日が沈んだ後、燕山荘の社長がやって来ました。</p>
+<p>「村田君はいったいどこで撮ってた？」</p>
+<p>近くにはいなかった、と。</p>
+<p>そして、</p>
+<p>「おらっちは子供の頃からここにいるけど、こんな条件になったのは初めてだ」</p>
+<p>というようなことを言いました。</p>
+<p>こんなにいい条件だったのに、村田はいったいどこから撮っていたんだ、と。</p>
+<p>おそらく社長は、</p>
+<p><strong>私が自分よりいい場所を見つけて撮っていたのではないか</strong></p>
+<p>と思ったのでしょう。</p>
+<p>もちろん、私も撮っています。</p>
+<p>自分では、バッチリ撮れたと思っています。</p>
+<p>たぶん社長にも負けていない。</p>
+<p>でも、答え合わせはしていません。</p>
+<p>だから、どちらが良かったのかは分かりません。</p>
+<h2>最後は「どこに立つか」</h2>
+<p>同じ山にいる。</p>
+<p>同じ時刻。</p>
+<p>同じ夕日。</p>
+<p>同じ雲海。</p>
+<p>それでも、</p>
+<p><strong>どこに立つかで写真は変わります。</strong></p>
+<p>その場所を、全部計算で決められるか。</p>
+<p>私はそうは思いません。</p>
+<p>地図は見ます。</p>
+<p>太陽や月の位置も見ます。</p>
+<p>天気予報もかなり見ます。</p>
+<p>理屈で考えられることは、かなり考えます。</p>
+<p>でも山小屋で写真仲間から、</p>
+<p>「村田さん、明日の朝、一緒に撮らせてもらっていいですか？」</p>
+<p>と言われて、</p>
+<p>「いいですよ」</p>
+<p>と答えても、</p>
+<p>「じゃあ、どこへ行きます？」</p>
+<p>と聞かれると、</p>
+<p><strong>「明日の朝起きて、外に出てみないと分からない」</strong></p>
+<p>と答えることがあります。</p>
+<p>小屋を出て右へ行くのか、左へ行くのか。</p>
+<p>それすら、外を見ないと分からない。</p>
+<p>雲を見る。</p>
+<p>光を見る。</p>
+<p>空気を見る。</p>
+<p>最後は、</p>
+<p><strong>「なんとなく、こっち」</strong></p>
+<p>で決めることもあります。</p>
+<h2>作らない。自動化しない。決めさせない。</h2>
+<p>若い頃の私は、必要なものがなければ作りました。</p>
+<p>複雑な回路も作りました。</p>
+<p>ソフトウェアも作りました。</p>
+<p>やがて、もっと単純なもので済むなら、単純な方がいいと分かりました。</p>
+<p>さらに、</p>
+<p><strong>作れるものを全部作る必要もない</strong></p>
+<p>と分かりました。</p>
+<p>自動化できるものを全部自動化する必要もない。</p>
+<p>そして今は、</p>
+<p><strong>コンピューターに計算させることと、コンピューターに写真を決めさせることは違う</strong></p>
+<p>と思っています。</p>
+<p>人間が一か月かけてやる画像処理を、コンピューターが一晩でできるなら、やらせればいい。</p>
+<p>天体がいつ、どこに来るのかを正確に計算できるなら、コンピューターに計算させればいい。</p>
+<p>でも、</p>
+<p>その写真を撮りたいのか。</p>
+<p>今日そこへ行くのか。</p>
+<p>現場で右へ行くのか、左へ行くのか。</p>
+<p>目の前の光を見て、予定していた写真を捨てるのか。</p>
+<p>そこまでコンピューターに決めてもらう必要はありません。</p>
+<p>道具は、人間の代わりに写真を撮るためにあるのではない。</p>
+<p><strong>人間が写真を撮るために、面倒な部分を引き受けてくれればいい。</strong></p>
+<p>今作っているSidekickも、結局はそういう道具なのだと思います。</p>
+<p>――つづく</p>
+
+  </div>
+
+  
+  <p class="kzc-story-series">
+    この話の前編
+    <a href="/story/make-your-own-tools">← 撮るための道具は、自分で作ればいい</a>
+  </p>
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">この話につながる現在のSidekick</p>
+    <ul>
+      
+      <li><a href="/sidekick">Sidekickとは →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="前後のStory">
+      <div class="kzc-story-nav-prev">
+        
+        <a href="/story/make-your-own-tools">
+          <span class="kzc-story-nav-label">前の話</span>
+          ← 撮るための道具は、自分で作ればいい
+        </a>
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+        <a href="/story/the-earth-keeps-turning">
+          <span class="kzc-story-nav-label">次の話</span>
+          地球の自転は止められない →
+        </a>
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、Sidekickの開発者です。ここに書かれているのは、実際の撮影・現像・講評・
+        道具作りの経験です。文中に出てくるメーカー・雑誌・イベントの名前は、過去に関わった仕事として
+        登場するものであり、それらの企業によるSidekickの推薦・公認を意味するものではありません。
+      </p>
+      <p><a href="/ichiro-murata">村田一朗について →</a></p>
+      
+    </section>
+    <p><a href="/story">← Storyの一覧へ戻る</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

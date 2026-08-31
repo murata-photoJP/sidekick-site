@@ -1,0 +1,381 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/story'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/story');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Story｜Sidekick Lab</title>
+<meta name="description" content="写真家・村田一朗が、写真、技術、道具作り、メーカーとの仕事、撮影現場で考えてきたこと、そして現在のSidekickにつながる背景を書いた読み物です。">
+<link rel="canonical" href="https://www.sidekick-lab.com/story">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="Story｜Sidekick Lab">
+<meta property="og:description" content="写真家・村田一朗が、写真、技術、道具作り、メーカーとの仕事、撮影現場で考えてきたこと、そして現在のSidekickにつながる背景を書いた読み物です。">
+<meta property="og:url" content="https://www.sidekick-lab.com/story">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/story">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" aria-current="page">Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/story" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<section class="kzc-hero">
+  <h1>Story</h1>
+  
+  <p class="kzc-hero-tagline">この道具が、どこから来たのか。</p>
+  
+</section>
+
+<div class="kzc-story-intro">
+  
+  <p>
+    写真家・村田一朗が、写真、技術、道具作り、メーカーや雑誌との仕事、そして撮影現場で
+    考えてきたことを、長めに書いている場所です。
+  </p>
+  <p>
+    製品の説明ではありません。<a href="/development-log">開発日誌</a>とも役割が違います。
+    開発日誌が「いま何を作り、何を判断しているか」の記録なのに対して、こちらは
+    「なぜ、こういう道具を作ることになったのか」という背景の話です。
+  </p>
+  
+</div>
+
+
+<section class="kzc-article-list" aria-label="Story一覧">
+  
+    
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    <p class="kzc-card-order">Story 1</p>
+    <h3 class="kzc-card-title"><a href="/story/before-i-knew-lighten-composite">「比較明合成」を知らなかった私が、星をつなぐまで</a></h3>
+    <p class="kzc-card-subtitle">――始まりは、燕岳を歩く登山者のヘッドライトだった</p>
+    <p class="kzc-card-desc">「比較明合成」という言葉を知らないまま、燕岳で撮った登山者のヘッドライトから、明るい部分だけを残す合成方法にたどり着いた。そこから星の連続写真、『デジタルフォト』2010年4月号「無限軌道」、処理を自動化するソフトまでの記録。</p>
+    <p class="kzc-card-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+      
+    </p>
+  </div>
+</article>
+  
+    
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    <p class="kzc-card-order">Story 2</p>
+    <h3 class="kzc-card-title"><a href="/story/make-your-own-tools">撮るための道具は、自分で作ればいい</a></h3>
+    <p class="kzc-card-subtitle">――写真家になる前から、私は妙なものを作っていた</p>
+    <p class="kzc-card-desc">PC-8001mkIIとカセットテープから、大学での研究、会社員時代の測定治具、デジタルカメラの外部電源まで。必要な道具が売っていなければ作る、ということをずっと続けてきた話。</p>
+    <p class="kzc-card-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+      
+      <span class="kzc-badge">道具を作るということ・前編</span>
+      
+    </p>
+  </div>
+</article>
+  
+    
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    <p class="kzc-card-order">Story 3</p>
+    <h3 class="kzc-card-title"><a href="/story/good-tools-get-simpler">いい道具は、だんだん簡単になる</a></h3>
+    <p class="kzc-card-subtitle">――作れることと、作るべきことは違う</p>
+    <p class="kzc-card-desc">凝った作りのレリーズ装置は壊れ、最後は電池ボックスに入るほど単純になった。作れることと作るべきことは違う。自動化できるのに、あえて自動化しないと決めた理由。</p>
+    <p class="kzc-card-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+      
+      <span class="kzc-badge">道具を作るということ・後編</span>
+      
+    </p>
+  </div>
+</article>
+  
+    
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    <p class="kzc-card-order">Story 4</p>
+    <h3 class="kzc-card-title"><a href="/story/the-earth-keeps-turning">地球の自転は止められない</a></h3>
+    <p class="kzc-card-subtitle">――O-GPS1とアストロトレーサーを、山で使える道具にするまで</p>
+    <p class="kzc-card-desc">発売前のO-GPS1を借りて山へ持っていき、精密キャリブレーションに何度も失敗した。「最大5分追尾できる」ことと「5分で撮る」ことは違う。最高性能ではなく、撮れる性能の話。</p>
+    <p class="kzc-card-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+      
+    </p>
+  </div>
+</article>
+  
+    
+<article class="kzc-card">
+  <div class="kzc-card-body">
+    <p class="kzc-card-order">Story 5</p>
+    <h3 class="kzc-card-title"><a href="/story/when-and-where-should-i-go">「いつ、どこへ行けばいい？」から始まった</a></h3>
+    <p class="kzc-card-subtitle">――Sidekick Plannerを作ろうと思った理由</p>
+    <p class="kzc-card-desc">Sidekick Plannerは、撮影に失敗したから作ったのではない。「ここに立てと言われれば撮れる。でも、この『ここ』が分からない」。その「ここ」を簡単に探せるようにしたい、というところから始まった。</p>
+    <p class="kzc-card-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+      
+    </p>
+  </div>
+</article>
+  
+</section>
+
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

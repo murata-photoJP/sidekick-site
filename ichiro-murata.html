@@ -284,7 +284,16 @@
      アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
      リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
      報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
-     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
 
 
 <div class="lang-banner" id="lang-banner">
@@ -318,6 +327,7 @@
       <a href="/gallery" >Gallery</a>
       <a href="/sidekick" >Sidekickとは</a>
       <a href="/about" >About</a>
+      <a href="/story" >Story</a>
       <a href="/development-log" >開発日誌</a>
       <a href="/changelog" >更新履歴</a>
       <a href="/faq" >Support</a>
@@ -659,7 +669,23 @@
             <div class="prod-desc">講評AI・カメラAI・撮影AI・PC AI。ブラウザから試せます。</div>
             <div class="prod-more">AI Lab を見る →</div>
           </a>
+          <!-- 2026-08-31追加: 開発中のためprod-more文言を「製品ページを見る」にしない。 -->
+          <a class="prod" href="/planner">
+            <div class="prod-name">🗺️ Sidekick Planner（開発中）</div>
+            <div class="prod-desc">撮りたい天体と風景が重なる「いつ・どこ」を探す撮影計画ツール。</div>
+            <div class="prod-more">開発中の内容を見る →</div>
+          </a>
         </div>
+
+        <!-- 2026-08-31追加: このページは「何をしてきた人か」の正本（Person Entity）だが、
+             経歴の一行ずつの背景までは書ききれない。Storyはその背景を本人の言葉で
+             読める場所なので、経歴を読んだ人の次の行き先として置く。 -->
+        <p class="sec-note" style="margin-top:24px;">
+          ここに並べた経歴の一つひとつが実際にどういう経験だったのかは、
+          「<a href="/story" style="color:var(--accent2);">Story</a>」に本人の言葉で書いています。
+          比較明合成にたどり着いた経緯、自分で道具を作り続けてきた話、
+          O-GPS1を山で使える道具にするまで、そしてSidekick Plannerを作ろうと思った理由。
+        </p>
 
         <div class="disc">
           <strong>このページの書き方について。</strong>
@@ -701,6 +727,9 @@
             <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
             <li><a href="/portrait">👤 Sidekick Portrait</a></li>
             <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
           </ul>
         </div>
 
@@ -747,6 +776,7 @@
           <ul>
             <li><a href="/about">About</a></li>
             <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
             <li><a href="/gallery">Gallery</a></li>
             <li><a href="/ichiro-murata">村田 一朗</a></li>
             <li><a href="/legal">特定商取引法</a></li>

@@ -1,0 +1,642 @@
+<!-- Story（2026-08-31新設）の共通レイアウト。開発日誌のtemplates/development-log/base.htmlを
+     踏襲する（言語自動判定・header/footerのinclude・既存CSSの流用）。Story専用の
+     新規CSSファイルは追加せず、/assets/css/knowledge.css と kzc-* クラスをそのまま使う。 -->
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/story/the-earth-keeps-turning'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/story/the-earth-keeps-turning');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>地球の自転は止められない｜Story - Sidekick Lab</title>
+<meta name="description" content="発売前のO-GPS1を借りて山へ持っていき、精密キャリブレーションに何度も失敗した。「最大5分追尾できる」ことと「5分で撮る」ことは違う。最高性能ではなく、撮れる性能の話。">
+<link rel="canonical" href="https://www.sidekick-lab.com/story/the-earth-keeps-turning">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/story/the-earth-keeps-turning">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/story/the-earth-keeps-turning">
+
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Sidekick Lab">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:title" content="地球の自転は止められない｜Story - Sidekick Lab">
+<meta property="og:description" content="発売前のO-GPS1を借りて山へ持っていき、精密キャリブレーションに何度も失敗した。「最大5分追尾できる」ことと「5分で撮る」ことは違う。最高性能ではなく、撮れる性能の話。">
+<meta property="og:url" content="https://www.sidekick-lab.com/story/the-earth-keeps-turning">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<meta property="article:published_time" content="2026-08-31">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+<link rel="stylesheet" href="/assets/css/story.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/story/the-earth-keeps-turning">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" >📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" aria-current="page">Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/story/the-earth-keeps-turning" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="パンくずリスト" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/story">Story</a></li>
+    <li aria-current="page">地球の自転は止められない</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    
+
+    <h1 class="kzc-article-title">地球の自転は止められない</h1>
+    <p class="kzc-story-subtitle">――O-GPS1とアストロトレーサーを、山で使える道具にするまで</p>
+    <p class="kzc-article-lead">発売前のO-GPS1を借りて山へ持っていき、精密キャリブレーションに何度も失敗した。「最大5分追尾できる」ことと「5分で撮る」ことは違う。最高性能ではなく、撮れる性能の話。</p>
+    <p class="kzc-article-meta">
+      <time datetime="2026-08-31">2026年8月31日</time>
+    </p>
+  </header>
+
+  <p class="kzc-author-short">村田一朗｜写真家・Sidekick開発者</p>
+
+  <div class="kzc-article-body kzc-story-body">
+    <p>最初にO-GPS1を見たとき、</p>
+<p><strong>「マッチ箱くらいの大きさによく入れたな」</strong></p>
+<p>と思いました。</p>
+<p>小さい。</p>
+<p>軽い。</p>
+<p>しかも電池は単4形1本です。</p>
+<p>それだけでも、山へ持っていく道具としては魅力的でした。</p>
+<p>でも、本当に驚いたのは中身です。</p>
+<p>GPSで現在地を求める。</p>
+<p>カメラがどちらを向いているかを調べる。</p>
+<p>そして星がどう動くかを計算して、カメラの手ぶれ補正機構を利用してイメージセンサーそのものを動かす。</p>
+<p>つまり、</p>
+<p><strong>カメラの中で星を追いかける。</strong></p>
+<p>2011年にPENTAXから発売されたO-GPS1とアストロトレーサーは、そんな製品でした。</p>
+<p>技術者として見ても、</p>
+<p>「よくこんなことを考えたな」</p>
+<p>と思います。</p>
+<p>考えるだけならできるかもしれない。</p>
+<p>でも、それを実際の商品にするのは別の話です。</p>
+<p>GPS、方位、傾き、レンズの焦点距離。</p>
+<p>それらを使って星の動きを求め、SRを動かす。</p>
+<p>しかも、それを小さなGPSユニットとカメラの中でやってしまう。</p>
+<p>誰が陣頭指揮を執って実現したのか知りませんが、</p>
+<p><strong>真っ当な人じゃないと思います。</strong></p>
+<p>もちろん、褒め言葉です。</p>
+<h2>最初の仕事は、発売前のO-GPS1だった</h2>
+<p>私が最初にO-GPS1を使ったのは、発売前だったと思います。</p>
+<p>試作品を借りて、実際に星を撮ってみる仕事でした。</p>
+<p>当時はまだニコンも使っていましたし、その後も使い続けます。</p>
+<p>メーカーが違うから、どちらか一方だけを使わなければならない、という感覚は私にはあまりありませんでした。</p>
+<p>新しい道具が出た。</p>
+<p>それで今まで撮れなかったものが撮れるかもしれない。</p>
+<p>なら、</p>
+<p><strong>実際に使ってみればいい。</strong></p>
+<p>借りたO-GPS1を持って、ヤビツ峠へ行きました。</p>
+<h2>回す</h2>
+<p>O-GPS1でアストロトレーサーを使うには、精密キャリブレーションが必要です。</p>
+<p>カメラを持って回転させ、方位センサーなどを補正する。</p>
+<p>説明書にもやり方は書いてあります。</p>
+<p>だから、その通りにやります。</p>
+<p>回す。</p>
+<p>失敗。</p>
+<p>もう一度やる。</p>
+<p>失敗。</p>
+<p>向きを変える。</p>
+<p>回す。</p>
+<p>また失敗。</p>
+<h2>まだ回す</h2>
+<p>10分くらいやっていたと思います。</p>
+<p>通らない。</p>
+<p>30分くらい経った。</p>
+<p>まだ通らない。</p>
+<p>そのうち、</p>
+<p><strong>「俺はいったい、こんな暗いところで何をやっているんだ？」</strong></p>
+<p>という気分になってきます。</p>
+<p>ヤビツ峠の暗闇で、カメラを持った男が一人、ぐるぐる回している。</p>
+<p>誰かが見たら、かなり怪しい。</p>
+<p>それでも撮影しなければならないので、回します。</p>
+<p>背面液晶を確認する。</p>
+<p>駄目。</p>
+<p>また回す。</p>
+<p>正確な時間はもう覚えていませんが、最終的には1時間近く格闘していたような記憶があります。</p>
+<p>そして、ようやく通りました。</p>
+<h2>本当に星が止まった</h2>
+<p>精密キャリブレーションが終われば、アストロトレーサーを使えます。</p>
+<p>撮ってみました。</p>
+<p>星が止まっています。</p>
+<p>当たり前ですが、</p>
+<p><strong>本当に追尾している。</strong></p>
+<p>当時のK-5との組み合わせでは、条件によって最大5分まで追尾できました。</p>
+<p>5分露光も試したと思います。</p>
+<p>ちゃんと星が写る。</p>
+<p>「なるほど。これは使える」</p>
+<p>と思いました。</p>
+<p>ただし同時に、</p>
+<p><strong>慣れが必要だな</strong></p>
+<p>とも思いました。</p>
+<p>製品として動くことは分かった。</p>
+<p>でも山で毎回、精密キャリブレーションに何十分もかけるわけにはいきません。</p>
+<p>何かやり方があるはずです。</p>
+<h2>ネットを探した</h2>
+<p>家へ帰ってからだったと思います。</p>
+<p>O-GPS1のキャリブレーションについて、ネットで情報を探しました。</p>
+<p>そこで、ある人のブログを見つけました。</p>
+<p>カメラをただ三方向に回すのではなく、</p>
+<p><strong>8の字を描くように動かす。</strong></p>
+<p>そんな方法が紹介されていました。</p>
+<p>見た瞬間、</p>
+<p>「ああ、これか」</p>
+<p>と思いました。</p>
+<p>iPhoneなどの電子コンパスでも、似たようなキャリブレーションをします。</p>
+<p>実際に試すと、ずっと簡単に通る。</p>
+<p>1分か2分くらいだったと思います。</p>
+<p>ヤビツ峠で延々カメラを回していたのは何だったんだ。</p>
+<h2>ジュリアナ東京キャリブレーション</h2>
+<p>8の字にカメラを振る。</p>
+<p>その動きを見ているうちに、私は勝手に名前を付けました。</p>
+<p><strong>「ジュリアナ東京キャリブレーション」</strong></p>
+<p>です。</p>
+<p>もちろんO-GPS1が発売された2011年にジュリアナ東京が流行っていたわけではありません。</p>
+<p>ずっと前の話です。</p>
+<p>でも、あの扇子を振るような感じに見えた。</p>
+<p>それだけです。</p>
+<p>この方法なら、精密キャリブレーションはかなり楽になります。</p>
+<p>でも、使っているうちに、また思います。</p>
+<p><strong>これ、もっと小さな動きでいいんじゃないか？</strong></p>
+<h2>小手先でいい</h2>
+<p>だんだん動きを小さくしていきました。</p>
+<p>腕全体で大きな8の字を描く必要はない。</p>
+<p>手首を使って、必要な方向へ動かせばいい。</p>
+<p>さらに小さくする。</p>
+<p>そのうち、</p>
+<p><strong>小手先だけで通る。</strong></p>
+<p>そこで今度は、</p>
+<p><strong>「小手先キャリブレーション」</strong></p>
+<p>と呼ぶようになりました。</p>
+<p>10秒とか20秒とか、そのくらいで終わる。</p>
+<p>長くても30秒程度だったと思います。</p>
+<p>ヤビツ峠で1時間近く回していたものが、小手先で終わる。</p>
+<p>もちろん、これはメーカーが説明書に書いていた正式な方法ではありません。</p>
+<p>私が使っていて、</p>
+<p><strong>「これで通る」</strong></p>
+<p>と分かった方法です。</p>
+<p>後にCP+のPENTAXブースなどで話す機会が増えると、この方法も何度も紹介しました。</p>
+<p>メーカーの人からも、その話をしてほしいと言われた記憶があります。</p>
+<p>メーカーが作った製品を、ユーザーである私が勝手な方法でキャリブレーションして、それをメーカーのブースで説明している。</p>
+<p>考えてみると、少し変な話です。</p>
+<h2>5分追尾できる</h2>
+<p>O-GPS1のアストロトレーサーには、大きな魅力がありました。</p>
+<p>長時間露光ができます。</p>
+<p>当時はデジタルカメラの高感度性能もどんどん良くなっていましたが、ISO感度を上げれば画質への影響もあります。</p>
+<p>追尾して長時間露光できれば、ISO感度を下げることができます。</p>
+<p>条件によっては5分。</p>
+<p>これは大きい。</p>
+<p>ところが実際に星景写真として撮っていると、別の問題が出てきます。</p>
+<p><strong>星は止まる。でも地上は止まらない。</strong></p>
+<h2>地球が動いている</h2>
+<p>アストロトレーサーは星を追いかけます。</p>
+<p>正確には、地球の自転によって星が動いて見える分だけ、センサーを動かしています。</p>
+<p>だから星は止まる。</p>
+<p>でも地上の風景は、カメラに対して本来動いていません。</p>
+<p>そこへセンサーを動かす。</p>
+<p>当然、</p>
+<p><strong>地上が動きます。</strong></p>
+<p>星を止めるために地上を動かしているわけです。</p>
+<p>ではどうするか。</p>
+<p>簡単です。</p>
+<p><strong>5分撮らなければいい。</strong></p>
+<h2>「5分撮れる」と「5分で撮る」は違う</h2>
+<p>私は実際の星景写真では、1分から2分程度で使うことが多くなりました。</p>
+<p>5分追尾できるのに、1分で止める。</p>
+<p>もったいないように感じるかもしれません。</p>
+<p>でも、そうではありません。</p>
+<p>製品として、</p>
+<p><strong>「最大5分追尾できる」</strong></p>
+<p>ということと、</p>
+<p>写真として、</p>
+<p><strong>「5分で撮るのが一番いい」</strong></p>
+<p>ということは全く違います。</p>
+<p>1分なら地上のズレは小さい。</p>
+<p>星は十分止まる。</p>
+<p>必要な光量も得られる。</p>
+<p>なら1分でいい。</p>
+<p>私は後にデジカメWatchの記事でも、アストロトレーサーを星景写真で使うなら1〜2分程度に留めることが大きなコツだと書きました。</p>
+<p>スペックを最大まで使うことが、道具を使いこなすことではありません。</p>
+<p><strong>自分の写真に必要なところで止めればいい。</strong></p>
+<h2>ポータブル赤道儀の方が優秀なのか</h2>
+<p>星を追尾するだけなら、ポータブル赤道儀という選択肢があります。</p>
+<p>私も後に買いました。</p>
+<p>専用機ですから、追尾そのものを考えれば非常に優秀です。</p>
+<p>ではO-GPS1はいらないのか。</p>
+<p>私の場合は、そうなりませんでした。</p>
+<p>むしろポータブル赤道儀は、ほとんど使っていません。</p>
+<p>日食などでは使います。</p>
+<p>でも山岳星景では、O-GPS1の方が圧倒的に楽な場面があります。</p>
+<p>理由は単純です。</p>
+<p><strong>私は動くからです。</strong></p>
+<h2>また、イルカ岩だった</h2>
+<p>燕岳に、イルカ岩と呼ばれる岩があります。</p>
+<p>第1章で書いた、比較明合成を偶然知るきっかけになった場所でもあります。</p>
+<p>後に私は、そこで別の写真を撮りました。</p>
+<p>天の川が、</p>
+<p><strong>イルカの口から吐き出されているように見える写真</strong></p>
+<p>です。</p>
+<p>これを撮ろうとすると、カメラを一度設置すれば終わりではありません。</p>
+<p>天の川は時間とともに動きます。</p>
+<p>イルカ岩との位置関係も変わります。</p>
+<p>「もう少し右だな」</p>
+<p>と思ったら、自分が動く。</p>
+<p>数メートル移動する。</p>
+<p>三脚を置く。</p>
+<p>撮る。</p>
+<p>また天の川が動く。</p>
+<p>自分も動く。</p>
+<p>撮る。</p>
+<p>それを繰り返します。</p>
+<p>ポータブル赤道儀でも、もちろんできます。</p>
+<p>でも赤道儀なら、三脚を移動するたびに極軸を合わせ直さなければなりません。</p>
+<p>O-GPS1なら、</p>
+<p><strong>カメラと三脚を持って移動すればいい。</strong></p>
+<p>その違いは、山では非常に大きい。</p>
+<h2>最高性能ではなく、撮れる性能</h2>
+<p>追尾精度だけを比較すれば、専用の赤道儀の方が優れているでしょう。</p>
+<p>でも私が欲しいのは、</p>
+<p><strong>一番正確に星を追いかける機械</strong></p>
+<p>ではありません。</p>
+<p>欲しいのは、</p>
+<p><strong>撮りたい写真を撮れる道具</strong></p>
+<p>です。</p>
+<p>軽い。</p>
+<p>小さい。</p>
+<p>山へ持っていける。</p>
+<p>数メートル移動して、すぐ撮れる。</p>
+<p>必要なだけ星を止められる。</p>
+<p>それなら、私にとっては十分です。</p>
+<p>これは前に書いたレリーズと同じです。</p>
+<p>CMOSを使った複雑な回路より、電池ボックスに入れた3端子の部品の方が道具として良いことがある。</p>
+<p>機械としての性能と、</p>
+<p><strong>自分にとっての道具としての性能は違います。</strong></p>
+<h2>できることと、やるべきことは違う</h2>
+<p>新しい技術が出ると、それまでできなかったことができるようになります。</p>
+<p>O-GPS1なら、三脚だけで星を追尾できるようになりました。</p>
+<p>それは大きな変化です。</p>
+<p>でも一つの制約がなくなると、別の制約が見えてきます。</p>
+<p>星が流れる。</p>
+<p>だから追尾する。</p>
+<p>すると今度は、</p>
+<p><strong>地上が流れる。</strong></p>
+<p>では追尾時間を短くする。</p>
+<p>今度は光量とのバランスを考える。</p>
+<p>広角レンズでは画面周辺の星が流れることもあります。</p>
+<p>なら焦点距離や追尾時間を変える。</p>
+<p>技術が問題を全部なくしてくれるわけではありません。</p>
+<p><strong>問題の場所が変わる。</strong></p>
+<p>写真家は、その新しい条件の中で、また考えればいい。</p>
+<h2>地球の自転を止めればいい</h2>
+<p>星も止めたい。</p>
+<p>地上も止めたい。</p>
+<p>なら、</p>
+<p><strong>地球の自転を止めればいい。</strong></p>
+<p>それが一番簡単です。</p>
+<p>もちろん、できません。</p>
+<p>だから写真家が妥協点を決めます。</p>
+<p>星を優先するのか。</p>
+<p>地上を優先するのか。</p>
+<p>追尾時間を短くするのか。</p>
+<p>場合によっては追尾量を減らして、その中間を取るという考え方もあります。</p>
+<p>どれが正解なのか。</p>
+<p>写真によります。</p>
+<h2>道具は、写真を決めてくれない</h2>
+<p>O-GPS1を最初に見たとき、私はその技術に驚きました。</p>
+<p>今でも、よく商品化したと思います。</p>
+<p>でも、実際に山へ持っていって分かったのは、</p>
+<p><strong>優れた技術が、そのまま優れた写真を作ってくれるわけではない</strong></p>
+<p>という、当たり前のことでした。</p>
+<p>キャリブレーションが面倒なら、短くできないか考える。</p>
+<p>5分追尾できても、1分の方がいいなら1分で撮る。</p>
+<p>専用の赤道儀の方が高精度でも、自分が動き回るならO-GPS1を選ぶ。</p>
+<p>そして最後は、自分で場所を決める。</p>
+<p>イルカ岩の前で、</p>
+<p>「あと少し右だな」</p>
+<p>と思ったら、</p>
+<p><strong>自分が右へ動く。</strong></p>
+<p>道具は、そこまで決めてくれません。</p>
+<p>でも、それでいい。</p>
+<p>むしろ、その方がいい。</p>
+<p>前にも書きました。</p>
+<p>道具は、人間の代わりに写真を撮るためにあるのではありません。</p>
+<p><strong>人間が撮りたい写真を撮るために、できないことや面倒なことを引き受けてくれればいい。</strong></p>
+<p>O-GPS1は、私にとってそういう道具でした。</p>
+<p>そして振り返ってみると、不思議なことがあります。</p>
+<p>比較明合成を知るきっかけになったのも、イルカ岩でした。</p>
+<p>アストロトレーサーを使って、自分が撮りたい構図を追いかけた場所も、イルカ岩でした。</p>
+<p>狙ったわけではありません。</p>
+<p>でも、</p>
+<p><strong>また、イルカ岩でした。</strong></p>
+<p>その写真は今も、私の寝室に飾ってあります。</p>
+<p>写真を撮る理由は、案外それくらい単純なのかもしれません。</p>
+<p><strong>自分の部屋に飾りたい写真が欲しい。</strong></p>
+<p>だから道具を使う。</p>
+<p>足りなければ工夫する。</p>
+<p>それでも足りなければ作る。</p>
+<p>そして最後は、自分で撮る。</p>
+<p>地球の自転は止められません。</p>
+<p>でも、</p>
+<p><strong>どんな写真にするかは、自分で決められます。</strong></p>
+<p>――つづく</p>
+
+  </div>
+
+  
+
+  
+  <section class="kzc-product-context kzc-story-related">
+    <p class="kzc-product-context-label">この話につながる現在のSidekick</p>
+    <ul>
+      
+      <li><a href="/sidekick-star">Sidekick Star →</a></li>
+      
+    </ul>
+  </section>
+  
+
+  <footer class="kzc-article-footer">
+    <nav class="kzc-story-nav" aria-label="前後のStory">
+      <div class="kzc-story-nav-prev">
+        
+        <a href="/story/good-tools-get-simpler">
+          <span class="kzc-story-nav-label">前の話</span>
+          ← いい道具は、だんだん簡単になる
+        </a>
+        
+      </div>
+      <div class="kzc-story-nav-next">
+        
+        <a href="/story/when-and-where-should-i-go">
+          <span class="kzc-story-nav-label">次の話</span>
+          「いつ、どこへ行けばいい？」から始まった →
+        </a>
+        
+      </div>
+    </nav>
+
+    <section class="kzc-author-block">
+      
+      <h2>この記事を書いた人</h2>
+      <p>
+        村田一朗は写真家であり、Sidekickの開発者です。ここに書かれているのは、実際の撮影・現像・講評・
+        道具作りの経験です。文中に出てくるメーカー・雑誌・イベントの名前は、過去に関わった仕事として
+        登場するものであり、それらの企業によるSidekickの推薦・公認を意味するものではありません。
+      </p>
+      <p><a href="/ichiro-murata">村田一朗について →</a></p>
+      
+    </section>
+    <p><a href="/story">← Storyの一覧へ戻る</a></p>
+  </footer>
+</article>
+
+</main>
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>打ち出の小槌</h4>
+          <ul>
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>AI Lab</h4>
+          <ul>
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Workshop</h4>
+          <ul>
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>サポート</h4>
+          <ul>
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <h4>Sidekick Lab</h4>
+          <ul>
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

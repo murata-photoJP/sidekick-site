@@ -1,10 +1,11 @@
 # デプロイ前チェック
 
-サイト全体（`site` / `knowledge` / `development-log` の3系統）に共通する、
+サイト全体（`site` / `knowledge` / `development-log` / `story` の4系統）に共通する、
 デプロイ前に確認すべき手順をまとめる。個別機能の実装記録・運用ルールは
 それぞれの専用ドキュメント（`DEVELOPMENT_LOG_BUILD.md`・`KNOWLEDGE_BUILD.md`・
-`KNOWLEDGE_UI_PHASE_A2.md`・`CHANGELOG_WORKFLOW.md`・`CODEX_CHANGELOG_PROMPT.md`・
-`DOWNLOAD_CONTACTS.md`）を参照すること。このドキュメントはそれらを置き換えない。
+`KNOWLEDGE_UI_PHASE_A2.md`・`STORY_BUILD.md`・`CHANGELOG_WORKFLOW.md`・
+`CODEX_CHANGELOG_PROMPT.md`・`DOWNLOAD_CONTACTS.md`）を参照すること。
+このドキュメントはそれらを置き換えない。
 
 ## 背景
 
@@ -17,9 +18,9 @@
 
 ---
 
-## 1. テンプレート↔本番HTML の差分チェック（3系統ぶん）
+## 1. テンプレート↔本番HTML の差分チェック（4系統ぶん）
 
-このリポジトリには、テンプレートから静的HTMLを生成する仕組みが**3系統**ある。
+このリポジトリには、テンプレートから静的HTMLを生成する仕組みが**4系統**ある。
 1つだけ確認して安心しないこと。
 
 | 系統 | テンプレート | ビルドスクリプト | 本番出力 |
@@ -27,27 +28,41 @@
 | site | `templates/site/pages/` | `build/site/build_site.py` | ルート直下・`en/`直下の各ページ |
 | knowledge（打ち出の小槌） | `templates/knowledge/` | `build/knowledge/build_knowledge.py` | `knowledge/`・`en/knowledge/` |
 | development-log（開発日誌） | `templates/development-log/` | `build/development-log/build_development_log.py` | `development-log/`・`en/development-log/` |
+| story | `templates/story/` | `build/story/build_story.py` | `story/`・`en/story/` |
 
 それぞれに、テンプレートのレンダリング結果と本番HTMLを比較する回帰テストがある
-（2026-08-30 `d3e8902`で追加）。
+（2026-08-30 `d3e8902`で3系統ぶんを追加、2026-08-31にstory系統を追加）。
 
 ```bash
 python -m pytest tests/site/test_build_site.py::test_production_html_matches_template_render -q
 python -m pytest tests/knowledge/test_build_knowledge.py::test_production_knowledge_html_matches_template -q
 python -m pytest tests/development-log/test_build_development_log.py::test_production_devlog_html_matches_template -q
+python -m pytest tests/story/test_build_story.py::test_production_story_html_matches_template -q
 ```
 
-デプロイ前は、この3つを個別に意識するか、後述の「2. pytestの実行範囲」で
+**ヘッダー・フッター（`templates/knowledge/header.html`・`header_en.html`・
+`footer.html`・`footer_en.html`）は4系統すべてが共用している。** ここを1行でも変えたら、
+**4系統すべてを再ビルドして本番へ反映する**こと。1系統だけ再ビルドすると、残りは
+次に誰かが再ビルドするまで古いヘッダーのまま配信され続ける（この文書の「背景」と
+同じ構造の見落としになる）。
+
+なお`build_knowledge.py`の英語版出力は`--output`の**兄弟**（`{output}/../en/knowledge/`）
+へ書かれる。`--output build-output/knowledge`で生成した場合、英語版は
+`build-output/knowledge/en/`ではなく`build-output/en/knowledge/`にある。
+本番へコピーするときに見落としやすい（2026-08-31に実際に見落とし、
+`test_production_knowledge_html_matches_template`が検出した）。
+
+デプロイ前は、この4つを個別に意識するか、後述の「2. pytestの実行範囲」で
 まとめて実行すること。
 
-**期待される出力**：上記3テストはいずれも比較前にBOM・CRLFを正規化する
+**期待される出力**：上記4テストはいずれも比較前にBOM・CRLFを正規化する
 （`_normalize_html`系関数、「内容の差ではない」という理由で意図的に無視している）。
 そのため、**BOMの有無だけの食い違いはこのテストでは検出できない**。2026-08-30時点で
 テンプレート6本（`index.html`・`ai-lab.html`・`ai-review.html`・`camera-ai.html`・
 `pc-ai.html`・`shooting-ai.html`）にBOMがあり本番にBOMが無い状態だったが、
 これは上記テストでは常に検出されず「差分ゼロ」のまま通っていた。BOMの有無自体は
 本文書「4. BOMの有無を確認する」のバイト単位チェックで別途確認すること。
-上記3テストが期待するのは、あくまで**BOM・CRLF以外の内容が完全に一致していること**であり、
+上記4テストが期待するのは、あくまで**BOM・CRLF以外の内容が完全に一致していること**であり、
 これは常に差分ゼロが期待値になる（例外は無い）。
 
 テストに頼らず手動で確認する場合は、各ビルドスクリプトを`build-output/`配下の
@@ -59,15 +74,16 @@ python -m pytest tests/development-log/test_build_development_log.py::test_produ
 
 ## 2. pytest の実行範囲
 
-**`python -m pytest tests -q` は254件**（`tests/site`・`tests/knowledge`・
-`tests/development-log`・`tests/tools`の全4スイート、`tests/tools`の50件を含む）。
+**`python -m pytest tests -q` は318件**（`tests/site` 46件・`tests/knowledge` 87件・
+`tests/development-log` 71件・`tests/tools` 50件・`tests/story` 64件の全5スイート）。
+2026-08-31にStory領域の新設で254件→318件になった（`tests/story`の64件が増分）。
 
 `tests/`配下の一部だけを指定すると、当然それより少ない件数になる。
-例えば3スイート（`tests/tools`を含めない）だけの実行では204件になる。
+例えば`tests/tools`を含めない4スイートだけの実行では268件になる。
 2026-08-30、この取り違えが実際に報告に混ざった。
 
 デプロイ前・作業報告で件数を出すときは、**実行したコマンドと対象を件数に併記する**
-こと。「254 passed」とだけ書かず、「`pytest tests -q` で254 passed」のように書く。
+こと。「318 passed」とだけ書かず、「`pytest tests -q` で318 passed」のように書く。
 
 ---
 

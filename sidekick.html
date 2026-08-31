@@ -1078,7 +1078,16 @@
      アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
      リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
      報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
-     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。 -->
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
 
 
 <div class="lang-banner" id="lang-banner">
@@ -1112,6 +1121,7 @@
       <a href="/gallery" >Gallery</a>
       <a href="/sidekick" aria-current="page">Sidekickとは</a>
       <a href="/about" >About</a>
+      <a href="/story" >Story</a>
       <a href="/development-log" >開発日誌</a>
       <a href="/changelog" >更新履歴</a>
       <a href="/faq" >Support</a>
@@ -1717,6 +1727,13 @@
               <strong style="color:var(--text);">その全てに共通するのは、膨大な情報から何を残し、何を捨てるかという判断だ。</strong><br>
               Sidekickは、その判断をツールとして外に出す試みである。
             </p>
+            <!-- 2026-08-31追加: Developer Storyはここで要約として終わるが、実際の経緯は
+                 長い。読み物として続きを読みたい人のためにStoryへ渡す（既存のレイアウト・
+                 CTA構成は変更せず、この段落を足すだけに留めている）。 -->
+            <p style="margin:18px 0 0;font-size:14px;line-height:1.9;color:var(--muted);">
+              ここに書いたのは要約です。実際に何があったのかは
+              「<a href="/story" style="color:var(--accent2);">Story</a>」に本人が書いています。
+            </p>
           </div>
         </div>
 
@@ -1800,6 +1817,9 @@
             <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
             <li><a href="/portrait">👤 Sidekick Portrait</a></li>
             <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
           </ul>
         </div>
 
@@ -1846,6 +1866,7 @@
           <ul>
             <li><a href="/about">About</a></li>
             <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
             <li><a href="/gallery">Gallery</a></li>
             <li><a href="/ichiro-murata">村田 一朗</a></li>
             <li><a href="/legal">特定商取引法</a></li>
