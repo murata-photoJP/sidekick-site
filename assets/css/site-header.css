@@ -99,8 +99,14 @@
     padding:10px 4px;
     min-height:44px;
   }
-  /* JSが動いているときだけ、data-open="false"で折りたたむ */
-  body.kzc-js-nav #kzc-nav-menu[data-open="false"]{
+  /* JSが動いているときだけ、data-open="false"で折りたたむ。
+
+     2026-08-31修正: assets/css/knowledge.css と同じ不具合がこちらにもあった。
+     セレクタが日本語ヘッダー専用のID（#kzc-nav-menu）だったため、英語ヘッダー
+     （id="kzc-nav-menu-en"）に一致せず、**英語ページのモバイルメニューが一度も
+     畳まれない**状態が続いていた。ID前方一致に変えて両方へ効くようにする。
+     詳しい経緯は knowledge.css の同じ箇所のコメントを参照。 */
+  body.kzc-js-nav nav[id^="kzc-nav-menu"][data-open="false"]{
     display:none;
   }
 }

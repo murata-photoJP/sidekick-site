@@ -140,8 +140,20 @@ a:focus-visible, button:focus-visible{
     padding:10px 4px;
     min-height:44px;
   }
-  /* JSが動いているときだけ、data-open="false"で折りたたむ */
-  body.kzc-js-nav #kzc-nav-menu[data-open="false"]{
+  /* JSが動いているときだけ、data-open="false"で折りたたむ。
+
+     2026-08-31修正: セレクタが日本語ヘッダー専用のID（#kzc-nav-menu）だったため、
+     英語ヘッダー（id="kzc-nav-menu-en"）には一致せず、**英語ページのモバイルメニューが
+     一度も畳まれない**状態が2026-07-20（英語版Knowledge公開、commit 2b64bca）から
+     約6週間続いていた。「Menu」ボタンは表示されaria-expandedも切り替わるのに、
+     見た目は常に全項目が展開されたまま、という症状（村田さんの公開前レビュー中に
+     ブラウザ実機で発見）。
+
+     ID前方一致に変えて、#kzc-nav-menu と #kzc-nav-menu-en の両方に効くようにする。
+     クラス（.nav）ではなくIDを使うのは、旧ヘッダー由来の`.nav{display:none}`が
+     新ヘッダーを丸ごと隠した過去の不具合（templates/site/pages/sky-effect.html の
+     コメント参照）と同じ広すぎるセレクタを避けるため。 */
+  body.kzc-js-nav nav[id^="kzc-nav-menu"][data-open="false"]{
     display:none;
   }
 }
