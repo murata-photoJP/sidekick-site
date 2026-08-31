@@ -109,6 +109,8 @@
     .section-label{
       font-size:13px;font-weight:800;letter-spacing:.08em;
       color:var(--sub);text-transform:uppercase;
+      /* h2 のUA既定 margin-top を打ち消し、div だった頃と同じ位置に保つ */
+      margin-top:0;
       margin-bottom:20px;
       padding-bottom:12px;
       border-bottom:1px solid rgba(255,255,255,.07);
@@ -276,7 +278,7 @@
     <div class="wrap">
 
       <!-- 1x.com Awarded 作品 -->
-      <div class="section-label">🏆 1x.com Awarded 作品</div>
+      <h2 class="section-label">🏆 1x.com Awarded 作品</h2>
 
       <div class="award-highlight">
         <div class="main-img">
@@ -295,7 +297,7 @@
       </div>
 
       <!-- 販売中の作品 -->
-      <div class="section-label" style="margin-top:56px;">販売中の作品（Fine Art America）</div>
+      <h2 class="section-label" style="margin-top:56px;">販売中の作品（Fine Art America）</h2>
 
       <!--
         ================================================================
