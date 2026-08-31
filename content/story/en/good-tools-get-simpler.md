@@ -351,7 +351,7 @@ At the same time, I sometimes find a slightly quirky lens — a Chinese 50mm f/1
 
 That is
 
-**because it's play.**
+**because it's just for fun.**
 
 Having a high-performance lens and then using a quirky one for fun is enjoyable.
 
@@ -539,7 +539,7 @@ Then, towards evening, the cloud began to break up a little.
 
 I went out to shoot.
 
-The manager of Enzanso went out too.
+The president of Enzanso went out too.
 
 Photographers and cameramen —
 
@@ -557,7 +557,7 @@ A sea of cloud spread from directly below Mt. Yari all the way to the foot of Mt
 
 The conditions were extraordinary.
 
-After the sun went down, the manager of Enzanso came over.
+After the sun went down, the president of Enzanso came over.
 
 "Where on earth were you shooting?"
 
@@ -569,7 +569,7 @@ And then:
 
 With conditions that good, where exactly had Murata been shooting from?
 
-I imagine the manager suspected
+I imagine the president suspected
 
 **that I had found a better spot than his and shot from there.**
 
@@ -577,7 +577,7 @@ I did shoot, of course.
 
 I think I got it, and got it well.
 
-Probably no worse than the manager did.
+Probably no worse than the president did.
 
 But we never compared.
 
