@@ -225,7 +225,7 @@ Nor was it a problem that buying an expensive instrument would solve. At least a
 
 So:
 
-**build something that can measure it.**
+**If you can't measure it, build something that can.**
 
 Feed in a reference clock and a reset signal from outside, and follow the timing with counters.
 
