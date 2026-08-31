@@ -1,18 +1,55 @@
 {# Sidekick Planner in-development page (English, added 2026-08-31).
 
-   Mirrors templates/site/pages/planner.html. Same structure, same CSS, same
-   deliberate omissions — see the Japanese template's comment block for the list of
-   things intentionally left out (price, availability, auth/update/signing method,
-   web and mobile versions, arch composition search, cloud-cover overlay). All of
-   those are undecided or out of scope for Version 1, and writing them here would
-   read as a product promise.
+   Mirrors templates/site/pages/planner.html. The Japanese page is the source of
+   truth; keep both in step when either changes.
 
-   The Japanese page is the source of truth; keep both in step when either changes. #}
+   -- 2026-08-31, decision from Murata-san's pre-publication review (important) --
+   The first version listed the development status in four cards ("running in the
+   validation prototype" / "scope planned for Version 1" / "not yet decided" /
+   "out of scope for Version 1"), built from the Planner repository's
+   CURRENT_WORK.md and OPEN_QUESTIONS.md. Murata-san judged that this published
+   **too much internal development detail**, and the page was changed to:
+
+     this page is not a status inventory. It is the landing place for
+     read a Story -> get interested in Planner -> understand what it does ->
+     understand it is still in development.
+
+   The following are therefore **deliberately not published** (do not restore them
+   on AI judgement):
+
+     - how far implementation has actually got
+     - the "Diamond / Pearl" feature naming (avoids exposing the Diamond XX
+       expansion; Pearl Fuji appearing inside Story 5 is fine)
+     - named data sources such as 3D city models / PLATEAU / elevation datasets
+       (to be handled when formal product specs and attribution require it)
+     - the list of things out of scope for Version 1 (web/smartphone versions,
+       Milky Way arch compositions, cloud-cover forecasts, in-app sharing).
+       Sharing in particular no longer matches the current state of the QR Share
+       track, so it must not appear here
+     - internal product scope (no external AI APIs / text and CSV export /
+       sharing delegated to the OS / data distribution / update mechanism /
+       authentication / code signing)
+     - price, availability, and distribution model (undecided; limited to
+       "will be announced once decided")
+
+   The following are **kept**:
+     - "It is not software that produces the right answer for a photograph"
+     - leave what can be calculated to the computer
+     - find the candidates a photographer can judge for themselves
+     - some things can be known by calculation, some only on site
+     - no promise that "go here and you will get a good photograph"
+     - the link to Story 5
+     - that it is currently in development
+     - that manufacturers do not endorse or approve Planner
+   ---------------------------------------------------------------------------
+
+   "In development" appears in three places: the badge, the opening notice, and
+   the closing disclaimer (tests/story/test_ja_en_parity.py checks for it). #}
 {% extends "base.html" %}
 
 {% block title %}Sidekick Planner (in development) — Find the when and where{% endblock %}
 
-{% block meta_description %}Sidekick Planner is a shot-planning tool for photographers: it looks for the "when and where" at which the sky object you want and the landscape you want line up. Currently in development for Windows PC, covering sun and moon location/date search and Milky Way direction, altitude and visibility guidance.{% endblock %}
+{% block meta_description %}Sidekick Planner is a shot-planning tool for photographers: it looks for the "when and where" at which the sky object you want and the landscape you want line up. Currently in development for Windows PC, covering candidate locations and dates for the sun and moon, and where and when the Milky Way is visible.{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/en/planner{% endblock %}
 
@@ -101,31 +138,26 @@
     .sec-body p strong{color:var(--text);font-weight:700;}
     .sec-body p:last-child{margin-bottom:0;}
 
-    /* -- Status lists -- */
-    .state-grid{display:grid;gap:16px;margin-top:8px;}
-    @media (min-width:760px){ .state-grid{grid-template-columns:1fr 1fr;} }
-    .state{
+    /* -- Features in development -- */
+    .features{
       background:var(--card);border:1px solid var(--line);
-      border-radius:var(--r);padding:20px 22px;
+      border-radius:var(--r);padding:24px 26px;max-width:820px;
     }
-    .state-label{
-      font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
-      margin-bottom:10px;
+    .features ul{list-style:none;margin:0;padding:0;}
+    .features li{
+      font-size:15px;line-height:1.9;color:var(--sub);
+      padding-left:20px;position:relative;margin-bottom:12px;
     }
-    .state-now .state-label{color:var(--accent2);}
-    .state-plan .state-label{color:var(--sub);}
-    .state-undecided .state-label{color:var(--muted);}
-    .state ul{list-style:none;margin:0;padding:0;}
-    .state li{
-      font-size:14px;line-height:1.8;color:var(--sub);
-      padding-left:18px;position:relative;margin-bottom:8px;
+    .features li:last-child{margin-bottom:0;}
+    .features li::before{
+      content:"";position:absolute;left:0;top:12px;
+      width:7px;height:7px;border-radius:50%;background:var(--accent);
     }
-    .state li:last-child{margin-bottom:0;}
-    .state li::before{
-      content:"";position:absolute;left:0;top:11px;
-      width:6px;height:6px;border-radius:50%;background:var(--muted);
+    .features-foot{
+      margin-top:18px;padding-top:16px;
+      border-top:1px solid var(--line);
+      font-size:13px;line-height:1.85;color:var(--muted);
     }
-    .state-now li::before{background:var(--accent);}
 
     /* -- Principle -- */
     .principle{
@@ -183,10 +215,8 @@
           </p>
           <div class="dev-note">
             <strong>This is not a product page.</strong>
-            Sidekick Planner is currently in development. There is no release yet, and
-            availability, pricing, and how it will be distributed are not decided.
-            What is written here is limited to what actually runs as of 31 August 2026,
-            plus the scope planned for Version 1.
+            Sidekick Planner is currently in development, and there is nothing to use yet.
+            Availability, pricing, and other details will be announced once decided.<br>
             Why it is being built is described in
             <a href="/en/story/when-and-where-should-i-go">Story: "It Started with 'When and Where Should I Go?'"</a>
           </div>
@@ -222,58 +252,21 @@
       </div>
     </section>
 
-    <!-- -- Current status -- -->
+    <!-- -- Features in development -- -->
     <section class="sec">
       <div class="wrap">
-        <h2 class="sec-h2">Current status (as of 31 August 2026)</h2>
-        <p class="sec-note">
-          So that things still under consideration are not read as product commitments,
-          what actually runs today is listed separately from what is still to be decided.
-        </p>
-        <div class="state-grid">
-
-          <div class="state state-now">
-            <p class="state-label">Running in the validation prototype</p>
-            <ul>
-              <li>Two-way search for sun/moon alignments: candidate locations, and the dates and times they occur</li>
-              <li>A "nightscape / sun and moon" genre (a core set of stars, constellations, and planets, plus the Milky Way)</li>
-              <li>Picking a point on the map and listing the resulting candidates</li>
-              <li>Terrain and building silhouettes toward the target, from elevation data and 3D city models</li>
-              <li>A composition preview for the chosen date, time, and location</li>
-            </ul>
-          </div>
-
-          <div class="state state-plan">
-            <p class="state-label">Scope planned for Version 1</p>
-            <ul>
-              <li>Delivered as an application for Windows PC</li>
-              <li>Two-way search — candidate locations and occurrence times — for the sun and moon</li>
-              <li>Milky Way limited to direction, altitude, tilt, and start/end of visibility</li>
-              <li>Targeted at locations in Japan, with times shown in Japan Standard Time</li>
-              <li>Calculation runs locally; no external AI APIs are used</li>
-              <li>Results exported as text/CSV, with sharing left to the operating system</li>
-            </ul>
-          </div>
-
-          <div class="state state-undecided">
-            <p class="state-label">Not yet decided</p>
-            <ul>
-              <li>Availability, distribution model, and price</li>
-              <li>How data is distributed and updated</li>
-              <li>Detailed system requirements</li>
-            </ul>
-          </div>
-
-          <div class="state state-undecided">
-            <p class="state-label">Out of scope for Version 1</p>
-            <ul>
-              <li>Web and smartphone versions (candidates for the future)</li>
-              <li>Milky Way arch compositions and precise composition search (Version 2 onwards)</li>
-              <li>Cloud-cover forecast map overlays (set aside on licensing and cost grounds)</li>
-              <li>In-app sharing features</li>
-            </ul>
-          </div>
-
+        <h2 class="sec-h2">The main features being built</h2>
+        <p class="sec-note">This is software in development, so the details may change.</p>
+        <div class="features">
+          <ul>
+            <li>Find candidate locations and dates from how the sun or moon lines up with a landscape</li>
+            <li>Check the direction and altitude of the Milky Way, and when it is visible</li>
+            <li>Plan a shoot while taking terrain, buildings, and other obstructions into account</li>
+            <li>Check the composition from a chosen date, time, and location</li>
+          </ul>
+          <p class="features-foot">
+            Development is currently aimed at Windows PC, for use in Japan.
+          </p>
         </div>
       </div>
     </section>
@@ -321,7 +314,7 @@
 
           <div class="disc">
             <strong>About how this page is written.</strong>
-            Sidekick Planner is software under development. The "planned scope" above reflects the
+            Sidekick Planner is software under development. What is described above reflects the
             current development direction; it is not a commitment to deliver, and it may change for
             implementation reasons. Availability, pricing, and how to obtain it will be announced in
             the <a href="/en/changelog">Changelog</a> and the
