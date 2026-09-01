@@ -195,6 +195,16 @@
     <lastmod>2026-08-30</lastmod>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/legal</loc>
+    <lastmod>2026-07-25</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/privacy</loc>
+    <lastmod>2026-07-25</lastmod>
+    <priority>0.3</priority>
+  </url>
 <!-- BEGIN AUTO-GENERATED KNOWLEDGE URLS (generate_knowledge_sitemap.py) -->
   <url>
     <loc>https://www.sidekick-lab.com/en/knowledge</loc>

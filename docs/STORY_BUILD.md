@@ -357,9 +357,9 @@ python -m pytest tests/story -q
 触れない。`test_production_story_html_matches_template`と`test_ja_en_parity.py`だけは
 本番の生成物を**読む**が、書き込みは一切しない。
 
-リポジトリ全体は`python -m pytest tests -q`で318件（`tests/site` 46件・
-`tests/knowledge` 87件・`tests/development-log` 71件・`tests/tools` 50件・
-`tests/story` 64件）。
+リポジトリ全体の実行範囲とPASS条件は`docs/DEPLOY_CHECKLIST.md`「2. pytestの実行範囲」へ
+一元化してある。合計件数はUnitごとに増えるため、この文書には書かない（2026-09-01まで
+両方の文書に318件と書かれたまま実測399件まで放置されていた）。
 
 ---
 

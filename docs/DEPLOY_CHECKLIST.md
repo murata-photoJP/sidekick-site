@@ -74,16 +74,70 @@ python -m pytest tests/story/test_build_story.py::test_production_story_html_mat
 
 ## 2. pytest の実行範囲
 
-**`python -m pytest tests -q` は318件**（`tests/site` 46件・`tests/knowledge` 87件・
-`tests/development-log` 71件・`tests/tools` 50件・`tests/story` 64件の全5スイート）。
-2026-08-31にStory領域の新設で254件→318件になった（`tests/story`の64件が増分）。
+全体を通すコマンドは常にこれ。
 
-`tests/`配下の一部だけを指定すると、当然それより少ない件数になる。
-例えば`tests/tools`を含めない4スイートだけの実行では268件になる。
+```powershell
+python -m pytest tests -q
+```
+
+**PASS条件は「全件PASSし、次の5スイートがすべて収集されていること」。**
+
+- `tests/site`
+- `tests/knowledge`
+- `tests/development-log`
+- `tests/tools`
+- `tests/story`
+
+`tests/`配下の一部だけを指定すると、当然それより少ない件数になる。とくに
+`tests/tools`は忘れやすく、これを含めない4スイートだけの実行は全体より少なくなる。
 2026-08-30、この取り違えが実際に報告に混ざった。
 
 デプロイ前・作業報告で件数を出すときは、**実行したコマンドと対象を件数に併記する**
-こと。「318 passed」とだけ書かず、「`pytest tests -q` で318 passed」のように書く。
+こと。「399 passed」とだけ書かず、「`pytest tests -q` で399 passed」のように書く。
+
+**合計件数はこの文書に確定値として書かない。** 件数はUnitごとに増えるため、書けば
+必ず陳腐化する。実際、318件と書かれたまま実測399件まで放置され、この文書自身が
+「件数を併記せよ」と定めているのに文書側の数字が最も古い、という状態になっていた
+（2026-09-01に是正）。報告に出す件数は、そのつど上のコマンドを実行して得ること。
+
+参考値（2026-09-01時点、確定値ではない）：`pytest tests -q`で399件
+（`tests/site` 127・`tests/knowledge` 87・`tests/development-log` 71・
+`tests/tools` 50・`tests/story` 64）。
+
+スイートを追加・改名したときは上の一覧も更新すること。一覧と実体の一致は
+`tests/site/test_deploy_policy.py`が検査する。
+
+---
+
+## 2-2. sitemap.xml へ載せるかどうかの判断
+
+`sitemap.xml`は**前半（site系ページ）が手書き、後半3ブロックが自動生成**という
+混成ファイルである。
+
+| 範囲 | 生成 |
+|---|---|
+| 先頭〜`BEGIN AUTO-GENERATED KNOWLEDGE URLS`の直前 | **手書き**（site系の全ページ） |
+| KNOWLEDGE / DEVELOPMENT LOG / STORY の各マーカーブロック | 各`generate_*_sitemap.py`が置換 |
+
+site系にはジェネレータが無いため、**ページを新設しても誰も自動では追加しない**。
+実際に`/en/legal`・`/en/privacy`は2026-07-25に公開されながら、2026-09-01までの
+38日間sitemapへ入っていなかった。原因は、EN全ページを一括登録した
+コミット（2026-07-14）の時点でこの2ページがまだ存在せず、後から追加したコミットが
+sitemapに触れなかったこと。悪意も設計判断も無い、単なる追随漏れである。
+
+**判断基準**：ページが次を*すべて*満たすなら、sitemapへ載せる。
+
+1. self-canonical を持つ（自分自身が正規URL）
+2. `<meta name="robots">` で noindex にしていない
+3. 対になる言語版があり、hreflang が相互参照になっている
+4. その対の片方が既にsitemapへ載っている
+
+購入・ダウンロード・完了などの導線ページ（`buy-*`・`dl-*`・`thanks*`・
+`register-dl`）は3を満たさない単独の機能ページで、意図的に非掲載にしている。
+`workshop`は日本語限定（英語版を作らない、`build_site.py`に明記）なので
+対称性の問題ではない。
+
+この4条件の破れは`tests/site/test_deploy_policy.py`が検出する。
 
 ---
 
