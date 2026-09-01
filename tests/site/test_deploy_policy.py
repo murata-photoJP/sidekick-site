@@ -52,6 +52,13 @@ TRANSACTIONAL = {
     "register-dl.html", "thanks.html", "thanks-portrait.html", "thanks-sky.html",
 }
 
+# 写真実践塾（photo-kouza.com）の講座を紹介する単独LP。日本語限定で対になる
+# 言語版が無いため4条件では掲載可否が決まらない。2026-09-01に村田さんが
+# 「独立した検索Landingとしてindexさせる（C-1）」と決定した。
+# 根拠と、noindex・canonical統合を採らなかった理由は
+# docs/DEPLOY_CHECKLIST.md「2-2.」の「単独LP（star-lp / kouzu-lp）の扱い」にある。
+STANDALONE_LP = {"star-lp.html", "kouzu-lp.html"}
+
 
 def _production_pages() -> list[Path]:
     """本番へ配置されるHTML。ビルドの一時出力・バックアップ・テンプレートは除く。"""
@@ -184,13 +191,48 @@ def test_legal_pages_are_listed_in_both_languages(url: str) -> None:
     assert url in SITEMAP_SET, f"{url} がsitemapに無い"
 
 
+@pytest.mark.parametrize("rel", sorted(STANDALONE_LP))
+def test_standalone_lp_has_self_canonical(rel: str) -> None:
+    """単独LPが自分自身を指すcanonicalを持つこと（C-1決定）。
+
+    他ページへ統合するcanonicalを入れてしまわないよう、値まで固定する。
+    """
+    p = REPO_ROOT / rel
+    m = _meta(p)
+    expected = _public_url(rel)
+    assert m["canonical"] == expected, (
+        f"{rel}: canonical={m['canonical']}（期待は self canonical の {expected}）"
+    )
+
+
+@pytest.mark.parametrize("rel", sorted(STANDALONE_LP))
+def test_standalone_lp_og_url_matches_canonical(rel: str) -> None:
+    """単独LPの og:url が canonical と同じ正規URLであること。
+
+    もとは `https://sidekick-lab.com/{slug}.html` を指しており、apex（vercel.jsonで
+    wwwへ301）と `.html`（cleanUrlsで301）の二重にリダイレクトされる形式だった。
+    build_site.py の生成ページは og:url に canonical をそのまま流用している。
+    """
+    t = (REPO_ROOT / rel).read_text(encoding="utf-8-sig")
+    m = re.search(r'<meta property="og:url" content="([^"]+)"', t)
+    assert m, f"{rel}: og:url が無い"
+    assert m.group(1) == _public_url(rel), f"{rel}: og:url={m.group(1)}"
+
+
+@pytest.mark.parametrize("rel", sorted(STANDALONE_LP))
+def test_standalone_lp_is_in_the_sitemap(rel: str) -> None:
+    """単独LPがsitemapへ載っていること（indexさせる方針の裏づけ）。"""
+    url = _public_url(rel)
+    assert url in SITEMAP_SET, f"{url} がsitemapに無い"
+
+
 def test_no_production_page_declares_noindex() -> None:
     """noindex指定が入ったら気付けるようにする。
 
     2026-09-01時点で `<meta name="robots">` を持つ本番ページは1つも無い。
-    noindexを使い始めるのは方針判断（例：star-lp/kouzu-lp のindex方針）なので、
-    黙って増えないよう固定する。増やすときはこのテストと
-    docs/DEPLOY_CHECKLIST.md「2-2.」を同時に更新すること。
+    候補だったstar-lp/kouzu-lpも、同日の決定でnoindexではなくindex（C-1）になった。
+    noindexを使い始めるのは方針判断なので、黙って増えないよう固定する。
+    増やすときはこのテストと docs/DEPLOY_CHECKLIST.md「2-2.」を同時に更新すること。
     """
     declared = []
     for p in PRODUCTION_PAGES:

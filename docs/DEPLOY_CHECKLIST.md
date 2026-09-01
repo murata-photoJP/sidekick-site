@@ -139,6 +139,30 @@ sitemapに触れなかったこと。悪意も設計判断も無い、単なる�
 
 この4条件の破れは`tests/site/test_deploy_policy.py`が検出する。
 
+### 単独LP（star-lp / kouzu-lp）の扱い — 2026-09-01 村田さん決定
+
+`star-lp.html`・`kouzu-lp.html`は、Sidekick製品ではなく**写真実践塾**
+（`photo-kouza.com`）の講座を紹介する単独LP。共通ヘッダー／フッターを使わず
+（「村田一朗 写真の学び場」という別ブランディング）、テンプレート生成でもなく、
+サイト内の被リンクは互いのみ。それでいて本文は長文・作例写真つきで、
+title / description / keywords も明確に検索流入を狙う作りになっている。
+
+**方針：独立した検索Landingとしてindexさせる（C-1）。**
+
+- self canonical を持たせる（`https://www.sidekick-lab.com/{slug}`）
+- `og:url` は canonical と同じ値にする
+- sitemapへ載せる（priority 0.6、`workshop`と同じ「学び」系の扱い）
+- **noindexにはしない。他ページへのcanonical統合もしない**
+
+他ページへ統合しない理由は、統合先となる重複ページがサイト内に存在しないため。
+これらは外部講座の紹介であり、`/lp-star`（SideKick Star の製品LP）とは
+検索意図も内容も別物である。
+
+上の4条件は対になる言語版を前提にしているが、この2ページは日本語限定で
+条件3を満たさない。そのため掲載可否は4条件では決まらず、この節の決定が根拠になる。
+`tests/site/test_deploy_policy.py`が、canonical・og:url・sitemap掲載・
+noindexでないことを名指しで固定している。
+
 ---
 
 ## 3. 一括置換をするときのGUARD手順
