@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" width="800" height="620" role="img" aria-labelledby="f14title">
+<title id="f14title">Tracking residual map, 5x5, px. 14 mm, 60 s, center-fixed. Idealized model.</title>
+<style>.m{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",Segoe UI,Roboto,sans-serif;font-size:26px;fill:#8c96aa}.v{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",Segoe UI,Roboto,sans-serif;font-size:30px;font-weight:600;text-anchor:middle;dominant-baseline:middle}</style>
+<text class="m" x="70" y="30">14 mm &#183; 60 s &#183; center-fixed</text>
+<text class="m" x="70" y="64">13&#215;13 &#8594; 5&#215;5</text>
+<g>
+<rect x="70" y="88" width="132" height="88.2451" fill="#fa8801"/>
+<text class="v" x="136" y="132.123" fill="#09090c">23.5</text>
+<rect x="202" y="88" width="132" height="88.2451" fill="#623d13"/>
+<text class="v" x="268" y="132.123" fill="#eef1f8">8.0</text>
+<rect x="334" y="88" width="132" height="88.2451" fill="#18181d"/>
+<text class="v" x="400" y="132.123" fill="#eef1f8">0.4</text>
+<rect x="466" y="88" width="132" height="88.2451" fill="#643e13"/>
+<text class="v" x="532" y="132.123" fill="#eef1f8">8.2</text>
+<rect x="598" y="88" width="132" height="88.2451" fill="#fe8a00"/>
+<text class="v" x="664" y="132.123" fill="#09090c">23.9</text>
+<rect x="70" y="176.245" width="132" height="88.2451" fill="#dd7904"/>
+<text class="v" x="136" y="220.368" fill="#09090c">20.5</text>
+<rect x="202" y="176.245" width="132" height="88.2451" fill="#4b3116"/>
+<text class="v" x="268" y="220.368" fill="#eef1f8">5.6</text>
+<rect x="334" y="176.245" width="132" height="88.2451" fill="#18181d"/>
+<text class="v" x="400" y="220.368" fill="#eef1f8">0.4</text>
+<rect x="466" y="176.245" width="132" height="88.2451" fill="#4c3216"/>
+<text class="v" x="532" y="220.368" fill="#eef1f8">5.7</text>
+<rect x="598" y="176.245" width="132" height="88.2451" fill="#e07b04"/>
+<text class="v" x="664" y="220.368" fill="#09090c">20.8</text>
+<rect x="70" y="264.49" width="132" height="88.2451" fill="#d27406"/>
+<text class="v" x="136" y="308.613" fill="#09090c">19.4</text>
+<rect x="202" y="264.49" width="132" height="88.2451" fill="#412c17"/>
+<text class="v" x="268" y="308.613" fill="#eef1f8">4.6</text>
+<rect x="334" y="264.49" width="132" height="88.2451" fill="#18181d"/>
+<text class="v" x="400" y="308.613" fill="#eef1f8">0.4</text>
+<rect x="466" y="264.49" width="132" height="88.2451" fill="#422d17"/>
+<text class="v" x="532" y="308.613" fill="#eef1f8">4.7</text>
+<rect x="598" y="264.49" width="132" height="88.2451" fill="#d57505"/>
+<text class="v" x="664" y="308.613" fill="#09090c">19.7</text>
+<rect x="70" y="352.735" width="132" height="88.2451" fill="#dd7904"/>
+<text class="v" x="136" y="396.858" fill="#09090c">20.5</text>
+<rect x="202" y="352.735" width="132" height="88.2451" fill="#4b3116"/>
+<text class="v" x="268" y="396.858" fill="#eef1f8">5.6</text>
+<rect x="334" y="352.735" width="132" height="88.2451" fill="#18181d"/>
+<text class="v" x="400" y="396.858" fill="#eef1f8">0.4</text>
+<rect x="466" y="352.735" width="132" height="88.2451" fill="#4c3216"/>
+<text class="v" x="532" y="396.858" fill="#eef1f8">5.7</text>
+<rect x="598" y="352.735" width="132" height="88.2451" fill="#e07b04"/>
+<text class="v" x="664" y="396.858" fill="#09090c">20.8</text>
+<rect x="70" y="440.981" width="132" height="88.2451" fill="#fa8801"/>
+<text class="v" x="136" y="485.103" fill="#09090c">23.5</text>
+<rect x="202" y="440.981" width="132" height="88.2451" fill="#633d13"/>
+<text class="v" x="268" y="485.103" fill="#eef1f8">8.1</text>
+<rect x="334" y="440.981" width="132" height="88.2451" fill="#18181d"/>
+<text class="v" x="400" y="485.103" fill="#eef1f8">0.4</text>
+<rect x="466" y="440.981" width="132" height="88.2451" fill="#643e13"/>
+<text class="v" x="532" y="485.103" fill="#eef1f8">8.2</text>
+<rect x="598" y="440.981" width="132" height="88.2451" fill="#fe8a00"/>
+<text class="v" x="664" y="485.103" fill="#09090c">23.9</text>
+</g>
+<g stroke="#515969" stroke-width="1" opacity="0.55">
+<line x1="202" y1="88" x2="202" y2="529.226"/>
+<line x1="70" y1="176.245" x2="730" y2="176.245"/>
+<line x1="334" y1="88" x2="334" y2="529.226"/>
+<line x1="70" y1="264.49" x2="730" y2="264.49"/>
+<line x1="466" y1="88" x2="466" y2="529.226"/>
+<line x1="70" y1="352.735" x2="730" y2="352.735"/>
+<line x1="598" y1="88" x2="598" y2="529.226"/>
+<line x1="70" y1="440.981" x2="730" y2="440.981"/>
+</g>
+<g fill="none" stroke="#eef1f8" stroke-width="3">
+<rect x="335.5" y="265.99" width="129" height="85.2451"/>
+<rect x="71.5" y="89.5" width="129" height="85.2451"/>
+<rect x="599.5" y="89.5" width="129" height="85.2451"/>
+<rect x="71.5" y="442.481" width="129" height="85.2451"/>
+<rect x="599.5" y="442.481" width="129" height="85.2451"/>
+</g>
+<rect x="70" y="88" width="660" height="441.226" fill="none" stroke="#515969" stroke-width="2"/>
+<defs><linearGradient id="f14ramp" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#14161d"/><stop offset="1" stop-color="#ff8a00"/></linearGradient></defs>
+<rect x="70" y="563.226" width="300" height="24" fill="url(#f14ramp)" stroke="#515969" stroke-width="1"/>
+<text class="m" x="70" y="615.226">0</text>
+<text class="m" x="370" y="615.226" text-anchor="end">24</text>
+<text class="m" x="388" y="583.226">px</text>
+</svg>
