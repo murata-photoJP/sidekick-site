@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アストロトレーサーで星は止まるのに、なぜ地上は流れる？｜センサーシフト追尾の仕組み｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="星を追えば地上が流れる。これはアストロトレーサーだけの問題ではありません。撮像素子をX/Y移動と回転で動かして星を追う仕組みと、地上の像が画面のどこでどう流れるかを、公式資料・特許・理想化モデルから整理します。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/astrotracer-ground-blur">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">アストロトレーサーで星は止まるのに、なぜ地上は流れる？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">アストロトレーサーで星は止まるのに、なぜ地上は流れる？<span class="kzc-title-sub">センサーシフト追尾の仕組み</span></h1>
+    <p class="kzc-article-lead">星を追えば地上が流れる。これはアストロトレーサーだけの問題ではありません。撮像素子をX/Y移動と回転で動かして星を追う仕組みと、地上の像が画面のどこでどう流れるかを、公式資料・特許・理想化モデルから整理します。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-03">更新日：2026-09-03</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>PENTAXのアストロトレーサーを使うと、普通に固定撮影すれば流れてしまう星を、点に近い状態で写すことができます。</p>
+<p>その代わり、地上の山や建物は流れます。</p>
+<p>でも、これはアストロトレーサーだけに起きる特別な現象ではありません。</p>
+<p>赤道儀を使って星を追尾しても同じです。</p>
+<p>星を止めて撮れば、今度は地上が流れます。</p>
+<p>考えてみれば当然のことで、アストロトレーサーを使っても赤道儀を使っても、<strong>地球の自転そのものを止めることはできない</strong>からです。</p>
+<p>普通にカメラを三脚へ固定して撮影すれば、地上は止まり、星が流れます。</p>
+<p>星を追尾すれば、星の流れは小さくなりますが、その代わり地上が流れます。</p>
+<p>星と地上の間にある相対的な動きそのものが、なくなったわけではありません。</p>
+<p>では、アストロトレーサーと赤道儀では何が違うのでしょうか。</p>
+<p>大きな違いは、<strong>何を動かして星を追っているか</strong>です。</p>
+<p>赤道儀は、カメラとレンズそのものを地球の自転に合わせて動かします。</p>
+<p>一方、アストロトレーサーでは、カメラとレンズは三脚に固定したままです。</p>
+<p>動くのは、カメラの中にある撮像素子です。</p>
+<p>この違いを知ると、アストロトレーサーで地上が流れる仕組みだけでなく、その流れ方まで見えてきます。</p>
+<p>私がアストロトレーサーに関わったのは、製品が発売された2011年までさかのぼります。</p>
+<p>私の記憶では、当時はPENTAX K-5と発売前の試作機を使って撮影しました。『フォトテクニックデジタル』2011年8月号で「GPS UNIT O-GPS1」のTest Reportを担当しています。</p>
+<p>そのころから、星を追えば地上が流れることも、PENTAXの撮像素子が上下左右への移動だけでなく回転も利用できることも知っていました。</p>
+<p>ですから今回調べ直したのは、</p>
+<p>「アストロトレーサーを使うと、なぜ地上が流れるのか？」</p>
+<p>という基本原理そのものではありません。</p>
+<p>撮像素子を移動・回転させて星を追ったとき、地上の像は画面の中で実際にはどのように動くのか。</p>
+<p>長年使ってきたアストロトレーサーを、公式資料や特許、当時の開発者インタビュー、そして幾何学的なモデルまで含めて、改めて整理してみることにしました。</p>
+<h2>まず、固定撮影で何が起きているのか</h2>
+<p>アストロトレーサーの仕組みを考える前に、普通の固定撮影から整理してみます。</p>
+<p>カメラを三脚に載せて固定します。</p>
+<p>カメラもレンズも動きません。</p>
+<p>地上にある山や建物も動いていなければ、それらの像は画面上の同じ場所に写り続けます。</p>
+<p>一方、星はそうではありません。</p>
+<p>地球が自転しているため、地上から見ると星空全体が時間とともに動いて見えます。</p>
+<p>そのため露光時間を長くすれば、星は点ではなく線になっていきます。</p>
+<p>つまり固定撮影では、</p>
+<p><strong>地上は止まる。</strong><br />
+<strong>星は流れる。</strong></p>
+<p>という関係になります。</p>
+<p><img src="/images/knowledge/astrotracer/f01-fixed-tracking-equatorial-ja.svg" alt="固定撮影・アストロトレーサー・赤道儀の比較図。固定撮影は地上が止まり星が流れる。アストロトレーサーと赤道儀は星が止まり地上が流れる。動かすものだけが違う。" /></p>
+<p>図1：固定撮影・アストロトレーサー・赤道儀。<strong>動かすものは違うが、星を止めれば地上が流れるという関係は同じ。</strong></p>
+<p>では、星を止めるにはどうすればいいでしょう。</p>
+<p>星の動きに合わせて、撮影する側も動かせばいい。</p>
+<p>それが追尾撮影です。</p>
+<h2>星を追えば、今度は地上が流れる</h2>
+<p>赤道儀では、地球の自転によって星が動いて見える分だけ、カメラとレンズを動かして星を追います。</p>
+<p>そうすれば、露光中も星は画面上のほぼ同じ場所にとどまり、星を点として写しやすくなります。</p>
+<p>しかし、そのカメラから見れば、今度は地上が動きます。</p>
+<p>山も建物も実際には動いていません。</p>
+<p>それでも星を追ってカメラの向きそのものが変わっていくため、写真の中では地上が流れていきます。</p>
+<p>アストロトレーサーでも、結果だけ見れば同じことが起こります。</p>
+<p><strong>星を追えば、地上が流れる。</strong></p>
+<p>これはアストロトレーサーの欠点ではありません。</p>
+<p>赤道儀でも同じです。</p>
+<p>星と地上の間にある相対的な動きそのものを、追尾装置で消すことはできないからです。</p>
+<p><strong>地球の自転は止められません。</strong></p>
+<p>では、同じように「星を止めて、地上が流れる」のなら、アストロトレーサーと赤道儀は何が違うのでしょうか。</p>
+<h2>違うのは、「何を動かしているか」</h2>
+<p>赤道儀は、カメラとレンズそのものを動かします。</p>
+<p>アストロトレーサーは違います。</p>
+<p>三脚の上に載っているカメラは動きません。</p>
+<p>レンズも動きません。</p>
+<p>動くのは、<strong>カメラ内部の撮像素子</strong>です。</p>
+<p>そのために使われているのが、PENTAXのSR（Shake Reduction）機構です。</p>
+<p>初代O-GPS1では、GPSから得られる緯度、電子コンパスや加速度センサーから得られるカメラの方位や傾き、レンズの焦点距離、日時などの情報から天体の動きを計算し、それに合わせて撮像素子を動かします。</p>
+<p>その後、GPS機能を本体に内蔵したK-1などでは、外付けのO-GPS1を装着しなくてもアストロトレーサーを利用できるようになりました。</p>
+<p>ここで重要なのはGPSそのものではありません。</p>
+<p><strong>カメラとレンズを固定したまま、撮像素子を動かして星を追う。</strong></p>
+<p>これがアストロトレーサーの大きな特徴です。</p>
+<h2>動いているのはセンサー。地上の像は動いていない</h2>
+<p>では、カメラの中で何が起きているのかを考えてみます。</p>
+<p>カメラとレンズは固定されています。</p>
+<p>地上にある山も動いていません。</p>
+<p>ですから、レンズによって作られる山の像も動きません。</p>
+<p>ところが、その像を受け取っている撮像素子のほうが、星を追うために動いています。</p>
+<p>つまり、</p>
+<p><strong>地上の像が動いているのではなく、</strong><br />
+<strong>その下で撮像素子が動いている。</strong></p>
+<p>撮像素子から見れば、結果として地上の像が反対方向へ移動していくことになります。</p>
+<p><img src="/images/knowledge/astrotracer/f02-sensor-3dof-and-ground-ja.svg" alt="固定されたレンズが作る地上の像の上を、撮像素子がX方向・Y方向へ移動し、光軸まわりに回転する模式図。" /></p>
+<p>図2：地上の像は動いていない。動いているのは、その下の撮像素子。</p>
+<p>これが、アストロトレーサーで地上が流れて写る基本的な仕組みです。</p>
+<p>ただし、ここまでなら話はかなり単純です。</p>
+<p>「星を追った分だけ、地上が反対へ動く」</p>
+<p>と考えても、大きくは間違っていません。</p>
+<p>ところが実際には、もう少し複雑です。</p>
+<h2>撮像素子は、上下左右に動くだけではない</h2>
+<p>PENTAXのSR機構では、撮像素子をX方向、Y方向へ移動させるだけでなく、光軸まわりに回転させることもできます。</p>
+<p>アストロトレーサーは、</p>
+<p><strong>X方向の移動</strong><br />
+<strong>＋ Y方向の移動</strong><br />
+<strong>＋ 回転</strong></p>
+<p>という撮像素子の動きを利用して星を追います。</p>
+<p>これは今回初めて知ったことではありません。</p>
+<p>私が2011年に最初のアストロトレーサーを使っていたころから理解していた仕組みです。</p>
+<p>ただ、今回改めて考えてみたかったのは、その先でした。</p>
+<p>撮像素子が単純に一方向へ移動するだけなら、地上も画面全体で同じ方向へ流れると考えればよさそうです。</p>
+<p>しかし、そこに回転まで加わったらどうなるのでしょう。</p>
+<p>画面中央にある山と、画面の隅にある木では、同じように流れるのでしょうか。</p>
+<p>そこで、実際に計算してみました。</p>
+<h2>地上の流れ方は、画面の場所によって違う</h2>
+<p>ここから先は、PENTAX実機の内部動作を測定した話ではありません。</p>
+<p>実際の制御アルゴリズムがどのように撮像素子を動かしているのか、そのすべてが公開されているわけでもありません。</p>
+<p>そこで今回は、撮像素子を</p>
+<p><strong>「像面内でX/Y方向へ移動し、回転もできる一枚の平面」</strong></p>
+<p>として理想化し、幾何学的にどうなるのかを計算しました。</p>
+<p>すると、地上の流れは画面全体で一様にはなりません。</p>
+<p>撮像素子に回転が加われば、画面中心から離れた場所ほど、回転による移動量も大きくなります。</p>
+<p>そのため、地上の像が流れる方向も長さも、画面内の場所によって変わります。</p>
+<p>撮影方向によっては、画面全体がほぼ同じ方向へ流れているように見える場合もあります。</p>
+<p>一方で、回転成分が強く現れる条件では、画面の場所によって流れる方向そのものが変わります。</p>
+<p>普段、私たちはまとめて「地上がブレる」と言っています。</p>
+<p>実写上はそれでも困りません。</p>
+<p>でも仕組みを細かく見ていくと、単純な手ブレのように画面全体が同じ方向へズレているわけではないのです。</p>
+<p>ただし、ここで書いたのはあくまで理想化モデルから見えることであって、PENTAX実機を測定した結果ではありません。</p>
+<h2>近くの岩だから大きく流れる、というわけでもない</h2>
+<p>もうひとつ、直感とは少し違うところがあります。</p>
+<p>たとえば画面の手前に岩があり、遠くに山があるとします。</p>
+<p>「近くの岩のほうが大きく流れるのでは？」</p>
+<p>と思うかもしれません。</p>
+<p>しかし、アストロトレーサーではカメラそのものは動いていません。</p>
+<p>そのため、カメラを横へ移動させたときのような視差は発生しません。</p>
+<p>静止している被写体なら、近くの岩も遠くの山も、レンズが作る像面上では止まっています。</p>
+<p>その像に対して撮像素子が動きます。</p>
+<p>ですから地上の流れを決めるうえで重要なのは、</p>
+<p><strong>被写体までの距離ではなく、画面上のどこに写っているか。</strong></p>
+<p>そして、</p>
+<p><strong>撮像素子がどのように移動・回転しているか。</strong></p>
+<p>です。</p>
+<p>普通の「カメラブレ」とは、少し違う現象です。</p>
+<h2>固定撮影と追尾撮影では、動く側が入れ替わる</h2>
+<p>ここまでの話を、もう一度単純にしてみます。</p>
+<p>固定撮影なら、</p>
+<p><strong>地上は止まり、星が流れる。</strong></p>
+<p>追尾撮影なら、</p>
+<p><strong>星の流れを小さくする代わりに、地上が流れる。</strong></p>
+<p>アストロトレーサーでも赤道儀でも、この基本的な関係は同じです。</p>
+<p>地球の自転そのものがなくなったわけではありません。</p>
+<p>星と地上の相対的な動きが消えたわけでもありません。</p>
+<p>追尾することで、その動きが写真のどちら側に現れるかが変わっているのです。</p>
+<p>私は、これはアストロトレーサーの欠点というより、星と地上を一緒に写す<strong>星景写真そのものが持っている問題</strong>だと考えています。</p>
+<p>地球の自転は止められないからです。</p>
+<h2>Type2は、そのバランスを変える</h2>
+<p>現在のアストロトレーサーには、この星と地上の関係に対して別のバランスを選べるType2があります。</p>
+<p>RICOHはType1を、天体の日周運動に対してイメージセンサーを追従させ、星を点像として撮影することを優先するモードと説明しています。</p>
+<p>一方Type2は、イメージセンサーをType1の半分の速度で追従させることで、地上風景の流れを抑え、星と風景の両方をバランスよく撮影するモードと説明しています。</p>
+<p>つまりType1では星をより強く追い、Type2ではその追い方を弱めることで、地上側に現れる流れを抑えます。</p>
+<p>ここでも、</p>
+<p><strong>星をどこまで止めるのか。</strong><br />
+<strong>地上をどこまで止めるのか。</strong></p>
+<p>という関係は変わりません。</p>
+<p>ただし、</p>
+<p>「Type2なら星50％、地上50％」</p>
+<p>と単純に考えるのも正確ではありません。</p>
+<p>星と地上が画面のどこでも同じように動くわけではないからです。</p>
+<p>ここでは、Type2は<strong>星と地上に現れる動きのバランスを変える選択肢</strong>と考えておけばいいでしょう。</p>
+<p>実際にType2で露光時間を2倍にすればいいのか、という問題は②で計算します。</p>
+<h2>2019年に書いた「1〜2分」は、15mmでの話だった</h2>
+<p>2019年、私はデジカメ Watchの「ここからはじめる星景写真」で、PENTAX K-1 Mark IIとアストロトレーサーを使った星景写真を紹介しました。</p>
+<p>そのとき掲載した燕岳での作例は、</p>
+<p><strong>15mm / F2.8 / 60秒 / ISO3200</strong></p>
+<p>でした。</p>
+<p>記事では、条件によって最大5分まで追尾できる一方、星景写真では星を止めたぶん地上風景がブレるため、露光時間を1〜2分程度に留める、という考え方を書いています。</p>
+<p>ただし、この「1〜2分」は、</p>
+<p><strong>アストロトレーサーなら1〜2分にする</strong></p>
+<p>という一般則として書いたものではありません。</p>
+<p>そのとき私が使っていたK-1系と15mmという条件で、星景写真として地上のブレとのバランスを考えた実践的な目安です。</p>
+<p>焦点距離が変われば、同じ時間でも地上に現れるブレの大きさは変わります。</p>
+<p>撮影方向によっても変わります。</p>
+<p>そして、写真をどの大きさで見るのか、地上のブレをどこまで許容するのかによっても判断は変わります。</p>
+<p>ですから、</p>
+<p><strong>「最大何分追尾できるのか」</strong></p>
+<p>と、</p>
+<p><strong>「作品として何分追尾したいのか」</strong></p>
+<p>は別の問題です。</p>
+<p>これは2026年になって初めて気づいたことではありません。</p>
+<p>メーカーの作例を撮影していたころから、私はこの二つを分けて考えていました。</p>
+<p>製品の性能を示す作例では、どこまで追尾できるのかを見せることにも意味があります。</p>
+<p>一方、自分が星景写真として撮るのであれば、最大追尾時間を使い切ることが目的ではありません。</p>
+<p>実際、15mmでは最終的に1〜2分程度を使うことが多くなりました。</p>
+<p>では、その時間は何によって決めればいいのでしょうか。</p>
+<p>15mmなら1〜2分だったとして、24mmならどうなのか。</p>
+<p>50mmならどうなのか。</p>
+<p>メーカーが表示する「追尾可能時間」は、そもそも「星がきれいに止まることを保証する時間」なのでしょうか。</p>
+<p>これは次の記事で詳しく考えます。</p>
+<p>→ 次の記事「<a href="/knowledge/photography/astrotracer-tracking-time">アストロトレーサーは何秒追尾すればいい？――『追尾可能時間』と星景で使いたい時間は違う</a>」</p>
+<h2>でも、もうひとつ問題がある</h2>
+<p>ここまでの説明では、</p>
+<p>「それなら撮像素子を十分正確に動かせば、星は画面全体で完全に止められるのでは？」</p>
+<p>と思うかもしれません。</p>
+<p>ところが、超広角レンズや魚眼レンズを使ってアストロトレーサーで撮影すると、画面中央では星がよく止まっているのに、周辺では流れて見えることがあります。</p>
+<p>私はこの現象自体は昔から知っていました。</p>
+<p>特に魚眼レンズについては、</p>
+<p><strong>「魚眼なのだから、周辺まで完全に補正できないのは仕方がないのだろう」</strong></p>
+<p>と思っていました。</p>
+<p>魚眼は普通のレンズとは違う特殊な投影をします。</p>
+<p>だからアストロトレーサーとの相性も悪いのだろう。</p>
+<p>長い間、そう考えていたのです。</p>
+<p>ところが今回、</p>
+<p><strong>本当に魚眼だからなのか？</strong></p>
+<p>と改めて疑って、幾何学的に計算してみました。</p>
+<p>結果は、私の予想とは逆でした。</p>
+<p>これは次々回の記事で扱います。</p>
+<p>→ 関連記事「<a href="/knowledge/photography/astrotracer-wide-angle-star-trails">アストロトレーサーを使っても、なぜ超広角の周辺では星が流れるのか？――センサーシフト追尾と赤道儀の違い</a>」</p>
+<h2>まとめ</h2>
+<p>アストロトレーサーで星を追うと、地上が流れます。</p>
+<p>しかし、それはアストロトレーサーだけの特殊な問題ではありません。</p>
+<p>赤道儀でも同じです。</p>
+<p>固定撮影では、</p>
+<p><strong>地上を止めて、星側に動きを残す。</strong></p>
+<p>追尾撮影では、</p>
+<p><strong>星の動きを小さくして、地上側に動きが現れる。</strong></p>
+<p>星と地上の間にある相対的な動きそのものをなくすことはできません。</p>
+<p><strong>地球の自転は止められないからです。</strong></p>
+<p>アストロトレーサーが面白いのは、その追尾を赤道儀とはまったく違う方法で実現しているところです。</p>
+<p>カメラもレンズも動かさず、</p>
+<p><strong>撮像素子をX/Y方向へ移動し、さらに回転させて星を追う。</strong></p>
+<p>そのため地上の流れも、単純に画面全体が同じ方向へ動くだけではありません。</p>
+<p>そして、さらに画角を広げていくと、今度は地上だけではなく、追尾しているはずの星側にも別の問題が見えてきます。</p>
+<p>まずは、</p>
+<p><strong>「星を止めれば地上が流れる」ことと、</strong><br />
+<strong>「アストロトレーサーが撮像素子を動かして星を追う」ことは、別々に考える。</strong></p>
+<p>ここを押さえておくと、この先の話がかなり分かりやすくなると思います。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-tracking-time">アストロトレーサーは何秒追尾すればいい？｜「追尾可能時間」と星景で使いたい時間は違う</a>
+        <p class="kzc-related-desc">メーカーの『追尾可能時間』は星が止まる保証時間ではありません。機械の限界・追尾精度・地上ブレ・周辺星像という4つの制約を分け、焦点距離ごとの地上ブレと500ルールとの関係を計算で確かめます。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-wide-angle-star-trails">アストロトレーサーを使っても、なぜ超広角の周辺では星が流れるのか？｜センサーシフト追尾と赤道儀の違い</a>
+        <p class="kzc-related-desc">画面中央では星が止まっているのに、周辺だけ流れる。長年『魚眼だから仕方ない』と考えていた原因を、天球の回転・レンズ投影・撮像素子の剛体運動から計算し直しました。結果は予想と逆でした。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-tracking-error-calculation">アストロトレーサーの追尾誤差は、どうやって計算したのか？｜天球の回転から、センサー上の星の動きまで</a>
+        <p class="kzc-related-desc">①〜③で使った『追尾残差○px』は何を測った数字なのか。センサー上の格子点から逆投影し、地球を回し、再投影し、X/Y移動＋回転で追い、残ったズレを測る——計算の中身をすべて開きます。AIの使い方も含めて。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

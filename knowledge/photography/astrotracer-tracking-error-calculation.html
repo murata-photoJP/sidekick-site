@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アストロトレーサーの追尾誤差は、どうやって計算したのか？｜天球の回転から、センサー上の星の動きまで｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="①〜③で使った『追尾残差○px』は何を測った数字なのか。センサー上の格子点から逆投影し、地球を回し、再投影し、X/Y移動＋回転で追い、残ったズレを測る——計算の中身をすべて開きます。AIの使い方も含めて。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/astrotracer-tracking-error-calculation">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">アストロトレーサーの追尾誤差は、どうやって計算したのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">アストロトレーサーの追尾誤差は、どうやって計算したのか？<span class="kzc-title-sub">天球の回転から、センサー上の星の動きまで</span></h1>
+    <p class="kzc-article-lead">①〜③で使った『追尾残差○px』は何を測った数字なのか。センサー上の格子点から逆投影し、地球を回し、再投影し、X/Y移動＋回転で追い、残ったズレを測る——計算の中身をすべて開きます。AIの使い方も含めて。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-03">更新日：2026-09-03</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>ここまでの記事では、アストロトレーサーについていくつかの計算結果を紹介してきました。</p>
+<p>→ 記事①「<a href="/knowledge/photography/astrotracer-ground-blur">アストロトレーサーで星は止まるのに、なぜ地上は流れる？――センサーシフト追尾の仕組み</a>」</p>
+<p>→ 記事②「<a href="/knowledge/photography/astrotracer-tracking-time">アストロトレーサーは何秒追尾すればいい？――『追尾可能時間』と星景で使いたい時間は違う</a>」</p>
+<p>→ 記事③「<a href="/knowledge/photography/astrotracer-wide-angle-star-trails">アストロトレーサーを使っても、なぜ超広角の周辺では星が流れるのか？――センサーシフト追尾と赤道儀の違い</a>」</p>
+<p>たとえば、同じ60秒でも焦点距離によって地上の流れる量が違うこと。</p>
+<p>画面中央では星がよく止まっていても、超広角では周辺に追尾残差が生じること。</p>
+<p>さらに前の記事では、通常の超広角レンズと魚眼レンズを同じ画角で比較すると、今回のモデルでは魚眼のほうが追尾残差が小さくなるという結果も紹介しました。</p>
+<p>そこで、</p>
+<p><strong>「ところで村田さん、その○pxという数字はいったいどうやって計算したんですか？」</strong></p>
+<p>と思った方もいるかもしれません。</p>
+<p>確かに、そこを説明せずに「計算したら24.14pxでした」とだけ書いても、計算機から出てきた数字を並べているだけに見えてしまいます。</p>
+<p>そこで今回は、①〜③で使った数字を<strong>実際にどうやって求めたのか</strong>を説明します。</p>
+<p>最初に断っておくと、計算コードそのものはAIを使って作成しました。</p>
+<p>ただし、</p>
+<p><strong>「アストロトレーサーの誤差を計算して」</strong></p>
+<p>とAIに聞いて、返ってきた数字をそのまま記事に使ったわけではありません。</p>
+<p>何をモデル化するのか。</p>
+<p>どんな条件を与えるのか。</p>
+<p>何を「誤差」として測るのか。</p>
+<p>既に分かっている結果を再現できるのか。</p>
+<p>そうしたことを一つずつ確認しながら計算モデルを作っています。</p>
+<p>そして実際にやっていることは、数式を抜きにすると意外と単純です。</p>
+<p><img src="/images/knowledge/astrotracer/f16-calculation-five-steps-ja.svg" alt="追尾残差の計算手順を5段で示した図。1 センサー上に格子点を置く。2 逆投影して空の方向を出す。3 地球の自転ぶん回転させる。4 レンズ投影でセンサー面へ戻す。5 X/Y移動と回転でできるだけ合わせ、残ったズレを追尾残差とする。" /></p>
+<p>図1：①〜③の「○px」がどう作られているか。画面の点から空へ逆算するのが出発点で、空に星を置くところからではありません。実際には<strong>計算でサンプルした各時刻・画面内の各格子点で残差を求め、この記事ではその最大値を比べています</strong>。理想化モデルであり、PENTAX の制御を再現したものではありません。</p>
+<p>まずは上の図を見てください。</p>
+<h2>1　まず、画面の上に星を並べる</h2>
+<p>最初にやったのは、</p>
+<p><strong>センサー上に格子点を並べること</strong></p>
+<p>です。</p>
+<p>今回のフルサイズモデルなら、センサーは35.9×24.0mm。</p>
+<p>その上に等間隔の点を並べます。</p>
+<p>一つ一つの点を、</p>
+<p>「ここに星が写っている」</p>
+<p>と考えます。</p>
+<p>ここは私自身、最初に聞いたとき少し意外でした。</p>
+<p>私はてっきり、</p>
+<p>「空に星を並べて、それをカメラで撮影する」</p>
+<p>という順番で計算するものだと思っていたからです。</p>
+<p>実際には逆でした。</p>
+<p>まず画面上の位置を決めてから、</p>
+<p><strong>「この位置に写っている星は、実際の空ではどの方向にあるのか？」</strong></p>
+<p>を逆算しています。</p>
+<p>この方法なら、計算する星が必ず画面の中に入ります。</p>
+<p>画面中央だけでなく、四隅まで均等に調べることもできます。</p>
+<h2>2　画面の点から、空の星の方向を逆算する</h2>
+<p>次に、その格子点をレンズを通して逆向きにたどります。</p>
+<p>普通の撮影なら、</p>
+<p><strong>空の星 → レンズ → センサー</strong></p>
+<p>です。</p>
+<p>ここでは逆に、</p>
+<p><strong>センサー → レンズ → 空</strong></p>
+<p>とたどります。</p>
+<p>これを「逆投影」と考えればいいでしょう。</p>
+<p>すると、</p>
+<p>「画面の右上に写っているこの星は、カメラから見るとこの方向にある」</p>
+<p>という三次元の方向が求められます。</p>
+<p>このとき重要なのが、<strong>レンズによって投影方法が違う</strong>ことです。</p>
+<h2>3　普通の広角と魚眼では、星を画面へ写す方法が違う</h2>
+<p>③で魚眼レンズを比較できたのは、ここを変えて計算したからです。</p>
+<p>通常の広角レンズでは、直線を直線として写す一般的な投影を使います。</p>
+<p>魚眼では、</p>
+<p><strong>等距離射影</strong><br />
+<strong>等立体角射影</strong><br />
+<strong>立体射影</strong></p>
+<p>など、別の投影方法があります。</p>
+<p>つまり、</p>
+<p><strong>空で中心から同じ角度だけ離れた星でも、レンズによってセンサー上のどこへ写るかが違う</strong></p>
+<p>わけです。</p>
+<p>たとえば通常の広角レンズでは、画面周辺へ行くほど像が大きく引き伸ばされます。</p>
+<p>一方、魚眼では直線を曲げる代わりに、周辺の詰まり方・伸び方が違います。</p>
+<p>③で、</p>
+<p><strong>「魚眼だからアストロトレーサーでは不利なのでは？」</strong></p>
+<p>を調べることができたのは、この投影式を入れ替えて、同じ星空を計算したからです。</p>
+<p>実際の計算では通常広角のrectilinearに加えて、魚眼などを含む複数の投影方式を実装し、同じ画角に揃えた比較では魚眼3方式を使用しています。</p>
+<h2>4　地球を60秒ぶん回す</h2>
+<p>これで露光開始時の星の位置ができました。</p>
+<p>次は時間を進めます。</p>
+<p>たとえば60秒露光するとします。</p>
+<p>地球は、その60秒の間にも自転しています。</p>
+<p>今回のモデルでは恒星時の自転角速度、</p>
+<p><strong>7.2921159×10⁻⁵ rad/s</strong></p>
+<p>を使っています。</p>
+<p>もちろん、この数字を覚える必要はありません。</p>
+<p>重要なのは、</p>
+<p><strong>「60秒後には、地球がこれだけ回っている」</strong></p>
+<p>という角度を求めて、そのぶん星の方向を回しているということです。</p>
+<p>正確に言えば、空そのものを回しているのではなく、地球の自転によって星がカメラからどちらへ動いて見えるかを計算しています。</p>
+<p>これで、</p>
+<p><strong>露光開始時の星空</strong></p>
+<p>と、</p>
+<p><strong>60秒後の星空</strong></p>
+<p>ができます。</p>
+<h2>5　60秒後の星を、もう一度レンズで写す</h2>
+<p>次に、60秒後の星をもう一度レンズに通します。</p>
+<p>すると、</p>
+<p><strong>最初はここにあった星が、60秒後には画面のここへ来る</strong></p>
+<p>という位置が分かります。</p>
+<p>固定撮影なら、基本的にはこれが星の流れです。</p>
+<p>しかし今回はアストロトレーサーを考えています。</p>
+<p>アストロトレーサーは、この星の動きを撮像素子を動かして追いかけます。</p>
+<p>そこで次の計算をします。</p>
+<h2>6　では、センサーをどう動かせば星を元へ戻せるのか</h2>
+<p>PENTAXのセンサーシフト機構では、撮像素子を</p>
+<p><strong>X方向へ移動</strong><br />
+<strong>Y方向へ移動</strong><br />
+<strong>光軸を中心に回転</strong></p>
+<p>させることができます。</p>
+<p>この3自由度自体は、今回勝手に作ったものではなく、関連する特許にも記載されている機構です。</p>
+<p>そこでモデル上でも、</p>
+<p><strong>60秒後に移動した星を、センサーのX/Y移動＋回転で元の位置へ戻してみる</strong></p>
+<p>という計算をします。</p>
+<p>ここで大切なのは、</p>
+<p><strong>実際のPENTAXが、今回のプログラムと同じ計算方法でセンサーを動かしていると言っているわけではない</strong></p>
+<p>ことです。</p>
+<p>実機の制御アルゴリズムは分かりません。</p>
+<p>今回知りたいのはもっと基本的なことです。</p>
+<p><strong>平面のセンサーを上下左右に動かして回転させるという条件だけで、空全体の動きをどこまで打ち消せるのか。</strong></p>
+<p>それを調べています。</p>
+<h2>7　全部合わせたつもりでも、少しズレが残る</h2>
+<p>ここが③の記事につながります。</p>
+<p>画面中央付近だけを見ると、かなりきれいに星を合わせることができます。</p>
+<p>ところが画面全体を見ると、</p>
+<p><strong>すべての星が完全に元の位置へ戻るとは限りません。</strong></p>
+<p>ある星はほぼ完全に戻る。</p>
+<p>別の星は少しズレる。</p>
+<p>四隅ではもっとズレる。</p>
+<p>そのズレが、①〜③で何度も出てきた、</p>
+<p><strong>追尾残差</strong></p>
+<p>です。</p>
+<h2>8　「追尾残差○px」の○とは、何を測っているのか</h2>
+<p>ここは今回の記事で、一番説明しておきたいところです。</p>
+<p>記事に出てくる、</p>
+<p><strong>「追尾残差24.14px」</strong></p>
+<p>という数字は、平均値ではありません。</p>
+<p>四隅だけを測った値でもありません。</p>
+<p>また、星が描いた軌跡の長さでもありません。</p>
+<p>実際の計算では露光中にも時間を区切って星の位置を調べています。</p>
+<p>そして、</p>
+<p><strong>露光中の各時刻 × 画面内の各格子点</strong></p>
+<p>について、</p>
+<p>「センサーを動かして追尾したあと、それでも元の位置からどれだけ離れているか」</p>
+<p>を測ります。</p>
+<p>その中で、</p>
+<p><strong>最も大きかったズレ</strong></p>
+<p>を記事の「○px」としています。</p>
+<p>ですから24.14pxなら、</p>
+<p><strong>今回調べた露光時間と画面範囲の中で、最悪の場所・最悪の時刻では約24.14pxのズレが残った</strong></p>
+<p>という意味です。</p>
+<p>平均24.14pxではありません。</p>
+<h2>9　なぜ平均ではなく「最大」を見たのか</h2>
+<p>これは写真を考えると分かりやすいと思います。</p>
+<p>たとえば画面に100個の星があったとします。</p>
+<p>99個はほとんど止まっている。</p>
+<p>でも四隅の一つだけ、大きく流れている。</p>
+<p>この状態で平均を取れば、かなり小さな数字になるかもしれません。</p>
+<p>しかし写真を見る側からすれば、</p>
+<p><strong>その一本だけ大きく流れた星は見えます。</strong></p>
+<p>だから今回の記事では、</p>
+<p>「平均的にどのくらい合っているか」</p>
+<p>よりも、</p>
+<p><strong>「画面のどこまで星を止められるのか」</strong></p>
+<p>を見るために最大値を使いました。</p>
+<p>これはPENTAXが製品評価に使っている指標ではありません。</p>
+<p>今回の記事で追尾残差を考えるために選んだ評価方法です。</p>
+<h2>10　「中心を合わせる」と「画面全体を最もよく合わせる」も分けて計算した</h2>
+<p><img src="/images/knowledge/astrotracer/f18-centre-fixed-vs-best-rigid-ja.svg" alt="中心に合わせた場合と画面全体で合わせた場合の追尾残差を比べた図。中心固定では中央がほぼゼロで四隅が最大の約24.14ピクセル、画面全体で合わせた場合は中央にも残差が残り最大は約17.85ピクセルになる。" /></p>
+<p>図2：**同じ天球の動きでも、センサーのX/Y移動＋回転をどう合わせると仮定するかで、残る誤差の大きさも分布も変わる。**対角画角114度・9×9格子。<strong>濃淡は分布の模式で、セルごとの数値ではない。どちらもモデル上の合わせ方であって、PENTAX実機の制御アルゴリズムではない。</strong></p>
+<p>今回のモデルでは、センサーの合わせ方も一種類ではありません。</p>
+<p>一つは、</p>
+<p><strong>画面中央付近の星がよく合うようにする方法。</strong></p>
+<p>もう一つは、</p>
+<p><strong>画面全体の星に対して、X/Y移動＋回転だけで最もよく合う状態を数学的に探す方法。</strong></p>
+<p>です。</p>
+<p>①〜③に出てくる数値は、前者、つまり画面中央に合わせた場合のものです。</p>
+<p>同じ条件でも、どちらの合わせ方をするかで残差は変わります。たとえば対角画角114度・フルサイズ・南向き高度40度・60秒なら、画面中央に合わせた場合が約24.14px、画面全体で最もよく合わせた場合が約17.85pxになります。</p>
+<p>後者では画面全体の格子点を使い、最小二乗で最もよく合う平面の移動と回転を求めています。</p>
+<p>どちらの合わせ方も、</p>
+<p>「PENTAXがこう制御している」</p>
+<p>という意味ではありません。</p>
+<p>とくに後者は、</p>
+<p><strong>もしX/Y移動＋回転という3つの動きだけを使って、画面全体へできるだけ都合よく合わせたら、どこまでいけるのか</strong></p>
+<p>を見るための計算です。</p>
+<p>それでも残差が残る。</p>
+<p>だから③で説明した、</p>
+<p><strong>「単に制御精度が悪いから周辺が流れるとは限らない」</strong></p>
+<p>という話につながります。</p>
+<h2>11　地上のブレは、もっと考え方が単純だった</h2>
+<p><img src="/images/knowledge/astrotracer/f02-sensor-3dof-and-ground-ja.svg" alt="地上ブレの考え方。像面上で静止した地上像に対し、星を追って動く撮像素子が相対的にずれていく模式図。" /></p>
+<p>図3：地上ブレは、動く撮像素子から見た<strong>静止した地上像の相対運動</strong>。</p>
+<p>①②では、星だけでなく地上のブレも計算しました。</p>
+<p>こちらは考え方がもっと簡単です。</p>
+<p>カメラとレンズは三脚に固定されています。</p>
+<p>ですから、理想化して考えれば地上の像そのものは像面上の同じ場所にあります。</p>
+<p>でもアストロトレーサーを使うと、<strong>その下でセンサーが星を追って動きます。</strong></p>
+<p>するとセンサーから見れば、地上の像が反対方向へ流れていきます。</p>
+<p>つまり、</p>
+<p><strong>地上を動かしているのではありません。</strong></p>
+<p><strong>星を追うために動いたセンサーに対して、固定された地上像が相対的に動いて見える。</strong></p>
+<p>これが①②で使った地上ブレの基本的な考え方です。</p>
+<h2>12　500ルールと同じ式が出たのも、このためだった</h2>
+<p>②で少し面白い結果を紹介しました。</p>
+<p>固定撮影で使われてきた500ルールと、アストロトレーサー使用時の地上ブレを同じ許容量で考えると、同じ時間が出てきました。</p>
+<p>これは偶然ではありません。</p>
+<p>固定撮影では、</p>
+<p><strong>地球の自転によって星がセンサー上を動く。</strong></p>
+<p>アストロトレーサーでは、</p>
+<p><strong>その星の動きを打ち消すためにセンサーを動かす。</strong></p>
+<p>だから同じ角速度、同じ焦点距離、同じ許容移動量で考えれば、同じ関係式になります。</p>
+<p>固定撮影で星が動く量も、アストロトレーサーで地上が流れる量も、同じ f・ω・T・cosδ という形になります。だから一致するのは偶然ではなく、式のうえで同じものを見ているということです。</p>
+<p>このあたりは、計算してみて「なるほど」と思ったところでした。</p>
+<h2>13　魚眼との比較では、レンズの部分だけを入れ替えた</h2>
+<p>③で行った魚眼との比較も、基本的には同じ計算です。</p>
+<p>星を作る。</p>
+<p>地球を回す。</p>
+<p>もう一度投影する。</p>
+<p>センサーをX/Y移動＋回転させる。</p>
+<p>残った最大ズレを測る。</p>
+<p>変えたのは主に、</p>
+<p><strong>レンズが空をセンサーへどう投影するか</strong></p>
+<p>です。</p>
+<p>しかも同じ焦点距離だけで比べると写る範囲そのものが変わってしまいます。</p>
+<p>そこで主要な比較では、通常の広角と魚眼が<strong>同じ対角画角</strong>になるよう条件を揃えました。</p>
+<p>その状態で投影方式だけを変え、同じ計算を繰り返したわけです。</p>
+<p>その結果が、</p>
+<p><strong>同じ画角なら、今回調べた範囲では魚眼のほうが追尾残差が小さかった</strong></p>
+<p>という③の結果です。</p>
+<p>たとえば対角114°の比較では、③で示した通常広角24.14px・魚眼3方式3.67px、4.53px、5.12pxが、画面中央に合わせた場合の値です。</p>
+<p>同じ条件を、画面全体で最もよく合わせた場合に切り替えると、通常広角17.85px、魚眼3方式は3.32px、3.35px、4.85pxになります。合わせ方を変えても、魚眼のほうが小さいという関係は変わりません。どちらもモデル上の合わせ方であって、PENTAX実機の追尾アルゴリズムを表すものではありません。</p>
+<h2>14　赤道儀だけは、計算する場所そのものが違う</h2>
+<p><img src="/images/knowledge/astrotracer/f13-before-after-projection-ja.svg" alt="赤道儀はレンズで投影する前にカメラごと回して星を追い、アストロトレーサーは投影した後に撮像素子を動かして追うことを、2段の流れ図で比べた図。" /></p>
+<p>図4：計算の上でも、赤道儀は投影の前で補正が入る。<strong>理想化モデルでは星の残差が0.00pxになるが、これは極軸合わせの誤差・たわみ・大気差をモデルに入れていないためで、現実の赤道儀の誤差がゼロという意味ではない。</strong></p>
+<p>③で赤道儀との違いも書きました。</p>
+<p>これも計算モデルにすると、とても分かりやすくなります。</p>
+<p>アストロトレーサーでは、</p>
+<p><strong>星が動く</strong><br />
+<strong>→ レンズで投影する</strong><br />
+<strong>→ できた像をセンサーで追う</strong></p>
+<p>という順番です。</p>
+<p>一方、理想的な赤道儀では、星が動くのと同じだけカメラとレンズそのものを回します。</p>
+<p>つまり、</p>
+<p><strong>レンズへ投影する前に、星とカメラの相対的な向きを保つ</strong></p>
+<p>ことになります。</p>
+<p>今回の理想モデルでは、星とカメラを同じ回転行列で回しているため、カメラから見た星の方向が変わりません。</p>
+<p>その結果、モデル上の星の追尾残差は0.00pxになります。</p>
+<p>もちろん、</p>
+<p><strong>現実の赤道儀なら誤差ゼロ</strong></p>
+<p>という意味ではありません。</p>
+<p>実際には極軸合わせの誤差、ピリオディックモーション、たわみ、大気差などがあります。</p>
+<p>0.00pxなのは、それらを入れていない<strong>理想モデルだから</strong>です。</p>
+<h2>15　では、この計算はどこまで信用できるのか</h2>
+<p>ここまで説明すると、今度は逆の疑問が出てきます。</p>
+<p><strong>「モデルで計算した数字は、本当に信用できるのか？」</strong></p>
+<p>今回のモデルには、入れていないものがたくさんあります。</p>
+<p>実際のPENTAX内部の制御アルゴリズム。</p>
+<p>機械的な誤差。</p>
+<p>キャリブレーション誤差。</p>
+<p>大気差。</p>
+<p>レンズ収差。</p>
+<p>振動。</p>
+<p>実際のレンズ固有の歪曲。</p>
+<p>そうしたものを全部再現したシミュレーターではありません。</p>
+<p>だから、</p>
+<p><strong>「実際のK-1で14mm・60秒なら必ず24.18px流れる」</strong></p>
+<p>とは言えません。</p>
+<p>24.18pxという数字は、あくまで今回設定した理想化モデルの結果です。</p>
+<p>なお、③に出てくる24.14pxは対角画角を114度ちょうどに揃えたときの値、こちらの24.18pxは焦点距離を14mmに固定したときの値です。ほとんど同じ条件ですが、何を揃えたかが違うので、数字もわずかに違います。</p>
+<p>では何の役に立つのか。</p>
+<p>たとえば、</p>
+<p><strong>センサーをX/Y＋回転させるだけで、天球の動きを画面全体で完全に打ち消せるのか。</strong></p>
+<p><strong>通常広角と魚眼では、投影方式だけで追尾残差にどんな違いが出るのか。</strong></p>
+<p><strong>赤道儀とセンサーシフトでは、なぜ結果が違うのか。</strong></p>
+<p>こうした<strong>仕組みそのものを切り分けて考える</strong>ために使っています。</p>
+<h2>16　計算したら終わり、にはしなかった</h2>
+<p>もう一つ、今回かなり気をつけたことがあります。</p>
+<p>AIを使って計算コードを作れば、数字そのものはいくらでも出せます。</p>
+<p>でも、その数字が正しいかどうかは別です。</p>
+<p>そこで記事①〜③で使用した主要な数値について、既存の計算結果、単位変換、投影式、同一画角条件などを再度機械的に照合しました。</p>
+<p>検証したのは166項目です。</p>
+<p>結果は、</p>
+<p><strong>165 PASS / 1 FAIL</strong></p>
+<p>でした。</p>
+<p>そして、その1件は計算結果の誤りではありませんでした。</p>
+<p>フルサイズセンサーの半対角について、文章に書いた数値の表記を間違えていたものです。</p>
+<p>検証項目としては1件ですが、同じ書き間違いが複数の下書きに入っていました。</p>
+<p>正しい値に直して再確認しても、計算結果は変わりませんでした。既存の主要数値や魚眼比較のself-validationもPASSしています。</p>
+<p>むしろ、この再検証をしたことで記述ミスを一つ見つけられました。</p>
+<h2>17　AIに計算してもらう、ということ</h2>
+<p>今回、私は計算コードそのものを一から手で書いたわけではありません。</p>
+<p>AIをかなり使っています。</p>
+<p>でも、今回やってみて改めて思ったのは、</p>
+<p><strong>AIに計算させることと、AIが出した数字を信じることは同じではない</strong></p>
+<p>ということです。</p>
+<p>何を計算するのか。</p>
+<p>どこまでを現実として扱い、どこからを理想化するのか。</p>
+<p>結果の○pxは何を意味しているのか。</p>
+<p>別の方法でも既知の結果を再現できるのか。</p>
+<p>そこを確認しないまま数字だけ使ってしまえば、私自身も説明できません。</p>
+<p>今回の記事を書くために計算方法をもう一度コードから整理してみて、少なくとも、</p>
+<p><strong>何をモデル化したのか。</strong><br />
+<strong>何を入力したのか。</strong><br />
+<strong>何を比較したのか。</strong><br />
+<strong>○pxとは何を測った数字なのか。</strong></p>
+<p>そこまでは自分の言葉で説明できる形にしました。</p>
+<h2>まとめ</h2>
+<p>今回の計算を、もう一度ものすごく簡単にまとめると、</p>
+<p><strong>画面に点を置く</strong></p>
+<p>↓</p>
+<p><strong>その点に写る星が空のどこにあるか逆算する</strong></p>
+<p>↓</p>
+<p><strong>地球を露光時間ぶん回す</strong></p>
+<p>↓</p>
+<p><strong>星をもう一度レンズで画面へ写す</strong></p>
+<p>↓</p>
+<p><strong>センサーをX/Y方向へ動かし、回転させて星を追う</strong></p>
+<p>↓</p>
+<p><strong>それでも残ったズレを測る</strong></p>
+<p>↓</p>
+<p><strong>露光中・画面全体で最も大きかったズレをpxにする</strong></p>
+<p>という計算です。</p>
+<p>これが①〜③に出てきた、</p>
+<p><strong>「追尾残差○px」</strong></p>
+<p>の正体です。</p>
+<p>数式だけを見るとかなり難しいことをしているように見えます。</p>
+<p>でも順番に追っていくと、</p>
+<p><strong>星がどこへ動くのかを計算して、センサーで追いかけて、それでも残ったズレを測っている。</strong></p>
+<p>基本的にはそれだけです。</p>
+<p>そして、このモデルを使ったからこそ、</p>
+<p>「超広角の周辺で星が流れるのは、本当に魚眼だからなのか？」</p>
+<p>という、私が長い間そのままにしていた疑問を、もう一度調べ直すことができました。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-ground-blur">アストロトレーサーで星は止まるのに、なぜ地上は流れる？｜センサーシフト追尾の仕組み</a>
+        <p class="kzc-related-desc">星を追えば地上が流れる。これはアストロトレーサーだけの問題ではありません。撮像素子をX/Y移動と回転で動かして星を追う仕組みと、地上の像が画面のどこでどう流れるかを、公式資料・特許・理想化モデルから整理します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-tracking-time">アストロトレーサーは何秒追尾すればいい？｜「追尾可能時間」と星景で使いたい時間は違う</a>
+        <p class="kzc-related-desc">メーカーの『追尾可能時間』は星が止まる保証時間ではありません。機械の限界・追尾精度・地上ブレ・周辺星像という4つの制約を分け、焦点距離ごとの地上ブレと500ルールとの関係を計算で確かめます。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-wide-angle-star-trails">アストロトレーサーを使っても、なぜ超広角の周辺では星が流れるのか？｜センサーシフト追尾と赤道儀の違い</a>
+        <p class="kzc-related-desc">画面中央では星が止まっているのに、周辺だけ流れる。長年『魚眼だから仕方ない』と考えていた原因を、天球の回転・レンズ投影・撮像素子の剛体運動から計算し直しました。結果は予想と逆でした。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

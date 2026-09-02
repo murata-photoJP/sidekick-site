@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アストロトレーサーは何秒追尾すればいい？｜「追尾可能時間」と星景で使いたい時間は違う｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="メーカーの『追尾可能時間』は星が止まる保証時間ではありません。機械の限界・追尾精度・地上ブレ・周辺星像という4つの制約を分け、焦点距離ごとの地上ブレと500ルールとの関係を計算で確かめます。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/astrotracer-tracking-time">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">アストロトレーサーは何秒追尾すればいい？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">アストロトレーサーは何秒追尾すればいい？<span class="kzc-title-sub">「追尾可能時間」と星景で使いたい時間は違う</span></h1>
+    <p class="kzc-article-lead">メーカーの『追尾可能時間』は星が止まる保証時間ではありません。機械の限界・追尾精度・地上ブレ・周辺星像という4つの制約を分け、焦点距離ごとの地上ブレと500ルールとの関係を計算で確かめます。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-03">更新日：2026-09-03</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>「アストロトレーサーは何秒くらい追尾すればいいですか？」</p>
+<p>実際に使おうとすると、これはかなり気になるところだと思います。</p>
+<p>30秒なのか。</p>
+<p>1分なのか。</p>
+<p>2分なのか。</p>
+<p>それとも、カメラに表示される「追尾可能時間」いっぱいまで使えばいいのでしょうか。</p>
+<p>私は2019年、デジカメ Watchの「ここからはじめる星景写真」で、PENTAX K-1 Mark IIとアストロトレーサーを使った星景写真を紹介しました。</p>
+<p>そのときの記事では、条件によって最大5分まで追尾できると説明した一方、実際の星景写真では、地上風景のブレを考えて1〜2分程度に留めるという考え方を書いています。</p>
+<p>では、</p>
+<p><strong>5分追尾できるのに、なぜ1〜2分で止めるのか。</strong></p>
+<p>これは単純に、</p>
+<p>「5分だとアストロトレーサーの精度が悪くなるから」</p>
+<p>という話ではありません。</p>
+<p>そもそも、</p>
+<p><strong>機械が何秒追尾できるのか。</strong></p>
+<p>そして、</p>
+<p><strong>写真として何秒追尾したいのか。</strong></p>
+<p>この二つは別の問題だからです。</p>
+<p>今回は、アストロトレーサーの「何秒？」を少し分解して考えてみます。</p>
+<h2>「追尾可能時間」は、星が止まる保証時間ではない</h2>
+<p>まず、ここはかなり重要です。</p>
+<p>RICOHが公開しているO-GPS1の仕様には、焦点距離と赤緯ごとに「アストロトレーサー追尾可能時間」の表があります。</p>
+<p>たとえばK-3 Mark IIIの場合、赤緯0度では、</p>
+<p><strong>200mm：80秒</strong><br />
+<strong>100mm：160秒</strong><br />
+<strong>50mm以下：300秒</strong></p>
+<p>となっています。</p>
+<p>天の極にあたる赤緯90度では、掲載されている全機種・全焦点距離で300秒です。</p>
+<p>ここだけを見ると、</p>
+<p>「この時間までは星が止まる」</p>
+<p>という意味に思えるかもしれません。</p>
+<p>しかし、表のタイトルには「目安」と書かれています。</p>
+<p>さらにRICOHの公式FAQには、もっとはっきりした説明があります。</p>
+<p>「追尾可能時間」は、SR機能を使ったイメージセンサーの作動可能時間を表したもので、<strong>追尾性能を保証する時間ではない</strong>という説明です。</p>
+<p>つまり、</p>
+<p><strong>センサーを何秒動かせるのか</strong></p>
+<p>と、</p>
+<p><strong>何秒露光すれば写真として星がきれいに止まるのか</strong></p>
+<p>は、そもそも同じ意味の時間ではありません。</p>
+<p>これはType3を見ると、さらに分かりやすくなります。</p>
+<p>RICOHはType3について、露光時間そのものは10分まで指定できる一方、「1分までに留めておくと、比較的安定して星を点で撮影することができます」と説明しています。</p>
+<p><strong>設定できる時間。</strong><br />
+<strong>機構が動ける時間。</strong><br />
+<strong>星を点として写しやすい時間。</strong></p>
+<p>「最大何分」という数字だけを見ても、実は意味の違う時間があるわけです。</p>
+<h2>「何秒？」の中には、いくつもの問題が入っている</h2>
+<p>では、アストロトレーサーの追尾時間を何が決めているのでしょう。</p>
+<p>今回整理してみると、大きく5つに分けて考えると分かりやすくなりました。</p>
+<h3>T1　機械的追尾可能時間</h3>
+<p>まずは、撮像素子を動かす機構そのものの限界です。</p>
+<p>撮像素子は無限に動かせるわけではありません。</p>
+<p>SRユニットの可動範囲があります。</p>
+<p>メーカーが示す「追尾可能時間」は、基本的にはこの種類の時間です。</p>
+<p>ただし先ほど書いたように、これは「その時間まで星が完全に止まる」という意味ではありません。</p>
+<h3>T2　追尾精度限界</h3>
+<p>機械的にはまだ撮像素子を動かせても、実際の追尾にはさまざまな誤差が入ります。</p>
+<p>方位や傾きなどをどこまで正確に取得できたのか。</p>
+<p>キャリブレーションはどこまで正確だったのか。</p>
+<p>そうした誤差が積み重なれば、機械的な可動限界に達する前に、星の流れが気になることも考えられます。</p>
+<p>実際のPENTAX機でこの限界が何秒なのかは、今回の資料からは分かりません。</p>
+<h3>T3　地上ブレ限界</h3>
+<p>星を十分に追尾できていたとしても、星景写真では地上も一緒に写します。</p>
+<p><a href="/knowledge/photography/astrotracer-ground-blur">前の記事で説明したように</a>、星を追えば地上が流れます。</p>
+<p>では、その地上の流れをどこまで許すのか。</p>
+<p>これも追尾時間を決める条件になります。</p>
+<h3>T4　周辺星像限界</h3>
+<p>さらに広角、特に超広角になると、画面中央だけを見ているわけにもいきません。</p>
+<p>画面中央では星がよく止まっていても、周辺では星に追尾残差が生じることがあります。</p>
+<p>今回の理想化した幾何学モデルでは、条件によっては地上のブレより先に、画面周辺の星像が制約になるケースもありました。</p>
+<p>なぜそうなるのかは、③で詳しく扱います。</p>
+<h3>T5　実用露光時間</h3>
+<p>そして最後が、</p>
+<p><strong>自分は実際に何秒で撮るのか。</strong></p>
+<p>です。</p>
+<p>これはT1〜T4のどれか一つから自動的に決まるものではありません。</p>
+<p>星をどこまで止めたいのか。</p>
+<p>地上をどこまで止めたいのか。</p>
+<p>最終的にWebで見るのか、大きくプリントするのか。</p>
+<p>四隅まで厳密に見るのか。</p>
+<p>何を優先するのか。</p>
+<p>そうしたことを考えて、最後に撮影者が決める時間です。</p>
+<p><img src="/images/knowledge/astrotracer/f05-t1-t5-constraints-ja.svg" alt="露光時間を決める4つの制約T1〜T4を並列に示し、それらを見たうえで撮影者がT5（実際に使う時間）を選ぶことを表した図。メーカーの追尾可能時間はT1にあたる。" /></p>
+<p>図1：**T1〜T4 は順番ではなく並列の制約。**どれが先に効くかは撮影条件で変わる。**メーカーが示す「追尾可能時間」は T1 にあたり、星が止まることを保証する時間ではない。**最後に T5 を決めるのは撮影者。</p>
+<p>ここで注意したいのは、</p>
+<p><strong>T1 → T2 → T3 → T4</strong></p>
+<p>という順番に限界が来るわけではないことです。</p>
+<p>T1〜T4は、それぞれ別の制約です。</p>
+<p>撮影条件によって、どれが先に問題になるかが変わります。</p>
+<h2>計算できることと、写真家が決めることは違う</h2>
+<p>「それでは結局、何秒が正解なのか分からないじゃないか」</p>
+<p>と思うかもしれません。</p>
+<p>でも、そういうことでもありません。</p>
+<p>物理的に計算できる部分はあります。</p>
+<p>たとえば、</p>
+<p><strong>60秒追尾したら、地上の像が何ピクセル動くのか。</strong></p>
+<p>これは条件を決めれば計算できます。</p>
+<p>仮に計算結果が3ピクセルだったとします。</p>
+<p>では、</p>
+<p><strong>3ピクセル動いたら写真として失敗なのか。</strong></p>
+<p>これは計算だけでは決まりません。</p>
+<p>小さなWeb画像と、大きなプリントでは違います。</p>
+<p>滑らかな山肌と、細かな枝が並んでいる樹林でも、ブレの見え方は違います。</p>
+<p>等倍で四隅まで見るのか、通常の鑑賞距離から見るのかでも違います。</p>
+<p>今回の計算でも3pxという値を検証条件として使っていますが、</p>
+<p>「3pxまでならOK」</p>
+<p>という意味ではありません。</p>
+<p>ここは、かなり大事だと思っています。</p>
+<p><strong>何px動くかは、コンピューターで計算できる。</strong></p>
+<p>でも、</p>
+<p><strong>何pxまで許すかは、写真家が決める。</strong></p>
+<p>計算によって物理量を出すことと、それを写真としてどう評価するかは別の問題です。</p>
+<h2>同じ60秒でも、14mmと50mmでは違う</h2>
+<p>地上のブレを例に、もう少し具体的に見てみましょう。</p>
+<p>今回、理想化したセンサーシフト追尾モデルを使って計算しました。</p>
+<p>条件は、</p>
+<p><strong>フルサイズ</strong><br />
+<strong>緯度35度</strong><br />
+<strong>南向き</strong><br />
+<strong>高度40度</strong><br />
+<strong>露光60秒</strong></p>
+<p>です。</p>
+<p>Type1相当の追尾をした場合、画面中心の地上像のブレは、</p>
+<p><strong>14mm：約12.5px</strong><br />
+<strong>20mm：約17.6px</strong><br />
+<strong>24mm：約21.0px</strong><br />
+<strong>35mm：約30.5px</strong><br />
+<strong>50mm：約43.4px</strong></p>
+<p>となりました。</p>
+<p><img src="/images/knowledge/astrotracer/f07-ground-blur-by-focal-length.svg" alt="露光60秒での画面中心の地上ブレを焦点距離ごとに比べた横棒グラフ。14mmで約12.5ピクセル、50mmで約43.4ピクセル。" /></p>
+<p>図2：<strong>理想化モデル</strong>で計算した、画面中心の地上ブレ。フルサイズ・緯度35度・南向き高度40度・60秒・<strong>13×13格子</strong>。<strong>PENTAX実機を測定した値ではない。</strong></p>
+<p>これはPENTAX実機を測定した値ではありません。</p>
+<p>理想化したセンサーシフト追尾モデルによる計算値です。</p>
+<p>それでも、</p>
+<p><strong>「1分なら、どのレンズでも同じ」</strong></p>
+<p>ではないことは分かります。</p>
+<p>14mmと50mmでは、同じ60秒でもセンサー上に記録される地上のブレ量が約3.5倍違います。</p>
+<p>もちろん、空が50mmのときだけ速く回っているわけではありません。</p>
+<p>同じ角度の動きを、焦点距離が長いレンズほど大きく写しているからです。</p>
+<h2>では「15mmで2分なら、30mmでは1分」なのか</h2>
+<p>ここまで読むと、</p>
+<p>「焦点距離が2倍なら、露光時間を半分にすればいいのでは？」</p>
+<p>と思うかもしれません。</p>
+<p>画面中心の地上ブレだけを見るなら、条件付きでその考え方は使えます。</p>
+<p>同じ撮影方向。</p>
+<p>同じボディ。</p>
+<p>同じ許容ブレ量。</p>
+<p>そして画面中心で比較する。</p>
+<p>これらが同じなら、焦点距離が2倍になれば、同じ地上ブレに達するまでの時間はおおむね半分になります。</p>
+<p>でも、これをそのまま</p>
+<p><strong>「アストロトレーサーの適正露光時間」</strong></p>
+<p>にすることはできません。</p>
+<p>撮影方向が変われば、動き方も変わります。</p>
+<p>画面周辺では、地上の流れ方も中心とは違います。</p>
+<p>さらに超広角では、地上よりも画面周辺の星像のほうが先に問題になる場合があります。</p>
+<p>地上ブレだけなら単純な比例関係が使えても、<strong>写真全体の実用露光時間は、それだけでは決まらない</strong>のです。</p>
+<h2>2019年の「1〜2分」を計算してみる</h2>
+<p>では、2019年に私が書いた「1〜2分」はどうだったのでしょうか。</p>
+<p>当時の記事では、PENTAX K-1 Mark IIと15-30mm F2.8を使い、燕岳で撮影したアストロトレーサーの作例を掲載しています。</p>
+<p>その作例は、</p>
+<p><strong>15mm / F2.8 / 60秒 / ISO3200</strong></p>
+<p>でした。</p>
+<p>記事では、条件によって最大5分まで追尾できる一方、星景写真では星を止めたぶん地上風景がブレるため、1〜2分程度に留めるという考え方を書いています。</p>
+<p>これは2026年になって初めて、</p>
+<p>「最大追尾時間と実際に使う時間は違うんだ」</p>
+<p>と気づいたわけではありません。</p>
+<p>私は以前から、この二つを分けて考えていました。</p>
+<p>メーカーの作例を撮るときには、その製品がどこまで追尾できるのかを見せることにも意味があります。</p>
+<p>そのため、アストロトレーサーの能力を示すことを目的とした撮影では、最大追尾時間を使うこともありました。</p>
+<p>一方、自分が星景写真として撮るのであれば、最大時間まで追尾すること自体が目的ではありません。</p>
+<p>星と地上を見ながら、自分が写真として使いたい時間を選びます。</p>
+<p>15mmでは、それがだいたい1〜2分でした。</p>
+<p>では、その経験値を現在のモデルで計算するとどうなるのか。</p>
+<p>2019年の撮影条件に近い状態として、</p>
+<p><strong>15mm</strong><br />
+<strong>K-1 Mark II相当</strong><br />
+<strong>燕岳付近・緯度36.4度</strong><br />
+<strong>当時の天の川中心部を想定した撮影方向</strong></p>
+<p>で計算しました。</p>
+<p>地上のブレは、</p>
+<p><strong>60秒：画面中心 約12.1px / 画面内最大 約18.9px</strong><br />
+<strong>120秒：約24.2px / 約37.7px</strong><br />
+<strong>300秒：約60.4px / 約94.4px</strong></p>
+<p>となりました。</p>
+<p><img src="/images/knowledge/astrotracer/f08-2019-exposure-comparison-ja.svg" alt="2019年の撮影条件に近い設定で、露光60秒・120秒・300秒の地上ブレを比べた棒グラフ。60秒で画面中心12.1ピクセル・画面内最大18.9ピクセル、300秒では60.4ピクセル・94.4ピクセルになる。" /></p>
+<p>図3：**2019年の作例に近い条件を、2026年に理想化モデルで計算し直したもの。**15mm・緯度36.4度・南向き高度25度・<strong>11×11格子</strong>。<strong>2019年の写真を測定した値ではない。</strong></p>
+<p>繰り返しますが、これは2019年の写真を測定して出した数値ではありません。</p>
+<p>2026年に理想化モデルで計算した値です。</p>
+<p>それでも、当時経験的にやっていたことの意味は見えてきます。</p>
+<p>最大5分まで追尾できたとしても、地上の流れは時間とともに増えていく。</p>
+<p>だから私は最大追尾時間をそのまま使わず、15mmでは1〜2分程度を使っていた。</p>
+<p>この考え方そのものは、今回の計算とも矛盾しません。</p>
+<p>ただし、</p>
+<p><strong>「1〜2分」という数字を一般則にすることはできない。</strong></p>
+<p>そこは分ける必要があります。</p>
+<p>15mmだったから。</p>
+<p>その撮影方向だったから。</p>
+<p>その写真で、その程度の地上の流れを私が許容したから。</p>
+<p>そうした条件から出てきた実用値です。</p>
+<h2>でも、2019年にも四隅の星が流れていることは分かっていた</h2>
+<p>ここは、今回の原稿で大事な訂正をしておきます。</p>
+<p>2019年の記事では、追尾時間を説明するときに地上風景のブレを取り上げました。</p>
+<p>だからといって、当時、</p>
+<p><strong>「地上しか見ていなかった」</strong></p>
+<p>わけではありません。</p>
+<p>実写の画面周辺を見れば、星が完全には止まっていないことも分かっていました。</p>
+<p>ただ、2019年の記事では、その理由を掘り下げていません。</p>
+<p>あの記事は、アストロトレーサーを使った星景写真の撮り方を紹介する記事であって、追尾誤差の仕組みを解析することが目的ではなかったからです。</p>
+<p>つまり、</p>
+<p><strong>星が流れていることを知らなかったのではありません。</strong></p>
+<p>原因について、それ以上追究していなかったのです。</p>
+<p>今回、当時の15mm・60秒に近い条件を理想化モデルで計算すると、地上の最大ブレが約18.9pxなのに対して、四隅の星の追尾残差は約20.5pxになりました。</p>
+<p>もちろん、この20.5pxを2019年の実写にそのまま当てはめることはできません。</p>
+<p>PENTAX実機の制御アルゴリズムを再現したものではないからです。</p>
+<p>実写の星像には、追尾精度、キャリブレーション、レンズ収差、ピント、振動など、さまざまな要因が入ります。</p>
+<p>ここで分かったのは、</p>
+<p><strong>超広角では、地上だけでなく画面周辺の星像も、実用露光時間を決める要因になり得る</strong></p>
+<p>というところまでです。</p>
+<p>なぜそうなるのかは、③で扱います。</p>
+<h2>500ルールを逆から見ると面白い</h2>
+<p>今回計算していて、もうひとつ面白い結果がありました。</p>
+<p>星景写真を撮る人なら、「500ルール」を聞いたことがあると思います。</p>
+<p>一般には、</p>
+<p><strong>500 ÷ 焦点距離</strong></p>
+<p>を、固定撮影で星を点に近く写すための露光秒数の目安にする方法です。</p>
+<p>たとえば、</p>
+<p><strong>14mm → 約35.7秒</strong><br />
+<strong>20mm → 25秒</strong><br />
+<strong>24mm → 約20.8秒</strong><br />
+<strong>35mm → 約14.3秒</strong><br />
+<strong>50mm → 10秒</strong></p>
+<p>となります。</p>
+<p>もちろん、500ルールそのものが絶対的な基準ではありません。</p>
+<p>センサーの画素数や最終出力、星をどこまで点として求めるかによって、許容できる時間は変わります。</p>
+<p>ここで面白いのは、その500ルールが暗黙に許容している像の移動量を逆算したときです。</p>
+<p>今回の条件では、センサー上で約36.5µmになります。</p>
+<p>ではアストロトレーサーを使って、今度は<strong>地上が同じ36.5µm動くまでの時間</strong>を計算するとどうなるでしょう。</p>
+<p>天の赤道方向では、</p>
+<p><strong>14mm → 35.7秒</strong><br />
+<strong>20mm → 25秒</strong><br />
+<strong>24mm → 20.8秒</strong><br />
+<strong>35mm → 14.3秒</strong><br />
+<strong>50mm → 10秒</strong></p>
+<p>となりました。</p>
+<p>500ルールと同じです。</p>
+<p>これは偶然ではありません。</p>
+<p>①で書いた話そのものです。</p>
+<p>同じ地球の自転によって生じる星と地上の相対運動を、</p>
+<p>固定撮影では<strong>星側の流れ</strong>として見ている。</p>
+<p>アストロトレーサーでは、星を追うことによって<strong>地上側の流れ</strong>として見ている。</p>
+<p>同じ許容移動量を設定すれば、同じ式が出てきます。</p>
+<p>ですから、</p>
+<p><strong>500ルールを裏返すと、アストロトレーサーで地上をどこまで流すかという目安としても現れる。</strong></p>
+<p>と考えることができます。</p>
+<p>ただし、これは「アストロトレーサーでは500ルールを使えばいい」という意味ではありません。</p>
+<p>500という数字自体が、写真として何を許容するかを含んだ経験則だからです。</p>
+<p>結局ここでも、</p>
+<p><strong>何µm、何px動くかは計算できる。</strong><br />
+<strong>何µm、何pxまで許すかは撮影者が決める。</strong></p>
+<p>という話に戻ってきます。</p>
+<h2>Type2なら2倍の時間を使えるのか？</h2>
+<p>もうひとつ気になるのがType2です。</p>
+<p>Type2は、RICOHの説明ではイメージセンサーをType1の半分の速度で追従させ、地上風景の流れを抑えながら、星と風景をバランスよく撮影するモードです。</p>
+<p>では、</p>
+<p><strong>「半分の速度なら、2倍の時間を露光できるのでは？」</strong></p>
+<p>と考えたくなります。</p>
+<p>地上だけを見るなら、これはかなり素直な考え方です。</p>
+<p>ここから先の比較は、南向き・高度30度で計算しています。前半で焦点距離ごとの地上ブレを出したときは南向き・高度40度だったので、数値をそのまま並べて比べないでください。</p>
+<p>今回の理想化モデルでも、</p>
+<p><strong>Type1・60秒</strong></p>
+<p>と、</p>
+<p><strong>Type2・120秒</strong></p>
+<p>では、地上のブレ量が一致しました。</p>
+<p>14mmでも24mmでも同じでした。</p>
+<p>つまり地上だけを考えれば、</p>
+<p><strong>Type1 60秒 ≒ Type2 120秒</strong></p>
+<p>という関係は成立します。</p>
+<p>しかし、星を見ると話が変わります。</p>
+<p>14mmの理想化モデルでは、</p>
+<p>Type1・60秒で画面中心の星の残差が約0.3px。</p>
+<p>一方、Type2・120秒では約11.1pxでした。</p>
+<p>これは追尾なし・60秒の約11.4pxとほぼ同じです。</p>
+<p>さらに四隅では、Type2・120秒のほうがType1・60秒より大きな残差になりました。</p>
+<p>つまり、</p>
+<p><strong>「Type2なら2倍露光できる」</strong></p>
+<p>という言い方は、地上だけを見れば成り立っても、写真全体には一般化できません。</p>
+<p>そもそもType2は、星を完全に止めるためのモードではありません。</p>
+<p>星と地上のどちらにどれだけ動きを残すか。</p>
+<p>そのバランスを変えるモードです。</p>
+<h2>では、アストロトレーサーは何秒にすればいいのか</h2>
+<p>最初の質問に戻りましょう。</p>
+<p><strong>アストロトレーサーは何秒追尾すればいいのか。</strong></p>
+<p>残念ながら、</p>
+<p>「14mmなら○秒」</p>
+<p>「アストロトレーサーなら○分」</p>
+<p>という万能な答えはありません。</p>
+<p>でも、何も分からないわけでもありません。</p>
+<p>何を考えればいいのかは整理できます。</p>
+<p><strong>T1　機械は何秒追尾できるのか。</strong></p>
+<p><strong>T2　実際に星をどこまで正確に追えるのか。</strong></p>
+<p><strong>T3　地上をどこまで流していいのか。</strong></p>
+<p><strong>T4　画面周辺の星をどこまで許すのか。</strong></p>
+<p>そして最後に、</p>
+<p><strong>T5　その写真で、自分は何を優先するのか。</strong></p>
+<p>2019年に私が書いた「1〜2分」は、アストロトレーサーの普遍的な正解ではありません。</p>
+<p>K-1 Mark IIと15mmを使って星景写真を撮っていた私が、実写の中から選んでいた時間です。</p>
+<p>そして2026年の今なら、その経験値について、</p>
+<p>「なぜそうなるのか」</p>
+<p>を以前より細かく計算できます。</p>
+<p>ただ、計算ができるようになったからといって、コンピューターが「正解の露光時間」を決めてくれるわけではありません。</p>
+<p>コンピューターが計算できるのは、</p>
+<p><strong>この条件なら、星がこれだけ動く。</strong><br />
+<strong>地上がこれだけ動く。</strong></p>
+<p>というところまでです。</p>
+<p>その結果を見て、</p>
+<p><strong>この写真なら、ここまで許す。</strong></p>
+<p>と決めるのは撮影者です。</p>
+<p>私は、この二つは分けて考えたほうがいいと思っています。</p>
+<h2>次は「なぜ周辺の星が止まりきらないのか」</h2>
+<p>ここまでで、一つだけまだ説明していない問題があります。</p>
+<p>アストロトレーサーは星を追っているのに、なぜ超広角になると画面周辺の星が止まりきらないのでしょうか。</p>
+<p>私はその現象自体は昔から見ていました。</p>
+<p>そして魚眼レンズについては長い間、</p>
+<p><strong>「魚眼だから仕方がないのだろう」</strong></p>
+<p>と思っていました。</p>
+<p>ところが今回、</p>
+<p>「本当に魚眼だからなのか？」</p>
+<p>と計算してみたところ、結果は予想とは逆でした。</p>
+<p>同じ画角なら、理想化したモデルでは<strong>魚眼のほうが通常の超広角レンズより、むしろ追尾残差が小さかった</strong>のです。</p>
+<p>では、問題の正体は何なのか。</p>
+<p>そこには、アストロトレーサーと赤道儀の「星の追い方」の違いが関係していました。</p>
+<p>→ 次の記事「<a href="/knowledge/photography/astrotracer-wide-angle-star-trails">アストロトレーサーを使っても、なぜ超広角の周辺では星が流れるのか？――センサーシフト追尾と赤道儀の違い</a>」</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-ground-blur">アストロトレーサーで星は止まるのに、なぜ地上は流れる？｜センサーシフト追尾の仕組み</a>
+        <p class="kzc-related-desc">星を追えば地上が流れる。これはアストロトレーサーだけの問題ではありません。撮像素子をX/Y移動と回転で動かして星を追う仕組みと、地上の像が画面のどこでどう流れるかを、公式資料・特許・理想化モデルから整理します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-wide-angle-star-trails">アストロトレーサーを使っても、なぜ超広角の周辺では星が流れるのか？｜センサーシフト追尾と赤道儀の違い</a>
+        <p class="kzc-related-desc">画面中央では星が止まっているのに、周辺だけ流れる。長年『魚眼だから仕方ない』と考えていた原因を、天球の回転・レンズ投影・撮像素子の剛体運動から計算し直しました。結果は予想と逆でした。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrotracer-tracking-error-calculation">アストロトレーサーの追尾誤差は、どうやって計算したのか？｜天球の回転から、センサー上の星の動きまで</a>
+        <p class="kzc-related-desc">①〜③で使った『追尾残差○px』は何を測った数字なのか。センサー上の格子点から逆投影し、地球を回し、再投影し、X/Y移動＋回転で追い、残ったズレを測る——計算の中身をすべて開きます。AIの使い方も含めて。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
