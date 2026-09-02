@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="800" height="500" role="img" aria-labelledby="t"><title id="t">Ground blur at the frame centre by focal length (idealized model).</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="40.0" y="56.0" fill="#8c96aa" font-size="27" font-weight="600" text-anchor="start">60 s · 13×13</text>
+<text x="40.0" y="126.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">14 mm</text>
+<rect x="190.0" y="96.0" width="550.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="190.0" y="96.0" width="149.5" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="327.5" y="127.0" fill="#09090c" font-size="28" font-weight="700" text-anchor="end">12.5</text>
+<text x="40.0" y="196.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">20 mm</text>
+<rect x="190.0" y="166.0" width="550.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="190.0" y="166.0" width="210.4" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="388.4" y="197.0" fill="#09090c" font-size="28" font-weight="700" text-anchor="end">17.6</text>
+<text x="40.0" y="266.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">24 mm</text>
+<rect x="190.0" y="236.0" width="550.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="190.0" y="236.0" width="251.1" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="429.1" y="267.0" fill="#09090c" font-size="28" font-weight="700" text-anchor="end">21.0</text>
+<text x="40.0" y="336.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">35 mm</text>
+<rect x="190.0" y="306.0" width="550.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="190.0" y="306.0" width="364.7" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="542.7" y="337.0" fill="#09090c" font-size="28" font-weight="700" text-anchor="end">30.5</text>
+<text x="40.0" y="406.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">50 mm</text>
+<rect x="190.0" y="376.0" width="550.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="190.0" y="376.0" width="518.9" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="696.9" y="407.0" fill="#09090c" font-size="28" font-weight="700" text-anchor="end">43.4</text>
+<text x="740.0" y="470.0" fill="#8c96aa" font-size="27" font-weight="700" text-anchor="end">px</text>
+</g></svg>

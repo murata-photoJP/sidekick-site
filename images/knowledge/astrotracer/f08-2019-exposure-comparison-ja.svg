@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" role="img" aria-labelledby="t"><title id="t">Ground blur at 60, 120 and 300 seconds under the 2019 conditions.</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="40.0" y="54.0" fill="#8c96aa" font-size="27" font-weight="600" text-anchor="start">15 mm ・ 11×11格子</text>
+<rect x="120.0" y="366.1" width="62.0" height="33.9" rx="5" fill="#ffb14a" stroke="none" stroke-width="0.0"/>
+<text x="151.0" y="352.1" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="middle">12.1</text>
+<rect x="194.0" y="347.1" width="62.0" height="52.9" rx="5" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="225.0" y="333.1" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="middle">18.9</text>
+<text x="194.0" y="440.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">60秒</text>
+<rect x="340.0" y="332.2" width="62.0" height="67.8" rx="5" fill="#ffb14a" stroke="none" stroke-width="0.0"/>
+<text x="371.0" y="318.2" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="middle">24.2</text>
+<rect x="414.0" y="294.4" width="62.0" height="105.6" rx="5" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="445.0" y="280.4" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="middle">37.7</text>
+<text x="414.0" y="440.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">120秒</text>
+<rect x="560.0" y="230.9" width="62.0" height="169.1" rx="5" fill="#ffb14a" stroke="none" stroke-width="0.0"/>
+<text x="591.0" y="216.9" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="middle">60.4</text>
+<rect x="634.0" y="135.7" width="62.0" height="264.3" rx="5" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="665.0" y="121.7" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="middle">94.4</text>
+<text x="634.0" y="440.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">300秒</text>
+<line x1="60.0" y1="400.0" x2="760.0" y2="400.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<text x="60.0" y="470.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="start">px</text>
+<rect x="300.0" y="452.0" width="26.0" height="22.0" rx="4" fill="#ffb14a" stroke="none" stroke-width="0.0"/>
+<text x="336.0" y="470.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="start">画面中心</text>
+<rect x="510.0" y="452.0" width="26.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="546.0" y="470.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="start">画面内最大</text>
+</g></svg>

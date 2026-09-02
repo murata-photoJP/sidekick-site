@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" width="800" height="620" role="img" aria-labelledby="t"><title id="t">Centre-fixed and best-rigid fits compared at a 114 degree diagonal field.</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="40.0" y="52.0" fill="#8c96aa" font-size="27" font-weight="600" text-anchor="start">対角画角114° ・ 60秒 ・ 9×9格子</text>
+<text x="40.0" y="104.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="start">中心に合わせた場合</text>
+<rect x="40.0" y="128.0" width="66.0" height="44.0" fill="#fa8700" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="106.0" y="128.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="172.0" y="128.0" width="66.0" height="44.0" fill="#14161d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="238.0" y="128.0" width="66.0" height="44.0" fill="#5b310c" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="304.0" y="128.0" width="66.0" height="44.0" fill="#ff8a00" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="40.0" y="172.0" width="66.0" height="44.0" fill="#da7501" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="106.0" y="172.0" width="66.0" height="44.0" fill="#462911" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="172.0" y="172.0" width="66.0" height="44.0" fill="#14161d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="238.0" y="172.0" width="66.0" height="44.0" fill="#472a11" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="304.0" y="172.0" width="66.0" height="44.0" fill="#de7701" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="40.0" y="216.0" width="66.0" height="44.0" fill="#ce6e02" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="106.0" y="216.0" width="66.0" height="44.0" fill="#3e2613" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="172.0" y="216.0" width="66.0" height="44.0" fill="#14161d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="238.0" y="216.0" width="66.0" height="44.0" fill="#3e2613" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="304.0" y="216.0" width="66.0" height="44.0" fill="#d27002" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="40.0" y="260.0" width="66.0" height="44.0" fill="#da7501" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="106.0" y="260.0" width="66.0" height="44.0" fill="#462911" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="172.0" y="260.0" width="66.0" height="44.0" fill="#14161d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="238.0" y="260.0" width="66.0" height="44.0" fill="#472911" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="304.0" y="260.0" width="66.0" height="44.0" fill="#de7701" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="40.0" y="304.0" width="66.0" height="44.0" fill="#fb8800" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="106.0" y="304.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="172.0" y="304.0" width="66.0" height="44.0" fill="#14161d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="238.0" y="304.0" width="66.0" height="44.0" fill="#5b310c" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="304.0" y="304.0" width="66.0" height="44.0" fill="#ff8a00" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="40.0" y="128.0" width="330.0" height="220.0" rx="0" fill="none" stroke="#515969" stroke-width="2.4"/>
+<text x="40.0" y="388.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">中心 0.0px</text>
+<text x="40.0" y="424.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">最大 24.14px</text>
+<text x="430.0" y="104.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="start">画面全体で合わせた場合</text>
+<rect x="430.0" y="128.0" width="66.0" height="44.0" fill="#b65f03" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="496.0" y="128.0" width="66.0" height="44.0" fill="#532e0e" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="562.0" y="128.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="628.0" y="128.0" width="66.0" height="44.0" fill="#532e0e" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="694.0" y="128.0" width="66.0" height="44.0" fill="#ba6203" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="430.0" y="172.0" width="66.0" height="44.0" fill="#864405" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="496.0" y="172.0" width="66.0" height="44.0" fill="#3c2514" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="562.0" y="172.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="628.0" y="172.0" width="66.0" height="44.0" fill="#3c2514" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="694.0" y="172.0" width="66.0" height="44.0" fill="#8a4704" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="430.0" y="216.0" width="66.0" height="44.0" fill="#753b06" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="496.0" y="216.0" width="66.0" height="44.0" fill="#302116" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="562.0" y="216.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="628.0" y="216.0" width="66.0" height="44.0" fill="#302116" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="694.0" y="216.0" width="66.0" height="44.0" fill="#783c06" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="430.0" y="260.0" width="66.0" height="44.0" fill="#874405" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="496.0" y="260.0" width="66.0" height="44.0" fill="#3c2514" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="562.0" y="260.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="628.0" y="260.0" width="66.0" height="44.0" fill="#3c2514" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="694.0" y="260.0" width="66.0" height="44.0" fill="#8a4604" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="430.0" y="304.0" width="66.0" height="44.0" fill="#b66003" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="496.0" y="304.0" width="66.0" height="44.0" fill="#532e0e" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="562.0" y="304.0" width="66.0" height="44.0" fill="#5a310d" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="628.0" y="304.0" width="66.0" height="44.0" fill="#532e0e" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="694.0" y="304.0" width="66.0" height="44.0" fill="#b96203" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="430.0" y="128.0" width="330.0" height="220.0" rx="0" fill="none" stroke="#515969" stroke-width="2.4"/>
+<text x="430.0" y="388.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">中心 8.3px</text>
+<text x="430.0" y="424.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">最小 2.8px</text>
+<text x="430.0" y="460.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">最大 17.85px</text>
+<rect x="40.0" y="508.0" width="720.0" height="80.0" rx="10" fill="#14161d" stroke="#2b3140" stroke-width="1.8"/>
+<text x="400.0" y="542.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="middle">合わせ方を変えると、残差の大きさも分布も変わる</text>
+<text x="400.0" y="574.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="middle">濃淡は両パネル同一スケール。どちらもモデル上の合わせ方</text>
+</g></svg>

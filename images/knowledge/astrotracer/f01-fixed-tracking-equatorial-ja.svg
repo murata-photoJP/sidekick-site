@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560" role="img" aria-labelledby="t"><title id="t">Fixed shooting, Astrotracer and equatorial mount compared.</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<rect x="166.0" y="40.0" width="208.0" height="400.0" rx="10" fill="none" stroke="#2b3140" stroke-width="1.8"/>
+<rect x="374.0" y="40.0" width="208.0" height="400.0" rx="10" fill="none" stroke="#2b3140" stroke-width="1.8"/>
+<rect x="582.0" y="40.0" width="208.0" height="400.0" rx="10" fill="none" stroke="#2b3140" stroke-width="1.8"/>
+<text x="270.0" y="92.0" fill="#ffb14a" font-size="29" font-weight="700" text-anchor="middle">固定撮影</text>
+<text x="478.0" y="78.0" fill="#ffb14a" font-size="27" font-weight="700" text-anchor="middle">アストロ</text>
+<text x="478.0" y="110.0" fill="#ffb14a" font-size="27" font-weight="700" text-anchor="middle">トレーサー</text>
+<text x="686.0" y="92.0" fill="#ffb14a" font-size="29" font-weight="700" text-anchor="middle">赤道儀</text>
+<text x="30.0" y="199.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">動かすもの</text>
+<line x1="26.0" y1="156.0" x2="774.0" y2="156.0" stroke="#2b3140" stroke-width="1.4" stroke-linecap="round"/>
+<text x="270.0" y="199.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="middle">なし</text>
+<text x="478.0" y="199.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="middle">センサー</text>
+<text x="686.0" y="199.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="middle">カメラとレンズ</text>
+<text x="30.0" y="283.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">星</text>
+<line x1="26.0" y1="240.0" x2="774.0" y2="240.0" stroke="#2b3140" stroke-width="1.4" stroke-linecap="round"/>
+<text x="270.0" y="283.0" fill="#ffb14a" font-size="27" font-weight="600" text-anchor="middle">流れる</text>
+<text x="478.0" y="283.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="middle">止まる</text>
+<text x="686.0" y="283.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="middle">止まる</text>
+<text x="30.0" y="367.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">地上</text>
+<line x1="26.0" y1="324.0" x2="774.0" y2="324.0" stroke="#2b3140" stroke-width="1.4" stroke-linecap="round"/>
+<text x="270.0" y="367.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="middle">止まる</text>
+<text x="478.0" y="367.0" fill="#ffb14a" font-size="27" font-weight="600" text-anchor="middle">流れる</text>
+<text x="686.0" y="367.0" fill="#ffb14a" font-size="27" font-weight="600" text-anchor="middle">流れる</text>
+<rect x="26.0" y="470.0" width="748.0" height="62.0" rx="10" fill="#14161d" stroke="#2b3140" stroke-width="1.8"/>
+<text x="400.0" y="508.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="middle">地球の自転による星と地上の相対運動は消せない</text>
+</g></svg>
