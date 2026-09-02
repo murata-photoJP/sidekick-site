@@ -52,6 +52,33 @@ python -m pytest tests/story/test_build_story.py::test_production_story_html_mat
 本番へコピーするときに見落としやすい（2026-08-31に実際に見落とし、
 `test_production_knowledge_html_matches_template`が検出した）。
 
+### 1-2. 一時ビルドは本番相当ビルドとJA/EN出力ツリーを共有してはならない（2026-09-03 KB-BUILD-2）
+
+**原則：一時ビルド（spike・比較用ビルド・検証用ビルド）は、本番相当ビルドと
+日本語版・英語版のどちらの出力ツリーも共有しない。**
+
+`build_knowledge.py`の英語版出力先は、`--output-en`を省略すると`--output`の親から
+`{output}/../en/knowledge/`として導出される。つまり**`--output`を分けても、親ディレクトリを
+共有していれば英語版の出力先は同じになる**。全記事ビルドは今回のインデックスに含まれない
+古い`.html`を削除するため、**一時ビルドが本番相当ビルドの英語版HTMLをstale扱いで削除する**。
+
+2026-09-03、Gate C-1のtechnical spikeで実際に発生した。`--output build-output/spike-knowledge`
+で生成したところ、英語版出力先が`build-output/en/knowledge/`と解決され、
+`--output build-output/knowledge`側が生成した英語版7ページが削除された。
+
+**一時ビルドでは`--output-en`も必ず明示する。**
+
+```bash
+python build/knowledge/build_knowledge.py \
+  --index data/knowledge/web-published.json \
+  --output build-output/spike/knowledge \
+  --output-en build-output/spike/en/knowledge
+```
+
+本番相当ビルド（`--output build-output/knowledge`）は、既定の導出のままでよい。
+`build_knowledge.py`は実行時に`[info] 英語版の出力先: ...`を必ず表示するので、
+**意図しない場所へ書いていないかを毎回確認すること**。
+
 デプロイ前は、この4つを個別に意識するか、後述の「2. pytestの実行範囲」で
 まとめて実行すること。
 

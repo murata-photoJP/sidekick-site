@@ -19,6 +19,11 @@ Phase A2範囲: 打ち出の小槌トップ・複数記事の一括生成に対�
 
     # 検証のみ（何も書き込まない）
     python build/knowledge/build_knowledge.py --index data/knowledge/web-published.json --output build-output/knowledge --validate-only
+
+  一時ビルド（spike・比較用）では、他のビルドの英語版出力を壊さないよう --output-en も明示する:
+
+    python build/knowledge/build_knowledge.py --index data/knowledge/web-published.json \
+        --output build-output/spike/knowledge --output-en build-output/spike/en/knowledge
 """
 
 from __future__ import annotations
@@ -679,21 +684,66 @@ def render_all(index: dict, article_id: str | None,
     return rendered
 
 
-def find_stale_html(output_dir: Path, rendered: dict[Path, str]) -> list[Path]:
-    """output_dir配下、および英語版の出力先（output_dirの兄弟ディレクトリ en/knowledge/）
-    の既存.htmlのうち、今回のrenderedに含まれないものを返す
+def resolve_en_output_dir(output_dir: Path, output_en: str | None) -> Path:
+    """英語版の出力先を決める。
+
+    --output-en が指定されていればそれを使う。省略時は従来どおり output_dir の兄弟
+    en/knowledge/（本番の html/en/knowledge/ に対応する既定）を導出する。
+
+    注意：--output だけを変えても、親ディレクトリを共有していれば英語版の出力先は
+    同じになる。一時ビルド（spike・比較用ビルド）が本番相当ビルドの英語版出力を
+    stale とみなして削除する事故を防ぐため、一時ビルドでは --output-en も必ず明示する
+    （2026-09-03 KB-BUILD-2）。"""
+    return Path(output_en) if output_en else output_dir.parent / "en" / "knowledge"
+
+
+def output_path_for(rel_path: Path, output_dir: Path, en_output_dir: Path) -> Path:
+    """render_all()が返す相対パスを、実際の出力先パスへ解決する。
+
+    英語版は public_url_to_output_path() の規約により Path("..", "en", "knowledge", ...)
+    で始まる。その3要素を落として en_output_dir の配下へ置く
+    （2026-09-03 KB-BUILD-2。それ以前は output_dir / rel_path で兄弟へ escape していた）。"""
+    parts = rel_path.parts
+    if parts[:3] == ("..", "en", "knowledge"):
+        return en_output_dir.joinpath(*parts[3:])
+    return output_dir / rel_path
+
+
+def display_removed_path(p: Path, output_dir: Path, en_output_dir: Path) -> Path:
+    """削除したファイルの表示用パス。日本語版・英語版それぞれの出力先からの相対にする。
+
+    英語版の出力先は output_dir の配下とは限らないため、p.relative_to(output_dir) は
+    ValueError になりうる。どちらにも属さない場合は与えられたパスをそのまま表示する
+    （2026-09-03 KB-BUILD-1）。"""
+    for base in (output_dir, en_output_dir):
+        if p.is_relative_to(base):
+            return p.relative_to(base)
+    return p
+
+
+def find_stale_html(output_dir: Path, en_output_dir: Path, rendered: dict[Path, str]) -> list[Path]:
+    """output_dir配下、および英語版の出力先（en_output_dir）配下の既存.htmlのうち、
+    今回のrenderedに含まれないものを返す
     （非公開になった/カテゴリやslugが変わった記事の古い生成物）。
     output_dirは、このツールが生成したファイルだけを置く場所という前提に立つ
     （手動で置いた無関係な.htmlも対象になるため、--outputは共有しない）。同様に
-    output_dirの兄弟の en/knowledge/ も、このツールが生成した英語版ファイルだけを
-    置く場所という前提に立つ（2026-07-20 英語Knowledge公開機能）。"""
-    keep = {(output_dir / rel_path).resolve() for rel_path in rendered}
-    roots = [output_dir, output_dir.parent / "en" / "knowledge"]
+    en_output_dirも、このツールが生成した英語版ファイルだけを置く場所という前提に立つ
+    （2026-07-20 英語Knowledge公開機能。2026-09-03 KB-BUILD-2 で兄弟ディレクトリの
+    暗黙導出をやめ、呼び出し側が決めた出力先を受け取る形にした）。"""
+    keep = {output_path_for(rel_path, output_dir, en_output_dir).resolve() for rel_path in rendered}
+    roots = [output_dir, en_output_dir]
     stale: list[Path] = []
+    seen: set[Path] = set()
     for root in roots:
         if not root.exists():
             continue
-        stale.extend(p for p in root.rglob("*.html") if p.resolve() not in keep)
+        for p in root.rglob("*.html"):
+            resolved = p.resolve()
+            # en_output_dirをoutput_dir配下に置いた場合、同じファイルを2回拾いうる
+            if resolved in keep or resolved in seen:
+                continue
+            seen.add(resolved)
+            stale.append(p)
     return stale
 
 
@@ -706,10 +756,11 @@ def _safe_staging_subpath(rel_path: Path) -> Path:
     return Path(*safe_parts)
 
 
-def stage_and_commit(rendered: dict[Path, str], output_dir: Path, cleanup_stale: bool) -> list[Path]:
+def stage_and_commit(rendered: dict[Path, str], output_dir: Path, en_output_dir: Path,
+                     cleanup_stale: bool) -> list[Path]:
     """一時ディレクトリへ全ファイルを書き出し、成功したら output_dir （日本語版）および
-    その兄弟ディレクトリ en/knowledge/ （英語版）へ確定コピーする。途中で失敗した場合、
-    output_dir・en/knowledge/のどちらにも一切触れない（既存の出力を壊さない）。
+    en_output_dir （英語版）へ確定コピーする。途中で失敗した場合、
+    output_dir・en_output_dirのどちらにも一切触れない（既存の出力を壊さない）。
 
     cleanup_stale=Trueのとき（全記事一括生成時のみ）、新しい内容の確定コピーが
     すべて成功した後に、今回のrenderedに含まれない古い.htmlを削除する
@@ -725,7 +776,7 @@ def stage_and_commit(rendered: dict[Path, str], output_dir: Path, cleanup_stale:
         output_dir.mkdir(parents=True, exist_ok=True)
         for rel_path in rendered:
             src = staging / _safe_staging_subpath(rel_path)
-            dst = output_dir / rel_path
+            dst = output_path_for(rel_path, output_dir, en_output_dir)
             dst.parent.mkdir(parents=True, exist_ok=True)
             # 一時ファイル経由でatomicに確定する（同一ボリューム上のstagingからの移動）
             fd, tmp_name = tempfile.mkstemp(dir=str(dst.parent), prefix=".tmp-knowledge-", suffix=".html")
@@ -739,7 +790,7 @@ def stage_and_commit(rendered: dict[Path, str], output_dir: Path, cleanup_stale:
         return []
 
     removed = []
-    for stale_path in find_stale_html(output_dir, rendered):
+    for stale_path in find_stale_html(output_dir, en_output_dir, rendered):
         stale_path.unlink()
         removed.append(stale_path)
     return removed
@@ -751,6 +802,11 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     p.add_argument("--output", required=True,
                    help="出力先ディレクトリ。本番のhtml/knowledge/を直接指定しないこと"
                         "（Phase A2ではローカル確認用ディレクトリを指定する運用とする）")
+    p.add_argument("--output-en", default=None,
+                   help="英語版の出力先ディレクトリ。省略時は{output}の兄弟のen/knowledge/"
+                        "（本番のhtml/en/knowledge/に対応する既定）。"
+                        "一時ビルド（spike・比較用）では、他のビルドの英語版出力を"
+                        "stale扱いで削除しないよう必ず明示すること")
     p.add_argument("--article-id", default=None, help="生成する記事ID。省略時は全記事+トップページを生成")
     p.add_argument("--validate-only", action="store_true", help="ファイルを書かず、生成可能かのみ確認する")
     p.add_argument("--pickup-config", default=None,
@@ -781,22 +837,30 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     output_dir = Path(args.output)
+    en_output_dir = resolve_en_output_dir(output_dir, args.output_en)
+    if output_dir.resolve() == en_output_dir.resolve():
+        print("ERROR: --output と --output-en が同じディレクトリを指しています: "
+              f"{output_dir}", file=sys.stderr)
+        return 1
     # 古いHTMLの削除は、全記事一括生成のとき（=今回のrenderedが公開状態の全体を
     # 正しく表している）のときだけ行う。--article-id指定時は一部しか分からないため行わない。
     cleanup_stale = args.article_id is None
     try:
-        removed = stage_and_commit(rendered, output_dir, cleanup_stale)
+        removed = stage_and_commit(rendered, output_dir, en_output_dir, cleanup_stale)
     except OSError as exc:
         print(f"ERROR: 出力先へ書き込めません: {exc}", file=sys.stderr)
         return 1
 
     print(f"[done] {len(rendered)}ページを生成しました -> {output_dir}")
+    # 英語版の出力先は--outputから離れた場所になりうるため、どこへ書いたかを必ず示す
+    # （2026-09-03 KB-BUILD-2。黙って兄弟ディレクトリへ書き、黙って消していた）。
+    print(f"[info] 英語版の出力先: {en_output_dir}")
     for rel_path in sorted(rendered):
         print(f"  - {rel_path}")
     if removed:
         print(f"[done] 非公開になった記事の古いHTMLを{len(removed)}件削除しました")
         for p in sorted(removed):
-            print(f"  - {p.relative_to(output_dir)}")
+            print(f"  - {display_removed_path(p, output_dir, en_output_dir)}")
     return 0
 
 

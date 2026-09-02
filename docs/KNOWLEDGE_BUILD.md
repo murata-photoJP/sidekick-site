@@ -187,3 +187,55 @@ python tests/knowledge/test_build_knowledge.py
 > Knowledge記事を公開・更新するたびに、`generate_web_published_index.py`→
 > `build_knowledge.py`→`generate_knowledge_sitemap.py`の順で実行する運用とする
 > （テスト: `tests/knowledge/test_generate_knowledge_sitemap.py`）。
+
+---
+
+## 2026-09-03追記：build safety修正（KB-BUILD-1 / KB-BUILD-2）
+
+Gate C-1のtechnical spikeで発見した2件を修正した。**記事のレンダリング仕様は変更していない**
+（本番インデックスでのA/Bビルド17ページがbyte-identicalであることを確認済み）。
+
+### KB-BUILD-1：英語版の古いHTMLを削除するとValueErrorで異常終了する
+
+`main()`が削除ファイル一覧を表示する際、`p.relative_to(output_dir)`を使っていた。
+英語版の出力先は`output_dir`の**配下ではない**ため、英語版の`.html`が1件でも
+staleとして削除されると`ValueError`になり、**HTML生成・確定コピー・削除はすべて
+完了しているのに`return 0`へ到達せず、exit code 1**になっていた。
+削除ファイルの一覧も失われるため、**本番から削除すべきページの記録が消える**
+（`DEPLOY_CHECKLIST.md`§1の「変更のあったファイルだけを本番へコピー」運用に必要な情報）。
+
+`display_removed_path()`を追加し、日本語版・英語版それぞれの出力先からの相対にする。
+どちらにも属さない場合は与えられたパスをそのまま表示する（例外を投げない）。
+
+### KB-BUILD-2：`--output`を分けても英語版の出力先を共有してしまう
+
+`find_stale_html()`の英語版ルートが`output_dir.parent / "en" / "knowledge"`から
+暗黙に導出されており、**親ディレクトリを共有する2つの`--output`が同じ英語版ツリーを
+共有していた**。詳細と運用原則は`DEPLOY_CHECKLIST.md`§1-2。
+
+`--output-en`を追加した（既定は従来どおりの導出なので、**既存のコマンド・運用・
+本番出力先は変わらない**）。あわせて：
+
+- `stage_and_commit()` / `find_stale_html()` が英語版出力先を引数で受け取る
+  （`output_path_for()`が`Path("..", "en", "knowledge", ...)`を解決する）
+- `--output`と`--output-en`が同じディレクトリなら誤設定として異常終了する
+- 実行時に`[info] 英語版の出力先: ...`を必ず表示する（従来は黙って書き、黙って消していた）
+
+**設計は`build/development-log/build_development_log.py`の`--output-en`に合わせた**
+（同リポジトリ内の既存パターン）。
+
+### 追加したregression test
+
+`tests/knowledge/test_build_knowledge.py`に3件追加した（既存テストは1件も変更していない）。
+
+| テスト | 検証内容 |
+|---|---|
+| `test_stale_en_html_removed_on_full_batch` | 英語版のstale削除でexit code 0・ValueErrorなし・削除ファイル名が表示される |
+| `test_stale_ja_and_en_html_reported_together` | 日本語版と英語版が同時にstaleでも両方削除・両方表示・exit code 0 |
+| `test_output_en_isolates_temporary_build` | `--output-en`を指定した一時ビルドが別ビルドの英語版出力を削除しない／同一指定は異常終了する |
+
+**なぜ既存420件で捕まらなかったか**：stale削除を扱う既存4テストはすべて
+`_six_article_fixture()`（日本語3記事のみ）を使っており、**英語版のstaleを作るテストが
+1件も無かった**ため、この経路が一度も実行されていなかった。
+
+`py -3.10 -m pytest tests -q` は **420 → 423**（knowledge 87→90、他スイートは増減なし）。

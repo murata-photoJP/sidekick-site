@@ -612,6 +612,140 @@ def test_stale_cleanup_ignores_unrelated_output_dir(tmp: Path) -> None:
 
 
 # ===========================================================================
+# 2026-09-03 KB-BUILD-1 / KB-BUILD-2: stale削除の報告と、英語版出力先の分離
+# ===========================================================================
+
+@with_tmp
+def test_stale_en_html_removed_on_full_batch(tmp: Path) -> None:
+    """KB-BUILD-1: 英語版の古いHTMLを削除したとき、異常終了せず一覧も表示されること。
+
+    英語版の出力先はoutput_dirの配下ではないため、削除ファイルの表示に
+    p.relative_to(output_dir)を使うとValueErrorで異常終了していた
+    （HTML生成・削除は完了しているのに exit code 1 になり、削除一覧も失われる）。"""
+    ja = sample_article()
+    en = sample_en_article()
+    index = make_index(articles=[ja, en])
+    proc1, output_dir = run_build(index, tmp)
+    check("EN stale削除: 1回目のビルドが成功する", proc1.returncode == 0, proc1.stdout + proc1.stderr)
+    en_file = output_dir.parent / "en" / "knowledge" / "photoshop" / "sample-en-article.html"
+    check("EN stale削除: 英語記事HTMLが最初は存在する", en_file.exists())
+
+    # 英語記事が非公開になった想定で、インデックスから外して全記事ビルドし直す
+    index2 = make_index(articles=[ja])
+    index_path = tmp / "web-published.json"
+    index_path.write_text(json.dumps(index2, ensure_ascii=False), encoding="utf-8")
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    proc2 = subprocess.run(
+        [sys.executable, str(BUILD_SCRIPT), "--index", str(index_path), "--output", str(output_dir)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", env=env,
+    )
+    check("EN stale削除: 2回目も exit code 0 で終わる（ValueErrorで落ちない）",
+          proc2.returncode == 0, proc2.stdout + proc2.stderr)
+    check("EN stale削除: ValueErrorが出ていない", "ValueError" not in proc2.stderr, proc2.stderr)
+    check("EN stale削除: 英語記事の古いHTMLが削除される", not en_file.exists())
+    check("EN stale削除: 削除件数が報告される", "古いHTMLを1件削除しました" in proc2.stdout, proc2.stdout)
+    check("EN stale削除: 削除ファイル名が報告される",
+          "sample-en-article.html" in proc2.stdout, proc2.stdout)
+    check("EN stale削除: 英語トップページは残る",
+          (output_dir.parent / "en" / "knowledge" / "index.html").exists())
+    check("EN stale削除: 日本語記事は残る",
+          (output_dir / "photoshop" / "sample-article.html").exists())
+
+
+@with_tmp
+def test_stale_ja_and_en_html_reported_together(tmp: Path) -> None:
+    """KB-BUILD-1: 日本語版と英語版の古いHTMLが同時にstaleになっても、
+    両方削除され、両方が一覧に表示され、exit code 0 で終わること。"""
+    ja1 = sample_article()
+    ja2 = sample_article(id="SKB-TEST-000002", slug="second-article", title="テスト記事2",
+                         category={"slug": "photography", "name": "Photography", "name_ja": "写真"},
+                         public_url="/knowledge/photography/second-article")
+    en = sample_en_article()
+    index = make_index(articles=[ja1, ja2, en])
+    proc1, output_dir = run_build(index, tmp)
+    check("JA/EN同時stale: 1回目のビルドが成功する", proc1.returncode == 0, proc1.stdout + proc1.stderr)
+    ja_file = output_dir / "photography" / "second-article.html"
+    en_file = output_dir.parent / "en" / "knowledge" / "photoshop" / "sample-en-article.html"
+    check("JA/EN同時stale: 日本語記事2のHTMLが最初は存在する", ja_file.exists())
+    check("JA/EN同時stale: 英語記事HTMLが最初は存在する", en_file.exists())
+
+    index2 = make_index(articles=[ja1])
+    index_path = tmp / "web-published.json"
+    index_path.write_text(json.dumps(index2, ensure_ascii=False), encoding="utf-8")
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    proc2 = subprocess.run(
+        [sys.executable, str(BUILD_SCRIPT), "--index", str(index_path), "--output", str(output_dir)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", env=env,
+    )
+    check("JA/EN同時stale: 2回目も exit code 0 で終わる", proc2.returncode == 0,
+          proc2.stdout + proc2.stderr)
+    check("JA/EN同時stale: 日本語版の古いHTMLが削除される", not ja_file.exists())
+    check("JA/EN同時stale: 英語版の古いHTMLが削除される", not en_file.exists())
+    check("JA/EN同時stale: 削除件数が2件と報告される",
+          "古いHTMLを2件削除しました" in proc2.stdout, proc2.stdout)
+    check("JA/EN同時stale: 日本語版の削除ファイル名が表示される",
+          "second-article.html" in proc2.stdout, proc2.stdout)
+    check("JA/EN同時stale: 英語版の削除ファイル名が表示される",
+          "sample-en-article.html" in proc2.stdout, proc2.stdout)
+
+
+@with_tmp
+def test_output_en_isolates_temporary_build(tmp: Path) -> None:
+    """KB-BUILD-2: --output-en を指定した一時ビルドが、別ビルドの英語版出力を壊さないこと。
+
+    英語版の出力先は従来 output_dir の親から暗黙に導出していたため、--output を分けても
+    親を共有していれば同じ en/knowledge/ を共有し、片方のビルドがもう片方の英語版HTMLを
+    stale とみなして削除していた。"""
+    ja = sample_article()
+    en = sample_en_article()
+    index = make_index(articles=[ja, en])
+
+    # 本番相当ビルド（既定の導出。en は shared/en/knowledge へ出る）
+    index_path = tmp / "web-published.json"
+    index_path.write_text(json.dumps(index, ensure_ascii=False), encoding="utf-8")
+    main_out = tmp / "shared" / "knowledge"
+    env = os.environ.copy()
+    env["PYTHONIOENCODING"] = "utf-8"
+    proc1 = subprocess.run(
+        [sys.executable, str(BUILD_SCRIPT), "--index", str(index_path), "--output", str(main_out)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", env=env,
+    )
+    check("出力先分離: 本番相当ビルドが成功する", proc1.returncode == 0, proc1.stdout + proc1.stderr)
+    main_en = tmp / "shared" / "en" / "knowledge" / "photoshop" / "sample-en-article.html"
+    check("出力先分離: 本番相当ビルドの英語記事HTMLが存在する", main_en.exists())
+
+    # 一時ビルド（親を共有するが、--output-en を明示して英語版を隔離する）
+    index2 = make_index(articles=[ja])
+    index2_path = tmp / "spike-index.json"
+    index2_path.write_text(json.dumps(index2, ensure_ascii=False), encoding="utf-8")
+    spike_out = tmp / "shared" / "spike-knowledge"
+    spike_en = tmp / "shared" / "spike-en" / "knowledge"
+    proc2 = subprocess.run(
+        [sys.executable, str(BUILD_SCRIPT), "--index", str(index2_path),
+         "--output", str(spike_out), "--output-en", str(spike_en)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", env=env,
+    )
+    check("出力先分離: 一時ビルドが成功する", proc2.returncode == 0, proc2.stdout + proc2.stderr)
+    check("出力先分離: 一時ビルドは本番相当ビルドの英語記事HTMLを削除しない",
+          main_en.exists(), proc2.stdout)
+    check("出力先分離: 一時ビルドの英語トップは自分の出力先へ出る",
+          (spike_en / "index.html").exists())
+    check("出力先分離: 英語版の出力先が表示される",
+          "[info] 英語版の出力先" in proc2.stdout, proc2.stdout)
+
+    # --output と --output-en が同じディレクトリなら誤設定として拒否する
+    proc3 = subprocess.run(
+        [sys.executable, str(BUILD_SCRIPT), "--index", str(index2_path),
+         "--output", str(spike_out), "--output-en", str(spike_out)],
+        capture_output=True, text=True, encoding="utf-8", errors="replace", env=env,
+    )
+    check("出力先分離: --outputと--output-enが同一なら異常終了する",
+          proc3.returncode == 1, proc3.stdout + proc3.stderr)
+
+
+# ===========================================================================
 # Phase A2-2: 打ち出の小槌トップ
 # ===========================================================================
 
@@ -1334,6 +1468,10 @@ def main() -> int:
         # Phase A2: 非公開になった記事の古いHTML削除
         test_stale_html_removed_on_full_batch, test_stale_html_not_removed_on_single_article_run,
         test_stale_cleanup_skipped_when_build_fails, test_stale_cleanup_ignores_unrelated_output_dir,
+        # 2026-09-03 KB-BUILD-1 / KB-BUILD-2
+        test_stale_en_html_removed_on_full_batch,
+        test_stale_ja_and_en_html_reported_together,
+        test_output_en_isolates_temporary_build,
         test_top_page_about_before_article_list,
         # Phase A2: トップページ
         test_top_page_card_count_and_order, test_top_page_no_draft_like_data,
