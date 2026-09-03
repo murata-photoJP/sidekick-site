@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astrotracer ③: Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens? — Sensor-Shift Tracking Is Not an Equatorial Mount | Knowledge - SideKick</title>
+<meta name="description" content="The stars are held at the center of the frame but trail near the edges. I had assumed for years that it was &#34;because it is a fisheye.&#34; Recalculating from the rotating celestial sphere, the lens projection and the rigid motion of the image sensor gave the opposite of what I expected.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/astrotracer-stars-trail-at-frame-edges">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/astrotracer-wide-angle-star-trails">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/astrotracer-stars-trail-at-frame-edges">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/astrotracer-wide-angle-star-trails">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/astrotracer-wide-angle-star-trails" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Astrotracer ③: Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens? — Sensor-Shift Tracking Is Not an Equatorial Mount</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Astrotracer ③: Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens? — Sensor-Shift Tracking Is Not an Equatorial Mount</h1>
+    <p class="kzc-article-lead">The stars are held at the center of the frame but trail near the edges. I had assumed for years that it was &#34;because it is a fisheye.&#34; Recalculating from the rotating celestial sphere, the lens projection and the rigid motion of the image sensor gave the opposite of what I expected.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-03">Updated: 2026-09-03</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Shoot with Astrotracer using an ultra-wide or fisheye lens and you can find that the stars are well held at the center of the frame while, near the edges, they trail a little.</p>
+<p>I have known about this phenomenon itself for a long time.</p>
+<p>As I recall, back in the earliest days when I was using a K-5 and an Astrotracer prototype, Astrotracer worked normally even with a fisheye lens attached.</p>
+<p>Look at the resulting images, though, and the stars were not perfectly held all the way to the edges.</p>
+<p>At the time I thought</p>
+<p><strong>&quot;it's a fisheye, so it can't be helped.&quot;</strong></p>
+<p>A fisheye lens renders things quite differently from an ordinary wide-angle lens.</p>
+<p>Straight lines bend considerably near the edges of the frame.</p>
+<p>Since it is a lens with such a special projection, Astrotracer — which follows the stars by moving the image sensor — presumably cannot correct all the way to the edges.</p>
+<p>I did not think about it any further than that.</p>
+<p>In 2026, though, I recalculated it while asking</p>
+<p><strong>&quot;is it really because it is a fisheye?&quot;</strong></p>
+<p>The result was the opposite of what I had vaguely assumed for years.</p>
+<p>Compared at the same field of view, in the idealized model used here,</p>
+<p><strong>the fisheye lens gave a <em>smaller</em> tracking residual near the edges of the frame than an ordinary, non-fisheye ultra-wide lens.</strong></p>
+<p>Nor was there a field of view at which the relationship reversed.</p>
+<p>I tested 16 diagonal fields of view from 5° to 165°. At every one of them the fisheye came out smaller.</p>
+<p>So why do the stars near the edges trail at all, when Astrotracer is supposed to be following them?</p>
+<p>As I looked into it, what sat at the center of the problem was not &quot;because it is a fisheye.&quot;</p>
+<p><strong>It was how Astrotracer follows the stars.</strong></p>
+<p>That is where the reason lay.</p>
+<h2>Astrotracer follows the stars by moving the image sensor</h2>
+<p>As explained in <a href="/en/knowledge/photography/astrotracer-why-the-ground-blurs">Astrotracer ① &quot;Why Do the Stars Stay Sharp While the Ground Blurs?&quot;</a>, Astrotracer does not move the camera or the lens themselves.</p>
+<p>The camera and lens stay fixed on the tripod.</p>
+<p>What moves is the image sensor inside the camera.</p>
+<p>PENTAX's SR unit can rotate the image sensor about the optical axis as well as shift it in X and Y.</p>
+<p>So Astrotracer follows star images as they move over time using</p>
+<p><strong>a shift in X</strong><br />
+<strong>+ a shift in Y</strong><br />
+<strong>+ rotation</strong></p>
+<p>I understood all of that from the time I first used Astrotracer.</p>
+<p>What I looked into again this time comes after that:</p>
+<p><strong>even if the X/Y shift and the rotation are performed perfectly, might there be cases where the stars across the whole frame cannot be matched exactly?</strong></p>
+<h2>The sky lies on a sphere; a photograph is a plane</h2>
+<p>The position of a star can be thought of as a direction on the celestial sphere that surrounds us.</p>
+<p>As the Earth rotates, the whole sky appears to rotate about the celestial pole.</p>
+<p>So far this is all about three-dimensional directions.</p>
+<p>But when you photograph it, the lens projects it onto a two-dimensional image plane.</p>
+<p>In other words,</p>
+<p><strong>the motion of a star on the celestial sphere</strong></p>
+<p>and</p>
+<p><strong>the motion of its star image after projection onto the plane of the photograph</strong></p>
+<p>are not the same thing.</p>
+<p><img src="/images/knowledge/astrotracer/f10-sky-to-lens-to-sensor-en.svg" alt="A three-stage diagram showing stars on the celestial sphere rotating about the celestial pole and then being projected by the lens onto the image plane. The way things move differs before and after projection." /></p>
+<p>Fig. 1: The stars rotate on the celestial sphere. The lens maps that onto a plane. <strong>The rotation before projection and the motion after projection are not the same.</strong></p>
+<p>That turned out to be the key point.</p>
+<p>What the image sensor can do is, essentially, shift a single plane in X and Y and rotate it.</p>
+<p>But the result of projecting the motion of stars on the celestial sphere onto a plane through a lens generally cannot be reproduced exactly by simply translating and rotating one plane.</p>
+<p>Match the stars at the center of the frame well, and small errors remain that grow with distance from the center.</p>
+<p>That is the <strong>tracking residual</strong> considered here.</p>
+<p>Put another way, the transformation that projects the rotation of the celestial sphere onto the image plane, and a planar X/Y shift plus rotation, are different things.</p>
+<h2>Matched at the center does not mean matched in the corners</h2>
+<p>Suppose you shift and rotate the image sensor to match the motion of stars near the center of the frame.</p>
+<p>Near the center, the star images can be followed quite accurately.</p>
+<p>Toward the edges and corners, however, the difference grows between the motion of the stars projected from the celestial sphere onto the plane and the planar motion of the image sensor.</p>
+<p>When that difference accumulates during the exposure, a star image becomes a short line rather than a point.</p>
+<p>The thing to note here is that this is <strong>not</strong> a claim that</p>
+<p><strong>&quot;they trail because Astrotracer is inaccurate.&quot;</strong></p>
+<p>These calculations assume an ideal state with no azimuth or tilt measurement error, no mechanical play and no vibration.</p>
+<p>Residuals still appear.</p>
+<p>So, at least in the idealized model, this is a <strong>geometric</strong> problem, separate from mechanical accuracy.</p>
+<h2>How large is the difference?</h2>
+<p>So how large is the residual in the idealized model?</p>
+<p>Here I assumed a full-frame-equivalent image sensor and modeled it as a single plane that can shift in X and Y and rotate.</p>
+<p>This does not reproduce the internal algorithm of an actual PENTAX body.</p>
+<p>Nor does it mean</p>
+<p>&quot;PENTAX tracks using the stars at the center of the frame as its reference.&quot;</p>
+<p>It is purely a model for looking at geometric behavior.</p>
+<p>The calculation produced conditions where the residual is very small near the center of the frame while growing toward the edges.</p>
+<p>For example, calculating full-frame 14 mm, a 60-second exposure, facing south at 40° altitude, and matching to the stars at the center of the frame: the residual near the center is only about 0.4 px, while in the corners it reaches about 23.5–23.9 px.</p>
+<p><img src="/images/knowledge/astrotracer/f14-residual-map-centre-fixed.svg" alt="A 5×5 map of the tracking residual across the frame. The center is about 0.4 pixels and almost nothing remains, while the corners reach about 23.5 to 23.9 pixels." /></p>
+<p>Fig. 2: Tracking residual across the frame, calculated with an idealized model. 14 mm, full frame (35.9 × 24.0 mm, 4.88 µm pixel pitch), latitude 35°, facing south at 40° altitude, 60 s exposure. Values are for tracking matched to the stars at the center of the frame (center-fixed), computed on a 13×13 grid and shown thinned to 5×5. Not a measurement of an actual PENTAX body.</p>
+<p>In other words,</p>
+<p><strong>the stars being held at the center does not mean the stars across the whole frame are held to the same accuracy.</strong></p>
+<p>With ultra-wide lenses this becomes easier to see.</p>
+<h2>The issue is &quot;field of view&quot; more than &quot;focal length&quot;</h2>
+<p>There is another important point here.</p>
+<p>When you hear that</p>
+<p>&quot;the wider you go, the more the stars near the edges trail,&quot;</p>
+<p>you might think</p>
+<p>&quot;so it is because the focal length is short.&quot;</p>
+<p>Essentially, though, what matters is not the focal length itself but <strong>how wide a region of the sky you are mapping onto a single plane</strong>.</p>
+<p>That is, the field of view.</p>
+<p>Over a narrow region, approximating a piece of a sphere with a plane does not produce much difference.</p>
+<p>The wider the field of view, the larger the difference produced by projecting the sphere of the sky onto a single plane.</p>
+<p>It is the same as a map.</p>
+<p>For a very small region of the Earth, a flat map causes little trouble.</p>
+<p>Try to put the whole Earth on one flat map and distortion appears somewhere.</p>
+<p>Something similar happens with the sky.</p>
+<p>So rather than</p>
+<p><strong>&quot;it trails because it is N mm,&quot;</strong></p>
+<p>it is closer to the truth to think</p>
+<p><strong>&quot;how wide a field of view are you mapping onto a plane, and with what projection?&quot;</strong></p>
+<h2>So is a fisheye even worse?</h2>
+<p>Here I come back to the question I had vaguely held for years.</p>
+<p>Fisheye lenses.</p>
+<p>Shoot with a fisheye and straight lines bend considerably near the edges of the frame.</p>
+<p>The image is clearly different from an ordinary ultra-wide lens.</p>
+<p>So I assumed</p>
+<p><strong>&quot;a fisheye is a special projection, so it must be even worse for Astrotracer.&quot;</strong></p>
+<p>The calculation gave the opposite result.</p>
+<p>What I compared was</p>
+<p><strong>an ordinary, non-fisheye ultra-wide/wide-angle lens</strong><br />
+<strong>— the type that renders straight lines as straight lines</strong></p>
+<p>against fisheye lenses.</p>
+<p>Ordinary wide-angle lenses normally use rectilinear projection.</p>
+<p>Fisheye lenses have several ways of deciding where an angle in the sky is mapped on the sensor. What I calculated here were the three projections</p>
+<p><strong>equidistant projection</strong><br />
+<strong>equisolid-angle projection</strong><br />
+<strong>stereographic projection</strong></p>
+<p>And I compared them with conditions matched so that the diagonal field of view was the same.</p>
+<h2>At the same 114 degrees, the fisheye had the smaller residual</h2>
+<p>As one example, let me compare at a diagonal field of view matched to about 114 degrees.</p>
+<p>In the idealized model, the maximum tracking residual within the frame when matched to the stars at the center of the frame was</p>
+<p><strong>ordinary wide-angle lens: about 24.14 px</strong></p>
+<p>whereas</p>
+<p><strong>equidistant-projection fisheye: about 3.67 px</strong><br />
+<strong>equisolid-angle fisheye: about 4.53 px</strong><br />
+<strong>stereographic fisheye: about 5.12 px</strong></p>
+<p><img src="/images/knowledge/astrotracer/f11-projection-comparison-114deg-en.svg" alt="Horizontal bar chart comparing projections at a matched diagonal field of view of 114 degrees. The ordinary wide-angle lens is about 24.14 pixels, the equidistant-projection fisheye about 3.67 pixels, equisolid-angle about 4.53 pixels and stereographic about 5.12 pixels." /></p>
+<p>Fig. 3: Tracking residual compared <strong>at a diagonal field of view matched to 114 degrees</strong>. <strong>Matched to the stars at the center of the frame (center-fixed), 9×9 grid.</strong> An idealized model — <strong>not a measurement of an actual PENTAX body.</strong></p>
+<p>That is a considerable difference.</p>
+<p>Comparing at the same focal length of 15 mm also gave a smaller residual for the fisheye than for the ordinary wide-angle lens in the model.</p>
+<p>So my long-held understanding that</p>
+<p><strong>&quot;the stars near the edges trail because it is a fisheye&quot;</strong></p>
+<p>does not explain it.</p>
+<p>If anything, in this model the result was that</p>
+<p><strong>if you are covering the same wide field of view, the fisheye projection is more favorable for Astrotracer</strong></p>
+<h2>So from what focal length does the fisheye become better?</h2>
+<p>Seeing that result, the next thing I wanted to know was this.</p>
+<p>&quot;If the fisheye gets better the wider you go, isn't there a crossover somewhere?&quot;</p>
+<p>Something like</p>
+<p>&quot;beyond a diagonal field of view of N degrees the fisheye is better,&quot;</p>
+<p>or</p>
+<p>&quot;wider than N mm the fisheye is better.&quot;</p>
+<p>So I ran an additional calculation.</p>
+<p>With the diagonal field of view matched, I compared <strong>at 16 points from 5 to 165 degrees</strong>.</p>
+<p>The result:</p>
+<p><strong>there was no place where it reversed.</strong></p>
+<p>At all 16 points tested, the fisheye's tracking residual was the smaller one.</p>
+<p>For example, comparing the smallest-residual of the three fisheye projections against the ordinary wide-angle lens:</p>
+<p><strong>diagonal FOV 20°</strong><br />
+<strong>rectilinear: about 2.81 px</strong><br />
+<strong>fisheye: about 0.60 px</strong></p>
+<p><strong>diagonal FOV 84°</strong><br />
+<strong>rectilinear: about 14.11 px</strong><br />
+<strong>fisheye: about 2.61 px</strong></p>
+<p><strong>diagonal FOV 165°</strong><br />
+<strong>rectilinear: about 121.43 px</strong><br />
+<strong>fisheye: about 5.81 px</strong></p>
+<p>The wider you go, the larger the difference becomes.</p>
+<p>Here, a ratio of 1.0 means the fisheye and the rectilinear lens have the same tracking residual; below 1.0 means the fisheye's residual is smaller.</p>
+<p><img src="/images/knowledge/astrotracer/f12-fov-sweep-16-points-en.svg" alt="Scatter plot of the ratio of fisheye to rectilinear tracking residual at 16 diagonal fields of view from 5 to 165 degrees. Every point falls well below a ratio of 1.0, and the ratio gets smaller as the field of view widens. The points are not connected." /></p>
+<p>Fig. 4: <strong>Not a continuous sweep — a result evaluated at 16 points.</strong> ● is the smallest of the three fisheye projections; △ compares the equisolid-angle projection alone. A ratio of 1.0 means the fisheye and rectilinear residuals are equal; below 1.0 the fisheye is smaller. <strong>At these 16 points the ratio did not exceed 1.0</strong> — that is the conclusion, and it is not a proof that this holds at every field of view. Center-fixed, 9×9 grid.</p>
+<p>So I cannot write</p>
+<p><strong>&quot;from N mm onward the fisheye is better.&quot;</strong></p>
+<p>What this idealized model supports is that</p>
+<p><strong>at the same field of view, across the range tested, the fisheye consistently had the smaller geometric tracking residual, and the difference grew as the field of view widened.</strong></p>
+<p>That was quite an unexpected result for me.</p>
+<h2>Why is the fisheye more favorable?</h2>
+<p>The fisheye looks far more distorted.</p>
+<p>So why is its tracking residual smaller?</p>
+<p>The word &quot;distorted&quot; is a little tricky here.</p>
+<p>Ordinary ultra-wide lenses are designed to render straight lines as straight lines.</p>
+<p>At first glance that seems more natural.</p>
+<p>In exchange, however, they stretch the image strongly near the edges of the frame.</p>
+<p>That is why faces and objects in the corners of an ultra-wide frame look pulled sideways.</p>
+<p>A fisheye bends straight lines, but in exchange it stretches the periphery differently.</p>
+<p>What is at issue here is not</p>
+<p><strong>whether straight lines come out straight.</strong></p>
+<p>It is how well a slight rotation of the celestial sphere can be approximated by shifting and rotating a plane at the sensor.</p>
+<p>From that point of view, the fisheye projection was more convenient than the ordinary wide-angle projection.</p>
+<p>At least in this idealized model, that is the result.</p>
+<h2>But &quot;a fisheye means the stars don't trail&quot; is not true</h2>
+<p>Please do not misread this.</p>
+<p>The result here does not mean</p>
+<p><strong>a fisheye holds the stars perfectly all the way to the edges with Astrotracer</strong></p>
+<p>Fisheyes have residuals too.</p>
+<p>And in real shooting, beyond the geometric residual, star images are affected by</p>
+<p>tracking accuracy, calibration error, lens aberrations, distortion, focus, vibration, atmospheric effects and more.</p>
+<p>What I compared here is an idealized model with all of that removed.</p>
+<p>So it cannot be used as a performance evaluation of an actual body in the sense of</p>
+<p>&quot;this lens will actually trail N px.&quot;</p>
+<p>What can be said here is that</p>
+<p><strong>&quot;a fisheye projection is not necessarily worse for Astrotracer.&quot;</strong></p>
+<p>Comparing pure projection geometry alone, under these conditions, it was the other way around.</p>
+<h2>So why doesn't the same problem occur with an equatorial mount?</h2>
+<p>At this point the difference from an equatorial mount becomes important.</p>
+<p>In Astrotracer ① &quot;Why Do the Stars Stay Sharp While the Ground Blurs?&quot; I wrote that</p>
+<p>&quot;with Astrotracer or with an equatorial mount, hold the stars and the ground blurs.&quot;</p>
+<p>The basic phenomenon in real shooting is the same.</p>
+<p>But the way the stars are held is different.</p>
+<p>An equatorial mount rotates the camera and lens themselves in step with the Earth's rotation.</p>
+<p>That is, it changes the camera's orientation <strong>before</strong> the light from the stars is projected into the photograph by the lens.</p>
+<p>With Astrotracer, the camera and lens are fixed.</p>
+<p>Light from the stars is first projected onto the image plane by the fixed lens.</p>
+<p>Only then does the image sensor move to follow the star images.</p>
+<p>In other words:</p>
+<p><strong>an equatorial mount follows the stars &quot;before projection.&quot;</strong></p>
+<p><strong>Astrotracer follows them &quot;after projection.&quot;</strong></p>
+<p><img src="/images/knowledge/astrotracer/f13-before-after-projection-en.svg" alt="A two-row flow diagram comparing an equatorial mount, which rotates the whole camera before the lens projects, with Astrotracer, which moves the image sensor after projection." /></p>
+<p>Fig. 5: <strong>An equatorial mount tracks before the projection; Astrotracer tracks after it.</strong> Both follow the stars, but they are not doing the same thing.</p>
+<p>That becomes a major difference when thinking about star images near the edges.</p>
+<h2>An equatorial mount rotates the optics together with the sky</h2>
+<p>Consider an ideal equatorial mount.</p>
+<p>Assume the polar axis is aligned perfectly, with no mechanical error and no atmospheric effects.</p>
+<p>The mount rotates the whole camera and lens so as to cancel the Earth's rotation.</p>
+<p>The camera's orientation as seen from the stars is then preserved.</p>
+<p>Because the direction in which a star enters the lens does not change, its position after projection by the lens does not change either.</p>
+<p>Whatever projection the lens uses, the direction going <em>into</em> that projection is being matched.</p>
+<p>So in the ideal model the stars are held not only at the center of the frame but near the edges as well.</p>
+<p>Astrotracer is different.</p>
+<p>Because the lens is fixed, the direction in which a star enters the lens changes over time.</p>
+<p>Each time, the lens projects the star to a different position.</p>
+<p>The <strong>image formed after that projection</strong> is then followed by shifting and rotating a single image sensor.</p>
+<p>But the change across the whole frame produced by the projection cannot necessarily be reproduced exactly by a planar X/Y shift plus rotation.</p>
+<p>That difference remains as the tracking residual near the edges of the frame.</p>
+<h2>Calling it a &quot;simplified equatorial mount&quot; is not wrong</h2>
+<p>The manufacturer itself has described Astrotracer as a &quot;simplified equatorial mount function.&quot;</p>
+<p>As a way of explaining a function that</p>
+<p><strong>follows the motion of the stars caused by the Earth's rotation, so that they are recorded close to points even in a long exposure</strong></p>
+<p>I think that is very easy to understand.</p>
+<p>I too thought of Astrotracer as something close to an equatorial mount in that sense.</p>
+<p>Having calculated as far as the star images near the edges, though, it becomes clear that</p>
+<p><strong>even when both &quot;follow the stars,&quot; they are not doing the same thing geometrically</strong></p>
+<p>An equatorial mount moves the optics themselves.</p>
+<p>Astrotracer follows, with the image sensor, the image formed by fixed optics.</p>
+<p>In everyday shooting you can use Astrotracer without being aware of this difference.</p>
+<p>But go ultra-wide and start considering the edges of the frame rigorously, and the difference becomes visible.</p>
+<h2>What is interesting is that lens distortion also shows up in a different place</h2>
+<p>While working through this idealized model I found one more interesting difference.</p>
+<p>Suppose the lens projection has distortion that departs from the ideal projection formula.</p>
+<p>With Astrotracer the lens is fixed.</p>
+<p>Stars are projected to different positions on the lens over time, and the image after that projection is followed by the sensor.</p>
+<p>So the lens's non-linear distortion can appear as <strong>tracking residual on the star side</strong>.</p>
+<p>With an ideal equatorial mount, by contrast, the whole camera and lens rotate together with the stars.</p>
+<p>Because a star keeps landing on almost the same place on the lens, that effect is less likely to appear as tracking residual on the star side.</p>
+<p>Now, however, the ground moves across the lens, so the lens's projection characteristics show up in how the ground image blurs.</p>
+<p>It is quite a fine point, but the idealized model also reveals the difference that</p>
+<p><strong>with Astrotracer the lens's projection characteristics tend to appear on the star side, while with an equatorial mount they tend to appear on the ground side.</strong></p>
+<h2>Why I did not write this much in the 2019 article</h2>
+<p>In &quot;Getting Started with Star-Landscape Photography,&quot; which I wrote for Dejicame Watch in 2019, I also published a 15 mm example shot with Astrotracer.</p>
+<p>As I recall, even then I could see, looking at the edges of the frame, that the stars were not perfectly held.</p>
+<p>But in that article I did not go into the trailing of the stars near the edges.</p>
+<p>It was an article about how to shoot star-landscape photographs with Astrotracer, not an analysis of the mechanism behind tracking error.</p>
+<p><strong>It is not that I did not know the stars were trailing.</strong></p>
+<p>I simply did not pursue the cause any further.</p>
+<p>And about fisheyes I thought</p>
+<p>&quot;it's a fisheye, so I suppose it can't be helped.&quot;</p>
+<p>This time I calculated, for the first time, what was inside that &quot;can't be helped.&quot;</p>
+<p>The result:</p>
+<p><strong>it was not disadvantageous because it was a fisheye.</strong></p>
+<p>If anything, at the same field of view, the fisheye was better in this model.</p>
+<p>The phenomenon I was seeing in real frames and what I believed about its cause were not the same thing.</p>
+<h2>Nor is it true that ultra-wide always trails</h2>
+<p>Finally, one more caution.</p>
+<p>Reading this far you might think</p>
+<p><strong>&quot;with Astrotracer, going ultra-wide always makes the stars near the edges trail.&quot;</strong></p>
+<p>That is not accurate either.</p>
+<p>The result changes with the shooting direction.</p>
+<p>In an extreme case, under ideal conditions with the camera's optical axis pointed at the celestial pole, the rotation of the celestial sphere can be expressed as a rotation on the image plane.</p>
+<p>That can be matched by rotating the image sensor.</p>
+<p>In that case, in this ideal model, the tracking residual can be reduced to zero.</p>
+<p>So the problem is not</p>
+<p><strong>&quot;wide is always bad.&quot;</strong></p>
+<p>The field of view.</p>
+<p>The shooting direction.</p>
+<p>The lens projection.</p>
+<p>The exposure time.</p>
+<p>And how much residual you accept in a photograph.</p>
+<p>It changes with all of those.</p>
+<p>Here too it is the same as in Astrotracer ② &quot;How Long Should You Track the Stars?&quot;.</p>
+<p><strong>How many pixels remain can be calculated.</strong></p>
+<p>But</p>
+<p><strong>how many pixels are still usable in a photograph is decided by the photographer.</strong></p>
+<h2>Summary</h2>
+<p>Use an ultra-wide lens with Astrotracer and, even where the stars are held at the center of the frame, they can trail near the edges.</p>
+<p>I have known about the phenomenon itself for a long time.</p>
+<p>For fisheyes in particular I thought, for years, that</p>
+<p><strong>&quot;it's a fisheye, so it can't be helped.&quot;</strong></p>
+<p>This time, though, idealizing the rotation of the celestial sphere, the lens projection and the image sensor's X/Y shift plus rotation, and calculating, showed a different picture.</p>
+<p>With Astrotracer the order is</p>
+<p><strong>the motion of the stars on the celestial sphere</strong><br />
+<strong>→ projected onto a plane by the lens</strong><br />
+<strong>→ that image followed by shifting and rotating the image sensor</strong></p>
+<p>Because of that, the motion of the stars across the whole frame generally cannot be matched exactly by shifting and rotating a single image sensor.</p>
+<p>And the problem was not simply &quot;because it is a fisheye&quot; either.</p>
+<p>In this idealized model, compared at the same diagonal field of view, the fisheye gave a smaller tracking residual than the ordinary wide-angle lens.</p>
+<p>Even examining 16 points from a diagonal field of view of 5° to 165°, no crossover was found.</p>
+<p>An equatorial mount, on the other hand, rotates the camera and lens themselves.</p>
+<p>So in the ideal model the difference becomes</p>
+<p><strong>an equatorial mount tracks before the projection.</strong><br />
+<strong>Astrotracer tracks after it.</strong></p>
+<p>Both follow the stars.</p>
+<p>With both, holding the stars blurs the ground.</p>
+<p>But they are not doing the same thing.</p>
+<p>From the time I was using the first Astrotracer in 2011, I knew that the image sensor shifts and rotates to follow the stars.</p>
+<p>What I learned this time was not that basic principle.</p>
+<p><strong>It was what geometric difference remains between the lens projection and the sensor's motion when you track a wide sky with that method.</strong></p>
+<p>And</p>
+<p><strong>whether my own explanation — &quot;it's a fisheye, so it can't be helped&quot; — was actually correct.</strong></p>
+<p>This is the result of going back and checking that.</p>
+<p>I had used it for years and knew the phenomenon.</p>
+<p>Even so:</p>
+<p><strong>that does not mean I correctly understood &quot;why.&quot;</strong></p>
+<p>That was the most interesting part of this calculation for me.</p>
+<p>→ <a href="/en/knowledge/photography/how-astrotracer-tracking-error-is-calculated">Astrotracer ④ &quot;How Did I Calculate Astrotracer Tracking Error?&quot;</a></p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-why-the-ground-blurs">Astrotracer ①: Why Do the Stars Stay Sharp While the Ground Blurs? — How Sensor-Shift Tracking Works</a>
+        <p class="kzc-related-desc">Track the stars and the ground blurs. That is not unique to Astrotracer — an equatorial mount does the same thing. Here is how PENTAX moves the image sensor in X, Y and rotation to follow the stars, and where the ground actually blurs in the frame, based on official documents, patents and an idealized geometric model.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-how-long-to-track-stars">Astrotracer ②: How Long Should You Track the Stars? — The Maximum Tracking Time Is Not the Exposure You Want for a Star-Landscape</a>
+        <p class="kzc-related-desc">The manufacturer&#39;s tracking time is not a guarantee that the stars will stay points. This article separates four different limits — the mechanism, tracking accuracy, ground blur and stars near the frame edges — and works out ground blur by focal length, and how it relates to the 500 rule.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/how-astrotracer-tracking-error-is-calculated">Astrotracer ④: How Did I Calculate Astrotracer Tracking Error? — From the Rotating Sky to Star Motion on the Sensor</a>
+        <p class="kzc-related-desc">What exactly is the &#34;tracking residual of N px&#34; used in the first three articles? I open up the whole calculation — grid points on the sensor, inverse projection to the sky, rotating the Earth, reprojection, following with X/Y shift plus rotation, and measuring what is left — including how AI was used.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

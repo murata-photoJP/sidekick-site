@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astrotracer ①: Why Do the Stars Stay Sharp While the Ground Blurs? — How Sensor-Shift Tracking Works | Knowledge - SideKick</title>
+<meta name="description" content="Track the stars and the ground blurs. That is not unique to Astrotracer — an equatorial mount does the same thing. Here is how PENTAX moves the image sensor in X, Y and rotation to follow the stars, and where the ground actually blurs in the frame, based on official documents, patents and an idealized geometric model.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/astrotracer-why-the-ground-blurs">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/astrotracer-ground-blur">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/astrotracer-why-the-ground-blurs">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/astrotracer-ground-blur">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/astrotracer-ground-blur" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Astrotracer ①: Why Do the Stars Stay Sharp While the Ground Blurs? — How Sensor-Shift Tracking Works</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Astrotracer ①: Why Do the Stars Stay Sharp While the Ground Blurs? — How Sensor-Shift Tracking Works</h1>
+    <p class="kzc-article-lead">Track the stars and the ground blurs. That is not unique to Astrotracer — an equatorial mount does the same thing. Here is how PENTAX moves the image sensor in X, Y and rotation to follow the stars, and where the ground actually blurs in the frame, based on official documents, patents and an idealized geometric model.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-03">Updated: 2026-09-03</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>With PENTAX's Astrotracer, stars that would trail in an ordinary fixed exposure can be recorded close to points of light.</p>
+<p>In exchange, the mountains and buildings on the ground blur.</p>
+<p>But this is not something peculiar to Astrotracer.</p>
+<p>The same thing happens when you track the stars with an equatorial mount.</p>
+<p>Freeze the stars, and the ground blurs instead.</p>
+<p>When you think about it, this has to be true: whether you use Astrotracer or an equatorial mount, <strong>you cannot stop the Earth from rotating</strong>.</p>
+<p>Put the camera on a tripod and shoot normally, and the ground stays sharp while the stars trail.</p>
+<p>Track the stars, and their trailing shrinks — but now the ground blurs.</p>
+<p>The relative motion between the stars and the ground has not gone away.</p>
+<p>So what is the difference between Astrotracer and an equatorial mount?</p>
+<p>The big one is <strong>what you move in order to follow the stars</strong>.</p>
+<p>An equatorial mount moves the camera and lens themselves in step with the Earth's rotation.</p>
+<p>With Astrotracer, the camera and lens stay fixed on the tripod.</p>
+<p>What moves is the image sensor inside the camera.</p>
+<p>Once you understand that difference, you can see not only why the ground blurs with Astrotracer, but also <em>how</em> it blurs.</p>
+<p>My own involvement with Astrotracer goes back to 2011, when the product was released.</p>
+<p>As I recall, I shot with a PENTAX K-5 and a pre-release prototype at the time. I wrote the Test Report on the &quot;GPS UNIT O-GPS1&quot; for the August 2011 issue of <em>Photo Technic Digital</em>.</p>
+<p>From those days I already knew that tracking the stars makes the ground blur, and that PENTAX's image sensor can rotate as well as shift up, down, left and right.</p>
+<p>So what I went back and re-examined this time was not the basic principle behind</p>
+<p>&quot;Why does the ground blur when you use Astrotracer?&quot;</p>
+<p>Instead: when the sensor shifts and rotates to follow the stars, how does the image of the ground actually move within the frame?</p>
+<p>I decided to work through Astrotracer — a tool I have used for years — again, this time including official documents, patents, a developer interview from the period, and a geometric model.</p>
+<h2>First, what happens in a fixed exposure</h2>
+<p>Before thinking about how Astrotracer works, let me start with an ordinary fixed exposure.</p>
+<p>The camera sits on a tripod.</p>
+<p>Neither the camera nor the lens moves.</p>
+<p>The mountains and buildings on the ground are not moving either, so their images stay in the same place in the frame.</p>
+<p>The stars are different.</p>
+<p>Because the Earth rotates, the whole sky appears to move over time as seen from the ground.</p>
+<p>Lengthen the exposure, and the stars stop being points and become lines.</p>
+<p>In other words, in a fixed exposure:</p>
+<p><strong>The ground stays sharp.</strong><br />
+<strong>The stars trail.</strong></p>
+<p><img src="/images/knowledge/astrotracer/f01-fixed-tracking-equatorial-en.svg" alt="Comparison of a fixed exposure, Astrotracer and an equatorial mount. In a fixed exposure the ground stays sharp and the stars trail. With Astrotracer and with an equatorial mount the stars are held and the ground blurs. Only the thing being moved is different." /></p>
+<p>Fig. 1: Fixed exposure, Astrotracer and equatorial mount. <strong>What moves is different, but the relationship is the same: hold the stars and the ground blurs.</strong></p>
+<p>So how do you hold the stars?</p>
+<p>Move the camera side in step with the stars.</p>
+<p>That is tracked shooting.</p>
+<h2>Track the stars, and now the ground blurs</h2>
+<p>An equatorial mount moves the camera and lens to follow the stars by exactly the amount the Earth's rotation makes them appear to move.</p>
+<p>The stars then stay in nearly the same place in the frame throughout the exposure, which makes it easier to record them as points.</p>
+<p>But from that camera's point of view, the ground is now moving.</p>
+<p>The mountains and buildings are not actually moving.</p>
+<p>Even so, because the camera itself is turning to follow the stars, the ground blurs in the photograph.</p>
+<p>With Astrotracer, if you only look at the result, the same thing happens.</p>
+<p><strong>Track the stars, and the ground blurs.</strong></p>
+<p>This is not a flaw in Astrotracer.</p>
+<p>The same is true of an equatorial mount.</p>
+<p>No tracking device can remove the relative motion that exists between the stars and the ground.</p>
+<p><strong>You cannot stop the Earth's rotation.</strong></p>
+<p>So if both hold the stars and blur the ground in the same way, what actually differs between Astrotracer and an equatorial mount?</p>
+<h2>The difference is <em>what</em> is being moved</h2>
+<p>An equatorial mount moves the camera and lens themselves.</p>
+<p>Astrotracer does not.</p>
+<p>The camera on the tripod does not move.</p>
+<p>Neither does the lens.</p>
+<p>What moves is the <strong>image sensor inside the camera</strong>.</p>
+<p>The mechanism used for this is PENTAX's SR (Shake Reduction) unit.</p>
+<p>On the original O-GPS1, the camera computes the motion of the sky from the latitude obtained via GPS, the camera's azimuth and tilt from the electronic compass and acceleration sensors, the focal length of the lens, and the date and time — then moves the image sensor to match.</p>
+<p>Later bodies such as the K-1 built the GPS function into the camera, so Astrotracer became available without attaching an external O-GPS1.</p>
+<p>The important part here is not GPS itself.</p>
+<p><strong>The camera and lens stay fixed while the image sensor moves to follow the stars.</strong></p>
+<p>That is the defining characteristic of Astrotracer.</p>
+<h2>The sensor is what moves. The image of the ground does not</h2>
+<p>So let me think about what is happening inside the camera.</p>
+<p>The camera and lens are fixed.</p>
+<p>The mountain on the ground is not moving.</p>
+<p>So the image of the mountain formed by the lens does not move either.</p>
+<p>What <em>is</em> moving is the image sensor receiving that image, as it follows the stars.</p>
+<p>In other words:</p>
+<p><strong>It is not the image of the ground that moves.</strong><br />
+<strong>It is the sensor underneath it.</strong></p>
+<p>From the sensor's point of view, the result is that the image of the ground drifts in the opposite direction.</p>
+<p><img src="/images/knowledge/astrotracer/f02-sensor-3dof-and-ground-en.svg" alt="Schematic of the image sensor shifting in X and Y and rotating about the optical axis, underneath the stationary image of the ground formed by the fixed lens." /></p>
+<p>Fig. 2: The image of the ground is not moving. What moves is the sensor underneath it.</p>
+<p>That is the basic mechanism behind the ground blurring with Astrotracer.</p>
+<p>Up to this point, though, the story is fairly simple.</p>
+<p>Thinking of it as</p>
+<p>&quot;the ground moves the opposite way by however much you tracked the stars&quot;</p>
+<p>is not far wrong.</p>
+<p>In practice, however, it is a little more complicated.</p>
+<h2>The sensor does not only shift up, down, left and right</h2>
+<p>PENTAX's SR unit can rotate the image sensor about the optical axis as well as shift it in X and Y.</p>
+<p>Astrotracer follows the stars using sensor motion that combines</p>
+<p><strong>a shift in X</strong><br />
+<strong>+ a shift in Y</strong><br />
+<strong>+ rotation</strong></p>
+<p>This is not something I learned for the first time this time.</p>
+<p>It is a mechanism I understood back when I was using the first Astrotracer in 2011.</p>
+<p>What I did want to think through again this time was what comes after that.</p>
+<p>If the sensor simply moved in one direction, you would expect the ground to blur in the same direction across the whole frame.</p>
+<p>But what happens once rotation is added?</p>
+<p>Does a mountain at the center of the frame blur the same way as a tree in the corner?</p>
+<p>So I ran the calculation.</p>
+<h2>How the ground blurs depends on where it is in the frame</h2>
+<p>From here on, this is not a measurement of what a PENTAX body does internally.</p>
+<p>Nor is the actual control algorithm — how it moves the sensor — fully public.</p>
+<p>So for this article I idealized the image sensor as</p>
+<p><strong>&quot;a single plane that can shift in X and Y within the image plane, and can also rotate&quot;</strong></p>
+<p>and worked out what follows geometrically.</p>
+<p>The result is that the blurring of the ground is not uniform across the frame.</p>
+<p>Once rotation is involved, the farther a point is from the center of the frame, the larger the displacement that rotation produces there.</p>
+<p>So both the direction and the length of the ground's blur vary with position in the frame.</p>
+<p>Depending on the shooting direction, the whole frame can look as though it is blurring in roughly the same direction.</p>
+<p>Under conditions where the rotation component is strong, however, the direction of the blur itself changes from place to place in the frame.</p>
+<p>In everyday conversation we lump all of this together as &quot;the ground is blurred.&quot;</p>
+<p>In practical shooting that is fine.</p>
+<p>But look at the mechanism closely and it is not like ordinary camera shake, where the whole frame shifts in one direction.</p>
+<p>That said, what I have written here is what the idealized model shows — not the result of measuring an actual PENTAX body.</p>
+<h2>It is not that a nearby rock blurs more</h2>
+<p>There is one more place where the behavior differs a little from intuition.</p>
+<p>Suppose there is a rock in the foreground and a mountain in the distance.</p>
+<p>&quot;Surely the nearby rock blurs more?&quot;</p>
+<p>you might think.</p>
+<p>But with Astrotracer the camera itself is not moving.</p>
+<p>So there is no parallax of the kind you get when you shift the camera sideways.</p>
+<p>For stationary subjects, both the nearby rock and the distant mountain are stationary on the image plane the lens forms.</p>
+<p>It is the sensor that moves relative to that image.</p>
+<p>So what matters for the ground blur is</p>
+<p><strong>not the distance to the subject, but where it falls in the frame.</strong></p>
+<p>And</p>
+<p><strong>how the sensor is shifting and rotating.</strong></p>
+<p>It is a slightly different phenomenon from ordinary camera shake.</p>
+<h2>Fixed and tracked exposures swap which side moves</h2>
+<p>Let me simplify all of this once more.</p>
+<p>In a fixed exposure:</p>
+<p><strong>The ground stays sharp and the stars trail.</strong></p>
+<p>In a tracked exposure:</p>
+<p><strong>The trailing of the stars is reduced, and in exchange the ground blurs.</strong></p>
+<p>This basic relationship is the same for Astrotracer and for an equatorial mount.</p>
+<p>The Earth's rotation has not gone away.</p>
+<p>Neither has the relative motion between the stars and the ground.</p>
+<p>Tracking changes which side of the photograph that motion appears on.</p>
+<p>I think of this less as a flaw in Astrotracer and more as <strong>an issue inherent to star-landscape photography itself</strong>, where the sky and the ground are recorded together.</p>
+<p>Because you cannot stop the Earth from rotating.</p>
+<h2>Type 2 changes that balance</h2>
+<p>Current Astrotracer implementations offer Type 2, which lets you choose a different balance in this relationship between the stars and the ground.</p>
+<p>RICOH describes Type 1 as a mode that makes the image sensor follow the diurnal motion of the sky, prioritizing recording the stars as points.</p>
+<p>Type 2 is described as a mode that makes the image sensor follow at half the speed of Type 1, suppressing the blur of the landscape so that both the stars and the scenery are captured in a balanced way.</p>
+<p>In other words, Type 1 tracks the stars more strongly, while Type 2 tracks them less strongly and so suppresses the blur that appears on the ground side.</p>
+<p>Here too, the relationship</p>
+<p><strong>how far you hold the stars</strong><br />
+<strong>versus how far you hold the ground</strong></p>
+<p>does not change.</p>
+<p>That said, thinking of it simply as</p>
+<p>&quot;Type 2 means 50% stars, 50% ground&quot;</p>
+<p>is not accurate either.</p>
+<p>The stars and the ground do not move the same way everywhere in the frame.</p>
+<p>For now it is enough to treat Type 2 as <strong>an option that changes the balance of motion appearing on the star side and the ground side</strong>.</p>
+<p>Whether you should actually double the exposure time with Type 2 is something I calculate in Astrotracer ② &quot;How Long Should You Track the Stars?&quot;.</p>
+<h2>The &quot;1–2 minutes&quot; I wrote in 2019 was about 15 mm</h2>
+<p>In 2019 I introduced star-landscape photography with a PENTAX K-1 Mark II and Astrotracer in &quot;Getting Started with Star-Landscape Photography&quot; on Dejicame Watch.</p>
+<p>The example image from Mt. Tsubakuro that I published there was</p>
+<p><strong>15 mm / f/2.8 / 60 s / ISO 3200</strong></p>
+<p>In the article I wrote that while tracking is possible for up to five minutes depending on conditions, in star-landscape photography the ground blurs by however much you hold the stars, so I keep the exposure to around one to two minutes.</p>
+<p>But that &quot;1–2 minutes&quot; was not written as a general rule meaning</p>
+<p><strong>use 1–2 minutes with Astrotracer</strong></p>
+<p>It was a practical guideline for the conditions I was working with — the K-1 series and 15 mm — balanced against ground blur for a star-landscape photograph.</p>
+<p>Change the focal length and the amount of ground blur in the same exposure time changes too.</p>
+<p>It also changes with the shooting direction.</p>
+<p>And the judgement changes again depending on how large you view the photograph and how much ground blur you are willing to accept.</p>
+<p>So</p>
+<p><strong>&quot;how many minutes can it track?&quot;</strong></p>
+<p>and</p>
+<p><strong>&quot;how many minutes do I want to track for this photograph?&quot;</strong></p>
+<p>are two different questions.</p>
+<p>This is not something I first realized in 2026.</p>
+<p>Back when I was shooting example images for the manufacturer, I already thought of these two separately.</p>
+<p>For an example image that demonstrates a product's capability, showing how far it can track has its own value.</p>
+<p>When I shoot a star-landscape photograph for myself, however, using up the maximum tracking time is not the goal.</p>
+<p>In fact, at 15 mm I ended up using about one to two minutes most of the time.</p>
+<p>So what should decide that time?</p>
+<p>If 15 mm called for one to two minutes, what about 24 mm?</p>
+<p>What about 50 mm?</p>
+<p>And is the &quot;maximum tracking time&quot; a manufacturer quotes really a time that guarantees the stars will be recorded cleanly as points?</p>
+<p>I look at this in detail in Astrotracer ② &quot;How Long Should You Track the Stars?&quot;.</p>
+<p>→ <a href="/en/knowledge/photography/astrotracer-how-long-to-track-stars">Astrotracer ② &quot;How Long Should You Track the Stars?&quot;</a></p>
+<h2>But there is another problem</h2>
+<p>From the explanation so far you might think</p>
+<p>&quot;then if you move the sensor accurately enough, surely the stars can be held perfectly across the whole frame?&quot;</p>
+<p>Yet when you shoot with Astrotracer using an ultra-wide or fisheye lens, the stars are well held at the center of the frame while they can look trailed near the edges.</p>
+<p>I have known about this phenomenon itself for a long time.</p>
+<p>For fisheye lenses in particular, I assumed</p>
+<p><strong>&quot;it's a fisheye, so of course it can't be corrected perfectly all the way to the edges.&quot;</strong></p>
+<p>A fisheye uses a special projection, unlike an ordinary lens.</p>
+<p>So it must simply be a poor match for Astrotracer.</p>
+<p>That is what I thought for years.</p>
+<p>This time, though, I went back and questioned it:</p>
+<p><strong>is it really because it is a fisheye?</strong></p>
+<p>— and worked it out geometrically.</p>
+<p>The result was the opposite of what I expected.</p>
+<p>I cover this in the article after next.</p>
+<p>→ <a href="/en/knowledge/photography/astrotracer-stars-trail-at-frame-edges">Astrotracer ③ &quot;Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens?&quot;</a></p>
+<h2>Summary</h2>
+<p>Track the stars with Astrotracer and the ground blurs.</p>
+<p>But that is not a problem unique to Astrotracer.</p>
+<p>The same is true of an equatorial mount.</p>
+<p>In a fixed exposure:</p>
+<p><strong>hold the ground, and leave the motion on the star side.</strong></p>
+<p>In a tracked exposure:</p>
+<p><strong>reduce the motion of the stars, and the motion appears on the ground side.</strong></p>
+<p>You cannot remove the relative motion that exists between the stars and the ground.</p>
+<p><strong>Because you cannot stop the Earth's rotation.</strong></p>
+<p>What makes Astrotracer interesting is that it achieves that tracking in a completely different way from an equatorial mount.</p>
+<p>Without moving the camera or the lens:</p>
+<p><strong>it shifts the image sensor in X and Y, and rotates it, to follow the stars.</strong></p>
+<p>Because of that, the ground does not simply blur in one direction across the whole frame.</p>
+<p>And once you widen the field of view further, a separate problem appears — this time not on the ground, but on the star side you are supposedly tracking.</p>
+<p>To begin with:</p>
+<p><strong>&quot;hold the stars and the ground blurs&quot; and</strong><br />
+<strong>&quot;Astrotracer moves the image sensor to follow the stars&quot; are two separate things.</strong></p>
+<p>Keep those apart, and I think the rest of this series becomes much easier to follow.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-how-long-to-track-stars">Astrotracer ②: How Long Should You Track the Stars? — The Maximum Tracking Time Is Not the Exposure You Want for a Star-Landscape</a>
+        <p class="kzc-related-desc">The manufacturer&#39;s tracking time is not a guarantee that the stars will stay points. This article separates four different limits — the mechanism, tracking accuracy, ground blur and stars near the frame edges — and works out ground blur by focal length, and how it relates to the 500 rule.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-stars-trail-at-frame-edges">Astrotracer ③: Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens? — Sensor-Shift Tracking Is Not an Equatorial Mount</a>
+        <p class="kzc-related-desc">The stars are held at the center of the frame but trail near the edges. I had assumed for years that it was &#34;because it is a fisheye.&#34; Recalculating from the rotating celestial sphere, the lens projection and the rigid motion of the image sensor gave the opposite of what I expected.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/how-astrotracer-tracking-error-is-calculated">Astrotracer ④: How Did I Calculate Astrotracer Tracking Error? — From the Rotating Sky to Star Motion on the Sensor</a>
+        <p class="kzc-related-desc">What exactly is the &#34;tracking residual of N px&#34; used in the first three articles? I open up the whole calculation — grid points on the sensor, inverse projection to the sky, rotating the Earth, reprojection, following with X/Y shift plus rotation, and measuring what is left — including how AI was used.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

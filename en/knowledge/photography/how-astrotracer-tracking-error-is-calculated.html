@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Astrotracer ④: How Did I Calculate Astrotracer Tracking Error? — From the Rotating Sky to Star Motion on the Sensor | Knowledge - SideKick</title>
+<meta name="description" content="What exactly is the &#34;tracking residual of N px&#34; used in the first three articles? I open up the whole calculation — grid points on the sensor, inverse projection to the sky, rotating the Earth, reprojection, following with X/Y shift plus rotation, and measuring what is left — including how AI was used.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/how-astrotracer-tracking-error-is-calculated">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/astrotracer-tracking-error-calculation">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/how-astrotracer-tracking-error-is-calculated">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/astrotracer-tracking-error-calculation">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/astrotracer-tracking-error-calculation" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Astrotracer ④: How Did I Calculate Astrotracer Tracking Error? — From the Rotating Sky to Star Motion on the Sensor</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Astrotracer ④: How Did I Calculate Astrotracer Tracking Error? — From the Rotating Sky to Star Motion on the Sensor</h1>
+    <p class="kzc-article-lead">What exactly is the &#34;tracking residual of N px&#34; used in the first three articles? I open up the whole calculation — grid points on the sensor, inverse projection to the sky, rotating the Earth, reprojection, following with X/Y shift plus rotation, and measuring what is left — including how AI was used.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-03">Updated: 2026-09-03</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / SideKick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>In the previous articles I presented a number of calculated results about Astrotracer.</p>
+<p>→ <a href="/en/knowledge/photography/astrotracer-why-the-ground-blurs">Astrotracer ① &quot;Why Do the Stars Stay Sharp While the Ground Blurs?&quot;</a></p>
+<p>→ <a href="/en/knowledge/photography/astrotracer-how-long-to-track-stars">Astrotracer ② &quot;How Long Should You Track the Stars?&quot;</a></p>
+<p>→ <a href="/en/knowledge/photography/astrotracer-stars-trail-at-frame-edges">Astrotracer ③ &quot;Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens?&quot;</a></p>
+<p>For example, that the same 60 seconds produces different amounts of ground blur at different focal lengths.</p>
+<p>That even where the stars are well held at the center of the frame, tracking residuals appear near the edges with ultra-wide lenses.</p>
+<p>And in Astrotracer ③ &quot;Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens?&quot; I also showed that, comparing an ordinary ultra-wide lens and a fisheye at the same field of view, the fisheye gave the smaller tracking residual in this model.</p>
+<p>At which point some readers may have thought:</p>
+<p><strong>&quot;By the way, Murata — how exactly did you calculate that 'N px'?&quot;</strong></p>
+<p>Fair enough: writing only &quot;the calculation gave 24.14 px,&quot; without explaining that part, looks like lining up numbers that came out of a machine.</p>
+<p>So in this article I explain <strong>how the numbers used in Astrotracer ①–③ were actually obtained</strong>.</p>
+<p>Let me say up front that the calculation code itself was written with AI.</p>
+<p>But it is not the case that I asked an AI</p>
+<p><strong>&quot;calculate Astrotracer's error&quot;</strong></p>
+<p>and used the numbers it returned as they were.</p>
+<p>What is being modeled.</p>
+<p>What conditions are given.</p>
+<p>What is being measured as the &quot;error.&quot;</p>
+<p>Whether it can reproduce results that are already known.</p>
+<p>I built the calculation model while checking each of those in turn.</p>
+<p>And what it actually does, setting the formulas aside, is surprisingly simple.</p>
+<p><img src="/images/knowledge/astrotracer/f16-calculation-five-steps-en.svg" alt="A five-step diagram of the procedure for calculating tracking residual. 1 Place grid points on the sensor. 2 Inverse-project them to get directions in the sky. 3 Rotate by the Earth's rotation. 4 Project back onto the sensor plane with the lens. 5 Match as well as possible with X/Y shift and rotation, and take what is left as the tracking residual." /></p>
+<p>Fig. 1: How the &quot;N px&quot; in ①–③ is produced. The starting point is working backwards from a point in the frame to the sky, not placing stars in the sky first. In practice the residual is <strong>computed at each sampled time and at each grid point in the frame, and this article compares the maximum of those</strong>. It is an idealized model, and does not reproduce PENTAX's control.</p>
+<p>Take a look at the diagram above first.</p>
+<h2>1　First, lay out stars on the frame</h2>
+<p>The first thing I did was</p>
+<p><strong>lay out grid points on the sensor</strong></p>
+<p>For the full-frame model used here, the sensor is 35.9 × 24.0 mm.</p>
+<p>Points are spaced evenly across it.</p>
+<p>Each point is treated as</p>
+<p>&quot;a star is recorded here.&quot;</p>
+<p>This surprised me a little when I first heard it.</p>
+<p>I had assumed the calculation would go in the order</p>
+<p>&quot;place stars in the sky, then photograph them with the camera.&quot;</p>
+<p>It is actually the reverse.</p>
+<p>You first fix a position in the frame, and then work backwards to</p>
+<p><strong>&quot;in which direction does the star recorded at this position actually lie in the sky?&quot;</strong></p>
+<p>This way, every star being calculated is guaranteed to fall inside the frame.</p>
+<p>It also lets you examine the corners as evenly as the center.</p>
+<h2>2　Work backwards from a point in the frame to a direction in the sky</h2>
+<p>Next, those grid points are traced backwards through the lens.</p>
+<p>In ordinary shooting it goes</p>
+<p><strong>star in the sky → lens → sensor</strong></p>
+<p>Here it goes the other way:</p>
+<p><strong>sensor → lens → sky</strong></p>
+<p>Think of it as &quot;inverse projection.&quot;</p>
+<p>That gives a three-dimensional direction:</p>
+<p>&quot;the star recorded here in the upper right of the frame lies in this direction as seen from the camera.&quot;</p>
+<p>What matters at this step is that <strong>the projection differs by lens</strong>.</p>
+<h2>3　An ordinary wide-angle and a fisheye map stars onto the frame differently</h2>
+<p>The reason Astrotracer ③ could compare fisheye lenses is that this is the part that was changed.</p>
+<p>An ordinary wide-angle lens uses the common projection that renders straight lines as straight lines.</p>
+<p>Fisheyes use other projections, such as</p>
+<p><strong>equidistant projection</strong><br />
+<strong>equisolid-angle projection</strong><br />
+<strong>stereographic projection</strong></p>
+<p>In other words,</p>
+<p><strong>for stars at the same angular distance from the center of the sky, where they land on the sensor differs by lens</strong></p>
+<p>With an ordinary wide-angle lens, for instance, the image is stretched more and more toward the edges of the frame.</p>
+<p>A fisheye bends straight lines but, in exchange, compresses and stretches the periphery differently.</p>
+<p>The reason Astrotracer ③ could investigate</p>
+<p><strong>&quot;isn't a fisheye worse for Astrotracer?&quot;</strong></p>
+<p>is that this projection formula was swapped out and the same sky recalculated.</p>
+<p>In the actual code, in addition to rectilinear for the ordinary wide-angle case, several projections including fisheye types are implemented, and the comparison at matched field of view uses the three fisheye projections.</p>
+<h2>4　Rotate the Earth by 60 seconds</h2>
+<p>That gives the positions of the stars at the start of the exposure.</p>
+<p>Next, advance time.</p>
+<p>Say the exposure is 60 seconds.</p>
+<p>The Earth keeps rotating during those 60 seconds.</p>
+<p>The model uses the sidereal rotation rate,</p>
+<p><strong>7.2921159 × 10⁻⁵ rad/s</strong></p>
+<p>You do not need to memorize that number, of course.</p>
+<p>What matters is that the angle</p>
+<p><strong>&quot;this is how far the Earth has turned after 60 seconds&quot;</strong></p>
+<p>is computed, and the directions of the stars are rotated by that amount.</p>
+<p>Strictly speaking, it is not the sky itself that is being rotated: what is calculated is which way the stars appear to move as seen from the camera because of the Earth's rotation.</p>
+<p>That gives</p>
+<p><strong>the sky at the start of the exposure</strong></p>
+<p>and</p>
+<p><strong>the sky 60 seconds later</strong></p>
+<h2>5　Project the 60-second-later stars through the lens again</h2>
+<p>Next, the stars 60 seconds later are put through the lens once more.</p>
+<p>That gives the positions:</p>
+<p><strong>a star that was here at the start arrives here in the frame after 60 seconds</strong></p>
+<p>In a fixed exposure, that is basically the trailing of the stars.</p>
+<p>But here we are considering Astrotracer.</p>
+<p>Astrotracer follows this motion of the stars by moving the image sensor.</p>
+<p>So the next calculation follows.</p>
+<h2>6　How should the sensor move to bring the stars back?</h2>
+<p>PENTAX's sensor-shift mechanism can</p>
+<p><strong>shift the image sensor in X</strong><br />
+<strong>shift it in Y</strong><br />
+<strong>rotate it about the optical axis</strong></p>
+<p>These three degrees of freedom are not something I invented for this article; they are a mechanism described in the related patents.</p>
+<p>So in the model as well, the calculation is</p>
+<p><strong>take the stars that moved over 60 seconds and try to bring them back to their original positions using the sensor's X/Y shift plus rotation</strong></p>
+<p>The important thing here is that</p>
+<p><strong>this does not claim that the actual PENTAX moves the sensor using the same calculation as this program</strong></p>
+<p>The real control algorithm is not known.</p>
+<p>What I wanted to know is something more basic:</p>
+<p><strong>with only the ability to shift a flat sensor up, down, left and right and rotate it, how far can the motion of the whole sky be cancelled?</strong></p>
+<p>That is what is being examined.</p>
+<h2>7　Even when everything is matched, a little error remains</h2>
+<p>This is where Astrotracer ③ connects.</p>
+<p>Looking only near the center of the frame, the stars can be matched quite cleanly.</p>
+<p>Look at the whole frame, however, and</p>
+<p><strong>not every star returns exactly to its original position.</strong></p>
+<p>One star comes back almost perfectly.</p>
+<p>Another is slightly off.</p>
+<p>In the corners it is off by more.</p>
+<p>That offset is the</p>
+<p><strong>tracking residual</strong></p>
+<p>that appeared again and again in Astrotracer ①–③.</p>
+<h2>8　What exactly does the &quot;N&quot; in &quot;tracking residual N px&quot; measure?</h2>
+<p>This is the part I most want to explain in this article.</p>
+<p>The number in</p>
+<p><strong>&quot;tracking residual 24.14 px&quot;</strong></p>
+<p>is not an average.</p>
+<p>Nor is it a value measured only in the corners.</p>
+<p>Nor is it the length of the trail a star drew.</p>
+<p>The actual calculation also divides the exposure into time steps and examines the positions of the stars.</p>
+<p>Then, for</p>
+<p><strong>each sampled time × each grid point in the frame</strong></p>
+<p>it measures</p>
+<p>&quot;after tracking by moving the sensor, how far is it still from its original position?&quot;</p>
+<p>Of those, the</p>
+<p><strong>largest offset</strong></p>
+<p>is what the articles quote as &quot;N px.&quot;</p>
+<p>So 24.14 px means</p>
+<p><strong>at the worst place and the worst moment within the exposure time and frame area examined here, about 24.14 px of offset remained</strong></p>
+<p>It does not mean an average of 24.14 px.</p>
+<h2>9　Why the maximum rather than the average</h2>
+<p>Thinking about photographs makes this easy to see.</p>
+<p>Suppose there are 100 stars in the frame.</p>
+<p>99 of them are almost perfectly held.</p>
+<p>But one, in a corner, is trailing badly.</p>
+<p>Take the average in that state and you may get quite a small number.</p>
+<p>To someone looking at the photograph, however,</p>
+<p><strong>that one badly trailed star is visible.</strong></p>
+<p>So in these articles I used the maximum in order to see</p>
+<p><strong>&quot;how far across the frame can the stars be held?&quot;</strong></p>
+<p>rather than</p>
+<p>&quot;how well are they matched on average?&quot;</p>
+<p>This is not a metric PENTAX uses for product evaluation.</p>
+<p>It is the evaluation method I chose for thinking about tracking residual in these articles.</p>
+<h2>10　&quot;Match the center&quot; and &quot;match the whole frame as well as possible&quot; were calculated separately</h2>
+<p><img src="/images/knowledge/astrotracer/f18-centre-fixed-vs-best-rigid-en.svg" alt="A figure comparing tracking residual when matched to the center and when matched across the whole frame. With center-fixed, the center is almost zero and the corners reach a maximum of about 24.14 pixels; when matched across the whole frame, residual remains at the center too and the maximum is about 17.85 pixels." /></p>
+<p>Fig. 2: <strong>For the same motion of the celestial sphere, both the size and the distribution of the remaining error change depending on how you assume the sensor's X/Y shift plus rotation is matched.</strong> Diagonal field of view 114 degrees, 9×9 grid. <strong>The shading is a schematic of the distribution, not per-cell values. Both are ways of matching within the model, not PENTAX's actual control algorithm.</strong></p>
+<p>In this model there is more than one way to match the sensor.</p>
+<p>One is</p>
+<p><strong>making the stars near the center of the frame match well.</strong></p>
+<p>The other is</p>
+<p><strong>mathematically searching for the state that best fits the stars across the whole frame using only X/Y shift plus rotation.</strong></p>
+<p>The numbers that appear in Astrotracer ①–③ are the former: matched to the center of the frame.</p>
+<p>Under the same conditions, the residual changes with which matching you use. For a diagonal field of view of 114 degrees, full frame, facing south at 40° altitude, 60 s, matching to the center of the frame gives about 24.14 px, while the best fit across the whole frame gives about 17.85 px.</p>
+<p>For the latter, grid points across the whole frame are used and a least-squares fit finds the best-fitting planar shift and rotation.</p>
+<p>Neither way of matching means</p>
+<p>&quot;this is how PENTAX controls it.&quot;</p>
+<p>The latter in particular is a calculation for seeing</p>
+<p><strong>how far you could get if you used only the three motions of X/Y shift plus rotation to fit the whole frame as favorably as possible</strong></p>
+<p>Residual still remains.</p>
+<p>Which connects to what Astrotracer ③ explained:</p>
+<p><strong>&quot;it does not follow that the edges trail simply because the control accuracy is poor.&quot;</strong></p>
+<h2>11　Ground blur turned out to be a simpler idea</h2>
+<p><img src="/images/knowledge/astrotracer/f02-sensor-3dof-and-ground-en.svg" alt="The idea behind ground blur. A schematic of the image sensor, moving as it follows the stars, drifting relative to the stationary image of the ground on the image plane." /></p>
+<p>Fig. 3: Ground blur is the <strong>relative motion of the stationary ground image</strong> as seen from the moving image sensor.</p>
+<p>In Astrotracer ①② I calculated ground blur as well as the stars.</p>
+<p>That idea is simpler.</p>
+<p>The camera and lens are fixed on the tripod.</p>
+<p>So, idealized, the image of the ground itself stays in the same place on the image plane.</p>
+<p>But with Astrotracer, <strong>the sensor underneath it moves to follow the stars.</strong></p>
+<p>Seen from the sensor, the image of the ground then drifts in the opposite direction.</p>
+<p>In other words,</p>
+<p><strong>the ground is not being moved.</strong></p>
+<p><strong>Relative to the sensor that moved in order to follow the stars, the fixed image of the ground appears to move.</strong></p>
+<p>That is the basic idea behind the ground blur used in Astrotracer ①②.</p>
+<h2>12　This is also why the same formula as the 500 rule appeared</h2>
+<p>In Astrotracer ② &quot;How Long Should You Track the Stars?&quot; I showed a slightly interesting result.</p>
+<p>Considering the 500 rule used for fixed exposures and the ground blur when using Astrotracer with the same acceptable amount, the same time came out.</p>
+<p>That is not a coincidence.</p>
+<p>In a fixed exposure,</p>
+<p><strong>the Earth's rotation moves the stars across the sensor.</strong></p>
+<p>With Astrotracer,</p>
+<p><strong>the sensor is moved to cancel that motion of the stars.</strong></p>
+<p>So with the same angular rate, the same focal length and the same acceptable displacement, you get the same relationship.</p>
+<p>Both the amount the stars move in a fixed exposure and the amount the ground blurs with Astrotracer take the same form, f · ω · T · cos δ. So the match is not a coincidence — in terms of the formula, they are the same thing seen from different sides.</p>
+<p>This was one of the places where calculating it made me think &quot;ah, of course.&quot;</p>
+<h2>13　For the fisheye comparison, only the lens part was swapped</h2>
+<p>The fisheye comparison done in Astrotracer ③ is basically the same calculation.</p>
+<p>Create the stars.</p>
+<p>Rotate the Earth.</p>
+<p>Project again.</p>
+<p>Shift and rotate the sensor in X/Y.</p>
+<p>Measure the largest remaining offset.</p>
+<p>What was changed is mainly</p>
+<p><strong>how the lens projects the sky onto the sensor</strong></p>
+<p>Also, comparing at the same focal length alone changes the area of sky covered.</p>
+<p>So for the main comparison, conditions were matched so that the ordinary wide-angle lens and the fisheye had the <strong>same diagonal field of view</strong>.</p>
+<p>In that state only the projection was changed, and the same calculation repeated.</p>
+<p>The result is the finding in Astrotracer ③ that</p>
+<p><strong>at the same field of view, across the range examined here, the fisheye had the smaller tracking residual</strong></p>
+<p>For example, in the 114° diagonal comparison, the 24.14 px for the ordinary wide-angle lens and 3.67, 4.53 and 5.12 px for the three fisheye projections shown in Astrotracer ③ are the values when matched to the center of the frame.</p>
+<p>Switch the same conditions to the best fit across the whole frame and the ordinary wide-angle becomes 17.85 px, with 3.32, 3.35 and 4.85 px for the three fisheye projections. Changing the matching does not change the relationship that the fisheye is smaller. Both are ways of matching within the model, and do not represent the tracking algorithm of an actual PENTAX body.</p>
+<h2>14　Only the equatorial mount is calculated in a different place</h2>
+<p><img src="/images/knowledge/astrotracer/f13-before-after-projection-en.svg" alt="A two-row flow diagram comparing an equatorial mount, which rotates the whole camera before the lens projects, with Astrotracer, which moves the image sensor after projection." /></p>
+<p>Fig. 4: In the calculation too, the equatorial mount's correction enters before the projection. <strong>In the idealized model the residual for the stars becomes 0.00 px, but that is because polar alignment error, flexure and atmospheric refraction are not in the model — it does not mean a real equatorial mount has zero error.</strong></p>
+<p>Astrotracer ③ also described the difference from an equatorial mount.</p>
+<p>Turning that into a calculation model makes it very clear.</p>
+<p>With Astrotracer the order is</p>
+<p><strong>the stars move</strong><br />
+<strong>→ the lens projects</strong><br />
+<strong>→ the sensor follows the resulting image</strong></p>
+<p>With an ideal equatorial mount, the camera and lens themselves are rotated by exactly the amount the stars move.</p>
+<p>That is,</p>
+<p><strong>the relative orientation between the stars and the camera is preserved before the projection into the lens</strong></p>
+<p>In this ideal model the stars and the camera are rotated by the same rotation matrix, so the direction of a star as seen from the camera does not change.</p>
+<p>As a result, the model's tracking residual for the stars is 0.00 px.</p>
+<p>Of course, that does not mean</p>
+<p><strong>a real equatorial mount has zero error</strong></p>
+<p>In practice there is polar alignment error, periodic error, flexure, atmospheric refraction and more.</p>
+<p>It is 0.00 px because this is an <strong>idealized model</strong> that does not include them.</p>
+<h2>15　So how far can this calculation be trusted?</h2>
+<p>Having explained all that, the opposite question arises.</p>
+<p><strong>&quot;Can the numbers from a model really be trusted?&quot;</strong></p>
+<p>There is a great deal this model does not include.</p>
+<p>The actual internal control algorithm of a PENTAX body.</p>
+<p>Mechanical error.</p>
+<p>Calibration error.</p>
+<p>Atmospheric refraction.</p>
+<p>Lens aberrations.</p>
+<p>Vibration.</p>
+<p>The specific distortion of a real lens.</p>
+<p>It is not a simulator that reproduces all of that.</p>
+<p>So I cannot say</p>
+<p><strong>&quot;a real K-1 at 14 mm and 60 s will always trail 24.18 px.&quot;</strong></p>
+<p>The figure 24.18 px is a result of the idealized model set up here, nothing more.</p>
+<p>Note that the 24.14 px in Astrotracer ③ is the value with the diagonal field of view matched to exactly 114 degrees, whereas this 24.18 px is the value with the focal length fixed at 14 mm. The conditions are almost the same, but what was held constant differs, so the numbers differ slightly.</p>
+<p>So what is it useful for?</p>
+<p>For questions like</p>
+<p><strong>can shifting and rotating the sensor alone cancel the motion of the celestial sphere across the whole frame?</strong></p>
+<p><strong>What difference does the projection alone make to the tracking residual between an ordinary wide-angle lens and a fisheye?</strong></p>
+<p><strong>Why do an equatorial mount and sensor-shift tracking give different results?</strong></p>
+<p>I use it to <strong>separate out the mechanisms themselves</strong>.</p>
+<h2>16　I did not stop at &quot;the calculation is done&quot;</h2>
+<p>There is one more thing I was careful about this time.</p>
+<p>Use AI to write calculation code and you can produce as many numbers as you like.</p>
+<p>Whether those numbers are correct is a separate matter.</p>
+<p>So for the main figures used in Astrotracer ①–③, I re-checked them mechanically against existing calculation results, unit conversions, projection formulas, matched-field-of-view conditions and so on.</p>
+<p>There were 166 checks.</p>
+<p>The result was</p>
+<p><strong>165 PASS / 1 FAIL</strong></p>
+<p>And that one was not an error in a calculation result.</p>
+<p>It was a mistake in a number written in the text, for the half-diagonal of a full-frame sensor.</p>
+<p>It counts as one check item, but the same typo had made its way into several drafts.</p>
+<p>Correcting it to the right value and re-checking did not change any calculation results. The existing main figures and the self-validation of the fisheye comparison also passed.</p>
+<p>If anything, doing this re-check let me find a written error.</p>
+<h2>17　On having AI do the calculation</h2>
+<p>I did not write the calculation code from scratch by hand this time.</p>
+<p>I used AI a great deal.</p>
+<p>But having done it, what struck me again is that</p>
+<p><strong>having AI perform a calculation is not the same as trusting the numbers AI produces</strong></p>
+<p>What is being calculated.</p>
+<p>Where reality ends and idealization begins.</p>
+<p>What the resulting &quot;N px&quot; means.</p>
+<p>Whether a known result can be reproduced by another method.</p>
+<p>Use the numbers without checking those, and I would not be able to explain them myself.</p>
+<p>Going back through the code to reorganize the calculation method for this article, I at least put it into a form where I can explain, in my own words,</p>
+<p><strong>what was modeled.</strong><br />
+<strong>What was given as input.</strong><br />
+<strong>What was compared.</strong><br />
+<strong>What the &quot;N px&quot; actually measures.</strong></p>
+<h2>Summary</h2>
+<p>To sum the calculation up very simply once more:</p>
+<p><strong>place points on the frame</strong></p>
+<p>↓</p>
+<p><strong>work backwards to where in the sky the star at that point lies</strong></p>
+<p>↓</p>
+<p><strong>rotate the Earth by the exposure time</strong></p>
+<p>↓</p>
+<p><strong>project the stars onto the frame through the lens again</strong></p>
+<p>↓</p>
+<p><strong>shift the sensor in X and Y and rotate it to follow the stars</strong></p>
+<p>↓</p>
+<p><strong>measure the offset that still remains</strong></p>
+<p>↓</p>
+<p><strong>take the largest offset over the exposure and across the frame, in pixels</strong></p>
+<p>That is the calculation.</p>
+<p>This is what the</p>
+<p><strong>&quot;tracking residual N px&quot;</strong></p>
+<p>in Astrotracer ①–③ actually is.</p>
+<p>Looking only at the formulas, it seems to be doing something quite difficult.</p>
+<p>But follow it step by step and</p>
+<p><strong>it computes where the stars move to, follows them with the sensor, and measures what offset is left.</strong></p>
+<p>Basically, that is all.</p>
+<p>And it was precisely because I had this model that I could go back and re-examine the question I had left alone for years:</p>
+<p>&quot;Is it really because it is a fisheye that stars trail near the edges with an ultra-wide lens?&quot;</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-why-the-ground-blurs">Astrotracer ①: Why Do the Stars Stay Sharp While the Ground Blurs? — How Sensor-Shift Tracking Works</a>
+        <p class="kzc-related-desc">Track the stars and the ground blurs. That is not unique to Astrotracer — an equatorial mount does the same thing. Here is how PENTAX moves the image sensor in X, Y and rotation to follow the stars, and where the ground actually blurs in the frame, based on official documents, patents and an idealized geometric model.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-how-long-to-track-stars">Astrotracer ②: How Long Should You Track the Stars? — The Maximum Tracking Time Is Not the Exposure You Want for a Star-Landscape</a>
+        <p class="kzc-related-desc">The manufacturer&#39;s tracking time is not a guarantee that the stars will stay points. This article separates four different limits — the mechanism, tracking accuracy, ground blur and stars near the frame edges — and works out ground blur by focal length, and how it relates to the 500 rule.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrotracer-stars-trail-at-frame-edges">Astrotracer ③: Why Do Stars Still Trail Near the Edges with an Ultra-Wide Lens? — Sensor-Shift Tracking Is Not an Equatorial Mount</a>
+        <p class="kzc-related-desc">The stars are held at the center of the frame but trail near the edges. I had assumed for years that it was &#34;because it is a fisheye.&#34; Recalculating from the rotating celestial sphere, the lens projection and the rigid motion of the image sensor gave the opposite of what I expected.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of SideKick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
