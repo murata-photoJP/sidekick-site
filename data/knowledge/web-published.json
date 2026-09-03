@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T16:49:48.682648+09:00",
+  "generated_at": "2026-09-03T17:44:31.938174+09:00",
   "schema_version": 1,
   "articles": [
     {
@@ -902,6 +902,46 @@
       "public_url": "/knowledge/photoshop/photoshop-lab-color-retouching"
     },
     {
+      "id": "SKB-ART-000030",
+      "title": "What to Check When Sidekick Star's AI Mask Generation Won't Finish",
+      "slug": "what-to-check-when-sidekick-star-ai-mask-stalls",
+      "language": "en",
+      "category": {
+        "slug": "sidekick",
+        "name": "SideKick",
+        "name_ja": "SideKick"
+      },
+      "subcategory": {
+        "slug": "troubleshooting",
+        "name": "Troubleshooting",
+        "name_ja": "トラブルシューティング"
+      },
+      "meta_description": "Sidekick Star's AI mask generation can appear to stall without ever completing. Here is what is actually happening, what you can try, and the improvements made on the development side.",
+      "difficulty": "beginner",
+      "audience": [
+        "SideKick Star利用者"
+      ],
+      "tags": [
+        "SideKick Star"
+      ],
+      "concepts": [
+        "sidekick-star"
+      ],
+      "related_products": [
+        "sidekick-star"
+      ],
+      "cta_type": "none",
+      "created_at": "2026-09-03",
+      "updated_at": "2026-09-03",
+      "published_at": "2026-09-03",
+      "related_articles": [],
+      "series": null,
+      "source_article_id": "SKB-ART-000021",
+      "body_markdown": "# What to Check When Sidekick Star's AI Mask Generation Won't Finish\n\nSidekick Star can detect the sky or the subject automatically and build a mask from it. Very occasionally, that process appears to stall without ever signalling that it has finished. Here is what is going on, and what you can actually try.\n\n## What is happening\n\nAI mask generation works by launching the work as a background process, separate from Photoshop itself, and then picking up the result once it completes.\n\nIf that background process fails to start properly, Photoshop can keep treating the job as still running and wait indefinitely for a completion that never arrives. What makes this hard to recognise is that the job is not slow because it is heavy: in some cases it stumbles at startup and never gets going at all.\n\n## What to try first\n\nWhen processing appears to have stalled, check the following.\n\n- **Wait a little, then try again**: if you have just processed a large batch of photos in one go, the processing engine is known to become temporarily unstable immediately afterwards. Waiting a few minutes and running it again will sometimes complete without any trouble.\n- **Update Sidekick Star to the latest version**: the reliability of the startup process is reviewed on an ongoing basis. Staying on an older version means you may run into a problem that has already been resolved.\n- **Check Task Manager to see whether the background process is running**: this gives you a way to tell whether processing has genuinely stopped or is simply taking a long time.\n\n## Improvements made on the development side\n\nInvestigating this meant suspecting several causes and finding, one after another, that each was not it. What is understood now is that the processing engine tends to become temporarily unstable immediately after a long run of file operations.\n\nWith that in mind, a mechanism was built in that retries automatically, leaving an interval between attempts, when startup fails. Processing has been confirmed to run through to completion on real data of a substantial number of frames.\n\nThat said, startup failures themselves have not been eliminated. What has changed is that when one happens, recovery is more reliable.\n\n## If that still does not solve it\n\nIf none of the above improves things, please get in touch and include the circumstances in which it occurred: how many images you were processing, what you had been doing immediately beforehand, your Photoshop version, and so on. Information about the environment where it actually happened is what helps pin down the cause.\n\n## Summary\n\nWhen AI mask generation appears to stall, the cause is usually that the background process did not start properly. Try waiting and running it again, or updating to the latest version, and see how things go; if it keeps happening, get in touch with the details. The machinery behind this kind of automated processing behaves differently depending on the number of photos and the environment, so it is reviewed on an ongoing basis, based on how it behaves in real use.\n",
+      "images": [],
+      "public_url": "/en/knowledge/sidekick/what-to-check-when-sidekick-star-ai-mask-stalls"
+    },
+    {
       "id": "SKB-ART-000021",
       "title": "SideKick StarのAIマスク生成が終わらないときに確認したいこと",
       "slug": "sidekick-star-ai-mask-generation-not-finishing",
@@ -1366,6 +1406,19 @@
       "public_url": "/knowledge/photoshop/photoshop-lab-color-retouching"
     },
     {
+      "id": "SKB-ART-000030",
+      "title": "What to Check When Sidekick Star's AI Mask Generation Won't Finish",
+      "slug": "what-to-check-when-sidekick-star-ai-mask-stalls",
+      "language": "en",
+      "meta_description": "Sidekick Star's AI mask generation can appear to stall without ever completing. Here is what is actually happening, what you can try, and the improvements made on the development side.",
+      "category_name": "SideKick",
+      "published_at": "2026-09-03",
+      "updated_at": "2026-09-03",
+      "thumbnail_url": null,
+      "difficulty": "beginner",
+      "public_url": "/en/knowledge/sidekick/what-to-check-when-sidekick-star-ai-mask-stalls"
+    },
+    {
       "id": "SKB-ART-000021",
       "title": "SideKick StarのAIマスク生成が終わらないときに確認したいこと",
       "slug": "sidekick-star-ai-mask-generation-not-finishing",
@@ -1459,6 +1512,12 @@
     {
       "slug": "sidekick",
       "name": "SideKick",
+      "language": "en",
+      "published_count": 1
+    },
+    {
+      "slug": "sidekick",
+      "name": "SideKick",
       "language": "ja",
       "published_count": 1
     },
@@ -1492,10 +1551,10 @@
     }
   ],
   "build_meta": {
-    "article_count": 23,
+    "article_count": 24,
     "language_counts": {
       "ja": 12,
-      "en": 11
+      "en": 12
     }
   }
 }
