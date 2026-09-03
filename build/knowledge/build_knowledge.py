@@ -87,14 +87,14 @@ LABELS = {
         "knowledge_top_url": "/en/knowledge",
         "updated_label": "Updated: ",
         "beginner_badge": "Beginner-friendly",
-        "author_short": "Ichiro Murata · Photographer / SideKick Developer",
+        "author_short": "Ichiro Murata · Photographer / Sidekick Developer",
         "related_heading": "Related Articles",
         "product_context_label": "Related Sidekick Product",
         "product_detail_link": "See details →",
         "product_trial_link": "Try it free →",
         "author_block_heading": "About the Author",
         "author_block_body": (
-            "Ichiro Murata is a photographer and the developer of SideKick. This article is "
+            "Ichiro Murata is a photographer and the developer of Sidekick. This article is "
             "written from his hands-on experience shooting, retouching, critiquing, and developing. "
             "AI is used to help organize past logs and draft the text, but the final review, edits, "
             "and publish decisions are always his own."
@@ -102,8 +102,8 @@ LABELS = {
         "ai_lab_cta_text": "Explore this topic together with AI",
         "ai_lab_cta_label": "Check it out on AI Lab",
         "ai_lab_href": "/en/ai-lab",
-        "title_suffix": " | Knowledge - SideKick",
-        "index_title": "Knowledge | SideKick",
+        "title_suffix": " | Knowledge - Sidekick",
+        "index_title": "Knowledge | Sidekick",
         "index_meta_description": (
             "A knowledge library photographers can turn to when they run into problems with "
             "shooting, developing, or Photoshop. A record of real problems and what was tried."
