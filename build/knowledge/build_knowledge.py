@@ -89,7 +89,7 @@ LABELS = {
         "beginner_badge": "Beginner-friendly",
         "author_short": "Ichiro Murata · Photographer / SideKick Developer",
         "related_heading": "Related Articles",
-        "product_context_label": "Related SideKick Product",
+        "product_context_label": "Related Sidekick Product",
         "product_detail_link": "See details →",
         "product_trial_link": "Try it free →",
         "author_block_heading": "About the Author",
@@ -126,7 +126,7 @@ LABELS = {
 # フィールドを追加する場合はこのマッピングを廃止する）。
 PRODUCT_EN_OVERRIDES = {
     "sidekick-star": {
-        "name": "SideKick Star",
+        "name": "Sidekick Star",
         "short_description": (
             "Automates star-trail Lighten composites, Milky Way enhancement, "
             "and aircraft-trail removal."
@@ -135,13 +135,13 @@ PRODUCT_EN_OVERRIDES = {
         "trial_url": "/en/ai-lab",
     },
     "sidekick-portrait": {
-        "name": "SideKick Portrait",
+        "name": "Sidekick Portrait",
         "short_description": "Automates portrait retouching (15 styles x 3 intensity levels).",
         "detail_url": "/en/portrait",
         "trial_url": "/en/ai-lab",
     },
     "sidekick-sky-effect": {
-        "name": "SideKick Sky Effect",
+        "name": "Sidekick Sky Effect",
         "short_description": (
             "Composites sky and ground using two different white balances for natural-looking finishing."
         ),
