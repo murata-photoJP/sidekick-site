@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 590" width="800" height="590" role="img" aria-labelledby="t"><title id="t">Fisheye to rectilinear residual ratio at 16 diagonal fields of view.</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="40.0" y="50.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">Center-fixed · 9×9 grid</text>
+<line x1="120.0" y1="404.0" x2="740.0" y2="404.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="120.0" y1="112.0" x2="120.0" y2="404.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="120.0" y1="150.1" x2="740.0" y2="150.1" stroke="#ff8a00" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
+<text x="740.0" y="136.1" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">1.0 = equal residuals</text>
+<circle cx="190.9" cy="349.4" r="7.5" fill="#ff8a00"/>
+<circle cx="226.3" cy="349.7" r="7.5" fill="#ff8a00"/>
+<circle cx="261.7" cy="350.4" r="7.5" fill="#ff8a00"/>
+<circle cx="297.1" cy="351.4" r="7.5" fill="#ff8a00"/>
+<circle cx="332.6" cy="352.7" r="7.5" fill="#ff8a00"/>
+<circle cx="368.0" cy="354.2" r="7.5" fill="#ff8a00"/>
+<circle cx="417.6" cy="357.0" r="7.5" fill="#ff8a00"/>
+<circle cx="474.3" cy="361.1" r="7.5" fill="#ff8a00"/>
+<circle cx="523.9" cy="365.4" r="7.5" fill="#ff8a00"/>
+<circle cx="580.6" cy="371.8" r="7.5" fill="#ff8a00"/>
+<circle cx="651.4" cy="381.9" r="7.5" fill="#ff8a00"/>
+<circle cx="704.6" cy="391.8" r="7.5" fill="#ff8a00"/>
+<path d="M 137.7 331.2 L 142.7 341.6 L 132.7 341.6 Z" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
+<path d="M 148.3 330.2 L 153.3 340.6 L 143.3 340.6 Z" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
+<path d="M 155.4 330.0 L 160.4 340.4 L 150.4 340.4 Z" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
+<path d="M 169.6 329.4 L 174.6 339.8 L 164.6 339.8 Z" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
+<text x="120.0" y="438.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">0</text>
+<text x="297.1" y="438.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">50</text>
+<text x="474.3" y="438.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">100</text>
+<text x="651.4" y="438.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">150</text>
+<text x="106.0" y="413.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="end">0.0</text>
+<text x="106.0" y="286.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="end">0.5</text>
+<text x="106.0" y="159.1" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="end">1.0</text>
+<text x="430.0" y="474.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="middle">Diagonal field of view (deg)</text>
+<text x="40.0" y="90.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="start">Tracking residual ratio (fisheye ÷ rectilinear)</text>
+<circle cx="60" cy="506" r="7.5" fill="#ff8a00"/>
+<text x="80.0" y="514.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="start">12 pts: smallest of 3 fisheye types</text>
+<path d="M 60 532 L 65 542.4 L 55 542.4 Z" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
+<text x="80.0" y="550.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="start">4 pts: equisolid-angle only</text>
+<text x="740.0" y="514.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="end">At these 16 points</text>
+<text x="740.0" y="550.0" fill="#eef1f8" font-size="25" font-weight="700" text-anchor="end">the ratio stayed below 1.0</text>
+</g></svg>

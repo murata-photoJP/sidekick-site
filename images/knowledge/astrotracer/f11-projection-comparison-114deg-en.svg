@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" width="800" height="460" role="img" aria-labelledby="t"><title id="t">Tracking residual by projection type at a matched 114 degree diagonal field.</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="40.0" y="56.0" fill="#8c96aa" font-size="27" font-weight="600" text-anchor="start">114° diagonal FOV · 60 s · 9×9 grid · center-fixed</text>
+<text x="40.0" y="126.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="start">Rectilinear wide-angle</text>
+<rect x="370.0" y="96.0" width="370.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="370.0" y="96.0" width="343.5" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="701.5" y="127.0" fill="#09090c" font-size="28" font-weight="700" text-anchor="end">24.14</text>
+<text x="40.0" y="196.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="start">Equidistant fisheye</text>
+<rect x="370.0" y="166.0" width="370.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="370.0" y="166.0" width="52.2" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="434.2" y="197.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="start">3.67</text>
+<text x="40.0" y="266.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="start">Equisolid-angle fisheye</text>
+<rect x="370.0" y="236.0" width="370.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="370.0" y="236.0" width="64.5" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="446.5" y="267.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="start">4.53</text>
+<text x="40.0" y="336.0" fill="#eef1f8" font-size="27" font-weight="600" text-anchor="start">Stereographic fisheye</text>
+<rect x="370.0" y="306.0" width="370.0" height="44.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.2"/>
+<rect x="370.0" y="306.0" width="72.9" height="44.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0.0"/>
+<text x="454.9" y="337.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="start">5.12</text>
+<text x="740.0" y="430.0" fill="#8c96aa" font-size="27" font-weight="700" text-anchor="end">px</text>
+</g></svg>

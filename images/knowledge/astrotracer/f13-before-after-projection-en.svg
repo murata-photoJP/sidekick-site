@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 560" width="800" height="560" role="img" aria-labelledby="t"><title id="t">The equatorial mount corrects before projection; Astrotracer corrects after.</title>
+<defs>
+<marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8c96aa"/></marker>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ffb14a"/></marker>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="40.0" y="158.0" fill="#ffb14a" font-size="29" font-weight="700" text-anchor="start">Equatorial</text>
+<rect x="210.0" y="116.0" width="150.0" height="76.0" rx="10" fill="#14161d" stroke="#2b3140" stroke-width="2.0"/>
+<text x="285.0" y="152.0" fill="#eef1f8" font-size="25" font-weight="600" text-anchor="middle">Star motion</text>
+<rect x="392.0" y="116.0" width="168.0" height="76.0" rx="10" fill="#14161d" stroke="#ff8a00" stroke-width="2.8"/>
+<text x="476.0" y="142.0" fill="#ff8a00" font-size="25" font-weight="700" text-anchor="middle">Rotate the whole</text>
+<text x="476.0" y="174.0" fill="#ff8a00" font-size="25" font-weight="700" text-anchor="middle">camera + lens</text>
+<rect x="592.0" y="116.0" width="148.0" height="76.0" rx="10" fill="#14161d" stroke="#2b3140" stroke-width="2.0"/>
+<text x="666.0" y="152.0" fill="#eef1f8" font-size="25" font-weight="600" text-anchor="middle">Lens projection</text>
+<line x1="366.0" y1="154.0" x2="384.0" y2="154.0" stroke="#8c96aa" stroke-width="2.6" stroke-linecap="round" marker-end="url(#ah)"/>
+<line x1="566.0" y1="154.0" x2="584.0" y2="154.0" stroke="#8c96aa" stroke-width="2.6" stroke-linecap="round" marker-end="url(#ah)"/>
+<text x="476.0" y="240.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="middle">Tracks before projection</text>
+<line x1="60.0" y1="292.0" x2="740.0" y2="292.0" stroke="#2b3140" stroke-width="1.8" stroke-linecap="round"/>
+<text x="40.0" y="398.0" fill="#ffb14a" font-size="29" font-weight="700" text-anchor="start"></text>
+<rect x="210.0" y="356.0" width="150.0" height="76.0" rx="10" fill="#14161d" stroke="#2b3140" stroke-width="2.0"/>
+<text x="285.0" y="392.0" fill="#eef1f8" font-size="25" font-weight="600" text-anchor="middle">Star motion</text>
+<rect x="392.0" y="356.0" width="148.0" height="76.0" rx="10" fill="#14161d" stroke="#2b3140" stroke-width="2.0"/>
+<text x="466.0" y="392.0" fill="#eef1f8" font-size="25" font-weight="600" text-anchor="middle">Lens projection</text>
+<rect x="572.0" y="356.0" width="168.0" height="76.0" rx="10" fill="#14161d" stroke="#ff8a00" stroke-width="2.8"/>
+<text x="656.0" y="382.0" fill="#ff8a00" font-size="25" font-weight="700" text-anchor="middle">Move the</text>
+<text x="656.0" y="414.0" fill="#ff8a00" font-size="25" font-weight="700" text-anchor="middle">sensor</text>
+<line x1="366.0" y1="394.0" x2="384.0" y2="394.0" stroke="#8c96aa" stroke-width="2.6" stroke-linecap="round" marker-end="url(#ah)"/>
+<line x1="546.0" y1="394.0" x2="564.0" y2="394.0" stroke="#8c96aa" stroke-width="2.6" stroke-linecap="round" marker-end="url(#ah)"/>
+<text x="40.0" y="382.0" fill="#ffb14a" font-size="29" font-weight="700" text-anchor="start">Astro</text>
+<text x="40.0" y="420.0" fill="#ffb14a" font-size="29" font-weight="700" text-anchor="start">tracer</text>
+<text x="656.0" y="480.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="middle">Tracks after projection</text>
+<text x="400.0" y="526.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="middle">Same tracking, different place for the correction</text>
+</g></svg>
