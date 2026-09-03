@@ -8,7 +8,7 @@
 <line x1="120.0" y1="404.0" x2="740.0" y2="404.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
 <line x1="120.0" y1="112.0" x2="120.0" y2="404.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
 <line x1="120.0" y1="150.1" x2="740.0" y2="150.1" stroke="#ff8a00" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="9 7"/>
-<text x="740.0" y="136.1" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">1.0</text>
+<text x="740.0" y="136.1" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">1.0 ＝ 魚眼と通常広角が同じ</text>
 <circle cx="190.9" cy="349.4" r="7.5" fill="#ff8a00"/>
 <circle cx="226.3" cy="349.7" r="7.5" fill="#ff8a00"/>
 <circle cx="261.7" cy="350.4" r="7.5" fill="#ff8a00"/>
@@ -33,7 +33,7 @@
 <text x="106.0" y="286.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="end">0.5</text>
 <text x="106.0" y="159.1" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="end">1.0</text>
 <text x="430.0" y="474.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="middle">対角画角（度）</text>
-<text x="40.0" y="90.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="start">魚眼 ÷ 通常広角</text>
+<text x="40.0" y="90.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="start">追尾残差の比（魚眼 ÷ 通常広角）</text>
 <circle cx="60" cy="506" r="7.5" fill="#ff8a00"/>
 <text x="80.0" y="514.0" fill="#8c96aa" font-size="25" font-weight="600" text-anchor="start">12点：魚眼3方式のうち最小</text>
 <path d="M 60 532 L 65 542.4 L 55 542.4 Z" fill="none" stroke="#ffb14a" stroke-width="2.4"/>
