@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>星景写真のピントは、どこに・どう合わせるのが正しいのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="星にピントを合わせるとき、∞マークに合わせれば正しいのでしょうか。星空AFがあるならまず使い、満足できなければMFで「星が一番小さく見えるところ」に合わせる。ワークショップで教えている手順を、メーカー公式資料とあわせて順番に説明します。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/astrophotography-focusing">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">星景写真のピントは、どこに・どう合わせるのが正しいのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">星景写真のピントは、どこに・どう合わせるのが正しいのか？</h1>
+    <p class="kzc-article-lead">星にピントを合わせるとき、∞マークに合わせれば正しいのでしょうか。星空AFがあるならまず使い、満足できなければMFで「星が一番小さく見えるところ」に合わせる。ワークショップで教えている手順を、メーカー公式資料とあわせて順番に説明します。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      <span class="kzc-badge">初心者向け</span>
+      <time datetime="2026-09-06">更新日：2026-09-06</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>星景写真のワークショップをやっていると、初心者の方がかなりの確率でつまずくのが「ピント」です。</p>
+<p>星は暗い。AFを動かしても迷ってしまう。ライブビューで拡大したら、今度は星がどこにあるのか分からなくなる。</p>
+<p>そして、よく聞かれるのが、</p>
+<p>「星は無限遠だから、レンズを∞に合わせればいいんですよね？」</p>
+<p>という話です。</p>
+<p>以前なら私は、まずMF（マニュアルフォーカス）にして、星を拡大して……と説明していました。</p>
+<p>でも、今は少し事情が変わりました。</p>
+<h2>星空AFがあるなら、まず使ってみる</h2>
+<p>最近のカメラには、星を対象にした専用のAF機能を持つものがあります。</p>
+<p>たとえば<a href="https://learning.omsystem.com/OM-3/zz_html_manual/ja/af_mode_40.html">OM SYSTEM</a>には「星空AF」があり、速度を優先するモードだけでなく、<a href="https://learning.omsystem.com/OM-5MarkII/zz_html_manual/ja/starry_sky_af_setting_53.html">三脚使用を前提として、より精密にピントを合わせるためのモード</a>も用意されています。</p>
+<p><a href="https://panasonic.jp/dc/products/DC-S1/feature/auto-focus.html">LUMIX</a>や<a href="https://www.ricoh-imaging.co.jp/japan/products/k-1/premium/astro/">PENTAX</a>にも、星へのピント合わせを想定したAF機能を搭載したカメラがあります。</p>
+<p>つまり、今はもう、</p>
+<p><strong>「星はAFでは合わない。だから必ずMF」</strong></p>
+<p>とは言えません。</p>
+<p>カメラに「星空AF」「星AF」など、星を対象にした専用AFがあるなら、まず使ってみればいいと思います。</p>
+<p>そして、一枚撮って拡大して確認する。</p>
+<p>星が十分シャープで、自分が撮る写真として問題がなければ、そこでピント合わせは終了です。</p>
+<p>「上級者だからMF」</p>
+<p>「プロならAFを使わない」</p>
+<p>と考える必要もありません。</p>
+<p>技術が進歩して、カメラがやってくれるようになったのなら、使えばいい。</p>
+<p>では、</p>
+<p>星空AFが付いていない</p>
+<p>星空AFがうまく働かない</p>
+<p>撮ってみたけれど、どうもピントに納得できない</p>
+<p>そんなときはどうするか。</p>
+<p>ここでMFの出番です。</p>
+<h2>星空AFで満足できなければ、MFで合わせる</h2>
+<p>ここからは、自分で星にピントを合わせる方法です。</p>
+<p>先に一番大切なことを書いておきます。</p>
+<p><strong>MFでは「星が一番小さく見えるところ」にピントを合わせる</strong></p>
+<p>これが基本です。</p>
+<p>∞マークそのものに合わせるのではありません。</p>
+<p>距離表示の数字を見るのでもありません。</p>
+<p><strong>実際の星を見ながらフォーカスを動かし、星が一番小さく見える位置を探します。</strong></p>
+<p>MFによる星のピント合わせで覚えておいてほしいことは、まずこれです。</p>
+<p>では、実際の手順を順番に見ていきましょう。</p>
+<h3>1. 撮りたい写真を考えて、使う焦点距離を決める</h3>
+<p>ズームレンズなら、まず使う焦点距離を決めます。</p>
+<p>どんな構図で撮りたいかを考えれば、必要な焦点距離も決まってきます。</p>
+<p>星景写真では最大広角側を使う人も多いでしょう。私自身もそのタイプです。</p>
+<p>ただし、ここで実際に最終的な構図まで作ってしまうわけではありません。</p>
+<p>最終構図を先に作ると、ピント合わせに使いやすい明るい星が画面中央にない可能性があるからです。</p>
+<p>まず焦点距離を決める。</p>
+<p>実際に最終構図へカメラを向けるのは、ピント合わせが終わってからです。</p>
+<h3>2. AF/MF切り替えを「MF」にする</h3>
+<p>自分でピントを合わせることにしたら、カメラまたはレンズのAF/MF切り替えをMFにします。</p>
+<p>当たり前のようですが、ワークショップではここで失敗することがあります。</p>
+<p>AFのまま一生懸命星にピントを合わせても、そのあと構図を作ってシャッターボタンを半押しした瞬間にAFが動けば、せっかく合わせたピントが変わってしまいます。</p>
+<p>暗い星空では通常のAFがうまく合焦できず、大きくピントを外してしまうこともあります。</p>
+<p>ですから、</p>
+<p><strong>MFで合わせると決めたら、最初にMFへ切り替える。</strong></p>
+<p>これを確認します。</p>
+<h3>3. 見つけやすい明るい星を、画面のど真ん中に入れる</h3>
+<p>次に、ピント合わせに使う星を探します。</p>
+<p>見つけやすい、明るい星を一つ選びます。</p>
+<p>そして、その星がファインダーやライブビューのど真ん中に来るようにカメラを向けます。</p>
+<p>ここは意外に重要です。</p>
+<p>ワークショップでは、星を画面の端に置いたままライブビューを拡大して、</p>
+<p>「先生、星がいなくなりました」</p>
+<p>となることが本当によくあります。</p>
+<p>星が消えたわけではありません。</p>
+<p>画面を大きく拡大したため、自分がどこを見ているのか分からなくなっただけです。</p>
+<p>ですから、拡大する前に、</p>
+<p><strong>ピント合わせに使う星を画面中央へ持ってくる。</strong></p>
+<p>それから拡大します。</p>
+<h3>4. MFで「星が一番小さく見えるところ」を探す</h3>
+<p>ここが、MFで星にピントを合わせるときの一番大切なところです。</p>
+<p>ライブビューで中央の星を大きく拡大します。</p>
+<p>そしてフォーカスリングをゆっくり動かします。</p>
+<p>ピントが外れていると、星は大きくぼんやり見えます。</p>
+<p>ピントが近づくにつれて、</p>
+<p><strong>大きな星 → 小さな星</strong></p>
+<p>へ変化していきます。</p>
+<p>そして、ある位置を越えると、</p>
+<p><strong>小さな星 → また大きな星</strong></p>
+<p>になります。</p>
+<p>その途中に、</p>
+<p><strong>星が一番小さく見える位置</strong></p>
+<p>があります。</p>
+<p><strong>そこが、MFで狙うピント位置です。</strong></p>
+<p>「∞に合わせる」と覚えるのではなく、</p>
+<p><strong>「星そのものを見て、一番小さくなるところへ合わせる」</strong></p>
+<p>と覚えてください。</p>
+<p>この方法はNikonも、<a href="https://www.nikonusa.com/learn-and-explore/c/tips-and-techniques/landscape-astrophotography-with-the-nikon-d810a">ライブビューで星を拡大し、その星ができるだけ小さくシャープに見えるまで手動でピントを調整する</a>方法として案内しています。</p>
+<h3>5. 一度少し通り過ぎると、最小位置を見つけやすい</h3>
+<p>星がかなり小さくなったところで、すぐに止めなくても構いません。</p>
+<p>私は昔からMFするとき、一度ピント位置を少し通り過ぎます。</p>
+<p>これは星景写真だけの特殊なテクニックではありません。</p>
+<p>フォーカスを動かして、</p>
+<p><strong>大きい→ 小さくなる→ 最も小さい付近→ また大きくなる</strong></p>
+<p>ところまで確認します。</p>
+<p>「また大きくなった」と分かれば、</p>
+<p>「あ、最良点を通り過ぎた」</p>
+<p>と判断できます。</p>
+<p>そこで少し戻します。</p>
+<p>つまり、</p>
+<p><strong>一度少し行き過ぎて、星が再び大きくなることを確認し、最も小さく見えるところへ戻す。</strong></p>
+<p>これだけです。</p>
+<h3>なぜ「星を一番小さくする」のか？</h3>
+<p>これは単なる昔からの言い伝えではありません。</p>
+<p>星は、写真撮影では非常に小さな点光源として扱えます。</p>
+<p>ピントが外れれば、その点は広がります。</p>
+<p>ピントが近づけば、その広がりは小さくなります。</p>
+<p>天体撮影の世界では、実際に星像の大きさを測定して最良のフォーカス位置を探す方法が使われています。</p>
+<p>FWHMやHFRなど、星像の大きさを数値化する方法もあります。</p>
+<p>人間がライブビューを見ながら行うMFは、もちろんそこまで精密な測定ではありません。</p>
+<p>それでも、</p>
+<p><strong>星像が最も小さくなる位置を探す</strong></p>
+<p>という基本的な考え方は同じです。</p>
+<p>だからMFでは、</p>
+<p><strong>星が一番小さく見えるところに合わせます。</strong></p>
+<h3>6. ピントとズームを動かないようにする</h3>
+<p>ピントが決まったら、今度はそれを壊さないようにします。</p>
+<p>私のワークショップでは、ここでフォーカスリングとズームリングをテープで固定するように指導しています。</p>
+<p>せっかく正確に合わせても、そのあと暗闇で構図を作ったりカメラを操作したりしているうちに、リングへ触れてしまえば位置が変わってしまいます。</p>
+<p>ズームリングが動いて焦点距離が変わった場合にも、ピントをもう一度確認する必要が出てきます。</p>
+<p>ですから、</p>
+<p><strong>焦点距離が決まった。ピントも決まった。だったら、触っても動かないようにしてしまう。</strong></p>
+<p>そのためのテープです。</p>
+<h3>7. ここで初めて、撮りたい構図にする</h3>
+<p>ピント合わせが終わり、ズームリングとフォーカスリングも固定しました。</p>
+<p>ここで初めて、実際に撮りたい構図へカメラを向けます。</p>
+<p>つまりMFの場合、私がワークショップで教えている流れは、</p>
+<p><strong>撮りたい写真を考える</strong></p>
+<p>↓</p>
+<p><strong>使う焦点距離を決める</strong></p>
+<p>↓</p>
+<p><strong>MFに切り替える</strong></p>
+<p>↓</p>
+<p><strong>見つけやすい明るい星を画面中央に入れる</strong></p>
+<p>↓</p>
+<p><strong>拡大する</strong></p>
+<p>↓</p>
+<p><strong>星が一番小さく見えるところにピントを合わせる</strong></p>
+<p>↓</p>
+<p><strong>フォーカスリングとズームリングをテープで固定する</strong></p>
+<p>↓</p>
+<p><strong>最終的な構図を作る</strong></p>
+<p>↓</p>
+<p><strong>撮影する</strong></p>
+<p>です。</p>
+<p>この「ピントを合わせやすい星で合わせてから、撮りたい構図へ向け直す」という順番は、私だけのやり方ではありません。RICOH IMAGINGも、通常の天体写真ではピント合わせをしやすい星で一度ピントを合わせた後に撮影したい構図へ調整する、と説明しています。</p>
+<h2>星は∞なのに、なぜ∞マークではダメなのか？</h2>
+<p>ここで最初の疑問へ戻ります。</p>
+<p>星までの距離を考えれば、光学的には無限遠です。</p>
+<p>それなら、</p>
+<p>「わざわざ星を拡大しなくても、フォーカスリングを∞へ合わせればいいのでは？」</p>
+<p>と思うでしょう。</p>
+<p>ところが、そう単純ではありません。</p>
+<p>メーカー自身が、温度変化などによって無限遠の合焦位置が変化することを想定しているレンズがあります。</p>
+<p>実際、一部の交換レンズでは温度変化による無限遠合焦位置の移動を考慮して、∞位置の先にもフォーカスリングが動くように作られています。</p>
+<p>そしてメーカー自身、正確に無限遠へMFするときには、拡大表示などを見ながら実際にピントを確認するよう案内しています。</p>
+<p>つまり、</p>
+<p><strong>星が無限遠にあること</strong></p>
+<p>と、</p>
+<p><strong>レンズの∞表示位置が、そのときの精密な合焦位置であること</strong></p>
+<p>は別の話です。</p>
+<p>ワークショップでは、かなり乱暴に、</p>
+<p>「∞マークは飾りだと思ってください」</p>
+<p>と説明することがあります。</p>
+<p>もちろん、本当に飾りという意味ではありません。</p>
+<p>無限遠付近へ素早く持っていくための目安としては使えます。</p>
+<p>ただ、</p>
+<p><strong>∞マークに合わせたから星にも正確にピントが合った</strong></p>
+<p>とは考えない方がいい、という意味です。</p>
+<p>だから最後は、∞の文字ではなく、</p>
+<p><strong>実際の星を見て判断します。</strong></p>
+<h2>ライブビューだけで判断しにくければ、撮って確認する</h2>
+<p>ライブビューを最大まで拡大すれば、それが記録される星像そのものだと思いたくなります。</p>
+<p>しかし、必ずしもそうではありません。</p>
+<p>カメラによっては暗所で見やすくするためにライブビュー表示を明るくしたり、MFしやすくするために表示用の画像処理を加えたりします。</p>
+<p>ライブビューは、あくまで撮影やピント合わせを助けるための表示です。</p>
+<p>精密な光学測定器ではありません。</p>
+<p>そこで、</p>
+<p>「一番小さいところがどうしても分からない」</p>
+<p>という場合は、</p>
+<p><strong>実際に一枚撮って、撮影画像を拡大して確認します。</strong></p>
+<p>それでも判断しにくければ、フォーカスをほんの少しずつ前後に変えて何枚か撮り、あとから比較します。</p>
+<h2>昔は、フォーカスリングに目盛りを付けていた</h2>
+<p>ライブビューが今ほど使いやすくなかった頃、私はもっと原始的な方法で星のピントを追い込むことがありました。</p>
+<p>物理的に動くフォーカスリングの∞付近へ細かな目盛りを付けます。</p>
+<p>そして少しずつ位置を変えながら撮影します。</p>
+<p>少し手前で一枚。</p>
+<p>ほんの少し動かして一枚。</p>
+<p>さらに少し動かして一枚。</p>
+<p>撮影した画像を拡大して比較して、星が一番小さかった位置を探します。</p>
+<p>慣れてくれば、2～3枚程度でもかなり絞り込めました。</p>
+<p>ただし、これは昔のようにフォーカスリングの物理的位置を再現しやすいレンズだから使いやすかった方法です。</p>
+<p>現在はfocus-by-wire、つまりフォーカスリングを回すと電子的にレンズを動かすものも多くあります。</p>
+<p>リングを回す速度によって移動量が変わるタイプもあります。</p>
+<p>そのため、昔のようにリングへ物理的な目盛りを付ければいい、とは限りません。</p>
+<h2>ピントが合ったのに、四隅の星がおかしい？</h2>
+<p>中央の星にはきちんとピントが合った。</p>
+<p>ところが四隅を見ると、星が少し伸びている。あるいは大きい。</p>
+<p>すると、</p>
+<p>「ピント合わせに失敗した？」</p>
+<p>と思うかもしれません。</p>
+<p>しかし、必ずしもそうではありません。</p>
+<p>写真用レンズには、像面湾曲、コマ収差、非点収差などがあります。</p>
+<p>そのため、中央で最も良くピントが合う位置と、周辺で最も良く見える位置が完全には一致しない場合もあります。</p>
+<p>つまり、</p>
+<p><strong>中央で星にピントが合ったこと</strong></p>
+<p>と、</p>
+<p><strong>画面全体の星が完全な点になること</strong></p>
+<p>は別の問題です。</p>
+<p>私は現在、星景に適していると分かっているレンズなら、ピントを合わせるたびに四隅まで細かく確認することは通常していません。</p>
+<p>まず、合わせたい星できちんとピントを取る。</p>
+<p>周辺だけに問題が残るなら、ピント以外の可能性も考える。</p>
+<p>初心者のうちから、画面の隅々まで見て「全部完全に合わせなければ」と考える必要はないと思います。</p>
+<h2>長時間撮影なら、ときどき確認する</h2>
+<p>一度ピントを合わせたからといって、一晩中絶対に変わらないとも限りません。</p>
+<p>星までの距離が変わるわけではありません。</p>
+<p>変わる可能性があるのは、カメラとレンズ側です。</p>
+<p>特に温度変化などによって、無限遠の合焦位置が動くことがあります。</p>
+<p>これはメーカー自身も想定している現象です。</p>
+<p>長時間撮影する場合や、撮影開始から大きく気温が変わった場合には、ときどき撮影画像を拡大して確認しておけば安心です。</p>
+<p>「何分ごとに合わせ直す」という固定ルールがあるわけではありません。</p>
+<p>必要に応じて確認すればいいと思います。</p>
+<h2>結局、どうすればいい？</h2>
+<p>長くなりましたが、実際の答えはかなり簡単です。</p>
+<p><strong>星空AFがあるなら</strong></p>
+<p><strong>まず使ってみる。</strong></p>
+<p>一枚撮って拡大する。</p>
+<p>十分シャープなら、それで終了です。</p>
+<p><strong>星空AFがない、あるいは結果に満足できないなら</strong></p>
+<p>MFにします。</p>
+<p>そして、</p>
+<p><strong>星が一番小さく見えるところにピントを合わせます。</strong></p>
+<p>一度少し通り過ぎて、星がまた大きくなることを確認すると最小位置を判断しやすくなります。</p>
+<p>ピントが決まったら動かないようにして、構図を作って撮影する。</p>
+<p>一枚撮って確認する。</p>
+<p>まだ判断できなければ、少し前後へピントを振って何枚か比較する。</p>
+<p>それで十分です。</p>
+<h2>「プロだからMF」ではない</h2>
+<p>私が星景写真を撮り始めた頃には、今のような星空AFはありませんでした。</p>
+<p>だから自分で合わせるしかありませんでした。</p>
+<p>どうすれば失敗しにくいかを考えながら、ワークショップでもMFによる方法を教えてきました。</p>
+<p>でも、カメラは進歩しています。</p>
+<p>今、星へのピント合わせを目的として作られたAF機能が手元のカメラにあるのなら、まずそれを使ってみればいい。</p>
+<p>それで撮った写真に満足できるなら、わざわざ難しい方法へ進む必要はありません。</p>
+<p><strong>星空AFで満足できれば、それで終わり。</strong></p>
+<p><strong>満足できなければ、MFという方法がある。</strong></p>
+<p>そしてMFで覚えておくべきことは、難しくありません。</p>
+<p><strong>∞マークではなく、実際の星を見て、一番小さく見えるところに合わせる。</strong></p>
+<p>大切なのは「AFかMFか」ではなく、</p>
+<p><strong>最終的に撮れた星が、自分の求めるシャープさになっているか。</strong></p>
+<p>そこだと思います。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-camera-settings">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</a>
+        <p class="kzc-related-desc">星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
