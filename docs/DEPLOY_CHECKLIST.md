@@ -190,6 +190,34 @@ title / description / keywords も明確に検索流入を狙う作りになっ�
 `tests/site/test_deploy_policy.py`が、canonical・og:url・sitemap掲載・
 noindexでないことを名指しで固定している。
 
+### Snapshot Viewer（/share）の扱い — 2026-09-06
+
+`share.html`（公開URLは`https://www.sidekick-lab.com/share`）は、Sidekick Plannerが
+共有した撮影計画のSnapshotを表示するための**道具ページ**である。読み物ではない。
+
+このページだけが、この4条件の「2. noindexにしていない」を意図的に満たさない。
+
+**方針：noindexにする。sitemapへ載せない。**
+
+- 撮影計画はURLの`#`以降（fragment）にしか無く、**fragmentはサーバーへ送られない**。
+  したがって共有された撮影計画そのものが検索へ載ることは、そもそも起こらない。
+- fragmentが無い状態で`/share`を開くと「共有された撮影計画が見つかりません」しか
+  表示されない。**索引されても空の器が検索結果に出るだけ**になる。
+- 到達経路はQRコードと共有リンクだけで、**検索から入る導線が無い**。
+
+この判断は、他ページのnoindex化を一切含まない。`tests/site/test_deploy_policy.py`の
+`NOINDEX_BY_DESIGN`が`share.html`の1件だけを許可し、それ以外は従来どおり0件で固定する。
+さらに`test_noindex_by_design_pages_keep_their_noindex`が、
+**このページからnoindexが黙って外れないこと**も同時に固定する（両方向）。
+
+`share.html`はこのリポジトリのテンプレート4系統のどれからも生成しない。
+**正本はPlannerリポジトリ側**（`validation/prototype/diamond_fuji_minimal/web_viewer/`の
+`build_share_viewer.py`が生成する`share_viewer.html`）にあり、ここへはバイト単位で
+そのまま配置する。**このリポジトリ側で直接編集しない。** 更新するときはPlanner側で
+再生成し、生成物をコピーし直す（Planner側 `web_viewer/DEPLOYMENT.md`を参照）。
+外部スクリプト・外部CSS・外部フォント・外部画像・analyticsをいずれも持たない
+単一の静的HTMLであることが、Planner側のテストで固定されている。
+
 ---
 
 ## 3. 一括置換をするときのGUARD手順

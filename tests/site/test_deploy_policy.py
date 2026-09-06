@@ -59,6 +59,15 @@ TRANSACTIONAL = {
 # docs/DEPLOY_CHECKLIST.md「2-2.」の「単独LP（star-lp / kouzu-lp）の扱い」にある。
 STANDALONE_LP = {"star-lp.html", "kouzu-lp.html"}
 
+# 設計上noindexにするページ。`/share`はQR・共有リンクから開く道具ページで、
+# fragment（`#`以降）が無いと「共有された撮影計画が見つかりません」しか表示しない。
+# 検索から入る導線が無く、索引されても空の器が検索結果へ出るだけになる。
+# なお撮影計画そのものはfragmentにしか無く、fragmentはサーバーへ送られないため、
+# 共有された撮影計画がそもそも索引されることはない。
+# 2026-09-06、QR Share V1 Web Viewer（Planner側 AI-0373 が生成）の本番配置で追加。
+# 根拠は docs/DEPLOY_CHECKLIST.md「2-2.」の「Snapshot Viewer（/share）の扱い」にある。
+NOINDEX_BY_DESIGN = {"share.html"}
+
 
 def _production_pages() -> list[Path]:
     """本番へ配置されるHTML。ビルドの一時出力・バックアップ・テンプレートは除く。"""
@@ -233,13 +242,32 @@ def test_no_production_page_declares_noindex() -> None:
     候補だったstar-lp/kouzu-lpも、同日の決定でnoindexではなくindex（C-1）になった。
     noindexを使い始めるのは方針判断なので、黙って増えないよう固定する。
     増やすときはこのテストと docs/DEPLOY_CHECKLIST.md「2-2.」を同時に更新すること。
+
+    2026-09-06、`/share`（Snapshot Viewer）を NOINDEX_BY_DESIGN として明示的に許可した。
+    許可は名指しの1件だけで、それ以外は従来どおり0件で固定している。
     """
     declared = []
     for p in PRODUCTION_PAGES:
+        rel = p.relative_to(REPO_ROOT).as_posix()
+        if rel in NOINDEX_BY_DESIGN:
+            continue
         r = _meta(p)["robots"]
         if r:
-            declared.append(f"{p.relative_to(REPO_ROOT).as_posix()}: {r}")
+            declared.append(f"{rel}: {r}")
     assert not declared, "meta robots を持つページが増えている:\n  " + "\n  ".join(declared)
+
+
+@pytest.mark.parametrize("rel", sorted(NOINDEX_BY_DESIGN))
+def test_noindex_by_design_pages_keep_their_noindex(rel: str) -> None:
+    """設計上noindexにしたページが、黙ってindex可能へ戻らないこと。
+
+    上のテストを例外つきにした以上、例外側も固定しないと「noindexが外れたのに
+    誰も気付かない」という逆向きの見落としが生まれる。両方向を固定する。
+    """
+    p = REPO_ROOT / rel
+    assert p.exists(), f"{rel} が存在しない"
+    robots = _meta(p)["robots"]
+    assert robots and "noindex" in robots, f"{rel}: robots={robots}（noindexが外れている）"
 
 
 # ---------------------------------------------------------------------------
