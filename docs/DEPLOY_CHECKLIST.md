@@ -190,10 +190,14 @@ title / description / keywords も明確に検索流入を狙う作りになっ�
 `tests/site/test_deploy_policy.py`が、canonical・og:url・sitemap掲載・
 noindexでないことを名指しで固定している。
 
-### Snapshot Viewer（/share）の扱い — 2026-09-06
+### Snapshot Viewer（/share）の扱い — 2026-09-06 村田さん決定
 
 `share.html`（公開URLは`https://www.sidekick-lab.com/share`）は、Sidekick Plannerが
 共有した撮影計画のSnapshotを表示するための**道具ページ**である。読み物ではない。
+
+**2026-09-06、村田さんが「noindexのままでよい」と判断した。** 理由は、`/share`は検索流入を
+得るコンテンツではなく、共有URLを受け取った人が撮影計画を見るためのRecipient Viewerであり、
+記事やPlanner紹介ページのようなSEO対象ページとは役割が異なるため。
 
 このページだけが、この4条件の「2. noindexにしていない」を意図的に満たさない。
 
