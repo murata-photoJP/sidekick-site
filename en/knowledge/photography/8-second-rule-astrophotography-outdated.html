@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated? | Knowledge - Sidekick</title>
+<meta name="description" content="How many seconds should you expose for astrophotography? Since my Nikon D3 days I have used 8 seconds at around 15mm for nearly 20 years. I re-examine that 8 seconds through the 500 Rule, the NPF Rule and higher-resolution sensors. This is not an article recommending 8 seconds.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/8-second-rule-astrophotography-outdated">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/astrophotography-exposure-time">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/8-second-rule-astrophotography-outdated">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/astrophotography-exposure-time">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/astrophotography-exposure-time" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</h1>
+    <p class="kzc-article-lead">How many seconds should you expose for astrophotography? Since my Nikon D3 days I have used 8 seconds at around 15mm for nearly 20 years. I re-examine that 8 seconds through the 500 Rule, the NPF Rule and higher-resolution sensors. This is not an article recommending 8 seconds.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-06">Updated: 2026-09-06</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Verifying two decades of habit through the 500 Rule and NPF Rule</p>
+<p>When shooting astrophotography, how many seconds should your exposure be?</p>
+<p><strong>For me, the answer was &quot;8 seconds&quot; for a long time.</strong></p>
+<p>Back when I shot with a Nikon D3, I was consistently using 8 seconds with a 15mm ultra-wide-angle lens for astrophotography. When I switched to a PENTAX K-1, it was still 8 seconds. Even when I used a LUMIX S1R for work, it was 8 seconds. And today, my default is still fundamentally 8 seconds.</p>
+<p>I've been doing essentially the same thing for nearly 20 years.</p>
+<p>But during a recent investigation into astrophotography focusing techniques, I found myself digging deeper into the &quot;500 Rule&quot; and &quot;NPF Rule.&quot; That's when something troubling occurred to me.</p>
+<p><strong>Why am I actually shooting at 8 seconds?</strong></p>
+<p>It's not that I'd forgotten the reasoning.</p>
+<p>The real issue was that my cameras had changed dramatically since I first settled on 8 seconds.</p>
+<p>So this time, I decided to question the &quot;8 seconds&quot; I'd relied on for nearly two decades.</p>
+<h2>Why 8 Seconds in the First Place?</h2>
+<p>I didn't start using 8 seconds because I knew about the 500 Rule.</p>
+<p><strong>Actually, I didn't even know what the 500 Rule was at that time.</strong></p>
+<p>It wasn't as though I calculated 500 ÷ 15mm ≈ 33 seconds and thought, &quot;No, 33 seconds is too long—let me use 8 instead.&quot;</p>
+<p>It was simpler than that.</p>
+<p>I actually shot and observed that,</p>
+<p><strong>&quot;At this duration, the stars look like points.&quot;</strong></p>
+<p>That's where 8 seconds came from.</p>
+<p>But deciding on 8 seconds wasn't purely about making stars appear as points.</p>
+<h2>For Star Trail Compositing, Shorter Isn't Always Better</h2>
+<p>Back then, I relied heavily on star trail compositing for my astrophotography work.</p>
+<p>This technique involves shooting many frames in succession and compositing them together, keeping the brightest pixels while layering the images to extend star trails.</p>
+<p>With this approach, shortening the exposure time on each frame reduces how far stars move.</p>
+<p>Extremely speaking, if I could shoot continuously at 1/1000 second, adjacent frames would show stars in nearly identical positions.</p>
+<p>What about 1 second?</p>
+<p>That would feel quite safe.</p>
+<p>2 seconds?</p>
+<p>That's not bad either.</p>
+<p>4 seconds?</p>
+<p>I actually remember considering this.</p>
+<p>But if I shortened exposure from 8 seconds to 4 seconds, I'd need to increase ISO by one stop to maintain the same brightness.</p>
+<p>Plus, I'd nearly double the number of frames to shoot.</p>
+<p>With the Nikon D3 I was using then, I couldn't casually push high ISO the way modern cameras allow. The media capacity and subsequent processing time were real constraints.</p>
+<p>I wanted stars to be as point-like as possible.</p>
+<p>I wanted the star trails to connect as smoothly as possible.</p>
+<p>But I didn't want to raise ISO unnecessarily.</p>
+<p>And I didn't want to multiply the frame count.</p>
+<p>After weighing all these factors, I finally arrived at,</p>
+<p><strong>&quot;Well, let's go with 8 seconds.&quot;</strong></p>
+<p>It wasn't that I avoided reasoning.</p>
+<p><strong>I reasoned through what I could, and since there was no single correct answer, I ultimately just committed to it.</strong></p>
+<p>My 8 seconds was born from that process.</p>
+<h2>But One Reason for Choosing 8 Seconds Eventually Disappeared</h2>
+<p>As I continued with star trail compositing, another problem emerged.</p>
+<p>Even with continuous shooting and compositing, I'd sometimes see visible boundaries between frames in the star trails.</p>
+<p>Even turning off long-exposure noise reduction and shooting with minimal gaps, the result wasn't always perfectly smooth.</p>
+<p>Eventually, I started using post-processing methods to make these seams less obvious.</p>
+<p>That technique itself falls outside today's focus, so I'll examine it another time.</p>
+<p>But here's what matters:</p>
+<p><strong>The necessity of determining exposure time specifically to connect star trails smoothly became less critical.</strong></p>
+<p>At that point, I could have revisited my 8-second setting.</p>
+<p>But I didn't.</p>
+<h2>Why I Never Changed the 8 Seconds</h2>
+<p>The reason is straightforward.</p>
+<p><strong>Because I wasn't having real problems with it.</strong></p>
+<p>8 seconds worked fine as source material for star trail compositing.</p>
+<p>It worked for time-lapse.</p>
+<p>I could select a single frame and finish it as a normal astrophotography image.</p>
+<p>I didn't need to push ISO excessively.</p>
+<p>Frame count didn't get out of hand.</p>
+<p>In other words, while 8 seconds wasn't the &quot;optimal solution&quot; for any single purpose, it was reasonably convenient across multiple uses.</p>
+<p>And I have one principle about shooting:</p>
+<p><strong>When there's no major problem, don't introduce new risks into your shooting workflow.</strong></p>
+<p>Shorter exposure—say, 4 seconds—might freeze stars even more.</p>
+<p>But that means raising ISO, potentially increasing noise. And frame count increases.</p>
+<p>As long as 8 seconds wasn't causing problems, there was no reason to change it.</p>
+<p>So the 8 seconds I used with the D3 stayed at 8 seconds when I switched to the K-1.</p>
+<p>When I used the LUMIX S1R for assignments, it was 8 seconds.</p>
+<p>And today, it's still 8 seconds.</p>
+<p>Somewhere along the way, 8 seconds stopped being a shooting parameter and became part of my standard shooting routine.</p>
+<h2>Meanwhile, the Cameras Changed Significantly</h2>
+<p>This brings me to what struck me most in this investigation.</p>
+<p>The Nikon D3 where I started using 8 seconds is roughly a 12-megapixel full-frame camera.</p>
+<p>Since then, cameras have steadily increased in resolution.</p>
+<p>Here's what's crucial: higher megapixel counts don't make stars move faster across the sensor.</p>
+<p>With the same focal length, same exposure time, and same conditions, the physical distance a star travels across the sensor stays constant.</p>
+<p>What changes is the size of the pixels recording that movement.</p>
+<p>In my representative test conditions, the star image movement at 15mm · 8 seconds looked roughly like this:</p>
+<table>
+<thead>
+<tr>
+<th>Camera</th>
+<th>Star Image Movement (15mm · 8 seconds)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nikon D3</td>
+<td>≈0.94 pixels</td>
+</tr>
+<tr>
+<td>Nikon D850</td>
+<td>≈1.83 pixels</td>
+</tr>
+<tr>
+<td>Sony α7R V</td>
+<td>≈2.11 pixels</td>
+</tr>
+</tbody>
+</table>
+<p>Same 8 seconds.</p>
+<p>Same physical distance the star travels on the sensor.</p>
+<p>Yet what was about 1 pixel on the D3 gets recorded across roughly 2 pixels on higher-resolution cameras.</p>
+<p>Which means:</p>
+<p><strong>My 8 seconds didn't change. The measuring stick I used to evaluate 8 seconds changed.</strong></p>
+<p>This was genuinely important.</p>
+<h2>With the 500 Rule, Does 15mm Really Become About 33 Seconds?</h2>
+<p>Enter the 500 Rule.</p>
+<p>When researching astrophotography, you frequently encounter this explanation:</p>
+<p><strong>Exposure time ≈ 500 ÷ Focal length</strong></p>
+<p>At 15mm, that would be:</p>
+<p>500 ÷ 15 ≈ 33 seconds.</p>
+<p>About 33 seconds.</p>
+<p>Compared to my 8 seconds, that's more than four times longer.</p>
+<p>Honestly, it feels long.</p>
+<p>From my experience, I think:</p>
+<p><strong>&quot;Can stars really appear frozen with that much exposure?&quot;</strong></p>
+<p>But concluding &quot;the 500 Rule is wrong&quot; isn't the right answer either.</p>
+<p>What my research revealed is that the key to the 500 Rule is not treating &quot;500&quot; like a law of physics.</p>
+<h2>500, 400, 300, 200... What's Changing?</h2>
+<p>The 500 Rule has variations: the 400 Rule, 300 Rule, 200 Rule, and others.</p>
+<p>Simplified, smaller numbers mean stricter tolerance for star image movement.</p>
+<p>For my test model, the approximate allowable movement on the focal plane works out to:</p>
+<ul>
+<li>500 Rule: ≈36.5µm</li>
+<li>400 Rule: ≈29.2µm</li>
+<li>300 Rule: ≈21.9µm</li>
+<li>200 Rule: ≈14.6µm</li>
+</ul>
+<p>In other words, the &quot;500&quot; itself doesn't have absolute meaning.</p>
+<p>Put another way:</p>
+<p><strong>&quot;We'll accept this much star drift.&quot;</strong></p>
+<p>A standard comes first, then gets simplified into an easy formula.</p>
+<p>And this calculation doesn't factor in pixel pitch.</p>
+<p>The same 15mm gives the same duration on both D3 and high-resolution cameras.</p>
+<p>With today's higher megapixel counts, that's what bothers me.</p>
+<h2>The NPF Rule Looks at Camera Pixel Pitch Too</h2>
+<p>Enter the NPF Rule.</p>
+<p>More complex than the 500 Rule, but with one major difference: it doesn't rely solely on focal length.</p>
+<p>It also factors in aperture, pixel pitch, and other variables.</p>
+<p>During my research, I traced back to the original NPF Rule documentation and discovered that beyond the simplified formula commonly cited, more detailed equations exist.</p>
+<p>But memorizing equations isn't the goal here.</p>
+<p>What mattered to me was realizing:</p>
+<p><strong>&quot;The same 15mm doesn't necessarily mean the same number of seconds.&quot;</strong></p>
+<p>Pixel size differs between the D3 and modern high-resolution cameras.</p>
+<p>So if your thinking is &quot;limit star movement to within X pixels,&quot; then the same 8 seconds carries different meaning.</p>
+<p>This was a fundamental assumption that had silently shifted during my nearly 20 years of shooting 8 seconds.</p>
+<h2>But Is Within 1 Pixel Really &quot;Frozen Stars&quot;?</h2>
+<p>At this point, another question emerges.</p>
+<p>What does &quot;stars are frozen&quot; actually mean?</p>
+<p>Within 1 pixel = frozen?</p>
+<p>1.5 pixels?</p>
+<p>2 pixels = trailing?</p>
+<p>Are the scenarios the same when viewing a 60-megapixel image at 100% magnification versus reducing it to 2000 pixels wide for social media?</p>
+<p>What about large prints?</p>
+<p>If lens aberrations mean the star image itself is larger than 1 pixel?</p>
+<p>With fisheye lenses, I've always accepted that edge performance is inherently compromised. Rather than raising ISO to achieve perfect point sources at the edges, I've prioritized noise performance.</p>
+<p>So:</p>
+<p><strong>&quot;How many seconds does it take to freeze stars?&quot; has no single answer.</strong></p>
+<p>How much movement will you tolerate?</p>
+<p>Which camera?</p>
+<p>Which focal length?</p>
+<p>How will you ultimately view the photograph?</p>
+<p>And what will you give up in exchange for freezing the stars?</p>
+<p>Until you have settled all of that, the exposure time is not really decided.</p>
+<h2>So Was My Old 8 Seconds Wrong?</h2>
+<p>When I started this investigation, something had been nagging at me.</p>
+<p>Maybe I had been using the wrong number for nearly 20 years.</p>
+<p>But when I looked into it, it turned out not to be that simple.</p>
+<p>Under the representative conditions used here, the D3 at 15mm and 8 seconds gave a star image movement of about 0.94 pixel near the center of the frame.</p>
+<p>Coincidence though it is, that is almost exactly 1 pixel.</p>
+<p>But let me emphasize this.</p>
+<p><strong>I did not choose 8 seconds by calculating that I should stay within 1 pixel.</strong></p>
+<p>When I ran the numbers afterward, it simply happened to work out that way.</p>
+<p>And toward the edges of the frame, the movement is larger.</p>
+<p>So this is not a story about how</p>
+<p>&quot;Murata discovered the 1-pixel rule from real shooting 20 years ago.&quot;</p>
+<p>Rather, the 8 seconds I settled on back then, by looking at photographs on the D3 and judging that &quot;this looks like a point,&quot; happened to correspond to roughly that amount of movement.</p>
+<p>Personally, I found that a very interesting result.</p>
+<p>That does not mean 8 seconds carries the same meaning on today's high-resolution cameras.</p>
+<p>It is less that my old 8 seconds was wrong, and more that</p>
+<p><strong>part of the basis for carrying that old 8 seconds straight into the present had quietly changed.</strong></p>
+<p>I think that is the closest way to put it.</p>
+<h2>A Rule of Thumb Can Go Stale Even When Nothing Fails</h2>
+<p>What made me think the most in this investigation was not the 500 Rule itself.</p>
+<p><strong>When does a rule of thumb go out of date?</strong></p>
+<p>It is not that I had forgotten why I chose 8 seconds.</p>
+<p>I shot with the camera I had at the time, checked how the stars looked, and decided while weighing star trail compositing, ISO, noise, the number of frames, and media capacity.</p>
+<p>Later, the seams in star trail compositing became something I could handle in post-processing.</p>
+<p>Cameras gained resolution.</p>
+<p>But 8 seconds kept working without any major problem.</p>
+<p>So there was never a trigger to revisit it.</p>
+<p>That is a slightly frightening thing.</p>
+<p>A rule of thumb never suddenly tells you,</p>
+<p>&quot;As of today, this piece of know-how is out of date.&quot;</p>
+<p>If something fails, you notice.</p>
+<p>But when things are going reasonably well, it is hard to notice.</p>
+<p><strong>Only the gear and the underlying assumptions shift, little by little, while the rule of thumb quietly goes stale.</strong></p>
+<p>My 8 seconds may have been one example of that.</p>
+<h2>So How Many Seconds Will I Shoot At From Now On?</h2>
+<p>Having looked into all of this, you might expect me to say,</p>
+<p>&quot;From now on, I will use 4 seconds.&quot;</p>
+<p>But I will probably keep shooting at 8 seconds.</p>
+<p>At least for now, I have no active intention of changing it.</p>
+<p>Because 8 seconds is already part of my shooting routine.</p>
+<p>I set 8 seconds and shoot the way I always do.</p>
+<p>It works for star trail compositing.</p>
+<p>It works for time-lapse.</p>
+<p>It works when I pick out a single frame.</p>
+<p>And so far, nothing large enough to ignore has gone wrong in my photographs.</p>
+<p>This investigation did show me that on a high-resolution camera, what 8 seconds means in pixels is different from what it meant in the D3 era.</p>
+<p>Even so, changing the number carries its own trade-offs.</p>
+<p>So if a clear problem shows up at 8 seconds, or if something appealing enough to make me give up 8 seconds comes along, I will change it then.</p>
+<p>Until then, it will probably stay 8 seconds.</p>
+<p>That said.</p>
+<p><strong>This is not me telling you to shoot at 8 seconds too.</strong></p>
+<p>Still less do I want to create a new rule saying</p>
+<p><strong>&quot;For 15mm, 8 seconds is the correct answer.&quot;</strong></p>
+<p>If anything, what studying the 500 Rule and the NPF Rule showed me was the opposite.</p>
+<p>Cameras differ.</p>
+<p>Pixel pitch differs.</p>
+<p>Lenses differ.</p>
+<p>Focal lengths differ.</p>
+<p>How much star movement you can accept differs.</p>
+<p>What you use the photograph for differs.</p>
+<p>And how much ISO and noise you are willing to sacrifice in order to freeze the stars differs from person to person.</p>
+<p>The 500 Rule, the NPF Rule, and my own 8 seconds: none of them is a single answer on its own.</p>
+<p>What matters, I think, is knowing what criteria a number was decided by.</p>
+<p>And when your gear or your goals change, occasionally questioning those assumptions.</p>
+<p>After nearly 20 years of shooting at 8 seconds, I ended up doing exactly that this time.</p>
+<p>In the end, the number 8 seconds itself may not change.</p>
+<p>But before and after this investigation, what 8 seconds means to me has shifted slightly.</p>
+<p><strong>Rules aren't answers—they're starting points for thinking.</strong></p>
+<p>That goes for the 500 Rule, for the NPF Rule, and for the rule of thumb I have used for years.</p>
+<p>Keeping that kind of distance from them is probably about right.</p>
+
+  </div>
+
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
