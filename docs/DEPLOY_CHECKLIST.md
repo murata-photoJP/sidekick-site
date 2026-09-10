@@ -7,6 +7,21 @@
 `CODEX_CHANGELOG_PROMPT.md`・`DOWNLOAD_CONTACTS.md`）を参照すること。
 このドキュメントはそれらを置き換えない。
 
+## Pythonテスト環境
+
+このリポジトリのビルド・テスト標準環境は **Python 3.12.x** とする。
+リポジトリ直下の仮想環境へ、固定済みのビルド依存とpytestをまとめて導入する。
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-test.txt
+.\.venv\Scripts\python.exe -m pytest tests -q
+.\.venv\Scripts\python.exe build/site/build_site.py --output build-output/site --validate-only
+```
+
+`requirements-build.txt`は本番ビルド依存、`requirements-test.txt`はそれを参照する
+開発・テスト用の入口である。グローバルPythonへ依存パッケージを追加しない。
+
 ## 背景
 
 2026-08-30、「テンプレートを直したのに本番HTMLを作り直していない（あるいはその逆）」

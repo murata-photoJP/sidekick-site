@@ -1,0 +1,4 @@
+# Reproducible local build and test environment (Python 3.12.x).
+-r requirements-build.txt
+pytest==9.1.1
+requests==2.34.2
