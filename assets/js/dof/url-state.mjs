@@ -2,9 +2,12 @@ export const URL_STATE_VERSION = "1";
 export const DEFAULT_URL_STATE = Object.freeze({sensor:"ff_36x24",f:50,n:4,s:3,criterion:"traditional_ff_0030"});
 const SENSORS=new Set(["ff_36x24","apsc_canon_ref","apsc_235x156_ref","mft_173x130","custom"]);
 const CRITERIA=new Set(["traditional_ff_0030","format_diagonal_1500","custom"]);
+const DOF_STATE_KEYS=new Set(["v","sensor","f","n","s","criterion","sw","sh","c"]);
 const positive=value=>Number.isFinite(Number(value))&&Number(value)>0;
 export function parseUrlState(search){
-  const p=new URLSearchParams(search); if(!p.size)return {ok:true,state:{...DEFAULT_URL_STATE},issues:[]};
+  const p=new URLSearchParams(search);
+  const hasDofState=[...p.keys()].some(key=>DOF_STATE_KEYS.has(key));
+  if(!hasDofState)return {ok:true,state:{...DEFAULT_URL_STATE},issues:[]};
   const issues=[]; const state={v:p.get("v"),sensor:p.get("sensor"),f:Number(p.get("f")),n:Number(p.get("n")),s:Number(p.get("s")),criterion:p.get("criterion")};
   if(state.v!==URL_STATE_VERSION)issues.push("INVALID_VERSION"); if(!SENSORS.has(state.sensor))issues.push("UNKNOWN_SENSOR");
   for(const key of ["f","n","s"])if(!positive(state[key]))issues.push(`INVALID_${key.toUpperCase()}`);

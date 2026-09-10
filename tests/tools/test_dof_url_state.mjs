@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";import test from "node:test";
 import {DEFAULT_URL_STATE,parseUrlState,serializeUrlState} from "../../assets/js/dof/url-state.mjs";
-import {formatDistance} from "../../assets/js/dof/formatters.mjs";
+import {formatCriterionMicrometers,formatDistance} from "../../assets/js/dof/formatters.mjs";
 import {parseRequiredNumber} from "../../assets/js/dof/input-values.mjs";
 test("default serialize/parse",()=>assert.deepEqual(parseUrlState(serializeUrlState(DEFAULT_URL_STATE)).state,{v:"1",...DEFAULT_URL_STATE}));
 test("VF-02 round trip",()=>{const s={sensor:"ff_36x24",f:50,n:4,s:3,criterion:"traditional_ff_0030"};assert.equal(parseUrlState(serializeUrlState(s)).ok,true);});
@@ -10,3 +10,7 @@ for(const [name,q,issue] of [["invalid version","?v=9&sensor=ff_36x24&f=50&n=4&s
 test("VF-02 display precision",()=>assert.deepEqual([formatDistance(2627.890680),formatDistance(3000),formatDistance(3494.874185),formatDistance(866.983505)],["2.63 m","3.00 m","3.49 m","0.87 m"]));
 test("blank and non-finite UI numbers stay invalid",()=>{for(const value of [""," ","NaN","Infinity","-Infinity"])assert.equal(Number.isNaN(parseRequiredNumber(value)),true);});
 test("zero and negative UI numbers remain explicit for Core rejection",()=>assert.deepEqual([parseRequiredNumber("0"),parseRequiredNumber("-1")],[0,-1]));
+test("unrelated query parameters retain defaults without a warning state",()=>{for(const query of ["?utm_source=chatgpt.com","?utm_medium=referral&utm_campaign=dof","?ref=article"])assert.deepEqual(parseUrlState(query),{ok:true,state:{...DEFAULT_URL_STATE},issues:[]});});
+test("valid DOF state ignores unrelated query parameters",()=>{const query=`${serializeUrlState(DEFAULT_URL_STATE)}&utm_source=chatgpt.com`;assert.equal(parseUrlState(query).ok,true);assert.equal(parseUrlState(query).state.f,50);});
+test("partial DOF state remains invalid",()=>{const result=parseUrlState("?v=1&sensor=ff_36x24&f=50");assert.equal(result.ok,false);assert.equal(result.state,null);});
+test("criterion micrometers use one decimal place",()=>assert.deepEqual([formatCriterionMicrometers(.03),formatCriterionMicrometers(Math.hypot(36,24)/1500)],["30.0 µm","28.8 µm"]));

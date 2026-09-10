@@ -45,7 +45,7 @@
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 
 <link rel="stylesheet" href="/assets/css/site-header.css">
-<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=2">
+<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=3">
 </head>
 <body>
 <!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
@@ -196,12 +196,14 @@
       <p class="dof-field-error" id="dof-sensor-error"></p>
     </fieldset>
     <div class="dof-field"><label for="dof-focal">焦点距離</label><div class="dof-unit"><input id="dof-focal" name="f" type="number" value="50" min="0.1" step="0.1" inputmode="decimal"><span>mm</span></div><p class="dof-field-error" id="dof-focal-error"></p></div>
-    <div class="dof-field"><label for="dof-aperture">F値</label><input id="dof-aperture" name="n" type="number" value="4" min="0.1" step="0.1" inputmode="decimal" list="dof-apertures"><datalist id="dof-apertures"><option value="1.4"><option value="2"><option value="2.8"><option value="4"><option value="5.6"><option value="8"><option value="11"><option value="16"><option value="22"></datalist><p class="dof-field-error" id="dof-aperture-error"></p></div>
+    <div class="dof-field"><label for="dof-aperture">F値</label><input id="dof-aperture" name="n" type="number" value="4" min="0.1" step="any" inputmode="decimal" list="dof-apertures" aria-describedby="dof-aperture-help dof-aperture-error"><datalist id="dof-apertures"><option value="1.4"><option value="2"><option value="2.8"><option value="4"><option value="5.6"><option value="8"><option value="11"><option value="16"><option value="22"><option value="32"></datalist><p class="dof-help" id="dof-aperture-help">代表的なF値を選ぶか、任意の正の値を入力できます。</p><div class="dof-fnumber-presets" role="group" aria-label="代表的なF値"><button type="button" data-fnumber="1.4">F1.4</button><button type="button" data-fnumber="2">F2</button><button type="button" data-fnumber="2.8">F2.8</button><button type="button" data-fnumber="4">F4</button><button type="button" data-fnumber="5.6">F5.6</button><button type="button" data-fnumber="8">F8</button><button type="button" data-fnumber="11">F11</button><button type="button" data-fnumber="16">F16</button><button type="button" data-fnumber="22">F22</button><button type="button" data-fnumber="32">F32</button></div><p class="dof-field-error" id="dof-aperture-error"></p></div>
     <div class="dof-field"><label for="dof-focus">ピント距離</label><div class="dof-unit"><input id="dof-focus" name="s" type="number" value="3" min="0.001" step="0.01" inputmode="decimal"><span>m</span></div><p class="dof-field-error" id="dof-focus-error"></p></div>
     <div class="dof-field dof-criterion"><label for="dof-criterion">許容錯乱円 / 基準</label>
       <select id="dof-criterion" name="criterion"><option value="traditional_ff_0030">Traditional 30 µm</option><option value="format_diagonal_1500">センサー対角線 ÷ 1500</option><option value="custom">カスタム</option></select>
       <label id="dof-custom-criterion" hidden>カスタム値 <span class="dof-unit"><input id="dof-criterion-value" name="c" type="number" min="0.1" step="0.1" inputmode="decimal"> <span>µm</span></span></label>
-      <p class="dof-help">従来の被写界深度計算で使われる基準値です。この値そのものが、人間の視覚の絶対的な限界を表すわけではありません。</p>
+      <p class="dof-help" id="dof-criterion-explanation"></p>
+      <p class="dof-effective-criterion" id="dof-effective-criterion" aria-live="polite">現在の許容錯乱円：30.0 µm</p>
+      <p class="dof-help">この値は「これより小さければ人間にはボケて見えない」という絶対的な視覚限界ではありません。</p>
       <p class="dof-field-error" id="dof-criterion-error"></p>
     </div>
     <button class="dof-button" type="submit">計算する</button>
@@ -219,11 +221,11 @@
   </section>
 
   <details class="dof-panel" id="dof-curve-disclosure"><summary>ボケの変化を見る</summary>
-    <p>ボケはピント位置から連続的に増え、選択した許容錯乱円との交点が近点・遠点になります。</p>
+    <p>ピント位置でボケは最小になり、手前・奥へ離れるほど大きくなります。緑の基準線より下にある範囲が、今回の設定での「被写界深度」です。</p>
     <div id="dof-chart"></div><p class="dof-chart-summary" id="dof-chart-summary"></p>
   </details>
   <details class="dof-panel" id="dof-assumptions"><summary>計算条件について</summary>
-    <p>この計算は理想的な薄レンズモデルによる幾何学的被写界深度です。</p><p>実際のレンズでは、主点位置、内部フォーカス、収差、回折などにより結果が異なる場合があります。</p><p>許容錯乱円は「どこまでのボケを許容するか」という計算上の基準です。人間の視覚の絶対的な境界ではありません。</p>
+    <p>この計算は理想的な薄レンズモデルによる幾何学的被写界深度です。</p><p>入力するピント距離は、カメラのセンサー面から被写体までの一般的な撮影距離として扱い、計算モデルが必要とする前側主点からの距離との差を0と近似しています。近距離ではこの差が大きくなる場合があります。</p><p>実際のレンズでは、主点位置、内部フォーカス、収差、回折などにより結果が異なる場合があります。</p><p>許容錯乱円は「どこまでのボケを許容するか」という計算上の基準です。人間の視覚の絶対的な境界ではありません。</p>
     <dl class="dof-provenance"><dt>Model</dt><dd>Ideal paraxial thin lens — MODEL</dd><dt>Criterion</dt><dd id="dof-criterion-detail">Traditional 30 µm — REFERENCE</dd><dt>Real lens geometry</dt><dd>UNKNOWN</dd></dl>
     <p id="dof-warning-detail" hidden>この警告は理想薄レンズモデルで推定した撮影倍率が約0.1倍以上の場合に表示しています。実際のレンズの撮影倍率はレンズ仕様によって異なります。</p>
   </details>
@@ -325,6 +327,6 @@
     </div>
   </div>
 </footer>
-<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=2"></script>
+<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=3"></script>
 </body>
 </html>

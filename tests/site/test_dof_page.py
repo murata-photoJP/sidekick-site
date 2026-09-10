@@ -11,6 +11,14 @@ def test_dof_page_has_required_inputs_and_results():
 def test_dof_page_has_progressive_disclosures_and_accessibility():
     page=html();assert 'id="dof-curve-disclosure"' in page;assert 'id="dof-assumptions"' in page;assert 'aria-live="polite"' in page;assert page.count("<h1") == 1
 def test_dof_page_links_scoped_assets():
-    page=html();assert '/assets/css/dof-calculator.css?v=2' in page;assert 'type="module" src="/assets/js/dof/calculator-ui.mjs?v=2"' in page
+    page=html();assert '/assets/css/dof-calculator.css?v=3' in page;assert 'type="module" src="/assets/js/dof/calculator-ui.mjs?v=3"' in page
 def test_dof_page_separates_url_warning_and_form_validation():
     page=html();assert 'id="dof-url-warning" role="status"' in page;assert 'id="dof-form-error" role="alert"' in page;assert 'id="dof-sensor-error"' in page
+def test_dof_page_explains_criterion_and_shows_effective_value():
+    page=html();assert 'id="dof-criterion-explanation"' in page;assert 'id="dof-effective-criterion" aria-live="polite"' in page;assert '絶対的な視覚限界ではありません' in page
+def test_dof_page_supports_standard_and_arbitrary_f_numbers():
+    page=html();assert 'step="any"' in page;assert 'data-fnumber="1.4"' in page;assert 'data-fnumber="32"' in page;assert '任意の正の値を入力できます' in page
+def test_dof_page_explains_curve_range_and_distance_approximation():
+    page=html();assert '緑の基準線より下にある範囲' in page;assert '前側主点からの距離との差を0と近似' in page
+def test_dof_curve_script_has_text_and_non_color_range_semantics():
+    script=(ROOT/'assets/js/dof/blur-chart.mjs').read_text(encoding='utf-8');assert '計算上のボケ径' in script;assert '許容するボケの基準' in script;assert '被写界深度' in script;assert 'この先も許容範囲' in script

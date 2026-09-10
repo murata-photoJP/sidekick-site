@@ -10,3 +10,8 @@
 - Review fix: custom sensor errors appear beside its width/height fields; blank numeric values remain invalid. URL parse warnings use a persistent status element separate from form validation errors.
 - Visual review: VF-02 and far-infinity curves retained a readable focus neighborhood, so the adaptive range was unchanged. Desktop 1280 px and mobile 375/320 px had no horizontal overflow; axis labels now state metres and micrometres.
 - Deferred: Pixel Reference, 100% Monitor, Print, diffraction/MTF/EE, real-lens and macro UI, English page, and share UI.
+- Unit 2.1 public review fix: unrelated query parameters no longer trigger DOF URL-state warnings; mixed valid state and UTM parameters remain valid.
+- Criterion help now follows the selected preset and displays the effective geometric blur threshold to one decimal micrometre. Custom provenance is identified as user input.
+- F-number retains arbitrary positive numeric input and adds keyboard-accessible one-stop preset buttons through F32.
+- The continuous-blur chart labels the calculated blur and criterion, shades the analytic near/far acceptable range, and explains an infinite far limit without placing a fake infinity marker.
+- Focus distance is entered using the usual sensor-plane camera convention; the MVP documents its zero principal-plane-offset approximation and close-range limitation.
