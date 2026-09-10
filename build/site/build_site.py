@@ -45,6 +45,17 @@ SITE_ORIGIN = "https://www.sidekick-lab.com"
 # 一致させる（URLを変更しないため）。ナビゲーション項目自体はheader.html側に
 # 一元化されているため、ここではnav_current等の「どのページか」を渡すだけでよい。
 PAGES: dict[str, dict] = {
+    "dof": {
+        "template": "pages/dof.html",
+        "output": Path("tools", "dof.html"),
+        "context": {
+            "language": "ja",
+            "nav_current": None,
+            "show_en_link": False,
+            "show_lang_banner": False,
+            "enable_ogp": True,
+        },
+    },
     "workshop": {
         "template": "pages/workshop.html",
         "output": Path("workshop.html"),

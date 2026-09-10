@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}被写界深度計算 | Sidekick Lab{% endblock %}
+{% block meta_description %}焦点距離、F値、ピント距離、許容錯乱円から被写界深度を計算し、ボケの連続的な変化を確認できます。{% endblock %}
+{% block canonical %}https://www.sidekick-lab.com/tools/dof{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=2">{% endblock %}
+{% block content %}
+<main class="dof-page" id="main-content">
+  <header class="dof-intro">
+    <p class="dof-kicker">Sidekick Lab Tools</p>
+    <h1>被写界深度計算</h1>
+    <p>ピントの基準となる距離は一つです。その前後ではボケが連続的に増えます。</p>
+    <p>被写界深度は、そのボケが選んだ基準以下に収まる範囲です。</p>
+  </header>
+
+  <noscript><p class="dof-error">この計算機を使うにはJavaScriptを有効にしてください。</p></noscript>
+  <form class="dof-panel dof-inputs" id="dof-form" novalidate>
+    <div class="dof-field">
+      <label for="dof-sensor">センサーサイズ</label>
+      <select id="dof-sensor" name="sensor">
+        <option value="ff_36x24">35mmフルサイズ</option><option value="apsc_canon_ref">Canon APS-C</option>
+        <option value="apsc_235x156_ref">APS-C</option><option value="mft_173x130">マイクロフォーサーズ</option><option value="custom">カスタム</option>
+      </select>
+    </div>
+    <fieldset class="dof-custom-grid" id="dof-custom-sensor" hidden><legend>カスタムセンサー</legend>
+      <label>幅 <input id="dof-sensor-width" name="sw" type="number" min="0.1" step="0.1" inputmode="decimal"> mm</label>
+      <label>高さ <input id="dof-sensor-height" name="sh" type="number" min="0.1" step="0.1" inputmode="decimal"> mm</label>
+      <p class="dof-field-error" id="dof-sensor-error"></p>
+    </fieldset>
+    <div class="dof-field"><label for="dof-focal">焦点距離</label><div class="dof-unit"><input id="dof-focal" name="f" type="number" value="50" min="0.1" step="0.1" inputmode="decimal"><span>mm</span></div><p class="dof-field-error" id="dof-focal-error"></p></div>
+    <div class="dof-field"><label for="dof-aperture">F値</label><input id="dof-aperture" name="n" type="number" value="4" min="0.1" step="0.1" inputmode="decimal" list="dof-apertures"><datalist id="dof-apertures"><option value="1.4"><option value="2"><option value="2.8"><option value="4"><option value="5.6"><option value="8"><option value="11"><option value="16"><option value="22"></datalist><p class="dof-field-error" id="dof-aperture-error"></p></div>
+    <div class="dof-field"><label for="dof-focus">ピント距離</label><div class="dof-unit"><input id="dof-focus" name="s" type="number" value="3" min="0.001" step="0.01" inputmode="decimal"><span>m</span></div><p class="dof-field-error" id="dof-focus-error"></p></div>
+    <div class="dof-field dof-criterion"><label for="dof-criterion">許容錯乱円 / 基準</label>
+      <select id="dof-criterion" name="criterion"><option value="traditional_ff_0030">Traditional 30 µm</option><option value="format_diagonal_1500">センサー対角線 ÷ 1500</option><option value="custom">カスタム</option></select>
+      <label id="dof-custom-criterion" hidden>カスタム値 <span class="dof-unit"><input id="dof-criterion-value" name="c" type="number" min="0.1" step="0.1" inputmode="decimal"> <span>µm</span></span></label>
+      <p class="dof-help">従来の被写界深度計算で使われる基準値です。この値そのものが、人間の視覚の絶対的な限界を表すわけではありません。</p>
+      <p class="dof-field-error" id="dof-criterion-error"></p>
+    </div>
+    <button class="dof-button" type="submit">計算する</button>
+    <p class="dof-url-warning" id="dof-url-warning" role="status" hidden>URLの計算条件を読み込めなかったため、安全な初期値を表示しています。</p>
+    <p class="dof-error" id="dof-form-error" role="alert" hidden></p>
+  </form>
+
+  <section class="dof-panel" aria-labelledby="dof-results-title"><h2 id="dof-results-title">計算結果</h2>
+    <div class="dof-results" id="dof-results" aria-live="polite" aria-atomic="true">
+      <div><span>近点</span><strong id="dof-near">—</strong></div><div><span>ピント位置</span><strong id="dof-focus-result">—</strong></div><div><span>遠点</span><strong id="dof-far">—</strong></div>
+      <div><span>被写界深度</span><strong id="dof-total">—</strong></div><div><span>前方</span><strong id="dof-front">—</strong></div><div><span>後方</span><strong id="dof-rear">—</strong></div>
+      <div><span>過焦点距離</span><strong id="dof-hyperfocal">—</strong></div>
+    </div>
+    <p class="dof-warning" id="dof-warning" hidden>近距離では、実際のレンズとこの計算モデルの差が大きくなる場合があります。</p>
+  </section>
+
+  <details class="dof-panel" id="dof-curve-disclosure"><summary>ボケの変化を見る</summary>
+    <p>ボケはピント位置から連続的に増え、選択した許容錯乱円との交点が近点・遠点になります。</p>
+    <div id="dof-chart"></div><p class="dof-chart-summary" id="dof-chart-summary"></p>
+  </details>
+  <details class="dof-panel" id="dof-assumptions"><summary>計算条件について</summary>
+    <p>この計算は理想的な薄レンズモデルによる幾何学的被写界深度です。</p><p>実際のレンズでは、主点位置、内部フォーカス、収差、回折などにより結果が異なる場合があります。</p><p>許容錯乱円は「どこまでのボケを許容するか」という計算上の基準です。人間の視覚の絶対的な境界ではありません。</p>
+    <dl class="dof-provenance"><dt>Model</dt><dd>Ideal paraxial thin lens — MODEL</dd><dt>Criterion</dt><dd id="dof-criterion-detail">Traditional 30 µm — REFERENCE</dd><dt>Real lens geometry</dt><dd>UNKNOWN</dd></dl>
+    <p id="dof-warning-detail" hidden>この警告は理想薄レンズモデルで推定した撮影倍率が約0.1倍以上の場合に表示しています。実際のレンズの撮影倍率はレンズ仕様によって異なります。</p>
+  </details>
+</main>
+{% endblock %}
+{% block extra_body_end %}<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=2"></script>{% endblock %}

@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";import test from "node:test";
+import {DEFAULT_URL_STATE,parseUrlState,serializeUrlState} from "../../assets/js/dof/url-state.mjs";
+import {formatDistance} from "../../assets/js/dof/formatters.mjs";
+import {parseRequiredNumber} from "../../assets/js/dof/input-values.mjs";
+test("default serialize/parse",()=>assert.deepEqual(parseUrlState(serializeUrlState(DEFAULT_URL_STATE)).state,{v:"1",...DEFAULT_URL_STATE}));
+test("VF-02 round trip",()=>{const s={sensor:"ff_36x24",f:50,n:4,s:3,criterion:"traditional_ff_0030"};assert.equal(parseUrlState(serializeUrlState(s)).ok,true);});
+test("custom sensor round trip",()=>{const s={...DEFAULT_URL_STATE,sensor:"custom",sw:44,sh:33};assert.deepEqual(parseUrlState(serializeUrlState(s)).state,{v:"1",...s});});
+test("custom criterion round trip",()=>{const s={...DEFAULT_URL_STATE,criterion:"custom",c:12.5};assert.deepEqual(parseUrlState(serializeUrlState(s)).state,{v:"1",...s});});
+for(const [name,q,issue] of [["invalid version","?v=9&sensor=ff_36x24&f=50&n=4&s=3&criterion=traditional_ff_0030","INVALID_VERSION"],["unknown sensor","?v=1&sensor=nope&f=50&n=4&s=3&criterion=traditional_ff_0030","UNKNOWN_SENSOR"],["invalid numeric","?v=1&sensor=ff_36x24&f=zero&n=4&s=3&criterion=traditional_ff_0030","INVALID_F"],["missing custom dimensions","?v=1&sensor=custom&f=50&n=4&s=3&criterion=traditional_ff_0030","CUSTOM_SENSOR_REQUIRED"],["missing custom criterion","?v=1&sensor=ff_36x24&f=50&n=4&s=3&criterion=custom","CUSTOM_CRITERION_REQUIRED"]])test(name,()=>{const r=parseUrlState(q);assert.equal(r.ok,false);assert.equal(r.state,null);assert.ok(r.issues.includes(issue));});
+test("VF-02 display precision",()=>assert.deepEqual([formatDistance(2627.890680),formatDistance(3000),formatDistance(3494.874185),formatDistance(866.983505)],["2.63 m","3.00 m","3.49 m","0.87 m"]));
+test("blank and non-finite UI numbers stay invalid",()=>{for(const value of [""," ","NaN","Infinity","-Infinity"])assert.equal(Number.isNaN(parseRequiredNumber(value)),true);});
+test("zero and negative UI numbers remain explicit for Core rejection",()=>assert.deepEqual([parseRequiredNumber("0"),parseRequiredNumber("-1")],[0,-1]));
