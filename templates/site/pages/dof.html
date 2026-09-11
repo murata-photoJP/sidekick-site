@@ -2,7 +2,7 @@
 {% block title %}被写界深度計算 | Sidekick Lab{% endblock %}
 {% block meta_description %}焦点距離、F値、ピント距離、許容錯乱円から被写界深度を計算し、ボケの連続的な変化を確認できます。{% endblock %}
 {% block canonical %}https://www.sidekick-lab.com/tools/dof{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=4">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=5">{% endblock %}
 {% block content %}
 <main class="dof-page" id="main-content">
   <header class="dof-intro">
@@ -40,7 +40,6 @@
       <p class="dof-help">この値は「これより小さければ人間にはボケて見えない」という絶対的な視覚限界ではありません。</p>
       <p class="dof-field-error" id="dof-criterion-error"></p>
     </div>
-    <button class="dof-button" type="submit">計算する</button>
     <p class="dof-url-warning" id="dof-url-warning" role="status" hidden>URLの計算条件を読み込めなかったため、安全な初期値を表示しています。</p>
     <p class="dof-error" id="dof-form-error" role="alert" hidden></p>
   </form>
@@ -65,4 +64,4 @@
   </details>
 </main>
 {% endblock %}
-{% block extra_body_end %}<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=4"></script>{% endblock %}
+{% block extra_body_end %}<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=5"></script>{% endblock %}

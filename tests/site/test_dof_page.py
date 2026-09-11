@@ -11,7 +11,7 @@ def test_dof_page_has_required_inputs_and_results():
 def test_dof_page_has_progressive_disclosures_and_accessibility():
     page=html();assert 'id="dof-curve-disclosure"' in page;assert 'id="dof-assumptions"' in page;assert 'aria-live="polite"' in page;assert page.count("<h1") == 1
 def test_dof_page_links_scoped_assets():
-    page=html();assert '/assets/css/dof-calculator.css?v=4' in page;assert 'type="module" src="/assets/js/dof/calculator-ui.mjs?v=4"' in page
+    page=html();assert '/assets/css/dof-calculator.css?v=5' in page;assert 'type="module" src="/assets/js/dof/calculator-ui.mjs?v=5"' in page
 def test_dof_page_separates_url_warning_and_form_validation():
     page=html();assert 'id="dof-url-warning" role="status"' in page;assert 'id="dof-form-error" role="alert"' in page;assert 'id="dof-sensor-error"' in page
 def test_dof_page_explains_criterion_and_shows_effective_value():
@@ -26,9 +26,21 @@ def test_dof_page_has_previous_input_and_result_delta_semantics():
     page=html();assert 'data-comparison-field="fNumber"' in page;assert 'id="dof-previous-aperture"' in page
     for value in ['id="dof-near-delta"','id="dof-focus-result-delta"','id="dof-far-delta"','id="dof-total-delta"','id="dof-front-delta"','id="dof-rear-delta"','id="dof-hyperfocal-delta"']:assert value in page
     assert 'aria-atomic="false"' in page
-def test_dof_comparison_controller_preserves_invalid_history_and_defers_presets():
+def test_dof_comparison_controller_preserves_invalid_history_and_auto_calculates():
     script=(ROOT/'assets/js/dof/calculator-ui.mjs').read_text(encoding='utf-8')
     assert 'history=advanceComparison(history,record(value,result))' in script
     assert 'catch(error){showError(error);updateInputComparison();}' in script
-    assert 'button.dataset.fnumber;noteDraftChange()' in script
-    assert 'button.dataset.fnumber;calculate()' not in script
+    # F-numberプリセットは値更新と同時にその場でcalculate()する（「計算する」ボタンを介さない）
+    assert 'button.dataset.fnumber;noteDraftChange();calculate();' in script
+    # numeric input/selectはchangeで確定計算し、submitはpreventDefaultのみ（ページ遷移防止の保険）でcalculate()を呼ばない
+    assert 'form.addEventListener("submit",e=>{e.preventDefault();});' in script
+    assert 'toggleOptional();noteDraftChange();calculate();' in script
+    # 同一値での再確定はhistoryを二重advanceしない（Enterとchangeの重複発火・同じpresetの連打を安全にする）
+    assert 'changedInputKeys(history.current.inputSnapshot,inputSnapshot()).length===0' in script
+def test_dof_page_has_no_explicit_calculate_button():
+    page=html()
+    assert 'dof-button' not in page
+    assert '計算する' not in page
+    assert 'type="submit"' not in page
+    css=(ROOT/'assets/css/dof-calculator.css').read_text(encoding='utf-8')
+    assert 'dof-button' not in css
