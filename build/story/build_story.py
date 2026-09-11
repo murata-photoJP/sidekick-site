@@ -368,6 +368,9 @@ def render_all(entries: list[dict], *, language: str = "ja",
             body_html=body_html,
             canonical_url=SITE_ORIGIN + public_url,
             nav_current="story",
+            # header.html共通ヘッダーのDOF計算ナビ項目（2026-09-11、common navigation統一 Case B）。
+            # 日本語ページのみ表示する。英語版は header_en.html にこの項目が無く、英語版DOF Calculatorも未提供のためscope外。
+            show_dof_nav=(language == "ja"),
             language=language,
             story_top_url=top_url,
             hreflang_alternates=hreflang_by_slug.get(e["slug"], {}),
@@ -384,6 +387,9 @@ def render_all(entries: list[dict], *, language: str = "ja",
         entries=list_entries,
         canonical_url=SITE_ORIGIN + top_url,
         nav_current="story",
+        # header.html共通ヘッダーのDOF計算ナビ項目（2026-09-11、common navigation統一 Case B）。
+        # 日本語ページのみ表示する。英語版は header_en.html にこの項目が無く、英語版DOF Calculatorも未提供のためscope外。
+        show_dof_nav=(language == "ja"),
         language=language,
         story_top_url=top_url,
         hreflang_alternates=index_hreflang,
