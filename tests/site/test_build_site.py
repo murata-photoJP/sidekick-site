@@ -197,13 +197,23 @@ def test_dof_page_has_aria_current_only_on_itself() -> None:
 
 
 def test_english_site_pages_have_no_dof_nav_regression() -> None:
-    """英語版DOF Calculatorはまだ存在しないため、build_site.py管理下の英語ページには
-    DOF計算ナビが追加されていないことを確認する（今回のscope外を維持）。"""
+    """英語版DOF Calculator（en/dof）自身以外のbuild_site.py管理下の英語ページには、
+    共通ナビへDOF計算機リンクが追加されていないことを確認する（2026-09-11時点で
+    en/dofのみ対応、他の英語ページへの展開は別scope）。en/dof自身のlang-banner/EN
+    switchリンクは日本語版（/tools/dof）を指すため、ナビ部分（kzc-nav-menu-en）
+    だけを対象にする。"""
     rendered = bs.render_all(None)
     en_keys = [k for k in bs.PAGES if k.startswith("en/")]
     assert en_keys, "英語ページが1件も登録されていません"
     for key in en_keys:
-        assert 'href="/tools/dof"' not in rendered[bs.PAGES[key]["output"]], f"{key}: 英語ページにDOFリンクが混入している"
+        html = rendered[bs.PAGES[key]["output"]]
+        if 'id="kzc-nav-menu-en"' not in html:
+            continue  # 共通ヘッダーを使わないページ（該当なしのはずだが将来の変化に備える）
+        nav = html.split('id="kzc-nav-menu-en"')[1].split("</nav>")[0]
+        if key == "en/dof":
+            assert 'href="/en/tools/dof" aria-current="page"' in nav, f"{key}: 自身のDOFナビにaria-currentが無い"
+        else:
+            assert 'href="/en/tools/dof"' not in nav, f"{key}: 英語ページのナビにDOFリンクが混入している"
 
 
 def test_show_dof_nav_default_stays_false_for_knowledge_devlog_story_parity() -> None:

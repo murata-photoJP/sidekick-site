@@ -196,6 +196,11 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://www.sidekick-lab.com/en/tools/dof</loc>
+    <lastmod>2026-09-11</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://www.sidekick-lab.com/en/faq</loc>
     <lastmod>2026-07-14</lastmod>
     <priority>0.5</priority>

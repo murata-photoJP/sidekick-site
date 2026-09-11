@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Depth of Field Calculator | Sidekick Lab{% endblock %}
+{% block meta_description %}Calculate depth of field from focal length, aperture, focus distance, and circle of confusion, and see how blur changes continuously.{% endblock %}
+{% block canonical %}https://www.sidekick-lab.com/en/tools/dof{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=6">{% endblock %}
+{% block content %}
+<main class="dof-page" id="main-content">
+  <header class="dof-intro">
+    <p class="dof-kicker">Sidekick Lab Tools</p>
+    <h1>Depth of Field Calculator</h1>
+    <p>There is only one distance where focus is set. Blur increases continuously as you move away from it in either direction.</p>
+    <p>Depth of field is the range where that blur stays within your chosen criterion.</p>
+  </header>
+
+  <noscript><p class="dof-error">Enable JavaScript to use this calculator.</p></noscript>
+  <form class="dof-panel dof-inputs" id="dof-form" novalidate>
+    <div class="dof-field" data-comparison-field="sensor">
+      <label for="dof-sensor">Sensor Format</label>
+      <select id="dof-sensor" name="sensor" aria-describedby="dof-previous-sensor dof-sensor-error">
+        <option value="ff_36x24">Full Frame (35mm)</option><option value="apsc_canon_ref">Canon APS-C</option>
+        <option value="apsc_235x156_ref">APS-C</option><option value="mft_173x130">Micro Four Thirds</option><option value="custom">Custom</option>
+      </select>
+      <p class="dof-previous-input" id="dof-previous-sensor" hidden></p>
+    </div>
+    <fieldset class="dof-custom-grid" id="dof-custom-sensor" data-comparison-field="customSensor" hidden><legend>Custom Sensor</legend>
+      <label>Width <input id="dof-sensor-width" name="sw" type="number" min="0.1" step="0.1" inputmode="decimal" aria-describedby="dof-previous-custom-sensor dof-sensor-error"> mm</label>
+      <label>Height <input id="dof-sensor-height" name="sh" type="number" min="0.1" step="0.1" inputmode="decimal" aria-describedby="dof-previous-custom-sensor dof-sensor-error"> mm</label>
+      <p class="dof-field-error" id="dof-sensor-error"></p>
+      <p class="dof-previous-input" id="dof-previous-custom-sensor" hidden></p>
+    </fieldset>
+    <div class="dof-field" data-comparison-field="focalLength"><label for="dof-focal">Focal Length</label><div class="dof-unit"><input id="dof-focal" name="f" type="number" value="50" min="0.1" step="0.1" inputmode="decimal" aria-describedby="dof-previous-focal dof-focal-error"><span>mm</span></div><p class="dof-previous-input" id="dof-previous-focal" hidden></p><p class="dof-field-error" id="dof-focal-error"></p></div>
+    <div class="dof-field" data-comparison-field="fNumber"><label for="dof-aperture">Aperture (f-number)</label><input id="dof-aperture" name="n" type="number" value="4" min="0.1" step="any" inputmode="decimal" list="dof-apertures" aria-describedby="dof-aperture-help dof-previous-aperture dof-aperture-error"><datalist id="dof-apertures"><option value="1.4"><option value="2"><option value="2.8"><option value="4"><option value="5.6"><option value="8"><option value="11"><option value="16"><option value="22"><option value="32"></datalist><p class="dof-help" id="dof-aperture-help">Choose a common f-number or enter any positive value.</p><div class="dof-fnumber-presets" role="group" aria-label="Common f-numbers">{% for value in [1.4, 2, 2.8, 4, 5.6, 8, 11, 16, 22, 32] %}<button type="button" data-fnumber="{{ value }}">F{{ value }}</button>{% endfor %}</div><p class="dof-previous-input" id="dof-previous-aperture" hidden></p><p class="dof-field-error" id="dof-aperture-error"></p></div>
+    <div class="dof-field" data-comparison-field="focusDistance"><label for="dof-focus">Focus Distance</label><div class="dof-unit"><input id="dof-focus" name="s" type="number" value="3" min="0.001" step="0.01" inputmode="decimal" aria-describedby="dof-previous-focus dof-focus-error"><span>m</span></div><p class="dof-previous-input" id="dof-previous-focus" hidden></p><p class="dof-field-error" id="dof-focus-error"></p></div>
+    <div class="dof-field dof-criterion" data-comparison-field="criterion"><label for="dof-criterion">Circle of Confusion (CoC) / Criterion</label>
+      <select id="dof-criterion" name="criterion" aria-describedby="dof-previous-criterion dof-criterion-explanation dof-criterion-error"><option value="traditional_ff_0030">Traditional 30 µm</option><option value="format_diagonal_1500">Sensor diagonal ÷ 1500</option><option value="custom">Custom</option></select>
+      <label id="dof-custom-criterion" hidden>Custom value <span class="dof-unit"><input id="dof-criterion-value" name="c" type="number" min="0.1" step="0.1" inputmode="decimal" aria-describedby="dof-previous-criterion dof-criterion-error"> <span>µm</span></span></label>
+      <p class="dof-help" id="dof-criterion-explanation"></p>
+      <p class="dof-effective-criterion" id="dof-effective-criterion" aria-live="polite">Current circle of confusion: 30.0 µm</p>
+      <p class="dof-previous-input" id="dof-previous-criterion" hidden></p>
+      <p class="dof-help">This value is not an absolute visual limit below which blur becomes invisible to everyone.</p>
+      <p class="dof-field-error" id="dof-criterion-error"></p>
+    </div>
+    <p class="dof-url-warning" id="dof-url-warning" role="status" hidden>Your calculation settings from the URL couldn't be loaded, so safe defaults are shown.</p>
+    <p class="dof-error" id="dof-form-error" role="alert" hidden></p>
+  </form>
+
+  <dialog class="dof-explainer" id="dof-sensor-explainer" aria-labelledby="dof-sensor-explainer-title">
+    <h2 id="dof-sensor-explainer-title">Sensor format changed</h2>
+    <p>The current circle of confusion is the fixed "Traditional 30 µm" value.</p>
+    <p>With this criterion, the circle of confusion stays 30 µm even when you change the sensor format, so the depth of field result doesn't change.</p>
+    <p>To have the circle of confusion follow the sensor format, choose "Sensor diagonal ÷ 1500".</p>
+    <form method="dialog"><button autofocus>OK</button></form>
+  </dialog>
+
+  <section class="dof-panel" aria-labelledby="dof-results-title"><h2 id="dof-results-title">Result</h2>
+    <div class="dof-results" id="dof-results" aria-live="polite" aria-atomic="false">
+      <div><span>Near Limit</span><strong id="dof-near">—</strong><small class="dof-result-delta" id="dof-near-delta" hidden></small></div><div><span>Focus Position</span><strong id="dof-focus-result">—</strong><small class="dof-result-delta" id="dof-focus-result-delta" hidden></small></div><div><span>Far Limit</span><strong id="dof-far">—</strong><small class="dof-result-delta" id="dof-far-delta" hidden></small></div>
+      <div><span>Total DOF</span><strong id="dof-total">—</strong><small class="dof-result-delta" id="dof-total-delta" hidden></small></div><div><span>Front</span><strong id="dof-front">—</strong><small class="dof-result-delta" id="dof-front-delta" hidden></small></div><div><span>Rear</span><strong id="dof-rear">—</strong><small class="dof-result-delta" id="dof-rear-delta" hidden></small></div>
+      <div><span>Hyperfocal Distance</span><strong id="dof-hyperfocal">—</strong><small class="dof-result-delta" id="dof-hyperfocal-delta" hidden></small></div>
+    </div>
+    <p class="dof-warning" id="dof-warning" hidden>At close range, the difference between an actual lens and this model can become larger.</p>
+  </section>
+
+  <details class="dof-panel" id="dof-curve-disclosure"><summary>See how blur changes</summary>
+    <p>Blur is smallest at the focus position and increases the farther you move in front of or behind it. The range below the green criterion line is the "depth of field" for this setting.</p>
+    <div id="dof-chart"></div><p class="dof-chart-summary" id="dof-chart-summary"></p>
+  </details>
+  <details class="dof-panel" id="dof-assumptions"><summary>About this calculation</summary>
+    <p>This calculation is a geometric depth of field based on an ideal thin-lens model.</p><p>The focus distance you enter is treated as the usual shooting distance from the sensor plane to the subject, approximating the difference from the front principal plane that the model needs as zero. This difference can become larger at close range.</p><p>With an actual lens, results may differ due to principal-plane position, internal focusing, aberrations, diffraction, and other factors.</p><p>The circle of confusion is a calculation criterion for how much blur is acceptable. It is not an absolute boundary of human vision.</p>
+    <dl class="dof-provenance"><dt>Model</dt><dd>Ideal paraxial thin lens — MODEL</dd><dt>Criterion</dt><dd id="dof-criterion-detail">Traditional 30 µm — REFERENCE</dd><dt>Real lens geometry</dt><dd>UNKNOWN</dd></dl>
+    <p id="dof-warning-detail" hidden>This warning appears when the estimated magnification from the ideal thin-lens model is about 0.1× or more. Actual lens magnification varies by lens specification.</p>
+  </details>
+</main>
+{% endblock %}
+{% block extra_body_end %}<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=6"></script>{% endblock %}

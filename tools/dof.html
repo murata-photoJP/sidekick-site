@@ -14,12 +14,12 @@
     try {
       var pref = localStorage.getItem('sk_lang_pref');
       if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/'); return; }
+      if (pref === 'en') { location.replace('/en/tools/dof'); return; }
       var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
       var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
       if (!isJapanese) {
         localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/');
+        location.replace('/en/tools/dof');
       }
     } catch (e) { /* localStorageが使えない環境などは何もしない */ }
   })();
@@ -28,6 +28,10 @@
 <title>被写界深度計算 | Sidekick Lab</title>
 <meta name="description" content="焦点距離、F値、ピント距離、許容錯乱円から被写界深度を計算し、ボケの連続的な変化を確認できます。">
 <link rel="canonical" href="https://www.sidekick-lab.com/tools/dof">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/tools/dof">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/tools/dof">
 
 
 <meta property="og:type" content="website">
@@ -95,6 +99,12 @@
      （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
 
 
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/tools/dof">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
 
 <header class="hdr">
   <div class="wrap hdr-in">
@@ -126,6 +136,8 @@
       <a href="/changelog" >更新履歴</a>
       <a href="/faq" >Support</a>
       <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/tools/dof" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
 
     </nav>
   </div>

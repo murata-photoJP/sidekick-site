@@ -9,8 +9,11 @@ export function formatCriterionMicrometers(valueMm){
   return `${(valueMm*1000).toFixed(1)} µm`;
 }
 
-export function formatDistanceDelta(deltaMm){
-  const direction=deltaMm>0?"増加":"減少";
+const DELTA_WORDS={ja:{increase:"増加",decrease:"減少"},en:{increase:"increase",decrease:"decrease"}};
+
+export function formatDistanceDelta(deltaMm,lang="ja"){
+  const words=DELTA_WORDS[lang]||DELTA_WORDS.ja;
+  const direction=deltaMm>0?words.increase:words.decrease;
   const arrow=deltaMm>0?"↑":"↓";
   const value=formatDistance(Math.abs(deltaMm));
   return {text:`${arrow} ${value}`,label:`${direction} ${value}`};

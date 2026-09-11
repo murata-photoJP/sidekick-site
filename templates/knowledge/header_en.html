@@ -18,6 +18,14 @@
      間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
      同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
      このファイルの原則には反しない。 -->
+{#- 2026-09-11五度目追記: DOF Calculator英語版（/en/tools/dof）を追加。header.html<JA版>
+    と同じ`show_dof_nav`（既定false）でopt-inガードし、Knowledgeの直後・LPの直前へ配置
+    （JA版の「打ち出の小槌→DOF計算→Workshop」に対応する位置。英語版にはWorkshopが
+    存在しないため次はLP）。build_site.py側の"en/dof"ページだけがtrueを渡す。
+    打ち出の小槌・開発日誌・Story英語版の本番HTMLは今回意図的に再生成していない
+    （JA版のCommon Navigation DOF Consistency CASE Bと同じ理由。英語版はJA版CASE Bの
+    さらに後続として別途扱う）。このコメント自体もJinja2コメント構文にして、
+    knowledge/development-log/Story英語版の本番HTMLへ余計な差分を出さないようにしている。 #}
 
 <div class="lang-banner" id="lang-banner-en">
   🇯🇵 このサイトは日本語でもご覧いただけます —
@@ -44,6 +52,9 @@
       <a href="/en/portrait" {% if nav_current == "portrait" %}aria-current="page"{% endif %}>👤 Portrait</a>
       <a href="/en/sky-effect" {% if nav_current == "sky-effect" %}aria-current="page"{% endif %}>☁️ Sky</a>
       <a href="/en/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 Knowledge</a>
+{%- if show_dof_nav|default(false) %}
+      <a href="/en/tools/dof" {% if nav_current == "dof" %}aria-current="page"{% endif %}>📐 DOF Calculator</a>
+{%- endif %}
       <a href="/en/lp-star" {% if nav_current == "lp-star" %}aria-current="page"{% endif %}>LP</a>
       <a href="/en/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
       <a href="/en/sidekick" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>What is Sidekick</a>

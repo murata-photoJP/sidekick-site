@@ -51,8 +51,6 @@ PAGES: dict[str, dict] = {
         "context": {
             "language": "ja",
             "nav_current": "dof",
-            "show_en_link": False,
-            "show_lang_banner": False,
             "enable_ogp": True,
             # header.html（打ち出の小槌・開発日誌・Storyとも共用）のDOF計算機ナビ項目は
             # opt-inガード（既定false）。2026-09-11時点でbuild_site.py管理下の
@@ -60,6 +58,34 @@ PAGES: dict[str, dict] = {
             # workshop）がtrueを渡すよう統一した。打ち出の小槌・開発日誌・Storyは
             # 別ビルド（build_knowledge.py等）が本番HTMLを直接生成しており、その本番配置には
             # 別途承認・移行手順が必要なため今回は対象外（header.html側コメント参照）。
+            "show_dof_nav": True,
+            # 英語版DOF Calculator追加（2026-09-11）。show_en_link・show_lang_bannerは
+            # 英語版が無かった間だけFalseにしていた一時設定で、既定（true）へ戻す。
+            # en_redirect_urlは元手書きページと同じ「/en/{slug}.html」形式ではなく、
+            # dofページのURLが/tools/dof（他ページの/{slug}と違う）ため個別に指定する。
+            "en_redirect_url": "/en/tools/dof",
+            "lang_switch_url": "/en/tools/dof",
+            "hreflang_alternates": {
+                "ja": f"{SITE_ORIGIN}/tools/dof",
+                "en": f"{SITE_ORIGIN}/en/tools/dof",
+            },
+        },
+    },
+    "en/dof": {
+        "template": "pages/en/dof.html",
+        "output": Path("en", "tools", "dof.html"),
+        "context": {
+            "language": "en",
+            "nav_current": "dof",
+            "enable_ogp": True,
+            "lang_switch_url": "/tools/dof",
+            "hreflang_alternates": {
+                "ja": f"{SITE_ORIGIN}/tools/dof",
+                "en": f"{SITE_ORIGIN}/en/tools/dof",
+            },
+            # header_en.htmlにもJA版と同じ`show_dof_nav`opt-inガード（既定false）を追加した。
+            # 英語版DOF計算機自身のナビにだけ表示する（打ち出の小槌・開発日誌・Story英語版の
+            # 本番HTMLは今回対象外のため、他の英語ページへは波及させない）。
             "show_dof_nav": True,
         },
     },
