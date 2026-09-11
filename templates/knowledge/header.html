@@ -48,9 +48,20 @@
     英語版ページがまだ無いためheader_en.htmlには追加していない。build_knowledge.py等
     経由の本番記事HTMLは今回意図的に再生成していない（同スクリプト冒頭に本番への
     直接配置を行わない旨の明示ガードがあるため）ので、`show_dof_nav`（既定false）で
-    このリンクをopt-in化し、本番へ直接書き出す運用のbuild_site.py側（dof・workshop）
-    だけがtrueを渡す。このコメント自体もJinja2コメント構文にして、
-    knowledge/development-log/Story側の本番HTMLへ余計な差分を出さないようにしている。 #}
+    このリンクをopt-in化した。このコメント自体もJinja2コメント構文にして、
+    knowledge/development-log/Story側の本番HTMLへ余計な差分を出さないようにしている。
+
+    2026-09-11七度目追記（common navigation統一）: Host Reviewで「/workshopにはDOF計算が
+    あるが/knowledgeには無い」という不統一が報告された。監査の結果、build_site.py管理下の
+    日本語ページ（index・_register_page_pair()経由の約20ページ・dof・workshop）は
+    dof・workshopの2ページしかtrueを渡しておらず、他は素通しで既定falseのままだった
+    ことが判明。build_site.pyはこれまでも`--output .`で本番へ直接反映する運用が
+    確立しているため、build_site.py側の全日本語ページでtrueを渡すよう統一した
+    （英語版・打ち出の小槌・開発日誌・Storyはこのopt-inガードの対象外のまま）。
+    打ち出の小槌・開発日誌・Storyは、build_knowledge.py側の明示的なガード
+    （本番html/knowledge/への直接配置禁止）や、開発日誌の「ローカル確認→手動コピー」
+    運用のため、本番HTMLの一括再生成には別途承認・移行手順が必要と判断し、
+    今回のsource変更対象から外した（COMMON_NAVIGATION_DOF_CONSISTENCY参照）。 #}
 
 {% if show_lang_banner|default(true) %}
 <div class="lang-banner" id="lang-banner">

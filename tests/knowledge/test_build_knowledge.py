@@ -1453,6 +1453,23 @@ def test_production_knowledge_html_matches_template() -> None:
         check("テンプレート↔本番Knowledge乖離検出", True)
 
 
+# ---------------------------------------------------------------------------
+# 本番直接配置の明示ガード維持確認（2026-09-11追加、Common Navigation DOF Consistency）
+# ---------------------------------------------------------------------------
+
+@with_checks
+def test_production_placement_guard_is_still_present() -> None:
+    """build_knowledge.pyの「既存のhtml/knowledge/への実配置・Vercelへのデプロイは
+    行わない」という明示ガードが、共通ナビ統一作業（DOFリンク追加）によって
+    削除・緩和・bypassされていないことを確認する。このガードにより、
+    打ち出の小槌の本番HTML一括再生成には別途承認・移行手順が必要になる。"""
+    source = (REPO_ROOT / "build" / "knowledge" / "build_knowledge.py").read_text(encoding="utf-8")
+    check("module docstring: 本番への直接配置を行わない旨の記述がある",
+          "既存の html/knowledge/ への実配置・Vercelへのデプロイは行わない" in source, source[:400])
+    check("--outputのhelp文字列: 本番ディレクトリを直接指定しないよう明示している",
+          "本番のhtml/knowledge/を直接指定しないこと" in source, "見つからない")
+
+
 def main() -> int:
     tests = [
         # Phase A1
@@ -1505,6 +1522,8 @@ def main() -> int:
         test_en_index_top_page_labels_and_empty_state, test_lang_switch_link_points_to_matching_article,
         # テンプレート↔本番HTML 乖離検出（2026-08-30追加）
         test_production_knowledge_html_matches_template,
+        # 本番直接配置の明示ガード維持確認（2026-09-11追加）
+        test_production_placement_guard_is_still_present,
     ]
     for t in tests:
         try:

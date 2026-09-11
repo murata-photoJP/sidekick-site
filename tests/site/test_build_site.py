@@ -160,3 +160,56 @@ def test_production_html_matches_template_render() -> None:
         "テンプレート↔本番HTML の乖離を検出しました。build_site.py --output . を実行して再ビルドしてください:\n"
         + "\n".join(failures)
     )
+
+
+# ---------------------------------------------------------------------------
+# 共通ナビゲーションのDOF計算機一貫性（2026-09-11追加、Host Review対応）
+# ---------------------------------------------------------------------------
+
+def test_common_header_shows_dof_nav_for_all_japanese_site_pages() -> None:
+    """build_site.py管理下の全日本語ページで、共通ヘッダーの「DOF計算」が
+    打ち出の小槌の直後・Workshopの直前という同じ位置に表示されることを確認する。
+    英語ページ（enで始まるkey）はscope外のため対象外。"""
+    rendered = bs.render_all(None)
+    ja_keys = [k for k in bs.PAGES if not k.startswith("en/")]
+    assert ja_keys, "日本語ページが1件も登録されていません"
+    for key in ja_keys:
+        html = rendered[bs.PAGES[key]["output"]]
+        nav = html.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
+        assert 'href="/tools/dof"' in nav, f"{key}: DOF計算ナビが存在しない"
+        kozuchi_pos = nav.index('href="/knowledge"')
+        dof_pos = nav.index('href="/tools/dof"')
+        workshop_pos = nav.index('href="/workshop"')
+        assert kozuchi_pos < dof_pos < workshop_pos, f"{key}: DOF計算の位置が打ち出の小槌とWorkshopの間にない"
+
+
+def test_dof_page_has_aria_current_only_on_itself() -> None:
+    """DOF Calculatorページ自身の共通ナビだけがaria-current="page"を持ち、
+    他の日本語ページのDOFリンクには誤って付かないことを確認する。"""
+    rendered = bs.render_all(None)
+    dof_nav = rendered[bs.PAGES["dof"]["output"]].split('id="kzc-nav-menu"')[1].split("</nav>")[0]
+    assert 'href="/tools/dof" aria-current="page"' in dof_nav
+    for key in bs.PAGES:
+        if key == "dof" or key.startswith("en/"):
+            continue
+        nav = rendered[bs.PAGES[key]["output"]].split('id="kzc-nav-menu"')[1].split("</nav>")[0]
+        assert 'href="/tools/dof" aria-current="page"' not in nav, f"{key}: DOFリンクに誤ってaria-currentが付いている"
+
+
+def test_english_site_pages_have_no_dof_nav_regression() -> None:
+    """英語版DOF Calculatorはまだ存在しないため、build_site.py管理下の英語ページには
+    DOF計算ナビが追加されていないことを確認する（今回のscope外を維持）。"""
+    rendered = bs.render_all(None)
+    en_keys = [k for k in bs.PAGES if k.startswith("en/")]
+    assert en_keys, "英語ページが1件も登録されていません"
+    for key in en_keys:
+        assert 'href="/tools/dof"' not in rendered[bs.PAGES[key]["output"]], f"{key}: 英語ページにDOFリンクが混入している"
+
+
+def test_show_dof_nav_default_stays_false_for_knowledge_devlog_story_parity() -> None:
+    """header.htmlのshow_dof_navは既定falseのまま維持する。打ち出の小槌・開発日誌・
+    Storyは別ビルド（build_knowledge.py等）がtrueを渡していない前提で本番HTMLと
+    一致しており、既定をtrueへ変えると本番再生成なしに3ビルドすべてのテンプレート↔
+    本番HTML一致テストが壊れる（Knowledge build guardの都合で本番再生成は今回scope外）。"""
+    header = (REPO_ROOT / "templates" / "knowledge" / "header.html").read_text(encoding="utf-8")
+    assert '{%- if show_dof_nav|default(false) %}' in header

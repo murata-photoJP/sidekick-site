@@ -55,9 +55,11 @@ PAGES: dict[str, dict] = {
             "show_lang_banner": False,
             "enable_ogp": True,
             # header.html（打ち出の小槌・開発日誌・Storyとも共用）のDOF計算機ナビ項目は
-            # opt-inガード（既定false）。build_site.pyが本番へ直接--output .で書き出す
-            # ページ（dof・workshop）だけがtrueを渡す。他3ビルドの本番HTMLは今回
-            # 意図的に変更していない（header.html側コメント参照）。
+            # opt-inガード（既定false）。2026-09-11時点でbuild_site.py管理下の
+            # 日本語ページ全体（_register_page_pair()のja_context・index・本ページ・
+            # workshop）がtrueを渡すよう統一した。打ち出の小槌・開発日誌・Storyは
+            # 別ビルド（build_knowledge.py等）が本番HTMLを直接生成しており、その本番配置には
+            # 別途承認・移行手順が必要なため今回は対象外（header.html側コメント参照）。
             "show_dof_nav": True,
         },
     },
@@ -93,6 +95,10 @@ def _register_page_pair(slug: str, *, ja_extra: dict | None = None, en_extra: di
         "en_redirect_url": f"/en/{slug}.html",
         "lang_switch_url": f"/en/{slug}",
         "hreflang_alternates": hreflang,
+        # header.html共通ヘッダーのDOF計算機ナビ項目（2026-09-11、common navigation統一）。
+        # build_site.py管理下の日本語ページ全体で一貫して表示する。英語版（en_context）には
+        # 渡さない（英語版DOF Calculatorがまだ存在しないため、今回のscope外）。
+        "show_dof_nav": True,
     }
     if ja_extra:
         ja_context.update(ja_extra)
@@ -239,6 +245,8 @@ PAGES["index"] = {
         "nav_current": None,
         "enable_ogp": True,
         "hreflang_alternates": _INDEX_HREFLANG,
+        # header.html共通ヘッダーのDOF計算機ナビ項目（2026-09-11、common navigation統一）。
+        "show_dof_nav": True,
         # 2026-08-05: header.htmlのlang_switch_url既定値"/en/"はcommit c2206e5
         # （GSCリダイレクトエラー対策で/en/を/enに統一）に追従できておらず、
         # 明示指定のないindex.htmlだけ末尾スラッシュ付きの/en/へ戻っていたため、
