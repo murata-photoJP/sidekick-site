@@ -582,9 +582,9 @@ def render_article(env: Environment, article: dict, index: dict) -> str:
         cta=cta,
         show_beginner_badge=(article.get("difficulty") == "beginner"),
         nav_current="knowledge",
-        # header.html共通ヘッダーのDOF計算ナビ項目（2026-09-11、common navigation統一 Case B）。
-        # 日本語ページのみ表示する。英語版は header_en.html にこの項目が無く、英語版DOF Calculatorも未提供のためscope外。
-        show_dof_nav=(language == "ja"),
+        # 共通ヘッダーのDOF Calculatorナビ項目（2026-09-11、common navigation統一 Case B）。
+        # 日本語は header.html（/tools/dof）、英語は header_en.html（/en/tools/dof）が同じshow_dof_nav で opt-in する。英語版DOF Calculator公開（d18ce80）に伴い両言語で表示する。
+        show_dof_nav=True,
         title_main=title_main,
         title_sub=title_sub,
         hreflang_alternates=hreflang_alternates,
@@ -626,9 +626,9 @@ def render_index(env: Environment, index: dict, language: str = "ja",
         labels=LABELS.get(language),
         tagline=KOZUCHI_TAGLINE,
         nav_current="knowledge",
-        # header.html共通ヘッダーのDOF計算ナビ項目（2026-09-11、common navigation統一 Case B）。
-        # 日本語ページのみ表示する。英語版は header_en.html にこの項目が無く、英語版DOF Calculatorも未提供のためscope外。
-        show_dof_nav=(language == "ja"),
+        # 共通ヘッダーのDOF Calculatorナビ項目（2026-09-11、common navigation統一 Case B）。
+        # 日本語は header.html（/tools/dof）、英語は header_en.html（/en/tools/dof）が同じshow_dof_nav で opt-in する。英語版DOF Calculator公開（d18ce80）に伴い両言語で表示する。
+        show_dof_nav=True,
         hreflang_alternates=hreflang_alternates,
         knowledge_top_url=top_path,
         lang_switch_url=("/knowledge" if language == "en" else "/en/knowledge"),

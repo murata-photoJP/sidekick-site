@@ -169,7 +169,8 @@ def test_production_html_matches_template_render() -> None:
 def test_common_header_shows_dof_nav_for_all_japanese_site_pages() -> None:
     """build_site.py管理下の全日本語ページで、共通ヘッダーの「DOF計算」が
     打ち出の小槌の直後・Workshopの直前という同じ位置に表示されることを確認する。
-    英語ページ（enで始まるkey）はscope外のため対象外。"""
+    英語ページ（enで始まるkey）は test_common_header_shows_dof_nav_for_all_english_site_pages
+    で対称に確認する。"""
     rendered = bs.render_all(None)
     ja_keys = [k for k in bs.PAGES if not k.startswith("en/")]
     assert ja_keys, "日本語ページが1件も登録されていません"
@@ -196,30 +197,57 @@ def test_dof_page_has_aria_current_only_on_itself() -> None:
         assert 'href="/tools/dof" aria-current="page"' not in nav, f"{key}: DOFリンクに誤ってaria-currentが付いている"
 
 
-def test_english_site_pages_have_no_dof_nav_regression() -> None:
-    """英語版DOF Calculator（en/dof）自身以外のbuild_site.py管理下の英語ページには、
-    共通ナビへDOF計算機リンクが追加されていないことを確認する（2026-09-11時点で
-    en/dofのみ対応、他の英語ページへの展開は別scope）。en/dof自身のlang-banner/EN
-    switchリンクは日本語版（/tools/dof）を指すため、ナビ部分（kzc-nav-menu-en）
-    だけを対象にする。"""
-    rendered = bs.render_all(None)
+def test_english_site_page_contexts_pass_show_dof_nav() -> None:
+    """build_site.py管理下の全英語ページの render context が show_dof_nav=True を渡していること。
+
+    生成HTMLではなく context 側で検出する。2026-09-11の EN CASE A で、en_context に
+    show_dof_nav が渡されておらず、英語サイトページ20件のナビから DOF Calculator が
+    欠落していたことが Host Review で見つかった（HTML parity テストは「渡していない状態」
+    と一致していたため検出できなかった）。header_en.html の opt-in ガード（既定false）は
+    維持したまま、渡し忘れをここで止める。"""
     en_keys = [k for k in bs.PAGES if k.startswith("en/")]
     assert en_keys, "英語ページが1件も登録されていません"
+    missing = [k for k in en_keys if bs.PAGES[k]["context"].get("show_dof_nav") is not True]
+    assert not missing, f"show_dof_nav=True を渡していない英語ページ: {missing}"
+
+
+def test_common_header_shows_dof_nav_for_all_english_site_pages() -> None:
+    """build_site.py管理下の全英語ページで、共通ヘッダーの「DOF Calculator」が
+    Knowledge の直後・LP の直前という同じ位置に表示されることを確認する
+    （日本語側 test_common_header_shows_dof_nav_for_all_japanese_site_pages の対称）。
+    英語版には Workshop が無いため、DOF の次は LP になる。"""
+    rendered = bs.render_all(None)
+    en_keys = [k for k in bs.PAGES if k.startswith("en/")]
     for key in en_keys:
         html = rendered[bs.PAGES[key]["output"]]
-        if 'id="kzc-nav-menu-en"' not in html:
-            continue  # 共通ヘッダーを使わないページ（該当なしのはずだが将来の変化に備える）
+        assert 'id="kzc-nav-menu-en"' in html, f"{key}: 共通英語ヘッダー（kzc-nav-menu-en）を使っていない"
         nav = html.split('id="kzc-nav-menu-en"')[1].split("</nav>")[0]
-        if key == "en/dof":
-            assert 'href="/en/tools/dof" aria-current="page"' in nav, f"{key}: 自身のDOFナビにaria-currentが無い"
-        else:
-            assert 'href="/en/tools/dof"' not in nav, f"{key}: 英語ページのナビにDOFリンクが混入している"
+        assert nav.count('href="/en/tools/dof"') == 1, f"{key}: DOF Calculator ナビが1つでない"
+        knowledge_pos = nav.index('href="/en/knowledge"')
+        dof_pos = nav.index('href="/en/tools/dof"')
+        lp_pos = nav.index('href="/en/lp-star"')
+        assert knowledge_pos < dof_pos < lp_pos, f"{key}: DOF Calculator の位置が Knowledge と LP の間にない"
+
+
+def test_en_dof_page_has_aria_current_only_on_itself() -> None:
+    """英語版 DOF Calculator ページ自身の共通ナビだけが aria-current="page" を持ち、
+    他の英語ページの DOF リンクには誤って付かないことを確認する
+    （日本語側 test_dof_page_has_aria_current_only_on_itself の対称）。"""
+    rendered = bs.render_all(None)
+    dof_nav = rendered[bs.PAGES["en/dof"]["output"]].split('id="kzc-nav-menu-en"')[1].split("</nav>")[0]
+    assert 'href="/en/tools/dof" aria-current="page"' in dof_nav
+    for key in bs.PAGES:
+        if key == "en/dof" or not key.startswith("en/"):
+            continue
+        nav = rendered[bs.PAGES[key]["output"]].split('id="kzc-nav-menu-en"')[1].split("</nav>")[0]
+        assert 'href="/en/tools/dof" aria-current="page"' not in nav, f"{key}: DOFリンクに誤ってaria-currentが付いている"
 
 
 def test_show_dof_nav_default_stays_false_for_knowledge_devlog_story_parity() -> None:
-    """header.htmlのshow_dof_navは既定falseのまま維持する。打ち出の小槌・開発日誌・
-    Storyは別ビルド（build_knowledge.py等）がtrueを渡していない前提で本番HTMLと
-    一致しており、既定をtrueへ変えると本番再生成なしに3ビルドすべてのテンプレート↔
-    本番HTML一致テストが壊れる（Knowledge build guardの都合で本番再生成は今回scope外）。"""
+    """header.htmlのshow_dof_navは既定falseのopt-inガードのまま維持する。
+    打ち出の小槌・開発日誌・Storyは別ビルド（build_knowledge.py等）が JA/EN とも
+    明示的に true を渡して表示しており（CASE B / EN CASE B）、表示の有無は
+    テンプレートの既定値ではなく各 builder の render context が決める、という
+    責務分担をここで固定する。"""
     header = (REPO_ROOT / "templates" / "knowledge" / "header.html").read_text(encoding="utf-8")
     assert '{%- if show_dof_nav|default(false) %}' in header

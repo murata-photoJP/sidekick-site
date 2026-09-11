@@ -21,11 +21,14 @@
 {#- 2026-09-11五度目追記: DOF Calculator英語版（/en/tools/dof）を追加。header.html<JA版>
     と同じ`show_dof_nav`（既定false）でopt-inガードし、Knowledgeの直後・LPの直前へ配置
     （JA版の「打ち出の小槌→DOF計算→Workshop」に対応する位置。英語版にはWorkshopが
-    存在しないため次はLP）。build_site.py側の"en/dof"ページだけがtrueを渡す。
-    打ち出の小槌・開発日誌・Story英語版の本番HTMLは今回意図的に再生成していない
-    （JA版のCommon Navigation DOF Consistency CASE Bと同じ理由。英語版はJA版CASE Bの
-    さらに後続として別途扱う）。このコメント自体もJinja2コメント構文にして、
-    knowledge/development-log/Story英語版の本番HTMLへ余計な差分を出さないようにしている。 #}
+    存在しないため次はLP）。追加当初は build_site.py 側の "en/dof" ページだけが true を
+    渡していたが、同日の EN CASE A / CASE B で、共通英語ナビを使う全ENページ
+    （build_site.py 管理ページは en_context / en/index、打ち出の小槌・開発日誌・Story
+    英語版は各 builder）から true を渡すようにした。現在の仕様: show_dof_nav は
+    opt-in ガード（既定 false）のままだが、共通英語ナビを使用する EN ページでは
+    builder 側から true が渡され /en/tools/dof を表示する。aria-current は
+    nav_current == "dof"（/en/tools/dof 自身）にだけ付く。このコメント自体は
+    Jinja2 コメント構文なので生成HTMLへは出ない。 #}
 
 <div class="lang-banner" id="lang-banner-en">
   🇯🇵 このサイトは日本語でもご覧いただけます —

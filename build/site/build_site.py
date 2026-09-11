@@ -122,8 +122,9 @@ def _register_page_pair(slug: str, *, ja_extra: dict | None = None, en_extra: di
         "lang_switch_url": f"/en/{slug}",
         "hreflang_alternates": hreflang,
         # header.html共通ヘッダーのDOF計算機ナビ項目（2026-09-11、common navigation統一）。
-        # build_site.py管理下の日本語ページ全体で一貫して表示する。英語版（en_context）には
-        # 渡さない（英語版DOF Calculatorがまだ存在しないため、今回のscope外）。
+        # build_site.py管理下の日本語ページ全体で一貫して表示する。英語版は当初
+        # 英語版DOF Calculatorが未公開のため対象外だったが、公開（d18ce80）後に
+        # en_context 側でも同様にtrueを渡すようにした（EN CASE A）。
         "show_dof_nav": True,
     }
     if ja_extra:
@@ -139,6 +140,10 @@ def _register_page_pair(slug: str, *, ja_extra: dict | None = None, en_extra: di
         "nav_current": slug,
         "lang_switch_url": f"/{slug}",
         "hreflang_alternates": hreflang,
+        # header_en.html共通ヘッダーのDOF Calculatorナビ項目（2026-09-11、EN CASE A）。
+        # 英語版DOF Calculator（/en/tools/dof、d18ce80）の公開に伴い、日本語側（ja_context）と
+        # 対称に英語ページ全体で表示する。
+        "show_dof_nav": True,
     }
     if en_extra:
         en_context.update(en_extra)
@@ -288,6 +293,8 @@ PAGES["en/index"] = {
         "nav_current": None,
         "enable_ogp": True,
         "hreflang_alternates": _INDEX_HREFLANG,
+        # header_en.html共通ヘッダーのDOF Calculatorナビ項目（2026-09-11、EN CASE A）。
+        "show_dof_nav": True,
         # header_en.htmlのlang_switch_url既定値は"/knowledge"（打ち出の小槌向け）のため、
         # トップページでは明示的にルート"/"を渡す必要がある。
         "lang_switch_url": "/",
