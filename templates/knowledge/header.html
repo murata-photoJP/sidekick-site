@@ -43,6 +43,14 @@
      しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
      Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
      （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+{#- 2026-09-11六度目追記: DOF Calculator（/tools/dof、Phase 1 Unit 2.2でCLOSE済み）への
+    導線が無く直接URLを知らないと到達できなかったため、打ち出の小槌の直後へ追加した。
+    英語版ページがまだ無いためheader_en.htmlには追加していない。build_knowledge.py等
+    経由の本番記事HTMLは今回意図的に再生成していない（同スクリプト冒頭に本番への
+    直接配置を行わない旨の明示ガードがあるため）ので、`show_dof_nav`（既定false）で
+    このリンクをopt-in化し、本番へ直接書き出す運用のbuild_site.py側（dof・workshop）
+    だけがtrueを渡す。このコメント自体もJinja2コメント構文にして、
+    knowledge/development-log/Story側の本番HTMLへ余計な差分を出さないようにしている。 #}
 
 {% if show_lang_banner|default(true) %}
 <div class="lang-banner" id="lang-banner">
@@ -71,6 +79,9 @@
       <a href="/portrait" {% if nav_current == "portrait" %}aria-current="page"{% endif %}>👤 Portrait</a>
       <a href="/sky-effect" {% if nav_current == "sky-effect" %}aria-current="page"{% endif %}>☁️ Sky</a>
       <a href="/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 打ち出の小槌</a>
+{%- if show_dof_nav|default(false) %}
+      <a href="/tools/dof" {% if nav_current == "dof" %}aria-current="page"{% endif %}>📐 DOF計算</a>
+{%- endif %}
       <a href="/workshop" {% if nav_current == "workshop" %}aria-current="page"{% endif %}>📷 Workshop</a>
       <a href="/lp-star" {% if nav_current == "lp-star" %}aria-current="page"{% endif %}>LP</a>
       <a href="/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>

@@ -1179,10 +1179,16 @@ def test_nav_links_present_without_js(tmp: Path) -> None:
     注意: テンプレートを文字列でカウントするため、Jinja2 の条件分岐内リンクも
     含めてカウントされる。show_en_link=False でビルドするページ（Workshopなど）では
     期待値と実際のリンク数がずれるため、このテストは適用できない。
-    打ち出の小槌は show_en_link=True（既定）なので現状は正しく動作する。"""
+    打ち出の小槌は show_en_link=True（既定）なので現状は正しく動作する。
+    2026-09-11: DOF計算機ナビ（show_dof_nav、既定false）はbuild_site.py（dof・workshop）
+    だけがtrueを渡すopt-inガード付きリンクとして追加された（打ち出の小槌・開発日誌・
+    Storyの本番HTMLを意図せず変更しないため）。打ち出の小槌ページはこのフラグを渡さず
+    既定のfalseのままなので、テンプレート文字列上は存在してもこのページには出力されない。
+    そのためexpected_countから除外する。"""
     header_tmpl = (REPO_ROOT / "templates" / "knowledge" / "header.html").read_text(encoding="utf-8")
     tmpl_nav = header_tmpl.split('id="kzc-nav-menu"')[1].split("</nav>")[0]
-    expected_count = tmpl_nav.count("<a ")
+    dof_nav_block = tmpl_nav.split("{%- if show_dof_nav|default(false) %}")[1].split("{%- endif %}")[0]
+    expected_count = tmpl_nav.count("<a ") - dof_nav_block.count("<a ")
 
     index = make_index()
     proc, output_dir = run_build(index, tmp, "--article-id", "SKB-TEST-000001")

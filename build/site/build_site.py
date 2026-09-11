@@ -50,10 +50,15 @@ PAGES: dict[str, dict] = {
         "output": Path("tools", "dof.html"),
         "context": {
             "language": "ja",
-            "nav_current": None,
+            "nav_current": "dof",
             "show_en_link": False,
             "show_lang_banner": False,
             "enable_ogp": True,
+            # header.html（打ち出の小槌・開発日誌・Storyとも共用）のDOF計算機ナビ項目は
+            # opt-inガード（既定false）。build_site.pyが本番へ直接--output .で書き出す
+            # ページ（dof・workshop）だけがtrueを渡す。他3ビルドの本番HTMLは今回
+            # 意図的に変更していない（header.html側コメント参照）。
+            "show_dof_nav": True,
         },
     },
     "workshop": {
@@ -67,6 +72,7 @@ PAGES: dict[str, dict] = {
             # EN切替リンク）は出さない。
             "show_lang_banner": False,
             "show_en_link": False,
+            "show_dof_nav": True,
         },
     },
 }
