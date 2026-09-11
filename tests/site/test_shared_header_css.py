@@ -167,3 +167,113 @@ def test_uppercase_override_does_not_leak_outside_japanese_story() -> None:
         f"kzc-story-related がStory以外のテンプレートでも使われている: {[str(p) for p in users]}"
     )
     assert users[0].parent.name == "story"
+
+
+# ---------------------------------------------------------------------------
+# site-header.css がヘッダーの配置・書体を自立して持つこと（2026-09-11、
+# Common Header Visual Consistency）
+# ---------------------------------------------------------------------------
+
+SITE_HEADER_CSS = REPO_ROOT / "assets" / "css" / "site-header.css"
+
+
+def _rule_body(css: str, selector_regex: str) -> str:
+    """指定セレクタで始まる全ルールの中身（{ } の内側）を連結して返す。空白は除去する。
+    同じセレクタのルールが複数あってもよい（.hdr は配置用と書体用に分かれている）。"""
+    bodies = re.findall(selector_regex + r"\s*\{([^}]*)\}", css)
+    assert bodies, f"site-header.css に {selector_regex!r} のルールが無い"
+    return re.sub(r"\s+", "", ";".join(bodies))
+
+
+def test_site_header_wrap_is_centered_without_page_css() -> None:
+    """`.hdr .wrap` / `.footer .wrap` が margin:0 auto を自前で持つこと。
+
+    かつては幅だけを指定し、中央寄せを各ページの inline .wrap 定義に暗黙に
+    依存していた。その定義を持たないページ（/tools/dof・AI Lab 4ページ）で
+    ヘッダーが左端に張り付いた（2026-09-11 Host Review）。
+    """
+    body = _rule_body(_read(SITE_HEADER_CSS), r"\.hdr\s+\.wrap\s*,\s*\.footer\s+\.wrap")
+    assert "margin:0auto" in body, f".hdr .wrap に margin:0 auto が無い: {body!r}"
+    assert "width:min(1100px" in body, f".hdr .wrap の 1100px 幅指定が失われている: {body!r}"
+
+
+def test_site_header_declares_its_own_typography() -> None:
+    """`.hdr` が line-height と font-family を自前で持つこと。
+
+    ページ側 body が line-height 未指定・別フォントスタックだと、ロゴ・ナビが
+    他ページより詰まって見えた（同上）。行間は打ち出の小槌（knowledge.css の
+    body）と同じ値に揃える。フォントスタックの全文は固定しない。
+    """
+    css = _read(SITE_HEADER_CSS)
+    body = _rule_body(css, r"(?m)^\.hdr")
+    assert "line-height:1.75" in body, f".hdr に line-height:1.75 が無い: {body!r}"
+    assert "font-family:" in body, f".hdr に font-family が無い: {body!r}"
+    # 本文（body）の書体には手を出していないこと
+    assert not re.search(r"(?m)^body\s*\{", css), "site-header.css が body の書体を定義している（本文へ影響する）"
+
+
+# ---------------------------------------------------------------------------
+# site-header.css がページ側の global ルール・:root 変数に依存しないこと
+# （2026-09-11、Common Header Self-Containment）
+# ---------------------------------------------------------------------------
+
+def _header_section(css: str) -> str:
+    """フッター節より前（ヘッダー節）だけを返す。"""
+    return css.split("---------- Footer ----------")[0]
+
+
+def test_site_header_links_are_reset_within_header_only() -> None:
+    """ヘッダー内リンクのリセットが .hdr にスコープされ、global の a{} は置かないこと。
+
+    AI Lab 4ページには a のリセットが無く、ブランド名が UA 既定の青＋下線になっていた。
+    knowledge.css は global の a{} でこれを避けているが、site-header.css は他ページの本文へ
+    影響しないよう global ルールを置かない方針（ファイル冒頭コメント参照）。
+    """
+    css = _read(SITE_HEADER_CSS)
+    body = _rule_body(css, r"(?m)^\.hdr\s+a")
+    assert "color:inherit" in body, f".hdr a に color:inherit が無い: {body!r}"
+    assert "text-decoration:none" in body, f".hdr a に text-decoration:none が無い: {body!r}"
+    assert not re.search(r"(?m)^(a|body|html|\*)\s*[{,]", css), (
+        "site-header.css に global セレクタ（a / body / html / *）のルールがある"
+    )
+
+
+def test_site_header_reset_precedes_nav_link_color_rule() -> None:
+    """`.hdr a{color:inherit}` が `.nav a{color:...}` より前にあること。
+
+    両者は同じ詳細度（0,1,1）なので、順序が逆になるとナビの色が inherit に負けて
+    canonical の --sub ではなく本文の文字色になる。
+    """
+    css = _read(SITE_HEADER_CSS)
+    i_reset = css.find(".hdr a{")
+    i_nav = re.search(r"(?m)^\.nav a\{", css).start()
+    assert 0 <= i_reset < i_nav, "`.hdr a` のリセットが `.nav a` より後ろにある"
+
+
+def test_site_header_declares_canonical_palette_on_hdr() -> None:
+    """ヘッダーが使う CSS 変数を .hdr 自身で宣言していること。
+
+    ページ側 :root が同名変数を別の値で定義しても（/workshop、/tools/dof の
+    dof-calculator.css）、ヘッダー内では canonical 値になる。ページ本文の変数には
+    及ばない（.hdr の子孫にしか効かない）。値そのものは固定しない。
+    """
+    body = _rule_body(_read(SITE_HEADER_CSS), r"(?m)^\.hdr")
+    for var in ("--text", "--sub", "--muted", "--accent", "--accent2", "--line"):
+        assert re.search(var + r":#[0-9a-fA-F]{6,8};", body), f".hdr に {var} の宣言が無い"
+
+
+def test_site_header_section_has_no_bare_var_references() -> None:
+    """ヘッダー節の var() が、.hdr で宣言済みの変数か fallback 付きであること。
+
+    どちらも無い var() は、ページ側 :root に依存する（未定義なら値が無効になる）。
+    """
+    css = _read(SITE_HEADER_CSS)
+    declared = set(re.findall(r"(--[a-z0-9-]+):#[0-9a-fA-F]{6,8};", _rule_body(css, r"(?m)^\.hdr")))
+    bare = []
+    for line in _header_section(css).splitlines():
+        if line.lstrip().startswith(("/*", "*", "//")) or "*/" in line and "{" not in line and ";" not in line:
+            continue
+        for m in re.finditer(r"var\((--[a-z0-9-]+)(,[^)]*)?\)", line):
+            if m.group(1) not in declared and not m.group(2):
+                bare.append(line.strip())
+    assert not bare, f"ヘッダー節に宣言も fallback も無い var() がある: {bare}"
