@@ -2,3 +2,6 @@
 -r requirements-build.txt
 pytest==9.1.1
 requests==2.34.2
+# tools/optimize_images.py（配信画像の最適化）とそのテストが使う。
+# 2026-09-12 追加。無いと tests/tools/test_optimize_images.py が skip される。
+Pillow==12.2.0

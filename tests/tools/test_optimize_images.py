@@ -5,7 +5,7 @@
 「Adobe RGB → sRGB 変換」「縮小」「EXIF 除去」「規約内なら触らない」
 「--in-place は退避してから上書き」を固定する。
 
-Pillow が無い環境（.venv）では skip する。py -3.10 で実行すると走る。
+Pillow は requirements-test.txt に固定済み（2026-09-12）。万一無い環境では skip する。
 """
 
 from __future__ import annotations

@@ -34,16 +34,16 @@
 --------------------------------------------------------------------
 使い方
 --------------------------------------------------------------------
-Pillow が必要（.venv には入っていない。py -3.10 には入っている）。
+Pillow が必要（requirements-test.txt に固定済み。.venv / py -3.10 どちらでも動く）。
 
     # 何が起きるかを見るだけ（既定。ファイルは一切書かない）
-    py -3.10 tools/optimize_images.py images/SkyEffects
+    .\\.venv\\Scripts\\python.exe tools/optimize_images.py images/SkyEffects
 
     # 別ディレクトリへ出力（元ファイルは無変更）
-    py -3.10 tools/optimize_images.py images/SkyEffects --out build-output/opt
+    .\\.venv\\Scripts\\python.exe tools/optimize_images.py images/SkyEffects --out build-output/opt
 
     # その場で置き換える。必ず --backup が要る（退避→SHA-256 検証→上書き）
-    py -3.10 tools/optimize_images.py images/SkyEffects --in-place \\
+    .\\.venv\\Scripts\\python.exe tools/optimize_images.py images/SkyEffects --in-place \\
         --backup "../html_未追跡素材_退避/images_original_YYYY-MM-DD"
 
 パスは html/ 直下からの相対でも絶対でも可。ディレクトリを渡すと再帰する。
@@ -65,7 +65,7 @@ from pathlib import Path
 try:
     from PIL import Image, ImageCms
 except ImportError:  # pragma: no cover
-    sys.exit("Pillow が必要です: py -3.10 -m pip install Pillow （.venv ではなく py -3.10 で実行）")
+    sys.exit("Pillow が必要です: .venv なら  .\\.venv\\Scripts\\python.exe -m pip install -r requirements-test.txt")
 
 HTML_ROOT = Path(__file__).resolve().parent.parent
 JPEG_SUFFIXES = {".jpg", ".jpeg"}
