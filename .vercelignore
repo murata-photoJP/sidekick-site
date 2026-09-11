@@ -30,8 +30,10 @@ images/PhotoAdvice/20190524_084623_0181892_-1.0.jpeg
 images/PhotoAdvice/20220430_011452_783_0.0.jpg
 images/PhotoAdvice/統合_20190522_193914_0175617_0_DxO.jpg
 
-# Star LP の素材原本（未参照・8.6MB）
+# Star の作業ファイル（未参照）。sky_orj = 富士山の原本 8.6MB、sky = その空マスク 1.9MB。
+# 2026-08-23 の「未追跡ファイルを整理」で巻き込まれたもの。Web で使っているのは web_*.jpg。
 images/Star/sky_orj.jpg
+images/Star/sky.jpg
 
 # --- 開発・運用ファイル（配信不要・内部情報） ---------------
 # Vercel はビルドを行わず、ローカルで生成済みの HTML をそのまま配信する
