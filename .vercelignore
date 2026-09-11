@@ -32,3 +32,26 @@ images/PhotoAdvice/統合_20190522_193914_0175617_0_DxO.jpg
 
 # Star LP の素材原本（未参照・8.6MB）
 images/Star/sky_orj.jpg
+
+# --- 開発・運用ファイル（配信不要・内部情報） ---------------
+# Vercel はビルドを行わず、ローカルで生成済みの HTML をそのまま配信する
+# （docs/DEPLOY_CHECKLIST.md）。テンプレート・ビルドスクリプト・テスト・
+# 記事原稿・内部ドキュメント・運用スクリプトは Web に出す必要が無い。
+# 2026-09-12 時点で、これらへの参照が公開 HTML/JS/CSS に無いことを確認済み
+# （knowledge.css のコメント内と、外部サイト URL の /docs/ は除く）。
+#
+# ★ 除外してはいけないもの（公開物）:
+#    development-log/  story/  knowledge/  sidekick_manual_package/  FAA/
+#    api/（Serverless Functions）  package.json（api/ の依存定義）
+# ★ tools/ には公開ページ dof.html が同居しているため、.py だけを除外する。
+
+BackUp/
+build/
+content/
+data/
+docs/
+templates/
+tests/
+tools/*.py
+requirements-build.txt
+requirements-test.txt
