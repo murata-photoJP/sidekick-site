@@ -11,7 +11,7 @@ def test_dof_page_has_required_inputs_and_results():
 def test_dof_page_has_progressive_disclosures_and_accessibility():
     page=html();assert 'id="dof-curve-disclosure"' in page;assert 'id="dof-assumptions"' in page;assert 'aria-live="polite"' in page;assert page.count("<h1") == 1
 def test_dof_page_links_scoped_assets():
-    page=html();assert '/assets/css/dof-calculator.css?v=5' in page;assert 'type="module" src="/assets/js/dof/calculator-ui.mjs?v=5"' in page
+    page=html();assert '/assets/css/dof-calculator.css?v=6' in page;assert 'type="module" src="/assets/js/dof/calculator-ui.mjs?v=6"' in page
 def test_dof_page_separates_url_warning_and_form_validation():
     page=html();assert 'id="dof-url-warning" role="status"' in page;assert 'id="dof-form-error" role="alert"' in page;assert 'id="dof-sensor-error"' in page
 def test_dof_page_explains_criterion_and_shows_effective_value():
@@ -29,12 +29,12 @@ def test_dof_page_has_previous_input_and_result_delta_semantics():
 def test_dof_comparison_controller_preserves_invalid_history_and_auto_calculates():
     script=(ROOT/'assets/js/dof/calculator-ui.mjs').read_text(encoding='utf-8')
     assert 'history=advanceComparison(history,record(value,result))' in script
-    assert 'catch(error){showError(error);updateInputComparison();}' in script
+    assert 'catch(error){showError(error);updateInputComparison();return false;}' in script
     # F-numberプリセットは値更新と同時にその場でcalculate()する（「計算する」ボタンを介さない）
     assert 'button.dataset.fnumber;noteDraftChange();calculate();' in script
     # numeric input/selectはchangeで確定計算し、submitはpreventDefaultのみ（ページ遷移防止の保険）でcalculate()を呼ばない
     assert 'form.addEventListener("submit",e=>{e.preventDefault();});' in script
-    assert 'toggleOptional();noteDraftChange();calculate();' in script
+    assert 'toggleOptional();noteDraftChange();const ok=calculate();' in script
     # 同一値での再確定はhistoryを二重advanceしない（Enterとchangeの重複発火・同じpresetの連打を安全にする）
     assert 'changedInputKeys(history.current.inputSnapshot,inputSnapshot()).length===0' in script
 def test_dof_page_has_no_explicit_calculate_button():
@@ -44,3 +44,27 @@ def test_dof_page_has_no_explicit_calculate_button():
     assert 'type="submit"' not in page
     css=(ROOT/'assets/css/dof-calculator.css').read_text(encoding='utf-8')
     assert 'dof-button' not in css
+def test_dof_sensor_explainer_dialog_present_and_worded_neutrally():
+    page=html()
+    assert '<dialog class="dof-explainer" id="dof-sensor-explainer" aria-labelledby="dof-sensor-explainer-title">' in page
+    assert 'id="dof-sensor-explainer-title">センサーサイズを変更しました</h2>' in page
+    assert 'Traditional 30 µm（固定値）' in page
+    assert '被写界深度の計算結果は変わりません' in page
+    assert 'センサー対角線 ÷ 1500' in page
+    assert '<form method="dialog"><button autofocus>OK</button></form>' in page
+    # 否定的・エラー的な表現をしないこと（既存仕様の明示的な禁止事項）
+    for forbidden in ['計算されていません', 'エラーです', '不適切です']:
+        assert forbidden not in page
+def test_dof_sensor_explainer_shows_once_per_session_only_for_traditional_criterion():
+    script=(ROOT/'assets/js/dof/calculator-ui.mjs').read_text(encoding='utf-8')
+    assert 'let sensorExplainerShown=false;' in script
+    assert 'function maybeShowSensorExplainer(){if(sensorExplainerShown||$("dof-criterion").value!=="traditional_ff_0030")return;sensorExplainerShown=true;$("dof-sensor-explainer").showModal();}' in script
+    # sensor changeでcalculate()が成功した場合だけ判定する（invalid custom sensor等では出さない）
+    assert 'const sensorChanged=e.target===$("dof-sensor");' in script
+    assert 'if(sensorChanged&&ok)maybeShowSensorExplainer();' in script
+    # localStorage/sessionStorage/cookieを使わず、in-memoryのみで保持する
+    assert 'localStorage' not in script
+    assert 'sessionStorage' not in script
+    assert 'document.cookie' not in script
+    # ダイアログを閉じたらsensor selectへフォーカスを戻す
+    assert '$("dof-sensor-explainer").addEventListener("close",()=>{$("dof-sensor").focus();});' in script

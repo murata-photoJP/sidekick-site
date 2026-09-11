@@ -2,7 +2,7 @@
 {% block title %}被写界深度計算 | Sidekick Lab{% endblock %}
 {% block meta_description %}焦点距離、F値、ピント距離、許容錯乱円から被写界深度を計算し、ボケの連続的な変化を確認できます。{% endblock %}
 {% block canonical %}https://www.sidekick-lab.com/tools/dof{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=5">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=6">{% endblock %}
 {% block content %}
 <main class="dof-page" id="main-content">
   <header class="dof-intro">
@@ -44,6 +44,14 @@
     <p class="dof-error" id="dof-form-error" role="alert" hidden></p>
   </form>
 
+  <dialog class="dof-explainer" id="dof-sensor-explainer" aria-labelledby="dof-sensor-explainer-title">
+    <h2 id="dof-sensor-explainer-title">センサーサイズを変更しました</h2>
+    <p>現在の許容錯乱円は「Traditional 30 µm（固定値）」です。</p>
+    <p>この基準では、センサーサイズを変更しても許容錯乱円は30 µmのままなので、被写界深度の計算結果は変わりません。</p>
+    <p>センサーサイズに応じて許容錯乱円を変える場合は、「センサー対角線 ÷ 1500」を選択してください。</p>
+    <form method="dialog"><button autofocus>OK</button></form>
+  </dialog>
+
   <section class="dof-panel" aria-labelledby="dof-results-title"><h2 id="dof-results-title">計算結果</h2>
     <div class="dof-results" id="dof-results" aria-live="polite" aria-atomic="false">
       <div><span>近点</span><strong id="dof-near">—</strong><small class="dof-result-delta" id="dof-near-delta" hidden></small></div><div><span>ピント位置</span><strong id="dof-focus-result">—</strong><small class="dof-result-delta" id="dof-focus-result-delta" hidden></small></div><div><span>遠点</span><strong id="dof-far">—</strong><small class="dof-result-delta" id="dof-far-delta" hidden></small></div>
@@ -64,4 +72,4 @@
   </details>
 </main>
 {% endblock %}
-{% block extra_body_end %}<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=5"></script>{% endblock %}
+{% block extra_body_end %}<script type="module" src="/assets/js/dof/calculator-ui.mjs?v=6"></script>{% endblock %}

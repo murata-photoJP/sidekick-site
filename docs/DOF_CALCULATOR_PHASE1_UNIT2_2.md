@@ -22,7 +22,13 @@ The explicit “計算する” (Calculate) submit button was removed. This is a
 - A calculation is skipped (no history advance, no delta) when the confirmed input snapshot is identical to the last successful calculation’s snapshot. This both satisfies the “same value → no noisy zero delta” rule and makes any redundant double-fire (e.g. `change` and the Enter fallback landing on the same confirmed value) safe — the second call is a no-op rather than a duplicate history advance.
 - Invalid confirmed values still run through the unchanged validation/error path; the last valid result and comparison history are preserved.
 
-## Failure and infinity rules
+### Traditional 30 µm sensor-change explainer (2026-09-11 Host Review fix)
+
+Host Review confirmed that switching Sensor Format while Criterion is still “Traditional 30 µm” correctly recalculates (the “前回” marker and comparison history advance normally), but near/far/DOF/hyperfocal are unchanged — this is mathematically correct, since that criterion is format-independent, not a stalled calculation. Because this reads as “nothing happened” to a first-time user, a small `<dialog id="dof-sensor-explainer">` explains it in place, without touching calculation timing or the comparison model above.
+
+- Shown once per page load, only when: the sensor `<select>` fires `change`, the resulting `calculate()` succeeds, and Criterion is still `traditional_ff_0030`. An in-memory flag (`sensorExplainerShown`) suppresses repeats for the rest of the session; no localStorage/sessionStorage/cookie is used, so a reload allows it again.
+- Uses the native `<dialog>` + `showModal()` (Escape-to-close, focus placement, and top-layer stacking come from the platform, not custom JS); an inner `<form method="dialog">` closes it on OK without extra script. Closing returns focus to the sensor `<select>`.
+- Selecting “センサー対角線 ÷ 1500” never shows it, and sensor changes under that criterion continue to recalculate CoC/DOF as before.
 
 - Invalid input displays validation feedback without clearing or advancing the last successful previous/current pair.
 - Finite-to-infinity and infinity-to-finite far limits are state transitions, not numeric subtraction.
