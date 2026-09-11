@@ -8,3 +8,10 @@ export function formatDistance(mm){
 export function formatCriterionMicrometers(valueMm){
   return `${(valueMm*1000).toFixed(1)} µm`;
 }
+
+export function formatDistanceDelta(deltaMm){
+  const direction=deltaMm>0?"増加":"減少";
+  const arrow=deltaMm>0?"↑":"↓";
+  const value=formatDistance(Math.abs(deltaMm));
+  return {text:`${arrow} ${value}`,label:`${direction} ${value}`};
+}
