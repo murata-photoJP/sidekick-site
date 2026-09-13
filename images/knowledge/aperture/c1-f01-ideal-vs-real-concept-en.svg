@@ -67,17 +67,17 @@
 <circle cx="174.2" cy="290.1" r="11" fill="none" stroke="#eef1f8" stroke-width="3"/>
 <text x="192.2" y="254.1" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">Peak under this model condition</text>
 <text x="192.2" y="284.1" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">(aberration improvement vs. diffraction penalty)</text>
-<text x="335.2" y="185.2" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">A  Fraction retained after aberration</text>
+<text x="335.2" y="185.2" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">A Fraction retained after aberration</text>
 <text x="335.2" y="215.2" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">(higher = less aberration loss)</text>
-<text x="248.4" y="330.0" fill="#8c96aa" font-size="20" font-weight="700" text-anchor="start">D  Diffraction limit (zero aberration): falls as you stop down</text>
-<text x="107.5" y="513.5" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">T  Combined resolution (aberration + diffraction)</text>
+<text x="248.4" y="330.0" fill="#8c96aa" font-size="24" font-weight="700" text-anchor="start">D Diffraction limit (zero aberration): keeps falling</text>
+<text x="107.5" y="513.5" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">T Combined resolution (aberration + diffraction)</text>
 <text x="107.5" y="547.9" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Low wide open because of aberration</text>
 <text x="764.0" y="377.9" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">Aberration improvement nearly complete →</text>
 <text x="764.0" y="406.2" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="end">From here on, falls along the diffraction limit</text>
 <rect x="30" y="660" width="755" height="152" rx="8" fill="#14161d" stroke="#8c96aa" stroke-width="1.5"/>
 <text x="46.0" y="694.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">MODEL RESULT / Synthetic spherical-aberration model</text>
-<text x="46.0" y="728.0" fill="#eef1f8" font-size="23" font-weight="500" text-anchor="start">Conditions: 2 waves of aberration, f/1.4-equivalent wide open, 550 nm</text>
+<text x="46.0" y="728.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">2 waves of aberration, f/1.4-equivalent wide open, 550 nm</text>
 <text x="46.0" y="762.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">Not a measurement of a real lens. T = A × D (product)</text>
-<text x="46.0" y="796.0" fill="#8c96aa" font-size="19" font-weight="500" text-anchor="start">Diffraction is present from wide open; the limit falls continuously as you stop down</text>
+<text x="46.0" y="796.0" fill="#8c96aa" font-size="25" font-weight="500" text-anchor="start">Diffraction is present wide open; its limit falls as you stop down</text>
 </g>
 </svg>
