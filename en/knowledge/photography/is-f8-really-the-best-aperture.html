@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Is f/8 Really the “Best” Aperture? | Knowledge - Sidekick</title>
+<meta name="description" content="Is f/8 really the best aperture? About 50 years after my father told me to “shoot at f/8,” I revisited the rule through optical theory, real-lens measurements and an aberration model. I found no evidence for a universal f/8 — yet I still use it when I have no reason to choose otherwise.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/is-f8-really-the-best-aperture">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/f8-best-aperture">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/is-f8-really-the-best-aperture">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/f8-best-aperture">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/f8-best-aperture" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Is f/8 Really the “Best” Aperture?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Is f/8 Really the “Best” Aperture?</h1>
+    <p class="kzc-article-lead">Is f/8 really the best aperture? About 50 years after my father told me to “shoot at f/8,” I revisited the rule through optical theory, real-lens measurements and an aberration model. I found no evidence for a universal f/8 — yet I still use it when I have no reason to choose otherwise.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-13">Updated: 2026-09-13</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Fifty years later, I looked into the aperture my father taught me.</p>
+<p>The first time I took photographs with an SLR was around 1977–78, when I was in the second year of junior high.</p>
+<p>It wasn't my camera. I was borrowing my father's. As I remember it, it was a Nikon EM, a small aperture-priority AE SLR, loaded with ISO 100 film. I'd take it along to school events and family trips — that kind of use.</p>
+<p>What my father taught me about shooting came down to almost a single sentence.</p>
+<p><strong>“Shoot at f/8. On rainy or cloudy days, f/5.6, because the camera shakes more easily.”</strong></p>
+<p>I never asked why. Or rather, at the time it never occurred to me to wonder why. I just shot at f/8, as I'd been told.</p>
+<p>There's one thing I want to make clear here.</p>
+<p>I have no memory of my father ever explaining that “f/8 is the aperture where a lens performs best.” He loved cameras, but as far as I can recall, he almost never talked about lens performance.</p>
+<p>So for me, f/8 started out as a number whose reason I didn't know.</p>
+<p>That was about 50 years ago.</p>
+<p>I've been photographing continuously ever since, and I've used lenses on the order of several hundred. And now that AI has made this kind of investigation possible for me, I decided to go back and look into it properly.</p>
+<p><strong>“Is f/8 really the aperture that gives the best image?”</strong></p>
+<p>Let me say up front that this article doesn't conclude that my father's advice was right, or that it was wrong. He never gave a reason in the first place, so there's nothing to evaluate.</p>
+<p>But once I started looking, the story around this number, f/8, turned out to be far more interesting than I had expected.</p>
+<h2>“f/8” and “Two to Three Stops Down” Aren't Just My Story</h2>
+<p>I bought my own camera as an adult, around 1986. At first the motive was no more than “I'm going on a trip with friends.”</p>
+<p>By around 1990, though, I was heading out with photography itself as the goal — “I have a camera, so I might as well go shoot in Kamikochi.” I added lenses little by little, read photography magazines, had long conversations at camera shops, and collected Nikon lens catalogs to pore over.</p>
+<p>It was probably around then that I came across the idea that “a lens gives its best image when stopped down two to three stops from wide open.”</p>
+<p>Was it a magazine? A camera-shop clerk? A catalog? Honestly, I don't remember where I first saw or heard it. But in the photographic culture of the time, it was simply common knowledge in circulation.</p>
+<p>It still is. For example, <a href="https://www.imatest.com/imaging/diffraction-and-optimum-aperture/" title="Imatest: Diffraction, Optimum Aperture, and Defocus">the technical documentation of a lens-measurement software maker</a> contains a statement to the effect that a lens tends to have its optimum aperture typically around two to three stops below its maximum aperture. For an f/1.4 lens that means f/2.8–f/4; for an f/4 zoom, f/8–f/11. “Two to three stops” and “f/8” are numbers that often turn up side by side in the same conversation.</p>
+<p>I'll confess, though, that back in 1990 I didn't care much about a lens's “performance.”</p>
+<p>What I cared about was mostly the amount of background blur I could get from the maximum aperture. I almost never went hunting for the optimum aperture — “does this lens resolve best at f/5.6 or f/8?” f/8 was simply the aperture I used when there was no particular reason to use anything else, and somewhere along the way it became second nature.</p>
+<h2>What Does “Best” Actually Mean?</h2>
+<p>Before going further, there's something we need to sort out.</p>
+<p>What does “gives the best image” actually mean?</p>
+<p>When you think about it, when we say a photograph “looks good,” we're using one phrase for quite a few different things:</p>
+<ul>
+<li>how finely detail is rendered on the plane you focused on (resolution)</li>
+<li>whether everything from foreground to background that needs to be in focus is in focus (<a href="/en/tools/dof">depth of field</a>)</li>
+<li>how much the background blurs, and how</li>
+<li>whether you can get a shutter speed that avoids camera shake and motion blur</li>
+<li>how the image looks in print or on screen</li>
+<li>and whether it's the photograph you wanted to make</li>
+</ul>
+<p>When people say “f/8 gives the best image” or “stopping down two to three stops gives the best image,” they mean the first of these: <strong>how finely detail is rendered on the plane of focus.</strong></p>
+<p>In this article, that's the sense of “best” I'll investigate first. I'll come back to the other senses in the second half.</p>
+<h2>An Ideal Lens With No Aberrations Is Best Wide Open</h2>
+<p>This may sound surprising, but it's the clearest place to start.</p>
+<p>Lenses have “aberrations,” which arise from their design and manufacture. I'd long known, as theory, how aperture relates to image quality, and I knew the words aberration and diffraction. But that knowledge stayed conceptual, and this time I ended up working through it step by step.</p>
+<p>Suppose, hypothetically, we had an ideal lens with no aberrations whatsoever.</p>
+<p>With that lens, the rendering of fine detail on the plane of focus <strong>is best wide open, and gets a little worse the further you stop down.</strong></p>
+<p>The reason is “diffraction.” When light passes through the aperture opening, it spreads slightly. No lens, however superb, can avoid this, and the smaller the opening, the greater the spread. There's no threshold where diffraction “starts at f/11” — it's happening at f/1.4, and it's happening at f/32. It just grows as you stop down.</p>
+<p>Calculate this ideal lens and you get a single, gently falling curve. f/8 is merely one point along it. There's nothing special anywhere.</p>
+<p>In other words, <strong>in an ideal lens, the phenomenon of “getting a little better when you stop down” simply doesn't exist.</strong></p>
+<p>And the values for this ideal lens are the “upper bound” for any real lens. At the same aperture, no real lens renders finer detail than this.</p>
+<h2>But a Real Lens Can Be Soft Wide Open</h2>
+<p>So why do people say that stopping down improves things?</p>
+<p>Because a real lens is not an ideal lens.</p>
+<p>In a real lens, aberrations can limit the rendering on the plane of focus near maximum aperture. <a href="https://lenspire.zeiss.com/photo/app/uploads/2022/02/technical-article-how-to-read-mtf-curves-01.pdf" title="H. H. Nasse (ZEISS), How to Read MTF Curves? Part I, 2008 (PDF, p. 8)">ZEISS's technical documentation</a>, for example, shows a 50mm lens whose measured resolution figures rise substantially across the board when stopped down from f/2 to f/5.6, and <a href="https://lenspire.zeiss.com/photo/app/uploads/2018/04/CLN_MTF_Kurven_2_en.pdf" title="H. H. Nasse (ZEISS), How to Read MTF Curves? Part II, 2009 (PDF, page II/25: f/8 optimum; II/28: f/11 in actual photographs)">measurements of an 85mm f/1.4 lens (Planar 1.4/85)</a> in which the highest figures came at f/8, falling off again the further the lens was stopped down beyond that.</p>
+<p>Because examples like these exist, many people have the experience that “wide open is soft, stopping down makes it better.”</p>
+<p>But it's “can be,” not “always is.” The amount and kind of aberration differ from design to design, and <a href="https://www.lensrentals.com/blog/2015/06/measuring-lens-variance/" title="Lensrentals: Measuring Lens Variance (2015)">copy-to-copy variation has been reported even within the same model</a>.</p>
+<h2>Why Stopping Down Helps</h2>
+<p>Stopping down means using only the light that passes near the center of the lens and discarding the light that passes through the outer zone.</p>
+<p>Most lens aberrations grow larger the further out the light passes through the lens. So when you stop down and cut off the outer zone, the influence of aberration decreases. A point that smeared wide open tightens up when you stop down. That, roughly, is the mechanism behind “stopping down makes it better.”</p>
+<p>But <strong>stopping down does not make aberrations disappear.</strong></p>
+<p>What decreases is the influence of aberrations concentrated in the outer zone. Some aberrations, such as distortion and lateral chromatic aberration, barely change no matter how far you stop down.</p>
+<h2>The Price: Diffraction Keeps Growing as You Stop Down</h2>
+<p>Here the ideal-lens story comes back. While stopping down reduces the influence of aberration, the spread caused by diffraction keeps growing the further you stop down. The influence of aberration falls off quickly once the outer zone is cut off, but diffraction keeps increasing without end. So as you keep stopping down, at some point the effect of “growing diffraction” overtakes the effect of “shrinking aberration.”</p>
+<p>From there on, the further you stop down, the worse the image gets. What happens when you stop down to f/16 or f/22, and how to weigh that against depth of field, are topics I plan to cover in a separate article. For now, just hold on to this: the further you stop down, the more diffraction grows.</p>
+<h2>So a Peak Can Appear in Between — But Its Position Isn't Fixed</h2>
+<p>Aberration on the wide-open side, diffraction on the stopped-down side.</p>
+<p>Where these two effects collide, a “peak” in the rendering of the plane of focus can appear. The rules of thumb — “stop down two to three stops for the best image,” “f/8 is best” — are talking about this peak.</p>
+<p><img src="/images/knowledge/aperture/c1-f01-ideal-vs-real-concept-en.svg" alt="A single chart of the results of a synthetic spherical-aberration model. Horizontal axis: aperture (f/1.4 to f/32); vertical axis: resolution relative to the diffraction limit wide open = 100%. D (diffraction limit, zero aberration) is a gray dashed line falling continuously from 100% wide open as the lens is stopped down. A (fraction retained after aberration) is a white dotted line, low wide open, rising as the lens is stopped down and reaching nearly 100% around f/2.8. T (combined resolution, aberration + diffraction) is an orange solid line: low wide open because of aberration, peaking partway, then falling along the diffraction limit. The peak is marked “Peak under this model condition (aberration improvement vs. diffraction penalty).” Headings at the top read “Aberration improvement dominates / Diffraction dominates.” The figure is labeled “MODEL RESULT / Synthetic spherical-aberration model / 2 waves of aberration, f/1.4-equivalent wide open, 550 nm / Not a measurement of a real lens. T = A × D (product) / Diffraction is present wide open; its limit falls as you stop down.”" /></p>
+<p>Fig. 1: Why a “best-performing zone” can appear partway through the aperture range. The three curves were calculated with the same synthetic spherical-aberration model as Fig. 2 (2 waves of aberration, in units of wavelength; f/1.4-equivalent wide open; 550 nm), shown relative to the diffraction limit wide open = 100%. D (the diffraction limit) is the upper bound of an ideal lens with zero aberration; diffraction is present from wide open and the limit falls continuously as you stop down (it doesn't “start” anywhere). A (the fraction retained after aberration) is the ratio of what remains relative to the diffraction limit at the same aperture: low wide open, rising as you stop down. T (combined resolution) is their product, T = A × D: wide open, aberration limits performance; at small apertures, diffraction does; and in between, where aberration improvement and the diffraction penalty compete, T peaks. Once the aberration improvement is essentially complete, T simply falls along the diffraction limit. <strong>This figure is a model calculation, not a measurement of a real lens. The peak position is specific to these model conditions and moves with the amount and type of aberration (Fig. 2). Nor does the crossing point of A and D mean the optimum aperture.</strong> “Aberration” here means aberrations whose effect can decrease when you stop down (it does not include distortion or lateral chromatic aberration, which don't change with aperture). Note: focal length itself is not a variable in this model. The ideal diffraction limit does not depend directly on focal length at the same wavelength and effective f-number. Real lenses differ in optical design and in the type and amount of aberration, so the combined curve and the aperture at which it peaks can differ.</p>
+<p>I myself had assumed that diffraction was something that suddenly got worse beyond a certain point. Looking at these three lines, that wasn't the case. The diffraction limit falls continuously from wide open, and even after the aberration improvement is essentially complete, resolution keeps slipping, bit by bit, the further you stop down.</p>
+<p>Looking at this, I think: stopping down without a photographic reason is a loss.</p>
+<p>Of course, if I need depth of field, I stop down; if I want a slow shutter, I stop down. If the photograph I want has a reason, that reason comes first. How I actually decide on an aperture is something I'll come back to in the second half.</p>
+<p>The question is <strong>where</strong> that peak appears.</p>
+<p>This time, using a synthetic model that assumes only one representative aberration — spherical aberration — with an f/1.4-equivalent maximum aperture, I calculated the position of the peak while varying the amount of aberration. This is not a measurement of a real lens; it's a hypothetical calculation of “what if there were this much aberration.”</p>
+<p>The result: the peak didn't settle in one place. As the amount of aberration changes, the peak moves anywhere from wide open itself to two stops down from wide open. It also shifts depending on whether you refocus as you stop down, and on what you use as your yardstick for “best.” And within the range of synthetic-model conditions I tested, there was no condition under which f/8 was the peak.</p>
+<p>To be clear, this is the result of a synthetic model, not a statement about real lenses. Real lenses have all sorts of aberrations that aren't in the model, and their maximum aperture isn't necessarily f/1.4. As with the ZEISS 85mm above, there are measured examples where the peak came at f/8, five stops down from wide open. The very existence of such examples shows that the peak's position can't be pinned to a single place.</p>
+<p><img src="/images/knowledge/aperture/c1-f02-synthetic-peak-moves-en.svg" alt="A chart from a synthetic model assuming spherical aberration only, showing MTF50 at each aperture for aberration amounts of 0, 0.25, 0.5, 1 and 2 (in units of wavelength). As the amount of aberration increases, the values wide open fall and the peak moves from wide open toward around f/2, in the direction of smaller apertures. A vertical guide line marks f/8, but none of the curves peaks at f/8. The figure is labeled “MODEL RESULT / Synthetic spherical-aberration model / Not a measurement of a real lens.”" /></p>
+<p>Fig. 2: Fine detail at the plane of focus (MTF50) versus aperture, calculated with the synthetic model. Spherical aberration only, f/1.4-equivalent wide open, 550 nm, refocused at every aperture (the best focus position for each amount of aberration). The orange dots mark the peak of each curve. <strong>Within the range of synthetic-model conditions tested here, there was no condition under which f/8 was the peak.</strong> That does not mean, however, that f/8 can never be the peak for real lenses in general. <strong>This figure is a model calculation, not a measurement of a real lens.</strong></p>
+<p>To put it another way:</p>
+<p><strong>A peak can exist. But where it falls moves with the amount of aberration in the lens, how you focus, and what you use as the yardstick for “best.”</strong></p>
+<h2>“Two to Three Stops” Is a Tendency. “f/8” Can't Be Pinned Down</h2>
+<p>With all that in hand, let's look again at the two pieces of common knowledge from the beginning.</p>
+<p>First, “a lens gives its best image when stopped down two to three stops from wide open.”</p>
+<p>This is a rule of thumb that technical documents state with the word “typically.” In a lens where aberration dominates on the wide-open side, the peak appears somewhere after stopping down a little, so it's a tendency with a reason behind it.</p>
+<p>But it isn't a law. In an ideal lens, the “number of stops” doesn't even exist; in a real lens, the peak moves with the amount of aberration and with your yardstick. “Two to three stops” is a rough guide that points somewhere within that moving range, not a rule that applies to every lens.</p>
+<p>Next, “f/8 gives the best image.”</p>
+<p>When and where the “f/8” rule of thumb became generalized is something this investigation couldn't establish. The only concrete measured example I could confirm was the ZEISS 85mm introduced above. And in that document, when actual photographs were compared side by side, the best was f/11 — and it also says that “the differences are not as large as the shape of the curves might suggest.” Even on the same lens, “best” shifts depending on what you judge it by.</p>
+<p>In other words, <strong>I found no evidence to support an “f/8 gives the best image” that applies to every lens and every condition.</strong></p>
+<p>But this, too, needs to be stated precisely.</p>
+<p>What I didn't find was a universal basis — one that “applies to every lens.” On a particular lens under particular conditions, f/8 can of course be the peak. For the measured example I was able to confirm, at least, one can say “on that lens, it was f/8.” But that's a statement about “that lens,” and it doesn't provide grounds for extending it to “every lens.”</p>
+<p>Table 1: “How many stops down is best?” has no single answer until you fix the conditions</p>
+<table>
+<thead>
+<tr>
+<th>Lens / source</th>
+<th>What counted as “best”</th>
+<th>Result</th>
+<th>Nature of the evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ideal lens with no aberrations</td>
+<td>Fine detail at the plane of focus (MTF50, 550 nm)</td>
+<td>Best wide open (0 stops down). Falls as you stop down</td>
+<td>Calculated value</td>
+</tr>
+<tr>
+<td>Synthetic spherical-aberration model (f/1.4-equivalent wide open)</td>
+<td>Same, calculated with varying amounts of aberration and focus positions</td>
+<td>Peak between wide open and 2 stops down. Moves with the amount of aberration, the focus position and the metric</td>
+<td>Synthetic model (not a real lens)</td>
+</tr>
+<tr>
+<td>ZEISS Planar 1.4/85 (manufacturer's technical document)</td>
+<td>Measured MTF</td>
+<td>f/8 (5 stops down from wide open) was highest</td>
+<td>One measured example</td>
+</tr>
+<tr>
+<td>Same lens</td>
+<td>Comparing actual photographs</td>
+<td>f/11 was best. “The differences are not as large as the shape of the curves might suggest”</td>
+<td>One measured example (a different criterion shifts the “best”)</td>
+</tr>
+<tr>
+<td>Technical documentation of a lens-measurement software maker</td>
+<td>General tendency of the “optimum aperture”</td>
+<td>“Typically around 2 to 3 stops below maximum aperture”</td>
+<td>Description of a tendency (neither a law nor a recommendation)</td>
+</tr>
+</tbody>
+</table>
+<p>A calculated value, a synthetic model, one measured example and a description of a tendency are different kinds of information. They sit in the same table for comparison, not because any one of them is “the right answer.”</p>
+<h2>When the Number Outlives Its Reasons</h2>
+<p>Here, let me return to my father.</p>
+<p>My father said, “Shoot at f/8,” but he never said why.</p>
+<p>In later years, I came to interpret it this way: with manual focus, it covers a bit of focusing error; it secures depth of field; and the lens renders consistently. As a setting for a beginner, f/8 could have had all kinds of practical meanings.</p>
+<p>But that's my interpretation. Whether my father thought it through that far, I have no way of knowing.</p>
+<p>What matters is this: <strong>when the reasons aren't passed on and only the number survives, that number loses its conditions and takes on a life of its own.</strong></p>
+<p>“Two to three stops” had reasons behind it — aberration and diffraction. Where the number “f/8” became generalized, on the other hand, is something this investigation couldn't establish. Even so, once the reasons and conditions fall away and only the number is left, it can start to look like a rule before anyone notices. It starts to wear the face of “any lens” and “any photograph.”</p>
+<p>The same thing seems to me to be happening, for example, with the saying “f/22 for mountain photography.” I intend to write about that in a separate article, together with what actually happens when you stop down to f/22.</p>
+<h2>So How Do You Choose an Aperture? Start With the Photograph You Want</h2>
+<p>When I critique or teach photography, I don't tell people to “shoot at f/8.”</p>
+<p>The first thing I ask is always this:</p>
+<p><strong>“What do you want to photograph? What's the picture in your head?”</strong></p>
+<p>Do you want the background blurred right out? Do you want everything in focus from front to back? Do you want to render flowing water with a slow shutter? Do you want to freeze a moving subject without blur? Or do you want to pan with it?</p>
+<p>If there's a purpose in that picture that involves aperture, the aperture follows from it. Want blur — open up. Want focus all the way back — stop down. Need a faster shutter speed — open up.</p>
+<p>How far you need to stop down to get the range you need in focus can be calculated from focal length, f-number and shooting distance. With Sidekick Lab's <a href="/en/tools/dof">Depth of Field Calculator</a>, you can see on the spot how depth of field changes as you change the aperture.</p>
+<p>By around 1990, I was already switching between wide open, f/8 and f/22 according to purpose. There was a period, for instance, when I liked stopping a 20mm f/2.8 down to f/22, putting the sun in the frame and deliberately producing ghosting. Not “I don't use f/22 because diffraction makes it soft,” but “this photograph needs f/22,” so I use it. That's all there is to it.</p>
+<p>For portraits and astrophotography, I shoot wide open.</p>
+<p>And when I feel that the rendering wide open isn't good enough, what I do is not “stop down a stop or two to improve it.” <strong>I switch to a lens that gives me the rendering I need wide open.</strong> For a photograph that needs the maximum aperture, an assessment like “it gives its best image stopped down to f/2.8” doesn't mean much.</p>
+<p>To be honest, maximum resolution sits fairly low on my list of priorities when I'm shooting. When I come across a lens with soft rendering, more often than not I take it as “that's the kind of lens this is.” Compared with getting the depth of field I need or avoiding unwanted blur, maximum resolution can wait. That's how I photograph.</p>
+<h2>I Still Shoot at f/8 Unless I Have a Reason Not To</h2>
+<p>So what do I do when there's no particular purpose?</p>
+<p>I've used lenses on the order of several hundred, but I don't operate by memorizing “this lens performs best at f/such-and-such” for each one. Fast prime or slow zoom, the basic approach is the same.</p>
+<p><strong>If there's no reason to choose otherwise, f/8.</strong></p>
+<p>This has been my basic practice, unchanged, since junior high.</p>
+<p>And after finishing this investigation into f/8, that practice hasn't changed. In my own words, it goes like this:</p>
+<p><strong>“Maybe I want to blur the background, or get everything sharp from front to back, or use a slow shutter, or avoid blur, or pan with the subject… If there's no reason to choose otherwise, f/8.”</strong></p>
+<p>Just to be clear, this isn't something I decided because I looked into it this time and understood the reasoning. It's simply that what I'd been doing all along didn't change after I looked into it.</p>
+<h2>“f/8 Is the Best Aperture” and “f/8 Unless I Have a Reason” Are Two Different Things</h2>
+<p>If you've read this far, I think it's clear that these are two different propositions.</p>
+<p>“<strong>f/8 is the best aperture</strong>” is a claim about lens performance. As a statement that applies to every lens, I found no evidence to support it. A peak can exist, but its position moves with the lens and the conditions. There are lenses for which f/8 is best, and lenses for which it isn't.</p>
+<p>“<strong>f/8 unless I have a reason</strong>” is my practice when I shoot. If the photograph I want gives me a reason to change the aperture, I follow that reason; if there's no reason, I use f/8 as the starting point. This isn't about lens performance. It's about the order in which you decide the aperture.</p>
+<p>Whether the “shoot at f/8” my father taught me around 1977–78 was scientifically correct, I don't know. He never gave a reason, and I never asked. What I did learn, looking into it about 50 years later, is that “because f/8 gives the best image” is not a reason that can hold that advice up.</p>
+<p>Even so, I expect I'll go on shooting at f/8 when there's no reason to choose otherwise.</p>
+<p>If you're looking for “the aperture that gives the best image,” there's one thing to settle first.</p>
+<p><strong>What is it you want to render well?</strong></p>
+<p>Choose the aperture from the photograph you want. If there's no reason to choose otherwise, f/8.</p>
+<p>For now, that's my answer.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</a>
+        <p class="kzc-related-desc">How many seconds should you expose for astrophotography? Since my Nikon D3 days I have used 8 seconds at around 15mm for nearly 20 years. I re-examine that 8 seconds through the 500 Rule, the NPF Rule and higher-resolution sensors. This is not an article recommending 8 seconds.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrophotography-focus-stars">How to Focus on Stars in Astrophotography: Where and How to Set Focus Correctly</a>
+        <p class="kzc-related-desc">Learn how to focus on stars for astrophotography. Discover when to use starry sky AF, manual focus techniques, and why the infinity mark isn&#39;t always reliable for sharp star images.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrophotography-settings-equipment-guide">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</a>
+        <p class="kzc-related-desc">Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
