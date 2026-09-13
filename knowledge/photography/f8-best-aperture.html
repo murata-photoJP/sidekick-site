@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「F8が一番よく写る」は、本当なのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="「F8が一番よく写る」「レンズは開放から2〜3段絞るとよい」は本当なのか。中学生のころ父に「F8で撮れ」と教わった私が、約50年後にAIを使って調べ直しました。分かったのは、どのレンズにも当てはまるF8を支持する根拠は見つからなかったこと。それでも私は今も、理由がなければF8で撮っています。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/f8-best-aperture">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">「F8が一番よく写る」は、本当なのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">「F8が一番よく写る」は、本当なのか？</h1>
+    <p class="kzc-article-lead">「F8が一番よく写る」「レンズは開放から2〜3段絞るとよい」は本当なのか。中学生のころ父に「F8で撮れ」と教わった私が、約50年後にAIを使って調べ直しました。分かったのは、どのレンズにも当てはまるF8を支持する根拠は見つからなかったこと。それでも私は今も、理由がなければF8で撮っています。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-13">更新日：2026-09-13</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>父に教わった絞りを、50年後に調べてみた</p>
+<p>私が初めて一眼レフで写真を撮ったのは、中学2年生だった1977〜78年ごろのことです。</p>
+<p>自分のカメラではありません。父のカメラを借りていました。記憶ではNikon EMという、絞り優先AEの小さな一眼レフで、フィルムはISO100。学校行事や家族旅行のときに持ち出す、そんな使い方でした。</p>
+<p>そのとき父から教わった撮り方は、ほぼ一言でした。</p>
+<p><strong>「F8で撮れ。雨や曇りの日は手ブレしやすいからF5.6。」</strong></p>
+<p>理由は聞きませんでした。というより、当時の私は理由を考えることもなく、言われたとおりF8で撮っていました。</p>
+<p>ここで一つ、はっきりさせておきたいことがあります。</p>
+<p>父から「F8はレンズの性能が一番よく出る絞りだから」と説明された記憶は、私にはありません。父はカメラが好きな人でしたが、レンズの性能について語ることはほとんどなかったと記憶しています。</p>
+<p>つまり私にとってのF8は、最初は「理由の分からない数字」でした。</p>
+<p>それから約50年。</p>
+<p>私はその間ずっと写真を撮り続け、レンズも数百本規模で使ってきました。そして今回、AIを使えるようになったのを機に、あらためて調べてみることにしました。</p>
+<p><strong>「F8は、本当に一番よく写る絞りなのか？」</strong></p>
+<p>先に断っておくと、この記事は「父の教えは正しかった」とも「間違っていた」とも結論しません。父はそもそも理由を言わなかったのですから、評価のしようがないのです。</p>
+<p>ただ、調べてみると、この「F8」という数字をめぐる話は、私が思っていたよりもずっと面白いものでした。</p>
+<h2>「F8」と「2〜3段」は、私だけの話ではない</h2>
+<p>大人になって自分のカメラを買ったのは1986年ごろ。最初は「友人と旅行に行くから」という程度の動機でした。</p>
+<p>それが1990年ごろになると、「せっかくカメラがあるから上高地にでも撮影に行こう」と、撮ること自体を目的に出かけるようになります。レンズを少しずつ買い足し、写真雑誌を読み、カメラ店で長話をし、Nikonのレンズカタログを集めては読みふけっていました。</p>
+<p>「レンズは開放から2〜3段絞ると一番よく写る」という話を知ったのも、たぶんこのころです。</p>
+<p>雑誌だったのか、カメラ店の店員さんだったのか、カタログだったのか。正直なところ、どこで最初に見聞きしたのかは覚えていません。ただ、当時の写真文化の中では、それはごく当たり前に流通している「常識」でした。</p>
+<p>今でもそうです。たとえば<a href="https://www.imatest.com/imaging/diffraction-and-optimum-aperture/" title="Imatest: Diffraction, Optimum Aperture, and Defocus">レンズ測定ソフトの技術文書</a>には、「レンズは典型的には開放から2〜3段絞ったところに最適絞りを持つ傾向がある」といった記述があります。F1.4のレンズならF2.8〜F4、F4のズームレンズならF8〜F11。「2〜3段」と「F8」は、こうして同じ話の中に並んで出てくることが多い数字です。</p>
+<p>ただ、白状しておくと、1990年当時の私はレンズの「性能」をそれほど気にしていませんでした。</p>
+<p>気にしていたのは、主に開放F値によるボケの量です。「このレンズはF5.6とF8のどちらが一番解像するか」といった最良絞りの追求は、ほとんどしていません。F8は、特に理由がなければ使う絞りとして、いつのまにか手に馴染んでいただけでした。</p>
+<h2>そもそも「一番よく写る」とは、何のことか</h2>
+<p>話を進める前に、一つ整理しておく必要があります。</p>
+<p>「一番よく写る」とは、何のことでしょうか。</p>
+<p>考えてみると、写真で「よく写る」と言うとき、私たちはかなり違うものを一つの言葉で呼んでいます。</p>
+<ul>
+<li>ピントを合わせた面の細部が、どれだけ細かく写るか（解像）</li>
+<li>手前から奥まで、必要な範囲にピントが合っているか（<a href="/tools/dof">被写界深度</a>）</li>
+<li>背景がどのくらい、どんなふうにぼけるか</li>
+<li>手ブレや被写体ブレを避けられるシャッター速度が確保できるか</li>
+<li>プリントや画面で見たときに、どう見えるか</li>
+<li>そして、撮りたかった写真になっているか</li>
+</ul>
+<p>「F8が一番よく写る」「2〜3段絞ると一番よく写る」という言い方が指しているのは、このうち最初の一つ、<strong>ピント面の細部がどれだけ細かく写るか</strong>です。</p>
+<p>この記事では、まずその意味で「一番よく写る」を調べます。他の意味については、後半で戻ってきます。</p>
+<h2>収差のない理想のレンズなら、開放が一番よく写る</h2>
+<p>意外に思われるかもしれませんが、ここから始めるのが一番分かりやすいのです。</p>
+<p>レンズには、設計や製造に起因する「収差」があります。絞りと写りの関係も、収差と回折という言葉も、私は以前から理屈としては知っていました。ただ、それは概念的な理解にとどまっていて、今回あらためて順を追って確かめることになりました。</p>
+<p>いま仮に、収差がまったくない理想のレンズがあったとしましょう。</p>
+<p>そのレンズでは、ピント面の細部の写りは、<strong>開放が一番よく、絞るほど少しずつ悪くなります。</strong></p>
+<p>理由は「回折」です。光は絞りの穴を通るときにわずかに広がり、この広がりはどんなに優れたレンズでも避けられず、穴が小さくなるほど大きくなります。回折に「F11から始まる」というような境目はなく、F1.4でも起きているし、F32でも起きている。ただ、絞るほど大きくなるだけです。</p>
+<p>この理想のレンズを計算してみると、写りはなだらかに下がっていく一本の曲線になります。F8はその途中にある一点にすぎず、どこにも特別な点はありません。</p>
+<p>つまり、<strong>理想のレンズには「少し絞ると良くなる」という現象がそもそも存在しない</strong>のです。</p>
+<p>そして、この理想のレンズの数値は、実際のレンズにとっての「上限」です。同じ絞りで、これより細かく写る実レンズは存在しません。</p>
+<h2>でも実際のレンズは、開放が甘いことがある</h2>
+<p>では、なぜ「絞ると良くなる」と言われるのでしょうか。</p>
+<p>それは、実際のレンズが理想のレンズではないからです。</p>
+<p>実際のレンズでは、開放付近で収差がピント面の写りを制限していることがあります。たとえば<a href="https://lenspire.zeiss.com/photo/app/uploads/2022/02/technical-article-how-to-read-mtf-curves-01.pdf" title="H. H. Nasse (ZEISS), How to Read MTF Curves? Part I, 2008（PDF、p.8）">ZEISSの技術資料</a>には、50mmレンズをf/2からf/5.6に絞ると測定した解像の数値が全体的に大きく上がる例や、<a href="https://lenspire.zeiss.com/photo/app/uploads/2018/04/CLN_MTF_Kurven_2_en.pdf" title="H. H. Nasse (ZEISS), How to Read MTF Curves? Part II, 2009（PDF、ページ番号 II/25：f/8 が最適、II/28：実写では f/11）">開放F1.4の85mmレンズ（Planar 1.4/85）の測定</a>でもっとも高い数値が出たのはf/8で、そこから先は絞るほど下がっていく例が示されています。</p>
+<p>こういう例があるので、「開放は甘い、絞ると良くなる」という実感は、多くの人が持っているわけです。</p>
+<p>ただし「ことがある」であって、「必ずそうなる」ではありません。設計によって収差の量も種類も違い、<a href="https://www.lensrentals.com/blog/2015/06/measuring-lens-variance/" title="Lensrentals: Measuring Lens Variance（2015）">同じ型番でも個体差が報告されています</a>。</p>
+<h2>絞ると、なぜ良くなるのか</h2>
+<p>絞りを絞るというのは、レンズの中心付近を通る光だけを使い、外周を通る光を使わなくすることです。</p>
+<p>レンズの収差の多くは、外周を通る光ほど大きくなります。ですから、絞って外周を切り捨てると、収差の影響が減ります。開放でにじんでいた点が、絞ると締まってくる。これが「絞ると良くなる」ことの、大まかな仕組みです。</p>
+<p>ただし、<strong>絞れば収差がなくなるわけではありません。</strong></p>
+<p>減るのは、外周に偏った収差の影響です。歪曲や倍率色収差のように、絞ってもほとんど変わらない収差もあります。</p>
+<h2>その代わり、回折は絞るほど増え続ける</h2>
+<p>ここで、さきほどの理想レンズの話が戻ってきます。絞って収差の影響が減っていく一方で、回折による広がりは絞るほど増え続けます。収差の影響は外周を切り捨てた時点で急速に小さくなりますが、回折はどこまでも増えていく。だから絞っていくと、どこかで「収差が減る効果」を「回折が増える効果」が上回ります。</p>
+<p>その先は、絞るほど写りは下がる一方です。F16やF22まで絞ったときに何が起きるか、被写界深度との兼ね合いをどう考えるかは、別の記事で扱う予定です。ここでは「絞るほど回折は増える」ということだけ押さえておいてください。</p>
+<h2>だから途中にピークが出る——ただし、位置は固定ではない</h2>
+<p>開放側では収差、絞り側では回折。</p>
+<p>この二つの効き方がぶつかるところに、ピント面の写りの「ピーク」が出ることがあります。「2〜3段絞ると一番よく写る」「F8が一番」という経験則は、このピークの話をしているわけです。</p>
+<p><img src="/images/knowledge/aperture/c1-f01-ideal-vs-real-concept-ja.svg" alt="合成球面収差モデルの計算結果を1枚のグラフにした図。横軸は絞り（F1.4〜F32）、縦軸は開放の回折限界を100%とした解像性能の相対値。D（回折限界、収差ゼロ）は灰色の破線で、開放の100%から絞るほど連続的に下がる。A（収差によって残る割合）は白い点線で、開放側で低く絞ると上がり、F2.8付近でほぼ100%に達する。T（総合解像性能、収差＋回折）はオレンジの実線で、開放側では収差で低く、途中でピークになり、その後は回折限界に沿って下がる。ピークには「このモデル条件でのピーク（収差の改善と回折の低下が競合）」の印。上部に「収差改善の効果が大きい／回折が支配的」の見出し。図中に「MODEL RESULT／合成球面収差モデルの計算結果／条件：収差2 waves・開放F1.4相当・550 nm／実レンズの測定結果ではありません。T＝A×D（掛け算）／回折は開放から存在し、絞るほど回折限界が連続的に下がります」と表示。" /></p>
+<p>図1：なぜ途中に「一番よく写る領域」が生じることがあるのか。図2と同じ合成球面収差モデル（収差2 waves［波長単位］・開放F1.4相当・波長550 nm）で計算した3本の曲線を、開放の回折限界を100%とした相対値で並べています。D（回折限界）は収差ゼロの理想レンズの上限で、回折は開放から存在し、絞るほど連続的に下がります（どこかで「始まる」ものではありません）。A（収差によって残る割合）は、同じ絞りの回折限界に対してどれだけ残っているかの比で、開放側で低く、絞ると上がります。T（総合解像性能）はその掛け算 T＝A×D で、開放側では収差が、小絞り側では回折が性能を制限し、収差の改善と回折の低下が競合する途中でピークになります。収差の改善がほぼ終わったあとは、回折限界に沿って下がるだけです。<strong>この図はモデルの計算結果であり、実レンズの測定結果ではありません。ピークの位置はこのモデル条件のもので、収差の量や種類で動きます（図2）。AとDの交点が最良絞りを意味するわけでもありません</strong>。ここでの「収差」は、絞ると影響が減り得る収差を指します（歪曲や倍率色収差のように絞っても変わらない収差は含みません）。※このモデルでは、焦点距離そのものは変数に含まれていません。理想的な回折限界は、同じ波長・実効F値なら焦点距離そのものでは変わりません。実レンズでは光学設計や収差の種類・量などが異なるため、総合性能の曲線やピークになる絞りは変わり得ます。</p>
+<p>私自身、回折はあるところから急に悪化するものだと思っていました。でも、この3本の線を見ると違いました。回折限界は開放から連続的に下がっていて、収差の改善がほぼ終わったあとも、絞るほど解像性能は少しずつ下がり続けます。</p>
+<p>これを見ると、撮影上の理由がないのに絞るのは損だな、と思います。</p>
+<p>もちろん、被写界深度が必要なら絞りますし、スローシャッターにしたければ絞ります。撮りたい写真に理由があるなら、その理由を優先します。絞りをどう決めるかは、後半で改めて書きます。</p>
+<p>問題は、そのピークが<strong>どこに出るか</strong>です。</p>
+<p>今回は、球面収差という代表的な収差だけを仮定した合成モデル（開放F1.4相当）で、収差の量を変えながらピークの位置を計算してみました。実際のレンズを測ったものではなく、「もし収差がこれだけあったら」という仮定の計算です。</p>
+<p>結果として、ピークの位置は一つに決まりませんでした。収差の量を変えると、ピークは開放そのものから、開放から2段絞ったところまでの範囲で動きます。絞るときにピントを合わせ直すかどうか、何を「よく写る」の物差しにするかでも、位置が変わります。そして、今回検証した合成モデルの条件の範囲では、F8がピークになる条件はありませんでした。</p>
+<p>念のため、これは合成モデルの結果であって、実際のレンズがこうだという話ではありません。実際のレンズにはモデルに入れていない収差がいろいろあり、開放F値もF1.4とは限りません。先ほどのZEISSの85mmのように、実測では開放から5段のf/8にピークが出た例もある。そうした例があること自体が、ピークの位置が一つに決まらないことを示しています。</p>
+<p><img src="/images/knowledge/aperture/c1-f02-synthetic-peak-moves-ja.svg" alt="球面収差だけを仮定した合成モデルで、収差量を0・0.25・0.5・1・2（波長単位）と変えたときのMTF50を絞りごとに示したグラフ。収差量が増えるほど開放側の値が下がり、ピークの位置が開放からF2付近まで小絞り側へ動く。F8には目印の縦線があるが、どの曲線もF8でピークにならない。図中に「MODEL RESULT／合成球面収差モデル／実レンズの測定結果ではありません」と表示。" /></p>
+<p>図2：合成モデルで計算したピント面の細かさ（MTF50）と絞りの関係。球面収差だけを仮定し、開放F1.4相当・波長550 nm、絞るたびにピントを合わせ直す条件（収差量ごとに一番良い位置）で計算しています。オレンジの点が各曲線のピーク。<strong>今回検証した合成モデルの条件の範囲では、F8がピークになる条件はありませんでした</strong>。ただし、これは実際のレンズ一般についてF8がピークになることがない、という意味ではありません。<strong>この図はモデルの計算結果であり、実レンズの測定結果ではありません。</strong></p>
+<p>言い換えると、こうなります。</p>
+<p><strong>ピークは存在し得る。しかし、その位置はレンズの収差の量、ピントの置き方、何を「よく写る」の物差しにするかによって動く。</strong></p>
+<h2>「2〜3段」は傾向。でも「F8」は固定できない</h2>
+<p>ここまでを踏まえて、冒頭の二つの常識を見直してみます。</p>
+<p>まず「レンズは開放から2〜3段絞ると一番よく写る」。</p>
+<p>これは、技術文書が「典型的には」という言い方で述べている経験則です。開放側で収差が支配的なレンズなら少し絞ったところにピークが出るのですから、理由のある傾向ではあります。</p>
+<p>けれども、法則ではありません。理想のレンズには「段数」そのものが存在しませんし、実際のレンズではピークの位置が収差の量や物差しで動きます。「2〜3段」は、その動く範囲のどこかを指す目安であって、どのレンズにも当てはまる決まりではないのです。</p>
+<p>次に「F8が一番よく写る」。</p>
+<p>「F8」という経験則がいつ、どこから一般化したのかは、今回の調査では分かりませんでした。調べた範囲で具体的に確認できた実測例は、上で紹介したZEISSの85mm一本です。しかもその資料では、実写で見比べると最も良かったのはf/11で、「曲線の形から想像されるほど差は大きくない」とも書かれています。同じレンズでも、何で判断するかで「一番」がずれるのです。</p>
+<p>つまり、<strong>どのレンズ・どの条件にも当てはまる「F8が一番よく写る」を支持する根拠は、見つかりませんでした。</strong></p>
+<p>ただし、これも正確に言っておく必要があります。</p>
+<p>見つからなかったのは「どのレンズにも当てはまる」という普遍的な根拠です。特定のレンズ・特定の条件でF8がピークになることは、当然あり得ます。少なくとも今回確認できた実測例については、「そのレンズではF8だった」ところまでは言えます。ただ、それは「そのレンズでは」という話であって、「どのレンズでも」へ広げる根拠にはなりません。</p>
+<p>表1：「何段絞ると最良か」は、条件を決めなければ一つの数字にならない</p>
+<table>
+<thead>
+<tr>
+<th>対象</th>
+<th>何を「最良」としたか</th>
+<th>結果</th>
+<th>性格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>収差のない理想のレンズ</td>
+<td>ピント面の細かさ（MTF50、550 nm）</td>
+<td>開放が最良（0段）。絞るほど低下</td>
+<td>計算値</td>
+</tr>
+<tr>
+<td>合成球面収差モデル（開放F1.4相当）</td>
+<td>同上。収差量とピントの置き方を変えて計算</td>
+<td>ピークは開放〜2段絞り。収差量・ピントの置き方・物差しで動く</td>
+<td>合成モデル（実レンズではない）</td>
+</tr>
+<tr>
+<td>ZEISS Planar 1.4/85（メーカー技術資料）</td>
+<td>測定したMTF</td>
+<td>f/8（開放から5段）が最高</td>
+<td>一本の実測例</td>
+</tr>
+<tr>
+<td>同上</td>
+<td>実写を見比べた評価</td>
+<td>f/11が最良。「曲線の形から想像されるほど差は大きくない」</td>
+<td>一本の実測例（判断基準が違うと「最良」もずれる）</td>
+</tr>
+<tr>
+<td>レンズ測定ソフトの技術文書</td>
+<td>「最適絞り」の一般的傾向</td>
+<td>「典型的には開放から2〜3段」</td>
+<td>傾向の記述（法則でも推奨値でもない）</td>
+</tr>
+</tbody>
+</table>
+<p>計算値・合成モデル・一本の実測例・傾向の記述は、それぞれ性格の違う情報です。同じ表に並べているのは比較のためで、どれかが「正解」だという意味ではありません。</p>
+<h2>数字だけが残るとき</h2>
+<p>ここで、父の話に戻ります。</p>
+<p>父は「F8で撮れ」と言いましたが、その理由は言いませんでした。</p>
+<p>後年、私はこう解釈するようになりました。マニュアルフォーカスでも多少のピントのずれをカバーできる、被写界深度が確保できる、レンズの写りも安定している——初心者向けの設定として、F8にはいろいろな実用上の意味があり得た、と。</p>
+<p>ただし、これは私の解釈です。父がそこまで考えていたかどうかは、私には分かりません。</p>
+<p>大事なのは、<strong>理由が伝わらずに数字だけが残ると、その数字は条件を失って独り歩きする</strong>ということです。</p>
+<p>「2〜3段」には、収差と回折という理由がありました。一方、「F8」という数字がどこから一般化したのかは、今回の調査では分かりませんでした。それでも、理由や条件が抜け落ちて数字だけが残ると、それがいつの間にか「決まり」に見えてしまうことがあります。「どんなレンズでも」「どんな写真でも」という顔をし始めるのです。</p>
+<p>同じことは、たとえば「山岳写真はF22」という言い方にも起きているように、私には見えます。これについては、F22まで絞ると何が起きるのかという話と合わせて、別の記事で書くつもりです。</p>
+<h2>では、絞りは何で決めるのか——撮りたい写真が先</h2>
+<p>写真の講評や指導をするとき、私は「F8で撮りなさい」とは教えません。</p>
+<p>最初に聞くのは、いつもこれです。</p>
+<p><strong>「何が撮りたいんですか？ 脳内イメージは？」</strong></p>
+<p>背景を大きくぼかしたいのか。手前から奥まで全部にピントを合わせたいのか。水の流れをスローシャッターで写したいのか。動く被写体をブレなく止めたいのか。あるいは流し撮りをしたいのか。</p>
+<p>そのイメージの中に絞りに関係する目的があれば、絞りはそこから決まります。ぼかしたいなら開放側へ。奥までピントが欲しいなら絞る側へ。シャッター速度を稼ぎたいなら開ける。</p>
+<p>私自身、1990年前後には、すでに開放・F8・F22を目的によって使い分けていました。たとえば20mm F2.8をF22まで絞り、太陽を画面の中に入れて、わざとゴーストを出すような写真を好んで撮っていた時期があります。「F22は回折で甘くなるから使わない」ではなく、「その写真にはF22が要る」から使う。それだけのことです。</p>
+<p>ポートレートや星景では、開放で撮ります。</p>
+<p>そして、開放で写りが足りないと感じたときに私がやるのは、「一段、二段絞って改善する」ことではありません。<strong>開放で必要な写りが得られるレンズに替える</strong>ことです。開放が必要な写真にとって、「F2.8まで絞れば一番よく写る」という評価は、あまり意味を持たないからです。</p>
+<p>正直に言えば、私にとって最高の解像度は、撮影のときの優先順位としては低いところにあります。甘い描写のレンズに出会っても、「これはそういうレンズだ」と受け止めることが多い。被写界深度やブレに比べれば、解像は後回しでいい。それが私の写真の撮り方です。</p>
+<h2>私は今も、理由がなければF8</h2>
+<p>では、目的が特にないときはどうするか。</p>
+<p>数百本規模のレンズを使ってきましたが、私は「このレンズの最高性能はF○」という値を、一本ずつ覚えて撮るような運用はしていません。明るい単焦点でも暗いズームでも、基本は同じです。</p>
+<p><strong>特別な理由がなければ、F8。</strong></p>
+<p>これは1990年前後から今日まで変わっていない、私の基本の運用です。</p>
+<p>そして今回、F8について調べ終えた後も、この運用は変わりませんでした。私の言葉でいうと、こうなります。</p>
+<p><strong>「ボカしたいとか、パンフォーカスにしたいとか、スローシャッターにしたいとか、ブラしたくないとか、流し撮りしたいとか……理由が無ければF8。」</strong></p>
+<p>念のために付け加えると、これは今回調べて理屈を理解したから決めたことではありません。ずっと前からそうしてきたことが、調べた後も変わらなかった、というだけです。</p>
+<h2>「F8が一番よく写る」と「理由がなければF8」は、別の話</h2>
+<p>ここまで読んでいただければ、この二つが別の命題だということが伝わったと思います。</p>
+<p>「<strong>F8が一番よく写る</strong>」は、レンズの性能についての主張です。どのレンズにも当てはまる話として、それを支持する根拠は見つかりませんでした。ピークは存在し得るけれど、その位置はレンズと条件で動く。F8が最良になるレンズもあれば、そうでないレンズもある。</p>
+<p>「<strong>理由がなければF8</strong>」は、撮影のときの私の実践です。撮りたい写真に絞りを変える理由があればその理由に従い、理由がなければF8を初期値として使う。これはレンズの性能の話ではなく、絞りを決める順番の話です。</p>
+<p>1977〜78年ごろに父から教わった「F8で撮れ」が、科学的に正しかったのかどうか、私には分かりません。父は理由を言わなかったし、私は聞かなかった。ただ、約50年後に調べてみて分かったのは、「F8が一番よく写るから」という理由でなら、あの教えを支えることはできない、ということでした。</p>
+<p>それでも、私はこれからも、理由がなければF8で撮ると思います。</p>
+<p>もしあなたが「一番よく写る絞り」を探しているのなら、その前に一つだけ決めておくことがあります。</p>
+<p><strong>何を、よく写したいのか。</strong></p>
+<p>撮りたい写真から絞りを決める。理由がなければF8。</p>
+<p>私の答えは、今のところこれです。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>
+        <p class="kzc-related-desc">星景写真の露光時間を何秒にするか。私はNikon D3の頃から15mm前後で20年近く「8秒」を使ってきました。その8秒を、500ルールとNPFルール、そしてカメラの高画素化という観点から検証します。8秒を勧める記事ではありません。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-focusing">星景写真のピントは、どこに・どう合わせるのが正しいのか？</a>
+        <p class="kzc-related-desc">星にピントを合わせるとき、∞マークに合わせれば正しいのでしょうか。星空AFがあるならまず使い、満足できなければMFで「星が一番小さく見えるところ」に合わせる。ワークショップで教えている手順を、メーカー公式資料とあわせて順番に説明します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-camera-settings">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</a>
+        <p class="kzc-related-desc">星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
