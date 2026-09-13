@@ -1,70 +1,83 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1130" width="800" height="1130" role="img" aria-labelledby="t"><title id="t">上段：絞ると収差の影響は減り、回折（小絞りボケ）の影響は増える（概念図、同じ単位の量ではない）。下段：回折だけなら性能は開放から低下し（計算値、相対）、収差で残る割合は絞ると上がる（概念）。総合の解像性能はその掛け算で、収差と回折が競合する領域で最大になることがある（概念）。AとBの交点は最良絞りではなく、ピーク位置は特定のF値を示さない。</title>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 830" width="800" height="830" role="img" aria-labelledby="t"><title id="t">合成球面収差モデル（MODEL RESULT）の計算結果。収差によって残る割合（A）は絞るほど上がり、回折限界（D）は開放から絞るほど連続的に下がる。総合解像性能（T = A × D）は途中でピークになり、収差の改善がほぼ終わった後は回折限界に沿って低下する。</title>
 <g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
-<line x1="100.0" y1="110.0" x2="100.0" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="186.8" y1="110.0" x2="186.8" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="268.6" y1="110.0" x2="268.6" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="355.4" y1="110.0" x2="355.4" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="437.2" y1="110.0" x2="437.2" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="523.9" y1="110.0" x2="523.9" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="601.4" y1="110.0" x2="601.4" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="692.5" y1="110.0" x2="692.5" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="770.0" y1="110.0" x2="770.0" y2="400.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="100.0" y1="400.0" x2="770.0" y2="400.0" stroke="#8c96aa" stroke-width="2"/>
-<line x1="100.0" y1="110.0" x2="100.0" y2="400.0" stroke="#8c96aa" stroke-width="2"/>
-<text transform="translate(40 255.0) rotate(-90)" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">影響の大きさ（概念）</text>
-<text x="100.0" y="60.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="start">原因：絞ると何が起きるか</text>
-<polyline points="100.0,150.5 114.0,151.8 128.1,155.6 142.1,161.9 156.2,170.3 170.2,180.7 184.3,192.8 198.3,206.2 212.4,220.6 226.4,235.6 240.5,250.8 254.5,266.0 268.6,280.8 282.6,294.9 296.7,308.3 310.7,320.7 324.8,332.0 338.8,342.2 352.9,351.2 366.9,359.1 381.0,366.0 395.0,371.8 409.1,376.7 423.1,380.7 437.2,384.1 451.2,386.8 465.3,388.9 479.3,390.7 493.4,392.0 507.4,393.0 521.5,393.8 535.5,394.4 549.6,394.9 563.6,395.2 577.7,395.4 591.7,395.6 605.8,395.7 619.8,395.8 633.9,395.9 647.9,395.9 662.0,395.9 676.0,396.0 690.1,396.0 704.1,396.0 718.2,396.0 732.2,396.0 746.3,396.0 760.3,396.0 774.4,396.0" fill="none" stroke="#eef1f8" stroke-width="3.4" stroke-dasharray="14 10" stroke-linecap="round"/>
-<polyline points="100.0,380.0 114.0,379.2 128.1,377.9 142.1,376.1 156.2,374.0 170.2,371.6 184.3,368.9 198.3,366.0 212.4,362.9 226.4,359.6 240.5,356.1 254.5,352.5 268.6,348.6 282.6,344.6 296.7,340.5 310.7,336.2 324.8,331.7 338.8,327.1 352.9,322.4 366.9,317.5 381.0,312.5 395.0,307.4 409.1,302.2 423.1,296.8 437.2,291.3 451.2,285.7 465.3,280.0 479.3,274.2 493.4,268.3 507.4,262.2 521.5,256.1 535.5,249.8 549.6,243.5 563.6,237.0 577.7,230.5 591.7,223.8 605.8,217.1 619.8,210.3 633.9,203.3 647.9,196.3 662.0,189.2 676.0,182.0 690.1,174.7 704.1,167.3 718.2,159.9 732.2,152.3 746.3,144.7 760.3,137.0 774.4,129.2" fill="none" stroke="#ffb14a" stroke-width="4.5" stroke-linecap="round"/>
-<text x="116.8" y="144.0" fill="#eef1f8" font-size="27" font-weight="700" text-anchor="start">収差の影響：絞ると減る ↓</text>
-<text x="764.0" y="338.0" fill="#ffb14a" font-size="27" font-weight="700" text-anchor="end">回折（小絞りボケ）の影響</text>
-<text x="764.0" y="370.0" fill="#ffb14a" font-size="27" font-weight="700" text-anchor="end">絞るほど増える ↑</text>
-<text x="100.0" y="434.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">※ 2本は同じ単位の量ではなく、交点に意味はありません</text>
-<line x1="100.0" y1="560.0" x2="100.0" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="186.8" y1="560.0" x2="186.8" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="268.6" y1="560.0" x2="268.6" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="355.4" y1="560.0" x2="355.4" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="437.2" y1="560.0" x2="437.2" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="523.9" y1="560.0" x2="523.9" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="601.4" y1="560.0" x2="601.4" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="692.5" y1="560.0" x2="692.5" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="770.0" y1="560.0" x2="770.0" y2="860.0" stroke="#2b3140" stroke-width="1.2"/>
-<line x1="100.0" y1="860.0" x2="770.0" y2="860.0" stroke="#8c96aa" stroke-width="2"/>
-<line x1="100.0" y1="560.0" x2="100.0" y2="860.0" stroke="#8c96aa" stroke-width="2"/>
-<text transform="translate(40 710.0) rotate(-90)" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">解像性能（相対）</text>
-<text x="100.0" y="480.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="start">結果：ピント面の解像性能</text>
-<text x="100.0" y="520.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="start">収差が優勢</text>
-<text x="435.0" y="520.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="middle">→　競合する領域　→</text>
-<text x="770.0" y="520.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="end">回折が優勢</text>
-<line x1="100.0" y1="580.0" x2="770.0" y2="580.0" stroke="#2b3140" stroke-width="1.2"/>
-<text x="88.0" y="589.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">100%</text>
-<line x1="100.0" y1="718.0" x2="770.0" y2="718.0" stroke="#2b3140" stroke-width="1.2"/>
-<text x="88.0" y="727.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">50%</text>
-<line x1="100.0" y1="856.0" x2="770.0" y2="856.0" stroke="#2b3140" stroke-width="1.2"/>
-<text x="88.0" y="865.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">0</text>
-<polyline points="100.0,580.0 114.0,595.5 128.1,610.1 142.1,623.9 156.2,636.9 170.2,649.2 184.3,660.8 198.3,671.8 212.4,682.1 226.4,691.9 240.5,701.1 254.5,709.8 268.6,718.0 282.6,725.7 296.7,733.1 310.7,740.0 324.8,746.5 338.8,752.6 352.9,758.4 366.9,763.9 381.0,769.1 395.0,773.9 409.1,778.6 423.1,782.9 437.2,787.0 451.2,790.9 465.3,794.5 479.3,798.0 493.4,801.2 507.4,804.3 521.5,807.2 535.5,809.9 549.6,812.5 563.6,815.0 577.7,817.3 591.7,819.4 605.8,821.5 619.8,823.4 633.9,825.3 647.9,827.0 662.0,828.6 676.0,830.2 690.1,831.6 704.1,833.0 718.2,834.3 732.2,835.5 746.3,836.6 760.3,837.7 774.4,838.8" fill="none" stroke="#8c96aa" stroke-width="3.6" stroke-dasharray="12 8" stroke-linecap="round"/>
-<polyline points="100.0,800.8 114.0,798.1 128.1,790.2 142.1,777.6 156.2,761.2 170.2,742.2 184.3,721.6 198.3,700.6 212.4,680.2 226.4,661.2 240.5,644.2 254.5,629.6 268.6,617.3 282.6,607.4 296.7,599.6 310.7,593.7 324.8,589.4 338.8,586.2 352.9,584.0 366.9,582.6 381.0,581.6 395.0,581.0 409.1,580.6 423.1,580.3 437.2,580.2 451.2,580.1 465.3,580.1 479.3,580.0 493.4,580.0 507.4,580.0 521.5,580.0 535.5,580.0 549.6,580.0 563.6,580.0 577.7,580.0 591.7,580.0 605.8,580.0 619.8,580.0 633.9,580.0 647.9,580.0 662.0,580.0 676.0,580.0 690.1,580.0 704.1,580.0 718.2,580.0 732.2,580.0 746.3,580.0 760.3,580.0 774.4,580.0" fill="none" stroke="#eef1f8" stroke-width="2.6" stroke-dasharray="3 8" stroke-linecap="round"/>
-<polyline points="100.0,800.8 114.0,801.3 128.1,797.3 142.1,790.1 156.2,780.8 170.2,770.7 184.3,760.9 198.3,752.3 212.4,745.3 226.4,740.2 240.5,737.2 254.5,736.1 268.6,736.7 282.6,738.7 296.7,741.8 310.7,745.7 324.8,750.2 338.8,755.0 352.9,759.8 366.9,764.8 381.0,769.6 395.0,774.2 409.1,778.7 423.1,783.0 437.2,787.0 451.2,790.9 465.3,794.5 479.3,798.0 493.4,801.2 507.4,804.3 521.5,807.2 535.5,809.9 549.6,812.5 563.6,815.0 577.7,817.3 591.7,819.4 605.8,821.5 619.8,823.4 633.9,825.3 647.9,827.0 662.0,828.6 676.0,830.2 690.1,831.6 704.1,833.0 718.2,834.3 732.2,835.5 746.3,836.6 760.3,837.7 774.4,838.8" fill="none" stroke="#eef1f8" stroke-width="5.0" stroke-linecap="round"/>
-<text x="473.4" y="612.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">A 収差で残る割合 ↑</text>
-<text x="124.8" y="590.7" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="start">B 回折だけなら ↓</text>
-<text x="284.5" y="662.1" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="start">C 総合の解像性能（A×B）</text>
-<text x="284.5" y="694.1" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="start">競合する領域で最大になることがある</text>
-<text x="108.5" y="846.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">開放側：収差で低いことがある</text>
-<text x="764.0" y="798.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">小絞り側は回折で低下</text>
-<text x="100.0" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F1.4</text>
-<text x="186.8" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F2</text>
-<text x="268.6" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F2.8</text>
-<text x="355.4" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F4</text>
-<text x="437.2" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F5.6</text>
-<text x="523.9" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F8</text>
-<text x="601.4" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F11</text>
-<text x="692.5" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F16</text>
-<text x="770.0" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F22</text>
-<text x="770.0" y="928.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">絞り（F値）</text>
-<text x="100.0" y="956.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">A：収差で残る割合（概念図・測定値ではない）</text>
-<text x="100.0" y="988.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">B：回折（小絞りボケ）だけなら（計算値、開放＝100%）</text>
-<text x="100.0" y="1020.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">C：総合の解像性能（概念図）＝A×B の掛け算</text>
-<text x="100.0" y="1052.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">縦軸：理想レンズの開放＝100%とした相対値</text>
-<text x="100.0" y="1084.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">AとBの交点は最良絞りではありません</text>
-<text x="100.0" y="1116.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">ピークの位置は特定のF値を示しません（どこかは図2）</text>
+<line x1="100.0" y1="120.0" x2="100.0" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="100.0" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F1.4</text>
+<line x1="176.4" y1="120.0" x2="176.4" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="176.4" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F2</text>
+<line x1="248.4" y1="120.0" x2="248.4" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="248.4" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F2.8</text>
+<line x1="324.8" y1="120.0" x2="324.8" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="324.8" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F4</text>
+<line x1="396.8" y1="120.0" x2="396.8" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="396.8" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F5.6</text>
+<line x1="473.2" y1="120.0" x2="473.2" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="473.2" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F8</text>
+<line x1="541.4" y1="120.0" x2="541.4" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="541.4" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F11</text>
+<line x1="621.6" y1="120.0" x2="621.6" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="621.6" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F16</text>
+<line x1="689.8" y1="120.0" x2="689.8" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="689.8" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F22</text>
+<line x1="770.0" y1="120.0" x2="770.0" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="770.0" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">F32</text>
+<line x1="100.0" y1="151.2" x2="770.0" y2="151.2" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="160.2" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">100%</text>
+<line x1="100.0" y1="353.6" x2="770.0" y2="353.6" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="362.6" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">50%</text>
+<line x1="100.0" y1="556.0" x2="770.0" y2="556.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="565.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">0</text>
+<line x1="100.0" y1="560.0" x2="770.0" y2="560.0" stroke="#8c96aa" stroke-width="2"/>
+<line x1="100.0" y1="120.0" x2="100.0" y2="560.0" stroke="#8c96aa" stroke-width="2"/>
+<text x="770.0" y="628.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">絞り（F値）</text>
+<text transform="translate(24 340.0) rotate(-90)" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">解像性能の目安（開放の回折限界＝100%）</text>
+<text x="100.0" y="50.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="start">収差改善の効果が大きい</text>
+<text x="770.0" y="50.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="end">回折が支配的</text>
+<text x="100.0" y="98.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">絞りごとの解像性能（同じ合成収差モデルの計算結果）</text>
+<polyline points="100.0,151.2 124.7,195.4 149.5,234.7 174.2,269.8 198.9,301.0 223.7,328.8 248.4,353.6 273.1,375.7 297.9,395.4 322.6,412.9 347.3,428.5 372.1,442.4 396.8,454.8 421.6,465.8 446.3,475.7 471.0,484.4 495.8,492.2 520.5,499.2 545.2,505.4 570.0,510.9 594.7,515.8 619.4,520.2 644.2,524.1 668.9,527.6 693.6,530.7 718.4,533.5 743.1,535.9 767.8,538.1" fill="none" stroke="#8c96aa" stroke-width="3.6" stroke-dasharray="12 8" stroke-linecap="round"/>
+<polyline points="100.0,438.2 124.7,346.0 149.5,231.2 174.2,179.9 198.9,162.0 223.7,155.4 248.4,152.9 273.1,151.9 297.9,151.5 322.6,151.3 347.3,151.2 372.1,151.2 396.8,151.2 421.6,151.2 446.3,151.2 471.0,151.2 495.8,151.2 520.5,151.2 545.2,151.2 570.0,151.2 594.7,151.2 619.4,151.2 644.2,151.2 668.9,151.2 693.6,151.2 718.4,151.2 743.1,151.2 767.8,151.2" fill="none" stroke="#eef1f8" stroke-width="2.8" stroke-dasharray="3 8" stroke-linecap="round"/>
+<polyline points="100.0,438.2 124.7,368.9 149.5,298.2 174.2,290.1 198.9,307.8 223.7,331.2 248.4,354.4 273.1,376.0 297.9,395.5 322.6,412.9 347.3,428.5 372.1,442.4 396.8,454.8 421.6,465.8 446.3,475.7 471.0,484.4 495.8,492.2 520.5,499.2 545.2,505.4 570.0,510.9 594.7,515.8 619.4,520.2 644.2,524.1 668.9,527.6 693.6,530.7 718.4,533.5 743.1,535.9 767.8,538.1" fill="none" stroke="#ffb14a" stroke-width="5.0" stroke-linecap="round"/>
+<circle cx="100.0" cy="438.2" r="3.5" fill="#ffb14a"/>
+<circle cx="124.7" cy="368.9" r="3.5" fill="#ffb14a"/>
+<circle cx="149.5" cy="298.2" r="3.5" fill="#ffb14a"/>
+<circle cx="174.2" cy="290.1" r="3.5" fill="#ffb14a"/>
+<circle cx="198.9" cy="307.8" r="3.5" fill="#ffb14a"/>
+<circle cx="223.7" cy="331.2" r="3.5" fill="#ffb14a"/>
+<circle cx="248.4" cy="354.4" r="3.5" fill="#ffb14a"/>
+<circle cx="273.1" cy="376.0" r="3.5" fill="#ffb14a"/>
+<circle cx="297.9" cy="395.5" r="3.5" fill="#ffb14a"/>
+<circle cx="322.6" cy="412.9" r="3.5" fill="#ffb14a"/>
+<circle cx="347.3" cy="428.5" r="3.5" fill="#ffb14a"/>
+<circle cx="372.1" cy="442.4" r="3.5" fill="#ffb14a"/>
+<circle cx="396.8" cy="454.8" r="3.5" fill="#ffb14a"/>
+<circle cx="421.6" cy="465.8" r="3.5" fill="#ffb14a"/>
+<circle cx="446.3" cy="475.7" r="3.5" fill="#ffb14a"/>
+<circle cx="471.0" cy="484.4" r="3.5" fill="#ffb14a"/>
+<circle cx="495.8" cy="492.2" r="3.5" fill="#ffb14a"/>
+<circle cx="520.5" cy="499.2" r="3.5" fill="#ffb14a"/>
+<circle cx="545.2" cy="505.4" r="3.5" fill="#ffb14a"/>
+<circle cx="570.0" cy="510.9" r="3.5" fill="#ffb14a"/>
+<circle cx="594.7" cy="515.8" r="3.5" fill="#ffb14a"/>
+<circle cx="619.4" cy="520.2" r="3.5" fill="#ffb14a"/>
+<circle cx="644.2" cy="524.1" r="3.5" fill="#ffb14a"/>
+<circle cx="668.9" cy="527.6" r="3.5" fill="#ffb14a"/>
+<circle cx="693.6" cy="530.7" r="3.5" fill="#ffb14a"/>
+<circle cx="718.4" cy="533.5" r="3.5" fill="#ffb14a"/>
+<circle cx="743.1" cy="535.9" r="3.5" fill="#ffb14a"/>
+<circle cx="767.8" cy="538.1" r="3.5" fill="#ffb14a"/>
+<circle cx="174.2" cy="290.1" r="11" fill="none" stroke="#eef1f8" stroke-width="3"/>
+<text x="192.2" y="254.1" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">このモデル条件でのピーク</text>
+<text x="192.2" y="284.1" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">（収差の改善と回折の低下が競合）</text>
+<text x="335.2" y="185.2" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">A 収差によって残る割合</text>
+<text x="335.2" y="215.2" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">（上ほど収差の影響が少ない）</text>
+<text x="248.4" y="330.0" fill="#8c96aa" font-size="26" font-weight="700" text-anchor="start">D 回折限界（収差ゼロ）：絞るほど低下</text>
+<text x="107.5" y="513.5" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">T 総合解像性能（収差＋回折）</text>
+<text x="107.5" y="547.9" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">開放側は収差で低い</text>
+<text x="764.0" y="377.9" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">収差の改善はほぼ終了 →</text>
+<text x="764.0" y="406.2" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="end">ここから先は回折限界に沿って低下</text>
+<rect x="30" y="660" width="755" height="152" rx="8" fill="#14161d" stroke="#8c96aa" stroke-width="1.5"/>
+<text x="46.0" y="694.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">MODEL RESULT ／ 合成球面収差モデルの計算結果</text>
+<text x="46.0" y="728.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">条件：収差 2 waves・開放 F1.4 相当・550 nm</text>
+<text x="46.0" y="762.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">実レンズの測定結果ではありません。T ＝ A × D（掛け算）</text>
+<text x="46.0" y="796.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">回折は開放から存在し、絞るほど回折限界が連続的に下がります</text>
 </g>
 </svg>
