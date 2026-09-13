@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 830" width="800" height="830" role="img" aria-labelledby="t"><title id="t">Results of a synthetic spherical-aberration model (MODEL RESULT). The fraction retained after aberration (A) rises as you stop down; the diffraction limit (D) falls continuously from wide open as you stop down. Combined resolution (T = A × D) peaks partway, then falls along the diffraction limit once the aberration improvement is essentially complete.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<line x1="100.0" y1="120.0" x2="100.0" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="100.0" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/1.4</text>
+<line x1="176.4" y1="120.0" x2="176.4" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="176.4" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/2</text>
+<line x1="248.4" y1="120.0" x2="248.4" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="248.4" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/2.8</text>
+<line x1="324.8" y1="120.0" x2="324.8" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="324.8" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/4</text>
+<line x1="396.8" y1="120.0" x2="396.8" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="396.8" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/5.6</text>
+<line x1="473.2" y1="120.0" x2="473.2" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="473.2" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/8</text>
+<line x1="541.4" y1="120.0" x2="541.4" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="541.4" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/11</text>
+<line x1="621.6" y1="120.0" x2="621.6" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="621.6" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/16</text>
+<line x1="689.8" y1="120.0" x2="689.8" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="689.8" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/22</text>
+<line x1="770.0" y1="120.0" x2="770.0" y2="560.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="770.0" y="594.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/32</text>
+<line x1="100.0" y1="151.2" x2="770.0" y2="151.2" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="160.2" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">100%</text>
+<line x1="100.0" y1="353.6" x2="770.0" y2="353.6" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="362.6" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">50%</text>
+<line x1="100.0" y1="556.0" x2="770.0" y2="556.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="565.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">0</text>
+<line x1="100.0" y1="560.0" x2="770.0" y2="560.0" stroke="#8c96aa" stroke-width="2"/>
+<line x1="100.0" y1="120.0" x2="100.0" y2="560.0" stroke="#8c96aa" stroke-width="2"/>
+<text x="770.0" y="628.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">Aperture (f-number)</text>
+<text transform="translate(24 340.0) rotate(-90)" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">Resolution, relative (diffraction limit wide open = 100%)</text>
+<text x="100.0" y="50.0" fill="#8c96aa" font-size="24" font-weight="700" text-anchor="start">Aberration improvement dominates</text>
+<text x="770.0" y="50.0" fill="#8c96aa" font-size="24" font-weight="700" text-anchor="end">Diffraction dominates</text>
+<text x="100.0" y="98.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">Resolution vs. aperture (same synthetic aberration model)</text>
+<polyline points="100.0,151.2 124.7,195.4 149.5,234.7 174.2,269.8 198.9,301.0 223.7,328.8 248.4,353.6 273.1,375.7 297.9,395.4 322.6,412.9 347.3,428.5 372.1,442.4 396.8,454.8 421.6,465.8 446.3,475.7 471.0,484.4 495.8,492.2 520.5,499.2 545.2,505.4 570.0,510.9 594.7,515.8 619.4,520.2 644.2,524.1 668.9,527.6 693.6,530.7 718.4,533.5 743.1,535.9 767.8,538.1" fill="none" stroke="#8c96aa" stroke-width="3.6" stroke-dasharray="12 8" stroke-linecap="round"/>
+<polyline points="100.0,438.2 124.7,346.0 149.5,231.2 174.2,179.9 198.9,162.0 223.7,155.4 248.4,152.9 273.1,151.9 297.9,151.5 322.6,151.3 347.3,151.2 372.1,151.2 396.8,151.2 421.6,151.2 446.3,151.2 471.0,151.2 495.8,151.2 520.5,151.2 545.2,151.2 570.0,151.2 594.7,151.2 619.4,151.2 644.2,151.2 668.9,151.2 693.6,151.2 718.4,151.2 743.1,151.2 767.8,151.2" fill="none" stroke="#eef1f8" stroke-width="2.8" stroke-dasharray="3 8" stroke-linecap="round"/>
+<polyline points="100.0,438.2 124.7,368.9 149.5,298.2 174.2,290.1 198.9,307.8 223.7,331.2 248.4,354.4 273.1,376.0 297.9,395.5 322.6,412.9 347.3,428.5 372.1,442.4 396.8,454.8 421.6,465.8 446.3,475.7 471.0,484.4 495.8,492.2 520.5,499.2 545.2,505.4 570.0,510.9 594.7,515.8 619.4,520.2 644.2,524.1 668.9,527.6 693.6,530.7 718.4,533.5 743.1,535.9 767.8,538.1" fill="none" stroke="#ffb14a" stroke-width="5.0" stroke-linecap="round"/>
+<circle cx="100.0" cy="438.2" r="3.5" fill="#ffb14a"/>
+<circle cx="124.7" cy="368.9" r="3.5" fill="#ffb14a"/>
+<circle cx="149.5" cy="298.2" r="3.5" fill="#ffb14a"/>
+<circle cx="174.2" cy="290.1" r="3.5" fill="#ffb14a"/>
+<circle cx="198.9" cy="307.8" r="3.5" fill="#ffb14a"/>
+<circle cx="223.7" cy="331.2" r="3.5" fill="#ffb14a"/>
+<circle cx="248.4" cy="354.4" r="3.5" fill="#ffb14a"/>
+<circle cx="273.1" cy="376.0" r="3.5" fill="#ffb14a"/>
+<circle cx="297.9" cy="395.5" r="3.5" fill="#ffb14a"/>
+<circle cx="322.6" cy="412.9" r="3.5" fill="#ffb14a"/>
+<circle cx="347.3" cy="428.5" r="3.5" fill="#ffb14a"/>
+<circle cx="372.1" cy="442.4" r="3.5" fill="#ffb14a"/>
+<circle cx="396.8" cy="454.8" r="3.5" fill="#ffb14a"/>
+<circle cx="421.6" cy="465.8" r="3.5" fill="#ffb14a"/>
+<circle cx="446.3" cy="475.7" r="3.5" fill="#ffb14a"/>
+<circle cx="471.0" cy="484.4" r="3.5" fill="#ffb14a"/>
+<circle cx="495.8" cy="492.2" r="3.5" fill="#ffb14a"/>
+<circle cx="520.5" cy="499.2" r="3.5" fill="#ffb14a"/>
+<circle cx="545.2" cy="505.4" r="3.5" fill="#ffb14a"/>
+<circle cx="570.0" cy="510.9" r="3.5" fill="#ffb14a"/>
+<circle cx="594.7" cy="515.8" r="3.5" fill="#ffb14a"/>
+<circle cx="619.4" cy="520.2" r="3.5" fill="#ffb14a"/>
+<circle cx="644.2" cy="524.1" r="3.5" fill="#ffb14a"/>
+<circle cx="668.9" cy="527.6" r="3.5" fill="#ffb14a"/>
+<circle cx="693.6" cy="530.7" r="3.5" fill="#ffb14a"/>
+<circle cx="718.4" cy="533.5" r="3.5" fill="#ffb14a"/>
+<circle cx="743.1" cy="535.9" r="3.5" fill="#ffb14a"/>
+<circle cx="767.8" cy="538.1" r="3.5" fill="#ffb14a"/>
+<circle cx="174.2" cy="290.1" r="11" fill="none" stroke="#eef1f8" stroke-width="3"/>
+<text x="192.2" y="254.1" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">Peak under this model condition</text>
+<text x="192.2" y="284.1" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">(aberration improvement vs. diffraction penalty)</text>
+<text x="335.2" y="185.2" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">A  Fraction retained after aberration</text>
+<text x="335.2" y="215.2" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">(higher = less aberration loss)</text>
+<text x="248.4" y="330.0" fill="#8c96aa" font-size="20" font-weight="700" text-anchor="start">D  Diffraction limit (zero aberration): falls as you stop down</text>
+<text x="107.5" y="513.5" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">T  Combined resolution (aberration + diffraction)</text>
+<text x="107.5" y="547.9" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Low wide open because of aberration</text>
+<text x="764.0" y="377.9" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">Aberration improvement nearly complete →</text>
+<text x="764.0" y="406.2" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="end">From here on, falls along the diffraction limit</text>
+<rect x="30" y="660" width="755" height="152" rx="8" fill="#14161d" stroke="#8c96aa" stroke-width="1.5"/>
+<text x="46.0" y="694.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">MODEL RESULT / Synthetic spherical-aberration model</text>
+<text x="46.0" y="728.0" fill="#eef1f8" font-size="23" font-weight="500" text-anchor="start">Conditions: 2 waves of aberration, f/1.4-equivalent wide open, 550 nm</text>
+<text x="46.0" y="762.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">Not a measurement of a real lens. T = A × D (product)</text>
+<text x="46.0" y="796.0" fill="#8c96aa" font-size="19" font-weight="500" text-anchor="start">Diffraction is present from wide open; the limit falls continuously as you stop down</text>
+</g>
+</svg>

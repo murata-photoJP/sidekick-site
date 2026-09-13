@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700" role="img" aria-labelledby="t"><title id="t">MTF50 versus aperture from a synthetic spherical-aberration model (MODEL RESULT). Changing the amount of aberration moves the peak within about one stop from wide open; under the conditions tested there was no condition where f/8 was the peak. Not a measurement of a real lens.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<line x1="100.0" y1="70.0" x2="100.0" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="100.0" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/1.4</text>
+<line x1="176.4" y1="70.0" x2="176.4" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="176.4" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/2</text>
+<line x1="248.4" y1="70.0" x2="248.4" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="248.4" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/2.8</text>
+<line x1="324.8" y1="70.0" x2="324.8" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="324.8" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/4</text>
+<line x1="396.8" y1="70.0" x2="396.8" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="396.8" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/5.6</text>
+<line x1="473.2" y1="70.0" x2="473.2" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="473.2" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/8</text>
+<line x1="541.4" y1="70.0" x2="541.4" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="541.4" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/11</text>
+<line x1="621.6" y1="70.0" x2="621.6" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="621.6" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/16</text>
+<line x1="689.8" y1="70.0" x2="689.8" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="689.8" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/22</text>
+<line x1="770.0" y1="70.0" x2="770.0" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="770.0" y="454.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">f/32</text>
+<line x1="100.0" y1="420.0" x2="770.0" y2="420.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="429.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">0</text>
+<line x1="100.0" y1="295.0" x2="770.0" y2="295.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="304.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">200</text>
+<line x1="100.0" y1="170.0" x2="770.0" y2="170.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="88.0" y="179.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">400</text>
+<line x1="100.0" y1="420.0" x2="770.0" y2="420.0" stroke="#8c96aa" stroke-width="2"/>
+<line x1="100.0" y1="70.0" x2="100.0" y2="420.0" stroke="#8c96aa" stroke-width="2"/>
+<text x="770.0" y="488.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">Aperture (f-number)</text>
+<text transform="translate(24 245.0) rotate(-90)" fill="#8c96aa" font-size="22" font-weight="500" text-anchor="middle">Fine detail at the plane of focus, MTF50 (cy/mm)</text>
+<line x1="473.2" y1="70.0" x2="473.2" y2="420.0" stroke="#8c96aa" stroke-width="2.4" stroke-dasharray="6 8"/>
+<text x="481.2" y="408.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">f/8</text>
+<polyline points="100.0,92.1 124.7,127.9 149.5,159.7 174.2,188.1 198.9,213.4 223.7,236.0 248.4,256.1 273.1,273.9 297.9,289.9 322.6,304.1 347.3,316.7 372.1,328.0 396.8,338.0 421.6,347.0 446.3,354.9 471.0,362.0 495.8,368.4 520.5,374.0 545.2,379.0 570.0,383.5 594.7,387.5 619.4,391.0 644.2,394.2 668.9,397.0 693.6,399.5 718.4,401.7 743.1,403.7 767.8,405.5" fill="none" stroke="#ffb14a" stroke-width="4.5" stroke-linecap="round"/>
+<polyline points="100.0,97.3 124.7,129.6 149.5,160.2 174.2,188.2 198.9,213.4 223.7,235.9 248.4,255.9 273.1,273.8 297.9,289.8 322.6,304.0 347.3,316.6 372.1,327.9 396.8,338.0 421.6,346.9 446.3,354.9 471.0,362.0 495.8,368.3 520.5,374.0 545.2,379.0 570.0,383.5 594.7,387.4 619.4,391.0 644.2,394.2 668.9,397.0 693.6,399.5 718.4,401.7 743.1,403.7 767.8,405.5" fill="none" stroke="#eef1f8" stroke-width="3.0" stroke-dasharray="3 7" stroke-linecap="round"/>
+<polyline points="100.0,115.1 124.7,135.5 149.5,162.3 174.2,188.9 198.9,213.6 223.7,236.0 248.4,256.0 273.1,273.8 297.9,289.8 322.6,304.0 347.3,316.6 372.1,327.9 396.8,338.0 421.6,346.9 446.3,354.9 471.0,362.0 495.8,368.3 520.5,374.0 545.2,379.0 570.0,383.5 594.7,387.4 619.4,391.0 644.2,394.2 668.9,397.0 693.6,399.5 718.4,401.7 743.1,403.7 767.8,405.5" fill="none" stroke="#eef1f8" stroke-width="3.0" stroke-dasharray="14 9" stroke-linecap="round"/>
+<polyline points="100.0,199.4 124.7,161.9 149.5,170.8 174.2,191.8 198.9,214.6 223.7,236.3 248.4,256.1 273.1,273.9 297.9,289.8 322.6,304.0 347.3,316.6 372.1,327.9 396.8,338.0 421.6,346.9 446.3,354.9 471.0,362.0 495.8,368.3 520.5,374.0 545.2,379.0 570.0,383.5 594.7,387.4 619.4,391.0 644.2,394.2 668.9,397.0 693.6,399.5 718.4,401.7 743.1,403.7 767.8,405.5" fill="none" stroke="#8c96aa" stroke-width="3.2" stroke-dasharray="18 7 4 7" stroke-linecap="round"/>
+<polyline points="100.0,324.5 124.7,268.3 149.5,211.0 174.2,204.4 198.9,218.8 223.7,237.8 248.4,256.6 273.1,274.1 297.9,289.9 322.6,304.0 347.3,316.7 372.1,327.9 396.8,338.0 421.6,346.9 446.3,354.9 471.0,362.0 495.8,368.3 520.5,374.0 545.2,379.0 570.0,383.5 594.7,387.4 619.4,391.0 644.2,394.2 668.9,397.0 693.6,399.5 718.4,401.7 743.1,403.7 767.8,405.5" fill="none" stroke="#eef1f8" stroke-width="2.4" stroke-linecap="round"/>
+<circle cx="100.0" cy="97.3" r="9" fill="#ff8a00" stroke="#09090c" stroke-width="2.5"/>
+<circle cx="100.0" cy="115.1" r="9" fill="#ff8a00" stroke="#09090c" stroke-width="2.5"/>
+<circle cx="124.7" cy="161.9" r="9" fill="#ff8a00" stroke="#09090c" stroke-width="2.5"/>
+<circle cx="174.2" cy="204.4" r="9" fill="#ff8a00" stroke="#09090c" stroke-width="2.5"/>
+<text x="196.8" y="345.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="start">● Peak: moves with the amount of aberration</text>
+<text x="560.0" y="110.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Aberration (waves)</text>
+<polyline points="560.0,137.0 630.0,137.0" fill="none" stroke="#ffb14a" stroke-width="4.5"/>
+<text x="646.0" y="146.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">0 (ideal)</text>
+<polyline points="560.0,173.0 630.0,173.0" fill="none" stroke="#eef1f8" stroke-width="3.0" stroke-dasharray="3 7" stroke-linecap="round"/>
+<text x="646.0" y="182.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">0.25</text>
+<polyline points="560.0,209.0 630.0,209.0" fill="none" stroke="#eef1f8" stroke-width="3.0" stroke-dasharray="14 9" stroke-linecap="round"/>
+<text x="646.0" y="218.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">0.5</text>
+<polyline points="560.0,245.0 630.0,245.0" fill="none" stroke="#8c96aa" stroke-width="3.2" stroke-dasharray="18 7 4 7" stroke-linecap="round"/>
+<text x="646.0" y="254.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">1</text>
+<polyline points="560.0,281.0 630.0,281.0" fill="none" stroke="#eef1f8" stroke-width="2.4" stroke-linecap="round"/>
+<text x="646.0" y="290.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">2</text>
+<rect x="100.0" y="538.0" width="670" height="132" rx="8" fill="#14161d" stroke="#8c96aa" stroke-width="1.5"/>
+<text x="116.0" y="572.0" fill="#ffb14a" font-size="25" font-weight="700" text-anchor="start">MODEL RESULT / Synthetic spherical-aberration model</text>
+<text x="116.0" y="612.0" fill="#8c96aa" font-size="22" font-weight="500" text-anchor="start">Spherical aberration only, f/1.4-equivalent wide open, 550 nm</text>
+<text x="116.0" y="652.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">Not a measurement of a real lens</text>
+</g>
+</svg>
