@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>あなたの許容錯乱円はいくつ？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="許容錯乱円 0.03 mmは物理定数ではなく、出力サイズ・観察距離・許容角という鑑賞条件を一つに圧縮した基準です。25年以上この数字を疑わなかった私の経験から、自分の許容錯乱円を決めるための条件を整理します。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/your-circle-of-confusion">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">あなたの許容錯乱円はいくつ？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">あなたの許容錯乱円はいくつ？</h1>
+    <p class="kzc-article-lead">許容錯乱円 0.03 mmは物理定数ではなく、出力サイズ・観察距離・許容角という鑑賞条件を一つに圧縮した基準です。25年以上この数字を疑わなかった私の経験から、自分の許容錯乱円を決めるための条件を整理します。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-14">更新日：2026-09-14</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――検査条件は変わったのに、0.03 mmだけが変わらなかった</p>
+<p>1990年代の後半、私は4×5のカメラのピントフードに、一枚の表を貼っていました。</p>
+<p>Excelで作った、レンズごとの被写界深度の表です。</p>
+<p>その表の計算に使っていた許容錯乱円の値は、0.03。</p>
+<p>612でも、69でも、67でも、0.03でした。</p>
+<p>当時の私にとって、0.03はマジックナンバーでした。インターネットで見つけた計算式に「0.03」と書いてあったので、そのまま使っていたのです。</p>
+<p><strong>私は、数字を疑うほうだと思っていました。それなのに、0.03だけは長いあいだ疑いませんでした。</strong></p>
+<p>その数字が、誰が、どんな大きさで、どんな距離から、どんな条件で見ることを想定した数字なのか。私はそれを問わないまま、25年以上この数字と付き合ってきました。</p>
+<p>この記事は、その問いを、いまさらながら調べた記録です。</p>
+<p>先に書いておきますが、「0.03 mmは間違いだ」という話にはなりません。「正しい許容錯乱円は何mmだ」という話にもなりません。調べて分かったのは、もっと別のことでした。</p>
+<p>順を追って書きます。</p>
+<h2>612でも67でも、0.03だった</h2>
+<p>私が4×5のカメラを買ったのは、1995年ころのことです。その数年後に、エボニーのカメラを使うようになりました。</p>
+<p>大判のレンズには、35mmのレンズのような被写界深度目盛がありません。だから自分で計算する必要があります。</p>
+<p>ちょうどインターネットが使えるようになった頃で、被写界深度の計算式を調べられるようになっていました。計算式には、許容錯乱円という項があります。その値として、たぶんメーカー系のWebサイトだったと思いますが、0.03と書いてあった。私はそれをExcelに入れて、レンズごとの表を作り、ピントフードに貼りました。</p>
+<p>4×5といっても、実際にはロールフィルムのホルダーを付けて、612、69、67で使うことがほとんどでした。それでも、許容錯乱円の値は変えませんでした。全部0.03です。</p>
+<p>当時の私は、35mmも4×5も、全部0.03だと思っていました。</p>
+<h2>私は数字を疑っていたつもりで、0.03だけは疑わなかった</h2>
+<p>正直に書くと、私は数字を鵜呑みにしないほうだと思っていました。</p>
+<p>35mmを使っていた頃、ニコンのMFレンズには被写界深度目盛がしっかり刻印されていました。私はそれを見て絞りを決めていたのですが、一つ引っかかっていたことがあります。</p>
+<p>目盛が、ピント位置を中心に左右対称なのです。</p>
+<p>手前よりも奥のほうが深いはずなのに、なぜ左右対称になるのか。変だなあ、と思っていました。</p>
+<p>そういうことは気になった。それなのに、許容錯乱円という言葉は、たぶん当時も聞いたことがあったはずなのに、聞き流して理解していなかったのだと思います。</p>
+<p>そして大判で自分で計算する段になっても、0.03が誰の数字なのかは、問いませんでした。</p>
+<p>目盛の対称性は疑ったのに、目盛の裏にある数字は疑わなかった。いま振り返ると、そういうことだったのだと思います。</p>
+<h2>でも現場で絞りを決めたのは、数字ではなく風だった</h2>
+<p>もう一つ、正直に書いておきます。</p>
+<p>私が被写界深度を計算していたのは、学問的な興味からではありません。シャッター速度を少しでも速くするためでした。</p>
+<p>当時の私の被写体は、高山植物でした。フィルムはベルビア。パンフォーカスで撮りたい。しかし高山植物は風で揺れる。吹雪の中で撮影することもありました。</p>
+<p>絞れば被写界深度は稼げますが、シャッター速度は遅くなる。必要以上に絞れば、風に負ける。だから、必要最小限の絞りを知りたかった。知らないと撮れない。そういう知識でした。</p>
+<p>ただ、いざ撮影のときに、その表をほとんど見ていなかったと思います。</p>
+<p>計算値どおりに絞ると、シャッター速度が足りなかったからです。</p>
+<p>風は一定ではありません。5分でも10分でも、風が弱まるのを待って撮影する。それが現実的な解決方法でした。計算値はあくまでも参考で、安心材料として併用していただけです。</p>
+<p>そして当然、高山植物が完全にブレていて話にならないポジが、山ほどあります。</p>
+<p>数字を信じていた。でも、写真を決めていたのは数字ではなかった。</p>
+<p>そのころ気にしていたのは、被写界深度そのものというより、風による被写体ブレと、アオリの設定によるボケのほうでした。</p>
+<h2>そもそも0.03 mmとは、誰の・どんな条件の数字なのか</h2>
+<p>では、私がマジックナンバーとして使っていた0.03 mmとは、何の数字なのか。</p>
+<p>調べて分かったことを、Research側の言葉で書きます。</p>
+<p>0.03 mmは、物理定数ではありません。</p>
+<p>35mm判の画像の対角線は43.27 mmです。これを約1500で割ると0.0288 mmで、慣例的な0.03 mmとほぼ一致します。</p>
+<p>この「対角線を約1500で割る」という規約を、<a href="https://lenspire.zeiss.com/photo/app/uploads/2018/02/cln35_en_web_special_bokeh.pdf" title="H. H. Nasse (ZEISS), Depth of Field and Bokeh, Camera Lens News Special, 2010">ZEISSの技術資料</a>にある例（12×18 cmのプリントを25 cmから見る）をもとに鑑賞条件へ置き換えてみると、こうなります。</p>
+<p><strong>画面全体を5倍前後に引き伸ばし、25 cm前後の距離から全体を眺めて、約2分角のぼけを「満足できるシャープさ」として許す。</strong></p>
+<p>つまり0.03 mmは、「出力サイズ」と「観察距離」と「観察者が許す角度」という三つの条件を、一つの数字に圧縮したものです。</p>
+<p>その規約が成り立つ条件であれば、0.03 mmは、いまのデジタル写真でも幾何学的な基準としてそのまま使えます。「デジタルだから使えない数字」ではありません。</p>
+<p>ただし、この数字がいつ、誰によって最初に提案されたのかは、調べた範囲では分かりませんでした。</p>
+<p>私にとって大事だったのは、初出ではありません。この数字が、特定の「見方」を前提にしている、ということのほうでした。</p>
+<p>私は4×5のフィルムに0.03を入れていた。でも0.03は、35mm判の対角を前提にした数字だった。同じ規約を大きなフォーマットに当てはめれば、同じ最終サイズに伸ばすときの拡大率が小さいぶん、フィルム面で許せる円は対角に比例して大きくなります。67なら、2倍以上です。</p>
+<p>だから私のExcelの表は、この規約に照らせば、67では「フォーマットに対する慣例値」ではなかったことになります。</p>
+<p>ただし、「間違っていた」とは言えません。0.03 mmの規約が前提にしているのは「5倍・25 cm・全体鑑賞」です。私の当時の出力条件がそれと違っていれば、厳しい値のほうが実情に合っていた可能性もある。そこは、いまとなっては分かりません。</p>
+<h2>同じ0.03でも、条件が変わると見える角度は変わる</h2>
+<p>0.03 mmが条件の圧縮だとすると、条件を変えれば、同じ0.03 mmでも「見え方」は変わります。</p>
+<p>フィルム面（センサー面）にある0.03 mmのぼけは、5倍に伸ばして25 cmから見れば約2分角です。20倍に伸ばして同じ25 cmから見れば、約8分角になります。</p>
+<p>数字は同じ0.03のまま、網膜に映る角度は4倍になる。</p>
+<p>この「角度」が、この記事の後半の軸になります。</p>
+<p>ぼけが見えるかどうかは、フィルム面で何mmかではなく、最終的に目に届いたときに何分角かで決まる——正確には、角度だけでも決まらないのですが、少なくとも、mmだけでは決まらない。</p>
+<p>そして私は、この角度を、自分がどう見ていたかを考えたことがありませんでした。</p>
+<h2>私の許容錯乱円は、数字ではなく3.5倍のルーペだった</h2>
+<p>では、当時の私は、何で写真の合否を決めていたのか。</p>
+<p>ルーペです。</p>
+<p>ポジをライトボックスの上に置き、エボニー製の3.5倍のルーペで拡大して確認していました。撮影のときにも使っていたのと、同じルーペです。</p>
+<p>ルーペで見て、ぎりぎり甘いと思ったコマは、ボツにしていました。</p>
+<p>一方、プリントのサイズは、写真展では小さいものが全紙、大きめで大全紙、最大で1×2 mまでありました。ほかに雑誌に載ることもありました。</p>
+<p>プリントのサイズはこれだけ幅があったのに、私の判断の条件は、いつも同じ3.5倍のルーペでした。</p>
+<p>Excelの表を作ったとき、出力サイズのことは気にしていませんでした。判断は、ほぼ原版をルーペで見て決めていました。</p>
+<p>いま思えば、私の「許容錯乱円」は、Excelに入れた0.03ではなかった。<strong>「3.5倍のルーペで原版を見て、納得できるか」という、固定の検査条件だった</strong>のです。</p>
+<p>1×2 mに伸ばしたときは、「ここまで伸ばすとさすがにきついな」と思いました。近寄って見ると一発で分かる。普通の距離で見ても、私には少し甘い。ただ、あれはピントの問題ではなかったと思っています。何が原因だったのかは、いまも分かりません。</p>
+<h2>100%表示という、新しい検査条件</h2>
+<p>2000年に、私はデジタルに移りました。Nikon D1です。</p>
+<p>ピントの確認は、モニターで100%表示を見る方法に変わりました。</p>
+<p>なぜ100%で見たのか。</p>
+<p>その頃、写真雑誌の付録として、原寸のデータがCD-ROMで付いてくる時代でした。読者はそのデータを、自分のモニターで100%にして見る。だから、撮った側も100%で確認しておかないといけない。そういう理由でした。私の作例が実際に載るようになったのはD1xからですが、確認の習慣はD1から始まっていました。</p>
+<p>つまり私が100%で見たのは、自分の鑑賞条件だったからではありません。<strong>別の条件で見る人がいるから、その条件で検査していた</strong>のです。</p>
+<p>ここで、Research側から100%表示を見ておきます。</p>
+<p>100%表示とは、画像の1画素をモニターの1画素に対応させる表示です。センサー面の0.03 mmは、いまの一般的な画素ピッチでは5〜8画素ほどにあたります。これを、たとえば27インチの4Kモニターで50 cmの距離から見ると、約5.4〜8.5分角。モニターや距離の組み合わせを広く取ると、おおよそ4〜15分角の範囲です。</p>
+<p>先ほどの「5倍・25 cm」の規約が約2分角でしたから、100%表示は、それより数倍大きな角度でぼけを見ている条件だということになります。全体を眺める条件ではなく、画素を検査する条件です。</p>
+<p>だからといって「100%なら0.03 mmのぼけは必ず見える」とは言えません。見えるかどうかは、被写体のコントラストや内容、モニター、見る人によって変わります。言えるのは、<strong>100%表示は、0.03 mmという数字が前提にしていた見方とは別の条件だ</strong>、というところまでです。</p>
+<p>逆の例もあります。スマートフォンで写真を画面いっぱいに収めて見ると、同じ0.03 mmのぼけは、約1.2分角です（横位置、460 ppiの画面、33 cmの距離、2400万画素の画像という仮定で）。これは0.03 mmの規約よりも、むしろ緩い条件です。</p>
+<p>同じ0.03 mmが、スマホの全体表示では約1.2分角、規約では約2分角、100%表示では4〜15分角。</p>
+<p><img src="/images/knowledge/circle-of-confusion/f03-same-30um-different-angles-ja.svg" alt="横棒グラフ。見かけの角度（分角）を横軸に、スマホ全体表示（仮定付き）1.2、A4を50 cmから1.7、全体鑑賞の規約（5倍・25 cm）2.06、A3を50 cmから2.41、A2を50 cmから3.4、100%表示（27インチ4K・50 cm）5.35〜8.45、20倍・25 cm 8.25、100%表示（代表範囲）4〜15。約2分角（規約）の破線基準線。副題「幾何学的な計算値。見える／見えないの閾値ではない」" /></p>
+<p>図1：センサー面の同じ30 µm（0.03 mm）のぼけが、見る条件によって何分角に見えるか。スマホの全体表示（横位置・460 ppi・33 cm・2400万画素の仮定）、全体鑑賞の規約（5倍・25 cm）、A4・A3・A2を50 cmから、100%表示（27インチ4K・50 cm、および代表範囲）、20倍・25 cm。幾何学的な計算値であり、ぼけが見える／見えないの閾値ではない。</p>
+<p>数字は一つも変わっていません。変わったのは、見る条件だけです。</p>
+<h2>私が100%を見なくなった理由</h2>
+<p>100%で確認する習慣は、その後もずっと続きました。</p>
+<p>やめたのは、K-1の頃からだったと思います。</p>
+<p>理由は、けっこう単純です。100%表示だと、画像の一部しか見えない。そこだけ見てダメだからといって、全体で見たらどうなのか。ぼけていて構わない場所なら、気にしなくていい。画素数が上がったことの弊害とも言えます。</p>
+<p>もう一つは、AFの性能が上がったことです。山岳の風景なら被写体はすべて無限遠で、F8で撮っていればまず外さない。星景は開放で撮りますが、撮影時にライブビューで拡大してMFで合わせるので、ある意味AFより高精度です。</p>
+<p>いま、大きく伸ばす前提の写真や、納品する写真のシャープさを最後に確認するときは、必要なところだけ、100%表示にしたりして見ています。</p>
+<p>こうして並べてみると、私の検査条件は三度変わっています。</p>
+<p>3.5倍のルーペ。モニターの100%。必要なところだけ100%。</p>
+<p>そのあいだ、許容錯乱円の値は0.03のまま、一度も変わっていません。</p>
+<p><img src="/images/knowledge/circle-of-confusion/f02-author-inspection-timeline-ja.svg" alt="縦の時系列に四つの点。〜1990年ごろ：35mm MF、レンズの被写界深度目盛。1995〜2000年ごろ：4×5（612/69/67）、3.5倍ルーペで原版を見る。2000年〜：D1/D1x、モニターで100%表示。K-1の頃〜現在：デジタル、必要なところだけ100%。右側に枠で「許容錯乱円の値 0.03 変わらず（35mmも4×5も同じ値のまま）」。下段に「検査条件は三度変わったが、数字は一度も変わらなかった」" /></p>
+<p>図2：私のピント確認の条件の変遷（本人の経験にもとづく図）。レンズの被写界深度目盛、3.5倍ルーペ、モニターの100%表示、必要なところだけ100%と条件は変わったが、許容錯乱円の値は0.03のまま変わらなかった。</p>
+<h2>プリントは、どこから見られるのか</h2>
+<p>ここまでは、私がどう見ていたかの話でした。では、写真を見る人は、どこから見るのか。</p>
+<p>幾何だけで考えると、プリントの幅と観察距離を比例させれば、同じぼけの角度は一定です。大きく伸ばせば、それだけ離れて見る。そう考えれば、0.03 mmの規約はどのサイズにも当てはまる。</p>
+<p>しかし、人が実際にプリントを見る距離は、サイズに比例しては伸びないことが、測られています。<a href="http://www.emilyacooper.org/pubs/2012CooperPiazza_JOV.pdf" title="E. A. Cooper, E. A. Piazza &amp; M. S. Banks (2012), The perceptual basis of common photographic practice, Journal of Vision 12(5):8">壁に掛けた写真プリントを見る距離を測った研究</a>では、対角線が7〜120 cmの範囲で、好みの距離は「1.3 × 対角線 + 25.3 cm」という関係でした（若い成人での測定です）。つまり、小さなプリントでも25 cmほどの切片があり、大きくしても距離はそれほど伸びない。<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5347319/" title="C.-C. Carbon (2017), Art Perception in the Museum: How We Spend Time and Space in Art Exhibitions, i-Perception 8(1)">美術館での測定</a>でも、作品の面積が12倍になっても、見る距離は1.4倍程度でした。</p>
+<p>これを0.03 mmに当てはめると、同じ0.03 mmのぼけの角度は、大きなプリントほどゆるやかに大きくなります。比例して離れるわけではないからです。</p>
+<p>一方で、「大きなプリントは細部を見に寄って見るものだ」とも言えません。美術館で細部を要する作品でも、近くまで寄る人は少数派だったという<a href="https://mapping-museum-experience.com/wp-content/uploads/2019/04/Troende-2014-Affordances.pdf" title="M. Tröndle (2014), Space, Movement and Attention: Affordances of the Museum Environment">測定</a>があります。ただし、写真のプリント展示で同じことを測った研究はありません。</p>
+<p>私自身は、寄って見ます。1×2 mの自分のプリントに近寄って「甘い」と思った、あの経験がそうです。ただ、それは作った本人だからで、一般の見方ではないでしょう。</p>
+<p>もう一つ付け加えると、プリントの側にもぼけがあります。公開されている測定例で比べると、プリンタと紙が作るぼけは、A4に伸ばした0.03 mmのぼけと同じ桁になり得ます。どちらが支配的になるかは、用紙や機種、サイズ、距離で入れ替わります。この話は、それだけで一本の記事になるので、ここでは「プリントは透明ではない」とだけ書いておきます。</p>
+<h2>判定する目も、条件のうち</h2>
+<p>ここまで、出力と距離の話をしてきました。最後に残るのは、見る側の目です。</p>
+<p>いま私は、老眼鏡をかけないと、プリントを見てもピントが判りません。10年ほど前から老眼鏡を使っていて、暗いところでは必須です。若い頃より、視力は落ちました。</p>
+<p>これは、明らかに違う。</p>
+<p>ある写真家から聞いた話があります。その人は自分の写真サークルで「最近、みんなピントが良くないよ」と言っていた。あるとき老眼鏡を新調したら、みんなのピントは問題なくて、問題があったのは自分の目のほうだった——という話です。</p>
+<p>私にも、少なくとも「見る側の条件が昔とは違う」ということは起きています。老眼鏡なしでは、プリントのピントをきちんと判断できないからです。</p>
+<p>ただし、私自身は、昔ほどピントが気にならなくなった理由を、視力ではなく、技術とカメラの性能だと思っています。若い頃はMFで、ピントを合わせてから構図を整えていたので、ピントがずれる可能性を気にしていた。いまのAFは、風景ならまずピンボケになりません。そもそも、ミスショットを除けば、ピントの甘いカットを撮っていないと思います。</p>
+<p>ただ、昔の機材で撮るなら、視力の低下は致命的かもしれない。機材が、それを補ってくれているだけです。</p>
+<p>Research側から見ると、ここには言えることと言えないことがあります。</p>
+<p>言えることは、視力1.0という値が意味する「1分角」は、視力表の細部を見分ける角度であって、ぼけを感じる閾値ではない、ということ。視力から許容錯乱円を計算することは、できません。</p>
+<p>年齢とともに、瞳孔が小さくなって目の焦点深度が広がり、細かい模様に対するコントラスト感度が下がり、目の中の光の散乱が増えることは、<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3049199/" title="C. Owsley (2011), Aging and vision, Vision Research 51:1610–1622（レビュー）">集団を対象にした研究</a>で分かっています。ただし、健常な矯正視力は50代半ばまでほぼ一定だという<a href="https://pubmed.ncbi.nlm.nih.gov/30989362/" title="W. Radner &amp; T. Benesch (2019), Age-related course of visual acuity obtained with ETDRS 2000 charts in persons with healthy eyes, Graefe's Archive for Clinical and Experimental Ophthalmology 257:1295–1301">報告</a>もありますし、ぼけへの耐性が、46歳までの範囲では年齢と関係なかったという<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2948623/" title="R. L. Woods, C. R. Colvin, F. A. Vera-Diaz &amp; E. Peli (2010), A Relationship between Tolerance of Blur and Personality, Investigative Ophthalmology &amp; Visual Science 51(11):6077–6082">報告</a>もあります。</p>
+<p>そして、「同じ人が年をとると、小さなぼけに気づきにくくなるか」を、写真のぼけで直接測った研究はありません。</p>
+<p>だから私は、自分の目がどう変わったかを、数字では言えません。言えるのは、<strong>見る側の条件も一定ではない</strong>、ということまでです。</p>
+<p>出力サイズと距離だけでなく、判定する目も、条件のうちです。</p>
+<h2>では、あなたの許容錯乱円はいくつ？</h2>
+<p>ここまでを、ひとつにまとめます。</p>
+<p>0.03 mmは、「35mm判を5倍前後に伸ばし、25 cm前後から全体を眺め、約2分角のぼけを許す」という条件の圧縮でした。</p>
+<p>その条件が自分の条件と同じなら、0.03 mmはそのまま使えます。違うなら、数字は同じでも、意味が変わります。</p>
+<p>「あなたの許容錯乱円」は、次の四つを宣言して、初めて計算できます。</p>
+<ul>
+<li>何の大きさに出力するのか（プリントのサイズ、あるいは画面）</li>
+<li>実際にどの距離から見るのか</li>
+<li>どれくらいの角度のぼけまで許すのか</li>
+<li>センサー面から出力までの実効的な拡大率はいくつか</li>
+</ul>
+<p>そして、判定する自分の目がどういう状態か。</p>
+<p>視力から自動で決まることはありません。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>0.03 mmが暗黙に含んでいる条件</th>
+<th>あなたが宣言する条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>フォーマット</td>
+<td>35mm判（対角 43.27 mm）</td>
+<td>使っているセンサー／フィルムのサイズ</td>
+</tr>
+<tr>
+<td>拡大率</td>
+<td>5倍前後</td>
+<td>センサー面から出力までの実効拡大率</td>
+</tr>
+<tr>
+<td>観察距離</td>
+<td>25 cm前後</td>
+<td>実際に見る距離</td>
+</tr>
+<tr>
+<td>許容する角度</td>
+<td>約2分角</td>
+<td>自分が許す角度</td>
+</tr>
+<tr>
+<td>見方</td>
+<td>全体を眺める</td>
+<td>全体か、部分の検査（100%）か</td>
+</tr>
+<tr>
+<td>観察者</td>
+<td>規約上の標準的な目</td>
+<td>自分の目（矯正の有無、老眼鏡）</td>
+</tr>
+</tbody>
+</table>
+<p>表1：0.03 mmという数字が暗黙に含んでいる条件と、「あなたの許容錯乱円」を計算するために宣言する条件の対応。左列は規約の再構成であり、推奨条件ではない。</p>
+<p>振り返ると、私の3.5倍のルーペも、雑誌の付録のための100%も、いまの「必要なところだけ100%」も、それぞれが一つの「宣言」でした。</p>
+<p>当時の私は、自分が条件を宣言していることを知らなかった。ただそれだけです。</p>
+<p>計算の道具としては、Sidekick DOF Calculator（<a href="/tools/dof">/tools/dof</a>）を用意しています。許容錯乱円の初期値には「Traditional 30 µm」を置いていますが、これは参考値で、自分の値に編集できます。センサーのフォーマットを変えても、この値は自動では変わりません。それは、この計算機が決める数字ではないからです。計算の前提は、Details / Assumptions に書いてあります。</p>
+<h2>一度検証してから、信じるか決める</h2>
+<p>私が0.03を疑い始めたのは、20年から10年ほど前のことです。「フォーマットで変わりそうだ」という程度の気づきでした。</p>
+<p>当時PENTAX関係者から見せてもらった資料では、一般的な0.03 mmとは違う値が使われていました。それ以上のことは、分かりませんでした。</p>
+<p>その「分からなさ」が頭の隅に残っていて、今回、AIを使えばかなり深掘りできると分かったので、調べてみた。それがこの記事です。</p>
+<p>調べて分かったのは、0.03 mmが正しいか間違いか、ということではありませんでした。0.03 mmという数字の背後には、鑑賞条件があった、ということでした。</p>
+<p>数字を捨てる必要はありません。0.03は、いまでも使えます。</p>
+<p>ただ、0.03が常に正しい数字であるわけではない。一度、自分の条件を当てはめて検証してから、信じるか信じないか、決めればいい。</p>
+<p>許容錯乱円は、数字だけでは決まりません。何を、どの大きさで、どの距離から、誰が、どう見るのか。条件を付けて初めて、その数字の意味を考えられます。</p>
+<p>私は25年以上、0.03を、誰の数字かを問わずに使ってきました。</p>
+<p>だから最後に、同じ問いを、あなたに返します。</p>
+<p>あなたの許容錯乱円は、いくつですか。</p>
+<hr />
+<p>関連記事：<a href="/knowledge/photography/f8-best-aperture">「F8が一番よく写る」は、本当なのか？</a>／<a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a></p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/f8-best-aperture">「F8が一番よく写る」は、本当なのか？</a>
+        <p class="kzc-related-desc">「F8が一番よく写る」「レンズは開放から2〜3段絞るとよい」は本当なのか。中学生のころ父に「F8で撮れ」と教わった私が、約50年後にAIを使って調べ直しました。分かったのは、どのレンズにも当てはまるF8を支持する根拠は見つからなかったこと。それでも私は今も、理由がなければF8で撮っています。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>
+        <p class="kzc-related-desc">星景写真の露光時間を何秒にするか。私はNikon D3の頃から15mm前後で20年近く「8秒」を使ってきました。その8秒を、500ルールとNPFルール、そしてカメラの高画素化という観点から検証します。8秒を勧める記事ではありません。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
