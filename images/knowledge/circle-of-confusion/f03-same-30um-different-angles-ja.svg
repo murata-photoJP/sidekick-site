@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 750" width="800" height="750" role="img" aria-labelledby="t"><title id="t">計算値：同じ 30 µm（0.03 mm）のセンサー面のぼけが、見る条件によって何分角に見えるか。スマホ全体表示 約1.2分角（仮定付き）、A4・A3・A2 を 50 cm から 約1.7・2.4・3.4分角、全体鑑賞の規約（5倍・25 cm）約2.06分角、100% 表示（27インチ 4K・50 cm）約5.4〜8.5分角、代表範囲 4〜15分角、20倍・25 cm 約8.25分角。幾何学的な計算値であり、ぼけが見える／見えないの閾値ではない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">計算値：同じ 30 µm のぼけが、見る条件で何分角になるか</text>
+<text x="20.0" y="84.0" fill="#ffb14a" font-size="26" font-weight="500" text-anchor="start">幾何学的な計算値。見える／見えないの閾値ではない</text>
+<line x1="400.0" y1="130.0" x2="400.0" y2="630.0" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="400.0" y1="630.0" x2="400.0" y2="638.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="400.0" y="670.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">0</text>
+<line x1="484.4" y1="630.0" x2="484.4" y2="638.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="484.4" y="670.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">4</text>
+<line x1="568.9" y1="630.0" x2="568.9" y2="638.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="568.9" y="670.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">8</text>
+<line x1="653.3" y1="630.0" x2="653.3" y2="638.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="653.3" y="670.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">12</text>
+<line x1="737.8" y1="630.0" x2="737.8" y2="638.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="737.8" y="670.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">16</text>
+<text x="780.0" y="706.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">見かけの角度（分角）</text>
+<line x1="442.2" y1="120.0" x2="442.2" y2="630.0" stroke="#ff8a00" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="450.2" y="116.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="start">約 2 分角（規約）</text>
+<text x="386.0" y="179.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">スマホ全体表示（仮定付き）</text>
+<line x1="400.0" y1="170.0" x2="425.3" y2="170.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt"/>
+<text x="435.3" y="179.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">1.2</text>
+<text x="386.0" y="239.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">A4 を 50 cm から</text>
+<line x1="400.0" y1="230.0" x2="435.9" y2="230.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt"/>
+<text x="445.9" y="239.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">1.7</text>
+<text x="386.0" y="299.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">全体鑑賞の規約（5倍・25 cm）</text>
+<line x1="400.0" y1="290.0" x2="443.5" y2="290.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt"/>
+<text x="453.5" y="299.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">2.06</text>
+<text x="386.0" y="359.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">A3 を 50 cm から</text>
+<line x1="400.0" y1="350.0" x2="450.9" y2="350.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt"/>
+<text x="460.9" y="359.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">2.41</text>
+<text x="386.0" y="419.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">A2 を 50 cm から</text>
+<line x1="400.0" y1="410.0" x2="471.8" y2="410.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt"/>
+<text x="481.8" y="419.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">3.4</text>
+<text x="386.0" y="479.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">100% 表示（27インチ 4K・50 cm）</text>
+<line x1="512.9" y1="470.0" x2="578.4" y2="470.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt" stroke-opacity="0.85"/>
+<line x1="400.0" y1="470.0" x2="512.9" y2="470.0" stroke="#2b3140" stroke-width="2" stroke-dasharray="4 6"/>
+<text x="588.4" y="479.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">5.35〜8.45</text>
+<text x="386.0" y="539.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">20倍・25 cm</text>
+<line x1="400.0" y1="530.0" x2="574.2" y2="530.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt"/>
+<text x="584.2" y="539.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">8.25</text>
+<text x="386.0" y="599.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">100% 表示（代表範囲）</text>
+<line x1="484.4" y1="590.0" x2="716.7" y2="590.0" stroke="#ffb14a" stroke-width="14" stroke-linecap="butt" stroke-opacity="0.85"/>
+<line x1="400.0" y1="590.0" x2="484.4" y2="590.0" stroke="#2b3140" stroke-width="2" stroke-dasharray="4 6"/>
+<text x="726.7" y="599.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">4〜15</text>
+</g>
+</svg>
