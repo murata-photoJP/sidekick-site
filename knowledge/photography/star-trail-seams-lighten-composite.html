@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>連続撮影なのに、なぜ星の軌跡に継ぎ目が見えるのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="比較明合成した星の軌跡に、連続撮影なのになぜ継ぎ目が見えるのか。17年前のD3のNEF 3,522枚を測り直すと、今回の実写では空白だけでは説明できず、合成前からあった測定された明るさの揺れを比較明合成が選び、強めていました。原因と周期は未解明です。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/star-trail-seams-lighten-composite">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">連続撮影なのに、なぜ星の軌跡に継ぎ目が見えるのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">連続撮影なのに、なぜ星の軌跡に継ぎ目が見えるのか？</h1>
+    <p class="kzc-article-lead">比較明合成した星の軌跡に、連続撮影なのになぜ継ぎ目が見えるのか。17年前のD3のNEF 3,522枚を測り直すと、今回の実写では空白だけでは説明できず、合成前からあった測定された明るさの揺れを比較明合成が選び、強めていました。原因と周期は未解明です。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-13">更新日：2026-09-13</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――17年前のD3データ3,522枚で調べ直した</p>
+<p>星景写真で星の軌跡を描くとき、私は連続撮影した写真を比較明合成でつないできました。</p>
+<p>連続撮影ですから、コマとコマの間はほとんど空いていません。</p>
+<p>それなのに、合成した軌跡を100%表示にすると、線がところどころで途切れて見える。</p>
+<p><strong>当時の私は、それをシャッター間のわずかな空白のせいだと思っていました。</strong></p>
+<p>今回、17年前に撮ったNEFが3,522枚残っていたので、この思い込みを実データで調べ直しました。</p>
+<p>先に結論を書いておきます。</p>
+<p>今回のD3の実写では、その継ぎ目や濃淡を、シャッター間のわずかな空白だけでは説明できませんでした。合成する前の各コマで、測定された星の明るさがすでに揺れていて、比較明合成がその揺れを選び、強めていた。ただし、揺れの物理的な原因と、濃淡の周期がどう決まるかは、まだ分かっていません。</p>
+<p>順を追って書きます。</p>
+<h2>17年前、100%表示で見えた「途切れ」</h2>
+<p>Nikon D3を使っていた頃、私は15mm前後の超広角レンズを付けて、F2.8、8秒で連続撮影し、それを比較明合成して星の軌跡を作っていました。</p>
+<p>合成の方法は、いちばん単純なもの。各コマを重ねて、比較（明）で合成するだけです。</p>
+<p>100%表示にすると、継ぎ目がはっきり分かりました。</p>
+<p>「少し暗い谷がある」という印象ではありませんでした。</p>
+<p><strong>線がそこで途切れている感じ。</strong></p>
+<p>私の言葉で言えば、<strong>いかにもデジタイズした線</strong>。</p>
+<p>長秒時ノイズ低減はOFFにしていました。それでも見えました。</p>
+<h2>当時の私の説明と、後年やっていた対策</h2>
+<p>当時の私は、こう考えていました。</p>
+<p>1コマの露光で星が描く線の長さに比べて、次のコマまでの間に星が動く距離を十分に短くすれば、継ぎ目は目立たなくなるはずだ。</p>
+<p>つまり、<strong>シャッターが閉じているわずかな時間に星が動くから、線が切れる</strong>、という理解です。</p>
+<p>とても自然な説明です。読者の方の多くも、同じように考えているのではないでしょうか。</p>
+<p>後年、私はこの継ぎ目への対策として、少し手間のかかる方法を使うようになりました。</p>
+<p>隣り合う2コマを、1コマずつずらして組にします。1コマ目と2コマ目、2コマ目と3コマ目……という具合に、全コマについて。それぞれの組をスクリーンで合成して統合し、Photoshopの「露光量」で−1.00EVする。そうしてできた組の画像を、最後にすべて比較明合成する。</p>
+<p>処理はRAW現像後の8bit、Adobe RGBのTIFFで行っていました。</p>
+<p>この方法は、私の実務では効きました。理論から計算して決めた方法ではなく、実際に困っていた問題を解決するために考えて、使ってきた方法です。</p>
+<p>いつから使い始めたのかは、自分でも特定できません。分かっているのは、D3で最初に継ぎ目を見た頃より後だ、ということだけです。</p>
+<p>前に<a href="/knowledge/photography/astrophotography-exposure-time">「8秒」について書いた記事</a>で、この継ぎ目の話は別の機会に検証したい、と書きました。</p>
+<p>今回がその機会です。</p>
+<h2>3,522枚が残っていた</h2>
+<p>調べ直すにあたって、まず当時の素材を探しました。</p>
+<p>2009年10月11日の夜に撮った、Nikon D3のNEFが3,522枚。一連の連続撮影が、欠けることなく、ひとつながりのまま残っていました。</p>
+<p>ここで、さっそく記憶と記録のずれが出ました。</p>
+<p><strong>私自身はISO 1600だったと記憶していたが、今回、当時のNEFを調べ直すと実際にはISO 3200だった。</strong></p>
+<p>17年も経てば、こういうこともあります。記憶違いの理由は分かりません。ここでは「記録の方を信じる」ということだけ書いておきます。</p>
+<p>今回の検証で使った条件を、実データから読み取った値でまとめます。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>撮影日</td>
+<td>2009年10月11日</td>
+</tr>
+<tr>
+<td>カメラ／レンズ</td>
+<td>Nikon D3、14-24mm F2.8の14mm側</td>
+</tr>
+<tr>
+<td>露光</td>
+<td>8.0秒</td>
+</tr>
+<tr>
+<td>絞り</td>
+<td>F2.8</td>
+</tr>
+<tr>
+<td>ISO</td>
+<td>3200</td>
+</tr>
+<tr>
+<td>撮影</td>
+<td>連続撮影</td>
+</tr>
+<tr>
+<td>RAW</td>
+<td>14bitロスレスNEF</td>
+</tr>
+<tr>
+<td>長秒時ノイズ低減</td>
+<td>OFF</td>
+</tr>
+<tr>
+<td>枚数</td>
+<td>3,522枚（単一の連続撮影、欠番なし）</td>
+</tr>
+<tr>
+<td>コマとコマの間隔</td>
+<td>約8.10秒</td>
+</tr>
+</tbody>
+</table>
+<p>表1：検証に使った実データの条件（NEFのメタデータとタイムスタンプから読み取った値）</p>
+<p>露光が8.0秒で、コマ間隔が約8.10秒。その差の約0.1秒が、シャッターが閉じていた時間の見積もりです。ファイルのタイムスタンプから読み取った値なので、カメラ内部で何が起きていたかまでは分かりません。</p>
+<h2>「0.1秒の空白」で、継ぎ目を説明できるのか</h2>
+<p>当時の私の説明が正しいなら、この約0.1秒の間に星が動いた分だけ、軌跡にすき間ができるはずです。</p>
+<p>実データで測りました。</p>
+<p>8秒の露光で、星が画面上を動く距離は、<strong>約1.13ピクセル</strong>。</p>
+<p>では、約0.1秒では。</p>
+<p><strong>約0.012ピクセル。</strong></p>
+<p>一方、このデータでの星像の幅（半値幅）は<strong>約4.52ピクセル</strong>でした。</p>
+<p>空白の間に星が動く距離は、星像の幅に対して、あまりにも小さい。隣り合う2コマの星像は、ほぼ完全に重なっています。</p>
+<p>少なくとも今回見えていた大きな継ぎ目・濃淡を、「0.1秒の間に星が動いて線にすき間ができた」だけで説明するのは、無理がありました。</p>
+<p><strong>それなのに、濃淡は実在していました。</strong></p>
+<p>3,522枚のうち300枚の区間を取り出して、合成した軌跡に沿った明るさを測ると、明暗の差ははっきりありました。明るいところと暗いところの差を表す指標（Michelsonコントラスト）で、短い軌跡で約0.24、長い軌跡になるほど大きく測れて、約0.54まで達しました。</p>
+<p>100%表示で私が見ていた「途切れ」に対応する実体が、たしかにデータの中にあったのです。</p>
+<p><img src="/images/knowledge/star-trails/f02-n-vs-michelson-ja.svg" alt="比較明合成に使った枚数（5枚・10枚・20枚・50枚・100枚・300枚）と、軌跡に沿った明暗差（Michelsonコントラストの中央値）の折れ線グラフ。5枚で約0.24、300枚で約0.54まで、枚数が増えるほど明暗差が大きく測れている。実測、Nikon D3、2009年10月11日、300枚区間。" /></p>
+<p>図1：比較明合成に使った枚数と、軌跡に沿った明暗差（Michelsonコントラスト、星ごとの中央値）。今回の実データ（300枚区間）を、5枚から300枚まで段階的に合成して測ったものです。軌跡が長くなるほど明暗差は大きく測れ、約0.24から約0.54に達しました。<strong>測定値の折れ線であり、モデルの予測ではありません。</strong> 1台のカメラ・1晩・1条件の実測です。</p>
+<p>一つ補足しておくと、理想的なモデルで考えても、隣り合うコマの境界には明るさの谷が生じ得ます。それ自体は間違いではありません。ただ、今回のD3実写で観測された大きな濃淡を、それだけでは説明できませんでした。</p>
+<p>17年間信じてきた説明は、少なくともこのデータでは、支持されませんでした。</p>
+<h2>濃淡は、合成する前からあった</h2>
+<p>では、あの濃淡はどこから来たのか。</p>
+<p>ここで検証の向きを変えました。合成した結果ではなく、<strong>合成する前の各コマ</strong>を見たのです。</p>
+<p>300枚の区間で、171個の星について、1コマごとに星の明るさを測りました。</p>
+<p>すると、合成する前から、<strong>測定された星の明るさがフレームごとに揺れていました。</strong> しかも、その揺れは単なる測定のばらつきで説明できる範囲を超えていました。</p>
+<p>「測定された明るさ」と、わざわざ書いているのには理由があります。測っているのは、写真の中の星像の明るさです。それが揺れていたからといって、星そのものの明るさが変わっていたと言える段階ではありません。</p>
+<p>いずれにしても、合成の前の段階で、材料そのものがすでに一定ではなかった。</p>
+<p><img src="/images/knowledge/star-trails/f04-time-to-position-ja.svg" alt="模式図。上段は、コマ1からコマ8まで、コマごとに測定された星の明るさが揺れている棒グラフ（時間の並び）。下段は、星が1コマごとに約1.13ピクセル動くことで、その揺れが軌跡の上の位置ごとの濃淡（位置の並び）として並ぶ様子。揺れの原因は未解明。" /></p>
+<p>図2：時間の並びが、位置の並びになる（模式図）。上段の棒の高さは説明のための仮の値で、測定値ではありません。星は1コマごとに約1.13ピクセル動くので、コマごとの明るさの揺れは、軌跡の上では位置ごとの濃淡として並び得ます。<strong>この図は仕組みの説明であり、揺れの原因（何が明るさを変えているのか）は描いていません。未解明です。</strong></p>
+<h2>比較明合成は、揺れを「選び、強める」</h2>
+<p>比較明合成、Photoshopでいう「比較（明）」は、何をしているのか。</p>
+<p>重ねた写真の各画素について、<strong>いちばん明るい値を採る</strong>。それだけです。</p>
+<p>足し算でも平均でもありません。「選ぶ」演算です。</p>
+<p>隣り合うコマの星像がほぼ同じ場所で重なっているとき、その場所に残るのは明るい方のコマの値で、暗い方は捨てられます。合成前の明るさがコマごとに揺れていれば、比較明合成はその揺れの中から明るい側を拾い上げて線にしていく。</p>
+<p><img src="/images/knowledge/star-trails/f01-adjacent-frames-and-max-ja.svg" alt="模式図。上段は、隣り合うコマ1とコマ2の星像。1コマの移動は約1.13ピクセル、星像の幅は約4.52ピクセルで、2つの星像はほぼ重なっている。下段は同じ画素の列を並べたもので、比較（明）は各画素でコマ1とコマ2のうち明るい方の値だけを採る。" /></p>
+<p>図3：隣り合う2コマの星像と、比較（明）の働き（模式図）。星像の幅（約4.52ピクセル）と1コマの移動（約1.13ピクセル）は今回の実データの値ですが、星像の形は説明のために単純化した模式図で、実測画像ではありません。下段のように、比較（明）は各画素で明るい方の値だけを採ります。足し算でも平均でもありません。</p>
+<p>このことを、実データで確かめました。</p>
+<p>同じ星について、各コマを「平均」で重ねた場合と、「比較（明）」で重ねた場合の、軌跡の明暗差を比べたのです。平均で重ねればコマごとの揺れは均され、比較（明）で重ねれば明るい側だけが残る。同じ材料から、違う線ができるはずです。</p>
+<p><strong>比較（明）の方が、明暗差の指標で約0.27大きくなりました。</strong> この差は、測り方の都合で、むしろ控えめに出る値です。</p>
+<p>さらに、星ごとに見ると、合成前の揺れが大きい星ほど、合成後の軌跡の濃淡も大きくなっていました。171個の星で、揺れの大きさの順位と濃淡の大きさの順位がよく対応していたのです（順位相関で約+0.56）。</p>
+<p><strong>比較明合成は、合成前からあった明るさの揺れを選び、増幅して、軌跡の濃淡を強める主要な段階だった。</strong></p>
+<p>ただし、比較明合成が濃淡を「作った」のではありません。「強めた」のです。材料の揺れがなければ、選ぶものもありません。そして、唯一の原因だとも言えません。他の段階がまったく効いていないと確かめたわけではないからです。</p>
+<h2>時間の揺れが、線の上の濃淡になる</h2>
+<p>ここまでをつなげると、継ぎ目の見え方は、こう理解できます。</p>
+<p>星は、1コマごとに画面上を約1.13ピクセル動きます。</p>
+<p>コマごとの明るさの揺れは、時間の順番に並んだ揺れです。その揺れを、星の移動が画面上の位置に写していく。1コマ目の明るさはこの位置に、2コマ目の明るさは1ピクセルほど先に、3コマ目はさらにその先に。</p>
+<p>時間の方向の揺れが、線の上の位置の方向の濃淡として並ぶ。</p>
+<p><strong>だから、連続撮影で空白がほとんどなくても、軌跡に濃淡は現れ得る。</strong></p>
+<p>「現れ得る」と書いているのは、ここまでが今回の検証で確かめられた範囲だからです。</p>
+<h2>まだ分かっていないこと</h2>
+<p>正直に書いておきます。</p>
+<p>今回の検証で分かったのは、「継ぎ目は空白のせいだけではなかった」「合成前から揺れがあった」「比較明合成がそれを強めていた」「時間の揺れが位置の濃淡になり得る」までです。</p>
+<p>分かっていないことが、二つ残っています。</p>
+<p>一つ目。<strong>合成前の測定された明るさの揺れが、何によって生じているのかは、まだ一つには特定できていません。</strong></p>
+<p>二つ目。<strong>濃淡には約15ピクセルという周期がありましたが、それがどうやって決まるのかも未解明です。</strong></p>
+<p>「おそらく○○だろう」と書くことは簡単ですが、今回のデータで確かめられていないことは、書かないことにします。</p>
+<p>もう一つ、限定も書いておきます。今回の結果は、1台のカメラで、1晩に、1つの条件（D3、14mm、8秒、F2.8、ISO 3200）で撮ったデータの、3,522枚のうち300枚の区間を調べたものです。他のカメラや他の条件で同じことが起きるかどうかは、今回は調べていません。</p>
+<h2>私の対策は、何をしていたのか</h2>
+<p>さて、後年の私がやっていた、隣り合う2コマをスクリーンで重ねて−1EVしてから比較明合成する方法。</p>
+<p>あれは何をしていたのか。</p>
+<p>今回あらためてモデルで考えると、コマの境界で捨てられていた側を足し戻す方向の処理で、継ぎ目を弱める方向としては理屈の通ったものでした。</p>
+<p>ただし、数学的に正確な補正ではありません。私が実際に処理していた8bitのTIFF上で、モデルどおりの数値になるわけでもありません。そして何より、<strong>今回の実写検証は、この方法の効果を測ったものではありません。</strong> 測ったのは、対策をする前の、単純な比較明合成の段階で何が起きていたか、です。</p>
+<p>面白いのは、原因の理解は違っていたのに、実務上は「見え方を改善する方法」にはたどり着いていたことです。</p>
+<p>今回分かったのは「対策が正しかった」ということではなく、「私が対策しようとしていた継ぎ目の正体は、私が思っていたものと違っていた」ということです。</p>
+<p>現在の私は、比較明合成を、自分で作っているSideKick Starという道具で行っています。そこに、このスクリーン−1EVの処理は入っていません。</p>
+<p>代わりに入っているのは、比較明合成のあと、空の領域だけに、空間的に滑らかにして破線に見える部分に橋を架けるような処理です。これは、失われた時間の情報を復元しているわけではありません。時間方向の揺れが位置方向の濃淡になって残ったものを、見え方として整えている処理です。それを分かった上で使っています。</p>
+<p>昔のスクリーン−1EVの方法から、なぜ今の方法になったのか。当時の開発記録がなく、理由は今では特定できません。分からないことは、ここでも分からないままにしておきます。</p>
+<h2>記憶より、記録</h2>
+<p>17年前、私は継ぎ目の原因をシャッター間の空白だと思っていました。</p>
+<p>ISO感度も1600だと記憶していました。</p>
+<p>どちらも、残っていた記録で調べ直したら、違っていました。</p>
+<p>継ぎ目は、空白だけでは説明できなかった。合成前から材料が揺れていて、比較明合成がそれを選び、強めていた。星が動くことで、時間の揺れが線の上の濃淡になって現れ得る。</p>
+<p>そして、揺れの原因と周期の正体は、まだ分からない。</p>
+<p>原因を解明した、とは言えません。</p>
+<p>でも、自分が17年間信じていた説明を、当時の実データで検証できたこと。間違っていたところを、間違っていたと確かめられたこと。それは、記録が残っていたからできたことです。</p>
+<p>撮ったデータは、捨てないでおくものだと思いました。</p>
+<p>分からないことは、無理に答えを作らない。</p>
+<p>比較明合成の継ぎ目について、今の私が言えるのは、ここまでです。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>
+        <p class="kzc-related-desc">星景写真の露光時間を何秒にするか。私はNikon D3の頃から15mm前後で20年近く「8秒」を使ってきました。その8秒を、500ルールとNPFルール、そしてカメラの高画素化という観点から検証します。8秒を勧める記事ではありません。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-camera-settings">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</a>
+        <p class="kzc-related-desc">星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
