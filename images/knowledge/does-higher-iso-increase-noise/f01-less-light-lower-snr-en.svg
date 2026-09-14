@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" width="800" height="620" role="img" aria-labelledby="t"><title id="t">Calculated values: when the amount of light reaching the sensor is 1, 1/2, 1/4 and 1/8, the ratio of signal to the light's own fluctuation (relative) is 1.00, 0.71, 0.50 and 0.35. Each halving of the light lowers the ratio to about 0.7× (square-root relationship). Conceptual values for the light's fluctuation only; read noise, circuit noise and highlight clipping are not included. There is no ISO scale.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">Calculated: less light, lower ratio of signal to fluctuation</text>
+<text x="20.0" y="80.0" fill="#ffb14a" font-size="26" font-weight="500" text-anchor="start">Conceptual values for the light's fluctuation only</text>
+<text x="20.0" y="114.0" fill="#ffb14a" font-size="24" font-weight="500" text-anchor="start">Read noise, circuit noise and highlight clipping not included</text>
+<line x1="100.0" y1="470.0" x2="760.0" y2="470.0" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="100.0" y1="470.0" x2="100.0" y2="200.0" stroke="#2b3140" stroke-width="1.5"/>
+<rect x="160.0" y="210.0" width="80.0" height="260.0" rx="6" fill="#ffb14a" stroke="none" stroke-width="0" fill-opacity="0.9"/>
+<text x="200.0" y="196.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="middle">1.00</text>
+<text x="200.0" y="510.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="middle">1</text>
+<rect x="320.0" y="286.2" width="80.0" height="183.8" rx="6" fill="#ff8a00" stroke="none" stroke-width="0" fill-opacity="0.9"/>
+<text x="360.0" y="272.2" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="middle">0.71</text>
+<text x="360.0" y="510.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="middle">1/2</text>
+<rect x="480.0" y="340.0" width="80.0" height="130.0" rx="6" fill="#ff8a00" stroke="none" stroke-width="0" fill-opacity="0.9"/>
+<text x="520.0" y="326.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="middle">0.50</text>
+<text x="520.0" y="510.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="middle">1/4</text>
+<rect x="640.0" y="378.1" width="80.0" height="91.9" rx="6" fill="#ff8a00" stroke="none" stroke-width="0" fill-opacity="0.9"/>
+<text x="680.0" y="364.1" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="middle">0.35</text>
+<text x="680.0" y="510.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="middle">1/8</text>
+<text x="440.0" y="554.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">Amount of light reaching the sensor (relative)</text>
+<text x="20.0" y="162.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Ratio of signal to the light's fluctuation (relative)</text>
+<line x1="20.0" y1="574.0" x2="780.0" y2="574.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="608.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Halve the light and the ratio falls to about 0.7× (√ relationship)</text>
+</g>
+</svg>

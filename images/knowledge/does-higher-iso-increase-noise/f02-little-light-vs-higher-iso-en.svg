@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="t"><title id="t">Conceptual diagram (not a measurement): the two things that happen at the same time when it is dark and you raise the ISO, drawn separately. Top row: less light (dark, stopped down, fast shutter) → fewer particles of light arrive → the light's own fluctuation stands out. Bottom row: raise the ISO → amplification and readout change → the result depends on the design (differs by model and mode). The two rows are not cause and effect; they are separate things that happen together in the same scene. There is no arrow from the ISO row to "more noise".</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">Conceptual diagram (not a measurement)</text>
+<text x="20.0" y="84.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="start">Dark → raise the ISO: two things happen at once</text>
+<rect x="40.0" y="150.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="155.0" y="194.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Less light</text>
+<text x="155.0" y="228.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">dark scene</text>
+<text x="155.0" y="258.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">stopped down</text>
+<text x="155.0" y="288.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">fast shutter</text>
+<line x1="276.0" y1="225.0" x2="282.0" y2="225.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="290.0" y="150.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="405.0" y="208.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Fewer light</text>
+<text x="405.0" y="250.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">particles arrive</text>
+<line x1="526.0" y1="225.0" x2="532.0" y2="225.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="540.0" y="150.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#ff8a00" stroke-width="2.5"/>
+<text x="655.0" y="200.0" fill="#ff8a00" font-size="28" font-weight="700" text-anchor="middle">Fluctuation of</text>
+<text x="655.0" y="240.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">the light itself</text>
+<text x="655.0" y="276.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">stands out</text>
+<rect x="40.0" y="410.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2.5"/>
+<text x="155.0" y="495.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Raise the ISO</text>
+<line x1="276.0" y1="485.0" x2="282.0" y2="485.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="290.0" y="410.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2.5"/>
+<text x="405.0" y="460.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Amplification</text>
+<text x="405.0" y="500.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">and readout</text>
+<text x="405.0" y="536.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">change</text>
+<line x1="526.0" y1="485.0" x2="532.0" y2="485.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="540.0" y="410.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2.5"/>
+<text x="655.0" y="460.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Result depends</text>
+<text x="655.0" y="500.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">on the design:</text>
+<text x="655.0" y="536.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">model and mode</text>
+<rect x="24.0" y="134.0" width="262.0" height="442.0" rx="16" fill="none" stroke="#8c96aa" stroke-width="1.8" stroke-dasharray="10 8"/>
+<text x="155.0" y="350.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">Happen together</text>
+<text x="155.0" y="384.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">in the same scene</text>
+<line x1="290.0" y1="355.0" x2="770.0" y2="355.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="4 6"/>
+<text x="770.0" y="343.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">Not cause and effect</text>
+</g>
+</svg>
