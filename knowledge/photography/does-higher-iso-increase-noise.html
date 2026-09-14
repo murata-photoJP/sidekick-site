@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「ISOを上げるとノイズが増える」は、本当なのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="「ISOを上げるとノイズが増える」は本当なのか。同じ光でISOだけ上げても、光のゆらぎによるノイズは増えない。ノイズが目立った主な原因は少ない光で、増幅で何が起きるかはカメラの設計次第。星景写真でISO12800を使う私が、ISOとノイズの関係を調べ直します。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/does-higher-iso-increase-noise">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">「ISOを上げるとノイズが増える」は、本当なのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">「ISOを上げるとノイズが増える」は、本当なのか？</h1>
+    <p class="kzc-article-lead">「ISOを上げるとノイズが増える」は本当なのか。同じ光でISOだけ上げても、光のゆらぎによるノイズは増えない。ノイズが目立った主な原因は少ない光で、増幅で何が起きるかはカメラの設計次第。星景写真でISO12800を使う私が、ISOとノイズの関係を調べ直します。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-14">更新日：2026-09-14</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――ノイズが増えた。その原因は、本当にISOなのか？</p>
+<p>暗い。シャッターが遅すぎる。ISOを上げる。撮れた写真を見ると、ノイズが増えている。</p>
+<p>だから、ISOを上げるとノイズが増える。</p>
+<p>写真を撮る人なら、たぶん誰でもこの順番で覚えます。私もそうでした。そして正直に言うと、私はこれを疑ったことが一度もありませんでした。</p>
+<p>高校から大学のころ、私はオーディオに凝っていました。小さな信号を大きく増幅すれば、ノイズが問題になる。アンプを触っていれば、それは理屈を考える前に身についてしまう感覚です。だからデジタルカメラを使うようになっても、「入ってくる光が少ないのに、それを増幅すればノイズが増えるのは当たり前だ」と、私は思っていました。そういうものだ、と。</p>
+<p>その私が、今回AIを使って、この当たり前をあらためて調べてみることにしました。</p>
+<p>結論を先に言えば、この常識は「たいてい当たっている」のですが、当たり方が私の思っていたものとは少し違っていました。</p>
+<h2>「高感度は粒子が荒れる」は、教わった記憶すらない</h2>
+<p>そもそも「感度を上げると画質が落ちる」という話は、デジタル以前からありました。</p>
+<p>フィルムの時代、高感度のフィルムほど粒子が荒れる。これを私はいつ、どこで知ったのか。思い出そうとしても、思い出せません。写真を本格的に始めてから覚えた、という感覚がないのです。たぶん小学生のころには、当たり前の常識として知っていたと思います。誰に教わったのか、何で読んだのかは、覚えていません。</p>
+<p>私の写真はISO100のネガフィルムから始まりました。ポジに切り替えたときもISO100。ベルビアが出てからはISO50を使うようになりました。感度は低いほうがいい。そう思って、ずっと低いほうを選んでいました。</p>
+<p>デジタルになっても、その延長で「ISOを上げるとノイズが増える」と受け止めていました。疑問を持たなかった理由は、前に書いたとおりです。少ない光を増幅する。ノイズが増える。当たり前だ。</p>
+<p>この常識がどこから来たのかは、この記事の後半でもう一度戻ってきます。</p>
+<h2>そのとき、同時に何が変わっていたのか</h2>
+<p>まず、最初の場面をもう一度ゆっくり見てみます。</p>
+<p>私たちがISOを上げる場面では、多くの場合、二つのことが同時に起きています。</p>
+<p>一つは、<strong>センサーが受け取る光の量が少なくなっている</strong>ことです。そもそも場所が暗い。手ブレを避けるためにシャッターを速くする。被写界深度を確保するために絞る。理由はさまざまですが、どれもセンサーに届く光を少なくします。ISOを上げたくなるのは、たいていこういうときです。</p>
+<p>もう一つは、<strong>ISOの数字を上げている</strong>ことです。少ない光で撮った暗い画像を、見られる明るさまで持ち上げる。</p>
+<p>「ISOを上げたらノイズが増えた」と言うとき、この二つはほとんどいつも一緒に起きています。だから、ノイズが増えた原因がどちらにあるのかは、分けて考えないと分かりません。</p>
+<p><img src="/images/knowledge/does-higher-iso-increase-noise/f02-little-light-vs-higher-iso-ja.svg" alt="概念図（測定値ではない）。「暗い → ISOを上げる」のとき同時に起きている二つのことを、上下二つの列に分けて描く。上の列：光が少ない（暗い・絞る・速いシャッター）→ 届く光の粒が少ない → 光のゆらぎが目立つ。下の列：ISOを上げる → 増幅・読み出しが変わる → 結果は設計次第（機種・モードで違う）。左端の二つの箱は「同じ場面で同時に起きる」として破線で囲まれ、二つの列の間には「原因と結果ではない」と書かれている。ISOの列から「ノイズが増える」への矢印はない。" /></p>
+<p>図1：暗い場所などでは、「届く光が少ない」ことと「ISOを上げる」ことが同時に起こりやすい。しかし、この二つは別の変化である（概念図）。上の列は光の話——そもそも暗い、絞る、シャッターを速くする、といった理由でセンサーに届く光が少なく、光のゆらぎが目立つ。下の列はISOの話——増幅や読み出しの動作が変わり、その結果はカメラの設計やモードで違う。二つの列は原因と結果ではなく、同じ場面で同時に起きている別々のことである。</p>
+<p>この記事は、この二つを分けて考えます。</p>
+<h2>光が半分になると、何が起きるか</h2>
+<p>先に、光の側から見ます。</p>
+<p>光は粒でやってきます。光子と呼ばれる粒が、露光時間の間にセンサーの一つ一つの画素に飛び込んでくる。その数が、画像の明るさになります。</p>
+<p>ここで大事なのは、粒の数には<strong>ばらつきがある</strong>ということです。同じ明るさの場所を撮っても、隣の画素より少し多く飛び込む画素と、少し少ない画素が必ず出ます。この「ばらつき」が、光そのものが持っているノイズです。</p>
+<p>そして、粒の数が少ないほど、このばらつきは相対的に目立ちます。</p>
+<p>たとえば、届く光の量が半分になると、ばらつきに対する信号の比は約0.7倍に下がります。4分の1になれば半分です。細かい計算は省きますが、光の量が減るほど、なだらかにノイズが目立っていく。これは光の性質そのものであって、カメラの設定とは関係なく起きます。</p>
+<p><img src="/images/knowledge/does-higher-iso-increase-noise/f01-less-light-lower-snr-ja.svg" alt="縦棒グラフ。横軸はセンサーに届く光の量（相対値）1、1/2、1/4、1/8、縦軸は光のゆらぎに対する信号の比（相対値）。棒の高さは1.00、0.71、0.50、0.35と、光が半分になるごとに約0.7倍に下がる。ISOの目盛りはない。図中に「計算値」「光のゆらぎだけを考えた概念値。読み出しノイズ・回路ノイズ・白飛びは含みません」と表示。" /></p>
+<p>図2：センサーに届く光の量が半分、4分の1、8分の1になると、光のゆらぎに対する信号の比は約0.71、0.50、0.35に下がる（√の関係）。光のゆらぎだけを考えた計算値で、読み出しノイズ・回路ノイズ・白飛びは含まない。横軸は光の量であって、ISOではない——ISOの数字を触らなくても、光が少なければこの変化は起きる。</p>
+<p>つまり、<strong>ISOの数字を一切触らなくても、光が少なければノイズは目立つ</strong>のです。</p>
+<p>場所が暗かった。シャッターを速くした。絞った。その時点で、ノイズが目立つ条件はすでに整っていました。</p>
+<h2>同じ光で、ISOだけを上げたら</h2>
+<p>では、ISOの側です。</p>
+<p>こんな実験を考えてみます。カメラを三脚に載せて、絞りもシャッター速度も同じにしたまま、ISOだけを上げる。</p>
+<p>センサーに届く光の粒の数は、変わりません。絞りとシャッターが同じなのですから、当然です。粒の数が変わらなければ、粒のばらつき、つまり光そのもののノイズも変わりません。</p>
+<p>変わるのは、画像の明るさです。</p>
+<p>ISOを上げると、暗く記録されるはずだった画像が明るく持ち上がります。そのとき、それまで暗くて見えなかったノイズも一緒に持ち上がって、<strong>見えるようになる</strong>。ノイズが新しく生まれたのではなく、隠れていたものが見えるようになっただけ——少なくとも光のゆらぎについては、そう言えます。</p>
+<p>ここまでで、私の「当たり前」の半分がほどけました。ノイズが目立つ主な原因は、光が少なかったことでした。ISOはそれを見えるようにした。</p>
+<p>では、残りの半分。「増幅すればノイズが増える」は、どうなのでしょう。</p>
+<h2>「増幅すればノイズが増える」は、どこまで本当か</h2>
+<p>オーディオ少年だった私の感覚を、あらためて書き出してみます。</p>
+<p>「入ってくる光が少ないのに、それを増幅すればノイズが増える。」</p>
+<p>今回調べてみて分かったのは、この一文が、実は<strong>二つのことを一つの言葉で言っていた</strong>ということでした。</p>
+<p>一つ目は「入ってくる光が少ない」。これは前の節で見たとおり、ノイズが目立つ主な原因です。私の感覚は、ここを正しく押さえていました。</p>
+<p>二つ目は「増幅すればノイズが増える」。こちらは、少し違いました。</p>
+<p>理想的な増幅器は、入ってきた信号もノイズも、同じ倍率で大きくします。信号が2倍になればノイズも2倍。両者の比は変わりません。だから、増幅そのものが新しいノイズを作るわけではないのです。理想的な増幅だけを考えるなら、同じ光で撮った画像は、ISOを変えても信号とノイズの比は同じになります。</p>
+<p>ただし、実際のカメラは「理想的な増幅だけ」ではありません。</p>
+<p>センサーから信号を読み出す回路には、それ自体のノイズがあります。この読み出しノイズが、増幅の<strong>前</strong>に乗るのか<strong>後</strong>に乗るのかで、結果が変わります。増幅の後ろで乗るノイズは、先に信号を大きくしておけば相対的に小さくなる。逆に、記録した後でデジタル的に明るくすれば、後ろで乗ったノイズもそのまま一緒に大きくなる。どこで増幅するかが効いてくるのです。</p>
+<p>だから、同じ光でISOだけを上げたとき、機種によっては暗部の読み出しノイズが相対的に小さくなることがあります。一方で、ISOを上げると、明るい側の余裕——白飛びまでの距離——が減ることがあります。ここから先は上げても暗部は良くならず、余裕だけが減る、そういう範囲を持つカメラもあります。</p>
+<p>そして、これらがどう振る舞うかは、<strong>カメラの設計次第</strong>です。ISOに対して読み出しノイズがなめらかに変わる機種もあれば、ある値で不連続に変わる<a href="https://www.photonstophotos.net/Investigations/Measurement_and_Sample_Variation.htm" title="PhotonsToPhotos: Measurement and Sample Variation">測定例</a>もあります。一つの法則にはなりません。</p>
+<p>私の経験で言えば、この「カメラによる」は、かなり実感のあるものです。Nikon D2Xを使っていたころ、ISO400程度まで上げると、ノイズで「クリスマスイルミネーションか？」と言いたくなるような画になりました。次のD3では、ISO6400でも大きな問題はありませんでした。もちろんノイズは多くなるのですが、実用になる。同じ「ISOを上げる」でも、カメラが違えば起きることが違う。これは私の経験であって、この二機種の性能を測った話ではありませんが、その差は忘れられません。</p>
+<p>さて、私の「当たり前」に戻ります。</p>
+<p>撮影の現場では、「光が少ない」と「ISOを上げる」はほとんど常に同時に起きます。だから私は、この二つを分けて考える必要がありませんでした。分けなくても撮れていたのです。今回調べて分かったのは、この二つは別々に考える必要がある、ということでした。光が少ないこと。それを増幅すること。前者はノイズが目立つ主な原因で、後者はそれ自体ではノイズを作りません。ただし増幅の仕方はカメラごとに違い、そこで良くも悪くもなる。</p>
+<p>「ISOを上げるとノイズが増える」は間違い、と言いたいわけではありません。いつもの撮り方をしている限り、この観察はたいてい当たっています。ただ、ノイズを作った犯人は、ISOという数字ではなかった。少ない光でした。</p>
+<h2>見えているのは、何のノイズか</h2>
+<p>もう一つ、分けておきたいことがあります。</p>
+<p>「ノイズが増えた」と言うとき、私たちが見ているのは何でしょうか。</p>
+<p>光の粒のばらつき、読み出し回路のノイズ、RAWファイルに記録された数値のばらつき、そして現像や表示を通った後に画面で見える粒状感。これらは、同じものではありません。私たちが「ノイズ」と呼んで見ているのは、いちばん最後の、処理を通った後の見え方です。</p>
+<p>カメラが作るJPEGは、撮影と現像を合わせた結果です。高いISOでは、カメラは自動的にノイズ低減を強くかけることが多い。だから滑らかに見えるのですが、そのとき細部も一緒に削られています。滑らかなJPEGだからノイズの少ないセンサー、とは言えないのです。RAWで撮っていても、最終的に私たちが画面で見るまでには、現像と表示の処理を通ります。</p>
+<p>私自身のことを言えば、D3のころは写真展で大きく伸ばす機会より、雑誌に載せる機会のほうが圧倒的に多かった。だから高いISOの画質も、「誌面で問題がないこと」が私の基準でした。後で大きく伸ばす必要が出たら、そのときに何か考えればいい。ノイズが「見える」かどうかは、どこで、どの大きさで見るかで変わります。</p>
+<h2>フィルムの粒子と、デジタルのノイズ</h2>
+<p>ここで、最初の疑問に戻ります。「高感度は粒子が荒れる」というフィルム時代の常識は、デジタルのノイズとどうつながっているのか。</p>
+<p>デジタルカメラの「ISO」という数字は、フィルムの感度と同じ露出の感覚で使えるように<a href="https://www.iso.org/standard/73758.html" title="ISO 12232:2019（デジタルスチルカメラのISO感度の規格。フィルムの露出実務との整合を意図したことは1998年版に記載）">決められました</a>。ISO100のフィルムで撮っていた人が、デジタルでもISO100と設定すれば、同じ絞りとシャッターで同じような明るさの写真が撮れる。そのために、数字の意味をフィルムから引き継いだのです。</p>
+<p>「高感度は粒子が荒れる」というフィルム時代の説明と、「高いISOではノイズが増える」というデジタル時代の説明は、非常によく似ています。<a href="https://files.canon-europe.com/files/soft24329/manual/EOSD30_CUG_EN.pdf" title="Canon EOS D30 User's Guide（PDF）">初期のデジタルカメラの説明書</a>も、その連続した語彙で説明していました。高いISOではノイズが増え、シャープさが落ちる、と。</p>
+<p>ただし、仕組みは同じではありません。フィルムの粒子が荒れる理由と、センサーのノイズが目立つ理由は、別の話です。今回調べた範囲では、この常識がどこで始まったのか、一つの出典を特定することはできませんでした。言えるのは、フィルム時代の説明の語彙が続いていたこと、初期のデジタルカメラで実際に高ISOの画質が厳しかったこと、その両方が今の常識を形作るのに関わったのだろう、というところまでです。</p>
+<p>ついでに言えば、フィルムの時代にも、高感度でありながら細かい粒子を<a href="https://asset.fujifilm.com/www/us/files/2020-03/85d928f44b0df3b2a95913e46608881d/ProfessionalFilmDataGuide.pdf" title="Fujifilm Professional Film Data Guide（PDF）">売りにした製品</a>はありました。感度と粒状の関係は、フィルムでさえ一本の法則ではなかったのです。</p>
+<p>私自身の粒子との付き合いも、少し書いておきます。1990年代、私が35mmフィルムで撮っていたころ、粒子が強く気になったのは大きくプリントしたときでした。半切まで伸ばすとかなり気になり、全紙では、がっかりするレベルでした。当時すでにベルビアのISO50を使っていましたから、感度をさらに下げる余地はほとんどありません。それでも満足できなかった。だから私は、感度を下げるのではなく、4×5や6×9、6×12といった大きなフォーマットへ移りました。</p>
+<p>粒子への答えは、ISOだけではなかった。今にして思えば、あのときすでに、私は「感度の数字」ではなく別のところで問題を解いていたのです。</p>
+<h2>記憶より、記録</h2>
+<p>話が少し逸れますが、ISOについて、私には一つ苦い経験があります。</p>
+<p>D3で星景を撮っていたころ、私はISO1600で撮っていたと記憶していました。ところが、比較明合成の継ぎ目を<a href="/knowledge/photography/star-trail-seams-lighten-composite">調べ直した記事</a>を書くとき、17年前のRAWを確認すると、その撮影はISO3200でした。</p>
+<p>あのころはデジタルの星景も比較明合成も、まだノウハウがほとんど蓄積されていなくて、試行錯誤していた時期です。その撮影ではISO3200を試したのだと思います。撮り方が固まってからは、ISO1600で撮るようになりました。</p>
+<p>撮影条件はExifに残ります。必要になればRAWを開いて確認すればいい。ですから私の受け止めは、「普段の撮り方なら1600だけど、この時は3200だったのかぁ」という程度のものです。ただ、ISOについて語るときは、記憶より記録を信じたほうがいい。自分自身で、それを確かめることになりました。</p>
+<h2>では、ISOはどう決めるのか——光を集められるかが先</h2>
+<p>ここまでの話を、撮影の判断に戻します。</p>
+<p>ノイズが目立つ主な原因が「光が少ないこと」だとすれば、順番は自然に決まります。<strong>光を集められるなら、まず光を集める。</strong></p>
+<p>ISOを下げるのはその結果であって、目的ではありません。</p>
+<p>三脚に載せてシャッターを長くできるなら、ISOを下げて光を多く集めるほうが、ノイズは目立たなくなります。ただし良くなった理由は「ISOが低いから」ではなく「光が増えたから」です。</p>
+<p>逆に、光をこれ以上集められない場面があります。手持ちでシャッターを遅くできない。動く被写体を止めたい。星を点に写したい。こういう場面でISOを下げても、光は増えません。画像が暗くなるだけです。そこで必要なのは、必要なISOまで上げることです。</p>
+<p>なお、露光時間を長くすれば長くするほど良くなる、というわけでもありません。長時間露光では熱によるノイズや輝点が別に増えてきますし、星景のように露光時間そのものに制約のある撮影もあります。星景の露光時間の話は<a href="/knowledge/photography/astrophotography-exposure-time">別の記事</a>に書きました。ここでは深入りしません。</p>
+<p>私自身の運用は、こうです。</p>
+<p>基本はベース感度のISO100で、三脚を使います。三脚を使うことがほとんどなので、通常はこれで困りません。手持ちでなければならない場面では、ISOを上げたほうがよければ上げます。上限は機種によって変えています。フルサイズとマイクロフォーサーズでは現実的な上限が違うと、私は感じています。</p>
+<p>「低いISOで暗く撮っておいて、現像で明るくする」という撮り方は、私は基本的にしません。階調を確保するために少しアンダー気味に撮って持ち上げることはありますが、それは別の目的です。低いISOで撮って持ち上げるのと、高いISOで撮るのとでは何が違うのか——これは機種によって答えが変わる話なので、次の記事で扱います。</p>
+<p>Auto ISOは、普段は使いません。ただ、街撮りや流し撮りのように、ISOをその場その場で変えたほうがよい撮影では積極的に使います。その場合も、ボディ側でISOの上限は決めておきます。</p>
+<p>写真の指導をしていると、初心者の方から「ISOはオートで良いんですよね！！」と、よく聞かれます。私は「それじゃだめだよ」と答えます。ただし、それはAuto ISOを使うなという意味ではありません。私自身が使っているのですから。だめなのは、ISOが写りにどう関係するのかを知らないまま、カメラに任せてしまうことです。何が起きるかを知っていれば、Auto ISOは便利な道具です。</p>
+<p>教えるときの私の基本は、状況の説明がなければベース感度で撮ること、手ブレが怖いのならまず三脚を使うこと。けれども、それは「常に低いISOを使え」という意味ではありません。そこから先は、撮影の状況を見て考えます。ISOの数字だけで一律に判断することは、私はしてきませんでした。</p>
+<h2>私は今も、必要ならISO25600で撮る</h2>
+<p>私の星景写真の撮り方では、ISO100では写りません。私は状況によって、ISO12800やISO25600も使います。</p>
+<p>私の言葉で言うと、こうなります。</p>
+<p><strong>「ノイズは当然増えるが、写らないと意味がない。ノイズは将来、何か対策する手立てが出てきてもおかしくないが、写ってないものはボツでしかない。」</strong></p>
+<p>これは私の撮影判断であって、物理の話ではありません。星景では露光時間を長くできないので、光をこれ以上集められない。だから必要なISOまで上げる。上げれば当然、ノイズは目立ちます。それでも、写っていない写真より、ノイズのある写真のほうがいい。私はそう判断しています。</p>
+<p>今回調べ終えた後も、私のISOの使い方は今まで通りです。</p>
+<p>一つだけ付け加えると、いまはデュアルベース感度をうたうカメラもあり、ISO100という数字そのものに絶対的なアドバンテージがあるわけではないと、私は考えています。かといって、必要がないのにわざわざ高い感度で撮る意味もない。「一番低いISOが一番きれい」とは限らない、という話は、次の記事で改めて書きます。</p>
+<p>ここまでの話を、一枚の表にまとめておきます。</p>
+<table>
+<thead>
+<tr>
+<th>比べ方</th>
+<th>届く光の粒とそのゆらぎ</th>
+<th>増幅・読み出し（読み出しノイズの見え、ハイライトの余裕）</th>
+<th>画面で見える粒</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) 同じ光で、ISOだけ上げる</td>
+<td>変わらない</td>
+<td>設計次第（増幅の前後で乗るノイズの位置による。余裕は減ることがある）</td>
+<td>明るくなるぶん見えやすくなる</td>
+</tr>
+<tr>
+<td>(b) 光が少ない場面で、ISOを上げる（そもそも暗い／シャッターを速く／絞る）</td>
+<td>粒は減り、ゆらぎが目立つ</td>
+<td>設計次第</td>
+<td>目立つ</td>
+</tr>
+<tr>
+<td>(c) 同じ光で撮り、明るさを揃えて比べる（低ISOを持ち上げる vs 高ISO）</td>
+<td>変わらない</td>
+<td>設計次第（先に増幅したか、後で明るくしたかで違う）</td>
+<td>設計次第</td>
+</tr>
+<tr>
+<td>(d) カメラJPEGで比べる</td>
+<td>—</td>
+<td>処理次第</td>
+<td>処理次第（ノイズ低減が強いほど滑らかに見えるが細部も減る）</td>
+</tr>
+</tbody>
+</table>
+<p>表1：何が変わり、何が変わらないか。「変わらない」「減る」は光のゆらぎについて計算で言えること、「設計次第」はカメラの増幅・読み出しの設計やモードによって結果が違うこと、「処理次第」は現像・表示の処理によって見え方が違うことを表す。どの行も、すべてのカメラに当てはまる一つの答えではない。</p>
+<h2>「ISOを上げるとノイズが増える」を、どう言い直すか</h2>
+<p>最後に、最初の常識を、私なりに言い直してみます。</p>
+<p>「ISOを上げるとノイズが増える」——光の少ない場面でISOを上げる、いつもの撮り方をしている限り、この観察はたいてい当たっています。</p>
+<p>けれども、ノイズを作ったのはISOという数字ではありませんでした。少ない光でした。同じ光でISOだけを上げても、光のゆらぎによるノイズは増えません。増幅の段階で何が起きるかは、カメラの設計次第で、良くなることも悪くなることもある。一つの法則にはなりません。</p>
+<p>だからといって「ISOは関係ない」わけでもありません。ISOを上げれば隠れていたノイズは見えるようになりますし、機種によっては明るい側の余裕が減ることもあります。</p>
+<p>私が今回学んだのは、「光が少ないこと」と「増幅すること」を、別々に考える必要があるということでした。撮影の現場ではいつも同時に起きるので、私は数十年、分ける必要を感じませんでした。それで撮れていたのですから、それはそれでよかったのだと思います。ただ、分けて考えられるようになった今、ISOを上げるときに私が見ているのは、ISOの数字ではなく、そこにある光の量です。</p>
+<p>光を集められるなら、まず光を集める。集められないなら、必要なISOまで上げる。</p>
+<p>写ってないものはボツでしかない。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>
+        <p class="kzc-related-desc">星景写真の露光時間を何秒にするか。私はNikon D3の頃から15mm前後で20年近く「8秒」を使ってきました。その8秒を、500ルールとNPFルール、そしてカメラの高画素化という観点から検証します。8秒を勧める記事ではありません。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/star-trail-seams-lighten-composite">連続撮影なのに、なぜ星の軌跡に継ぎ目が見えるのか？</a>
+        <p class="kzc-related-desc">比較明合成した星の軌跡に、連続撮影なのになぜ継ぎ目が見えるのか。17年前のD3のNEF 3,522枚を測り直すと、今回の実写では空白だけでは説明できず、合成前からあった測定された明るさの揺れを比較明合成が選び、強めていました。原因と周期は未解明です。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-camera-settings">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</a>
+        <p class="kzc-related-desc">星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
