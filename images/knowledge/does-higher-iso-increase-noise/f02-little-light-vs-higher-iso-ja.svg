@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="t"><title id="t">概念図（測定値ではない）：暗い場所で ISO を上げるとき、同時に起きている二つのことを分けて描いた図。上の列：光が少ない（暗い、絞る、速いシャッター）→ 届く光の粒が少ない → 光のゆらぎが目立つ。下の列：ISO を上げる → 増幅・読み出しが変わる → 結果は設計次第（機種・モードで違う）。二つの列は原因と結果ではなく、同じ場面で同時に起きる別々のこと。ISO の列から「ノイズが増える」への矢印は無い。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">概念図（測定値ではありません）</text>
+<text x="20.0" y="84.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="start">「暗い → ISOを上げる」のとき、同時に起きている二つのこと</text>
+<rect x="40.0" y="150.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="155.0" y="200.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">光が少ない</text>
+<text x="155.0" y="240.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">暗い・絞る・</text>
+<text x="155.0" y="276.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">速いシャッター</text>
+<line x1="276.0" y1="225.0" x2="282.0" y2="225.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="290.0" y="150.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="405.0" y="208.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">届く光の粒が</text>
+<text x="405.0" y="250.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">少ない</text>
+<line x1="526.0" y1="225.0" x2="532.0" y2="225.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="540.0" y="150.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#ff8a00" stroke-width="2.5"/>
+<text x="655.0" y="208.0" fill="#ff8a00" font-size="28" font-weight="700" text-anchor="middle">光のゆらぎが</text>
+<text x="655.0" y="250.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">目立つ</text>
+<rect x="40.0" y="410.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2.5"/>
+<text x="155.0" y="495.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">ISOを上げる</text>
+<line x1="276.0" y1="485.0" x2="282.0" y2="485.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="290.0" y="410.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2.5"/>
+<text x="405.0" y="468.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">増幅・読み出しが</text>
+<text x="405.0" y="510.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">変わる</text>
+<line x1="526.0" y1="485.0" x2="532.0" y2="485.0" stroke="#ffb14a" stroke-width="3" marker-end="url(#ah)"/>
+<rect x="540.0" y="410.0" width="230.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2.5"/>
+<text x="655.0" y="460.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">結果は設計次第</text>
+<text x="655.0" y="500.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">機種・モードで</text>
+<text x="655.0" y="536.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">違う</text>
+<rect x="24.0" y="134.0" width="262.0" height="442.0" rx="16" fill="none" stroke="#8c96aa" stroke-width="1.8" stroke-dasharray="10 8"/>
+<text x="155.0" y="350.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">同じ場面で</text>
+<text x="155.0" y="384.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">同時に起きる</text>
+<line x1="290.0" y1="355.0" x2="770.0" y2="355.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="4 6"/>
+<text x="770.0" y="343.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">原因と結果ではない</text>
+</g>
+</svg>
