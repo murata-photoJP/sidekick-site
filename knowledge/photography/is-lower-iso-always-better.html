@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「ISOは低いほど高画質」は、本当なのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="「ISOは低いほど高画質」は本当なのか。良くしたのは低い数字ではなく、シャッターを延ばして集めた光だった。光を増やせない場面で下げても同じことは起きず、ISO50などの拡張感度には落とし穴もある。ISOの数字に画質を決めさせない、私のISOの決め方。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/is-lower-iso-always-better">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">「ISOは低いほど高画質」は、本当なのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">「ISOは低いほど高画質」は、本当なのか？</h1>
+    <p class="kzc-article-lead">「ISOは低いほど高画質」は本当なのか。良くしたのは低い数字ではなく、シャッターを延ばして集めた光だった。光を増やせない場面で下げても同じことは起きず、ISO50などの拡張感度には落とし穴もある。ISOの数字に画質を決めさせない、私のISOの決め方。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-15">更新日：2026-09-15</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――ISOの数字に、画質を決めさせない。</p>
+<p>SNSで、「ISO50でしか撮らない」と強く言う人を、何人か見かけました。理由を本人に聞いたわけではありません。ただ私には、「それが一番きれいに決まっているから」という考えに見えました。</p>
+<p>気持ちは分かります。ISO感度は低いほどノイズが少ない、と聞く。だから一番低い数字を選べば、一番きれいに撮れるはずだ。そう考えるのは自然です。</p>
+<p>私自身、撮影を始めるときはISO100・F8から入ります。では私も、一番低いISOが一番きれいだと思っているのか。今回、AIを使ってこの常識を調べ直してみて、自分の運用を言葉にできるようになりました。</p>
+<p>先に言っておくと、ISO100・F8は「一番きれいな設定」だから選んでいるのではありません。この記事は、そこから始まります。</p>
+<h2>「ISOを下げた」には、二つの意味がある</h2>
+<p>「ISOを下げたら、きれいに撮れた」という一文には、実は二つの違う出来事が混ざっています。</p>
+<p>一つ目。暗い場所で、三脚を立てて、ISOを下げた。そのぶんシャッターを長くした。センサーには、前より<strong>多くの光</strong>が届いています。</p>
+<p>二つ目。明るい昼間、絞りもシャッターもそのままで、ISOの数字だけを下げた。センサーに届く光の量は、<strong>前と同じ</strong>です。</p>
+<p>どちらも「ISOを下げた」です。けれども、起きていることは別です。この記事では、この二つを分けて考えます。</p>
+<p><img src="/images/knowledge/is-lower-iso-always-better/f01-lower-iso-more-light-vs-iso-only-ja.svg" alt="概念図（測定値ではない）。「ISOを下げた」の二つの意味を、共通の出発点「暗い場面（同じ明るさ、届く光の粒12）」から左右二つの列に分けて描く。左の列：ISOを下げる ＋ シャッターを延ばす → センサーに届く光の粒が増える（粒24） → 光のゆらぎが目立ちにくくなる。右の列：ISOの数字だけ下げる（絞り・シャッターは同じ） → 届く光の粒は同じ（粒12） → 光の粒は増えない。余裕・暗部は設計次第。ISOの数字を画質の順位としては描かない。数式・√・測定グラフは無い。粒の数は見やすさのための例示で、光子の統計値ではない。" /></p>
+<p>図1：「ISOを下げた」には二つの意味がある。左はシャッターを延ばして光を多く集めた場合、右は光の量を変えず数字だけ下げた場合。良くなり得るのは左で、その原因は集めた光である（概念図）。</p>
+<h2>ここで一度、答えを出します</h2>
+<p>一番低いISOが、いつでも一番きれいとは限りません。</p>
+<p>ISOを下げたことで、シャッターを長くして多くの光を集められたなら、画質が良くなることがあります。でも良くしたのは「低いISOという数字」ではなく、多く集めた光です。</p>
+<p>光の量が同じなら、ISOの数字だけ下げても、同じことは起きません。</p>
+<p>これがこの記事のいちばん大事なところです。以下では、光を集められる場面、集められない場面、そして低いISOの本当の利点を、順に見ていきます。</p>
+<h2>光を多く集められるとき——三脚の話</h2>
+<p><a href="/knowledge/photography/does-higher-iso-increase-noise">ISOを上げるとノイズが増えるのかを調べた前の記事</a>で、ノイズが目立つ主な原因は少ない光で、光を集められるなら集める、集められないなら必要なISOまで上げる、と書きました。この記事はその続きです。集められるとき、低いISOの何が効いているのか。</p>
+<p>光は粒でやってきます。粒が多いほど、光そのもののゆらぎは目立ちにくくなります。三脚に載せて、シャッターを長くできるなら、ISOを下げたぶんだけ長く露光して、粒を多く集められる。画質が良くなり得るのは、このときです。</p>
+<p>私の運用もそうです。暗い条件で、そのままではISO6400くらいが必要な場面でも、三脚でシャッターを延ばせるのなら、ISOを下げます。理由は数字を小さくしたいからではなく、そのぶん光を集められるからです。</p>
+<p>ただし、いくつか条件があります。被写体が動いていないこと。明るい部分が白く飛ばない範囲であること。そして、露光時間を長くすればするほど良くなる、というわけでもありません。長時間露光では、熱によるノイズや輝点が別に増えてきます。星景のように、露光時間そのものに制約がある撮影もあります。露光時間の話は<a href="/knowledge/photography/astrophotography-exposure-time">別の記事</a>に書きました。</p>
+<p>それでも、三脚と静止した被写体があるなら、ISOを下げて光を集めるのは、いちばん素直な選択です。</p>
+<h2>光を増やせないとき——手持ちと、動くもの</h2>
+<p>では、三脚がないときはどうでしょう。</p>
+<p>手持ちで撮っている。ISOを下げれば、そのぶんシャッターが遅くなる。遅くできる範囲なら、光は増えます。でも、手ブレが出るところまで遅くしてしまえば、ノイズが減っても写真はブレます。ノイズが少なくても、ブレていれば「高画質」とは言いにくい。</p>
+<p>動くものを撮っている。子ども、動物、乗り物。被写体を止めるためにシャッター速度が決まっている。この場合、ISOを下げてもシャッターは延ばせません。光は増えません。画像が暗くなるだけです。ここでISOを下げても、光の面では何も得ていないことになります。必要なISOまで上げるのが、この場面の正解です。</p>
+<p>私の経験で言えば、「低いISOにこだわったせいで失敗した」という記憶はありません。逆に、ISOを上げれば問題なく撮れたはずなのに、上げ忘れて失敗したことはあります。</p>
+<p>光を増やせない場面で数字だけ下げても、光の面では良くなりません。</p>
+<h2>低いISOの本当の利点と、拡張ISOの落とし穴</h2>
+<p>ここまで読むと、「じゃあ低いISOに利点はないのか」と思われるかもしれません。そうではありません。ちゃんとあります。</p>
+<p>同じ光で撮るとき、低いISOのほうが<strong>明るい側の余裕</strong>——白飛びまでの距離——が残ることがあります。雲や雪、逆光の空を守りたい場面では、これは大切な利点です。ただし、どのくらい残るかはカメラやモードによって違います。</p>
+<p>逆に、カメラによっては、少し高めのISOのほうが暗部がきれいになることもあります。これも「ISOの数字が低いほど良い」とは言えない理由の一つです（詳しくは後半で）。</p>
+<p>そのうえで、落とし穴が一つあります。カメラによっては、通常の範囲より下に「拡張」の低いISO——ISO50などの、「L」といった表示の設定——があります。数字は一番低い。では、それが一番きれいなのか。</p>
+<p>そうとは限りません。機種によっては、拡張の低いISOでは明るい側の余裕が減る、とメーカー自身が説明書に書いています。「一番低い数字」が「基準」とは限らないのです。どの機種でどうなるかは、その機種の説明書で確かめるしかありません（技術的な話と実例は、記事の後半にまとめました）。</p>
+<p>私は、拡張ISO50などは基本的に使いません。理由は、本来の性能を十分に得られない場合があると考えているからです。ただし、使ってはいけないとも思っていません。どうしてもスローシャッターにしたいのに、NDフィルターを持っていない。シャッターも絞りも動かしたくない。そういう場面で、他に選択肢がなければ使います。NDフィルターが使えるなら、そちらを選びます。</p>
+<p>ついでに言えば、フィルムの時代、私はベルビアというISO50のフィルムを使っていました。でもそれは、「ISO50だからISO100より高画質」と思って選んだのではありません。ベルビアという高画質なフィルムを選んでいて、その感度がたまたま50だった、というだけのことです。</p>
+<h2>では、ISOはどう決めるのか——シャッターと絞りが先</h2>
+<p>「最低のISOを先に決めて、残りを合わせる」。私の運用は、そうではありません。</p>
+<p>まず、撮りたい写真を決めます。シャッター速度に意図があるなら——流したい、止めたい——シャッターは動かしません。絞りに意図があるなら——ぼかしたい、全体にピントを合わせたい——絞りは動かしません。</p>
+<p>露出を調整する必要があるとき、私はシャッター速度で調整できるならシャッター速度を第一候補にします。次に絞り。そして、その二つを動かしたくない場合に、ISOを動かします。私にとってISOは、シャッターと絞りの意味を先に考えた結果として決まるものです。</p>
+<p>ハイライトを守りたいときも同じです。明るい部分を飛ばさないように、意図的に露出をアンダーにして撮ることは普通にあります。でも、それを「ISOを下げて」やる、という意識はありません。絞りか、シャッターか、ISOか、あるいはその組み合わせで決めます。</p>
+<p>すでにISO100で撮っているなら、そこからさらにISOを下げることを目的にはしません。必要があれば、シャッターか絞りで調整します。私の運用をまとめると、こうなります。「ISOは低いほどよい」ではなく、「ISOを下げることで、撮影上・画質上、何を得られるか」を見ている。</p>
+<p>もう一つ付け加えると、低いISOで暗く撮っておいて、あとで現像で明るくする、という撮り方は、私は基本的にしません。</p>
+<p>これは私の運用であって、すべての人に当てはまるルールではありません。ただ、私自身は、ISOを「画質の順位」として先に固定するのではなく、シャッター・絞り・ISOそれぞれの意味を考えて露出を決めています。</p>
+<h2>私の出発点はISO100・F8。でも、そこがゴールではない</h2>
+<p>冒頭に戻ります。私は撮影を始めるとき、ISO100・F8から入ります。</p>
+<p>でもそれは、ISO100が一番きれいだから、F8が一番きれいだから、ではありません。出発点として決めているだけです。撮りたい写真に応じて、そこから動かします。</p>
+<p>最低のISOを守ることは、目的ではありません。撮りたい写真に必要なシャッター速度と絞りを決めて、その条件の中で、ISOを選ぶ。ISOを下げて良くなるのは、そのぶん光を集められたときだけ。光を増やせないなら、数字を下げても、同じことは起きません。</p>
+<p>ISOの数字に、画質を決めさせない。</p>
+<h2>ここから先は、もう少し詳しく知りたい人へ</h2>
+<p>撮影で必要な結論は、ここまでで完結しています。ここから先は、本文で「設計次第」「機種によって」と省いたところを、もう少し細かく見たい人への補足です。新しい主張はありません。</p>
+<h3>四つの比べ方</h3>
+<p>「ISO100とISO800、どちらが高画質か」という問いは、何を固定して比べるかを決めないと答えられません。この記事で使った比べ方を整理します。</p>
+<table>
+<thead>
+<tr>
+<th>比べ方</th>
+<th>固定するもの</th>
+<th>光の粒</th>
+<th>何が変わり得るか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(1) 同じ光で、ISOだけ下げる</td>
+<td>場面、絞り、シャッター</td>
+<td>変わらない</td>
+<td>明るい側の余裕（低いISO側が有利になることがある）、暗部の読み出しノイズ（設計次第）</td>
+</tr>
+<tr>
+<td>(2) ISOを下げて、シャッターを延ばす</td>
+<td>場面、絞り、表示上の明るさ</td>
+<td>増える</td>
+<td>光のゆらぎが目立ちにくくなる（原因は追加した光）。白飛び・動き・長秒のノイズが限界</td>
+</tr>
+<tr>
+<td>(3) ISOを上げて、シャッターを短くする</td>
+<td>場面、絞り、表示上の明るさ</td>
+<td>減る</td>
+<td>光のゆらぎが目立つ（前の記事の主題）</td>
+</tr>
+<tr>
+<td>(4) 白飛びしない範囲で、光を最大にする</td>
+<td>場面、明るい部分を飛ばさない条件</td>
+<td>条件内で最大</td>
+<td>露光と増幅・読み出しの組み合わせで決まる。最低表示ISOが常に最大の余裕とは限らない</td>
+</tr>
+</tbody>
+</table>
+<p>表1：四つの比べ方。「変わらない」「増える」「減る」は光の粒について言えること。「設計次第」はカメラの増幅・読み出しの設計やモードによって結果が違うこと。本文の「二つの意味」は (2) と (1) の対比である。</p>
+<h3>光が二倍になると</h3>
+<p>粒の数が二倍になると、光のゆらぎに対する信号の比は約1.4倍（√2倍）になります。半分なら約0.7倍。これは光の性質そのもので、ISOの数字とは無関係に起きます。<a href="/knowledge/photography/does-higher-iso-increase-noise">前の記事の図2</a>に、光の量とこの比の関係を描いてあります。</p>
+<p>ただしこれは、光のゆらぎだけを考えた計算値です。被写体やカメラが静止していること、白く飛ばないこと、長時間露光の熱によるノイズや輝点が支配的でないことが前提で、露光時間を長くすれば無条件に良くなるわけではありません。</p>
+<h3>「一番低いISO」には、四つの意味がある</h3>
+<p>「一番低いISO」と言うとき、実は四つの別のものが混ざっています。</p>
+<ul>
+<li><strong>選べる最小値</strong>：そのカメラ・モードでメニューから選べる一番小さい数字。</li>
+<li><strong>通常範囲の下限</strong>：メーカーが「通常のISO範囲」としている中での一番小さい数字。</li>
+<li><strong>ベースISO／ネイティブISO</strong>：メーカーが特定の機種やモードに対して使う呼び方。<strong>メーカーによって用語も意味も違い</strong>、ブランドをまたいで一つの回路的な意味に対応しているわけではありません。</li>
+<li><strong>拡張の低いISO</strong>：メーカーが通常範囲の外、または「拡張」として指定した低い設定（ISO50、「L」など）。デジタル的に暗くしているとは限らず、実装は機種ごとです。</li>
+</ul>
+<p>この四つを同じものとして扱うと、「選べる最小値がベースISOで、ベースISOが一番きれい」という三段論法ができてしまいます。どれも自動的には成り立ちません。</p>
+<h3>拡張の低いISOで、メーカー自身が余裕の減少を案内している機種</h3>
+<p>「機種によっては」の実例です。いずれもメーカーの取扱説明書の記載で、内部でどう処理しているかは資料に書かれていません。</p>
+<ul>
+<li>Canon EOS R5：ISO Lは拡張設定で、Lではダイナミックレンジがやや狭くなることがある、と<a href="https://cam.start.canon/en/C003/manual/html/UG-03_Shooting-1_0080.html" title="Canon EOS R5 Advanced User Guide — ISO Speed Settings">説明書</a>に書かれています。</li>
+<li>Nikon Z6III：Loではハイライトが飛びやすくなる可能性があり、ISO100以上を推奨する、と<a href="https://onlinemanual.nikonimglib.com/z6III/en/iso_sensitivity_38.html" title="Nikon Z6III Reference Guide — ISO Sensitivity">説明書</a>にあります。</li>
+<li>OM SYSTEM OM-1：L80／L100ではダイナミックレンジが低下し、ISO200がノイズとダイナミックレンジのバランスの設定である、と<a href="https://download.omsystem.com/pages/inst/om1/manual_om1_v1.7_ENU.pdf" title="OM SYSTEM OM-1 Instruction Manual（PDF）">説明書</a>にあります。</li>
+</ul>
+<p>一方、Sony α7R Vの<a href="https://helpguide.sony.net/ilc/2230/v1/en/contents/TP1000669431.html" title="Sony α7R V (ILCE-7RM5) Help Guide — Specifications: Extended ISO minimum ISO 50">ヘルプガイド</a>は、ISO50などが拡張範囲として選べることを示しているだけで、そこから画質の低下を言うことはできません。「選べる」ことと「不利になる」ことは別の話です。</p>
+<p>これらは「そういう機種がある」という実例であって、全部のカメラがそうだ、という話ではありません。また、どれくらいの機種がそうなのかも、今回調べた範囲では分かりません。</p>
+<h3>同じ光でISOだけ変えたとき、何が変わり得るか</h3>
+<p>本文で「低いISOのほうが明るい側の余裕が残ることがある」「カメラによっては少し高めのISOのほうが暗部がきれいになることもある」と書きました。同じ光でISOだけ変えたとき、光の粒は同じでも、カメラの中の増幅や読み出しのやり方が変わることがあり、その結果として二つの方向の違いが出得ます。</p>
+<p>一つは明るい側。RAWで白飛びするまでの余裕は、選んだ露光と読み出し、RAWの正規化で決まります。最低表示のISOが常に最大の余裕とは限りません。</p>
+<p>もう一つは暗い側。読み出しの段階で乗るノイズが、増幅の前に乗るか後に乗るかで、暗部の見え方が変わります。機種によっては、ある範囲のISOで暗部の読み出しノイズが相対的に小さくなることがあります。ISOに対して読み出しノイズがなめらかに変わる機種もあれば、ある値で不連続に変わる<a href="https://www.photonstophotos.net/Investigations/Measurement_and_Sample_Variation.htm" title="PhotonsToPhotos: Measurement and Sample Variation">測定例</a>もあります。逆に、ISOを上げても暗部は良くならず、明るい側の余裕だけが減っていく範囲を持つカメラもあります。</p>
+<p>どちらが効くかは、機種・モード・どのISO範囲かによって違い、一つの法則にはなりません。だから「同じ光でISOだけ変える」比べ方では、「低いISOほど高画質」も「高いISOのほうが良い」も、一般には言えないのです。</p>
+<h3>画質を、一つの点数にしない</h3>
+<p>この記事で「画質」と言ってきたものには、少なくとも次の顔があります。</p>
+<ul>
+<li>ノイズ（光のゆらぎ、読み出しノイズ）</li>
+<li>明るい側の余裕（白飛びまでの距離）</li>
+<li>ブレ（手ブレ、被写体の動き）</li>
+<li>色や階調、細部の残り方、処理による人工的な模様</li>
+</ul>
+<p>ISOを下げると、このうちの一つが良くなっても、別のものが悪くなることがあります。これらを平均して「一番良いISO」を一つ決めることはできません。どれを優先するかは、撮りたい写真が決めます。</p>
+<h3>RAWとJPEGで順位が変わる</h3>
+<p>カメラが作るJPEGは、ISOに応じたノイズ低減や階調の処理を含みます。だからRAWで比べたときとJPEGで比べたときで、「どのISOが良いか」の順位が変わることがあります。滑らかなJPEGは、センサーのノイズが少ないことや、細部・色が良いことを意味しません。この記事の話は、主にRAWで撮った場合の、センサーに届く光と増幅・読み出しの話です。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/does-higher-iso-increase-noise">「ISOを上げるとノイズが増える」は、本当なのか？</a>
+        <p class="kzc-related-desc">「ISOを上げるとノイズが増える」は本当なのか。同じ光でISOだけ上げても、光のゆらぎによるノイズは増えない。ノイズが目立った主な原因は少ない光で、増幅で何が起きるかはカメラの設計次第。星景写真でISO12800を使う私が、ISOとノイズの関係を調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>
+        <p class="kzc-related-desc">星景写真の露光時間を何秒にするか。私はNikon D3の頃から15mm前後で20年近く「8秒」を使ってきました。その8秒を、500ルールとNPFルール、そしてカメラの高画素化という観点から検証します。8秒を勧める記事ではありません。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/f8-best-aperture">「F8が一番よく写る」は、本当なのか？</a>
+        <p class="kzc-related-desc">「F8が一番よく写る」「レンズは開放から2〜3段絞るとよい」は本当なのか。中学生のころ父に「F8で撮れ」と教わった私が、約50年後にAIを使って調べ直しました。分かったのは、どのレンズにも当てはまるF8を支持する根拠は見つからなかったこと。それでも私は今も、理由がなければF8で撮っています。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
