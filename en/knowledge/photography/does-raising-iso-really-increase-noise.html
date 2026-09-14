@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Does Raising ISO Really Increase Noise? | Knowledge - Sidekick</title>
+<meta name="description" content="Does raising ISO really increase noise? With the same light, raising only the ISO does not add to the noise the light itself carries. The main reason the noise stood out was the small amount of light; ISO made it easier to see, and the rest depends on the camera&#39;s design. A photographer who shoots star landscapes at ISO 12800 re-examines a piece of common sense.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/does-raising-iso-really-increase-noise">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/does-higher-iso-increase-noise">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/does-raising-iso-really-increase-noise">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/does-higher-iso-increase-noise">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/does-higher-iso-increase-noise" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Does Raising ISO Really Increase Noise?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Does Raising ISO Really Increase Noise?</h1>
+    <p class="kzc-article-lead">Does raising ISO really increase noise? With the same light, raising only the ISO does not add to the noise the light itself carries. The main reason the noise stood out was the small amount of light; ISO made it easier to see, and the rest depends on the camera&#39;s design. A photographer who shoots star landscapes at ISO 12800 re-examines a piece of common sense.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-15">Updated: 2026-09-15</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>The noise went up. But was ISO really the cause?</p>
+<p>It's dark. The shutter speed is too slow. You raise the ISO. You look at the photograph, and there is more noise.</p>
+<p>So raising ISO increases noise.</p>
+<p>Anyone who takes photographs probably learns it in that order. I did. The sense that &quot;the higher the film speed, the coarser the grain&quot; goes back to the film era, and I took it so much for granted that I can't remember when or where I first learned it. Even after going digital, I never once questioned it. All the more so because, in high school and university, I was into audio: I had absorbed the idea that if you amplify a small signal a lot, noise becomes a problem. Amplify a small amount of light, and you get more noise. Or so it seemed obvious to me.</p>
+<p>And yet this time, now that AI has made this kind of investigation possible for me, I decided to take a fresh look at this obvious truth.</p>
+<p>To state the conclusion first: this piece of common sense is &quot;usually right,&quot; but not quite in the way I had thought.</p>
+<h2>What Else Was Changing at That Moment?</h2>
+<p>Let me go back to that first scene and look at it slowly.</p>
+<p>When we raise the ISO, two things are usually happening at the same time.</p>
+<p>One is that <strong>the sensor is receiving less light.</strong> The place is dark to begin with. We use a faster shutter speed to avoid camera shake. We stop down to get enough depth of field. The reasons vary, but every one of them means less light reaching the sensor. These are exactly the moments when we want to raise the ISO.</p>
+<p>The other is that <strong>we are raising the ISO number.</strong> We are lifting a dark image, shot with little light, up to a brightness we can look at.</p>
+<p>When we say &quot;I raised the ISO and the noise went up,&quot; these two things are almost always happening together. So unless we separate them, we can't tell which of them is responsible for the noise.</p>
+<p><img src="/images/knowledge/does-higher-iso-increase-noise/f02-little-light-vs-higher-iso-en.svg" alt="Conceptual diagram (not a measurement). The two things that happen at the same time when it is dark and you raise the ISO, drawn as two separate rows. Top row: less light (dark scene, stopped down, fast shutter) → fewer light particles arrive → the fluctuation of the light itself stands out. Bottom row: raise the ISO → amplification and readout change → the result depends on the design (model and mode). The two starting boxes on the left are grouped by a dashed frame labeled &quot;happen together in the same scene,&quot; and between the two rows it says &quot;not cause and effect.&quot; There is no arrow from the ISO row to &quot;more noise.&quot;" /></p>
+<p>Figure 1: In a dark place and similar situations, &quot;less light reaching the sensor&quot; and &quot;raising the ISO&quot; tend to happen at the same time. But they are two different changes (conceptual diagram). The top row is about light, the bottom row is about ISO, and what happens on the ISO side differs by camera design and mode. The two rows are not cause and effect; they are separate things happening together in the same scene.</p>
+<p>This article separates the two.</p>
+<h2>What Happens When There Is Less Light</h2>
+<p>Let's look at the light side first.</p>
+<p>Light arrives as particles. During the exposure time, particles called photons fly into each pixel of the sensor, and the number that arrive becomes the brightness of the image.</p>
+<p>The important point is that the number of particles <strong>varies.</strong> Even when you photograph an area of uniform brightness, some pixels will always receive a few more particles than their neighbors, and some a few fewer. This variation is the noise that the light itself carries.</p>
+<p>And the fewer the particles, the more this variation stands out, relatively speaking. As the amount of light goes down, the noise becomes more noticeable. That is a property of light itself, and it happens regardless of the camera's settings.</p>
+<p>In other words, <strong>without touching the ISO number at all, noise stands out when there is little light.</strong></p>
+<p>The place was dark. You used a faster shutter speed. You stopped down. At that point, the conditions for noise to stand out were already in place.</p>
+<p>(If you'd like to see, in numbers, how much more noticeable it gets when the light is halved, there is a figure in the second half of this article.)</p>
+<h2>Same Light, Higher ISO Only</h2>
+<p>Now the ISO side.</p>
+<p>Consider an experiment. Put the camera on a tripod, keep the aperture and shutter speed exactly the same, and raise only the ISO.</p>
+<p>The number of light particles reaching the sensor does not change. The aperture and shutter speed are the same, so of course it doesn't. And if the number of particles doesn't change, neither does their variation — the noise of the light itself.</p>
+<p>What changes is the brightness of the image.</p>
+<p>When you raise the ISO, an image that would have been recorded dark is lifted to a brighter level. And along with it, the noise that was too dark to see is lifted too, and it <strong>becomes visible.</strong> No new noise was created; what was hidden simply came into view — at least as far as the fluctuation of the light itself is concerned.</p>
+<h2>Let Me Give the Answer Here</h2>
+<p>&quot;Raising ISO increases noise.&quot; As long as you shoot the usual way — raising the ISO when there isn't much light — this observation is usually right.</p>
+<p>But the main reason the noise stood out was not the ISO number. It was the small amount of light. Raising the ISO made that noise easier to see.</p>
+<p>My old intuition — &quot;if little light comes in and you amplify it, you get more noise&quot; — was, I can see now, <strong>saying two things in one sentence.</strong> &quot;Little light comes in&quot;: that part I had right. It is precisely the main reason noise stands out. &quot;Amplify it and you get more noise&quot;: that part was a little off.</p>
+<p>When I raised the ISO, there wasn't enough light in the first place. That is the most important point in this article. So what, then, is ISO itself doing?</p>
+<h2>So What Does ISO Actually Do?</h2>
+<p>Roughly speaking, raising the ISO means taking an image that would come out dark because of the small amount of light, and lifting it to a brightness you can see. As we saw in the previous section, that by itself does not increase the noise of the light itself.</p>
+<p>In a real camera, however, changing the ISO can also change how the signal is amplified and read out. So what happens when you raise only the ISO with the same light differs from camera to camera and from mode to mode. On some cameras, the noise in the shadows becomes relatively smaller. On the other hand, the headroom on the bright side — the distance to clipped highlights — can shrink. Which of these happens <strong>depends on the camera's design,</strong> and there is no single rule.</p>
+<p>In my own experience, this &quot;it depends on the camera&quot; is something I have felt very concretely. When I was using a Nikon D2X, going up to around ISO 400 gave me images that made me want to ask, &quot;Is this a Christmas light display?&quot; — that was how colorful the noise looked to me. On the D3 that followed, ISO 6400 was no great problem. The same act of &quot;raising the ISO&quot; produced different things on different cameras. This is my experience, not a measurement of these two cameras' performance, but I have never forgotten the difference.</p>
+<p>That doesn't mean ISO is irrelevant, either. Raise it, and noise that was hidden becomes visible; and on some cameras, the headroom shrinks.</p>
+<p>(What happens inside the amplification, and what the &quot;noise&quot; we see actually is, are covered in more detail in the second half of the article.)</p>
+<h2>So What Should You Do When Shooting? Collect Light First, If You Can</h2>
+<p><strong>If you can collect more light, collect it first. If you can't, raise the ISO to what you need.</strong></p>
+<p>If the main reason noise stands out is that there is little light, then the order follows from that. Lowering the ISO is a consequence, not the goal.</p>
+<p>If the camera is on a tripod and you can use a longer shutter speed, lowering the ISO and collecting more light will make the noise less noticeable. But the reason it got better is not &quot;because the ISO is low.&quot; It's &quot;because there is more light.&quot;</p>
+<p>Conversely, there are situations where you can't collect any more light. You're handheld and can't slow the shutter. You want to freeze a moving subject. You want the stars as points. Lowering the ISO in these situations doesn't give you more light. It only gives you a darker image. What you need then is to raise the ISO to whatever is necessary.</p>
+<p>Nor is it true that the longer the exposure time, the better. In long exposures, heat-related noise and hot pixels increase separately. I wrote about exposure time for star landscapes in <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">a separate article</a>.</p>
+<p>Here is how I work. My baseline is the base ISO of 100, on a tripod. Since I use a tripod most of the time, that usually covers it. When I have to shoot handheld, I raise the ISO if raising it is the better choice. The upper limit I set varies by camera. This doesn't mean &quot;always use a low ISO&quot;; beyond that, I look at the shooting situation and decide.</p>
+<p>&quot;Shoot dark at a low ISO and brighten it later in processing&quot; is not something I normally do. What the difference is between that and shooting at a high ISO is a question whose answer changes with the camera, so I won't go further into that here. Is a lower ISO always better for image quality? I looked into that question in a separate article.</p>
+<p>Auto ISO is not something I normally use, but for shooting where the ISO is better changed on the spot — street photography, panning — I use it actively. Even then, I set an upper limit on the body. What matters, I think, is not whether you use Auto ISO but that you use it knowing what happens when the ISO changes.</p>
+<h2>I Still Shoot at ISO 25600 When I Need To</h2>
+<p>The way I shoot star landscapes, nothing shows up at ISO 100. Depending on the situation, I use ISO 12800 and ISO 25600 as well.</p>
+<p>In my own words, it comes down to this:</p>
+<p><strong>&quot;Of course the noise goes up. But if the subject isn't captured, there's no point. Someday there may well be a way to deal with noise — but what isn't captured is just a reject.&quot;</strong></p>
+<p>This is my shooting judgment, not a statement about physics. In star landscapes I can't lengthen the exposure time, so I can't collect any more light. So I raise the ISO to what I need. Raise it, and of course the noise stands out. Even so, a photograph with noise is better than a photograph that captured nothing. That is my judgment.</p>
+<p>Now that I have finished this investigation, the way I use ISO is the same as before. What I learned this time is that &quot;having little light&quot; and &quot;raising the ISO&quot; need to be thought of separately. In the field they always happen together, so for decades I never felt the need to separate them. And since I was getting my photographs, that was fine as it was. But now that I can separate them, what I'm looking at when I raise the ISO is not the ISO number but how much light there is.</p>
+<p>If you can collect more light, collect it first. If you can't, raise the ISO to what you need.</p>
+<p>What isn't captured is just a reject.</p>
+<h2>For Those Who Want to Go a Little Deeper</h2>
+<p>Everything you need for shooting is above. What follows is a supplement for readers who want to look more closely at the places where I said &quot;depends on the design&quot; or &quot;a separate story.&quot; It adds no new claims.</p>
+<h3>What Changes and What Doesn't</h3>
+<table>
+<thead>
+<tr>
+<th>How you compare</th>
+<th>Light particles arriving, and their fluctuation</th>
+<th>Amplification and readout (how read noise appears, highlight headroom)</th>
+<th>Grain you see on screen</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a) Same light, raise only the ISO</td>
+<td>Unchanged</td>
+<td>Depends on the design (on where noise is added, before or after the amplification; headroom can shrink)</td>
+<td>Easier to see because the image is brighter</td>
+</tr>
+<tr>
+<td>(b) Little light, raise the ISO (dark to begin with / faster shutter / stopped down)</td>
+<td>Fewer particles; the fluctuation stands out</td>
+<td>Depends on the design</td>
+<td>Stands out</td>
+</tr>
+<tr>
+<td>(c) Same light, compared at matched brightness (low ISO lifted later vs. high ISO)</td>
+<td>Unchanged</td>
+<td>Depends on the design (differs by whether you amplified first or brightened later)</td>
+<td>Depends on the design</td>
+</tr>
+<tr>
+<td>(d) Comparing camera JPEGs</td>
+<td>—</td>
+<td>Depends on the processing</td>
+<td>Depends on the processing (stronger noise reduction looks smoother but removes detail too)</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1: What changes and what doesn't. &quot;Unchanged&quot; and &quot;fewer&quot; are what can be said by calculation about the fluctuation of the light; &quot;depends on the design&quot; means the result differs with the camera's amplification and readout design or mode; &quot;depends on the processing&quot; means the appearance differs with the raw processing and display. No row is a single answer that applies to every camera.</p>
+<h3>How Much More Visible Does Noise Get When the Light Is Halved?</h3>
+<p>In the main text I wrote that &quot;the fewer the particles, the more the variation stands out, relatively speaking.&quot; In numbers, it goes like this. When the amount of light reaching the sensor is halved, the ratio of signal to that variation falls to about 0.7 times. At a quarter of the light, it is halved. As the light decreases, the noise becomes noticeable gradually, not suddenly.</p>
+<p><img src="/images/knowledge/does-higher-iso-increase-noise/f01-less-light-lower-snr-en.svg" alt="Vertical bar chart. The horizontal axis is the amount of light reaching the sensor (relative): 1, 1/2, 1/4, 1/8. The vertical axis is the ratio of signal to the light's fluctuation (relative). The bar heights are 1.00, 0.71, 0.50 and 0.35, falling to about 0.7 times with each halving of the light. There is no ISO scale. The figure is labeled &quot;calculated&quot; and &quot;conceptual values for the light's fluctuation only; read noise, circuit noise and highlight clipping not included.&quot;" /></p>
+<p>Figure 2: When the amount of light reaching the sensor falls to 1/2, 1/4 and 1/8, the ratio of signal to the light's own fluctuation falls to about 0.71, 0.50 and 0.35 (a square-root relationship). These are calculated values for the light's fluctuation only; read noise, circuit noise and highlight clipping are not included. The horizontal axis is the amount of light, not ISO — this change happens without touching the ISO number, whenever there is less light.</p>
+<h3>Before and After Amplification</h3>
+<p>In the main text I wrote that &quot;in a real camera, changing the ISO can also change how the signal is amplified and read out.&quot; Let me separate what differs, one step further.</p>
+<p>First, an ideal amplifier makes the incoming signal and the incoming noise larger by the same factor. If the signal doubles, the noise doubles too, and the ratio between them doesn't change. So amplification itself does not create new noise. If you think only of ideal amplification, an image shot with the same light has the same ratio of signal to noise no matter what ISO you set.</p>
+<p>But a real camera is not &quot;ideal amplification only.&quot; The circuits that read the signal out of the sensor have noise of their own. Whether this read noise is added <strong>before</strong> the amplification or <strong>after</strong> it changes the result. Noise added after the amplification becomes relatively smaller if you made the signal larger beforehand. Conversely, if you brighten the image digitally after recording it, noise added afterward is scaled up right along with it. Where the amplification happens matters.</p>
+<p>That is why, when you raise only the ISO with the same light, the read noise in the shadows becomes relatively smaller on some cameras. On the other hand, raising the ISO can shrink the headroom on the bright side — the distance to clipped highlights. Some cameras have a range where raising the ISO further no longer improves the shadows and only reduces the headroom.</p>
+<p>How these behave depends on the camera's design. On some cameras the read noise changes smoothly with ISO; on others, <a href="https://www.photonstophotos.net/Investigations/Measurement_and_Sample_Variation.htm" title="PhotonsToPhotos: Measurement and Sample Variation">one set of measurements</a> shows it changing discontinuously at a certain value. There is no single rule.</p>
+<h3>Which Noise Are We Actually Seeing?</h3>
+<p>When we say &quot;the noise went up,&quot; what are we looking at?</p>
+<p>The variation in the light particles, the noise of the readout circuits, the scatter in the numbers recorded in the RAW file, and the graininess we see on screen after the raw processing and display — these are not the same thing. What we look at and call &quot;noise&quot; is the last of these: the appearance after processing.</p>
+<p>The JPEG a camera produces is the combined result of shooting and processing. At high ISO, cameras often apply stronger noise reduction automatically. That is why it looks smooth — but detail is being removed along with the noise. A smooth JPEG does not mean a sensor with less noise. Even when you shoot RAW, by the time you see the image on screen it has passed through raw processing and display. Whether noise is &quot;visible&quot; also depends on where, and at what size, you look at it.</p>
+<h3>Film Grain and Digital Noise</h3>
+<p>How does the film-era common sense that &quot;high-speed film has coarse grain&quot; connect to digital noise?</p>
+<p>The &quot;ISO&quot; number on a digital camera <a href="https://www.iso.org/standard/73758.html" title="ISO 12232:2019 (the standard for the ISO speed of digital still cameras; the intent to keep consistency with film exposure practice is stated in the 1998 edition)">was defined</a> so that it could be used with the same exposure sense as film speed. Someone who had been shooting ISO 100 film could set ISO 100 on a digital camera and get a photograph of about the same brightness at the same aperture and shutter speed. To make that possible, the meaning of the number was carried over from film.</p>
+<p>The film-era explanation, &quot;high-speed film has coarse grain,&quot; and the digital-era explanation, &quot;high ISO has more noise,&quot; are very much alike. <a href="https://files.canon-europe.com/files/soft24329/manual/EOSD30_CUG_EN.pdf" title="Canon EOS D30 User's Guide (PDF)">The manual of an early digital camera</a> explained it in that same continuous vocabulary: at high ISO, noise increases and sharpness falls.</p>
+<p>But the mechanisms are not the same. The reason film grain gets coarse and the reason sensor noise becomes noticeable are different stories. Within what I looked into this time, I could not identify a single source where this piece of common sense began. What can be said is this: the vocabulary of the film-era explanation carried on, and the image quality of early digital cameras at high ISO really was harsh — and both of those probably played a part in shaping the common sense we have today.</p>
+<p>Incidentally, even in the film era there were <a href="https://asset.fujifilm.com/www/us/files/2020-03/85d928f44b0df3b2a95913e46608881d/ProfessionalFilmDataGuide.pdf" title="Fujifilm Professional Film Data Guide (PDF)">products that made a selling point</a> of fine grain at high speed. Even for film, the relationship between speed and grain was never a single rule.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</a>
+        <p class="kzc-related-desc">How many seconds should you expose for astrophotography? Since my Nikon D3 days I have used 8 seconds at around 15mm for nearly 20 years. I re-examine that 8 seconds through the 500 Rule, the NPF Rule and higher-resolution sensors. This is not an article recommending 8 seconds.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrophotography-settings-equipment-guide">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</a>
+        <p class="kzc-related-desc">Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
