@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700" role="img" aria-labelledby="t"><title id="t">Based on the author's own experience: a timeline of how focus was checked — the depth-of-field scale on the lens with 35mm manual focus; the original transparency through an Ebony 3.5× loupe with 4×5 (6×12 / 6×9 / 6×7); the 100% view on a monitor with the D1 / D1x (full-size files bundled with magazines); and, from the K-1 era to now, 100% only where it matters. Throughout, the circle of confusion stayed at 0.03. Contains no research values and no judgement of right or wrong.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">Based on the author's own experience (AC-2026-005)</text>
+<text x="20.0" y="84.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="start">How I checked focus changed</text>
+<line x1="60.0" y1="120.0" x2="60.0" y2="540.0" stroke="#2b3140" stroke-width="3"/>
+<circle cx="60.0" cy="150.0" r="10" fill="#ffb14a"/>
+<text x="90.0" y="128.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Until about 1990</text>
+<text x="90.0" y="162.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">35mm, manual focus</text>
+<text x="90.0" y="196.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">Lens depth-of-field scale</text>
+<circle cx="60.0" cy="270.0" r="10" fill="#ffb14a"/>
+<text x="90.0" y="248.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">About 1995–2000</text>
+<text x="90.0" y="282.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">4×5 (6×12 / 6×9 / 6×7)</text>
+<text x="90.0" y="316.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">3.5× loupe on the original</text>
+<circle cx="60.0" cy="390.0" r="10" fill="#ffb14a"/>
+<text x="90.0" y="368.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">From 2000</text>
+<text x="90.0" y="402.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">D1 / D1x</text>
+<text x="90.0" y="436.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">100% view on a monitor</text>
+<circle cx="60.0" cy="510.0" r="10" fill="#ffb14a"/>
+<text x="90.0" y="488.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">K-1 era to now</text>
+<text x="90.0" y="522.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">Digital</text>
+<text x="90.0" y="556.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">100% only where it matters</text>
+<rect x="560.0" y="110.0" width="220.0" height="440.0" rx="14" fill="none" stroke="#ff8a00" stroke-width="3"/>
+<text x="670.0" y="170.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">CoC value</text>
+<text x="670.0" y="228.0" fill="#ff8a00" font-size="56" font-weight="700" text-anchor="middle">0.03</text>
+<text x="670.0" y="280.0" fill="#ff8a00" font-size="30" font-weight="700" text-anchor="middle">unchanged</text>
+<text x="670.0" y="490.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">(same value for</text>
+<text x="670.0" y="524.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">35mm and 4×5)</text>
+<line x1="20.0" y1="640.0" x2="780.0" y2="640.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="674.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">How I checked changed three times. The number never did.</text>
+</g>
+</svg>
