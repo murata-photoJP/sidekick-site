@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「レンズは2〜3段絞ると一番よく写る」は、本当なのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="「レンズは開放から2〜3段絞ると一番よく写る」は本当なのか。F1.2のレンズとF5.6のレンズでは、同じ「2〜3段」がまったく別のF値を指す。今回確認した実測例では、一番よく写る絞りは開放付近から5段近くまで散り、同じレンズでも、画面の中心と外側で違う実測例があった。2〜3段は目安であって最終値ではない。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/two-three-stops-best-aperture">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">「レンズは2〜3段絞ると一番よく写る」は、本当なのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">「レンズは2〜3段絞ると一番よく写る」は、本当なのか？</h1>
+    <p class="kzc-article-lead">「レンズは開放から2〜3段絞ると一番よく写る」は本当なのか。F1.2のレンズとF5.6のレンズでは、同じ「2〜3段」がまったく別のF値を指す。今回確認した実測例では、一番よく写る絞りは開放付近から5段近くまで散り、同じレンズでも、画面の中心と外側で違う実測例があった。2〜3段は目安であって最終値ではない。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-15">更新日：2026-09-15</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>F8の次に疑った、もう一つの「最良絞り」</p>
+<p>父から教わった「F8で撮れ」を、<a href="/knowledge/photography/f8-best-aperture">前の記事</a>で調べました。F8がどのレンズにも当てはまる「一番よく写る絞り」だという根拠は、見つかりませんでした。</p>
+<p>ただ、私が覚えている「最良絞り」の常識は、もう一つあります。</p>
+<p>自分のカメラで風景を撮りに行き始める少し前、カメラ店で「レンズは開放から2〜3段絞ると一番よく写る」と聞いた記憶があります。誰に聞いたのか、どの店だったのかは覚えていません。ただ、この二つの教えは、私の中では特に矛盾しませんでした。</p>
+<p>理由は単純です。当時の私は風景を撮るために、F2.8クラスの控えめな明るさの単焦点レンズを選んで買っていました。風景ではボケの浅いピントをまず使いませんし、F1.4の明るさは要らない。F2.8の単焦点なら安く、軽く、小さく、一日歩いて撮り続けられる。そういう一式です。</p>
+<p>F2.8のレンズを2段絞ればF5.6、3段絞ればF8。つまり私の機材では、「F8」も「開放から2〜3段」も、ほぼ同じ場所を指していました。</p>
+<p>でも、レンズの開放F値はさまざまです。F1.2のレンズもあれば、F5.6のレンズもある。「開放から2〜3段」という数え方は、そうしたレンズでも同じように「一番よく写る」を教えてくれるのでしょうか。</p>
+<h2>「2〜3段」を、F値に直してみる</h2>
+<p>まず、算数だけをします。</p>
+<p><img src="/images/knowledge/two-three-stops-best-aperture/f01-relative-stop-ladder-ja.svg" alt="「開放から2〜3段」を、開放F値の違うレンズで絶対F値に直した図（はしご図）。各行は開放F値から始まり、2段絞る、3段絞るの順に絶対F値を示す。F1.2 → F2.4 → F3.4、F1.4 → F2.8 → F4、F2 → F4 → F5.6、F2.8 → F5.6 → F8、F4 → F8 → F11、F5.6 → F11 → F16。2段絞る・3段絞るの列は各行ごとに帯で囲まれ、上の行ではF2.4〜F3.4、下の行ではF11〜F16と、同じ「2〜3段」が行ごとにまったく違う絶対F値になることを示す。F2.4・F3.4は計算値。これは絞りの算数だけの図で、どの絞りが光学的に最良かは示していない。どの行・どの列も「良い」「悪い」としては描かない。" /></p>
+<p>図1：「開放から2〜3段」を、開放F値の違うレンズでF値に直したもの。1段絞るとF値は約1.4倍になるので、F1.2のレンズの2〜3段はF2.4〜F3.4、F5.6のレンズの2〜3段はF11〜F16になる。<strong>これは絞りの算数だけの図で、どの絞りが光学的に一番よく写るかは示していません。</strong></p>
+<p>同じ「2〜3段」でも、F1.2のレンズならF2.4〜F3.4、F2.8のレンズならF5.6〜F8、F5.6のレンズならF11〜F16です。絶対的なF値で見ると、まったく別の場所を指しています。ただし、この図はどの絞りが最良かを何も言っていません。「2〜3段」という規則をレンズごとにF値へ翻訳しただけで、その結果がこれだけ違う——まずそこを見ておいてほしいのです。</p>
+<h2>ここで一度、答えを出します</h2>
+<p>「開放から2〜3段絞ると一番よく写る」は、役に立つ目安ではあります。ただし、どのレンズにも当てはまる光学の法則ではありません。そして、その写真に使う絞りを決めてくれるものでもありません。</p>
+<p>「間違いです」とは言いません。開放付近で収差が写りを制限していて、少し絞ればまだ回折の影響が小さいレンズなら、2〜3段は妥当な目安になり得ます。けれども「だいたい正しいです」とも言いません。今回確認した実測例では、一番よく写る絞りは開放付近から5段近くまで散り、同じレンズでも、画面のどこを見るかで変わるからです。</p>
+<p>なぜそうなるのかを、順に見ていきます。</p>
+<h2>絞ると良くなることがある——前の記事のおさらい</h2>
+<p>理屈は<a href="/knowledge/photography/f8-best-aperture">前の記事</a>に書いたので、ここでは四つの文にまとめます。</p>
+<p>実際のレンズには収差があり、開放付近では収差がピント面の写りを制限していることがあります。絞るとレンズの外周を通る光を使わなくなるので、外周に偏った収差の影響が減ることがあります。その一方で、回折による光の広がりは開放のときから存在し、絞るほど増えていきます。だから、収差の減る効果と回折の増える効果がぶつかるところに「一番よく写る領域」が出ることがあり、その位置はレンズと物差しによって動きます。</p>
+<p>「2〜3段絞ると一番よく写る」という経験則は、この「途中の領域」の話をしています。ここまでは前の記事と同じです。</p>
+<h2>では、なぜ「開放から2〜3段」が特別なはずがあるのか</h2>
+<p>ここが、この記事の要です。</p>
+<p>通常の撮影距離では、回折の量は絶対的なF値で決まります。F8ならF8ぶんの回折が出る。そのレンズの開放がF1.4だったかF4だったかは、回折には関係ありません。</p>
+<p>一方、収差の量は、レンズの設計で決まります。開放でどれだけ収差が残っているか、どんな種類の収差か、絞るとどのくらい減るかは、一本一本違います。</p>
+<p>ピント面の写りで見た「一番よく写る領域」は、この二つの釣り合いで決まります。片方は絶対的なF値で決まり、もう片方はレンズごとに違う。そうであれば、二つが釣り合う場所が、どのレンズでも「開放から2〜3段」という同じ距離に来る理由は、どこにあるのでしょうか。</p>
+<p>今回調べた範囲では、そうなる仕組みは見つかりませんでした。「開放からの段数」は、絞りの算数としては正しく、経験則としては役に立ちます。でも、光学がそこに最良を置いてくれるわけではないのです。</p>
+<h2>測ってみると、レンズごとに散る</h2>
+<p>実際のレンズはどうか。今回は、既存の測定資料を横断して確認しました。</p>
+<p>たとえばCanonのEF 50mm F1.8 STMは、ある測定サイトの中心解像の測定で、F4——開放から2段と少し——が最も高い値でした。「2〜3段」に近い例です。</p>
+<p>一方、前の記事で紹介したZEISSの85mm F1.4は、メーカーの測定で最も高い値が出たのはF8、開放から5段でした。逆に、F2.8通しの標準ズームの中には、開放から1段以内で中心の値がほぼ最高に達する例もあります。</p>
+<p>今回確認できた実測例をまとめると、一番よく写る絞りは、開放付近から5段近くまで散っていました。「2〜3段」に収まる例もあれば、大きく外れる例もある。何本のうち何本がどうだった、という比率は言えません。それでも、「どのレンズも2〜3段」ではないことは、この範囲でも言えます。</p>
+<h2>同じレンズでも、「どこを見るか」で最良は変わる</h2>
+<p>もう一つ、私が意外に思った例があります。</p>
+<p>Tokinaの56mm F1.4（APS-C用）を、一つの測定サイトが同じ条件で測った結果では、画面の中心が最も良かったのはF2.8、開放から2段でした。ところが画面の外側が最も良かったのはF5.6〜F8、開放から4〜5段です。一本のレンズの、一回の測定で、中心と周辺の「一番」が2〜3段ずれていました。</p>
+<p><img src="/images/knowledge/two-three-stops-best-aperture/f02-tokina-center-vs-outer-field-ja.svg" alt="一本のレンズの実測例：Tokina 56mm F1.4 E（APS-C）。開放F1.4からF11までの絞りの目盛りの上に、画面の中心が最も良かった絞り（F2.8付近、開放から約2段）を点で、画面外側が最も良かった絞り（F5.6〜F8、開放から約4〜5段）を帯で示す。同じテストの中で、中心と画面外側の最良が2〜3段ずれている。実測曲線や中間の値は描いていない。すべてのレンズが同じように振る舞うという意味ではない。" /></p>
+<p>図2：一本のレンズの実測例。画面の中心が最も良い絞りと、画面の外側が最も良い絞りが、同じテストの中で別だった（Tokina 56mm F1.4 E、一つの測定サイトによる測定）。<strong>これは一本のレンズの例で、すべてのレンズが同じように振る舞うという意味ではありません。</strong></p>
+<p>一本の例ではありますが、示していることは大きい。「このレンズの一番よく写る絞りは？」という問いには、「画面のどこを見て言うのか」を決めないと、一つの答えが出ないのです。</p>
+<p>ここで、私自身の昔の経験に戻ります。当時の風景写真は、ピントがほぼ無限遠でした。F8を常用していたのは、被写界深度が必要だったからではありません。気にしていたのは、写真が「ビシッと」写っているか、「ボヤっと」しているかでした。半切に伸ばすことが多く、その大きさで見ると、ピントの甘さや鮮鋭感の不足に気づけたように思います。開放で撮ったものはビシッとしない——そういう印象を、私は持っていました。これは当時の私の印象であって、測ったものではありません。</p>
+<h2>私は、2〜3段の規則で撮っていなかった</h2>
+<p>白状しておくと、「開放から2〜3段」を知ったあとも、私はその規則で撮っていませんでした。</p>
+<p>風景用のF2.8のレンズでは、たしかにF8前後を使っていました。でも同じ時期、50mm F1.4はときどき意図的にボカした写真を撮るために持っていましたし、85mm F1.4は「開放で使うレンズ」だと思っていて、基本的に開放で使っていました。F1.4から2〜3段絞ればF2.8〜F4です。そこで使った記憶は、ほとんどありません。</p>
+<p>つまり私は、規則を知っていて、受け入れてもいて、しかし実際にはレンズごとに「そのレンズに何をさせたいか」で絞りを決めていた。F2.8のレンズでは、それがたまたま「2〜3段」と重なっていただけです。</p>
+<h2>レンズの最良絞りと、この写真の絞りは、別の話</h2>
+<p>「レンズにとって一番よく写る絞りはどこか」と、「この写真にはどの絞りが要るか」は、別の問いです。</p>
+<p>前者は、測れば答えが出ます。ただし、何を「よく写る」の物差しにするか、画面のどこで見るか、どんなピントの置き方かを決めたうえでの答えで、レンズごとに違います。後者は、レンズではなく、撮りたい写真が決めます。</p>
+<p>私の場合は、こうです。ボカしたければ開けます。星景で光が要るときも開けます。風景なら、その写真に必要な被写界深度から絞りを決めます。必要のないところまで絞ることはしませんが、被写界深度のほうが大事なら、回折の代償は受け入れます。写真の目的が絞りの方向を決めているなら、まっすぐそこへ行く。それだけです。</p>
+<p>では、「開放から2〜3段」はどうするか。私は、使ってもいいと思っています。ただし、それはデフォルト値であって、最終値ではありません。スタート値です。撮りたい写真に、絞りを決めるより強い理由がないとき、参照する値。写真に何が要るか分かっているのに、まず2〜3段に合わせてからそこへ動く必要はありません。それは無意味な回り道です。</p>
+<p>レストランに行って「シェフ、私は何が食べたいんでしょう？」と聞く人はいません。何を撮りたいかは、自分で決めることです。</p>
+<p>「一番よく写る絞り」は、シェフのおすすめ料理のようなものです。食べてもいい。でも、食べなきゃいけないわけじゃない。お寿司がおすすめでも、タマゴかけご飯が食べたかったら、食べればいい。</p>
+<p>絞りを決めるのは、レンズではなく写真のほうだ。</p>
+<h2>ここから先は、もう少し詳しく知りたい人へ</h2>
+<p>撮影で必要な結論は、ここまでで完結しています。ここから先は、本文で「物差しによる」「レンズによる」と省いたところを、もう少し細かく見たい人への補足です。新しい主張はありません。</p>
+<h3>「一番よく写る」の物差し</h3>
+<p>「一番よく写る絞り」は、少なくとも次を決めないと一つの数字になりません。</p>
+<ul>
+<li><strong>何を測るか</strong>：ピント面の細かさ（MTF50など）、低い周波数でのコントラスト、どこまで解像するか。物差しが違えば、最良の絞りは同じレンズでもずれます。</li>
+<li><strong>画面のどこか</strong>：中心、中間、周辺。本文のTokinaの例のように、中心と周辺で最良の絞りが違うことがあります。</li>
+<li><strong>ピントをどう置くか</strong>：絞るたびにピントを合わせ直すか、開放で合わせたまま絞るか。レンズによっては絞るとピント位置が動き、順位が変わります。</li>
+<li><strong>最後にどう見るか</strong>：センサーの画素、現像、プリントや画面のサイズと鑑賞距離で、差が見えるかどうかが変わります。</li>
+</ul>
+<p>これらを平均して「一番良いF値」を一つ決めることはできません。どれを優先するかは、撮りたい写真が決めます。</p>
+<h3>確認できた実測例</h3>
+<p>本文で触れた例を含め、今回確認できた実測例を並べます。測定サイトやメーカーによって測り方が違うので、<strong>別の出典の数値どうしを順位比較はしていません</strong>。同じ出典の中でだけ、開放からの段数を読んでください。</p>
+<table>
+<thead>
+<tr>
+<th>レンズ</th>
+<th>開放</th>
+<th>何を測ったか</th>
+<th>最も良かった絞り</th>
+<th>開放からの段数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canon EF 50mm F1.8 STM（<a href="https://www.lenstip.com/444.4-Lens_review-Canon_EF_50_mm_f_1.8_STM_Image_resolution.html" title="LensTip: Canon EF 50 mm f/1.8 STM — Image resolution">LensTip</a>）</td>
+<td>F1.8</td>
+<td>中心解像（MTF50）</td>
+<td>F4</td>
+<td>約2段</td>
+</tr>
+<tr>
+<td>Nikon Z 50mm F1.8 S（<a href="https://www.lenstip.com/577.4-Lens_review-Nikon_Nikkor_Z_50_mm_f_1.8_S_Image_resolution.html" title="LensTip: Nikon Nikkor Z 50 mm f/1.8 S — Image resolution">LensTip</a>）</td>
+<td>F1.8</td>
+<td>中心解像（MTF50）。開放から高い</td>
+<td>F4</td>
+<td>約2段</td>
+</tr>
+<tr>
+<td>Nikon AF 50mm F1.8D（<a href="https://www.lenstip.com/219.4-Lens_review-__Image_resolution.html" title="LensTip: Nikon AF 50 mm f/1.8D — Image resolution">LensTip</a>）</td>
+<td>F1.8</td>
+<td>中心解像（MTF50）</td>
+<td>F5.6</td>
+<td>約3段</td>
+</tr>
+<tr>
+<td>Canon EF 50mm F1.2L（<a href="https://www.lenstip.com/257.4-Lens_review-Canon_EF_50_mm_f_1.2L_USM_Image_resolution.html" title="LensTip: Canon EF 50 mm f/1.2L USM — Image resolution">LensTip</a>）</td>
+<td>F1.2</td>
+<td>中心解像（MTF50）</td>
+<td>F4〜F5.6</td>
+<td>約3.5〜4.5段</td>
+</tr>
+<tr>
+<td>Sony FE 35mm F1.4 GM（<a href="https://www.lenstip.com/598.4-Lens_review-Sony_FE_35_mm_f_1.4_GM_Image_resolution.html" title="LensTip: Sony FE 35 mm f/1.4 GM — Image resolution">LensTip</a>）</td>
+<td>F1.4</td>
+<td>中心解像（MTF50）。開放から高い</td>
+<td>F2.8〜F4（平坦）</td>
+<td>約2〜3段</td>
+</tr>
+<tr>
+<td>Tamron 28-75mm F2.8 G2（<a href="https://www.lenstip.com/661.4-Lens_review-Tamron_28-75_mm_f_2.8_Di_III_VXD_G2_Image_resolution.html" title="LensTip: Tamron 28-75 mm f/2.8 Di III VXD G2 — Image resolution">LensTip</a>）</td>
+<td>F2.8</td>
+<td>中心解像（MTF50）。焦点距離で変わる</td>
+<td>開放〜1段</td>
+<td>0〜1段</td>
+</tr>
+<tr>
+<td>Sigma 24-105mm F4 Art（<a href="https://www.lenstip.com/389.4-Lens_review-Sigma_A_24-105_mm_f_4_DG_OS_HSM_Image_resolution.html" title="LensTip: Sigma A 24-105 mm f/4 DG OS HSM — Image resolution">LensTip</a>）</td>
+<td>F4</td>
+<td>中心解像（MTF50）</td>
+<td>開放〜1段</td>
+<td>0〜1段</td>
+</tr>
+<tr>
+<td>Tokina 56mm F1.4 E（<a href="https://opticallimits.com/sony/tokina-atx-m-56mm-f-1-4-e/" title="OpticalLimits: Tokina atx-m 56mm f/1.4 E">OpticalLimits</a>、APS-C）</td>
+<td>F1.4</td>
+<td>中心／画面外側</td>
+<td>中心F2.8／外側F5.6〜F8</td>
+<td>中心2段／外側4〜5段</td>
+</tr>
+<tr>
+<td>ZEISS Planar 1.4/85（<a href="https://lenspire.zeiss.com/photo/app/uploads/2018/04/CLN_MTF_Kurven_2_en.pdf" title="H. H. Nasse (ZEISS), How to Read MTF Curves? Part II, 2009（PDF、II/25）">メーカー技術資料</a>）</td>
+<td>F1.4</td>
+<td>測定MTF（10〜80 lp/mm）</td>
+<td>F8。F11以降は低下</td>
+<td>5段</td>
+</tr>
+</tbody>
+</table>
+<p>表1：今回確認できた実測例。「最も良かった絞り」は各出典の測定条件（カメラ、現像、像高、ピントの置き方）に限った値。出典が違う行どうしの優劣は比べられません。何本のうち何本がどの範囲に入るか、という比率も分かりません。</p>
+<p>読み取れることは一つです。同じ「中心解像」という物差しの中でさえ、最も良い絞りは開放から0段〜4段以上まで散っていて、明るいレンズどうしでも一致しない。どのレンズでも「開放からの段数」で最良が決まっているなら、こうはなりません。</p>
+<h3>資料の中の「2〜3段」</h3>
+<p>「2〜3段という話はどこから来たのか」と思う人もいるでしょう。今回の調査で確認できた資料を、いくつか挙げます。</p>
+<p>古い光学資料では、<a href="https://nvlpubs.nist.gov/nistpubs/Legacy/circ/nbscircular27.pdf" title="U.S. Bureau of Standards, Circular No. 27 (1910), printed p. 5">1910年のアメリカ標準局の資料</a>が、写真用のように広い画面を写す対物レンズについて、開口の直径を開放の半分に絞ると像の明瞭さが改善する、と書いています。直径が半分ということはF値が2倍、つまり2段相当です。ただし「2〜3段」という決まり文句も、それがどのレンズにも最良だという話も、この資料にはありません。</p>
+<p>メーカーの資料にもあります。Nikonの引伸しレンズ<a href="https://www.savazzi.net/download/manuals/El-Nikkor-N-Instruction-manual.pdf" title="Nikon EL-Nikkor N Instruction Manual, p. 8">EL-Nikkorの説明書</a>は、四隅までシャープに引き伸ばすために2〜3段絞るよう指示しています——これは引伸しレンズの話で、撮影レンズ一般には広げられません。2012年の<a href="https://www.makofoto.cz/aktuality/NikonD800/D800_TechnicalGuide_En.pdf" title="Nikon D800/D800E Technical Guide, p. 17">Nikon D800のテクニカルガイド</a>は、周辺のコントラストは最大開口から2〜3段絞ると一般に改善し得る、と書きつつ、結果はレンズごとに異なる、とも明記しています。</p>
+<p>確認できた資料のいくつかは、周辺まで含めた画面全体の写りの文脈で「絞る」ことを勧めています。ただ、「開放から2〜3段」という決まり文句が最初にどこで生まれ、誰が広めたのかは、今回の調査では分かりませんでした。</p>
+<h3>今回の調査で分からなかったこと</h3>
+<ul>
+<li>「2〜3段」という決まり文句の初出と、どれくらい広く教えられてきたか。</li>
+<li>世の中のレンズのうち、最良の絞りが開放から何段の範囲に入るものがどれくらいあるか（今回の例は限られた本数で、比率は言えません）。</li>
+<li>一本のレンズについて、開放から4段までを中心・中間・周辺で同じ条件で測った完全な数表。</li>
+<li>個体差、ピント位置のずれ、ボディ側の処理が、個々の結果にどれだけ効いているか。</li>
+</ul>
+<p>この記事の話は、こうした空欄を埋めずに書けることだけを書いています。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/f8-best-aperture">「F8が一番よく写る」は、本当なのか？</a>
+        <p class="kzc-related-desc">「F8が一番よく写る」「レンズは開放から2〜3段絞るとよい」は本当なのか。中学生のころ父に「F8で撮れ」と教わった私が、約50年後にAIを使って調べ直しました。分かったのは、どのレンズにも当てはまるF8を支持する根拠は見つからなかったこと。それでも私は今も、理由がなければF8で撮っています。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/your-circle-of-confusion">あなたの許容錯乱円はいくつ？</a>
+        <p class="kzc-related-desc">許容錯乱円 0.03 mmは物理定数ではなく、出力サイズ・観察距離・許容角という鑑賞条件を一つに圧縮した基準です。25年以上この数字を疑わなかった私の経験から、自分の許容錯乱円を決めるための条件を整理します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/is-lower-iso-always-better">「ISOは低いほど高画質」は、本当なのか？</a>
+        <p class="kzc-related-desc">「ISOは低いほど高画質」は本当なのか。良くしたのは低い数字ではなく、シャッターを延ばして集めた光だった。光を増やせない場面で下げても同じことは起きず、ISO50などの拡張感度には落とし穴もある。ISOの数字に画質を決めさせない、私のISOの決め方。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
