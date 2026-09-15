@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 760" width="800" height="760" role="img" aria-labelledby="t"><title id="t">“Two to three stops down from wide open” converted to absolute f-numbers for lenses with different maximum apertures (a ladder chart). Each row starts at the maximum aperture and shows the f-number 2 stops down and 3 stops down: f/1.2 → f/2.4 → f/3.4, f/1.4 → f/2.8 → f/4, f/2 → f/4 → f/5.6, f/2.8 → f/5.6 → f/8, f/4 → f/8 → f/11, f/5.6 → f/11 → f/16. The 2-stops and 3-stops columns are outlined as a band in every row, showing that the same “2–3 stops” lands on f/2.4–f/3.4 in the top row and f/11–f/16 in the bottom row. f/2.4 and f/3.4 are calculated values. This is aperture arithmetic only; it does not show which aperture is optically best, and no row or column is drawn as “good” or “bad.”</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L10,5 L0,10 z" fill="#8c96aa"/></marker></defs>
+<text x="20" y="40" font-size="30" fill="#eef1f8" text-anchor="start" font-weight="700">Turning “2–3 stops down” into f-numbers</text>
+<text x="20" y="78" font-size="26" fill="#8c96aa" text-anchor="start" font-weight="600">This is aperture arithmetic only.</text>
+<text x="20" y="114" font-size="26" fill="#8c96aa" text-anchor="start" font-weight="600">It does not show which aperture is optically best.</text>
+<text x="150" y="172" font-size="28" fill="#eef1f8" text-anchor="middle" font-weight="700">Wide open</text>
+<text x="420" y="172" font-size="28" fill="#ffb14a" text-anchor="middle" font-weight="700">2 stops down</text>
+<text x="660" y="172" font-size="28" fill="#ffb14a" text-anchor="middle" font-weight="700">3 stops down</text>
+<line x1="40" y1="188" x2="760" y2="188" stroke="#2b3140" stroke-width="1.5"/>
+<rect x="320" y="206" width="430" height="52" rx="26" fill="none" stroke="#ffb14a" stroke-width="2"/>
+<text x="150" y="240" font-size="36" fill="#eef1f8" text-anchor="middle" font-weight="700">f/1.2</text>
+<line x1="212" y1="228" x2="308" y2="228" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="420" y="240" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/2.4*</text>
+<line x1="486" y1="228" x2="590" y2="228" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="660" y="240" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/3.4*</text>
+<rect x="320" y="290" width="430" height="52" rx="26" fill="none" stroke="#ffb14a" stroke-width="2"/>
+<text x="150" y="324" font-size="36" fill="#eef1f8" text-anchor="middle" font-weight="700">f/1.4</text>
+<line x1="212" y1="312" x2="308" y2="312" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="420" y="324" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/2.8</text>
+<line x1="486" y1="312" x2="590" y2="312" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="660" y="324" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/4</text>
+<rect x="320" y="374" width="430" height="52" rx="26" fill="none" stroke="#ffb14a" stroke-width="2"/>
+<text x="150" y="408" font-size="36" fill="#eef1f8" text-anchor="middle" font-weight="700">f/2</text>
+<line x1="212" y1="396" x2="308" y2="396" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="420" y="408" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/4</text>
+<line x1="486" y1="396" x2="590" y2="396" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="660" y="408" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/5.6</text>
+<rect x="320" y="458" width="430" height="52" rx="26" fill="none" stroke="#ffb14a" stroke-width="2"/>
+<text x="150" y="492" font-size="36" fill="#eef1f8" text-anchor="middle" font-weight="700">f/2.8</text>
+<line x1="212" y1="480" x2="308" y2="480" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="420" y="492" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/5.6</text>
+<line x1="486" y1="480" x2="590" y2="480" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="660" y="492" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/8</text>
+<rect x="320" y="542" width="430" height="52" rx="26" fill="none" stroke="#ffb14a" stroke-width="2"/>
+<text x="150" y="576" font-size="36" fill="#eef1f8" text-anchor="middle" font-weight="700">f/4</text>
+<line x1="212" y1="564" x2="308" y2="564" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="420" y="576" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/8</text>
+<line x1="486" y1="564" x2="590" y2="564" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="660" y="576" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/11</text>
+<rect x="320" y="626" width="430" height="52" rx="26" fill="none" stroke="#ffb14a" stroke-width="2"/>
+<text x="150" y="660" font-size="36" fill="#eef1f8" text-anchor="middle" font-weight="700">f/5.6</text>
+<line x1="212" y1="648" x2="308" y2="648" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="420" y="660" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/11</text>
+<line x1="486" y1="648" x2="590" y2="648" stroke="#8c96aa" stroke-width="2.5" marker-end="url(#ah)"/>
+<text x="660" y="660" font-size="36" fill="#ffb14a" text-anchor="middle" font-weight="700">f/16</text>
+<text x="20" y="724" font-size="24" fill="#8c96aa" text-anchor="start" font-weight="500">One stop ≈ ×1.4 in f-number. * = calculated, not a marked f-stop.</text>
+</g>
+</svg>

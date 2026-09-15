@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" role="img" aria-labelledby="t"><title id="t">One measured lens: Tokina 56mm F1.4 E (APS-C). On an aperture scale from f/1.4 wide open to f/11, a dot marks the aperture where the center of the frame was best (around f/2.8, about two stops down) and a band marks where the outer field was best (f/5.6–f/8, about four to five stops down). Within the same test, the best apertures for the center and the outer field are two to three stops apart. No measured curve or intermediate values are drawn. It does not mean every lens behaves this way.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20" y="40" font-size="30" fill="#eef1f8" text-anchor="start" font-weight="700">One measured lens</text>
+<text x="20" y="76" font-size="26" fill="#8c96aa" text-anchor="start" font-weight="600">Tokina 56mm F1.4 E (APS-C), one test site, the same test</text>
+<line x1="70" y1="260" x2="750" y2="260" stroke="#2b3140" stroke-width="2"/>
+<line x1="90" y1="252" x2="90" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="90" y="300" font-size="26" fill="#eef1f8" text-anchor="middle" font-weight="600">f/1.4</text>
+<line x1="196.667" y1="252" x2="196.667" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="196.667" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">f/2</text>
+<line x1="303.333" y1="252" x2="303.333" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="303.333" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">f/2.8</text>
+<line x1="410" y1="252" x2="410" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="410" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">f/4</text>
+<line x1="516.667" y1="252" x2="516.667" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="516.667" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">f/5.6</text>
+<line x1="623.333" y1="252" x2="623.333" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="623.333" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">f/8</text>
+<line x1="730" y1="252" x2="730" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="730" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">f/11</text>
+<text x="90" y="338" font-size="26" fill="#eef1f8" text-anchor="middle" font-weight="600">wide open</text>
+<text x="303.333" y="120" font-size="28" fill="#ff8a00" text-anchor="middle" font-weight="700">Center: around f/2.8</text>
+<text x="303.333" y="156" font-size="26" fill="#ffb14a" text-anchor="middle" font-weight="500">about 2 stops down</text>
+<circle cx="303.333" cy="200" r="14" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="303.333" y1="216" x2="303.333" y2="250" stroke="#ff8a00" stroke-width="3"/>
+<line x1="516.667" y1="270" x2="516.667" y2="360" stroke="#ffb14a" stroke-width="2" stroke-dasharray="6 6"/>
+<line x1="623.333" y1="270" x2="623.333" y2="360" stroke="#ffb14a" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="516.667" y="360" width="106.667" height="18" rx="9" fill="#ffb14a" stroke="none" stroke-width="0"/>
+<text x="570" y="420" font-size="28" fill="#ffb14a" text-anchor="middle" font-weight="700">Outer field: f/5.6–f/8</text>
+<text x="570" y="456" font-size="26" fill="#ffb14a" text-anchor="middle" font-weight="500">about 4–5 stops down</text>
+<text x="20" y="498" font-size="26" fill="#8c96aa" text-anchor="start" font-weight="600">This does not mean every lens behaves this way.</text>
+</g>
+</svg>
