@@ -310,3 +310,10 @@ has_bom = data[:3] == b"\xef\xbb\xbf"
 テンプレート側と本番側は常に同じBOM状態（両方あり／両方無し）で揃っていること。
 どちらかにだけBOMがある状態は、次の全ページ再ビルドでBOMが消える・増えるという
 形で本番へ意図せず影響する。
+
+## 5. 復旧・NAS backup（2026-09-16 追加）
+
+このリポジトリの所在（GitHub `origin` / local / NAS file-copy backup）、NAS backup の仕組み（手動 robocopy、`/MIR` なし）、
+鮮度確認（`py -3.10 -B tools/check_nas_backup_status.py`、READ ONLY）、復旧手順、security boundary は
+`docs/WEB_RECOVERY_AND_BACKUP.md` にまとめた。新規 AI / 人間 session の入口は repository 直下の `START_HERE_FOR_DEVELOPMENT.md`
+（`.vercelignore` で配信除外）。backup の実行（`☆☆☆nas_backup.bat`）は本人の判断で行い、AI worker は実行しない。
