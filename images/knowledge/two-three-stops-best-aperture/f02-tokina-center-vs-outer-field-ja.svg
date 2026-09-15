@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" role="img" aria-labelledby="t"><title id="t">一本のレンズの実測例：Tokina 56mm F1.4 E（APS-C）。開放 F1.4 から F11 までの絞りの目盛りの上に、画面の中心が最も良かった絞り（F2.8付近、開放から約2段）を点で、画面外側が最も良かった絞り（F5.6〜F8、開放から約4〜5段）を帯で示す。同じテストの中で、中心と画面外側の最良が2〜3段ずれている。実測曲線や中間の値は描いていない。すべてのレンズが同じように振る舞うという意味ではない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20" y="40" font-size="30" fill="#eef1f8" text-anchor="start" font-weight="700">一本のレンズの実測例</text>
+<text x="20" y="76" font-size="26" fill="#8c96aa" text-anchor="start" font-weight="600">Tokina 56mm F1.4 E（APS-C）、一つの測定サイトの同一テスト</text>
+<line x1="70" y1="260" x2="750" y2="260" stroke="#2b3140" stroke-width="2"/>
+<line x1="90" y1="252" x2="90" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="90" y="300" font-size="26" fill="#eef1f8" text-anchor="middle" font-weight="600">F1.4</text>
+<line x1="196.667" y1="252" x2="196.667" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="196.667" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">F2</text>
+<line x1="303.333" y1="252" x2="303.333" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="303.333" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">F2.8</text>
+<line x1="410" y1="252" x2="410" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="410" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">F4</text>
+<line x1="516.667" y1="252" x2="516.667" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="516.667" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">F5.6</text>
+<line x1="623.333" y1="252" x2="623.333" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="623.333" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">F8</text>
+<line x1="730" y1="252" x2="730" y2="268" stroke="#8c96aa" stroke-width="2"/>
+<text x="730" y="300" font-size="26" fill="#8c96aa" text-anchor="middle" font-weight="600">F11</text>
+<text x="90" y="338" font-size="26" fill="#eef1f8" text-anchor="middle" font-weight="600">開放</text>
+<text x="303.333" y="120" font-size="28" fill="#ff8a00" text-anchor="middle" font-weight="700">中心：F2.8付近</text>
+<text x="303.333" y="156" font-size="26" fill="#ffb14a" text-anchor="middle" font-weight="500">開放から約2段</text>
+<circle cx="303.333" cy="200" r="14" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="303.333" y1="216" x2="303.333" y2="250" stroke="#ff8a00" stroke-width="3"/>
+<line x1="516.667" y1="270" x2="516.667" y2="360" stroke="#ffb14a" stroke-width="2" stroke-dasharray="6 6"/>
+<line x1="623.333" y1="270" x2="623.333" y2="360" stroke="#ffb14a" stroke-width="2" stroke-dasharray="6 6"/>
+<rect x="516.667" y="360" width="106.667" height="18" rx="9" fill="#ffb14a" stroke="none" stroke-width="0"/>
+<text x="570" y="420" font-size="28" fill="#ffb14a" text-anchor="middle" font-weight="700">画面外側：F5.6〜F8</text>
+<text x="570" y="456" font-size="26" fill="#ffb14a" text-anchor="middle" font-weight="500">開放から約4〜5段</text>
+<text x="20" y="498" font-size="26" fill="#8c96aa" text-anchor="start" font-weight="600">すべてのレンズが同じように振る舞うという意味ではありません。</text>
+</g>
+</svg>
