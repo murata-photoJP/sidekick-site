@@ -180,7 +180,7 @@
     <p class="kzc-article-meta">
       <span class="kzc-category">写真</span>
       
-      <time datetime="2026-09-13">更新日：2026-09-13</time>
+      <time datetime="2026-09-17">更新日：2026-09-17</time>
     </p>
   </header>
 
@@ -309,6 +309,7 @@
 <p>比較明合成、Photoshopでいう「比較（明）」は、何をしているのか。</p>
 <p>重ねた写真の各画素について、<strong>いちばん明るい値を採る</strong>。それだけです。</p>
 <p>足し算でも平均でもありません。「選ぶ」演算です。</p>
+<p>この「選ぶ」演算が、長時間露光や平均合成と何が違うのかは、別の記事<a href="/knowledge/photography/thirty-minute-exposure-vs-lighten-composite">「30分の長時間露光と、30分の比較明合成は何がどう違う？」</a>で、一つの画素に注目して説明しています。</p>
 <p>隣り合うコマの星像がほぼ同じ場所で重なっているとき、その場所に残るのは明るい方のコマの値で、暗い方は捨てられます。合成前の明るさがコマごとに揺れていれば、比較明合成はその揺れの中から明るい側を拾い上げて線にしていく。</p>
 <p><img src="/images/knowledge/star-trails/f01-adjacent-frames-and-max-ja.svg" alt="模式図。上段は、隣り合うコマ1とコマ2の星像。1コマの移動は約1.13ピクセル、星像の幅は約4.52ピクセルで、2つの星像はほぼ重なっている。下段は同じ画素の列を並べたもので、比較（明）は各画素でコマ1とコマ2のうち明るい方の値だけを採る。" /></p>
 <p>図5：隣り合う2コマの星像と、比較（明）の働き（模式図）。星像の幅（約4.52ピクセル）と1コマの移動（約1.13ピクセル）は今回の実データの値ですが、星像の形は説明のために単純化した模式図で、実測画像ではありません。下段のように、比較（明）は各画素で明るい方の値だけを採ります。足し算でも平均でもありません。</p>
@@ -361,6 +362,12 @@
   <section class="kzc-related-articles" aria-label="関連記事">
     <h2>関連する記事</h2>
     <ul>
+      
+      <li>
+        <a href="/knowledge/photography/thirty-minute-exposure-vs-lighten-composite">30分の長時間露光と、30分の比較明合成は何がどう違う？</a>
+        <p class="kzc-related-desc">星の明るさは同じなのに、30分の長時間露光と30秒×60枚の比較明合成では、なぜ星の軌跡の写り方が違うのか。星像はセンサー上を動くので、一つの画素が星の光を受けるのは、D3の実データでは30分のうち約30秒だけ。長時間露光・平均合成・比較明合成を「時間方向の光のまとめ方」の違いとして説明します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
       
       <li>
         <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>

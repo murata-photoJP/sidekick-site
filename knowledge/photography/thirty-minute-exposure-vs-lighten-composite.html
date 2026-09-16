@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>30分の長時間露光と、30分の比較明合成は何がどう違う？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="星の明るさは同じなのに、30分の長時間露光と30秒×60枚の比較明合成では、なぜ星の軌跡の写り方が違うのか。星像はセンサー上を動くので、一つの画素が星の光を受けるのは、D3の実データでは30分のうち約30秒だけ。長時間露光・平均合成・比較明合成を「時間方向の光のまとめ方」の違いとして説明します。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/thirty-minute-exposure-vs-lighten-composite">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">30分の長時間露光と、30分の比較明合成は何がどう違う？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">30分の長時間露光と、30分の比較明合成は何がどう違う？</h1>
+    <p class="kzc-article-lead">星の明るさは同じなのに、30分の長時間露光と30秒×60枚の比較明合成では、なぜ星の軌跡の写り方が違うのか。星像はセンサー上を動くので、一つの画素が星の光を受けるのは、D3の実データでは30分のうち約30秒だけ。長時間露光・平均合成・比較明合成を「時間方向の光のまとめ方」の違いとして説明します。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      <span class="kzc-badge">初心者向け</span>
+      <time datetime="2026-09-17">更新日：2026-09-17</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――星の明るさは同じなのに、なぜ星の軌跡の見え方が違うのか？</p>
+<p>星の軌跡を撮る方法は、大きく二つあります。</p>
+<p>シャッターを30分開けたままにする長時間露光。</p>
+<p>30秒の露光を60枚連続で撮って、あとで比較明合成する方法。</p>
+<p>どちらも、星の光を受けている時間は30分です。星そのものの明るさは、もちろん変わりません。</p>
+<p>それなら、同じように写るはずではないか。</p>
+<p>この疑問は、とても自然なものだと思います。そして、半分は正しい。この記事では、その「半分」がどこまでで、残りの半分で何が起きているのかを、センサーの画素の話まで降りて説明します。</p>
+<p>先に結論だけ書いておきます。</p>
+<p><strong>星の明るさが変わったのではありません。30分間に入ってきた光を、一枚の画像にする方法が違うのです。</strong></p>
+<h2>「星の明るさは同じなのだから、同じでは？」</h2>
+<p>もう少し、この疑問を丁寧に見ておきます。</p>
+<p>星は30分間、ずっと光っています。カメラは30分間、その光を受けています。30分×1枚でも、30秒×60枚でも、受けた光の総量は同じはずです。</p>
+<p>ここまでは、その通りです。</p>
+<p>問題は、その光が<strong>センサーのどこに</strong>届いたか、です。</p>
+<p>「星が30分間光っている」ことと、「センサーのある一つの画素が、30分間、星の光を受け続けている」ことは、別の話です。</p>
+<h2>星は、センサーの上で止まっていない</h2>
+<p>固定撮影では、地球の自転によって、星の像はセンサーの上をゆっくり動いていきます。だから軌跡が写るわけです。</p>
+<p>ということは、軌跡の上のどの画素も、星の像が通り過ぎていく間だけ、星の光を受けている。通り過ぎたあとは、空の光しか受けていません。</p>
+<p>どれくらいの時間、通り過ぎているのか。</p>
+<p>これは、私が<a href="/knowledge/photography/star-trail-seams-lighten-composite">前の記事</a>で使った、17年前のNikon D3の実データから計算できます。14mmで8秒露光を連続撮影したデータで、星の像の幅（半値幅）は約4.52ピクセル、星は1コマ8秒の間に約1.13ピクセル動いていました。</p>
+<p>割り算をすると、星の像が一つの画素の上を通り過ぎるのに、およそ32秒。星の位置によって速さが違うので、だいたい20秒から60秒の幅があります。</p>
+<p>30分は1,800秒です。</p>
+<p><strong>つまり「30分露光」といっても、軌跡の上のある一つの画素が星の光を受けているのは、そのうちの30秒前後にすぎません。</strong> 残りの29分半、その画素に入ってくるのは空の光だけです。</p>
+<p>「30分露光したからといって、軌跡上の一地点を30分間露光しているわけではない」。ここが、この記事でいちばん大事なところです。</p>
+<p><img src="/images/knowledge/star-trails/f01-adjacent-frames-and-max-ja.svg" alt="模式図。上段は、隣り合うコマ1とコマ2の星像。1コマの移動は約1.13ピクセル、星像の幅は約4.52ピクセルで、2つの星像はほぼ重なっている。下段は同じ画素の列を並べたもので、比較（明）は各画素でコマ1とコマ2のうち明るい方の値だけを採る。" /></p>
+<p>図1：星の像には幅があり、センサーの上を少しずつ動いていく（模式図。前の記事の図を再掲）。星像の幅（約4.52ピクセル）と1コマの移動（約1.13ピクセル）はD3の実データの値ですが、星像の形は説明のために単純化したもので、実測画像ではありません。下段の「比較（明）」の働きについては、この記事の後半で使います。</p>
+<h2>30分露光では、一つの画素に何が起きているか</h2>
+<p>ここからは、軌跡の上にある一つの画素に注目して、30分を眺めてみます。</p>
+<p>説明しやすいように、30分を30秒ずつの60コマに区切って考えます。実際の長時間露光にコマの区切りはありませんが、光の入り方を数えるための区切りです。</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f01-one-pixel-thirty-minutes-ja.svg" alt="模式図。一つの画素を時間方向に見た図。30秒×60コマを横一列に並べた帯のうち、空の光だけのコマが59個、星の光が入ったコマが1コマ前後。空の光はすべてのコマに入り、星の光は星が通り過ぎたコマにしか入らない。" /></p>
+<p>図2：ある一つの画素が、30分間に受けた光（模式図）。空の光は60コマすべてに入る。星の光は、星がその画素を通り過ぎた約30秒、コマにして1コマ前後にしか入らない。「約30秒」は今回のD3実データの条件から計算した値で、レンズや星の位置によって変わります。</p>
+<p>この画素が30分間に受け取った光は、こうなります。</p>
+<ul>
+<li>空の光：60コマぶん、全部</li>
+<li>星の光：星が通り過ぎた1コマ前後のぶんだけ</li>
+</ul>
+<p>長時間露光では、この二つが<strong>足し算</strong>で一枚に積み上がります。</p>
+<p>星の光は、露光を長くしても増えません。星が通り過ぎたあとは、もう来ないからです。露光を長くすると軌跡は「長く」なりますが、「明るく」はなりません。</p>
+<p>一方、空の光は露光時間に比例して増え続けます。街明かりや薄明、大気の光は、その画素にずっと届いているからです。</p>
+<p>だから、30分の長時間露光では、星の軌跡は暗くなったわけではないのに、明るくなり続けた空に埋もれていく。これが「長時間露光では星の軌跡が薄くなる」という言葉の中身です。薄くなるのは、軌跡そのものではなく、<strong>軌跡と空の明るさの差</strong>です。</p>
+<h2>30秒×60枚を「平均」したら？</h2>
+<p>さて、ここで冒頭の疑問に戻ります。</p>
+<p>「星の明るさが同じなら、同じに写るはず」という直感は、実は的外れではありません。</p>
+<p>光は足し算で積み上がるものです。だから、理想的に考えれば、30分の露光を30秒×60コマに分けて撮り、その60コマを<strong>足し合わせる</strong>と、30分露光した一枚と同じ光の分布になります。時間を区切っただけで、届いた光は同じだからです。</p>
+<p>「平均」は、この足し算を60で割ったものです。割っただけなので、星と空の明るさの<strong>比</strong>は、足し算と変わりません。</p>
+<p>つまり、30秒×60枚を平均合成した画像は、30分の長時間露光の一枚と、写り方としてはよく似たものになります。星の光は60で割られてわずかになり、空の光もまた60で割られて1コマぶんに戻る。星が空に埋もれる度合いは、理想的には長時間露光と同じです。</p>
+<p>理想的なモデルでこれを確かめると、コマの間に空白がなければ、60コマの足し算と一続きの露光の軌跡はぴったり一致し、平均はそれをちょうど60分の1にしたものになります。</p>
+<p>ただし、ここで一つ、正直に書いておくべきことがあります。</p>
+<p><strong>「30分1枚 ＝ 30秒×60枚の平均」は、あくまで理想化した話です。</strong> 実際のカメラには、コマごとの読み出しノイズ、暗電流、センサーの温度、明るい星の飽和、RAWの量子化、現像処理、長秒時ノイズ低減、コマとコマの間隔など、理想から外れる要因がいくつもあります。特に読み出しノイズは1コマごとに乗るので、60回読み出せば60回ぶん入ります。だから、両者が完全に同じ画像になるとは限りません。</p>
+<p>それでも、「平均合成した画像を見れば、長時間露光で軌跡が薄くなる理由が目で分かる」という関係は成り立ちます。星の光は一部のコマにしかないのに、空の光は全部のコマにある。平均は、その事実をそのまま一枚にしたものです。</p>
+<h2>同じ60枚を「比較明」したら？</h2>
+<p>比較明合成は、平均ではありません。</p>
+<p>Photoshopでいう「比較（明）」は、重ねた画像の各画素について、<strong>いちばん明るい値を残す</strong>演算です。足し算でも割り算でもなく、「選ぶ」演算です。</p>
+<p>さっきの一つの画素で考えます。60コマの値は、こう並んでいます。</p>
+<p>背景、背景、背景……、星が通過、背景、背景……</p>
+<p>平均では、星がいなかった59コマも計算に入ります。だから星の光は薄まる。</p>
+<p>比較明では、この60個の値の中から、いちばん明るい値だけが残ります。星が通過したコマの値です。星がいなかった59コマは、その画素については捨てられます。</p>
+<p>空の光はどうか。星が通らなかった画素では、60コマともほぼ同じ空の値なので、いちばん明るい値を選んでも、空は1コマぶんのままです（厳密にはノイズの明るい側を拾うので、少しだけ持ち上がります。あとで触れます）。</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f02-same-frames-average-vs-lighten-ja.svg" alt="模式図。同じ60コマの帯から、左の「平均合成」と右の「比較明合成」へ矢印が分岐している。下の棒は一つの画素の値で、平均は空の部分がそのままで星の部分がごくわずか、比較明は空の部分がそのままで星の部分が一番明るいコマの値のまま残っている。" /></p>
+<p>図3：同じ60コマから、平均と比較明へ（模式図）。撮影データも星の明るさも同じ。違うのは最後の演算だけ。平均は星の光を60で割り、比較明は星が通ったコマの値をそのまま残す。空はどちらもそのまま。実際には星像には幅があり、同じ画素への星の寄与が複数のコマにまたがることがあります。ここでは原理を分かりやすくするため、1コマだけ星が通過したものとして模式化しています。棒の長さは説明のための模式値です。</p>
+<h2>違うのは星ではなく、演算</h2>
+<p>ここまでを、一枚にまとめます。</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f03-three-ways-of-integration-ja.svg" alt="模式図。同じ30分を一枚にする三つの方法（A：30分×1枚の長時間露光、B：30秒×60枚を平均、C：30秒×60枚を比較明）について、軌跡上の一つの画素が受けた星の光と空の光を棒で比較。AとBは星も空も同じ比率で、空が相対的に大きい。Cは星も空も1コマ分の関係を保つ。" /></p>
+<p>図4：同じ30分を一枚にする三つの方法（理想化した線形モデルの模式図）。A（長時間露光）とB（平均）は、星も空も同じ比率なので写り方は同じ。C（比較明）は星も空も1コマぶんの関係を保つ。ノイズ・飽和・現像などの実機の要因は含めていません。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>星の光（軌跡上の一画素）</th>
+<th>空の光</th>
+<th>演算の性格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A　30分×1枚の長時間露光</td>
+<td>通り過ぎた約30秒ぶん</td>
+<td>30分ぶん</td>
+<td>一つの露光として記録</td>
+</tr>
+<tr>
+<td>B　30秒×60枚を平均合成</td>
+<td>約30秒ぶん÷60</td>
+<td>30秒ぶん</td>
+<td>時間分割した露光を線形に統合</td>
+</tr>
+<tr>
+<td>C　30秒×60枚を比較明合成</td>
+<td>いちばん明るかった1コマぶん</td>
+<td>30秒ぶん（＋ノイズの明るい側）</td>
+<td>各時刻から明るい値を選択</td>
+</tr>
+</tbody>
+</table>
+<p>表1：三つの方法の違い（理想化したモデル。Cの「星の光」は、星の通過が2コマにまたがると1コマぶんより少なくなる）</p>
+<p>こう並べると、はっきりします。</p>
+<p>理想化した線形モデルでは、AとBは同じ光の分布を表しています。BはAを60で割ったものです。どちらも、星の光と空の光を「足す」ことでまとめていて、実機では完全には一致しないという注意は、前の節に書いたとおりです。</p>
+<p>Cだけが、違う種類の操作です。60コマの中から、画素ごとに明るい値を「選ぶ」。だから空は増えず、星は通過したコマの値のまま残る。</p>
+<p><strong>「30分の長時間露光」と「30分間撮影した短時間露光の比較明合成」は、撮影していた総時間は同じでも、同じ画像形成ではありません。</strong> 星の明るさが違うのではなく、時間方向の情報のまとめ方が違うのです。</p>
+<p>一つ、誤解を避けるために補足しておきます。</p>
+<p><strong>比較明合成は、星を明るくしているのではありません。星がそこにいた短時間露光の「星と空の明るさの関係」を、軌跡に沿って残しているのです。</strong></p>
+<p>ですから、比較明合成にすると軌跡そのものが長時間露光より明るくなる、というわけでもありません。理想的なモデルでは、比較明の軌跡の明るさは一続きの露光と同じか、コマごとの星像が重なり合う条件では、それより低くなります。比較明が守っているのは、軌跡の明るさではなく、<strong>空に対する軌跡の明るさの比</strong>です。空が1コマぶんに留まるから、軌跡が埋もれない。それだけのことです。</p>
+<h2>なぜ星の軌跡撮影で比較明合成が使われるのか</h2>
+<p>原理が分かると、比較明合成のメリットとされていることが、二つの種類に分かれて見えてきます。</p>
+<p>一つは、<strong>比較明という演算そのもの</strong>のメリット。もう一つは、<strong>短時間露光を連続で撮る、という撮影方法</strong>のメリットです。後者は、平均合成でも得られます。</p>
+<p><strong>比較明という演算のメリット</strong></p>
+<ul>
+<li>空の光が撮影時間に応じて積み上がらない。だから長時間露光や平均のように、軌跡が空に埋もれていかない</li>
+<li>光害のある場所でも、空の明るさは1コマぶんのままなので、長時間露光では成り立たない撮影時間を軌跡に使える</li>
+</ul>
+<p><strong>短時間連続撮影という撮影方法のメリット</strong>（比較明でなくても得られる）</p>
+<ul>
+<li>途中の失敗コマ（車のライト、人が横切った、風でブレた）を、そのコマだけ外して合成できる</li>
+<li>軌跡の長さを、撮影後に「何コマ使うか」で調整できる</li>
+<li>一枚の超長時間露光に賭けなくて済む。途中で雲が来ても、それまでのコマは残る</li>
+<li>1コマが短いので、長秒時ノイズ低減の待ち時間や、露光時間とともに増える熱由来のノイズといった長時間露光特有の問題を、1コマの範囲に抑えられる</li>
+<li>同じコマ列を、タイムラプス動画や一枚ものの星景にも使い回せる。私自身、8秒という露光時間を長く使い続けてきた理由の一つが、この多用途性でした</li>
+</ul>
+<p>つまり、「比較明合成のメリット」として語られることの多くは、実は「短く区切って撮ること」のメリットです。比較明そのものが担っているのは、空を積み上げずに軌跡だけをつなぐ、という一点です。</p>
+<h2>比較明合成のデメリット</h2>
+<p>メリットだけの話にはしません。「選ぶ」演算には、選ぶ演算ならではの弱点があります。</p>
+<p><strong>明るい不要物を全部拾う。</strong> 比較明は、画素ごとにいちばん明るい値を残します。ということは、60コマのどれか1コマにでも飛行機や人工衛星、車のライト、懐中電灯の光が写っていれば、それは必ず最終画像に残ります。平均なら60分の1に薄まるものが、比較明では原寸のまま残る。比較明合成の後処理に飛行機の軌跡消しが付いて回るのは、このためです。</p>
+<p><strong>空のノイズを、明るい側だけ拾う。</strong> 星のない画素でも、60コマの値はノイズで少しずつ違います。比較明はその中のいちばん明るい値を選ぶので、空は1コマぶんより少し明るい側に持ち上がった状態で残ります。ホットピクセルのように毎コマ同じ場所で明るい欠陥も、そのまま残ります。平均はこの逆で、ノイズは均されて減ります。理想的なモデルで確かめても、比較明は空の平均値を持ち上げ、平均合成は空のばらつきを下げる方向に働きます。</p>
+<p><strong>空や雲の変化に弱い。</strong> 60コマの間に雲が通ったり、街明かりが変わったりすると、明るくなったコマの空がその画素の「いちばん明るい値」として選ばれます。長時間露光ならならされる変化が、比較明では明るい側に残ります。</p>
+<p><strong>コマの境界や濃淡が見えることがある。</strong> 理想的なモデルで考えると、比較明では隣り合うコマの境界に明るさの谷が生じ得ます。また「選ぶ」演算は、合成前の各コマにあった明るさの揺れを、そのまま軌跡の濃淡として残し得ます。これは次の節で、前の記事につなげて書きます。</p>
+<p><strong>本当の空白は、どの演算でも埋められない。</strong> コマとコマの間隔が長すぎて、星の像の幅より大きく動いてしまうと、その区間の光はどのコマにも記録されません。記録されなかった光は、比較明でも平均でも作れません。たとえば長秒時ノイズ低減をONにすると、私が使っていたD3の使用説明書には、露光時間とほぼ同じ時間の処理が入り、その間は撮影できないと書かれています。私はD3での比較明合成用の連続撮影では、長秒時ノイズ低減をOFFに固定していました。</p>
+<p><strong>枚数と処理が要る。</strong> 30分ぶんで60枚、一晩なら数千枚。メディアの容量も、合成の手間も、長時間露光の一枚とは比べものになりません。</p>
+<p><strong>長時間露光とは別の画像になる。</strong> 比較明合成は長時間露光の代用品ではありません。空の扱いも、ノイズの性質も、境界の見え方も違う、別の画像形成です。</p>
+<h2>D3の「波線」はなぜ起きたのか</h2>
+<p>私はD3の時代から、8秒の連続撮影を比較明合成して星の軌跡を作っていました。その軌跡を100%表示にすると、線がところどころで途切れて見えました。当時の私は、それをシャッター間のわずかな空白、この記事の言葉でいえば「本当の空白」のせいだと思っていました。</p>
+<p>17年後に当時のNEFを調べ直すと、空白だけでは説明がつきませんでした。シャッター間の約0.1秒に星が動く距離は約0.012ピクセルで、星像の幅に比べて無視できる大きさ。それでも濃淡は実在していて、合成前の各コマで測定された星の明るさがすでに揺れていた。比較明合成は、その揺れを「選び、強める」主要な段階でした。この記事で説明した「選ぶ」という演算の性格そのものが、あの濃淡にも関わっていたのです。揺れの物理的な原因と、濃淡の周期がどう決まるのかは、まだ分かっていません。</p>
+<p>詳しくは<a href="/knowledge/photography/star-trail-seams-lighten-composite">「連続撮影なのに、なぜ星の軌跡に継ぎ目が見えるのか？」</a>に書きました。</p>
+<h2>まとめ</h2>
+<p>星の明るさは同じです。カメラが星の光を受けていた時間も同じです。</p>
+<p>違うのは、30分間にセンサーへ届いた光を、一枚の画像にまとめる方法です。</p>
+<ul>
+<li>長時間露光は、30分間に入ってきた光を一つの露光として記録する。星の光は通り過ぎた数十秒ぶんしか来ないのに、空の光は30分ぶん積み上がる</li>
+<li>短時間露光の平均（や加算）は、時間分割された露光を線形に統合する。理想的には長時間露光と同じ写り方になり、実機では読み出しノイズなどのぶんだけずれる</li>
+<li>比較明合成は、各時刻の画像から画素ごとに明るい値を選んで軌跡を構成する。空は1コマぶんに留まり、軌跡は埋もれないが、明るい不要物もノイズの明るい側も残る</li>
+</ul>
+<p>どれが優れているか、という話ではありません。時間方向の情報のまとめ方が違い、得られる画像も違う。それを知った上で、自分が何を撮りたいかで選ぶものだと思います。</p>
+<p>この記事の「一つの画素が星の光を受けているのは約30秒」という数字は、D3で14mm、8秒露光という一つの条件の実データから計算したものです。レンズの焦点距離や、星がどのあたりにあるかで変わります。ただ、「30分露光しても、一つの画素を30分間露光しているわけではない」という構図は、どの条件でも変わりません。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/star-trail-seams-lighten-composite">連続撮影なのに、なぜ星の軌跡に継ぎ目が見えるのか？</a>
+        <p class="kzc-related-desc">比較明合成した星の軌跡に、連続撮影なのになぜ継ぎ目が見えるのか。17年前のD3のNEF 3,522枚を測り直すと、今回の実写では空白だけでは説明できず、合成前からあった測定された明るさの揺れを比較明合成が選び、強めていました。原因と周期は未解明です。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-exposure-time">星を止める「8秒」は、いつの間に古くなったのか？</a>
+        <p class="kzc-related-desc">星景写真の露光時間を何秒にするか。私はNikon D3の頃から15mm前後で20年近く「8秒」を使ってきました。その8秒を、500ルールとNPFルール、そしてカメラの高画素化という観点から検証します。8秒を勧める記事ではありません。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/astrophotography-camera-settings">星景写真の撮影設定・機材完全ガイド｜露出の目安から必須アイテムまで</a>
+        <p class="kzc-related-desc">星景写真の露出設定、必要な機材、撮影前の準備をまとめました。初心者から中級者まで対応。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
