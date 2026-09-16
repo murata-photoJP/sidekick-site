@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" width="800" height="900" role="img" aria-labelledby="t"><title id="t">Conceptual diagram: the chain by which a photograph comes into being. Subject, lens, focus / film plane, emulsion (grain), development, then the branch (view with a loupe / enlarge / scan), then output (transparency viewed directly, print, magazine, screen) and viewing. The data-sheet resolving power is a value measured at the emulsion and development stages, not a value for the whole chain. Scanning ppi is the number of grid cells decided at that stage, not the amount of detail recorded. What must be preserved depends on the use. No numbers, MTF curves or multiplication. This is the framework used in this site's investigation, not a diagram from the period.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">Concept: the chain from subject to viewing</text>
+<rect x="36.0" y="170.0" width="104.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="88.0" y="220.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Subject</text>
+<rect x="160.0" y="170.0" width="104.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="212.0" y="220.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Lens</text>
+<rect x="284.0" y="170.0" width="176.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="372.0" y="204.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Focus</text>
+<text x="372.0" y="236.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">film plane</text>
+<rect x="480.0" y="170.0" width="138.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="549.0" y="204.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Emulsion</text>
+<text x="549.0" y="236.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">(grain)</text>
+<rect x="640.0" y="170.0" width="124.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="702.0" y="220.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Develop</text>
+<line x1="143.0" y1="212.0" x2="157.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="267.0" y1="212.0" x2="281.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="463.0" y1="212.0" x2="477.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="621.0" y1="212.0" x2="637.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="466.0" y="156.0" width="314.0" height="112.0" rx="16" fill="none" stroke="#ff8a00" stroke-width="2.5" stroke-dasharray="10 7"/>
+<text x="780.0" y="110.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">Data-sheet resolving power</text>
+<text x="780.0" y="142.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">is measured at this stage</text>
+<text x="549.0" y="294.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">not a grid</text>
+<line x1="702.0" y1="257.0" x2="702.0" y2="340.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="146.0" y1="340.0" x2="702.0" y2="340.0" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="24.0" y="328.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Branches</text>
+<line x1="146.0" y1="340.0" x2="146.0" y2="397.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="36.0" y="400.0" width="220.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="146.0" y="450.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">View with a loupe</text>
+<line x1="400.0" y1="340.0" x2="400.0" y2="397.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="290.0" y="400.0" width="220.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="400.0" y="450.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Enlarge</text>
+<line x1="654.0" y1="340.0" x2="654.0" y2="397.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="544.0" y="400.0" width="220.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="654.0" y="450.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Scan</text>
+<line x1="146.0" y1="487.0" x2="146.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="400.0" y1="487.0" x2="400.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="654.0" y1="487.0" x2="654.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="146.0" y1="508.0" x2="654.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="780.0" y="556.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="end">ppi: the cell count set here</text>
+<text x="780.0" y="592.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">cell count ≠ recorded detail</text>
+<line x1="316.0" y1="508.0" x2="316.0" y2="637.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="36.0" y="640.0" width="560.0" height="110.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="316.0" y="687.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Output</text>
+<text x="316.0" y="719.6" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">transparency · print · magazine · screen</text>
+<line x1="599.0" y1="695.0" x2="637.0" y2="695.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="640.0" y="640.0" width="124.0" height="110.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="702.0" y="704.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">View</text>
+<text x="316.0" y="790.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">What must be preserved depends on the use</text>
+<line x1="20.0" y1="836.0" x2="780.0" y2="836.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="872.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">This site's own framework, not a diagram from the period</text>
+</g>
+</svg>
