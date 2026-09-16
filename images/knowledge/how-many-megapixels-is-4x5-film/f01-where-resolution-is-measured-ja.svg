@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" width="800" height="900" role="img" aria-labelledby="t"><title id="t">概念図：写真ができるまでの鎖。被写体 → レンズ → ピント・フィルムの平面 → 乳剤（粒子）→ 現像 → 分岐（ルーペで見る／引き伸ばす／スキャンする）→ 出力（ポジ直視・プリント・雑誌・画面）→ 見る。フィルム資料の解像力は乳剤と現像の段で測った値であり、鎖全体の値ではない。スキャンの ppi はその段で決まる升目の数で、写っている細部の量ではない。用途によって守りたいものが変わる。数値・MTF曲線・掛け算は含まない。本サイトの調査で置いた整理であり、当時の概念図ではない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">概念図：写真ができるまでの鎖</text>
+<rect x="36.0" y="170.0" width="104.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="88.0" y="221.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">被写体</text>
+<rect x="160.0" y="170.0" width="104.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="212.0" y="221.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">レンズ</text>
+<rect x="284.0" y="170.0" width="176.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="372.0" y="204.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">ピント</text>
+<text x="372.0" y="238.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">フィルムの平面</text>
+<rect x="480.0" y="170.0" width="138.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="549.0" y="204.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">乳剤</text>
+<text x="549.0" y="238.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">（粒子）</text>
+<rect x="640.0" y="170.0" width="124.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="702.0" y="221.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">現像</text>
+<line x1="143.0" y1="212.0" x2="157.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="267.0" y1="212.0" x2="281.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="463.0" y1="212.0" x2="477.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="621.0" y1="212.0" x2="637.0" y2="212.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="466.0" y="156.0" width="314.0" height="112.0" rx="16" fill="none" stroke="#ff8a00" stroke-width="2.5" stroke-dasharray="10 7"/>
+<text x="780.0" y="110.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">フィルム資料の解像力は</text>
+<text x="780.0" y="142.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="end">この段で測られた値</text>
+<text x="549.0" y="294.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">格子ではない</text>
+<line x1="702.0" y1="257.0" x2="702.0" y2="340.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="146.0" y1="340.0" x2="702.0" y2="340.0" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="24.0" y="328.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">分岐</text>
+<line x1="146.0" y1="340.0" x2="146.0" y2="397.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="36.0" y="400.0" width="220.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="146.0" y="451.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">ルーペで見る</text>
+<line x1="400.0" y1="340.0" x2="400.0" y2="397.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="290.0" y="400.0" width="220.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="400.0" y="451.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">引き伸ばす</text>
+<line x1="654.0" y1="340.0" x2="654.0" y2="397.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="544.0" y="400.0" width="220.0" height="84.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="654.0" y="451.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">スキャンする</text>
+<line x1="146.0" y1="487.0" x2="146.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="400.0" y1="487.0" x2="400.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="654.0" y1="487.0" x2="654.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="146.0" y1="508.0" x2="654.0" y2="508.0" stroke="#ffb14a" stroke-width="2.5"/>
+<text x="780.0" y="556.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="end">ppi は、ここで決まる升目の数</text>
+<text x="780.0" y="592.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">升目の数 ≠ 写っている細部</text>
+<line x1="316.0" y1="508.0" x2="316.0" y2="637.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="36.0" y="640.0" width="560.0" height="110.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="316.0" y="687.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">出力</text>
+<text x="316.0" y="721.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">ポジ直視・プリント・雑誌・画面</text>
+<line x1="599.0" y1="695.0" x2="637.0" y2="695.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="640.0" y="640.0" width="124.0" height="110.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="702.0" y="704.4" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">見る</text>
+<text x="316.0" y="790.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">用途によって、守りたいものが変わる</text>
+<line x1="20.0" y1="836.0" x2="780.0" y2="836.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="872.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">本サイトの調査で置いた整理（当時の概念図ではありません）</text>
+</g>
+</svg>

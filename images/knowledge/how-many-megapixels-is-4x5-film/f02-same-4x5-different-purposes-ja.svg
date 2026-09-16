@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-labelledby="t"><title id="t">概念図：同じ1枚の4×5ポジから、ライトボックスとルーペで見る／雑誌・印刷／大きなプリント／保存用スキャンという四つの用途例へ分かれ、それぞれ守りたいもの（局所の細部・質感／誌面での見え／壁で見たときの見え／将来の再利用）が違い、必要な取り込みの細かさは固定ではなく条件で決まる。量の大小は描いていない。四つは例であり、順序・優劣・当時の割合ではない。画素数・ppi・解像力の数値は含まない。本サイトの調査で置いた整理であり、当時の概念図ではない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">概念図：同じポジでも、守りたいものが違う</text>
+<rect x="300.0" y="70.0" width="200.0" height="110.0" rx="8" fill="none" stroke="#ff8a00" stroke-width="3"/>
+<rect x="314.0" y="84.0" width="172.0" height="82.0" rx="4" fill="none" stroke="#ff8a00" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="400.0" y="119.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="middle">同じ1枚の</text>
+<text x="400.0" y="153.0" fill="#ff8a00" font-size="30" font-weight="700" text-anchor="middle">4×5 ポジ</text>
+<line x1="400.0" y1="183.0" x2="400.0" y2="220.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="106.0" y1="220.0" x2="694.0" y2="220.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="106.0" y1="220.0" x2="106.0" y2="267.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="14.0" y="270.0" width="184.0" height="392.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="106.0" y="314.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">ライトボックス</text>
+<text x="106.0" y="348.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">＋ルーペ</text>
+<text x="106.0" y="420.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">守りたいもの</text>
+<text x="106.0" y="456.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">局所の細部・</text>
+<text x="106.0" y="490.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">質感</text>
+<line x1="36.0" y1="504.0" x2="176.0" y2="504.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="106.0" y="556.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">必要な細かさ</text>
+<text x="106.0" y="594.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">条件で決まる</text>
+<text x="106.0" y="630.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">固定ではない</text>
+<line x1="302.0" y1="220.0" x2="302.0" y2="267.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="210.0" y="270.0" width="184.0" height="392.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="302.0" y="314.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">雑誌・印刷</text>
+<text x="302.0" y="420.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">守りたいもの</text>
+<text x="302.0" y="456.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">誌面での見え</text>
+<line x1="232.0" y1="504.0" x2="372.0" y2="504.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="302.0" y="556.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">必要な細かさ</text>
+<text x="302.0" y="594.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">条件で決まる</text>
+<text x="302.0" y="630.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">固定ではない</text>
+<line x1="498.0" y1="220.0" x2="498.0" y2="267.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="406.0" y="270.0" width="184.0" height="392.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="498.0" y="314.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">大きな</text>
+<text x="498.0" y="348.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">プリント</text>
+<text x="498.0" y="420.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">守りたいもの</text>
+<text x="498.0" y="456.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">壁で見たとき</text>
+<text x="498.0" y="490.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">の見え</text>
+<line x1="428.0" y1="504.0" x2="568.0" y2="504.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="498.0" y="556.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">必要な細かさ</text>
+<text x="498.0" y="594.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">条件で決まる</text>
+<text x="498.0" y="630.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">固定ではない</text>
+<line x1="694.0" y1="220.0" x2="694.0" y2="267.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="602.0" y="270.0" width="184.0" height="392.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="694.0" y="314.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">保存用</text>
+<text x="694.0" y="348.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">スキャン</text>
+<text x="694.0" y="420.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">守りたいもの</text>
+<text x="694.0" y="456.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">将来の再利用</text>
+<line x1="624.0" y1="504.0" x2="764.0" y2="504.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="694.0" y="556.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">必要な細かさ</text>
+<text x="694.0" y="594.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">条件で決まる</text>
+<text x="694.0" y="630.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">固定ではない</text>
+<line x1="20.0" y1="700.0" x2="780.0" y2="700.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="736.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">四つは用途の例。順序・優劣・当時の割合ではありません</text>
+<text x="20.0" y="772.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">本サイトの調査で置いた整理（当時の概念図ではありません）</text>
+</g>
+</svg>
