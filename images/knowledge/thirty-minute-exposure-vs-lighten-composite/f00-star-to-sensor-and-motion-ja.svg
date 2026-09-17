@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1150" width="800" height="1150" role="img" aria-labelledby="t"><title id="t">模式図。空の星の光がレンズを通ってセンサー（受光素子）の上に幅のある星像として届き、固定撮影では地球の自転によってその星像がセンサーの画素の上を少しずつ動く。一つの画素に星の光が入るのは、星像がその画素を通過している間だけ。光の経路・星像の形や大きさ・移動量は模式化したもので実測値ではない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<defs><radialGradient id="gs"><stop offset="0" stop-color="#eef1f8" stop-opacity="0.95"/><stop offset="0.5" stop-color="#eef1f8" stop-opacity="0.35"/><stop offset="1" stop-color="#eef1f8" stop-opacity="0"/></radialGradient></defs>
+<text x="24.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">模式図（実測画像ではありません）</text>
+<text x="24.0" y="90.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">星の光は、センサーの上に「幅のある星像」として届く</text>
+<circle cx="400.0" cy="150.0" r="26" fill="url(#gs)"/>
+<circle cx="400.0" cy="150.0" r="4" fill="#eef1f8"/>
+<text x="440.0" y="159.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">空の星</text>
+<polygon points="390.0,176.0 410.0,176.0 490.0,256.0 310.0,256.0" fill="#eef1f8" fill-opacity="0.10"/>
+<polygon points="310.0,268.0 490.0,268.0 424.0,392.0 376.0,392.0" fill="#ffb14a" fill-opacity="0.12"/>
+<line x1="400.0" y1="178.0" x2="400.0" y2="254.0" stroke="#8c96aa" stroke-width="1.2" stroke-dasharray="4 6"/>
+<line x1="400.0" y1="270.0" x2="400.0" y2="390.0" stroke="#8c96aa" stroke-width="1.2" stroke-dasharray="4 6"/>
+<text x="230.0" y="222.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">光（模式）</text>
+<ellipse cx="400.0" cy="262.0" rx="150.0" ry="12" fill="#2b3140" stroke="#eef1f8" stroke-width="2"/>
+<text x="570.0" y="271.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">レンズ</text>
+<rect x="124.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="170.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="216.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="262.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="308.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="354.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="400.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="446.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="492.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="538.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="584.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<rect x="630.0" y="392.0" width="42.0" height="40.0" fill="#2b3140" stroke="#8c96aa" stroke-width="0.8"/>
+<text x="124.0" y="468.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">センサー（受光素子）の画素</text>
+<circle cx="400.0" cy="412.0" r="54.0" fill="url(#gs)"/>
+<circle cx="400.0" cy="412.0" r="30.0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="6 6"/>
+<line x1="436.0" y1="412.0" x2="550.0" y2="412.0" stroke="#ff8a00" stroke-width="2.4" marker-start="url(#ah)"/>
+<text x="558.0" y="404.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="start">星像：点ではなく、</text>
+<text x="558.0" y="436.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="start">幅をもって写る</text>
+<text x="24.0" y="520.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">固定撮影では、星像はセンサーの上を少しずつ動く</text>
+<text x="24.0" y="556.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">（地球の自転で、星の見かけの位置が動くため）</text>
+<text x="176.0" y="656.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">時刻 t1</text>
+<rect x="190.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.14" stroke="#2b3140" stroke-width="1"/>
+<rect x="228.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="266.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="1.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="304.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="342.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.14" stroke="#2b3140" stroke-width="1"/>
+<rect x="380.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.01" stroke="#2b3140" stroke-width="1"/>
+<rect x="418.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="456.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="494.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="532.0" y="620.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="207.0" y="616.0" width="114.0" height="54" fill="none" stroke="#ffb14a" stroke-width="1.6" stroke-dasharray="6 6"/>
+<rect x="377.0" y="617.0" width="40.0" height="52.0" fill="none" stroke="#ff8a00" stroke-width="3.0"/>
+<text x="582.0" y="656.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">空の光だけ</text>
+<text x="176.0" y="720.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">時刻 t2</text>
+<rect x="190.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="228.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="266.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.01" stroke="#2b3140" stroke-width="1"/>
+<rect x="304.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.14" stroke="#2b3140" stroke-width="1"/>
+<rect x="342.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="380.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="1.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="418.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="456.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.14" stroke="#2b3140" stroke-width="1"/>
+<rect x="494.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.01" stroke="#2b3140" stroke-width="1"/>
+<rect x="532.0" y="684.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="321.0" y="680.0" width="114.0" height="54" fill="none" stroke="#ffb14a" stroke-width="1.6" stroke-dasharray="6 6"/>
+<rect x="377.0" y="681.0" width="40.0" height="52.0" fill="none" stroke="#ff8a00" stroke-width="3.0"/>
+<text x="582.0" y="720.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="start">空の光＋星の光</text>
+<text x="176.0" y="784.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">時刻 t3</text>
+<rect x="190.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="228.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="266.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="304.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="342.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="380.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.01" stroke="#2b3140" stroke-width="1"/>
+<rect x="418.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.14" stroke="#2b3140" stroke-width="1"/>
+<rect x="456.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="494.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="1.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="532.0" y="748.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="435.0" y="744.0" width="114.0" height="54" fill="none" stroke="#ffb14a" stroke-width="1.6" stroke-dasharray="6 6"/>
+<rect x="377.0" y="745.0" width="40.0" height="52.0" fill="none" stroke="#ff8a00" stroke-width="3.0"/>
+<text x="582.0" y="784.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">空の光だけ</text>
+<line x1="285.0" y1="594.0" x2="513.0" y2="594.0" stroke="#ffb14a" stroke-width="2.4" marker-end="url(#ah)"/>
+<text x="527.0" y="603.0" fill="#ffb14a" font-size="26" font-weight="500" text-anchor="start">星像が動く</text>
+<text x="380.0" y="832.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="middle">この画素（オレンジの枠）に星の光が入るのは、</text>
+<text x="380.0" y="864.0" fill="#ff8a00" font-size="26" font-weight="500" text-anchor="middle">星像がここを通過している間だけ</text>
+<text x="24.0" y="914.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">t1 → t2 → t3 → …と位置が動き続けた跡が、星の軌跡</text>
+<text x="176.0" y="980.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">軌跡</text>
+<rect x="190.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.14" stroke="#2b3140" stroke-width="1"/>
+<rect x="228.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="266.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="1.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="304.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.88" stroke="#2b3140" stroke-width="1"/>
+<rect x="342.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.88" stroke="#2b3140" stroke-width="1"/>
+<rect x="380.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="1.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="418.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.88" stroke="#2b3140" stroke-width="1"/>
+<rect x="456.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.88" stroke="#2b3140" stroke-width="1"/>
+<rect x="494.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="1.00" stroke="#2b3140" stroke-width="1"/>
+<rect x="532.0" y="944.0" width="34.0" height="46" fill="#eef1f8" fill-opacity="0.61" stroke="#2b3140" stroke-width="1"/>
+<rect x="207.0" y="940.0" width="114.0" height="54" fill="none" stroke="#ffb14a" stroke-width="1.2" stroke-dasharray="6 6"/>
+<rect x="321.0" y="940.0" width="114.0" height="54" fill="none" stroke="#ffb14a" stroke-width="1.2" stroke-dasharray="6 6"/>
+<rect x="435.0" y="940.0" width="114.0" height="54" fill="none" stroke="#ffb14a" stroke-width="1.2" stroke-dasharray="6 6"/>
+<text x="24.0" y="1034.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">各時刻には幅のある星像がある。線に変形するのではなく、</text>
+<text x="24.0" y="1068.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">位置が続けて動いた結果が、長時間露光では軌跡として記録される</text>
+<text x="24.0" y="1122.0" fill="#eef1f8" font-size="26" font-weight="700" text-anchor="start">星は光り続けている。でも、同じ画素を照らし続けてはいない。</text>
+</g>
+</svg>
