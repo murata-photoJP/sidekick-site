@@ -181,7 +181,7 @@
 <p>Figure 1: Light from a star passes through the lens and lands on the sensor as a star image of finite width; with a fixed camera that image drifts across the sensor over time (schematic). A given pixel receives the star's light only while the star image is passing over it. The light path, the shape and size of the star image and the amount of movement are schematic and are not measured values. Measured values appear in the next figure and in the text.</p>
 <p>That means any pixel along the trail receives starlight only while the star image is passing over it. Once the image has moved on, the pixel receives nothing but sky light.</p>
 <p>How long does that passage take?</p>
-<p>I can calculate it from the 17-year-old Nikon D3 data I used in <a href="/knowledge/photography/star-trail-seams-lighten-composite">my previous article</a> (in Japanese). In that data — 14 mm, 8-second exposures, shot continuously — the star image was about 4.52 pixels wide (full width at half maximum), and the star moved about 1.13 pixels per 8-second frame.</p>
+<p>I can calculate it from the 17-year-old Nikon D3 data I used in <a href="/en/knowledge/photography/why-star-trails-show-seams-when-shot-continuously">my previous article</a>. In that data — 14 mm, 8-second exposures, shot continuously — the star image was about 4.52 pixels wide (full width at half maximum), and the star moved about 1.13 pixels per 8-second frame.</p>
 <p>Divide one by the other and you get roughly 32 seconds for the star image to cross a single pixel. The speed depends on where the star is in the frame, so the range is roughly 20 to 60 seconds.</p>
 <p>Thirty minutes is 1,800 seconds.</p>
 <p><strong>In other words, even in a &quot;30-minute exposure&quot;, a given pixel on the trail receives the star's light for only about 30 seconds of that time.</strong> For the remaining twenty-nine and a half minutes, all that enters that pixel is sky light.</p>
@@ -293,7 +293,7 @@
 <h2>Why the D3 trails looked &quot;wavy&quot;</h2>
 <p>Since the D3 era I have made star trails by Lighten-compositing continuous sequences of 8-second frames. When I viewed those trails at 100%, the lines looked broken in places. At the time I put this down to the tiny gap between shutter closings — a &quot;true gap&quot;, in the terms of this article.</p>
 <p>When I re-examined the original NEF files 17 years later, the gaps alone could not explain it. In the roughly 0.1 seconds between frames the star moves about 0.012 pixels — negligible against the width of the star image. Yet the unevenness was real, and the measured brightness of the star was already fluctuating from frame to frame <em>before</em> compositing. Lighten compositing was the main stage that selected and amplified that fluctuation. The very character of the selection operation described in this article was involved in those patches. What physically causes the fluctuation, and what sets the period of the patches, is still unknown.</p>
-<p>The details are in <a href="/knowledge/photography/star-trail-seams-lighten-composite">Why do star trails show seams even though the frames were shot continuously?</a> (in Japanese).</p>
+<p>The details are in <a href="/en/knowledge/photography/why-star-trails-show-seams-when-shot-continuously">Why do star trails show seams even though the frames were shot continuously?</a>.</p>
 <h2>Summary</h2>
 <p>The star's brightness is the same. The time during which its light kept reaching the camera is the same.</p>
 <p>What differs is how the light that reached the sensor over those 30 minutes is combined into one image.</p>
@@ -311,6 +311,12 @@
   <section class="kzc-related-articles" aria-label="related articles">
     <h2>Related Articles</h2>
     <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/why-star-trails-show-seams-when-shot-continuously">Why Do Star Trails Show Seams Even Though the Frames Were Shot Continuously?</a>
+        <p class="kzc-related-desc">Why do Lighten-stacked star trails show seams and dashes even though the frames were shot continuously? I re-measured 3,522 Nikon D3 NEF files from 17 years ago. The gaps between frames alone could not explain it; the star&#39;s measured brightness was already fluctuating before compositing, and Lighten selected and amplified it. Cause and period remain unknown.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
       
       <li>
         <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</a>

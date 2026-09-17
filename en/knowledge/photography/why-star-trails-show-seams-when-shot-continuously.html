@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Do Star Trails Show Seams Even Though the Frames Were Shot Continuously? | Knowledge - Sidekick</title>
+<meta name="description" content="Why do Lighten-stacked star trails show seams and dashes even though the frames were shot continuously? I re-measured 3,522 Nikon D3 NEF files from 17 years ago. The gaps between frames alone could not explain it; the star&#39;s measured brightness was already fluctuating before compositing, and Lighten selected and amplified it. Cause and period remain unknown.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/why-star-trails-show-seams-when-shot-continuously">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/star-trail-seams-lighten-composite">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/why-star-trails-show-seams-when-shot-continuously">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/star-trail-seams-lighten-composite">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/star-trail-seams-lighten-composite" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Why Do Star Trails Show Seams Even Though the Frames Were Shot Continuously?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Why Do Star Trails Show Seams Even Though the Frames Were Shot Continuously?</h1>
+    <p class="kzc-article-lead">Why do Lighten-stacked star trails show seams and dashes even though the frames were shot continuously? I re-measured 3,522 Nikon D3 NEF files from 17 years ago. The gaps between frames alone could not explain it; the star&#39;s measured brightness was already fluctuating before compositing, and Lighten selected and amplified it. Cause and period remain unknown.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-17">Updated: 2026-09-17</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Re-examined with 3,522 frames of Nikon D3 data from 17 years ago</p>
+<p>When I photograph star trails, I have always joined continuously shot frames with Lighten compositing.</p>
+<p>Because the frames are shot continuously, there is almost no gap between one frame and the next.</p>
+<p>And yet, when I view the composited trail at 100%, the lines look broken here and there.</p>
+<p><strong>At the time, I put this down to the tiny gap between shutter closings.</strong></p>
+<p>I still had 3,522 NEF files from 17 years ago, so I decided to test that assumption against real data.</p>
+<p>Let me state the conclusion up front.</p>
+<p>In this D3 data, the seams and the uneven brightness could not be explained by the tiny gap between shutter closings alone. In each frame, before any compositing, the measured brightness of the star was already fluctuating, and Lighten compositing selected and amplified that fluctuation. What physically causes the fluctuation, and what sets the period of the light and dark patches, is still unknown.</p>
+<p>Let me go through it in order.</p>
+<h2>The &quot;breaks&quot; I saw at 100% seventeen years ago</h2>
+<p>Back when I used the Nikon D3, I would mount an ultra-wide lens of around 15 mm, shoot continuously at F2.8 and 8 seconds, and Lighten-composite the frames into star trails.</p>
+<p>The compositing method was the simplest possible: stack the frames and blend them with Lighten.</p>
+<p>At 100%, the seams were plainly visible.</p>
+<p>The impression was not &quot;there is a slightly darker valley here&quot;.</p>
+<p><strong>The line looked as if it was interrupted there.</strong></p>
+<p>In my own words, <strong>a line that looked digitized</strong>.</p>
+<p>Long-exposure noise reduction was switched off. I saw the breaks anyway.</p>
+<p><img src="/images/knowledge/star-trails/p01-d3-2009-plain-lighten-300frames.jpg" alt="Star trails over the ridgeline at Tsubakuro-dake on 11 October 2009: 300 of the continuously shot frames, extracted from the NEF files with default development settings and stacked with Lighten (per-pixel maximum) only. Countless star trails arc above the Yari-ga-take ridge. Reduced-size view." /></p>
+<p>Figure 1: Tsubakuro-dake, 11 October 2009. Of the 3,522 frames used in this investigation, 300 were extracted from the NEF files with default development settings and stacked with Lighten (each pixel keeps the brighter value) — nothing else (reduced-size view). No aircraft-trail removal, smoothing, sharpening or noise processing of any kind. This is not a reproduction of the finished work from that time; it shows &quot;what you get if you extract the RAW files and simply Lighten-stack them&quot;.</p>
+<p><img src="/images/knowledge/star-trails/p02-d3-2009-plain-lighten-100pct-crop.jpg" alt="A 100% crop of Figure 1. Many star trails look not like smooth lines but like rows of short dashes, broken at intervals. No processing other than cropping." /></p>
+<p>Figure 2: Part of Figure 1 at 100% (no processing other than cropping). The star trails look like rows of short line segments. The &quot;line that looked interrupted&quot; and &quot;line that looked digitized&quot; in the text refer to this appearance.</p>
+<h2>My explanation at the time, and the fix I used later</h2>
+<p>At the time, my thinking went like this.</p>
+<p>Compared with the length of line a star draws during one exposure, if the distance the star moves before the next frame starts is kept short enough, the seams should stop being noticeable.</p>
+<p>In other words: <strong>the star moves during the brief moment the shutter is closed, and that is why the line breaks.</strong></p>
+<p>It is a very natural explanation. I suspect many readers think the same way.</p>
+<p>Later, I began using a somewhat laborious workaround for the seams.</p>
+<p>Take adjacent pairs of frames, offset by one frame: frames 1 and 2, frames 2 and 3, and so on, for every frame. Blend each pair with Screen and merge it, then apply −1.00 EV with Photoshop's Exposure adjustment. Finally, Lighten-composite all the resulting pair images.</p>
+<p>I did this on 8-bit Adobe RGB TIFFs after RAW development.</p>
+<p>In my own practice, this method worked. It was not derived from theory; it was a method I worked out, and kept using, to solve a problem I was actually having.</p>
+<p>When I started using it, I cannot pin down myself. All I know is that it was some time after I first saw the seams on the D3.</p>
+<p>In <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">my article about the &quot;8 seconds&quot;</a>, I wrote that I wanted to investigate this seam question separately some day.</p>
+<p>This is that investigation.</p>
+<h2>3,522 frames had survived</h2>
+<p>The first step was to find the original material.</p>
+<p>Nikon D3 NEF files from the night of 11 October 2009: 3,522 of them. One continuous shooting run, complete, with no frames missing.</p>
+<p>And here the first discrepancy between memory and record appeared.</p>
+<p><strong>I remembered shooting at ISO 1600. When I re-examined the NEF files, it was actually ISO 3200.</strong></p>
+<p>Things like this happen after 17 years. I do not know why my memory was wrong. All I will say here is that I trust the record.</p>
+<p>The conditions used in this investigation, as read from the actual data:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Date</td>
+<td>11 October 2009</td>
+</tr>
+<tr>
+<td>Camera / lens</td>
+<td>Nikon D3, 14-24mm F2.8 at 14 mm</td>
+</tr>
+<tr>
+<td>Exposure</td>
+<td>8.0 s</td>
+</tr>
+<tr>
+<td>Aperture</td>
+<td>F2.8</td>
+</tr>
+<tr>
+<td>ISO</td>
+<td>3200</td>
+</tr>
+<tr>
+<td>Drive</td>
+<td>Continuous shooting</td>
+</tr>
+<tr>
+<td>RAW</td>
+<td>14-bit lossless NEF</td>
+</tr>
+<tr>
+<td>Long-exposure noise reduction</td>
+<td>OFF</td>
+</tr>
+<tr>
+<td>Frames</td>
+<td>3,522 (a single continuous run, no missing frames)</td>
+</tr>
+<tr>
+<td>Interval between frames</td>
+<td>About 8.10 s</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1: Conditions of the real data used in this investigation (read from the NEF metadata and timestamps)</p>
+<p>The exposure is 8.0 seconds and the interval between frames is about 8.10 seconds. The difference, about 0.1 seconds, is the estimate of how long the shutter was closed. It is read from file timestamps, so it says nothing about what happened inside the camera.</p>
+<h2>Can a &quot;0.1-second gap&quot; explain the seams?</h2>
+<p>If my explanation from back then were right, the star's movement during that 0.1 seconds should leave a gap in the trail.</p>
+<p>I measured it on the real data.</p>
+<p>During an 8-second exposure, a star moves <strong>about 1.13 pixels</strong> across the frame.</p>
+<p>And in about 0.1 seconds?</p>
+<p><strong>About 0.012 pixels.</strong></p>
+<p>Meanwhile, the width of a star image in this data (full width at half maximum) was <strong>about 4.52 pixels</strong>.</p>
+<p>The distance the star moves during the gap is tiny compared with the width of the star image. The star images of adjacent frames overlap almost completely.</p>
+<p>At least the large seams and brightness variations I had been seeing could not reasonably be explained by &quot;the star moved during the 0.1 seconds and left a gap in the line&quot;.</p>
+<p><strong>And yet the uneven brightness was real.</strong></p>
+<p>Taking a 300-frame segment out of the 3,522 and measuring the brightness along the composited trails, the variation between light and dark was unmistakable. In terms of the index that expresses the difference between the brightest and darkest parts (Michelson contrast), it was about 0.24 for short trails and grew with trail length, reaching about 0.54.</p>
+<p>The &quot;breaks&quot; I had been seeing at 100% had a real counterpart in the data.</p>
+<p><img src="/images/knowledge/star-trails/f02-n-vs-michelson-en.svg" alt="Line chart of the number of frames Lighten-composited (5, 10, 20, 50, 100 and 300) against the brightness variation along the trail (median Michelson contrast). The variation rises from about 0.24 at 5 frames to about 0.54 at 300 frames. Measured: Nikon D3, 11 October 2009, 300-frame segment." /></p>
+<p>Figure 3: Number of frames Lighten-composited versus the brightness variation along the trail (Michelson contrast, median over stars). Measured on the 300-frame segment of this data by compositing 5 to 300 frames in stages. The longer the trail, the larger the measured variation, from about 0.24 to about 0.54. <strong>These are measured values, not a model's prediction.</strong> One camera, one night, one set of conditions.</p>
+<p>One further note: even in an idealized model, a dip in brightness can arise at the boundary between adjacent frames. That in itself is not wrong. But the large variation observed in this D3 data could not be explained by that alone.</p>
+<p>The explanation I had believed for 17 years was, at least on this data, not supported.</p>
+<h2>The variation was already there before compositing</h2>
+<p>So where did the variation come from?</p>
+<p>Here I changed the direction of the investigation. Instead of the composited result, I looked at <strong>the individual frames before compositing</strong>.</p>
+<p>In the 300-frame segment, I measured the brightness of 171 stars, frame by frame.</p>
+<p>It turned out that <strong>the measured brightness of the stars was already fluctuating from frame to frame</strong> before any compositing. And the fluctuation was larger than could be explained by mere measurement scatter.</p>
+<p>I write &quot;measured brightness&quot; deliberately. What is being measured is the brightness of the star image in the photograph. The fact that it fluctuated is not yet grounds to say that the star itself was varying in brightness.</p>
+<p>Either way, the raw material was already not constant before the compositing stage.</p>
+<p><img src="/images/knowledge/star-trails/f04-time-to-position-en.svg" alt="Schematic. Top: a bar chart in which the measured brightness of a star fluctuates from frame 1 to frame 8 (sequence in time). Bottom: because the star moves about 1.13 pixels per frame, that fluctuation is laid out along the trail as light and dark patches at successive positions (sequence in position). The cause of the fluctuation is unknown." /></p>
+<p>Figure 4: A sequence in time becomes a sequence in position (schematic). The bar heights in the upper part are illustrative values, not measurements. Because the star moves about 1.13 pixels per frame, the frame-to-frame fluctuation in brightness can be laid out along the trail as light and dark patches at successive positions. <strong>This figure explains the mechanism only; it does not depict the cause of the fluctuation (what changes the brightness). That is unknown.</strong></p>
+<h2>Lighten compositing &quot;selects and amplifies&quot; the fluctuation</h2>
+<p>What does Lighten compositing — Photoshop's Lighten blend mode — actually do?</p>
+<p>For each pixel of the stacked images, it <strong>keeps the brightest value</strong>. That is all.</p>
+<p>It is neither addition nor averaging. It is a <em>selection</em>.</p>
+<p>How that selection differs from a long exposure or an average is explained, with the focus on a single pixel, in a separate article: <a href="/en/knowledge/photography/long-exposure-vs-lighten-composite-star-trails">A 30-Minute Exposure vs. 30 Minutes of Lighten Compositing: What Actually Differs?</a>.</p>
+<p>When the star images of adjacent frames overlap at almost the same place, what survives there is the value from the brighter frame; the darker one is discarded. If the pre-compositing brightness fluctuates from frame to frame, Lighten picks out the brighter side of that fluctuation and turns it into the line.</p>
+<p><img src="/images/knowledge/star-trails/f01-adjacent-frames-and-max-en.svg" alt="Schematic. Top: the star images of adjacent frames 1 and 2. The movement per frame is about 1.13 pixels and the star image is about 4.52 pixels wide, so the two images almost completely overlap. Bottom: the same row of pixels, where Lighten keeps, for each pixel, only the brighter of the two frames' values." /></p>
+<p>Figure 5: The star images of two adjacent frames, and how Lighten works (schematic). The star-image width (about 4.52 pixels) and the movement per frame (about 1.13 pixels) are values from this data, but the shape of the star image is simplified for explanation and is not a measured image. As the lower part shows, Lighten keeps only the brighter value at each pixel. It is neither addition nor averaging.</p>
+<p>I checked this on the real data.</p>
+<p>For the same stars, I compared the brightness variation along the trail when the frames were combined by &quot;averaging&quot; and when they were combined with &quot;Lighten&quot;. Averaging smooths out the frame-to-frame fluctuation; Lighten keeps only the brighter side. The same material should give different lines.</p>
+<p><strong>With Lighten, the variation index was about 0.27 larger.</strong> Because of how it is measured, this difference is, if anything, on the conservative side.</p>
+<p>Looking star by star, the stars with larger fluctuation before compositing also had larger variation along the trail after compositing. Over the 171 stars, the ranking by fluctuation size and the ranking by trail variation corresponded well (rank correlation about +0.56).</p>
+<p><strong>Lighten compositing was the main stage that selected the brightness fluctuation already present before compositing, amplified it, and strengthened the light and dark patches along the trail.</strong></p>
+<p>Lighten did not, however, <em>create</em> the variation. It <em>strengthened</em> it. Without fluctuation in the material, there would be nothing to select. Nor can I say it was the only cause: I have not confirmed that no other stage contributes at all.</p>
+<h2>A fluctuation in time becomes patches along the line</h2>
+<p>Putting all this together, the appearance of the seams can be understood like this.</p>
+<p>The star moves about 1.13 pixels across the frame with each frame.</p>
+<p>The frame-to-frame fluctuation in brightness is a fluctuation in time order. The star's movement maps that fluctuation onto positions in the frame: frame 1's brightness at this position, frame 2's brightness about a pixel further on, frame 3's further still.</p>
+<p>A fluctuation along the time axis is laid out as light and dark patches along the line.</p>
+<p><strong>So even with almost no gap between continuously shot frames, uneven brightness can appear along the trail.</strong></p>
+<p>I write &quot;can appear&quot; because that is as far as this investigation was able to confirm.</p>
+<h2>What is still unknown</h2>
+<p>Let me be frank.</p>
+<p>What this investigation established is this much: the seams were not due to the gaps alone; there was fluctuation before compositing; Lighten compositing strengthened it; and a fluctuation in time can become patches along the trail.</p>
+<p>Two things remain unknown.</p>
+<p>First: <strong>what causes the fluctuation in the measured brightness before compositing has not yet been pinned down to a single source.</strong></p>
+<p>Second: <strong>the patches had a period of about 15 pixels, and how that period is set is also unresolved.</strong></p>
+<p>It would be easy to write &quot;it is probably such-and-such&quot;, but I have decided not to write anything that this data did not confirm.</p>
+<p>One more limitation. These results come from one camera, one night, one set of conditions (D3, 14 mm, 8 s, F2.8, ISO 3200), and a 300-frame segment of the 3,522 frames. Whether the same thing happens with other cameras or under other conditions, I have not investigated here.</p>
+<h2>What was my fix actually doing?</h2>
+<p>So what about the method I used later — blending adjacent pairs with Screen, applying −1 EV, then Lighten-compositing?</p>
+<p>What was it doing?</p>
+<p>Looking at it again with a model, it was an operation in the direction of adding back the side that had been discarded at the frame boundaries — a reasonable way of weakening the seams.</p>
+<p>But it is not a mathematically exact correction. Nor do the model's numbers carry over to the 8-bit TIFFs I was actually processing. And above all, <strong>this investigation did not measure the effect of that method.</strong> What it measured was what was happening at the stage of simple Lighten compositing, before any fix.</p>
+<p>What I find interesting is that, although my understanding of the cause was wrong, in practice I had arrived at a way of improving the appearance.</p>
+<p>What I learned this time is not &quot;the fix was right&quot;, but &quot;the seams I was trying to fix were not what I thought they were&quot;.</p>
+<p>Today I do Lighten compositing with SideKick Star, a tool I make myself. It does not include the Screen / −1 EV process.</p>
+<p>What it does include is a process applied after Lighten compositing, to the sky region only, that spatially smooths the areas that look dashed — bridging them over, so to speak. This does not restore lost information about time. It tidies up, as a matter of appearance, the residue of a fluctuation in time that has become patches along the trail. I use it knowing that.</p>
+<p>Why the old Screen / −1 EV method gave way to the current one, I cannot now determine; there are no development records from that time. What I do not know, I leave unknown here as well.</p>
+<h2>The record over the memory</h2>
+<p>Seventeen years ago, I believed the seams were caused by the gap between shutter closings.</p>
+<p>I also remembered the ISO as 1600.</p>
+<p>When I checked both against the surviving records, both were wrong.</p>
+<p>The seams could not be explained by the gaps alone. The material was fluctuating before compositing, and Lighten compositing selected and strengthened that fluctuation. Because the star moves, a fluctuation in time can appear as patches along the line.</p>
+<p>And the cause of the fluctuation, and of its period, is still unknown.</p>
+<p>I cannot say I have found the cause.</p>
+<p>But I was able to test an explanation I had believed for 17 years against the real data from that time, and to confirm where it was wrong. That was possible only because the records had survived.</p>
+<p>The data you shoot is worth keeping, I thought.</p>
+<p>Where something is unknown, do not manufacture an answer.</p>
+<p>About the seams in Lighten-composited star trails, this is as much as I can say today.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/long-exposure-vs-lighten-composite-star-trails">A 30-Minute Exposure vs. 30 Minutes of Lighten Compositing: What Actually Differs?</a>
+        <p class="kzc-related-desc">The star is just as bright either way, so why does one 30-minute exposure look different from sixty 30 s frames stacked with Lighten? A star image drifts across the sensor; in my Nikon D3 data, one pixel receives starlight for only about 30 seconds of the 30 minutes.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</a>
+        <p class="kzc-related-desc">How many seconds should you expose for astrophotography? Since my Nikon D3 days I have used 8 seconds at around 15mm for nearly 20 years. I re-examine that 8 seconds through the 500 Rule, the NPF Rule and higher-resolution sensors. This is not an article recommending 8 seconds.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrophotography-settings-equipment-guide">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</a>
+        <p class="kzc-related-desc">Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
