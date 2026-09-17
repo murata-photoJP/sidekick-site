@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 660" width="800" height="660" role="img" aria-labelledby="t"><title id="t">概念図：同じ一枚のポジ原版（ライトボックスで見る）から、ダイレクトプリント／印刷（写真集・雑誌）／スキャンして画面、という三つの経路へ同じ太さの矢印で分かれ、それぞれで変わり得るもの（紙・反射／網点・紙・インク／画面の明るさ・表示）を経て、最後に「見る（光・大きさ・距離）」で合流する。三つは経路の例で、順序・優劣・劣化の段階は描いていない。本サイトの整理。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">概念図：同じ原版から、見るまでの経路</text>
+<rect x="284.0" y="92.0" width="276.0" height="124.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="422.0" y="134.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">ダイレクトプリント</text>
+<text x="422.0" y="170.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">変わり得るもの</text>
+<text x="422.0" y="202.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">紙・反射</text>
+<rect x="284.0" y="246.0" width="276.0" height="124.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="422.0" y="288.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">印刷（写真集・雑誌）</text>
+<text x="422.0" y="324.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">変わり得るもの</text>
+<text x="422.0" y="356.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">網点・紙・インク</text>
+<rect x="284.0" y="400.0" width="276.0" height="124.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="422.0" y="442.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="middle">スキャン → 画面</text>
+<text x="422.0" y="478.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">変わり得るもの</text>
+<text x="422.0" y="510.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">画面の明るさ・表示</text>
+<rect x="16.0" y="233.0" width="210.0" height="150.0" rx="8" fill="none" stroke="#ff8a00" stroke-width="3"/>
+<rect x="28.0" y="245.0" width="186.0" height="126.0" rx="4" fill="none" stroke="#ff8a00" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="121.0" y="283.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="middle">同じ一枚の</text>
+<text x="121.0" y="319.0" fill="#ff8a00" font-size="30" font-weight="700" text-anchor="middle">ポジ原版</text>
+<text x="121.0" y="355.0" fill="#ff8a00" font-size="26" font-weight="600" text-anchor="middle">ライトボックス</text>
+<line x1="229.0" y1="308.0" x2="254.0" y2="308.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="254.0" y1="154.0" x2="254.0" y2="462.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="254.0" y1="154.0" x2="281.0" y2="154.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="254.0" y1="308.0" x2="281.0" y2="308.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="254.0" y1="462.0" x2="281.0" y2="462.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="563.0" y1="154.0" x2="590.0" y2="154.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="563.0" y1="308.0" x2="590.0" y2="308.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="563.0" y1="462.0" x2="590.0" y2="462.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="590.0" y1="154.0" x2="590.0" y2="462.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="590.0" y1="308.0" x2="611.0" y2="308.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="614.0" y="208.0" width="170.0" height="200.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="699.0" y="262.0" fill="#eef1f8" font-size="30" font-weight="700" text-anchor="middle">見る</text>
+<text x="699.0" y="306.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">光</text>
+<text x="699.0" y="342.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">大きさ</text>
+<text x="699.0" y="378.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="middle">距離</text>
+<line x1="20.0" y1="566.0" x2="780.0" y2="566.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="602.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">三つは経路の例。順序・優劣・劣化の段階ではありません</text>
+<text x="20.0" y="638.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">本サイトの整理（当時の定義ではありません）</text>
+</g>
+</svg>
