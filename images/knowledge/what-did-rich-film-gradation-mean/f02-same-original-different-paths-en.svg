@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 780" width="800" height="780" role="img" aria-labelledby="t"><title id="t">Conceptual diagram: from one and the same original transparency on a light table, arrows of equal weight lead to three paths — a direct print (what can change: paper, reflection), printing in books and magazines (halftone, paper, ink), and scanning to a screen (brightness, display) — which meet again at viewing (light, size, distance). The three are example paths; no order, ranking or stage of degradation is drawn. This site’s own framework.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ffb14a"/></marker></defs>
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="28" font-weight="600" text-anchor="start">Concept: from the same transparency to the viewer</text>
+<rect x="284.0" y="92.0" width="276.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="422.0" y="142.0" fill="#ffb14a" font-size="24" font-weight="700" text-anchor="middle">Direct print</text>
+<text x="422.0" y="188.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">what can change:</text>
+<text x="422.0" y="220.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">paper, reflection</text>
+<rect x="284.0" y="272.0" width="276.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="422.0" y="306.0" fill="#ffb14a" font-size="24" font-weight="700" text-anchor="middle">Printing</text>
+<text x="422.0" y="334.0" fill="#ffb14a" font-size="24" font-weight="700" text-anchor="middle">(books, magazines)</text>
+<text x="422.0" y="368.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">what can change:</text>
+<text x="422.0" y="400.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">halftone, paper, ink</text>
+<rect x="284.0" y="452.0" width="276.0" height="150.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="422.0" y="502.0" fill="#ffb14a" font-size="24" font-weight="700" text-anchor="middle">Scan → screen</text>
+<text x="422.0" y="548.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">what can change:</text>
+<text x="422.0" y="580.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">brightness, display</text>
+<rect x="16.0" y="272.0" width="210.0" height="150.0" rx="8" fill="none" stroke="#ff8a00" stroke-width="3"/>
+<rect x="28.0" y="284.0" width="186.0" height="126.0" rx="4" fill="none" stroke="#ff8a00" stroke-width="1.5" stroke-opacity="0.6"/>
+<text x="121.0" y="310.0" fill="#ff8a00" font-size="24" font-weight="700" text-anchor="middle">The same</text>
+<text x="121.0" y="340.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="middle">original</text>
+<text x="121.0" y="370.0" fill="#ff8a00" font-size="26" font-weight="700" text-anchor="middle">transparency</text>
+<text x="121.0" y="402.0" fill="#ff8a00" font-size="24" font-weight="600" text-anchor="middle">on a light table</text>
+<line x1="229.0" y1="347.0" x2="254.0" y2="347.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="254.0" y1="167.0" x2="254.0" y2="527.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="254.0" y1="167.0" x2="281.0" y2="167.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="254.0" y1="347.0" x2="281.0" y2="347.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="254.0" y1="527.0" x2="281.0" y2="527.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<line x1="563.0" y1="167.0" x2="590.0" y2="167.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="563.0" y1="347.0" x2="590.0" y2="347.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="563.0" y1="527.0" x2="590.0" y2="527.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="590.0" y1="167.0" x2="590.0" y2="527.0" stroke="#ffb14a" stroke-width="2.5"/>
+<line x1="590.0" y1="347.0" x2="611.0" y2="347.0" stroke="#ffb14a" stroke-width="2.5" marker-end="url(#ah)"/>
+<rect x="614.0" y="247.0" width="170.0" height="200.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="699.0" y="301.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Viewing</text>
+<text x="699.0" y="345.0" fill="#8c96aa" font-size="24" font-weight="600" text-anchor="middle">light</text>
+<text x="699.0" y="381.0" fill="#8c96aa" font-size="24" font-weight="600" text-anchor="middle">size</text>
+<text x="699.0" y="417.0" fill="#8c96aa" font-size="24" font-weight="600" text-anchor="middle">distance</text>
+<line x1="20.0" y1="640.0" x2="780.0" y2="640.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="676.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Three example paths, side by side:</text>
+<text x="20.0" y="712.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">not an order, a ranking or stages of degradation</text>
+<text x="20.0" y="748.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">This site’s own framework, not a definition from the period</text>
+</g>
+</svg>
