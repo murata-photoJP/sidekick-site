@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Velvia 50 は、なぜ「高画質フィルム」として使われたのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="1990年に出た最初のVelvia（ベルビア）は、なぜ「高画質フィルム」として使われたのか。当時の資料が示す市場には複数の選択肢があり、私の山岳写真の現場ではほぼ一択だった。色、ISO 50、コダックとの併存から、二つの話を分けて読む。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/why-was-velvia-used-as-high-quality-film">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">Velvia 50 は、なぜ「高画質フィルム」として使われたのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Velvia 50 は、なぜ「高画質フィルム」として使われたのか？</h1>
+    <p class="kzc-article-lead">1990年に出た最初のVelvia（ベルビア）は、なぜ「高画質フィルム」として使われたのか。当時の資料が示す市場には複数の選択肢があり、私の山岳写真の現場ではほぼ一択だった。色、ISO 50、コダックとの併存から、二つの話を分けて読む。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-18">更新日：2026-09-18</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――私の周りでは、ほぼ全員が Velvia だった。市場も、そうだったのか。</p>
+<h2>私の周りでは、ほぼ全員が Velvia だった</h2>
+<p>山岳写真の同人に入っていたころ、撮影に行く前にフィルムを選ぶ、という感覚がほとんどありませんでした。</p>
+<p>私の周り——山岳写真の同人の仲間たち——では、ほぼ全員が Velvia を主に使っていました。ほかの銘柄を使う人も確かにいましたが、その人たちもメインは Velvia で、ときどき別のフィルムを試す、という程度でした。雑誌に写真を渡すときも、編集側からフィルムの銘柄について何か言われた記憶はありません。私も Velvia で撮っていたし、周りも Velvia でしたから、言われようがなかったのだと思います。</p>
+<p>私自身は、速いシャッターが要るときに使う別のフィルムを除けば、Velvia しか使わなくなっていました。だから、コダックが新しいフィルムを出しても、興味すら湧きませんでした。</p>
+<p>このあいだ、何十年も触っていなかったクリアファイルを開けました。ファイル自体はボロボロでしたが、中には当時カメラ屋でもらったカタログが残っていました。「これは」と思ったカタログは取っておく癖があったのです。その一冊が、富士写真フイルムの「FUJICHROME Velvia FOR PROFESSIONALS」。裏には「このカタログの内容は1990年2月現在のものです」とあります。</p>
+<h2>では、市場も一択だったのか？</h2>
+<p>ところが、そのカタログや当時の資料を調べてみると、私の現場とは別の景色が見えてきます。</p>
+<p>Velvia が出て、プロは一斉にコダックをやめたのか。Velvia は、何が良かったのか。この記事は、その二つの問いを、当時の資料と、私自身の経験の両方から見ていきます。</p>
+<h2>ここで一度、答えを出します</h2>
+<p>資料を調べる限り、「Velvia が登場して、プロのリバーサルフィルム（ポジフィルム）から他の選択肢が一斉に消えた」という歴史は確認できません。Velvia が出る前から、富士、コダック、アグファは競争していましたし、Velvia が出た後も、コダックは 1990 年代を通じて新しいフィルムを出し続けています。1990 年 2 月のカタログ自体が、粒状性、シャープネス、色、肌色、シャドー、現像、フォーマットを別々に売り込んでいて、「Velvia は解像力が高いから高画質」という説明は、当時のメーカーの訴求とも合いません。用途によって、選ばれるフィルムは違いました。</p>
+<p>それでも、私の現場では、選択肢は実質一つに消えていました。</p>
+<p>この二つは矛盾しません。市場に選択肢があったことと、一人の写真家の現場で一つに収束したことは、別の大きさの話です。この記事は、その両方を書きます。タイトルの「高画質フィルム」という言葉も、一つの数字や一つの性能のことではありません。当時の私が何を「高画質」として見ていたのか、それはあとで書きます。</p>
+<p>なお、この記事で Velvia と呼ぶのは、1990 年に出た最初の Velvia（ISO 50）のことです。後年、同じ ISO 50 の後継として「Velvia 50」という名前の製品も出ていますが、それとは区別します。</p>
+<p>前の二つの記事で、<a href="/knowledge/photography/how-many-megapixels-is-4x5-film">「4×5フィルムは何万画素？」</a>という問いに一つの数字で答えられないこと、<a href="/knowledge/photography/what-did-rich-film-gradation-mean">「階調が豊か」</a>という一つの言葉が一つの意味ではないことを書きました。この記事はその続きで、今度は「一つの歴史」にできない話です。</p>
+<h2>Velvia の前から、選択肢はあった</h2>
+<p>まず、Velvia が出る前の話です。</p>
+<p>富士フイルムの社史によれば、1980 年には高感度のフジクローム 400 が、1983 年 3 月には商業・プロ用途向けの新しいフジクロームのラインナップが出ています。1984 年には、アメリカの写真誌がコダクローム 64 プロ、アグファクローム CT50 プロ、フジクローム 50 プロを比べる記事を載せています。1980 年代のなかばには、富士がアメリカのプロラボと現像の情報でつながりを作っていたという報道もあります。</p>
+<p>つまり、Velvia は富士がプロ市場に初めて入ってきた製品ではなく、すでに三社が競争している場所に投入された製品でした。コダックが強い立場にあったことは資料から読めますが、プロ向けリバーサルに限ったシェアがどれくらいだったかは、分かっていません。</p>
+<p>私の個人史も、少しだけ書いておきます。学生のころ、私は何も考えずに富士のネガフィルムを使っていました。父はコニカ派でした。あるとき一度だけコダックのネガを使って、「富士とコダックでこんなに色が違うのか」と驚いたのを覚えています。銘柄は覚えていません。ISO 100 の、一番普通に売られていたものです。ただ、そのとき、普段使っていた富士の色のほうが自分の好みに合っていると分かって、それからは富士しか使っていません。私の言い方では、富士もコダックも「パッケージの色の発色をする」フィルムでした。富士は青い箱、コダックは黄色い箱。あくまで、私の印象の話です。</p>
+<h2>1990 年 2 月のカタログは、何を売っていたか</h2>
+<p>手元の 1990 年 2 月のカタログには、Velvia が 135 から 8×10 までのフォーマットで載っています。135、120、220、4×5、5×7、8×10。ただし、カタログに載っていることと、その月に全部が発売されたことは別です。それぞれのフォーマットがいつから買えたのかは、資料からは分かりません。</p>
+<p>このカタログが何を売り込んでいたかは、はっきりしています。「画期的な超微粒子」「シャープネスと高解像力」「鮮やかな色再現、深みのある色調描写」「なめらかな皮膚描写と、好ましい肌色」「ニュートラルなグレイトーンと優れたシャドー描写」。それに現像処理（CR-56 / E-6）と増感、フォーマットのラインナップ。これらは、一つの見出しにまとめられているのではなく、それぞれ別々の項目として並んでいます。用途のページも、ポートレート、スチルライフ、ランドスケープ、アーキテクチャーと分かれています。</p>
+<p>ここで気をつけたいのは、これがメーカーの売り込みだということです。「鮮やかな色再現」と書いてあることは事実ですが、それが独立した測定で確かめられた値なのか、実際にプロがそれを理由に買ったのか、どの用途でどれだけ使われたのかは、カタログからは分かりません。分かるのは、発売時のメーカーが「解像力が高い」だけを売り文句にしていたわけではない、ということです。粒状、シャープネス、色、肌色、シャドー、現像、フォーマット。売り込みの時点で、すでに複数の軸がありました。</p>
+<h2>コダックは、やめられていなかった</h2>
+<p>では、Velvia が出たあとの市場はどうだったのか。</p>
+<p>資料を見る限り、コダックは 1990 年代を通じて、リバーサルフィルムの新製品を出し続けています。1991 年、1993 年、1996 年、1999 年と、複数の波があります。それぞれが Velvia への直接の反応だったのかどうかは、コダック内部の資料がないので分かりません。分かるのは、コダックが「やめられた」のではなく、作り続け、売り続けていたことです。</p>
+<p>1995 年のアメリカの写真誌には、Velvia と並んで、コダック、富士、アグファ、3M の多数のリバーサルフィルムを比較する表が載っています。1998 年には、雑誌向けや催事の撮影でコダックの E200 を選ぶ、というプロの証言もあります。1999 年の新聞記事は、富士のプロビアや Velvia とコダックの E100 系が並ぶ、混み合った（crowded）市場だと伝えています。</p>
+<p>一方で、風景や自然の分野では、Velvia が強く選ばれたと読める資料が、メーカー側にも、同時代の比較記事にも、後年のプロの証言にもあります。ただし、それが何割だったのか、どの地域で、どのフォーマットで、という数字は、分かっていません。</p>
+<p>つまり、少なくとも「一斉に Velvia へ置き換わった」という歴史ではありません。用途によって、選ばれるフィルムも違っていました。</p>
+<h2>選択肢が「あること」と、「選ぶこと」は違う</h2>
+<p>ここまでが、資料が示す市場の話です。ここからは、私の話です。</p>
+<p>私の現場では、選択肢は実質一つでした。周りもほぼ全員が Velvia で、私は Velvia と、撮れないときのための別のフィルムしか使わなくなっていた。コダックの新製品には興味が湧かなかった。それは本当です。</p>
+<p>市場には選択肢があった。私の現場では選択肢がなかった。この二つは、どちらも本当で、矛盾していません。片方は、日本とアメリカの資料に残る、いろいろな用途のプロを含んだ市場の話です。もう片方は、日本の山岳写真の、一つの同人の、一人の話です。大きさが違う。</p>
+<p><img src="/images/knowledge/why-was-velvia-used-as-high-quality-film/f01-market-options-vs-my-choice-ja.svg" alt="概念図。上段は市場（資料）：富士、コダック、アグファ、その他のリバーサルフィルムが並んで存在し、用途によって選ばれるフィルムは違った。下段は私の現場（山岳写真の同人）：私と周りの同人の仲間では Velvia がほぼ一択で、速いシャッターが必要なときだけ別のフィルムを使った。上段と下段は同じ大きさの話ではなく、どちらかが正しいのでもない。数量・順位・シェアは描いていない。本サイトの整理。" /></p>
+<p>図1：市場（資料）には複数のリバーサルフィルムが並んで存在していた。私の現場（山岳写真）では Velvia がほぼ一択となり、速いシャッターが必要なときだけ別のフィルムを使った。上と下のどちらかが正しいのではなく、両方が本当。数量や順位は示していない。</p>
+<p>では、なぜ私には、選択肢がないほどだったのか。</p>
+<h2>私が Velvia に見ていたもの——「記憶色」</h2>
+<p>初めて Velvia で撮ったのは、上高地から涸沢へ入った、7 月下旬の夏山だったと思います。新しいポジフィルムが出ると聞いて、買って持っていきました。</p>
+<p>原版を見たときの印象は、よく覚えています。とにかく色が鮮やかでした。私の言い方では、「正確な色ではなく、人間の記憶色で撮れるフィルム」。青空が青空だし、木々の緑がちゃんと緑でした。実物以上にリアルに見えた。ただし、それは頭の中のイメージに対してのリアルさで、正確な色ではありませんでした。</p>
+<p>私が Velvia に見ていたのは、色でした。解像力が高いから選んだ、という記憶はありません。粒子については、35mm では大きく伸ばすと気になって、それは Velvia でも同じでした。この話はあとで書きます。</p>
+<p>一つ、正直に書いておきます。私は、Velvia と、撮れないときに使っていた別のフィルムを、同じ場面で撮り比べたことがありません。Velvia で撮れる場面なら Velvia で撮り、撮れないときだけ別のフィルムを使っていたので、比べる機会がなかったのです。だから「比べたら Velvia のほうが良かった」とは書けません。書けるのは、私が Velvia の色を好んでいた、ということまでです。</p>
+<p>「記憶色」というのは、私がそう感じていた、という言葉です。メーカーがそう設計したという話でも、色の科学の用語の意味で使っているわけでもありません。</p>
+<h2>ISO 50 は、代償だった</h2>
+<p>Velvia は ISO 50 です。この数字は「低いほど高画質」という意味ではありません。必要な光の量の話です。<a href="/knowledge/photography/is-lower-iso-always-better">「ISO は低いほど高画質」なのかを検証した記事</a>で書いたように、私が ISO 50 を使っていたのは、ISO 50 だから高画質だと思っていたからではなく、Velvia という好みのフィルムを選んだ結果、その感度が ISO 50 だったからです。</p>
+<p>ISO 50 は、三脚を立てて、動かない風景を撮るぶんには、あまり困りません。35mm で使っていたころは、スローシャッターに少し手間取ったかもしれない、という程度で、さほど気にしていませんでした。</p>
+<p>大判にしてからは、さすがに困りました。風で揺れる高山植物の被写体ブレと、強風のなかでのカメラブレには手を焼きました。それ以外は特に困らなかったのですが、この二つは ISO 50 の代償でした。速いシャッターがどうしても要るときは、別のフィルムを使いました。Velvia で撮れるなら Velvia、撮れないときだけ別のフィルム。それが私の使い分けでした。</p>
+<p>つまり ISO 50 という数字だけで、Velvia の長所や短所を決めることはできません。撮り方との組み合わせで意味が変わります。三脚と静止した被写体なら成立し、風と動きがあれば制約になる。資料の側も、同じことを言っています。速さが要る用途では、別のフィルムも十分に選ばれ得た、と。</p>
+<h2>大判にしても、変わらなかったもの</h2>
+<p>私は 35mm から、4×5 のカメラで 6×9 や 6×12 のロールフィルムを使う撮り方へ移りました。理由は粒子です。35mm の Velvia は、半切まで伸ばすと粒子が気になり、全紙ではがっかりするレベルでした。ISO をさらに下げれば済む話ではなかったので、フォーマットを大きくしました。<a href="/knowledge/photography/how-many-megapixels-is-4x5-film">前の記事</a>で書いた、拡大率の話です。</p>
+<p>大判にしても、Velvia の発色は基本的にそのまま引き継がれました。私にとって、大判化による画質の変化は大きなものでした。ただ、Velvia の色の性格まで別物になったとは感じませんでした。35mm で出なかったのは、粒子と、シャープネスの限界でした。</p>
+<p>大判にして驚いたことが一つあります。色のトーンが、めちゃくちゃ細かい。肉眼では見えないところまで、しっかり描写される。「見えるように強調されている」感じ、と言えば近い。ただしそれはコントラストが高いという意味ではなくて、近眼の人が度の合った眼鏡をかけたときのような感じでした。これが何によるものなのかは、この記事では書きません。フォーマットなのか、レンズなのか、拡大率なのか、私には分かりませんし、分けて確かめてもいません。</p>
+<p>撮った結果の良し悪しは、まずライトボックスの上で決めていました。ここで弾いてから、プリントや出版社へ渡す。どこへ持っていくにせよ、原版で決めた評価を変えることはありませんでした。現像は、35mm のころはプロラボというものを知らなかったので街のカメラ店に出し、大判にして同人に入ってからは、例会の場所の近くにあったプロラボに出すようになりました。品質を比べて選んだわけではなく、縁と場所の話です。</p>
+<p>もう一つ、レンズの話を短く。大判で使っていたレンズはローデンシュトックで、ラインナップにない焦点距離はフジノンを使っていました。色については、フジノンはローデンシュトックによく似ていると私は感じていました。同人の仲間に、どうして村田さんが撮影に行くとそんなに条件がいつも良いのか、自分も村田さんのような青空の写真を撮りたいのに一度も撮れたことがない、フィルムだって同じ Velvia だし現像だって同じラボなのに、と言われたことがあります。私は、それをレンズの違いだと思っていました。同人で私だけがローデンシュトックで、ほかの人はたいていニコンだったからです。ただ、本当にそうだったのかは、この記事では確かめません。同じ場面を同じ条件で撮り比べたわけではないし、レンズの色とは何なのかは、次の記事の問いです。</p>
+<h2>私の評価は、変わっていない</h2>
+<p>私にとって、選択肢はほぼ一つでした。Velvia に対する評価と認識は、当時から現在まで、基本的に変わっていません。</p>
+<p>市場に選択肢がなかったわけではありません。資料が示す市場と、一人の撮影者の現場は、同じ大きさの話ではないというだけです。</p>
+<h2>ここから先は、もう少し詳しく知りたい人へ</h2>
+<p>この記事で必要な結論は、ここまでで完結しています。ここから先は、本文で短く済ませたところの根拠と、分かっていないことを、もう少し細かく見たい人への補足です。新しい主張はありません。</p>
+<h3>Velvia の前史——1980 年代の三社</h3>
+<p>富士フイルムの社史では、1980 年に高感度のフジクローム 400 を発売したこと、1983 年 3 月に「ニューフジクローム」として 50 プロフェッショナル D、100 プロフェッショナル D、64 プロフェッショナル T と複製用フィルムを出したことが記録されています。1984 年 1 月のアメリカの写真誌は、コダクローム 64 プロ、アグファクローム CT50 プロ、フジクローム 50 プロを比較しました。同じ年、アグファはプロ向けの広告を出しています。1989 年の新聞報道は、1980 年代なかばに富士がアメリカのプロラボとテストや現像の情報で連携していたこと、1985 年にコダックがプロ用製品の部門を設けたことを伝えています。1987 年には、一つのラボがエクタクローム、フジクローム、コダクロームを併せて処理していた記事があります。</p>
+<p>これらから言えるのは、Velvia が富士のプロ市場参入の始まりではないこと、コダックが確立した複数のフィルム系列を持つ強い立場にあったこと、そして少なくとも三社が競争していたことです。言えないのは、プロ向けリバーサルに限ったシェアの数字です。1989 年の報道にある「約 85 % 対 10 %」という数字は、フィルムと印画紙全体の話で、プロ向けリバーサルの話ではありません。</p>
+<h3>コダックの 1990 年代——複数の波</h3>
+<p>コダックの動きは、一つの「Velvia 対抗製品」ではなく、複数の波として資料に残っています。1991 年のエクタクローム 64X / 100X、1993 年のルミエール、1996 年の E100S / E100SW、1999 年の E100VS と E200、そして 2002〜03 年の更新。64X / 100X は暖かみのある色と安定性、E100S / SW はニュートラルと暖色の二本立て、E100VS は鮮やかさ、E200 は感度、というように、それぞれ別の目的を持っていました。</p>
+<p>これらが Velvia への直接の反応だったかどうかは、コダック内部の判断を示す資料がないので、分かりません。日付の順番だけで因果を言うことはできません。</p>
+<h3>E-6 と K-14——現像所という要因</h3>
+<p>フィルムの選択には、フィルムそのもの以外の要因もありました。コダクロームは K-14、エクタクロームと Velvia は E-6 という、別の現像工程でした。1995 年 11 月のアメリカの新聞コラムは、コダクロームからの乗り換えの理由として、色やシャープネスだけでなく、現像の失敗と業者のサービスを挙げています。ラボの信頼性が選択に効いた実例です。</p>
+<p>E-6 自体は、秒単位・温度単位で管理された工程で、コントロールストリップと濃度計で監視されます。「現像に出せば劣化する」というものではありません。ただし、ラボの数、費用、仕上がりまでの時間がどれくらい違ったのか、それが選択にどれだけ効いたのかの数字は、分かっていません。</p>
+<p>本文で書いた私のラボの話は、この市場の話とは別です。私は最初から富士の E-6 フィルムを使っていて、ラボを変えたのは品質の比較ではなく、同人に入った縁と場所によるものでした。</p>
+<h3>数字はあった——ISO 50、RMS 9、80 / 160 本/mm</h3>
+<p>Velvia には測定値があります。1997 年のデータシートには、デイライト ISO 50、粒状性 RMS 9（48 µm の測定開口、濃度 1.0）、解像力はコントラスト 1.6:1 で 80 本/mm、1000:1 で 160 本/mm、それに MTF 曲線と、1/4000 秒から 1 秒までは補正不要という相反則の表があります。</p>
+<p>この数字を読むときの注意を三つ。第一に、これは 1997 年の資料に載った値で、1990 年の発売時のフィルムと完全に同じかどうかは確認できません。第二に、解像力は測定条件で 2 倍変わります。80 と 160 は同じフィルムの、コントラストの違う条件の値です。また、富士の資料の「本/mm」が線の数なのか線対の数なのかは、資料からは確定できません。第三に、この数字を画素数に換算することはできません。その理由は<a href="/knowledge/photography/how-many-megapixels-is-4x5-film">前の記事</a>で書いたとおりです。</p>
+<p>数字があったことと、数字だけで選ばれたのではないことは、両立します。本文で書いたように、私が見ていたのは色でしたし、カタログの売り込みも複数の軸に分かれていました。</p>
+<h3>CM フジノン——「超高画質フィルムの性能がジレンマを変えた。」</h3>
+<p>もう一冊、同じクリアファイルから出てきたカタログがあります。富士写真フイルムの大判用レンズ、CM フジノン W のカタログで、記号から 1995 年 3 月ごろと読めますが、正確な発行日は分かりません。その見開きに「超高画質フィルムの性能がジレンマを変えた。」という一文があります。</p>
+<p>これは、フィルムの性能が上がったことがレンズへの要求を変えた、というメーカーの位置づけです。ただし、この「超高画質フィルム」が Velvia を指すとは、カタログには書かれていません。また、このレンズが具体的に何をどう変えたのかの設計記録や、以前の世代との測定比較は、今回の調査では見つかっていません。</p>
+<p>本文で書いた私のレンズの話——ローデンシュトックとフジノンの色が似て見えたこと、青空の違いをレンズのせいだと思っていたこと——は、このカタログとは別の話です。私の感じ方は私の感じ方で、メーカーの位置づけとは別に置いておく必要があります。大判のレンズが何を目指して設計されていたのか、レンズの「色」とは何だったのかは、次の記事の問いです。</p>
+<h3>分かっていないこと</h3>
+<p>この記事で、資料からは分からないこととして扱ったものを、まとめておきます。</p>
+<p>Velvia の正確な発表日と発売日、国ごとの導入順、発売時に買えたフォーマット。1988 年から 2000 年のプロ向けリバーサルフィルムの、年・地域・用途・フォーマット・銘柄ごとのシェア。1990 年の発売時のフィルムと、1997 年の資料の値が同じかどうか。コダックの各製品が Velvia への反応だったかどうか。ラボの数、費用、仕上がり時間の違いがどれだけ効いたか。雑誌や依頼主がフィルムの銘柄を指定していたかどうか。風景分野で Velvia が強かったことの数量。</p>
+<p>私の側で分かっていないこと。初めて Velvia を使った年。撮れないときに使っていたフィルムの製品資料。大判で感じた「トーンの細かさ」の原因。青空の違いの原因。</p>
+<h3>市場と現場——この記事の範囲</h3>
+<p>この記事の資料は、主に日本とアメリカ、英語圏で集めたもので、世界全体の結論にはなりません。私の経験は、日本の、山岳写真の、一つの同人の、一人の経験です。資料が示す市場を私の経験で塗ることはできませんし、私の経験を資料で否定することもできません。どちらも、それぞれの大きさの話として、そのまま置いてあります。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/what-did-rich-film-gradation-mean">「フィルムは階調が豊か」とは、何だったのか？</a>
+        <p class="kzc-related-desc">「フィルムは階調が豊か」と言われたとき、写真家は何を見ていたのか。新緑の黄緑から深緑までの途中、新雪の光から陰まで。階調はダイナミックレンジでもビット数でもなく、一つの数字ではなかった。1990年代にポジで撮っていた私が、資料と自分の経験から調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/how-many-megapixels-is-4x5-film">「4×5フィルムは何万画素？」に、一つの答えがない理由</a>
+        <p class="kzc-related-desc">「4×5フィルムは何万画素相当？」に一つの答えはない。同じベルビアの資料でも測定条件で解像力は80と160に分かれ、換算した升目の数は4倍違う。条件を決めれば比べられるが、一つの数字にはならない。1995年ころから4×5とベルビアを使っていた私が、その数字の意味を調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/is-lower-iso-always-better">「ISOは低いほど高画質」は、本当なのか？</a>
+        <p class="kzc-related-desc">「ISOは低いほど高画質」は本当なのか。良くしたのは低い数字ではなく、シャッターを延ばして集めた光だった。光を増やせない場面で下げても同じことは起きず、ISO50などの拡張感度には落とし穴もある。ISOの数字に画質を決めさせない、私のISOの決め方。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
