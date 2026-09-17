@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A 30-Minute Exposure vs. 30 Minutes of Lighten Compositing: What Actually Differs? | Knowledge - Sidekick</title>
+<meta name="description" content="The star is just as bright either way, so why does one 30-minute exposure look different from sixty 30 s frames stacked with Lighten? A star image drifts across the sensor; in my Nikon D3 data, one pixel receives starlight for only about 30 seconds of the 30 minutes.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/long-exposure-vs-lighten-composite-star-trails">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/thirty-minute-exposure-vs-lighten-composite">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/long-exposure-vs-lighten-composite-star-trails">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/thirty-minute-exposure-vs-lighten-composite">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/thirty-minute-exposure-vs-lighten-composite" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">A 30-Minute Exposure vs. 30 Minutes of Lighten Compositing: What Actually Differs?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">A 30-Minute Exposure vs. 30 Minutes of Lighten Compositing: What Actually Differs?</h1>
+    <p class="kzc-article-lead">The star is just as bright either way, so why does one 30-minute exposure look different from sixty 30 s frames stacked with Lighten? A star image drifts across the sensor; in my Nikon D3 data, one pixel receives starlight for only about 30 seconds of the 30 minutes.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      <span class="kzc-badge">Beginner-friendly</span>
+      <time datetime="2026-09-17">Updated: 2026-09-17</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>The star is just as bright either way. So why don't the trails look the same?</p>
+<p>There are two main ways to photograph star trails.</p>
+<p>One is a long exposure: leave the shutter open for 30 minutes.</p>
+<p>The other is to shoot sixty consecutive 30-second frames and combine them afterwards with Lighten compositing — a common method of star-trail stacking.</p>
+<p>In both cases, the star keeps sending light toward the camera throughout the 30 minutes. And the star itself, of course, is no brighter in one case than in the other.</p>
+<p>So shouldn't the two come out looking the same?</p>
+<p>I think that is a very natural question. And half of it is right. In this article I want to show where that half ends, and what happens in the other half — going all the way down to the individual pixels of the sensor.</p>
+<p>Let me state the conclusion first.</p>
+<p><strong>The star did not become brighter or dimmer. What differs is how the light that arrived over those 30 minutes is turned into a single image.</strong></p>
+<h2>&quot;The star is just as bright, so why wouldn't it look the same?&quot;</h2>
+<p>Let me look at the question a little more carefully.</p>
+<p>The star shines for the whole 30 minutes. The camera receives its light for the whole 30 minutes. Whether that is one 30-minute frame or sixty 30-second frames, the total amount of light received should be the same.</p>
+<p>So far, this is correct.</p>
+<p>The problem is <strong>where on the sensor</strong> that light lands.</p>
+<p>&quot;The star shines for 30 minutes&quot; and &quot;one particular pixel on the sensor receives the star's light for 30 minutes&quot; are two different statements.</p>
+<h2>The star does not sit still on the sensor</h2>
+<p>With a fixed camera, the Earth's rotation makes the star's image drift slowly across the sensor. That is why a trail is recorded in the first place.</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f00-star-to-sensor-and-motion-en.svg" alt="Schematic. Top: light from a star in the sky passes through a lens and lands on the sensor's pixels as a star image of finite width. Bottom: at times t1, t2 and t3 the same star image moves a little to the right across the pixels; the highlighted pixel receives starlight only while the image overlaps it, and only sky light before and after. Finally, the positions strung together over time form a star trail." /></p>
+<p>Figure 1: Light from a star passes through the lens and lands on the sensor as a star image of finite width; with a fixed camera that image drifts across the sensor over time (schematic). A given pixel receives the star's light only while the star image is passing over it. The light path, the shape and size of the star image and the amount of movement are schematic and are not measured values. Measured values appear in the next figure and in the text.</p>
+<p>That means any pixel along the trail receives starlight only while the star image is passing over it. Once the image has moved on, the pixel receives nothing but sky light.</p>
+<p>How long does that passage take?</p>
+<p>I can calculate it from the 17-year-old Nikon D3 data I used in <a href="/knowledge/photography/star-trail-seams-lighten-composite">my previous article</a> (in Japanese). In that data — 14 mm, 8-second exposures, shot continuously — the star image was about 4.52 pixels wide (full width at half maximum), and the star moved about 1.13 pixels per 8-second frame.</p>
+<p>Divide one by the other and you get roughly 32 seconds for the star image to cross a single pixel. The speed depends on where the star is in the frame, so the range is roughly 20 to 60 seconds.</p>
+<p>Thirty minutes is 1,800 seconds.</p>
+<p><strong>In other words, even in a &quot;30-minute exposure&quot;, a given pixel on the trail receives the star's light for only about 30 seconds of that time.</strong> For the remaining twenty-nine and a half minutes, all that enters that pixel is sky light.</p>
+<p>A 30-minute exposure does not mean that any one point on the trail was exposed for 30 minutes. This is the single most important point in the article.</p>
+<p><img src="/images/knowledge/star-trails/f01-adjacent-frames-and-max-en.svg" alt="Schematic. Top: the star images of adjacent frames 1 and 2. The movement per frame is about 1.13 pixels and the star image is about 4.52 pixels wide, so the two images almost completely overlap. Bottom: the same row of pixels, where Lighten keeps, for each pixel, only the brighter of the two frames' values." /></p>
+<p>Figure 2: A star image has width, and it moves a little at a time across the sensor (schematic; reproduced from the previous article). The star-image width (about 4.52 pixels) and the movement per frame (about 1.13 pixels) are values from the D3 data, but the shape of the star image is simplified for explanation and is not a measured image. The lower half, showing how Lighten works, will be used later in this article.</p>
+<h2>What happens to a single pixel during a 30-minute exposure</h2>
+<p>From here on, let me focus on one pixel on the trail and watch it for 30 minutes.</p>
+<p>To make the counting easier, I will divide the 30 minutes into sixty 30-second slots. A real long exposure has no frame boundaries, of course; the slots are just a way to count how the light comes in.</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f01-one-pixel-thirty-minutes-en.svg" alt="Schematic. One pixel seen along the time axis: a strip of 60 slots of 30 s, of which 59 contain only sky light and about one contains starlight. Sky light enters every slot; starlight enters only the slot in which the star image passed over the pixel." /></p>
+<p>Figure 3: The light received by one pixel over 30 minutes (schematic). Sky light enters all 60 slots. Starlight enters only during the roughly 30 seconds — about one slot — in which the star image passes over that pixel. The &quot;about 30 seconds&quot; is calculated from the conditions of the D3 data used here and changes with the lens and the star's position.</p>
+<p>The light this pixel collects over the 30 minutes breaks down like this:</p>
+<ul>
+<li>Sky light: all 60 slots' worth</li>
+<li>Starlight: only the one slot or so during which the star passed</li>
+</ul>
+<p>In a long exposure, these two are <strong>added</strong> together into a single image.</p>
+<p>The starlight does not increase if you expose for longer. Once the star has passed, no more of it arrives. A longer exposure makes the trail <em>longer</em>, not <em>brighter</em>.</p>
+<p>Sky light, on the other hand, keeps accumulating in proportion to the exposure time. Light from towns, twilight and the atmosphere itself keeps arriving at that pixel the whole time.</p>
+<p>So in a 30-minute exposure, the star trail is not getting dimmer — it is being buried under a sky that keeps getting brighter. That is what people mean when they say that star trails &quot;fade&quot; in a long exposure. What fades is not the trail itself but <strong>the difference in brightness between the trail and the sky</strong>.</p>
+<h2>What if you average 60 frames of 30 s?</h2>
+<p>Now let me return to the question we started with.</p>
+<p>The intuition that &quot;if the star is just as bright, it should look the same&quot; is actually not far off.</p>
+<p>Light adds up. So, in idealized terms, if you split the 30-minute exposure into sixty 30-second frames and then <strong>add</strong> those 60 frames together, you get the same distribution of light as the single 30-minute exposure. You only divided up the time; the light that arrived is the same.</p>
+<p>&quot;Averaging&quot; is that sum divided by 60. Because it is only a division, the <strong>ratio</strong> between star and sky brightness is the same as in the sum.</p>
+<p>So an average of sixty 30-second frames comes out looking very much like the single 30-minute exposure. The starlight is divided by 60 and becomes faint; the sky light is also divided by 60 and drops back to one frame's worth. The degree to which the star is buried in the sky is, ideally, the same as in the long exposure.</p>
+<p>When I check this with an idealized model, the sum of the 60 frames matches the trail of one continuous exposure exactly, provided there are no gaps between frames, and the average is exactly one sixtieth of it.</p>
+<p>But there is one thing I should be honest about here.</p>
+<p><strong>&quot;One 30-minute frame equals the average of sixty 30-second frames&quot; is an idealization.</strong> A real camera has many factors that depart from the ideal: per-frame read noise, dark current, sensor temperature, saturation of bright stars, RAW quantization, development processing, long-exposure noise reduction, the gaps between frames, and so on. Read noise in particular is added with every readout, so sixty readouts add sixty portions of it. The two will not necessarily be identical images.</p>
+<p>Even so, this much holds: if you look at an averaged composite, you can see with your own eyes why star trails fade in a long exposure. Starlight is present in only a few of the frames, while sky light is present in all of them. The average simply puts that fact into one image.</p>
+<h2>What if you Lighten-composite the same 60 frames?</h2>
+<p>Lighten compositing is not averaging.</p>
+<p>The Lighten blend mode in Photoshop keeps, for each pixel of the stacked images, <strong>the brightest value</strong>. It is neither addition nor division. It is a <em>selection</em>.</p>
+<p>Think again about our single pixel. Its 60 values run like this:</p>
+<p>background, background, background … star passing … background, background …</p>
+<p>In an average, the 59 frames in which the star was absent also enter the calculation. That is why the starlight is diluted.</p>
+<p>In Lighten, only the brightest of those 60 values survives — the value from the frame in which the star passed. The 59 star-less frames are, for that pixel, discarded.</p>
+<p>What about the sky light? In a pixel the star never crosses, all 60 values are roughly the same sky value, so picking the brightest leaves the sky at one frame's worth. (Strictly speaking it picks the bright side of the noise and lifts the sky slightly; I will come back to that.)</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f02-same-frames-average-vs-lighten-en.svg" alt="Schematic. From one strip of the same 60 frames, arrows branch to &quot;average&quot; on the left and &quot;Lighten&quot; on the right. The bars below show one pixel's value: in the average, the sky part is unchanged and the star part is a sliver; in Lighten, the sky part is unchanged and the star part keeps the value of the brightest frame." /></p>
+<p>Figure 4: The same 60 frames, averaged or Lighten-composited (schematic). The captured data and the star's brightness are identical; only the final operation differs. Averaging divides the starlight by 60; Lighten keeps the value of the frame in which the star passed. The sky is unchanged in both. In reality the star image has width, and a star's contribution to one pixel can straddle several frames; to keep the principle clear, it is drawn here as passing in a single frame. Bar lengths are illustrative values.</p>
+<h2>What differs is not the star but the operation</h2>
+<p>Let me put everything on one page.</p>
+<p><img src="/images/knowledge/thirty-minute-exposure-vs-lighten-composite/f03-three-ways-of-integration-en.svg" alt="Schematic. Three ways of turning the same 30 minutes into one image — A: one 30-minute exposure, B: sixty 30 s frames averaged, C: sixty 30 s frames Lighten-composited — comparing, as bars, the starlight and sky light received by one pixel on the trail. In A and B the star and sky are in the same ratio, with the sky relatively large. In C the star and sky keep the one-frame relationship." /></p>
+<p>Figure 5: Three ways of turning the same 30 minutes into one image (schematic, idealized linear model). In A (long exposure) and B (average) the star and sky are in the same ratio, so they look the same. In C (Lighten) the star and sky both keep their one-frame relationship. Real-camera factors such as noise, saturation and development are not included.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Starlight (one pixel on the trail)</th>
+<th>Sky light</th>
+<th>Nature of the operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A: one 30-minute exposure</td>
+<td>The roughly 30 s of the star's passage</td>
+<td>30 minutes' worth</td>
+<td>Recorded as a single exposure</td>
+</tr>
+<tr>
+<td>B: 60 × 30 s frames, averaged</td>
+<td>Roughly 30 s worth ÷ 60</td>
+<td>30 seconds' worth</td>
+<td>Time-divided exposures combined linearly</td>
+</tr>
+<tr>
+<td>C: 60 × 30 s frames, Lighten</td>
+<td>The brightest single frame's worth</td>
+<td>30 seconds' worth (plus the bright side of the noise)</td>
+<td>The brighter value selected from each moment</td>
+</tr>
+</tbody>
+</table>
+<p>Table 1: How the three methods differ (idealized model). In C, the &quot;starlight&quot; is less than one frame's worth if the star's passage straddles two frames.</p>
+<p>Laid out like this, it becomes clear.</p>
+<p>In an idealized linear model, A and B represent the same distribution of light; B is A divided by 60. Both combine the light by <em>adding</em> star and sky together — with the caveat, as noted in the previous section, that they will not match exactly on a real camera.</p>
+<p>Only C is a different kind of operation. Out of the 60 frames it <em>selects</em>, pixel by pixel, the brighter value. So the sky does not accumulate, and the star keeps the value of the frame in which it passed.</p>
+<p><strong>&quot;A 30-minute long exposure&quot; and &quot;a Lighten composite of short exposures taken over 30 minutes&quot; share the same total shooting time, but they are not the same image-forming process.</strong> It is not the star's brightness that differs, but the way information along the time axis is combined.</p>
+<p>One clarification, to avoid a misunderstanding.</p>
+<p><strong>Lighten compositing does not make the stars brighter. What it preserves, along the trail, is the relationship between star and sky brightness from the short exposure in which the star was there.</strong></p>
+<p>So it is also not the case that Lighten makes the trail itself brighter than a long exposure would. In an idealized model, the brightness of a Lighten-composited trail is equal to that of one continuous exposure, or lower where the star images of successive frames overlap. What Lighten protects is not the brightness of the trail but <strong>the ratio of trail brightness to sky brightness</strong>. Because the sky stays at one frame's worth, the trail is not buried. That is all there is to it.</p>
+<h2>Why Lighten compositing is used for star trails</h2>
+<p>Once you understand the principle, the advantages usually attributed to Lighten compositing separate into two kinds.</p>
+<p>One kind belongs to <strong>the Lighten operation itself</strong>. The other belongs to <strong>the shooting method of taking many short exposures in succession</strong> — and that second kind you would get with averaging as well.</p>
+<p><strong>Advantages of the Lighten operation itself</strong></p>
+<ul>
+<li>Sky light does not accumulate with shooting time, so the trail is not buried in the sky the way it is in a long exposure or an average.</li>
+<li>Even under light pollution, the sky stays at one frame's brightness, so you can devote to the trail a total shooting time that a single long exposure could never sustain.</li>
+</ul>
+<p><strong>Advantages of shooting many short frames</strong> (obtainable without Lighten)</p>
+<ul>
+<li>Frames spoiled part-way through — car headlights, someone walking through, wind shake — can be left out individually.</li>
+<li>The length of the trail can be adjusted afterwards by choosing how many frames to use.</li>
+<li>You are not betting everything on one very long exposure. If clouds roll in half-way, the frames up to that point survive.</li>
+<li>Because each frame is short, problems specific to long exposures — the wait for long-exposure noise reduction, thermal noise that grows with exposure time — are confined to one frame at a time.</li>
+<li>The same sequence can be reused for a time-lapse or a single-frame nightscape. That versatility was one of the reasons I kept using an 8-second exposure for so long.</li>
+</ul>
+<p>In other words, much of what gets called &quot;the advantages of Lighten compositing&quot; is really the advantage of shooting in short pieces. What Lighten itself contributes is one thing only: it joins the trail without piling up the sky.</p>
+<h2>The disadvantages of Lighten compositing</h2>
+<p>This is not going to be a one-sided story. A selection operation has weaknesses that come with being a selection.</p>
+<p><strong>It keeps every bright unwanted object.</strong> Lighten keeps the brightest value at each pixel. So if an aircraft, a satellite, a car's headlights or a torch beam appears in even one of the 60 frames, it will be in the final image, guaranteed. What averaging would dilute to one sixtieth, Lighten keeps at full strength. This is why removing aircraft trails is a permanent companion to Lighten compositing.</p>
+<p><strong>It picks only the bright side of the sky noise.</strong> Even in a pixel with no star, the 60 values differ slightly because of noise. Lighten picks the brightest of them, so the sky is left slightly lifted toward the bright side compared with a single frame. Defects that are bright in the same place in every frame, such as hot pixels, also survive unchanged. Averaging does the opposite: noise is smoothed out and reduced. An idealized model confirms the direction: Lighten raises the mean level of the sky, while averaging reduces its scatter.</p>
+<p><strong>It is vulnerable to changes in the sky and clouds.</strong> If a cloud passes or the town lights change during the 60 frames, the sky of the frame that got brighter is selected as that pixel's &quot;brightest value&quot;. Changes that a long exposure would smooth out are kept on the bright side by Lighten.</p>
+<p><strong>Frame boundaries and uneven brightness can become visible.</strong> In an idealized model, Lighten can produce a dip in brightness at the boundary between adjacent frames. And a selection operation can carry any frame-to-frame variation in brightness that existed before compositing straight into the trail as light and dark patches. I take this up in the next section, in connection with my previous article.</p>
+<p><strong>A true gap cannot be filled by any operation.</strong> If the interval between frames is so long that the star moves further than the width of its own image, the light from that interval is recorded in no frame at all. Light that was never recorded cannot be manufactured by Lighten, nor by averaging. With long-exposure noise reduction switched on, for example, the manual of the D3 I was using states that processing lasting roughly as long as the exposure follows each shot and that no photographs can be taken in the meantime. For the continuous sequences I shot on the D3 for Lighten compositing, I kept long-exposure noise reduction switched off.</p>
+<p><strong>It takes many frames and some processing.</strong> Sixty frames for 30 minutes; several thousand for a night. Neither the storage nor the compositing effort bears comparison with a single long exposure.</p>
+<p><strong>It is a different image from a long exposure.</strong> Lighten compositing is not a substitute for a long exposure. The treatment of the sky, the character of the noise and the appearance of frame boundaries are all different. It is a different image-forming process.</p>
+<h2>Why the D3 trails looked &quot;wavy&quot;</h2>
+<p>Since the D3 era I have made star trails by Lighten-compositing continuous sequences of 8-second frames. When I viewed those trails at 100%, the lines looked broken in places. At the time I put this down to the tiny gap between shutter closings — a &quot;true gap&quot;, in the terms of this article.</p>
+<p>When I re-examined the original NEF files 17 years later, the gaps alone could not explain it. In the roughly 0.1 seconds between frames the star moves about 0.012 pixels — negligible against the width of the star image. Yet the unevenness was real, and the measured brightness of the star was already fluctuating from frame to frame <em>before</em> compositing. Lighten compositing was the main stage that selected and amplified that fluctuation. The very character of the selection operation described in this article was involved in those patches. What physically causes the fluctuation, and what sets the period of the patches, is still unknown.</p>
+<p>The details are in <a href="/knowledge/photography/star-trail-seams-lighten-composite">Why do star trails show seams even though the frames were shot continuously?</a> (in Japanese).</p>
+<h2>Summary</h2>
+<p>The star's brightness is the same. The time during which its light kept reaching the camera is the same.</p>
+<p>What differs is how the light that reached the sensor over those 30 minutes is combined into one image.</p>
+<ul>
+<li>A long exposure records the light of the 30 minutes as a single exposure. Starlight arrives for only the few tens of seconds of the star's passage, while sky light accumulates for the full 30 minutes.</li>
+<li>Averaging (or summing) short exposures combines the time-divided exposures linearly. Ideally this looks the same as the long exposure; on a real camera it departs from it by the read noise and other factors.</li>
+<li>Lighten compositing selects, pixel by pixel, the brighter value from each moment and builds the trail from those. The sky stays at one frame's worth and the trail is not buried — but bright unwanted objects and the bright side of the noise are kept as well.</li>
+</ul>
+<p>This is not a question of which method is better. They combine information along the time axis differently and produce different images. Knowing that, you choose according to what you want to photograph.</p>
+<p>The figure of &quot;about 30 seconds of starlight per pixel&quot; in this article was calculated from real data under one set of conditions: a D3, a 14 mm lens and 8-second exposures. It changes with the focal length and with where the star is in the frame. But the underlying picture — that a 30-minute exposure does not expose any one pixel for 30 minutes — is the same under any conditions.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/8-second-rule-astrophotography-outdated">When Did My &#34;8 Seconds&#34; for Freezing Stars Become Outdated?</a>
+        <p class="kzc-related-desc">How many seconds should you expose for astrophotography? Since my Nikon D3 days I have used 8 seconds at around 15mm for nearly 20 years. I re-examine that 8 seconds through the 500 Rule, the NPF Rule and higher-resolution sensors. This is not an article recommending 8 seconds.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/astrophotography-settings-equipment-guide">Complete Guide to Astrophotography Camera Settings and Equipment: From Exposure Fundamentals to Essential Gear</a>
+        <p class="kzc-related-desc">Master astrophotography exposure settings, essential equipment, and pre-shoot preparation. Learn exposure principles, lens requirements, and best practices for capturing the night sky.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
