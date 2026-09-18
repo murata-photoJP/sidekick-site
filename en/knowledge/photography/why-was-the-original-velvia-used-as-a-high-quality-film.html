@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Was the Original Velvia Used as a “High-Quality” Film? | Knowledge - Sidekick</title>
+<meta name="description" content="Why was the original Velvia used as a “high-quality” film? The sources show several choices; in my mountain-photography work it was almost one. Color, ISO 50, and Kodak.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/why-was-the-original-velvia-used-as-a-high-quality-film">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/why-was-velvia-used-as-high-quality-film">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/why-was-the-original-velvia-used-as-a-high-quality-film">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/why-was-velvia-used-as-high-quality-film">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/why-was-velvia-used-as-high-quality-film" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Why Was the Original Velvia Used as a “High-Quality” Film?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Why Was the Original Velvia Used as a “High-Quality” Film?</h1>
+    <p class="kzc-article-lead">Why was the original Velvia used as a “high-quality” film? The sources show several choices; in my mountain-photography work it was almost one. Color, ISO 50, and Kodak.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-18">Updated: 2026-09-18</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>Almost everyone around me used Velvia. Was the market the same?</p>
+<h2>Almost Everyone Around Me Used Velvia</h2>
+<p>Back when I belonged to a mountain-photography group, I hardly had any sense of choosing a film before going out to shoot.</p>
+<p>Around me — the others in the group — almost everyone used Velvia as their main film. There were certainly people who used other brands, but for them too the main film was Velvia, and they tried something else now and then, that was all. When I handed photographs to magazines, I have no memory of anyone on the editorial side saying anything about which film I had used. I was shooting Velvia, and so was everyone around me, so I suppose there was nothing to say.</p>
+<p>As for me, apart from a different film I used when I needed a faster shutter speed, I had stopped using anything but Velvia. So when Kodak brought out a new film, I was not even curious.</p>
+<p>The other day I opened a clear plastic folder I had not touched in decades. The folder itself was falling apart, but inside were the catalogues I had picked up at camera shops back then. I had a habit of keeping any catalogue that made me think, “This one.” One of them was Fuji Photo Film's “FUJICHROME Velvia FOR PROFESSIONALS.” On the back it says that the contents are current as of February 1990.</p>
+<h2>So Was the Market a One-Film Market, Too?</h2>
+<p>And yet, when I went back to that catalogue and to the other documents of the time, a different landscape came into view — different from the one I had been working in.</p>
+<p>When Velvia appeared, did professionals all drop Kodak at once? And what was it about Velvia that was good? This article looks at those two questions from both sides: the documents of the time, and my own experience.</p>
+<h2>Let Me Give the Answer Here</h2>
+<p>As far as the sources show, the history in which “Velvia arrived, and every other choice vanished at once from professional reversal (transparency) film” cannot be confirmed. Fuji, Kodak and Agfa were competing before Velvia came out, and after it came out Kodak went on releasing new films throughout the 1990s. The February 1990 catalogue itself sells granularity, sharpness, color, skin tones, shadows, processing and formats as separate points, and the explanation “Velvia was high-quality because its resolving power was high” does not even match what the manufacturer was claiming at the time. Different films were chosen for different uses.</p>
+<p>And yet, where I was working, the choice had effectively narrowed to one.</p>
+<p>The two do not contradict each other. That the market offered choices, and that in one photographer's own work the choice converged on a single film, are claims made at different scales. This article writes both. Nor does the phrase “high-quality film” in the title mean one number or one property. What I was seeing as “high quality” at the time, I will come to later.</p>
+<p>One note. In this article, “Velvia” means the first Velvia, released in 1990 (ISO 50). A later product, also ISO 50 and sold as its successor, carries the name “Velvia 50”; I keep the two apart.</p>
+<p>In the previous two articles I wrote that the question <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">“how many megapixels is 4×5 film?”</a> cannot be answered with a single number, and that the single phrase <a href="/en/knowledge/photography/what-did-rich-gradation-in-film-mean">“rich gradation”</a> did not have a single meaning. This article is their sequel, and this time the story is one that cannot be made into a single history.</p>
+<h2>There Were Choices Before Velvia</h2>
+<p>First, the years before Velvia.</p>
+<p>According to Fujifilm's company history, the high-speed Fujichrome 400 came out in 1980, and in March 1983 a new Fujichrome lineup for commercial and professional use. In 1984, a US photography magazine ran an article comparing Kodachrome 64 Professional, Agfachrome CT50 Professional and Fujichrome 50 Professional. There are also reports that, in the mid-1980s, Fuji was building ties with US professional labs over processing information.</p>
+<p>In other words, Velvia was not the product with which Fuji first entered the professional market. It was a product put into a place where three companies were already competing. The sources do show Kodak in a strong position, but what share Kodak had in professional reversal film specifically is not known.</p>
+<p>Let me add a little of my own history, too. As a student I used Fuji negative film without thinking about it. My father was a Konica man. Once, just once, I used a Kodak negative film, and I remember being surprised at how different the colors were between Fuji and Kodak. I do not remember which product it was — an ISO 100 film, the most ordinary one on sale. But I realized then that the Fuji colors I had been using suited my taste better, and from then on I used nothing but Fuji. The way I put it, both Fuji and Kodak were films that rendered color the way their boxes looked: Fuji's blue box, Kodak's yellow box. That is only my impression.</p>
+<h2>What the February 1990 Catalogue Was Selling</h2>
+<p>In the February 1990 catalogue in my hands, Velvia is listed in formats from 135 up to 8×10: 135, 120, 220, 4×5, 5×7, 8×10. Being listed in the catalogue, though, is not the same as all of them going on sale that month. When each format became available, the sources do not say.</p>
+<p>What this catalogue was selling is clear. “Groundbreaking ultra-fine grain.” “Sharpness and high resolving power.” “Vivid color reproduction, color rendering with depth.” “Smooth skin rendering and pleasing skin tones.” “Neutral gray tones and excellent shadow rendering.” (These phrases are translated from the Japanese.) Alongside them: processing (CR-56 / E-6) and push processing, and the format lineup. These are not gathered under a single headline; they are laid out as separate items. The pages on uses are also divided: portrait, still life, landscape, architecture.</p>
+<p>What to bear in mind here is that this is the manufacturer's pitch. That the catalogue says “vivid color reproduction” is a fact; whether that was confirmed by independent measurement, whether professionals actually bought the film for that reason, and how much it was used for which purposes, the catalogue cannot tell us. What it can tell us is that, at launch, the manufacturer was not selling “high resolving power” alone. Grain, sharpness, color, skin, shadows, processing, formats. There were already several axes at the point of sale.</p>
+<h2>Kodak Did Not Go Away</h2>
+<p>So what happened to the market after Velvia came out?</p>
+<p>As far as the sources show, Kodak went on releasing new reversal films throughout the 1990s — in several waves: 1991, 1993, 1996, 1999. Whether each of these was a direct response to Velvia, I cannot say; there are no internal Kodak documents in the sources. What can be said is that Kodak was not “given up on.” It kept making reversal film, and kept selling it.</p>
+<p>A US photography magazine in 1995 printed a table comparing a large number of reversal films — from Kodak, Fuji, Agfa and 3M — alongside Velvia. From 1998 there is testimony from a professional who chose Kodak's E200 for magazine and event work. A 1999 newspaper article described a “crowded field” in which Fuji's Provia and Velvia stood alongside Kodak's E100 series.</p>
+<p>On the other hand, there are sources — from the manufacturer, from comparisons of the time, from professionals looking back — that can be read as showing Velvia strongly chosen in landscape and nature work. But what share that was, in which regions and in which formats, is not known.</p>
+<p>So, at the very least, this is not a history in which everything was replaced by Velvia all at once. Different films were chosen for different uses.</p>
+<h2>Having a Choice and Making One Are Different Things</h2>
+<p>Up to here, this has been the market as the sources show it. From here on, it is my story.</p>
+<p>Where I was working, there was effectively only one choice. Almost everyone around me used Velvia, and I had come to use nothing but Velvia and one other film, for when Velvia could not do the job. Kodak's new products did not interest me. That is true.</p>
+<p>The market had choices. Where I was working, there were none. Both of these are true, and they do not contradict each other. One is the story of a market, recorded in Japanese and American sources, that included professionals in all kinds of work. The other is the story of one person, in one mountain-photography group, in Japan. They are different in scale.</p>
+<p><img src="/images/knowledge/why-was-velvia-used-as-high-quality-film/f01-market-options-vs-my-choice-en.svg" alt="Conceptual diagram. Top: the market as the sources show it. Fujifilm, Kodak, Agfa and other reversal films existed side by side, and different films were chosen for different uses. Bottom: my own work, a mountain-photography group. For me and the others in the group, Velvia was effectively the only choice, with another film only when a faster shutter speed was needed. The top and the bottom are not claims at the same scale, and neither is the right one. No quantity, ranking or share is drawn. This site's own arrangement." /></p>
+<p>Fig. 1: In the market, as the sources show it, several reversal films existed side by side. In my own work (mountain photography), Velvia was effectively the only choice, and I used another film only when I needed a faster shutter speed. Neither the top nor the bottom is “the right one”; both are true. The figure shows no quantities or rankings.</p>
+<p>So why, for me, was there hardly any choice at all?</p>
+<h2>What I Saw in Velvia: The Colors as I Remembered Them</h2>
+<p>The first time I shot Velvia, I think, was in the summer mountains in late July, going in from Kamikochi to Karasawa. I had heard that a new transparency film was coming out, so I bought some and took it with me.</p>
+<p>I remember well my impression on seeing the original transparencies. Above all, the colors were vivid. The way I put it was: a film that gave you not accurate color, but the colors as you remembered them — what I called “memory color.” A blue sky was a blue sky, and the green of the trees was properly green. It looked more real than the actual scene had. But that was “real” measured against the image in my head — not accurate color.</p>
+<p>What I saw in Velvia was color. I have no memory of choosing it because its resolving power was high. As for grain, with 35 mm it bothered me in big enlargements, and that was true of Velvia too. I will come to that later.</p>
+<p>One thing I want to put down honestly. I never shot Velvia and the other film — the one I used when Velvia could not do the job — side by side on the same scene. If Velvia could do it, I shot Velvia; only when it could not did I use the other film; so there was never an occasion to compare. That is why I cannot write “compared directly, Velvia was better.” What I can write is only this: I preferred Velvia's color.</p>
+<p>“Memory color” is my own word for what I felt. It does not mean the manufacturer designed the film that way, and I am not using it in the sense the term has in color science.</p>
+<h2>ISO 50 Came With a Trade-Off</h2>
+<p>Velvia is ISO 50. The number does not mean “the lower, the higher the image quality.” It is about how much light the film needs. As I wrote in <a href="/en/knowledge/photography/does-lower-iso-really-mean-better-image-quality">the article that asked whether lower ISO really means better image quality</a>, I was not using ISO 50 because I believed ISO 50 meant high image quality. I had chosen Velvia, the film I liked, and its speed happened to be 50.</p>
+<p>For a landscape that does not move, shot from a tripod, ISO 50 is not much of a problem. In my 35 mm days I may have struggled a little with slow shutter speeds, but I did not think much of it.</p>
+<p>When I moved to large format, it did become a problem. Subject blur in alpine plants swaying in the wind, and camera shake in strong wind, gave me real trouble. Apart from those two things I was not much troubled, but those two were the trade-off that came with ISO 50. When I absolutely needed a faster shutter speed, I used a different film. Velvia when Velvia could do it; the other film only when it could not. That was how I divided them.</p>
+<p>So the number ISO 50, on its own, cannot settle what was good or bad about Velvia. Its meaning changes with how you shoot. With a tripod and a still subject it works; with wind and movement it becomes a constraint. The sources say the same thing: where speed was needed, other films could perfectly well have been chosen.</p>
+<h2>What Did Not Change When I Moved to Large Format</h2>
+<p>I moved from 35 mm to shooting 6×9 and 6×12 roll film on a 4×5 camera. The reason was grain. With 35 mm Velvia, enlarged to hansetsu — the Japanese half-sheet print size — the grain began to bother me, and at full-sheet size (zenshi) it was disappointing. It was not something a still lower ISO would have solved, so I made the format bigger. This is the matter of enlargement ratio I wrote about in <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">the previous article</a>.</p>
+<p>With the larger format, Velvia's color carried over essentially as it was. For me, the change in image quality from going to large format was a big one. But I did not feel that the character of Velvia's color had become something else. What had not come through on 35 mm was grain, and the limits of sharpness.</p>
+<p>One thing surprised me when I moved to large format. The tones of the colors were unbelievably fine. Rendered right down to what the naked eye does not see. “As if it had been emphasized so that you could see it” — that is close. But I do not mean higher contrast. It was like a near-sighted person putting on glasses with the right prescription. What this came from, I will not say in this article. Format, lens, enlargement ratio — I do not know, and I have not tested them separately.</p>
+<p>Whether a picture was good or bad, I decided first on the light table. Anything that failed there was rejected; only what passed went on to the print or to the publisher. Wherever the picture went, I never changed the assessment I had made on the original transparency. As for processing: in my 35 mm days I did not know that pro labs existed, so I took my film to a camera shop in town; after I moved to large format and joined the group, I began taking it to a pro lab near the place where the group held its regular meetings. It was not a choice made by comparing quality. It was a matter of connections and location.</p>
+<p>One more thing, briefly, about lenses. The lenses I used on large format were Rodenstock, with Fujinon for the focal lengths that were not in the Rodenstock lineup. As far as color went, the Fujinons seemed to me very close to the Rodenstocks. Someone in the group once asked me why the conditions were always so good whenever I went out shooting — he wanted to take blue-sky photographs like mine and had never once managed it, even though the film was the same Velvia and the lab was the same lab. I thought it was the difference in lenses. I was the only one in the group using Rodenstock; the others mostly used Nikon. But whether that was really so, this article does not test. We never shot the same scene under the same conditions, and what the “color” of a lens even is, is the question for the next article.</p>
+<h2>My Assessment Has Not Changed</h2>
+<p>For me, the choice had effectively narrowed to one film. My assessment of Velvia, and my sense of it, have basically not changed from then to now.</p>
+<p>It is not that the market had no choices. What the sources tell us about the market, and what happened in one photographer's own work, are simply claims made at different scales.</p>
+<h2>For Those Who Want to Go a Little Deeper</h2>
+<p>Everything this article needs in order to conclude is above. What follows is for readers who want a closer look at the grounds for the points I passed over quickly, and at what is not known. There are no new claims.</p>
+<h3>Before Velvia: Three Makers in the 1980s</h3>
+<p>Fujifilm's company history records the release of the high-speed Fujichrome 400 in 1980 and, in March 1983, of the “New Fujichrome” line — 50 Professional D, 100 Professional D, 64 Professional T, and a duplicating film. In January 1984 a US photography magazine compared Kodachrome 64 Professional, Agfachrome CT50 Professional and Fujichrome 50 Professional. The same year, Agfa ran advertising aimed at professionals. A 1989 newspaper report says that in the mid-1980s Fuji worked with US professional labs on testing and processing information, and that in 1985 Kodak set up a division for professional products. A 1987 article describes a single lab processing Ektachrome, Fujichrome and Kodachrome together.</p>
+<p>What these sources allow us to say is that Velvia was not the start of Fuji's entry into the professional market; that Kodak was in a strong position, with several established film lines; and that at least three companies were competing. What they do not allow us to say is a share figure for professional reversal film. The “roughly 85 % to 10 %” in the 1989 report is about film and paper overall, not professional reversal film.</p>
+<h3>Kodak in the 1990s: Several Waves</h3>
+<p>Kodak's moves are recorded in the sources not as a single “answer to Velvia” but as several waves: Ektachrome 64X and 100X in 1991, Lumière in 1993, E100S and E100SW in 1996, E100VS and E200 in 1999, and updates in 2002–03. Each had its own aim: 64X / 100X, warm color and stability; E100S / SW, a neutral and a warm version side by side; E100VS, vividness; E200, speed.</p>
+<p>Whether these were direct responses to Velvia is not known; there are no sources showing Kodak's internal reasoning. The order of the dates alone cannot establish cause.</p>
+<h3>E-6 and K-14: The Lab as a Factor</h3>
+<p>There were factors in the choice of film besides the film itself. Kodachrome was processed in K-14; Ektachrome and Velvia in E-6 — two different processes. A November 1995 column in a US newspaper gives, as reasons for moving away from Kodachrome, not only color and sharpness but processing failures and the service of the lab. It is an example of lab reliability affecting the choice.</p>
+<p>E-6 itself is a process controlled to the second and to the degree, monitored with control strips and a densitometer. It is not the case that sending film to a lab means it comes back degraded. But how much the number of labs, the cost and the turnaround time differed, and how much that affected the choice, are not known in figures.</p>
+<p>The lab story I told in the main text is separate from this market story. I used Fuji's E-6 films from the start, and I changed labs not on a comparison of quality but through the connections and location that came with joining the group.</p>
+<h3>There Were Numbers: ISO 50, RMS 9, 80 / 160 lines/mm</h3>
+<p>Velvia has measured values. The 1997 data sheet gives daylight ISO 50; RMS granularity 9 (48 µm measuring aperture, at density 1.0); resolving power of 80 lines/mm at a contrast of 1.6:1 and 160 lines/mm at 1000:1; an MTF curve; and a reciprocity table showing no correction needed from 1/4000 s to 1 s.</p>
+<p>Three cautions in reading these numbers. First, they are values printed in a 1997 document; whether they are exactly the same as the film as sold in 1990 cannot be confirmed. Second, resolving power doubles with the measuring conditions: 80 and 160 are values for the same film at different contrasts. And whether Fuji's “lines/mm” counts individual lines or line pairs cannot be settled from the sources. Third, these numbers cannot be converted into a pixel count. The reasons are in <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">the previous article</a>.</p>
+<p>That there were numbers, and that the film was not chosen on numbers alone, are both true. As I wrote in the main text, what I was looking at was color, and the catalogue's pitch, too, was spread across several axes.</p>
+<h3>CM Fujinon: “Ultra-High-Image-Quality Film Changed the Dilemma”</h3>
+<p>Another catalogue came out of the same folder: Fuji Photo Film's catalogue for its CM Fujinon W large-format lenses. From its code it appears to date from around March 1995, but the exact date is not known. Across its spread runs a single line: “The performance of ultra-high-image-quality film has changed the dilemma.” (Translated from the Japanese.)</p>
+<p>This is the manufacturer's positioning: that improved film performance changed what was asked of the lens. But the catalogue does not say that this “ultra-high-image-quality film” means Velvia. Nor were any design records of what, concretely, these lenses changed, or any measured comparison with the previous generation, found in this research.</p>
+<p>The lens story I told in the main text — that the Rodenstock and Fujinon colors looked alike to me, and that I thought the difference in blue skies was down to the lenses — is a separate matter from this catalogue. My impressions are my impressions, and they have to be kept apart from the manufacturer's positioning. What large-format lenses were designed to achieve, and what the “color” of a lens was, are the questions for the next article.</p>
+<h3>What Is Not Known</h3>
+<p>Let me gather here what this article has treated as not knowable from the sources.</p>
+<p>Velvia's exact announcement and release dates, the order of introduction by country, and the formats available at launch. The share of professional reversal film from 1988 to 2000, by year, region, use, format and brand. Whether the film sold in 1990 and the values in the 1997 document are the same. Whether each Kodak product was a response to Velvia. How much the differences in the number of labs, cost and turnaround time mattered. Whether magazines and clients specified the brand of film. How large, in numbers, Velvia's strength in landscape work was.</p>
+<p>On my side, what I do not know: the year I first used Velvia; the product literature for the film I used when Velvia could not do the job; the cause of the fineness of tone I felt on large format; the cause of the difference in blue skies.</p>
+<h3>The Market and My Own Work: The Scope of This Article</h3>
+<p>The sources for this article were gathered mainly in Japan, the United States and the English-speaking world; they do not add up to a conclusion about the world as a whole. My experience is that of one person, in one mountain-photography group, in Japan. I cannot paint the market the sources show with my experience, and I cannot refute my experience with the sources. Both are left standing, each at its own scale.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/what-did-rich-gradation-in-film-mean">What Did “Rich Gradation” in Film Really Mean?</a>
+        <p class="kzc-related-desc">“Rich gradation” in film was not dynamic range, and not bit depth. The Japanese word carried several questions at once. From what I saw in new leaves and fresh snow on transparencies in the 1990s, and from the technical literature, here is what it meant.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">How Many Megapixels Is 4×5 Film? Why There Is No Single Answer</a>
+        <p class="kzc-related-desc">How many megapixels is 4×5 film? There is no single answer. The same Velvia data sheet lists 80 and 160 lines/mm depending on test contrast — four times apart as a cell count. Comparison is possible once the conditions are set, but not as one number. I used 4×5 and Velvia from around 1995.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/does-lower-iso-really-mean-better-image-quality">Does Lower ISO Really Mean Better Image Quality?</a>
+        <p class="kzc-related-desc">Does lower ISO really mean better image quality? Not always. When lowering the ISO lets you collect more light with a longer shutter speed, the picture can get better — but what made it better was the light, not the low number. Lowering only the ISO number is a different thing, and expanded settings like ISO 50 have a trap of their own. From a photographer who starts every shoot at ISO 100 and f/8.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
