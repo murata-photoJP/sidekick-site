@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 916" width="800" height="916" role="img" aria-labelledby="t"><title id="t">モデル計算の図：プリント系は、伸ばした 0.03 mm のぼけの境目の幅を、どれだけ広げるか。横向きの範囲の帯。5倍、A4、A3、20倍の四行に、それぞれ二つの帯。塗りの帯は、1999 年の測定（染料プリンタ、査読論文）の形を仮定した場合で、プラス 23 から 38 パーセント、9 から 15、4 から 8、1 から 2 パーセント。破線の帯は、2019 年の一例（Epson P800、顔料、一台・一紙・一枚）を同じ形に当てた場合で、プラス 49 から 85、19 から 36、10 から 19、3 から 6 パーセント。幅の増分であり、見え方ではない。どちらも、いまのプリンタの一般値ではなく、新旧の優劣を示す図でもない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">プリント系が広げる、ぼけの境目の幅（モデル計算）</text>
+<text x="20.0" y="84.0" fill="#ffb14a" font-size="26" font-weight="600" text-anchor="start">幅の増分（%）であり、見え方ではない</text>
+<line x1="20.0" y1="126.0" x2="80.0" y2="126.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="96.0" y="135.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">1999年の測定（染料機、査読論文）の形を仮定</text>
+<text x="96.0" y="169.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">（プリント系のぼけの幅 約0.08〜0.1 mm）</text>
+<rect x="20.0" y="206.0" width="60.0" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="96.0" y="223.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">2019年の一例（P800、顔料、一台・一紙・一枚）を</text>
+<text x="96.0" y="257.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">同じ形に当てた場合</text>
+<line x1="170.0" y1="288.0" x2="170.0" y2="722.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="170.0" y1="722.0" x2="170.0" y2="730.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="170.0" y="762.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">0</text>
+<line x1="274.0" y1="288.0" x2="274.0" y2="722.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="274.0" y1="722.0" x2="274.0" y2="730.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="274.0" y="762.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">20</text>
+<line x1="378.0" y1="288.0" x2="378.0" y2="722.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="378.0" y1="722.0" x2="378.0" y2="730.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="378.0" y="762.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">40</text>
+<line x1="482.0" y1="288.0" x2="482.0" y2="722.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="482.0" y1="722.0" x2="482.0" y2="730.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="482.0" y="762.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">60</text>
+<line x1="586.0" y1="288.0" x2="586.0" y2="722.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="586.0" y1="722.0" x2="586.0" y2="730.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="586.0" y="762.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">80</text>
+<line x1="690.0" y1="288.0" x2="690.0" y2="722.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="690.0" y1="722.0" x2="690.0" y2="730.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="690.0" y="762.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">100</text>
+<line x1="170.0" y1="288.0" x2="170.0" y2="722.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="690.0" y="798.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">ぼけの境目の幅の増分（%）</text>
+<text x="156.0" y="361.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">5倍</text>
+<line x1="289.6" y1="330.0" x2="367.6" y2="330.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="379.6" y="339.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+23〜38 %</text>
+<rect x="424.8" y="366.0" width="187.2" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="624.0" y="383.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+49〜85 %</text>
+<line x1="170.0" y1="404.0" x2="690.0" y2="404.0" stroke="#2b3140" stroke-width="1.0"/>
+<text x="156.0" y="465.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">A4</text>
+<line x1="216.8" y1="434.0" x2="248.0" y2="434.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="260.0" y="443.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+9〜15 %</text>
+<rect x="268.8" y="470.0" width="88.4" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="369.2" y="487.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+19〜36 %</text>
+<line x1="170.0" y1="508.0" x2="690.0" y2="508.0" stroke="#2b3140" stroke-width="1.0"/>
+<text x="156.0" y="569.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">A3</text>
+<line x1="190.8" y1="538.0" x2="211.6" y2="538.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="223.6" y="547.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+4〜8 %</text>
+<rect x="222.0" y="574.0" width="46.8" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="280.8" y="591.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+10〜19 %</text>
+<line x1="170.0" y1="612.0" x2="690.0" y2="612.0" stroke="#2b3140" stroke-width="1.0"/>
+<text x="156.0" y="673.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">20倍</text>
+<line x1="175.2" y1="642.0" x2="180.4" y2="642.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="192.4" y="651.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+1〜2 %</text>
+<rect x="185.6" y="678.0" width="15.6" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="213.2" y="695.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">+3〜6 %</text>
+<line x1="20.0" y1="822.0" x2="780.0" y2="822.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="858.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">どちらも今のプリンタの一般値ではなく、新旧の優劣でもない</text>
+<text x="20.0" y="894.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">本サイトのモデル計算（10–90%幅。ドライバ処理は含まない）</text>
+</g>
+</svg>

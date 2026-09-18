@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 620" width="800" height="620" role="img" aria-labelledby="t"><title id="t">幾何だけの図：センサー面の 0.03 mm のぼけを、プリントに伸ばすと何 mm になるか。同じ縮尺で描いた四つの円。5倍（はがき〜2L判）で 0.15 mm、A4（長辺で約8.3倍）で約 0.25 mm、A3（約11.7倍）で約 0.35 mm、20倍（全紙級）で 0.6 mm。下に 1 mm の縮尺の目盛。拡大だけで、プリント系はまだ何も足していない。見える／見えないの境界も、見る距離も描いていない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">幾何だけ：0.03 mmのぼけは、プリント上で何 mm か</text>
+<text x="20.0" y="84.0" fill="#ffb14a" font-size="26" font-weight="500" text-anchor="start">同じ縮尺で描いた（プリント系は、まだ何も足していない）</text>
+<text x="115.0" y="140.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">5倍</text>
+<text x="115.0" y="174.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">はがき〜2L判</text>
+<circle cx="115.0" cy="359.0" r="21.0" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="115.0" y="420.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">0.15 mm</text>
+<text x="305.0" y="140.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">A4</text>
+<text x="305.0" y="174.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">長辺で約8.3倍</text>
+<circle cx="305.0" cy="345.4" r="34.6" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="305.0" y="420.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">約0.25 mm</text>
+<text x="495.0" y="140.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">A3</text>
+<text x="495.0" y="174.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">約11.7倍</text>
+<circle cx="495.0" cy="331.0" r="49.0" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="495.0" y="420.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">約0.35 mm</text>
+<text x="685.0" y="140.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">20倍</text>
+<text x="685.0" y="174.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">全紙級</text>
+<circle cx="685.0" cy="296.0" r="84.0" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="685.0" y="420.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">0.6 mm</text>
+<line x1="20.0" y1="380.0" x2="780.0" y2="380.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="20.0" y1="470.0" x2="300.0" y2="470.0" stroke="#eef1f8" stroke-width="3" stroke-linecap="butt"/>
+<line x1="20.0" y1="462.0" x2="20.0" y2="478.0" stroke="#eef1f8" stroke-width="2"/>
+<line x1="300.0" y1="462.0" x2="300.0" y2="478.0" stroke="#eef1f8" stroke-width="2"/>
+<text x="314.0" y="479.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">1 mm（この図の縮尺）</text>
+<line x1="20.0" y1="520.0" x2="780.0" y2="520.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="556.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">拡大だけの計算。0.03 mm × 倍率</text>
+<text x="20.0" y="592.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">見える／見えないの境界も、見る距離も、描いていない</text>
+</g>
+</svg>

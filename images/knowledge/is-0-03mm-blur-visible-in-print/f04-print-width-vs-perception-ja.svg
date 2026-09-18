@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 680" width="800" height="680" role="img" aria-labelledby="t"><title id="t">概念図：別々の二つの問い。左の枠「プリント上で、ぼけは何 mm に広がるか」は計算と測定で決まる。センサー面のぼけ、拡大率、プリント上の幅（幾何）、プリント系が足す幅（測定があるときだけ）。右の枠「そのぼけを、人がぼけとして認識するか」は、まだ一つの数字になっていない。プリントのサイズ、見る距離、見る人、何を見ようとしているか、写っているもの、コントラスト、もとのぼけの量。二つの枠は矢印で結ばれていない。間の一文「左が決まっても、右は決まらない」。プリントの上での見え方の閾値を測った研究は見つかっておらず、この記事は「プリントの許容錯乱円」を作らない。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">概念図：別々の二つの問い</text>
+<rect x="20.0" y="70.0" width="370.0" height="430.0" rx="14" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="38.0" y="112.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">プリント上で、ぼけは</text>
+<text x="38.0" y="148.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">何 mm に広がるか</text>
+<text x="38.0" y="192.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">計算と測定で決まる</text>
+<text x="38.0" y="240.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・センサー面のぼけ</text>
+<text x="38.0" y="276.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・拡大率</text>
+<text x="38.0" y="312.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・プリント上の幅（幾何）</text>
+<text x="38.0" y="348.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・プリント系が足す幅</text>
+<text x="38.0" y="384.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">　（測定があるときだけ）</text>
+<rect x="410.0" y="70.0" width="370.0" height="430.0" rx="14" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="428.0" y="112.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">そのぼけを、人が</text>
+<text x="428.0" y="148.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">ぼけとして認識するか</text>
+<text x="428.0" y="192.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">まだ一つの数字にならない</text>
+<text x="428.0" y="240.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・プリントのサイズ</text>
+<text x="428.0" y="276.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・見る距離</text>
+<text x="428.0" y="312.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・見る人</text>
+<text x="428.0" y="348.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・何を見ようとしているか</text>
+<text x="428.0" y="384.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・写っているもの</text>
+<text x="428.0" y="420.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・コントラスト</text>
+<text x="428.0" y="456.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">・もとのぼけの量</text>
+<text x="400.0" y="544.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">左が決まっても、右は決まらない</text>
+<line x1="20.0" y1="574.0" x2="780.0" y2="574.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="610.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">プリントの上で見え方の閾値を測った研究は、見つかっていない</text>
+<text x="20.0" y="646.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">この記事は「プリントの許容錯乱円」を作らない</text>
+</g>
+</svg>
