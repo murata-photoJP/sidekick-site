@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" width="800" height="520" role="img" aria-labelledby="t"><title id="t">Maximum edge residual versus frame-centre declination for a 14 mm rectilinear lens and a 180-degree equidistant fisheye, 60 s, centre-fixed. Both curves are smooth, largest at the equator and zero at the poles; the fisheye curve lies far below. Idealised model.</title><g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="30.0" y="38.0" font-size="28" fill="#eef1f8" text-anchor="start">画面中央の赤緯と、周辺の最大残差（60秒・中心固定）</text>
+<rect x="291.1" y="90" width="297.7" height="310" fill="#ffb14a" fill-opacity="0.10"/>
+<line x1="110" y1="400.0" x2="770" y2="400.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="98.0" y="409.0" font-size="26" fill="#8c96aa" text-anchor="end">0</text>
+<line x1="110" y1="296.7" x2="770" y2="296.7" stroke="#2b3140" stroke-width="1.5"/>
+<text x="98.0" y="305.7" font-size="26" fill="#8c96aa" text-anchor="end">10</text>
+<line x1="110" y1="193.3" x2="770" y2="193.3" stroke="#2b3140" stroke-width="1.5"/>
+<text x="98.0" y="202.3" font-size="26" fill="#8c96aa" text-anchor="end">20</text>
+<line x1="110" y1="90.0" x2="770" y2="90.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="98.0" y="99.0" font-size="26" fill="#8c96aa" text-anchor="end">30</text>
+<line x1="110.0" y1="90" x2="110.0" y2="400" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="275.0" y1="90" x2="275.0" y2="400" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="440.0" y1="90" x2="440.0" y2="400" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="605.0" y1="90" x2="605.0" y2="400" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="770.0" y1="90" x2="770.0" y2="400" stroke="#2b3140" stroke-width="1.5"/>
+<text x="110.0" y="432.0" font-size="26" fill="#8c96aa" text-anchor="middle">南極</text>
+<text x="440.0" y="432.0" font-size="26" fill="#8c96aa" text-anchor="middle">赤道</text>
+<text x="770.0" y="432.0" font-size="26" fill="#8c96aa" text-anchor="middle">北極</text>
+<text x="440.0" y="466.0" font-size="26" fill="#8c96aa" text-anchor="middle">画面中央の赤緯</text>
+<text x="98.0" y="76.0" font-size="26" fill="#8c96aa" text-anchor="end">残差 px</text>
+<path d="M110.0 400.0 L128.3 377.9 L146.7 355.9 L165.0 334.2 L183.3 313.0 L201.7 292.5 L220.0 272.7 L238.3 253.9 L256.7 236.2 L275.0 219.7 L293.3 204.6 L311.7 190.9 L330.0 178.9 L348.3 168.6 L366.7 160.0 L385.0 153.3 L403.3 148.5 L421.7 145.6 L440.0 144.6 L458.3 145.6 L476.7 148.5 L495.0 153.3 L513.3 160.0 L531.7 168.6 L550.0 178.9 L568.3 190.9 L586.7 204.6 L605.0 219.7 L623.3 236.2 L641.7 253.9 L660.0 272.7 L678.3 292.5 L696.7 313.0 L715.0 334.2 L733.3 355.9 L751.7 377.9 L770.0 400.0" fill="none" stroke="#ff8a00" stroke-width="3" stroke-linejoin="round"/>
+<text x="452.0" y="134.6" font-size="26" fill="#ff8a00" text-anchor="start">14mm 通常広角</text>
+<path d="M110.0 400.0 L128.3 393.8 L146.7 387.7 L165.0 381.7 L183.3 375.8 L201.7 370.1 L220.0 364.6 L238.3 359.4 L256.7 354.5 L275.0 350.0 L293.3 345.8 L311.7 342.1 L330.0 338.7 L348.3 335.9 L366.7 333.6 L385.0 331.7 L403.3 330.4 L421.7 329.6 L440.0 329.4 L458.3 329.6 L476.7 330.4 L495.0 331.7 L513.3 333.6 L531.7 335.9 L550.0 338.7 L568.3 342.1 L586.7 345.8 L605.0 350.0 L623.3 354.5 L641.7 359.4 L660.0 364.6 L678.3 370.1 L696.7 375.8 L715.0 381.7 L733.3 387.7 L751.7 393.8 L770.0 400.0" fill="none" stroke="#eef1f8" stroke-width="3" stroke-linejoin="round"/>
+<text x="452.0" y="319.4" font-size="26" fill="#eef1f8" text-anchor="start">魚眼 180°</text>
+<text x="30.0" y="508.0" font-size="26" fill="#8c96aa" text-anchor="start">帯：14mmで赤道が画面内に入る範囲・60秒・中心固定・理想化モデル</text>
+</g></svg>
