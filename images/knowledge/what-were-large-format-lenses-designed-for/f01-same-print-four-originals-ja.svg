@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 886" width="800" height="886" role="img" aria-labelledby="t"><title id="t">同じ縮尺の図。上に 35mm（24×36 mm）、6×9（56×82 mm）、6×12（56×112 mm）、4×5（約 96×120 mm）の原版を、下に全倍（現在の富士フイルムの呼び方と寸法で 600×900 mm）のプリントの外形を、同じ縮尺で描いている。原版全体をそのまま収めて全倍へ伸ばすときの拡大率は、35mm が約 25 倍、6×9 が約 11 倍、6×12 が約 8 倍、4×5 が約 6 倍。順位や優劣を示す図ではなく、同じプリントを作るにも原版によって必要な拡大率が違う、ということだけを描いている。鑑賞距離は別の話。本サイトの整理。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">同じ全倍プリントと、四つの原版（同じ縮尺）</text>
+<text x="20.0" y="84.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">原版（実寸比）</text>
+<rect x="104.2" y="155.6" width="21.6" height="14.4" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="115.0" y="208.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">35mm</text>
+<text x="115.0" y="246.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">24×36 mm</text>
+<rect x="280.4" y="136.4" width="49.2" height="33.6" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="305.0" y="208.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">6×9</text>
+<text x="305.0" y="246.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">56×82 mm</text>
+<rect x="461.4" y="136.4" width="67.2" height="33.6" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="495.0" y="208.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">6×12</text>
+<text x="495.0" y="246.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">56×112 mm</text>
+<rect x="649.0" y="112.4" width="72.0" height="57.6" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="685.0" y="208.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">4×5</text>
+<text x="685.0" y="246.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">約 96×120 mm</text>
+<text x="20.0" y="296.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">全倍へ伸ばす拡大率（原版全体を収める）</text>
+<text x="115.0" y="340.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">約 25 倍</text>
+<text x="305.0" y="340.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">約 11 倍</text>
+<text x="495.0" y="340.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">約 8 倍</text>
+<text x="685.0" y="340.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">約 6 倍</text>
+<line x1="20.0" y1="384.0" x2="160.0" y2="384.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="640.0" y1="384.0" x2="780.0" y2="384.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="400.0" y="393.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">どの原版も、同じ大きさのプリントへ伸ばす</text>
+<rect x="130.0" y="420.0" width="540.0" height="360.0" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="150.0" y="464.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">全倍　600×900 mm</text>
+<text x="150.0" y="502.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">現在の富士フイルムの呼び方と寸法</text>
+<text x="150.0" y="538.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">原版全体をそのまま収める（切り抜きなし）</text>
+<line x1="20.0" y1="800.0" x2="780.0" y2="800.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="836.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">順位や優劣を示す図ではありません。鑑賞距離は別の話</text>
+<text x="20.0" y="872.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">本サイトの整理（寸法は資料、4×5 は約、拡大率は計算）</text>
+</g>
+</svg>
