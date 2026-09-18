@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1012" width="800" height="1012" role="img" aria-labelledby="t"><title id="t">Same-scale diagram. Top: originals 35mm (24 x 36 mm), 6x9 (56 x 82 mm), 6x12 (56 x 112 mm) and 4x5 (approx. 96 x 120 mm). Bottom: the outline of a 600 x 900 mm print (what Fujifilm's current print service calls zenbai), drawn to the same scale. Enlargement needed to fill the print with the whole original: about 25, 11, 8 and 6 times. Not a ranking; it only shows that the same print needs a different enlargement from each original. Viewing distance is a separate matter. This site's own arrangement.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="28" font-weight="600" text-anchor="start">Same-Scale View:</text>
+<text x="20.0" y="78.0" fill="#8c96aa" font-size="28" font-weight="600" text-anchor="start">One 600 × 900 mm Print and Four Originals</text>
+<text x="20.0" y="124.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Originals (to scale)</text>
+<rect x="104.2" y="195.6" width="21.6" height="14.4" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="115.0" y="248.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">35mm</text>
+<text x="115.0" y="284.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">24 × 36 mm</text>
+<rect x="280.4" y="176.4" width="49.2" height="33.6" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="305.0" y="248.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">6×9</text>
+<text x="305.0" y="284.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">56 × 82 mm</text>
+<rect x="461.4" y="176.4" width="67.2" height="33.6" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="495.0" y="248.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">6×12</text>
+<text x="495.0" y="284.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">56 × 112 mm</text>
+<rect x="649.0" y="152.4" width="72.0" height="57.6" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="685.0" y="248.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">4×5</text>
+<text x="685.0" y="284.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">96 × 120 mm</text>
+<text x="685.0" y="318.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">(approx.)</text>
+<text x="20.0" y="360.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Enlargement to fill the 600 × 900 mm print</text>
+<text x="20.0" y="394.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">(whole original kept, no cropping)</text>
+<text x="115.0" y="438.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">about 25×</text>
+<text x="305.0" y="438.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">about 11×</text>
+<text x="495.0" y="438.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">about 8×</text>
+<text x="685.0" y="438.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="middle">about 6×</text>
+<line x1="20.0" y1="484.0" x2="110.0" y2="484.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="690.0" y1="484.0" x2="780.0" y2="484.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="400.0" y="493.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Every original is enlarged into the same print</text>
+<rect x="130.0" y="520.0" width="540.0" height="360.0" rx="2" fill="none" stroke="#eef1f8" stroke-width="2"/>
+<text x="150.0" y="564.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">600 × 900 mm print</text>
+<text x="150.0" y="602.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">What Fujifilm's current print</text>
+<text x="150.0" y="636.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">service calls zenbai</text>
+<text x="150.0" y="674.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Whole original kept, no cropping</text>
+<line x1="20.0" y1="902.0" x2="780.0" y2="902.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="936.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Not a ranking. Viewing distance is a separate matter.</text>
+<text x="20.0" y="968.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">This site's own arrangement</text>
+<text x="20.0" y="1002.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">(sizes from sources; 4×5 approx.; ratios computed)</text>
+</g>
+</svg>
