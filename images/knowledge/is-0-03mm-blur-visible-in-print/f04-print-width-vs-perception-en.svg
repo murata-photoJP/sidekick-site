@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" width="800" height="800" role="img" aria-labelledby="t"><title id="t">Concept diagram: two separate questions. Left panel, “How wide does the blur become on the print?”, decided by calculation and measurement: sensor-plane blur, enlargement, width on the print (geometry), width the print system adds (only where a measurement exists). Right panel, “Does a person perceive that blur as blur?”, not yet a single number: print size, viewing distance, the viewer, what the viewer is trying to see, the subject, contrast, the blur already present. The two panels are not joined by an arrow; between them, one sentence: settling the left does not settle the right. No study measuring a visibility threshold on prints was found, and this article does not create a “print circle of confusion”.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">Concept: two separate questions</text>
+<rect x="20.0" y="70.0" width="370.0" height="476.0" rx="14" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="38.0" y="112.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">How wide does the blur</text>
+<text x="38.0" y="146.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">become on the print?</text>
+<text x="38.0" y="188.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">Decided by calculation</text>
+<text x="38.0" y="218.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">and measurement</text>
+<text x="38.0" y="264.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Sensor-plane blur</text>
+<text x="38.0" y="298.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Enlargement</text>
+<text x="38.0" y="332.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Width on the print</text>
+<text x="38.0" y="366.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">   (geometry)</text>
+<text x="38.0" y="400.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Width the print system</text>
+<text x="38.0" y="434.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">   adds (only where a</text>
+<text x="38.0" y="468.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">   measurement exists)</text>
+<rect x="410.0" y="70.0" width="370.0" height="476.0" rx="14" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="428.0" y="112.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">Does a person perceive</text>
+<text x="428.0" y="146.0" fill="#ffb14a" font-size="26" font-weight="700" text-anchor="start">that blur as blur?</text>
+<text x="428.0" y="188.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">Not yet a single number</text>
+<text x="428.0" y="230.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Print size</text>
+<text x="428.0" y="264.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Viewing distance</text>
+<text x="428.0" y="298.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• The viewer</text>
+<text x="428.0" y="332.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• What the viewer is</text>
+<text x="428.0" y="366.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">   trying to see</text>
+<text x="428.0" y="400.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• The subject</text>
+<text x="428.0" y="434.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Contrast</text>
+<text x="428.0" y="468.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">• Blur already present</text>
+<text x="400.0" y="590.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">Settling the left does not settle the right</text>
+<line x1="20.0" y1="620.0" x2="780.0" y2="620.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="654.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">No study measuring a visibility threshold</text>
+<text x="20.0" y="686.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">on prints was found</text>
+<text x="20.0" y="718.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">This article does not create</text>
+<text x="20.0" y="750.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">a “print circle of confusion”</text>
+</g>
+</svg>

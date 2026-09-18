@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 680" width="800" height="680" role="img" aria-labelledby="t"><title id="t">Geometry-only diagram: how many millimeters a 0.03 mm blur on the sensor plane becomes once enlarged onto a print. Four circles drawn to a common scale: 0.15 mm at 5× (postcard to 2L), about 0.25 mm at A4 (about 8.3× on the long side), about 0.35 mm at A3 (about 11.7×), 0.6 mm at 20× (zenshi class). A 1 mm scale bar below. Enlargement only; the print system has added nothing yet. No visible/invisible boundary and no viewing distance are drawn.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">Geometry only:</text>
+<text x="20.0" y="74.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">how many mm is a 0.03 mm blur on the print?</text>
+<text x="20.0" y="112.0" fill="#ffb14a" font-size="24" font-weight="500" text-anchor="start">Common scale; the print system has added nothing yet</text>
+<text x="115.0" y="166.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">5×</text>
+<text x="115.0" y="198.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">postcard–2L</text>
+<circle cx="115.0" cy="409.0" r="21.0" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="115.0" y="470.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">0.15 mm</text>
+<text x="305.0" y="166.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">A4</text>
+<text x="305.0" y="198.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">about 8.3×</text>
+<text x="305.0" y="226.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">(long side)</text>
+<circle cx="305.0" cy="395.4" r="34.6" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="305.0" y="470.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">about 0.25 mm</text>
+<text x="495.0" y="166.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">A3</text>
+<text x="495.0" y="198.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">about 11.7×</text>
+<circle cx="495.0" cy="381.0" r="49.0" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="495.0" y="470.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">about 0.35 mm</text>
+<text x="685.0" y="166.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">20×</text>
+<text x="685.0" y="198.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">zenshi class</text>
+<circle cx="685.0" cy="346.0" r="84.0" fill="#ff8a00" fill-opacity="0.85" stroke="none"/>
+<text x="685.0" y="470.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">0.6 mm</text>
+<line x1="20.0" y1="430.0" x2="780.0" y2="430.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="20.0" y1="520.0" x2="300.0" y2="520.0" stroke="#eef1f8" stroke-width="3" stroke-linecap="butt"/>
+<line x1="20.0" y1="512.0" x2="20.0" y2="528.0" stroke="#eef1f8" stroke-width="2"/>
+<line x1="300.0" y1="512.0" x2="300.0" y2="528.0" stroke="#eef1f8" stroke-width="2"/>
+<text x="314.0" y="529.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">1 mm (scale of this figure)</text>
+<line x1="20.0" y1="570.0" x2="780.0" y2="570.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="606.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Enlargement only: 0.03 mm × magnification</text>
+<text x="20.0" y="640.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">No visible/invisible boundary, no viewing distance</text>
+</g>
+</svg>

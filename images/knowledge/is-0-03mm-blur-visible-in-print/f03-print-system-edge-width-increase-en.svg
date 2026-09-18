@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 956" width="800" height="956" role="img" aria-labelledby="t"><title id="t">Model-calculation diagram: how much the print system widens the edge of the enlarged 0.03 mm blur, as horizontal range bands. Four rows, 5×, A4, A3 and 20×, each with two bands. The filled band assumes the shape from the 1999 measurement (dye printer, peer-reviewed): plus 23 to 38 percent, 9 to 15, 4 to 8, 1 to 2 percent. The dashed band fits the single 2019 example (Epson P800, pigment; one printer, one paper, one print) to the same shape: plus 49 to 85, 19 to 36, 10 to 19, 3 to 6 percent. An increase in width, not in how visible the blur is. Neither is a typical value for today’s printers, and the figure is not a ranking of old against new.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="26" font-weight="600" text-anchor="start">How much the print system widens the blur’s edge</text>
+<text x="20.0" y="74.0" fill="#ffb14a" font-size="24" font-weight="600" text-anchor="start">Model calculation — width increase (%), not visibility</text>
+<line x1="20.0" y1="114.0" x2="80.0" y2="114.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="96.0" y="123.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">Shape assumed from the 1999 measurement</text>
+<text x="96.0" y="153.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">(dye printer, peer-reviewed;</text>
+<text x="96.0" y="183.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">print-system blur width about 0.08–0.1 mm)</text>
+<rect x="20.0" y="212.0" width="60.0" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="96.0" y="229.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">The single 2019 example (P800, pigment;</text>
+<text x="96.0" y="259.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">one printer, one paper, one print)</text>
+<text x="96.0" y="289.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">fitted to the same shape</text>
+<line x1="170.0" y1="328.0" x2="170.0" y2="762.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="170.0" y1="762.0" x2="170.0" y2="770.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="170.0" y="802.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">0</text>
+<line x1="274.0" y1="328.0" x2="274.0" y2="762.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="274.0" y1="762.0" x2="274.0" y2="770.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="274.0" y="802.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">20</text>
+<line x1="378.0" y1="328.0" x2="378.0" y2="762.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="378.0" y1="762.0" x2="378.0" y2="770.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="378.0" y="802.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">40</text>
+<line x1="482.0" y1="328.0" x2="482.0" y2="762.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="482.0" y1="762.0" x2="482.0" y2="770.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="482.0" y="802.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">60</text>
+<line x1="586.0" y1="328.0" x2="586.0" y2="762.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="586.0" y1="762.0" x2="586.0" y2="770.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="586.0" y="802.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">80</text>
+<line x1="690.0" y1="328.0" x2="690.0" y2="762.0" stroke="#2b3140" stroke-width="1.2" stroke-dasharray="3 6"/>
+<line x1="690.0" y1="762.0" x2="690.0" y2="770.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="690.0" y="802.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">100</text>
+<line x1="170.0" y1="328.0" x2="170.0" y2="762.0" stroke="#2b3140" stroke-width="1.5"/>
+<text x="690.0" y="838.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="end">Increase in edge width (%)</text>
+<text x="156.0" y="401.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">5×</text>
+<line x1="289.6" y1="370.0" x2="367.6" y2="370.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="379.6" y="379.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+23–38%</text>
+<rect x="424.8" y="406.0" width="187.2" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="624.0" y="423.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+49–85%</text>
+<line x1="170.0" y1="444.0" x2="690.0" y2="444.0" stroke="#2b3140" stroke-width="1.0"/>
+<text x="156.0" y="505.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">A4</text>
+<line x1="216.8" y1="474.0" x2="248.0" y2="474.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="260.0" y="483.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+9–15%</text>
+<rect x="268.8" y="510.0" width="88.4" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="369.2" y="527.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+19–36%</text>
+<line x1="170.0" y1="548.0" x2="690.0" y2="548.0" stroke="#2b3140" stroke-width="1.0"/>
+<text x="156.0" y="609.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">A3</text>
+<line x1="190.8" y1="578.0" x2="211.6" y2="578.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="223.6" y="587.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+4–8%</text>
+<rect x="222.0" y="614.0" width="46.8" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="280.8" y="631.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+10–19%</text>
+<line x1="170.0" y1="652.0" x2="690.0" y2="652.0" stroke="#2b3140" stroke-width="1.0"/>
+<text x="156.0" y="713.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="end">20×</text>
+<line x1="175.2" y1="682.0" x2="180.4" y2="682.0" stroke="#ff8a00" stroke-width="16" stroke-linecap="butt"/>
+<text x="192.4" y="691.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+1–2%</text>
+<rect x="185.6" y="718.0" width="15.6" height="16.0" rx="0" fill="none" stroke="#ffb14a" stroke-width="2" stroke-dasharray="7 5"/>
+<text x="213.2" y="735.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">+3–6%</text>
+<line x1="20.0" y1="862.0" x2="780.0" y2="862.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="898.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Not typical values for today’s printers; not old vs new</text>
+<text x="20.0" y="932.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">10–90% edge width; driver processing not included</text>
+</g>
+</svg>
