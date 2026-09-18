@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 920" width="800" height="920" role="img" aria-labelledby="t"><title id="t">Conceptual diagram. Top: the market as the sources show it. Fujifilm, Kodak, Agfa and other reversal films existed side by side, and different films were chosen for different uses. Bottom: my own work, a mountain-photography group. For me and the others in the group, Velvia was effectively the only choice, with another film only when a faster shutter speed was needed. The top and the bottom are not claims at the same scale, and neither is the right one. No quantity, ranking or share is drawn. This site's own arrangement.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="28" font-weight="600" text-anchor="start">Concept: Several Choices in the Market,</text>
+<text x="20.0" y="74.0" fill="#8c96aa" font-size="28" font-weight="600" text-anchor="start">Almost One in My Own Work</text>
+<rect x="20.0" y="100.0" width="760.0" height="300.0" rx="14" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="40.0" y="142.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">The market (sources)</text>
+<text x="40.0" y="178.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Several films existed side by side</text>
+<rect x="40.0" y="204.0" width="171.0" height="90.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="125.5" y="259.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Fujifilm</text>
+<rect x="223.0" y="204.0" width="171.0" height="90.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="308.5" y="259.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Kodak</text>
+<rect x="406.0" y="204.0" width="171.0" height="90.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="491.5" y="259.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Agfa</text>
+<rect x="589.0" y="204.0" width="171.0" height="90.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="674.5" y="259.0" fill="#eef1f8" font-size="28" font-weight="700" text-anchor="middle">Others</text>
+<text x="40.0" y="372.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Different films were chosen for different uses</text>
+<line x1="20.0" y1="435.0" x2="190.0" y2="435.0" stroke="#2b3140" stroke-width="1.2"/>
+<line x1="610.0" y1="435.0" x2="780.0" y2="435.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="400.0" y="444.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="middle">Not claims at the same scale</text>
+<rect x="20.0" y="470.0" width="760.0" height="300.0" rx="14" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="40.0" y="512.0" fill="#ffb14a" font-size="28" font-weight="700" text-anchor="start">My own work (a mountain-photography group)</text>
+<text x="40.0" y="548.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">Me and the others in the group</text>
+<rect x="40.0" y="574.0" width="330.0" height="130.0" rx="12" fill="none" stroke="#ff8a00" stroke-width="2"/>
+<text x="205.0" y="620.0" fill="#ff8a00" font-size="30" font-weight="700" text-anchor="middle">Velvia</text>
+<text x="205.0" y="656.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">effectively</text>
+<text x="205.0" y="686.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">the only choice</text>
+<rect x="386.0" y="574.0" width="374.0" height="130.0" rx="12" fill="none" stroke="#2b3140" stroke-width="2"/>
+<text x="573.0" y="616.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">another film</text>
+<text x="573.0" y="648.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">only when a faster</text>
+<text x="573.0" y="680.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="middle">shutter speed was needed</text>
+<text x="40.0" y="742.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">My experience, not the market</text>
+<line x1="20.0" y1="794.0" x2="780.0" y2="794.0" stroke="#2b3140" stroke-width="1.2"/>
+<text x="20.0" y="830.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">This is not a chart of market quantity, ranking or share.</text>
+<text x="20.0" y="866.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">This site's own arrangement</text>
+<text x="20.0" y="898.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">(top: the sources; bottom: my experience)</text>
+</g>
+</svg>
