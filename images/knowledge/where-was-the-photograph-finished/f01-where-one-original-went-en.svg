@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 772" width="800" height="772" role="img" aria-labelledby="t"><title id="t">Conceptual map. On the left, one original transparency. Three lines of the same weight fan out to the right into three boxes: judged (on a light table, names withheld); shown as it is (bringing a light table and a loupe); the source of outputs (the photo book, the exhibition prints). Below the third box, a separate dashed box reads "finished, to me" -- "printed, framed, hung on the wall" -- with the note "not a role of the original; my own view". Not a sequence and not a ranking. This site's own drawing.</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="42.0" fill="#8c96aa" font-size="28" font-weight="600" text-anchor="start">Where did the photograph go from one original?</text>
+<rect x="20.0" y="200.0" width="290.0" height="200.0" rx="14" fill="#2b3140" stroke="#ff8a00" stroke-width="2.0"/>
+<text x="165.0" y="266.0" fill="#ff8a00" font-size="28" font-weight="600" text-anchor="middle">One original</text>
+<text x="165.0" y="310.0" fill="#ff8a00" font-size="28" font-weight="600" text-anchor="middle">transparency</text>
+<text x="165.0" y="364.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">back from the lab</text>
+<line x1="310.0" y1="300.0" x2="350.0" y2="153.0" stroke="#ffb14a" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="350.0" cy="153.0" r="5.0" fill="#ffb14a"/>
+<line x1="310.0" y1="300.0" x2="350.0" y2="307.0" stroke="#ffb14a" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="350.0" cy="307.0" r="5.0" fill="#ffb14a"/>
+<line x1="310.0" y1="300.0" x2="350.0" y2="461.0" stroke="#ffb14a" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="350.0" cy="461.0" r="5.0" fill="#ffb14a"/>
+<circle cx="310.0" cy="300.0" r="6.0" fill="#ff8a00"/>
+<rect x="350.0" y="86.0" width="430.0" height="134.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="368.0" y="128.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">Judged</text>
+<text x="368.0" y="170.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">on a light table,</text>
+<text x="368.0" y="206.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">names withheld</text>
+<rect x="350.0" y="240.0" width="430.0" height="134.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="368.0" y="282.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">Shown as it is</text>
+<text x="368.0" y="324.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">bringing a light table</text>
+<text x="368.0" y="360.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">and a loupe</text>
+<rect x="350.0" y="394.0" width="430.0" height="134.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="368.0" y="436.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">The source of outputs</text>
+<text x="368.0" y="478.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">the photo book</text>
+<text x="368.0" y="514.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">the exhibition prints</text>
+<line x1="410.0" y1="528.0" x2="410.0" y2="578.0" stroke="#8c96aa" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="6 6"/>
+<rect x="350.0" y="578.0" width="430.0" height="140.0" rx="12" fill="none" stroke="#ffb14a" stroke-width="1.8" stroke-dasharray="8 6"/>
+<text x="368.0" y="620.0" fill="#ffb14a" font-size="28" font-weight="600" text-anchor="start">Finished, to me</text>
+<text x="368.0" y="666.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">printed, framed,</text>
+<text x="368.0" y="702.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">hung on the wall</text>
+<text x="20.0" y="638.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">not a role of the original;</text>
+<text x="20.0" y="674.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">my own view</text>
+<line x1="20.0" y1="732.0" x2="780.0" y2="732.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="756.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Not a sequence and not a ranking. This site's own drawing.</text>
+</g>
+</svg>
