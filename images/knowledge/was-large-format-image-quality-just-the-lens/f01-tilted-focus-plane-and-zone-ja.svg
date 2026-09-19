@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 668" width="800" height="668" role="img" aria-labelledby="t"><title id="t">概念図（側面）。左にレンズを前に傾けた蛇腹カメラ、右へ向かって近景の花、中間の谷、遠景の山。カメラの下から右上へ伸びる一本の線がピント面で、近景の花と遠景の山を通っている。その両側に、遠くへ行くほど広がる楔のような帯がピントの合う範囲。花と山頂はその帯の中にあり、中間の谷の底は帯の外にある。帯から外れた部分は甘くなり得る、という意味で、必ずボケるという図ではない。角度や距離は実際の値ではない。本サイトの整理。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="40.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">傾けたピント面と、ピントの合う範囲（概念図・側面）</text>
+<polygon points="190.0,446.2 790.0,296.2 790.0,173.2 190.0,443.2" fill="#ff8a00" fill-opacity="0.16" stroke="none" stroke-width="0" stroke-linejoin="round"/>
+<line x1="190.0" y1="446.2" x2="790.0" y2="296.2" stroke="#ffb14a" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="8 7"/>
+<line x1="190.0" y1="443.2" x2="790.0" y2="173.2" stroke="#ffb14a" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="8 7"/>
+<line x1="190.0" y1="444.8" x2="790.0" y2="234.8" stroke="#ff8a00" stroke-width="3.0" stroke-linecap="round"/>
+<polyline points="200.0,480.0 260.0,442.0 300.0,422.0 340.0,432.0 420.0,476.0 520.0,502.0 600.0,470.0 660.0,400.0 720.0,322.0 760.0,244.0 790.0,272.0" fill="none" stroke="#eef1f8" stroke-width="2.2" stroke-linejoin="round"/>
+<line x1="300.0" y1="410.2" x2="300.0" y2="422.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="300.0" cy="406.2" r="7.5" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<circle cx="300.0" cy="406.2" r="3.0" fill="#2b3140" stroke="none" stroke-width="0"/>
+<circle cx="520.0" cy="502.0" r="4.5" fill="#8c96aa" stroke="none" stroke-width="0"/>
+<circle cx="760.0" cy="244.0" r="4.5" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<polygon points="110.0,250.0 110.0,350.0 163.0,350.0 163.0,250.0" fill="#2b3140" fill-opacity="0.9" stroke="#8c96aa" stroke-width="1.5" stroke-linejoin="round"/>
+<line x1="110.0" y1="245.0" x2="110.0" y2="355.0" stroke="#eef1f8" stroke-width="4.0" stroke-linecap="round"/>
+<line x1="153.2" y1="358.0" x2="196.8" y2="242.0" stroke="#eef1f8" stroke-width="4.0" stroke-linecap="round"/>
+<circle cx="175.0" cy="300.0" r="5.0" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="145.0" y1="350.0" x2="145.0" y2="478.0" stroke="#8c96aa" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="145.0" y1="478.0" x2="119.0" y2="512.0" stroke="#8c96aa" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="145.0" y1="478.0" x2="171.0" y2="512.0" stroke="#8c96aa" stroke-width="2.0" stroke-linecap="round"/>
+<text x="20.0" y="232.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">カメラ（側面）</text>
+<text x="20.0" y="560.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">レンズを前に傾ける</text>
+<text x="270.0" y="372.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">近景の花</text>
+<text x="496.0" y="546.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">中間の谷</text>
+<text x="748.0" y="180.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="end">遠景の山</text>
+<text x="556.0" y="384.0" fill="#ff8a00" font-size="26" font-weight="600" text-anchor="start">ピント面</text>
+<line x1="600.0" y1="358.0" x2="612.0" y2="306.0" stroke="#ff8a00" stroke-width="1.4" stroke-linecap="round"/>
+<text x="300.0" y="290.0" fill="#ffb14a" font-size="26" font-weight="600" text-anchor="start">ピントの合う範囲</text>
+<line x1="470.0" y1="298.0" x2="500.0" y2="330.0" stroke="#ffb14a" stroke-width="1.4" stroke-linecap="round"/>
+<text x="548.0" y="466.0" fill="#ffb14a" font-size="26" font-weight="500" text-anchor="start">この範囲から外れると</text>
+<text x="548.0" y="504.0" fill="#ffb14a" font-size="26" font-weight="600" text-anchor="start">甘くなり得る</text>
+<line x1="20.0" y1="588.0" x2="780.0" y2="588.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="620.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">概念図です。角度や距離は実際の値ではありません</text>
+<text x="20.0" y="658.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">本サイトの整理（幾何はシャインプルーフの原理とヒンジの規則に沿う）</text>
+</g>
+</svg>
