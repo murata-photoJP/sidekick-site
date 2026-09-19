@@ -14,5 +14,8 @@
       "destination": "https://www.sidekick-lab.com/$1",
       "permanent": true
     }
+  ],
+  "crons": [
+    { "path": "/api/planner-activity-cleanup", "schedule": "30 18 * * *" }
   ]
 }

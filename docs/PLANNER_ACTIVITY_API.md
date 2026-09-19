@@ -54,32 +54,39 @@ IP（`x-forwarded-for` 等を読まない）／ IP 由来の地理情報（`x-ve
 
 | collection / document | 内容 | 保持 |
 |---|---|---|
-| `planner_activity_events/{event_id}` | raw event（`schema` `event` `at` `day` `client_kind` ＋ event 種別の field、`received_at`、`expire_at`） | **`expire_at` = `at` ＋ 425 日**（`HD-007`: β ＋ 12 か月）。**TTL policy は Human が console で設定する（下記）** |
+| `planner_activity_events/{event_id}` | raw event（`schema` `event` `at` `day` `client_kind` ＋ event 種別の field、`received_at`、`expire_at`） | **`expire_at` = `at` ＋ 425 日**（`HD-007`: β ＋ 12 か月）。**`expire_at <= now` になった doc は `/api/planner-activity-cleanup`（Vercel Cron、1 日 1 回）が削除する**（`HD-PLANNERACTIVITY-012`。Firestore TTL は Blaze 前提のため β1.00 では使わない） |
 | `planner_activity_daily/{YYYY-MM-DD}` | 日次 increment（`share_created` `share_created_category_*` `share_created_transport_*` `share_viewed` `share_viewed_unique` `share_viewed_client_*` `share_view_failed` `share_view_failed_code_*`） | 永久（成長推移） |
 | `planner_activity_totals/all` | 累計 increment（同じ field） | 永久 |
 
 冪等: `event_id` を document id にして `create()`。重複は無視し、集計は **create 成功時だけ** 増やす（再送しても二重計上しない）。
 
+## raw event の cleanup（`/api/planner-activity-cleanup`、`HD-PLANNERACTIVITY-012`）
+
+- `vercel.json` の `crons` により **Vercel Hobby Cron が 1 日 1 回（UTC 18:30 = JST 03:30）GET** する。Vercel は `Authorization: Bearer <CRON_SECRET>` を付ける。
+- 動作: `planner_activity_events` を `where("expire_at", "<=", now).orderBy("expire_at").limit(500)` で読み、batch delete。1 回の実行で最大 10 batch（5,000 件）。**冪等**（何度走っても同じ結果）。**`planner_activity_daily` / `planner_activity_totals` には触れない**（code に名前が無いことを `tests/site/test_planner_activity_api_policy.py` が固定）。
+- fail-open: cleanup が止まっても raw が増えるだけで、Activity 本体（`/api/planner-activity`）・公開集計に影響しない。`CRON_SECRET` 未設定 → 503 で何もしない。不一致 → 401。
+- 手動実行: `curl -H "Authorization: Bearer $CRON_SECRET" https://www.sidekick-lab.com/api/planner-activity-cleanup` → `{"ok":true,"collection":"planner_activity_events","deleted":N,"batches":M,"exhausted":false}`。
+- Firestore TTL への置換は将来 Blaze に移行する合理的理由が生じたときに再検討（`HD-012` 第9項）。
+
 ## Human 作業（deploy 後）
 
-1. **Firestore TTL policy**: Firebase console → Firestore → TTL → collection `planner_activity_events`、field `expire_at` を有効化（一度だけ）。
-   これを設定しないと raw event は消えない（集計は影響なし）。
-2. **動作確認**（deploy 後、開発機から。**本物の event は送らない** —— 集計を汚さないため。write 経路は Phase 2 の iPhone gate の実 beacon で確認する）:
+1. **`CRON_SECRET` を Vercel の Environment Variables に設定**（Project → Settings → Environment Variables、Production。値は 32 文字以上のランダム文字列。設定後に **再 deploy** が必要 = 空 commit の push か Vercel の Redeploy）。未設定の間、cleanup は 503 で何もしない。
+2. **cleanup の smoke test（`share.html` 配置の gate）**: Human が console で作った `planner_activity_events/ttl-bootstrap`（`expire_at` 過去）が **最初の cleanup 実行で消える**ことを確認する。方法は (a) 翌日 JST 03:30 以降に Firebase console で `ttl-bootstrap` が無いことを見る、または (b) 上記の手動 `curl` を実行し `deleted` が 1 以上で、console から `ttl-bootstrap` が消えていることを見る。**PASS するまで `share.html`（Viewer beacon）を production に配置しない**。
+3. **動作確認（Activity 本体、deploy 後、開発機から。本物の event は送らない）**:
 
 ```bash
 curl -s -o /dev/null -w "%{http_code}\n" -X POST "https://www.sidekick-lab.com/api/planner-activity" -H "Content-Type: application/json" -d "{\"schema\":\"planner_activity/0\"}"
 ```
 
-   → `204`（未知 schema は無視され、何も保存されない）。続けて `curl -s "https://www.sidekick-lab.com/api/planner-activity"` が
-   `200` で `{"schema":"planner_activity_aggregate/1", ..., "totals": {...}, "daily": {...}}` を返せば、function と Firestore（Admin SDK read）は生きている。
-   `503 firestore_unavailable` なら Vercel の `FIREBASE_SERVICE_ACCOUNT` env を確認する。
-3. **B-6 Privacy 文面**（`privacy.html` と Planner 内 `legal_documents.js`）に、送るもの・送らないもの・IP の到達・保持期間・停止方法を書く（Phase 3 と同時）。
+   → `204`。続けて `curl -s "https://www.sidekick-lab.com/api/planner-activity"` が `200` で aggregate JSON を返せば function と Firestore（Admin SDK read）は生きている。
+4. **B-6 Privacy 文面**（`privacy.html` と Planner 内 `legal_documents.js`）に、送るもの・送らないもの・IP の到達・**保持期間「raw event は約 14 か月後に自動削除、集計は保持」**（Firestore TTL を使っているとは書かない）・停止方法を書く（Phase 3 と同時）。
 
 ## test
 
 ```bash
 node --test tests/tools/test_planner_activity_api.mjs      # 挙動（firebase-admin を fake に差し替え）14 件
-python -m pytest tests/site/test_planner_activity_api_policy.py -q   # source 上の privacy policy 7 件
+node --test tests/tools/test_planner_activity_cleanup.mjs  # cleanup（期限切れのみ・500 件単位・冪等・secret）6 件
+python -m pytest tests/site/test_planner_activity_api_policy.py -q   # source 上の privacy policy ＋ cleanup / cron policy 12 件
 ```
 
 ## 将来（B3、V1 以降）

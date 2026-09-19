@@ -19,8 +19,9 @@
 //       GET は集計（totals ＋ 直近 30 日の daily）を返す。細粒度（category / transport / client）は k >= 5 未満を伏せる（HD-009）。
 //
 // 保存先（Firestore、Admin SDK、FIREBASE_SERVICE_ACCOUNT env は add-contact.js と共通）:
-//   planner_activity_events/{event_id}   raw event。expire_at = at + 425 日（HD-007: β ＋ 12 か月。TTL policy は
-//                                        Firestore console で field "expire_at" に設定する = Human 作業）
+//   planner_activity_events/{event_id}   raw event。expire_at = at + 425 日（HD-007: β ＋ 12 か月）。期限切れは
+//                                        api/planner-activity-cleanup.js（Vercel Cron、1 日 1 回）が削除する
+//                                        （HD-PLANNERACTIVITY-012。Firestore TTL は Blaze 前提で β1.00 では不使用）
 //   planner_activity_daily/{YYYY-MM-DD}  日次 increment（永久）
 //   planner_activity_totals/all          累計 increment（永久）
 //
