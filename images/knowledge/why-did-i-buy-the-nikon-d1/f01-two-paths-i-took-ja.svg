@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 944" width="800" height="944" role="img" aria-labelledby="t"><title id="t">概念図。左右に二つの縦の経路。左「私が通った経路（フィルム）」は、Velvia 6×9 / 6×12 で撮る（記憶）→ 現像に出す → 受け取る → スキャン（フラットベッド＋透過ユニット）→ ゴミ・傷を一つずつ取る、の五段。右「知人が通った経路（D1）」は、D1 で撮る（知人が、東京の街で）→ データを転送する、の二段。両方の経路は同じ太さの線で下の一つの箱「同じ A4 のカラーレーザーで出力（事務用、機種は不明）」につながる。注記：画質比較の実験図ではありません。当時、私が実際に通った二つの経路です。被写体も撮る人も違う（山のポジ／東京の街）。段の数と種類を示す図で、優劣の矢印ではない。本サイトの整理。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="42.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">当時、私が実際に通った二つの経路</text>
+<text x="195.0" y="96.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">私が通った経路（フィルム）</text>
+<text x="605.0" y="96.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">知人が通った経路（D1）</text>
+<rect x="20.0" y="118.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="152.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">Velvia 6×9 / 6×12 で撮る</text>
+<text x="195.0" y="190.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">（記憶）</text>
+<line x1="195.0" y1="204.0" x2="195.0" y2="222.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="195.0" cy="222.0" r="4.0" fill="#8c96aa"/>
+<rect x="20.0" y="222.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="274.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">現像に出す</text>
+<line x1="195.0" y1="308.0" x2="195.0" y2="326.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="195.0" cy="326.0" r="4.0" fill="#8c96aa"/>
+<rect x="20.0" y="326.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="378.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">受け取る</text>
+<line x1="195.0" y1="412.0" x2="195.0" y2="430.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="195.0" cy="430.0" r="4.0" fill="#8c96aa"/>
+<rect x="20.0" y="430.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="464.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">スキャン</text>
+<text x="195.0" y="502.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">フラットベッド＋透過ユニット</text>
+<line x1="195.0" y1="516.0" x2="195.0" y2="534.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="195.0" cy="534.0" r="4.0" fill="#8c96aa"/>
+<rect x="20.0" y="534.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="586.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">ゴミ・傷を一つずつ取る</text>
+<rect x="430.0" y="118.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="152.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">D1 で撮る</text>
+<text x="605.0" y="190.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">（知人が、東京の街で）</text>
+<line x1="605.0" y1="204.0" x2="605.0" y2="222.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="605.0" cy="222.0" r="4.0" fill="#8c96aa"/>
+<rect x="430.0" y="222.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="274.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">データを転送する</text>
+<line x1="195.0" y1="620.0" x2="195.0" y2="660.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="195.0" cy="660.0" r="5.0" fill="#ffb14a"/>
+<line x1="605.0" y1="308.0" x2="605.0" y2="660.0" stroke="#2b3140" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="605.0" cy="660.0" r="5.0" fill="#ffb14a"/>
+<rect x="150.0" y="660.0" width="500.0" height="96.0" rx="14" fill="#2b3140" stroke="#ff8a00" stroke-width="2.0"/>
+<text x="400.0" y="700.0" fill="#ff8a00" font-size="28" font-weight="600" text-anchor="middle">同じ A4 のカラーレーザーで出力</text>
+<text x="400.0" y="736.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">（事務用、機種は不明）</text>
+<text x="20.0" y="800.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">画質比較の実験図ではありません。</text>
+<text x="20.0" y="836.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">当時、私が実際に通った二つの経路です。</text>
+<text x="20.0" y="872.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">被写体も撮る人も違う（山のポジ／東京の街）。</text>
+<line x1="20.0" y1="902.0" x2="780.0" y2="902.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="928.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">段の数と種類を示す図。優劣の矢印ではない。本サイトの整理。</text>
+</g>
+</svg>
