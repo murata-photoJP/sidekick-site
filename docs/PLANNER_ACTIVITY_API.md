@@ -67,8 +67,7 @@ IP（`x-forwarded-for` 等を読まない）／ IP 由来の地理情報（`x-ve
 2. **動作確認**（deploy 後、開発機から。**本物の event は送らない** —— 集計を汚さないため。write 経路は Phase 2 の iPhone gate の実 beacon で確認する）:
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}
-" -X POST "https://www.sidekick-lab.com/api/planner-activity" -H "Content-Type: application/json" -d "{\"schema\":\"planner_activity/0\"}"
+curl -s -o /dev/null -w "%{http_code}\n" -X POST "https://www.sidekick-lab.com/api/planner-activity" -H "Content-Type: application/json" -d "{\"schema\":\"planner_activity/0\"}"
 ```
 
    → `204`（未知 schema は無視され、何も保存されない）。続けて `curl -s "https://www.sidekick-lab.com/api/planner-activity"` が
