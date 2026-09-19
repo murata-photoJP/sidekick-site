@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>写真は、どこで完成していたのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="同じ一枚のポジ原版から、写真展のプリントと写真集ができた。私には同じには見えなかった。原版は審査され、見せられ、印刷とプリントの元になった。では写真はどこで完成していたのか。1990年代の資料と私の経験から、原版が通った経路を書きます。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/where-was-the-photograph-finished">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">写真は、どこで完成していたのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">写真は、どこで完成していたのか？</h1>
+    <p class="kzc-article-lead">同じ一枚のポジ原版から、写真展のプリントと写真集ができた。私には同じには見えなかった。原版は審査され、見せられ、印刷とプリントの元になった。では写真はどこで完成していたのか。1990年代の資料と私の経験から、原版が通った経路を書きます。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-19">更新日：2026-09-19</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――同じ一枚のポジから、写真展のプリントと写真集ができた。私には、同じには見えなかった。</p>
+<h2>同じ一枚のポジから、写真展のプリントと写真集ができた</h2>
+<p>前の記事まで、レンズが作った像がフィルムに残るまでを書きました。この記事は、そのあとの話です。現像所から戻ってきたポジの原版は、どこへ行ったのか。</p>
+<p>1994 年に、私が入っていた山岳写真の同人の写真集が出ました。『日本アルプスの四季』（東京新聞出版局）です。私の写真も一点、載りました。ベルビアで撮った 6×9 のポジです。同じ写真集に関連して、原画展もありました。出版社に出したのは、原版一枚だけです。たぶんスリーブに入れて出したと思います。実務は同人の写真展委員がまとめてやっていたので、そこから先——写真集がどう作られ、原画展のプリントが誰にどう焼かれたのか——を、私は知りません。原版は戻ってきました。展示されたプリントも戻ってきました。</p>
+<p>つまり私は、同じ一枚の原版から出た三つの物を、手元で見比べることになりました。ポジの原版そのもの。写真展のプリント。写真集のページ。同じに見えたか。見えませんでした。当時の正直な感想は、「写真集ってクオリティ低いんだなぁ」でした。</p>
+<p>これは、当時の写真集が一般に低画質だった、という話ではありません。自分の原版から作られた複数の出口を、自分の目で見比べたときの、私の評価です。何がどこで変わったのかは、私には分かりません。工程に触れていないからです。</p>
+<p>ただ、この経験は一つの問いを残しました。原版が最高でも、プリントや誌面で同じに見えるとは限らない。では、あの写真は、どこで完成していたのか。原版か。プリントか。誌面か。この記事は、その問いを、原版がたどった役割の順に歩いていきます。</p>
+<h2>ここで一度、答えを出します</h2>
+<p>写真は、一つの場所で完成してはいませんでした。</p>
+<p>資料の側から言えることは、こうです。1990 年代のポジ原版は、ライトボックスで直接見るための物であると同時に、製版に渡す中間物でもありました。現像所も、スキャンも、分版も、網点も、紙も、それぞれが管理された工程で、経路ごとに、残るものが違います。どの経路でも、原版の性能がそのまま全部使われるわけではなく、かといって無意味になるわけでもありません。何がどれだけ削れたのかは、資料からは分かりません。この記事でも、それは言いません。</p>
+<p>私の側から言えることは、こうです。原版は、審査される物であり、人に見せる物であり、プリントと写真集の元でした。それでも、私にとって完成した写真は、原版ではありませんでした。プリントして、額装して、部屋に飾られて、完成。それは今でもそうです。原版が要らなかったという意味ではありません。原版がなければ、何も始まらなかった。</p>
+<h2>原版は、ライトボックスの上で作品だった</h2>
+<p>撮ったポジの合否は、ライトボックスの上で決めていた、と<a href="/knowledge/photography/why-was-velvia-used-as-high-quality-film">前の記事</a>に書きました。ここで弾いてから、プリントなり出版社なりへ渡す。原版で決めた評価を、その後の出口で変えることはありませんでした。ルーペで原版をどう見ていたかは、<a href="/knowledge/photography/your-circle-of-confusion">許容錯乱円の記事</a>に書いたとおりです。</p>
+<p>原版は、私が一人で見るだけの物ではありませんでした。私が入っていた山岳写真の同人「四季」には、月例がありました。毎月、コンテストの形で選者が来て、十位まで順位が付きます。審査は、ポジの原版をライトボックスに載せて行われました。タイトルは付けますが、名前は伏せます。誰の作品かで判断が動かないように、というのが私の理解です。制度としての公式な理由を私が知っているわけではありません。ともかく、その結果として、一人の作者から何点も入ることがありました。私は、入ったばかりのころは、あまり選ばれませんでした。</p>
+<p>人に見せるときも同じでした。プリントを見せるか、ライトボックスとルーペを持って行って、原版そのものを見せるか。スライド映写機は、35mm を使っていた初期に少し使いましたが、面倒なのですぐにやめました。私にとって、原版は見せる物でもあったのです。</p>
+<p>資料の側では、ポジを直接見ることは、きちんと定義された経路でした。1996 年の富士フイルムの複製用フィルムの資料は、見え方が観察光の質と明るさに左右されるとして、5000 K の光源、輝度、均一性まで挙げています。1975 年の ISO 規格は、ポジの直視と、印刷物との比較のための観察条件を定めています。ライトボックスの上の原版は、それ自体が一つの「見る対象」として、資料の上でも扱われていました。ただし、その頃の写真家がどれくらいの割合で原版そのものを見せ、渡していたのかは、資料からは分かりません。</p>
+<h2>現像所という工程</h2>
+<p>原版がライトボックスに載る前には、現像所があります。</p>
+<p>資料の側から。ポジの標準現像処理である E-6 は、管理された像形成の工程として書かれています。コダックのプロラボ向け資料は、第一現像の時間を秒単位、温度を 0.1 度単位で指定し、管理片を濃度計で読んで、決められた範囲を超えたら顧客のフィルムの処理を止めるように書いています。現像は、単に画質を落とす工程ではなく、管理された工程でした。ただし、日本の現像所が実際にどれだけそのとおりに運用していたか、回ごとのばらつきがどれくらいあったかは、資料からは分かりません。</p>
+<p>私の側から。ポジの現像は、主に新橋にあった堀内カラーに出していました。基本は通常現像です。増感や減感を頼んだこともありますが、かなり稀で、ほとんどやっていません。戻ってきたポジは、当時住んでいた会社の寮で、ライトボックスに載せて見ていました。</p>
+<p>そして、現像の回ごと、あるいは店ごとに色や濃度が違うと感じたことは、私にはありません。区別がつかなかった、というのが正確です。これは、差が無かったことの証明ではありません。私が現像所のばらつきを見越して露出や色を調整していた、という話でもありません。私は、差を感じなかった。それだけです。</p>
+<h2>原版を渡す、プリントと写真集が戻ってくる</h2>
+<p>写真集の話に戻ります。</p>
+<p>出版社に出した物は、原版一枚だけでした。複製を作ったことは、自分でも、ラボに頼んでも、一度もありません。原版を出版社などへ渡すことに、抵抗はありませんでした。当時は、原版を渡すのが普通のやり方だと思っていたからです。これは私がそう思っていた、ということであって、業界全体でどれくらい普通だったのかを私が知っているわけではありません。資料の側にも、原版を色分解に渡す用途を挙げた富士フイルムの資料や、1995 年に製版会社が 4×5 の原版を受け取ってスキャンした事例はあります。どれくらい一般的だったかは、分かりません。</p>
+<p>戻ってきた写真集は、私には、原版と同じには見えませんでした。写真展のプリントも、原版とは別の物に見えました。<a href="/knowledge/photography/what-did-rich-film-gradation-mean">「階調」の記事</a>で、ポジ原版、ダイレクトプリント、写真集、という私の順位を書きましたが、そのときの経験の一つが、この写真集です。</p>
+<p>もう一度書いておきます。写真集の製版も印刷も、原画展のプリントも、私はノータッチでした。だから、何が失われたのか——解像なのか、階調なのか、色なのか、網点なのか——を、私の経験から言うことはできません。言えるのは、同じ原版から出た物が、私には同じに見えなかった、ということまでです。</p>
+<p>その後、自分でプロラボに頼んで写真展のプリントを作るようになってからの話——どう頼み、できあがったプリントをどう見ていたか——は、<a href="/knowledge/photography/is-0-03mm-blur-visible-in-print">別の記事</a>に書きました。ここでは繰り返しません。</p>
+<h2>誌面までの道で、何が変わり得るのか</h2>
+<p>私に分からなかった部分を、資料の側から見ておきます。原版が誌面になるまでの道には、いくつもの段があります。</p>
+<p>まずスキャンです。1990 年代の製版用の高級なスキャナーには、ドラムに原版を貼り付けて、光電子増倍管で読み取るものがありました。資料の上では、1 インチあたり 1 万から 1 万 8 千の細かさで読めると書かれた機種があります。ただしこの数字は、取り込みの升目の細かさであって、読み取れた細部の量ではありません。読み取りの開口——光を受け取る穴——の大きさ、拡大率、そしてシャープネス処理——アンシャープマスク、輪郭を強める処理です——が、それぞれ別の量として効きます。1998 年の製版機器メーカーの特許は、原版、スキャナーのレンズ、開口、拡大、モニター、出力を別々の要素として扱い、シャープネス処理がスキャナーの中に組み込まれ得ることを書いています。</p>
+<p>次に分版です。読み取った像は、シアン、マゼンタ、イエロー、黒の版に分けられます。人が色や濃さを補正します。</p>
+<p>次に網点です。印刷は、点の大きさで濃淡を作ります。1995 年のアドビの印刷ガイドは、新聞なら 1 インチあたり 85 線、コート紙の雑誌なら 133 線、という例を挙げています。例であって、当時の標準ではありません。同じ資料に、4×5 の原版をスキャンして 200 線で印刷した事例も載っています。</p>
+<p>そして紙とインクと見当と、最後に判型と照明と、見る距離です。網点の細かさ、インクのにじみ、紙の吸収、版の重なりのずれ——それぞれが、解像・階調・色の別の成分を変えます。どれか一つが全部を決めるのではなく、また、一番弱い段だけで最後の見え方が決まるのでもありません。補正やシャープネス処理は、途中で見え方を作り直すからです。</p>
+<p>私の写真集が、どのスキャナーで、何線で、どの紙で刷られたのかを、私は知りません。だからこの記事は、「写真集で何が失われた」とは書きません。書けるのは、変わり得る段がこれだけある、ということまでです。</p>
+<p>ついでに一つ。同じ大きさの誌面やプリントを作るとき、原版が大きいほど拡大率は小さくなります。大判の利点の一つは、ここにあります。ただしそれは「大判なら常に上」という話ではありません。そのあたりは、<a href="/knowledge/photography/how-many-megapixels-is-4x5-film">「4×5 は何万画素？」の記事</a>に書きました。</p>
+<h2>複製も投影も、私にはなかった</h2>
+<p>資料の上では、原版の出口はもう二つあります。複製用フィルムで原版のコピーを作ること、そしてスライド映写機で投影することです。富士フイルムもコダックも複製用フィルムを出していて、複製で何世代か色と階調を保てると謳っていました。謳い文句であって、無劣化の証明ではありません。投影の側にも、映写レンズやスクリーンの条件を書いた資料があります。</p>
+<p>私の経路には、どちらもありませんでした。複製は一度も作らなかった。投影は、さっき書いたとおり、35mm の初期に少し試してやめました。人に見せるなら、原版そのものか、プリントでした。</p>
+<h2>写真は、どこで完成していたのか</h2>
+<p>ここまでを、役割で並べ直します。</p>
+<p>原版は、審査される物でした。ライトボックスの上で、名前を伏せて、順位が付いた。原版は、見せる物でした。ライトボックスとルーペを持って行って、そのまま見せた。原版は、元になる物でした。一枚を渡せば、写真展のプリントと写真集ができて、原版は戻ってきた。そして私にとって完成した写真は、額装されたプリントでした。</p>
+<p>プリントして、額装して、部屋に飾られて、完成。それは今でもそうです。</p>
+<p><img src="/images/knowledge/where-was-the-photograph-finished/f01-where-one-original-went-ja.svg" alt="概念図。左に「一枚のポジ原版」。そこから同じ太さの三本の線が右へ出て、三つの箱につながる。上から、審査する（ライトボックスの上で、名前を伏せて）、そのまま見せる（ライトボックスとルーペを持って行く）、出力の元になる（写真集、写真展のプリント）。三つ目の箱の下に、破線で囲んだ別の箱があり、「私にとっての完成」として「プリントして、額装して、部屋に飾る」と書かれ、「原版の役割ではなく、私の考え」と注記されている。順序や優劣を示す図ではない。本サイトの整理。" /></p>
+<p>図1：一枚のポジ原版から、写真はどこへ行ったのか。原版は、審査され、そのまま見せられ、写真集と写真展のプリントの元になった。破線の箱は、私にとっての完成——プリントして、額装して、部屋に飾る——で、原版の役割ではなく私の考え。順序や優劣を示す図ではない。本サイトの整理。</p>
+<p>資料の側は、そうは言いません。資料が言えるのは、原版は直接見る物にも製版の中間物にもなり、経路ごとに残るものが違う、ということまでです。どこで完成か、という問いは、資料の中にはありません。だからこの答えの後半は、私の考えです。写真家一般の話ではありません。</p>
+<p>原版が要らなかった、という意味でもありません。審査も、見せることも、プリントも写真集も、原版がなければ始まりませんでした。ポジの原版は、今も基本的に整理して保管してあります。押し入れの奥にあって、簡単には取り出せませんが。</p>
+<h2>やがて原版は、スキャンされた</h2>
+<p>原版の出口は、その後、一つ増えました。</p>
+<p>インターネットが普及し始めて、自分のホームページを作ろうと思ったとき、ポジをデジタルにする必要が出ました。それでエプソンの、当時としては最高級クラスのスキャナーを買いました。スキャンした画像を見た印象は、「ボヤボヤだな」でした。当時の私は、スキャンしたあとにシャープネス処理——アンシャープマスク——が要ることを、まったく知りませんでした。</p>
+<p>資料の側から言えば、これは驚くことではありません。スキャナーの最大の細かさは取り込みの升目の話であって、写った細部の量ではない。シャープネス処理は別の工程で、スキャナーに組み込まれていることもあれば、人が後から掛けることもある。ただ、あのボヤボヤが、原版の性能なのか、スキャナーの性能なのか、私の無知なのか。当時の私には切り分けられませんでした。</p>
+<p>その先——出口の側からではなく、撮る側まで含めて全部がデジタルへ移った話——は、次の記事で書きます。</p>
+<h2>ここから先は、もう少し詳しく知りたい人へ</h2>
+<p>この記事で必要な結論は、ここまでで完結しています。ここから先は、本文で短く済ませたところの根拠と、分かっていないことを、もう少し細かく見たい人への補足です。新しい主張はありません。</p>
+<h3>現像所は何を管理していたか</h3>
+<p>コダックのプロラボ向け資料（Q-LAB）は、E-6 の第一現像を 38 °C ±0.2 °C で 6 分 00 秒 ±5 秒と指定し、管理片を Status A の透過濃度計で読み、最低濃度・低濃度・高濃度・最高濃度のそれぞれに管理限界を置いています（1997 年版の例で、最低濃度 +0.05、低濃度 ±0.10、高濃度 ±0.15、最高濃度 −0.25）。管理片は 1 シフトに 3 回以上読み、色バランスが管理を外れたら顧客のフィルムを止める、とあります。これらは工程の管理限界であって、現像所のあいだの実際のばらつきの分布ではありません。増感・減感は意図的な工程の変種で、「1 段増感で解像力がいくら落ちる」という普遍則は、資料には見つかりませんでした。日本の現像所の運用実態は、分かっていません。</p>
+<h3>スキャナーの「最大 ppi」と、写った細部は別の量</h3>
+<p>1994 年ごろの Linotype-Hell の資料は、ドラム式で 10,000 ppi と 18,540 ppi、CCD 式で最大 8,000 ppi の機種を並べ、濃度域 4.2 と謳っています。SCREEN の DT-S1045AI は最大 8,000 dpi、三本の光電子増倍管、3.9D、16 ビットと謳いつつ、開口の選択、シャープネス処理の段階、色と階調の手動補正、プロファイル、出力形式を操作者の設定として持っています。Crosfield の 1998 年の特許は、原版、スキャナーのレンズ、物理的な開口、拡大・編集、モニター、出力の MTF を分けて扱っています。取り込みの ppi、出力の ppi、開口、補間、拡大率、網点の線数、実効の解像は、それぞれ別の量です。「PMT なら常に高解像、CCD なら常に低い」という区分も、資料では成り立ちません。</p>
+<h3>網点と紙——133 線は例</h3>
+<p>1995 年のアドビの印刷ガイドは、網点の線数が出力機の解像度と紙と印刷機で決まるとして、新聞 85 線、コート紙の四色印刷 133 線を例に挙げています。同じ資料の、名目上の階調数の式は（出力 dpi ÷ 線数）² ＋ 1 で、1200 dpi で 90 線なら約 178、175 線なら約 48 です。これは網点一つの中の升目の数であって、印刷で実際に出る階調数でも、連続階調の解像でもありません。SWOP や CGATS の特性値は、米国の出版印刷の特定条件の測定値です。日本の写真集や雑誌が当時どの線数・どの紙で刷られていたかの代表値は、今回の調査では回収できていません。</p>
+<h3>資料の中の「原版を渡す」</h3>
+<p>富士フイルムの 1996 年の複製用フィルムの資料は、原版の直視用途と並べて、色分解や写植のための複製の用途を挙げています。1995 年のアドビの印刷ガイドには、製版会社が 4×5 のポジ原版を受け取り、Scitex でスキャンして 200 線で印刷した事例があります。一つの事例であって、当時の市場の割合ではありません。</p>
+<h3>複製と投影という経路</h3>
+<p>富士フイルムの CDU II とコダックの EDUPE は、原版から等倍・縮小・拡大の複製ポジを作るフィルムで、光源、露光、フィルター、処理を指定し、複製での色と階調の保持を謳っています。これは新しい工程の追加であって、原版と同一ではありません。コダックの映写機の資料は、平面と湾曲の映写レンズ、マウント、投影距離、スクリーンの条件を分けて書いています。どちらも、私の経路にはありませんでした。</p>
+<h3>出典</h3>
+<p>『日本アルプスの四季：山岳写真同人〈四季〉写真集』は東京新聞出版局から 1994 年 4 月に刊行されました（国立国会図書館の書誌）。掲載作の内容と原画展については私の記憶です。堀内カラーは 1959 年にカラーフィルムの現像所として創業した会社です（同社の会社概要）。当時の店舗が新橋にあったという部分は、私の記憶です。</p>
+<h3>分かっていないこと</h3>
+<p>この記事で、分からないこととして扱ったものをまとめておきます。私の写真集がどのスキャナーで、何線で、どの紙で刷られたか。原画展のプリントが誰にどう焼かれたか。現像所の回ごとのばらつき。日本の現像所の運用。原版を渡すことがどれくらい普通だったか。日本の写真集や雑誌の当時の線数と紙。原版の細部がプリントや誌面にどれだけ残ったか。ポジを直接見せることがどれくらい行われていたか。私のスキャナーの機種と設定。そして、あの「ボヤボヤ」が何に由来したか。</p>
+<h3>この記事の範囲</h3>
+<p>この記事の資料は、メーカーの技術資料と規格と特許と印刷ガイドの言葉であって、測定値ではありません。私の経験は、日本の山岳写真の、一人のアマチュアの、主にロールフィルムを使った経験です。「完成は額装したプリント」というのは私の考えであって、写真家一般の答えではありません。資料が「経路ごとに残るものが違う」と言うことを、私の経験で「だから写真集は劣る」と言い換えることはできませんし、私の経験を資料で否定することもできません。どちらも、それぞれの層の話として、そのまま置いてあります。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/how-many-megapixels-is-4x5-film">「4×5フィルムは何万画素？」に、一つの答えがない理由</a>
+        <p class="kzc-related-desc">「4×5フィルムは何万画素相当？」に一つの答えはない。同じベルビアの資料でも測定条件で解像力は80と160に分かれ、換算した升目の数は4倍違う。条件を決めれば比べられるが、一つの数字にはならない。1990年に4×5を買い、ベルビアを使っていた私が、その数字の意味を調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/what-did-rich-film-gradation-mean">「フィルムは階調が豊か」とは、何だったのか？</a>
+        <p class="kzc-related-desc">「フィルムは階調が豊か」と言われたとき、写真家は何を見ていたのか。新緑の黄緑から深緑までの途中、新雪の光から陰まで。階調はダイナミックレンジでもビット数でもなく、一つの数字ではなかった。1990年代にポジで撮っていた私が、資料と自分の経験から調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/is-0-03mm-blur-visible-in-print">0.03 mmのボケは、プリントすると本当に見えるのか？</a>
+        <p class="kzc-related-desc">撮影側で0.03 mmまで考えたボケは、プリントするとどうなるのか。プリンタと紙がボケをどれだけ広げるかは条件を置けば桁までは言えるが、「見えるか」は公開データでは決まらない。「あなたの許容錯乱円はいくつ？」の続編。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
