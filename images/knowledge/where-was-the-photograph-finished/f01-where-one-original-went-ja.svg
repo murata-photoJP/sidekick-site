@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 772" width="800" height="772" role="img" aria-labelledby="t"><title id="t">概念図。左に「一枚のポジ原版」。そこから同じ太さの三本の線が右へ出て、三つの箱につながる。上から、審査する（ライトボックスの上で、名前を伏せて）、そのまま見せる（ライトボックスとルーペを持って行く）、出力の元になる（写真集、写真展のプリント）。三つ目の箱の下に、破線で囲んだ別の箱があり、「私にとっての完成」として「プリントして、額装して、部屋に飾る」と書かれ、「原版の役割ではなく、私の考え」と注記されている。順序や優劣を示す図ではない。本サイトの整理。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="42.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">一枚のポジ原版から、写真はどこへ行ったのか</text>
+<rect x="20.0" y="200.0" width="290.0" height="200.0" rx="14" fill="#2b3140" stroke="#ff8a00" stroke-width="2.0"/>
+<text x="165.0" y="266.0" fill="#ff8a00" font-size="30" font-weight="600" text-anchor="middle">一枚の</text>
+<text x="165.0" y="310.0" fill="#ff8a00" font-size="30" font-weight="600" text-anchor="middle">ポジ原版</text>
+<text x="165.0" y="364.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">現像所から戻ったもの</text>
+<line x1="310.0" y1="300.0" x2="350.0" y2="153.0" stroke="#ffb14a" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="350.0" cy="153.0" r="5.0" fill="#ffb14a"/>
+<line x1="310.0" y1="300.0" x2="350.0" y2="307.0" stroke="#ffb14a" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="350.0" cy="307.0" r="5.0" fill="#ffb14a"/>
+<line x1="310.0" y1="300.0" x2="350.0" y2="461.0" stroke="#ffb14a" stroke-width="2.0" stroke-linecap="round"/>
+<circle cx="350.0" cy="461.0" r="5.0" fill="#ffb14a"/>
+<circle cx="310.0" cy="300.0" r="6.0" fill="#ff8a00"/>
+<rect x="350.0" y="86.0" width="430.0" height="134.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="368.0" y="128.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="start">審査する</text>
+<text x="368.0" y="170.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">ライトボックスの上で、</text>
+<text x="368.0" y="206.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">名前を伏せて</text>
+<rect x="350.0" y="240.0" width="430.0" height="134.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="368.0" y="282.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="start">そのまま見せる</text>
+<text x="368.0" y="324.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">ライトボックスとルーペを</text>
+<text x="368.0" y="360.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">持って行く</text>
+<rect x="350.0" y="394.0" width="430.0" height="134.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="368.0" y="436.0" fill="#eef1f8" font-size="30" font-weight="600" text-anchor="start">出力の元になる</text>
+<text x="368.0" y="478.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">写真集</text>
+<text x="368.0" y="514.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">写真展のプリント</text>
+<line x1="410.0" y1="528.0" x2="410.0" y2="578.0" stroke="#8c96aa" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="6 6"/>
+<rect x="350.0" y="578.0" width="430.0" height="140.0" rx="12" fill="none" stroke="#ffb14a" stroke-width="1.8" stroke-dasharray="8 6"/>
+<text x="368.0" y="620.0" fill="#ffb14a" font-size="30" font-weight="600" text-anchor="start">私にとっての完成</text>
+<text x="368.0" y="666.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">プリントして、額装して、</text>
+<text x="368.0" y="702.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">部屋に飾る</text>
+<text x="20.0" y="638.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">原版の役割ではなく、</text>
+<text x="20.0" y="674.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">私の考え</text>
+<line x1="20.0" y1="732.0" x2="780.0" y2="732.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="756.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">順序や優劣を示す図ではない。本サイトの整理。</text>
+</g>
+</svg>
