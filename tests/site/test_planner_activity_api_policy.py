@@ -74,7 +74,7 @@ def test_no_third_party_analytics_or_outbound_calls() -> None:
         assert marker not in CODE, marker
 
 
-# ---------------------------------------------------------------- cleanup（HD-PLANNERACTIVITY-012、AI-6215）
+# ---------------------------------------------------------------- cleanup（HD-PLANNERACTIVITY-012、AI-6217）
 
 def test_cleanup_only_touches_the_raw_event_collection() -> None:
     """削除するのは planner_activity_events だけ。daily / totals の名前が cleanup の code に無い。"""

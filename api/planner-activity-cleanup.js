@@ -1,4 +1,4 @@
-// Sidekick Planner Activity raw event の定期 cleanup（HD-PLANNERACTIVITY-012、2026-09-19、AI-6215）
+// Sidekick Planner Activity raw event の定期 cleanup（HD-PLANNERACTIVITY-012、2026-09-19、AI-6217）
 //
 // Firestore TTL は Blaze（billing）前提で β1.00 では使わない。代わりに Vercel Cron（Hobby、1 日 1 回、
 // vercel.json の crons）がこの endpoint を GET し、`planner_activity_events` のうち

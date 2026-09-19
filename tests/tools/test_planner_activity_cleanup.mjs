@@ -1,4 +1,4 @@
-// api/planner-activity-cleanup.js の contract test（HD-PLANNERACTIVITY-012、AI-6215）。
+// api/planner-activity-cleanup.js の contract test（HD-PLANNERACTIVITY-012、AI-6217）。
 // firebase-admin を in-memory の fake に差し替えて、「expire_at <= now だけ」「500 件単位」「冪等」
 // 「aggregate に触れない」「secret 無しは動かない」を固定する。
 //   node --test tests/tools/test_planner_activity_cleanup.mjs
