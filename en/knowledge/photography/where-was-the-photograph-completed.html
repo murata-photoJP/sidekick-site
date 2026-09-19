@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where Was the Photograph Finished? | Knowledge - Sidekick</title>
+<meta name="description" content="From one transparency came an exhibition print and a photo book; to me they did not look the same. Where was the photograph finished? 1990s sources and my path.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/where-was-the-photograph-completed">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/where-was-the-photograph-finished">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/where-was-the-photograph-completed">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/where-was-the-photograph-finished">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/where-was-the-photograph-finished" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Where Was the Photograph Finished?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Where Was the Photograph Finished?</h1>
+    <p class="kzc-article-lead">From one transparency came an exhibition print and a photo book; to me they did not look the same. Where was the photograph finished? 1990s sources and my path.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-19">Updated: 2026-09-19</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>— From one and the same transparency came the exhibition print and the photo book. To me, they did not look the same.</p>
+<h2>From One Transparency Came an Exhibition Print and a Photo Book</h2>
+<p>Up to the previous article, I wrote about how the image the lens made ended up on the film. This article is about what came after that. The original transparency that came back from the lab — where did it go?</p>
+<p>In 1994, the mountain-photography group I belonged to published a photo book: <em>Nihon Arupusu no Shiki</em> (Tokyo Shimbun Shuppankyoku). One of my photographs was in it. A 6×9 transparency shot on Velvia. Connected with the same book, there was also an exhibition of original prints. What I handed to the publisher was a single original — one transparency. I think I put it in a sleeve. The practical work was handled by the group's exhibition committee, so what happened from there — how the book was made, who printed the exhibition prints and how — I do not know. The original came back. So did the print that had been exhibited.</p>
+<p>Which means I ended up with three things made from one and the same original, side by side in my hands. The original transparency itself. The exhibition print. The page of the photo book. Did they look the same? They did not. My honest reaction at the time was: “Huh. So a photo book really is lower quality.”</p>
+<p>This is not a claim that photo books of the time were low quality in general. It is my judgement, made by looking with my own eyes at several outputs made from my own original. What changed, and where, I cannot say. I never touched the process.</p>
+<p>But the experience left me with a question. Even if the original is at its best, it does not follow that the print or the printed page will look the same. So where, then, was that photograph finished? In the original? In the print? On the page? This article walks through that question in the order of the roles the original played.</p>
+<h2>Let Me Give the Answer Here</h2>
+<p>The photograph was not finished in any one place.</p>
+<p>Here is what the sources can say. In the 1990s, an original transparency was a thing to be viewed directly on a light table, and at the same time an intermediate to be handed to prepress. The lab, the scan, the color separation, the halftone, the paper — each was a controlled process, and what remains differs from path to path. On no path is the full performance of the original used as it is, and on no path does it become meaningless either. How much was taken away, and where, the sources do not say. This article does not say it either.</p>
+<p>Here is what I can say. The original was a thing to be judged, a thing to show people, and the source of the prints and the photo book. Even so, the finished photograph, for me, was not the original. Printed, framed, hung on the wall — finished. That is still true today. That does not mean the original was not needed. Without the original, nothing would have started.</p>
+<h2>On the Light Table, the Original Was the Work</h2>
+<p>Whether a transparency passed or failed, I decided on the light table — I wrote that in <a href="/en/knowledge/photography/why-was-the-original-velvia-used-as-a-high-quality-film">the previous article</a>. I weeded them out there, and only then handed them on to be printed or to a publisher. The assessment made on the original I never changed at any later output. How I looked at an original through a loupe is as I described in <a href="/en/knowledge/photography/what-is-your-circle-of-confusion">the article on the circle of confusion</a>.</p>
+<p>The original was not something only I looked at. The mountain-photography group I belonged to, Shiki, had a monthly competition. Every month a judge came, it was run as a contest, and entries were ranked down to tenth place. The judging was done with the original transparencies laid on a light table. Titles were given, but names were withheld. So that the judging would not be swayed by who had made the picture — that is my understanding. I do not know the official reason for the rule. In any case, as a result, several entries from one photographer could place. In my early days in the group, I was not chosen very often.</p>
+<p>It was the same when showing people. Either I showed a print, or I brought a light table and a loupe and showed the original itself. A slide projector I used a little in the early days, when I was still shooting 35mm, but it was a nuisance and I soon gave it up. For me, the original was also a thing to show.</p>
+<p>On the sources' side, viewing a transparency directly was a properly defined path. A 1996 Fujifilm document on duplicating film says that how a transparency looks depends on the quality and brightness of the viewing light, and goes as far as specifying a 5000 K light source, its brightness and its uniformity. A 1975 ISO standard defines viewing conditions for looking at transparencies directly and for comparing them with printed matter. An original on a light table was treated, in the sources too, as something to be looked at in its own right. What the sources do not say is how many photographers of the time showed or handed over the original itself.</p>
+<h2>The Lab as a Process</h2>
+<p>Before an original reached the light table, there was the lab.</p>
+<p>From the sources. E-6, the standard process for transparency film, is written up as a controlled image-forming process. Kodak's literature for pro labs specifies the first-developer time to the second and its temperature to a tenth of a degree, and tells the lab to read control strips on a densitometer and to stop processing customers' film if the readings go outside the set limits. Processing was not simply a stage that degraded the image; it was a controlled stage. What the sources do not say is how closely Japanese labs actually ran to that, or how much variation there was from run to run.</p>
+<p>From my side. I had my transparencies processed mainly at Horiuchi Color, in Shimbashi at the time. Normal processing, as a rule. I did occasionally ask for a push or a pull, but very rarely — hardly ever. The transparencies that came back I looked at on a light table in the company dormitory I was living in.</p>
+<p>And I do not recall ever feeling that the color or density differed from one run to the next, or from one shop to another. To be exact: I could not tell them apart. That is not proof that there was no difference. Nor is it a story of my adjusting exposure or color in anticipation of lab variation. I did not notice a difference. That is all.</p>
+<h2>Handing Over the Original; the Print and the Book Come Back</h2>
+<p>Back to the photo book.</p>
+<p>What I handed to the publisher was a single original, and nothing else. I never made a duplicate — not myself, and not by asking a lab. I had no reluctance about handing an original over to a publisher or anyone else. At the time, I believed that handing over the original was simply the normal way. That is what I believed; how common it was across the industry I do not know. On the sources' side, too, there is a Fujifilm document that lists handing an original over for color separation among its uses, and a 1995 case in which a prepress house received a 4×5 original and scanned it. How common that was, I do not know.</p>
+<p>The photo book that came back did not, to me, look the same as the original. The exhibition print, too, looked like a different thing from the original. In <a href="/en/knowledge/photography/what-did-rich-gradation-in-film-mean">the article on “gradation”</a> I gave my own ranking — the original transparency, the direct print, the photo book — and one of the experiences behind it was this book.</p>
+<p>Let me say it once more. The prepress and printing of the photo book, and the prints for the exhibition — I had no hand in any of it. So I cannot say from my experience what was lost — resolution, gradation, color, the halftone. What I can say is only that things made from the same original did not look the same to me.</p>
+<p>What came later, when I began having exhibition prints made at a pro lab myself — how I placed the order and how I looked at the finished prints — I wrote about in <a href="/en/knowledge/photography/can-you-really-see-a-0-03-mm-blur-in-a-print">a separate article</a>. I will not repeat it here.</p>
+<h2>What Can Change on the Way to the Printed Page</h2>
+<p>Let me look, from the sources' side, at the part I could not see. Between the original and the printed page there are several stages.</p>
+<p>First, the scan. Among the high-end prepress scanners of the 1990s there were drum scanners, which read an original mounted on a drum with photomultiplier tubes. In the literature there are models said to read at 10,000 to 18,000 samples per inch. But that figure is the fineness of the sampling grid, not the amount of detail actually captured. The scanning aperture — the opening that admits the light — its size, the enlargement ratio, and the sharpening — unsharp masking, a process that strengthens edges — each acts as a separate quantity. A 1998 patent from a prepress-equipment maker treats the original, the scanner's lens, the aperture, the enlargement, the monitor and the output as separate elements, and describes sharpening as something that can be built into the scanner itself.</p>
+<p>Next, the color separation. The scanned image is separated into cyan, magenta, yellow and black plates. A person corrects the color and the density.</p>
+<p>Next, the halftone. Printing makes its tones out of the size of dots. Adobe's 1995 printing guide gives as examples 85 lines per inch (lpi) for newspapers and 133 lpi for magazines on coated paper. Examples, not the standard of the time. The same guide also carries a case in which a 4×5 original was scanned and printed at 200 lpi.</p>
+<p>And then the paper, the ink and the registration of the plates, and finally the page size, the lighting and the viewing distance. The fineness of the halftone, the spread of the ink, the absorbency of the paper, the misregistration of the plates — each changes a different component of resolution, gradation and color. No single stage decides everything, nor does the weakest stage alone decide the final look, because correction and sharpening remake the image along the way.</p>
+<p>Which scanner my photo book was scanned on, at how many lines per inch it was printed, on what paper — I do not know. So this article does not say “what was lost in the photo book.” What it can say is only that there are this many stages at which things can change.</p>
+<p>One more thing, in passing. When making a page or a print of the same size, the larger the original, the smaller the enlargement ratio. One of the advantages of large format lies here. But that is not to say “large format is always better.” I wrote about that in <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">the article “How Many Megapixels Is 4×5 Film?”</a>.</p>
+<h2>Neither Duplication nor Projection, in My Case</h2>
+<p>In the sources there are two more outputs for an original: making a copy of it on duplicating film, and projecting it with a slide projector. Both Fujifilm and Kodak made duplicating film, and claimed that color and gradation could be held over several generations of copies. That is a claim in the literature, not proof of a lossless copy. On the projection side, too, there are documents that spell out the conditions of projection lenses and screens.</p>
+<p>Neither was on my path. I never made a duplicate. Projection, as I said above, I tried a little in the early 35mm days and gave up. If I was going to show someone, it was the original itself, or a print.</p>
+<h2>Where Was the Photograph Finished?</h2>
+<p>Let me line up what I have written so far by role.</p>
+<p>The original was a thing to be judged. On a light table, names withheld, it was ranked. The original was a thing to show. I brought a light table and a loupe and showed it as it was. The original was the source. Hand over one, and an exhibition print and a photo book came into being, and the original came back. And the finished photograph, for me, was the framed print.</p>
+<p>Printed, framed, hung on the wall — finished. That is still true today.</p>
+<p><img src="/images/knowledge/where-was-the-photograph-finished/f01-where-one-original-went-en.svg" alt="Conceptual map. On the left, one original transparency. Three lines of the same weight fan out to the right into three boxes: judged (on a light table, names withheld); shown as it is (bringing a light table and a loupe); the source of outputs (the photo book, the exhibition prints). Below the third box, a separate dashed box reads &quot;finished, to me&quot; -- &quot;printed, framed, hung on the wall&quot; -- with the note &quot;not a role of the original; my own view&quot;. Not a sequence and not a ranking. This site's own drawing." /></p>
+<p>Fig. 1: Where did the photograph go from one original transparency? The original was judged, shown as it was, and became the source of the photo book and the exhibition prints. The dashed box is what was finished, to me — printed, framed, hung on the wall — my own view, not a role of the original. Not a sequence and not a ranking. This site's own drawing.</p>
+<p>The sources do not say that. What the sources can say is only that an original can be a thing viewed directly and an intermediate for prepress, and that what remains differs from path to path. The question of where a photograph is finished is not in the sources. So the second half of this answer is my own view. It is not a statement about photographers in general.</p>
+<p>Nor does it mean the original was not needed. The judging, the showing, the prints and the photo book — none of it would have started without the original. My original transparencies are, even now, basically sorted and kept — at the back of a closet, not easy to get at.</p>
+<h2>In Time, the Original Was Scanned</h2>
+<p>Later, the original gained one more output.</p>
+<p>When the internet began to spread and I thought of making my own website, I needed to turn my transparencies into digital files. So I bought an Epson scanner, top of the range at the time. My impression on seeing the scanned image was: “It's all fuzzy.” At the time I had no idea at all that a scan needs sharpening — unsharp masking — afterwards.</p>
+<p>From the sources' side, this is no surprise. A scanner's maximum resolution is a matter of the sampling grid, not of the amount of detail captured. Sharpening is a separate step — sometimes built into the scanner, sometimes applied by a person afterwards. But whether that fuzziness was the original, the scanner, or my own ignorance, I could not tell at the time.</p>
+<p>What came next — not the output side, but the move of everything, shooting included, to digital — is for the next article.</p>
+<h2>For Those Who Want to Go a Little Deeper</h2>
+<p>The conclusions this article needs are complete above. What follows is supporting detail for those who want it — the grounds for things kept short in the main text, and the things that are not known. There are no new claims.</p>
+<h3>What the Lab Controlled</h3>
+<p>Kodak's literature for pro labs (Q-LAB) specifies the E-6 first developer at 38 °C ±0.2 °C for 6 minutes 00 seconds ±5 seconds, has the control strips read on a Status A transmission densitometer, and sets control limits on each of minimum density, low density, high density and maximum density (in the 1997 edition, for example: D-min +0.05, LD ±0.10, HD ±0.15, D-max −0.25). Control strips are to be read at least three times per shift, and if the color balance goes out of control, customers' film is to be stopped. These are the control limits of the process, not the actual distribution of variation between labs. Push and pull are deliberate variants of the process, and no universal rule of the form “a one-stop push loses this much resolution” was found in the sources. How Japanese labs actually operated is not known.</p>
+<h3>A Scanner's “Maximum ppi” and the Detail Captured Are Different Quantities</h3>
+<p>Linotype-Hell literature from around 1994 lists drum models at 10,000 ppi and 18,540 ppi alongside a CCD model at up to 8,000 ppi, and claims a density range of 4.2. SCREEN's DT-S1045AI claims up to 8,000 dpi, three photomultiplier tubes, 3.9D and 16 bits, while leaving aperture selection, the degree of sharpening, manual color and tone correction, profiles and output format as operator settings. Crosfield's 1998 patent treats the MTF of the original, the scanner's lens, the physical aperture, enlargement and editing, the monitor and the output separately. Input ppi, output ppi, aperture, interpolation, enlargement ratio, halftone screen ruling and effective resolution are all different quantities. Nor does the division “PMT is always high resolution, CCD always low” hold in the sources.</p>
+<h3>Halftone and Paper: 133 lpi Is an Example</h3>
+<p>Adobe's 1995 printing guide says the screen ruling is set by the resolution of the output device, the paper and the press, and gives 85 lpi for newspapers and 133 lpi for four-color printing on coated paper as examples. The same guide's formula for the nominal number of gray levels is (output dpi ÷ screen ruling)² + 1: at 1200 dpi, about 178 levels at 90 lpi and about 48 at 175 lpi. That is the number of cells inside one halftone dot, not the number of tones actually produced on press, nor the resolution of a continuous-tone image. The SWOP and CGATS characterization data are measurements under specific conditions of publication printing in the United States. Representative figures for the screen rulings and papers on which Japanese photo books and magazines were printed at the time were not recovered in this research.</p>
+<h3>“Handing Over the Original” in the Sources</h3>
+<p>Fujifilm's 1996 document on duplicating film lists, alongside viewing the original directly, the uses of duplicates for color separation and for phototypesetting. Adobe's 1995 printing guide carries a case in which a prepress house received a 4×5 original transparency, scanned it on a Scitex and printed it at 200 lpi. One case, not the share of the market at the time.</p>
+<h3>Duplication and Projection as Paths</h3>
+<p>Fujifilm's CDU II and Kodak's EDUPE are films for making same-size, reduced or enlarged duplicate transparencies from an original; they specify the light source, exposure, filtration and processing, and claim that color and gradation are held in the duplicate. That is the addition of a new process, not identity with the original. Kodak's projector literature treats flat-field and curved-field projection lenses, mounts, projection distance and screen conditions separately. Neither was on my path.</p>
+<h3>Sources</h3>
+<p><em>Nihon Arupusu no Shiki</em> — the photo book of the mountain-photography group Shiki — was published by Tokyo Shimbun Shuppankyoku in April 1994 (National Diet Library record). What was in the book, and the exhibition of original prints, are my memory. Horiuchi Color is a company founded in 1959 as a color-film processing lab (company profile). That the shop was in Shimbashi at the time is my memory.</p>
+<h3>What Is Not Known</h3>
+<p>Here, together, are the things this article has treated as not known. On which scanner my photo book was scanned, at what screen ruling and on what paper it was printed. Who printed the exhibition prints, and how. The run-to-run variation of the lab. How Japanese labs operated. How common it was to hand over the original. The screen rulings and papers of Japanese photo books and magazines at the time. How much of the original's detail survived into the print or the printed page. How often transparencies were shown directly. The model and settings of my scanner. And what that “fuzziness” came from.</p>
+<h3>The Scope of This Article</h3>
+<p>The sources for this article are the words of manufacturers' technical literature, standards, patents and printing guides, not measurements. My experience is that of one amateur in Japanese mountain photography, mostly on roll film. “The finished photograph is the framed print” is my own view, not the answer of photographers in general. I cannot turn what the sources say — “what remains differs from path to path” — into “so a photo book is inferior” on the strength of my experience, nor can my experience be refuted by the sources. Both are left standing as they are, each on its own layer.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">How Many Megapixels Is 4×5 Film? Why There Is No Single Answer</a>
+        <p class="kzc-related-desc">How many megapixels is 4×5 film? There is no single answer. The same Velvia data sheet lists 80 and 160 lines/mm depending on test contrast — four times apart as a cell count. Comparison is possible once the conditions are set, but not as one number. I bought a 4×5 in 1990 and shot Velvia.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/what-did-rich-gradation-in-film-mean">What Did “Rich Gradation” in Film Really Mean?</a>
+        <p class="kzc-related-desc">“Rich gradation” in film was not dynamic range, and not bit depth. The Japanese word carried several questions at once. From what I saw in new leaves and fresh snow on transparencies in the 1990s, and from the technical literature, here is what it meant.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/can-you-really-see-a-0-03-mm-blur-in-a-print">Can You Really See a 0.03 mm Blur in a Print?</a>
+        <p class="kzc-related-desc">Once enlarged, a 0.03 mm blur is widened again by the printer and paper — an amount you can bound if the conditions are fixed. Whether a viewer sees it is not decided by the published data.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
