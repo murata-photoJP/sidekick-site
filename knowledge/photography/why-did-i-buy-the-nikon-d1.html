@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>フィルムの方がまだ高画質だった。それでも私はD1を買った｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="1999年秋に65万円で出たニコンD1。当時の私は、きちんとプリントしたフィルムの方がまだ上だと思っていた。それでも山のポジをスキャンして知人のD1と同じレーザーでA4に出したとき、私の経路は変わった。資料と私の経験から書きます。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/why-did-i-buy-the-nikon-d1">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">フィルムの方がまだ高画質だった。それでも私はD1を買った</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">フィルムの方がまだ高画質だった。それでも私はD1を買った</h1>
+    <p class="kzc-article-lead">1999年秋に65万円で出たニコンD1。当時の私は、きちんとプリントしたフィルムの方がまだ上だと思っていた。それでも山のポジをスキャンして知人のD1と同じレーザーでA4に出したとき、私の経路は変わった。資料と私の経験から書きます。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-20">更新日：2026-09-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――同じ被写体で比べたわけではない。それでも、私が通った経路は、あの日から変わった。</p>
+<h2>100 万円を用意して、D1 を買った</h2>
+<p><a href="/knowledge/photography/where-was-the-photograph-finished">前の記事</a>は、ポジの原版をホームページ用にスキャンしたところで終わりました。スキャンした画像は「ボヤボヤ」で、それが原版のせいなのか、スキャナーのせいなのか、私の無知なのか、当時の私には切り分けられなかった。この記事は、その続きです。撮る側まで含めて、全部がデジタルへ移った話。</p>
+<p>2000 年になるかならないかのころ、私はニコンの D1 を買いました。ボディだけで 65 万円。レンズも、バッテリーも、RAW を扱うソフトも、記録メディアも要ります。必要なものを調べて、お金を用意して、全部で 100 万円を超えました。現金で払いました。</p>
+<p>周囲からは、そんなオモチャに 100 万円も出すなんて、というようなことをずいぶん言われました。私の周囲では、D1 をまだ「オモチャ」のように見る人も少なくありませんでした。</p>
+<h2>それでも、フィルムの方がまだ上だと思っていた</h2>
+<p>ここで先に言っておきます。私は、D1 の方がフィルムより高画質だと思って買ったのではありません。</p>
+<p>でも、フィルムをきちんとプリントすれば、この時点ではまだフィルムの方が上だと思っていました。</p>
+<p>では、なぜ買ったのか。この記事は、その問いに答えます。</p>
+<h2>ここで一度、答えを出します</h2>
+<p>私が比べたのは、フィルムの性能と D1 の性能ではありませんでした。私が実際に通っていた経路と、知人が実際に通っていた経路を、同じ出口で比べたのです。</p>
+<p>私の側から言えることは、こうです。私の経路——ポジを現像に出し、受け取り、スキャンし、ゴミと傷を一つずつ取り、A4 に出す——と、知人の経路——D1 で撮り、転送し、同じ A4 に出す——を並べたとき、知人の出力の方がシャープで、ゴミも傷もなく、私が 1 週間ほど見ておきたかった作業が、数分で終わっていました。だから私は、デジタルは確実にフィルムに追いつくし、追い抜く可能性がある、と見ました。フィルムの方がまだ上だと思ったまま、D1 を買ったのです。</p>
+<p>資料の側から言えることは、こうです。D1 は 1999 年 6 月に発表され、9 月末に発売されました。カメラの中で JPEG を作れたので、専用のソフトを通さずに画像を扱えました。報道の現場では、現像と電送にかかっていた時間が消えることが価値でした。一方で、スキャナーの公称の細かさは読み取れた細部の量ではなく、シャープネス処理は別の工程で、私が使っていたころのエプソンのフラットベッドスキャナーには、ゴミや傷を自動で消す機能はありませんでした。そして、どの経路でどれだけ画質が変わったのかは、資料からは分かりません。この記事でも、それは言いません。</p>
+<h2>比べたのは、山のポジと、東京の街の D1 だった</h2>
+<p>知人が D1 を買った、と聞いて、フィルムをスキャンしたデータと D1 のデータのどちらが綺麗か、という話になりました。</p>
+<p>はっきり書いておきます。これは比較テストではありませんでした。私は自分の部屋で、自分の山の写真——たぶん 6×9 か 6×12 のベルビアです——をスキャンして、そのファイルを持って行きました。知人の D1 の写真は、二人で東京の街を歩きながら、知人が撮ったものです。被写体が違い、撮る人が違います。知人が付けていたレンズも、JPEG で撮ったのか RAW だったのかも、覚えていません。</p>
+<p>同じだったのは、出口です。知人の事務所——小さな出版社でした——にあった業務用のカラーレーザープリンターで、両方を A4 に出しました。機種は覚えていません。</p>
+<p>比較前の私は、「絶対自分の方が綺麗」と思っていました。結果は、そうではありませんでした。</p>
+<h2>スキャンは、ボヤボヤで、ゴミだらけだった</h2>
+<p>D1 の出力の方が良く見えた点は、二つです。一つは、シャープさ。もう一つは、ゴミと傷が無いこと。</p>
+<p>私のスキャン画像は、前の記事に書いたとおり「ボヤボヤ」でした。今から振り返れば、使える状態にするには強いシャープネス処理が要るような、輪郭の立たない見え方です。当時の私には、なぜそう見えるのかが分かりませんでした。今も、私のあのスキャンについて、原因がどれだったかは分かりません。</p>
+<p>資料の側から言えることは、こう書けます。スキャナーの「1 インチあたり何点」という数字は、取り込みの升目の細かさであって、読み取れた細部の量ではありません。このことは<a href="/knowledge/photography/how-many-megapixels-is-4x5-film">「4×5 は何万画素？」の記事</a>に書きました。そのうえで、レンズ、ピント、ガラス面、フィルムの平面性——いくつもの要因で、スキャンは原版より眠く見えることがあります。眠く見えたからといって、原版の情報が少なかったことにはなりません。</p>
+<p>ゴミと傷の方は、もっと単純でした。フィルムの面に付いているものは、そのまま像として写ります。私はそれを、一つずつ手で消していました。使えるファイルになるまでに、それだけの手間がかかりました。</p>
+<h2>「アンシャープネス？ それって、シャープネスを落とすフィルター？」</h2>
+<p>スキャンしたあとにシャープネス処理が要ることを、当時の私はまったく知りませんでした。</p>
+<p>レタッチソフトのメニューに「アンシャープマスク」という項目があるのは見ていました。本当にこう思っていました。アンシャープネス？ それって、シャープネスを落とすフィルター？</p>
+<p>名前のせいです。アンシャープマスクは、暗室の技法から来た言葉です。原版に、わざとぼかした——アンシャープな——マスクを重ねて焼くと、大きな明暗は打ち消し合い、細かい輪郭だけが相対的に強調される。「アンシャープ」なのはマスクの方で、結果はシャープになります。デジタルのソフトも同じ原理で、ぼかした複製との差分を足して輪郭を強めます。</p>
+<p>ただし、シャープネス処理が取り戻すのは、途中の工程で弱くなった輪郭の見え方です。原版に無かった細部を作ることはできません。私のスキャンが眠く見えたことは、原版に細部が無かったことの証明にはなりません。私がシャープネス処理という工程を知らなかったことも、要因の一つだったはずです。どの要因がどれだけだったかは、分かりません。</p>
+<h2>同じ A4 のカラーレーザーで、何が分かって、何が分からなかったか</h2>
+<p>もう一つ、はっきりさせておきます。事務用のカラーレーザープリンターの A4 出力は、写真の最終的な画質を測る場ではありません。</p>
+<p>カラーレーザーは、トナーの点で濃淡を作ります。連続階調のプリントではなく、細部も階調も、プリンターの側で決まる範囲に収まります。同じプリンターに両方を通したので、差の見当は付きました。知人のものは、当時の私の言葉で言えば、アタリを付けるには十分でした。しかしそれは、フィルムの最大の画質でも、D1 の最大の画質でもありません。</p>
+<p>あの日、私は知人の出力の方が綺麗だと思いました。しかしそれを「D1 の方が高画質だ」という結論にはしませんでした。私が出した結論は、「私の経路では、D1 の経路に勝ち目がない」でした。</p>
+<h2>一週間が、数分になった</h2>
+<p>勝ち目がない、の中身は、画質だけではありませんでした。</p>
+<p>私の経路は、こうです。撮ったフィルムを現像に出す。受け取りに行く。スキャンする。ゴミと傷を一つずつ取る。データを整えて、使う。私はこの経路に、少なくとも 1 週間ほどは見ておきたかった。これは私の見積もりで、誰かが測った数字ではありません。</p>
+<p>知人の経路は、こうです。D1 で撮る。画像を転送する。ほぼそれで終わり。私の記憶では、数分でした。</p>
+<p>比較のあと、私はすぐに動きました。1〜2 か月というのは、迷っていた期間ではありません。初めて D1 を見てから、何が要るか——レンズ、バッテリー、RAW 現像のソフト、その他の機材——を調べて、お金を用意して、手元に来るまでにそれだけかかった。私としては、できるだけ早く買ったつもりです。</p>
+<p><img src="/images/knowledge/why-did-i-buy-the-nikon-d1/f01-two-paths-i-took-ja.svg" alt="概念図。左右に二つの縦の経路。左「私が通った経路（フィルム）」は、Velvia 6×9 / 6×12 で撮る（記憶）→ 現像に出す → 受け取る → スキャン（フラットベッド＋透過ユニット）→ ゴミ・傷を一つずつ取る、の五段。右「知人が通った経路（D1）」は、D1 で撮る（知人が、東京の街で）→ データを転送する、の二段。両方の経路は同じ太さの線で下の一つの箱「同じ A4 のカラーレーザーで出力（事務用、機種は不明）」につながる。注記：画質比較の実験図ではありません。当時、私が実際に通った二つの経路です。被写体も撮る人も違う（山のポジ／東京の街）。段の数と種類を示す図で、優劣の矢印ではない。本サイトの整理。" /></p>
+<p>図1：当時、私が実際に通った二つの経路。左はフィルム——Velvia 6×9 / 6×12 で撮る（記憶）、現像に出す、受け取る、スキャンする、ゴミと傷を一つずつ取る。右は D1——知人が東京の街で撮る、データを転送する。どちらも同じ事務用の A4 カラーレーザー（機種は不明）で出力した。段の数と種類を示す図で、優劣の矢印ではない。画質比較の実験図ではなく、被写体も撮る人も違う。本サイトの整理。</p>
+<h2>1999 年の D1 は、何だったのか</h2>
+<p>ここで、資料の側から D1 を置いておきます。</p>
+<p>ニコン D1 は 1999 年 6 月 15 日に発表され、9 月末に発売されました。ボディの標準価格は 65 万円。当時のフラッグシップのフィルム一眼レフ F5 の 2 倍で、それまでのプロ用デジタル一眼レフが数百万円だったことを考えると、その数分の一の価格でした。画像は 2,000×1,312 ピクセル。JPEG をカメラの中で作れ、TIFF と 12 ビットの RAW も選べました。RAW を扱うには別売のソフトが要りました。</p>
+<p>ニコン自身の回顧では、D1 の価値がいちばんはっきり出たのは報道の現場です。フィルムの現像と電送にかかっていた時間が消え、撮った場で確認でき、締め切りぎりぎりまで撮れる。同じ回顧は、初期の D1 のノイズを弱点として挙げています。ノイズと光の量の関係は、<a href="/knowledge/photography/does-higher-iso-increase-noise">「ISO を上げるとノイズが増える」の記事</a>に書いたとおりです。</p>
+<p>私は報道写真家ではありません。山を撮り、作品を作る側です。それでも、私が知人の事務所で見たものは、報道の現場で起きていたことと同じ種類のものでした。最大の画質の勝負ではなく、経路の勝負です。</p>
+<h2>追いつく、と思った</h2>
+<p>ここまでを、まとめ直します。</p>
+<p>フィルムの方がまだ上だった。整理すると、こうなります。フィルムはまだ勝てた。しかし、勝ち続けられるとは思えなくなった。——これは、この連載の側の言い方です。当時の私の言葉に近い形で言えば、こうです。デジタルは確実にフィルムに追いつくし、追い抜く可能性がある。これは、あのときそう見た、ということを、今の私が言い直したものです。</p>
+<p>「D1 がフィルムに勝った」とは、当時も今も思っていません。あの比較は、被写体も撮る人も違い、出口は事務用のプリンターでした。それでも、経路の差は、それだけの条件でも十分に見えました。</p>
+<p>D1 を買ったあとも、フィルムはすぐには消えませんでした。1 年ほどは、4×5 と、6×9 や 6×12 と、D1 を並行して使っていました。ある日を境にフィルムを捨てた、という話ではありません。</p>
+<h2>画質を決める場所が、動き始めた</h2>
+<p>最後に、この出来事を、この連載の見方で置き直します。</p>
+<p>フィルムの経路では、画質を管理する場所が、撮影のあとにいくつもありました。現像所、原版そのもの、スキャン、ゴミ取り、出力。<a href="/knowledge/photography/where-was-the-photograph-finished">前の記事</a>に書いたとおり、原版は写真集の元にも写真展のプリントの元にもなり、経路ごとに残るものが違いました。</p>
+<p>D1 の経路では、そのうちのいくつかが消え、いくつかが別の場所へ移りました。現像所は要らなくなり、原版という物が要らなくなり、スキャンとゴミ取りが要らなくなった。代わりに、センサーと、カメラの中の処理と、RAW 現像と、モニターと、デジタルの出力が、画質を決める場所になりました。私の感覚で言えば、フィルムが RAW 現像ソフトに置き換わったようなもので、プロラボがやっていたところを自分がやらないといけない。それが、ここで始まったことです。</p>
+<p>「画質を決める場所が動いた」というのは、この連載の整理の仕方であって、当時そういう言葉があったわけではありません。デジタルになって画質の管理が消えたのではなく、場所が変わった。それが、この記事の答えの、資料の側の言い方です。</p>
+<p>では、撮る側までデジタルになったとき、画質はどこで決まるようになったのか。レンズはそのままなのに、レンズに求められるものは変わりました。それは次の記事で書きます。</p>
+<h2>ここから先は、もう少し詳しく知りたい人へ</h2>
+<p>この記事で必要な結論は、ここまでで完結しています。ここから先は、本文で短く済ませたところの根拠と、分かっていないことを、もう少し細かく見たい人への補足です。新しい主張はありません。</p>
+<h3>D1 の記録形式と、当時の評価</h3>
+<p>D1 の記録形式は、圧縮率の違う 3 段階の JPEG、RGB と YCbCr の TIFF、12 ビットの RAW です。記録メディアはコンパクトフラッシュ（Type II）で、本体には付属しませんでした。IEEE1394 で接続し、RAW を扱うには別売のソフト「Nikon Capture」（5 万円）が要りました。発表時の専門誌の評は、カメラの中で JPEG を作れるため「ごく普通のデジタルカメラと同じ感覚でデータが扱える」点を、それまでの業務用機——独自形式で記録し、パソコン側で専用ソフトを通す必要があった——との違いとして挙げています。知人が比較に使った画像が JPEG だったか RAW だったかは、分かりません。</p>
+<h3>スキャナーの公称の細かさと、眠さについて（一般論）</h3>
+<p>製版用のスキャナーについては、取り込みの細かさ（ppi）、読み取りの開口、拡大率、シャープネス処理が別々の量であることを前の記事の補足に書きました。消費者向けのフラットベッドスキャナーに透過原稿ユニットを付けて 6×9 や 6×12 を読む場合も、同じことが当てはまります。加えて、レンズと CCD の解像、ピント面とフィルムの位置のずれ、フィルムの反り、ガラス面での散乱、スキャナー側のシャープネス処理の有無が、それぞれ輪郭の見え方に効きます。私のスキャナーの機種名、設定、ソフトの既定のシャープネスがどうだったかは、覚えていません。だから私のあの「ボヤボヤ」がどの要因によるものだったかは、この記事では特定しません。</p>
+<p>私のスキャナーについて覚えているのは、エプソンのフラットベッドで、透過原稿ユニットを付け、SCSI で接続し、20〜30 万円ほどした、当時のエプソンの最高級クラスだった、ということです。買ったのは 1997 年か 98 年ごろで、D1 を見た時期より前です。多数のソフトが付いていました。</p>
+<h3>アンシャープマスクの由来</h3>
+<p>アンシャープマスクは、暗室で原版に、わざとぼかした低コントラストのマスクを重ねて焼く技法が起源です。マスクがぼけているので、大きな明暗はマスクと原版で打ち消し合い、細かい輪郭の情報だけが残って、プリントの鮮鋭感が上がる。デジタルのアンシャープマスクは、ぼかした複製との差分を元画像に足す処理で、量・半径・しきい値で制御します。スキャンした画像に使うのが慣用で、掛けすぎると輪郭に縁取りが出たりノイズが増えたりします。取り戻せるのは工程で弱くなった輪郭のコントラストであって、原版に無い細部を作る処理ではありません。</p>
+<h3>ゴミと傷、自動除去の時期</h3>
+<p>フィルムの面のゴミ、傷、カビ、指紋は、透過光を遮ったり散らしたりするので、スキャンではそのまま像になります。これを自動で検出して補正する機能は、消費者向けでは 1998 年 4 月発売のニコンのフィルムスキャナー LS-2000（35mm と APS、198,000 円）が初期の例で、キズ・ホコリ・カビ・指紋を検知して自動補正する機能を載せていました。のちに「Digital ICE」の名で知られる方式です。エプソンのフラットベッドスキャナーにこの機能が載ったのは 2003 年 10 月の GT-X800 が最初です。私が使っていた 1997〜2000 年ごろのエプソンのフラットベッドには、この種の自動除去はありませんでした。手で一つずつ消していたのは、そのためです。</p>
+<h3>事務用のカラーレーザーについて</h3>
+<p>事務用のカラーレーザープリンターは、トナーの点の大きさや配置で濃淡を作る方式で、連続階調の写真プリントとは別のものです。細部と階調は、点の細かさと、プリンター側の色変換と、紙で決まります。同じプリンターに二つの画像を通せば相対の差の見当は付きますが、その差はプリンターの限界に条件づけられたものです。知人の事務所のプリンターの機種、解像度、用紙は覚えていません。</p>
+<h3>出典</h3>
+<p>ニコン D1 の発表日・発売時期・価格・記録形式・記録メディア・インターフェイス・別売ソフトは、1999 年 6 月 15 日の発表を伝えた専門誌の記事と、同年 9 月の製品版の記事、およびニコンの企業情報ページ「D1：プロの現場を、デジタルの時代へ」によります。報道現場での価値、ノイズが弱点だったこと、F5 の 2 倍の価格、当時のプロ用機が数百万円だったことは、同ページ（ニコン自身の回顧）によります。ニコン LS-2000 とエプソン GT-X800 の発売時期・機能は、それぞれ 1998 年と 2003 年の専門誌の記事によります。アンシャープマスクの由来は写真技術の一般的な文献によります。私の経路、比較の状況、時間、費用、その後の併用は、私の記憶です。</p>
+<h3>分かっていないこと</h3>
+<p>この記事で、分からないこととして扱ったものをまとめておきます。比較したフィルムが 6×9 だったか 6×12 だったか。知人の D1 のレンズと記録形式。カラーレーザーの機種と解像度。私のスキャナーの機種名、設定、ソフトの既定のシャープネス。私のスキャンが眠く見えた要因の内訳。D1 を初めて見た日、比較した日、買った日。100 万円超の内訳。フィルムと D1 を並行して使っていた期間の正確な長さ。そして、当時の日本の風景写真家のうち、どれくらいがこの時期にデジタルへ移ったか。</p>
+<h3>この記事の範囲</h3>
+<p>この記事の資料は、メーカーの企業情報と、発表当時の専門誌の記事と、スキャナーの技術資料の言葉であって、測定値ではありません。私の経験は、山岳写真を撮る一人の写真家が、自分の部屋のスキャナーと知人の事務所のプリンターで見たことです。それは、フィルムと D1 の性能を比べた実験ではありません。「フィルムの方がまだ上だった」は当時の私の理解であり、「追いつくし、追い抜く可能性がある」は当時の私の見立てです。どちらも、資料がそう言っているのではなく、私がそう見た、ということです。資料の側の「どの経路でどれだけ変わったかは分からない」は、そのまま残してあります。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/where-was-the-photograph-finished">写真は、どこで完成していたのか？</a>
+        <p class="kzc-related-desc">同じ一枚のポジ原版から、写真展のプリントと写真集ができた。私には同じには見えなかった。原版は審査され、見せられ、印刷とプリントの元になった。では写真はどこで完成していたのか。1990年代の資料と私の経験から、原版が通った経路を書きます。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/how-many-megapixels-is-4x5-film">「4×5フィルムは何万画素？」に、一つの答えがない理由</a>
+        <p class="kzc-related-desc">「4×5フィルムは何万画素相当？」に一つの答えはない。同じベルビアの資料でも測定条件で解像力は80と160に分かれ、換算した升目の数は4倍違う。条件を決めれば比べられるが、一つの数字にはならない。1990年に4×5を買い、ベルビアを使っていた私が、その数字の意味を調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/does-higher-iso-increase-noise">「ISOを上げるとノイズが増える」は、本当なのか？</a>
+        <p class="kzc-related-desc">「ISOを上げるとノイズが増える」は本当なのか。同じ光でISOだけ上げても、光のゆらぎによるノイズは増えない。ノイズが目立った主な原因は少ない光で、増幅で何が起きるかはカメラの設計次第。星景写真でISO12800を使う私が、ISOとノイズの関係を調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう「（開発中）」を必ず添える。 -->
+            <li><a href="/planner">🗺️ Sidekick Planner（開発中）</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
