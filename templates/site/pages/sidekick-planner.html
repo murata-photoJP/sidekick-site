@@ -1,4 +1,4 @@
-{# Sidekick Planner β1.00 製品ページ（日本語版）。2026-09-20 新設
+{# Sidekick Planner β1.01 製品ページ（日本語版）。2026-09-20 新設
    （Track planner-beta1-web-product-page、AI-10450、HD namespace HD-PLANNERBETA1WEBPRODUCTPAGE）。
 
    位置づけ: Sidekick Star / Portrait / Sky Effect と同じ「製品ページ」の系列。
@@ -9,9 +9,9 @@
    /sidekick-planner に置くのは今回の明示指示による。矛盾の解消は Human Review 時）。
 
    本文の事実は canonical から取った（推測で書かない）:
-     - 版 / OS / 未署名 / SHA-256 / 提供期間: release_acceptance.json（record_version 4、
-       build 1.0.0-beta.1+20260920T004212Z.gbea1697、EXE sha256 709afc4e…、2,185 file /
-       2,079,489,773 B、annual asset 374）、HD-MC-12〜14（未署名で初期 Public Beta 可、
+     - 版 / OS / 未署名 / SHA-256 / 提供期間: release_acceptance.json（record_version 5、β1.01 RC14
+       build 1.0.0-beta.2+20260920T132054Z.gc3faa92、EXE sha256 d06df226…、2,185 file /
+       2,079,502,600 B、annual asset 374。β1.01 RC13 = 2026-09-20〜09-21 の配布物、history 保持）、HD-MC-12〜14（未署名で初期 Public Beta 可、
        distribution page での disclosure）、HD-LR-40 / Terms 第3条（一般公開日〜2026-10-31 予定）、
        HD-OS-01（Windows 10 64-bit 以降）、HD-PLANNERBETA1LOCALIZATIONPOLICY-001（初期 β は日本語 UI）
      - 機能の範囲: beta_capability.py（太陽 = SUPPORTED、パール = COMING_SOON で計算開始不可）、
@@ -31,15 +31,15 @@
    新しいデザインシステムは作らない。 #}
 {% extends "base.html" %}
 
-{% block title %}Sidekick Planner β1.00 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
+{% block title %}Sidekick Planner β1.01 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
 
-{% block meta_description %}Sidekick Planner（サイドキック プランナー）は、太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。ダイヤモンド富士をはじめ、山・塔・城・寺院など100か所の被写体に対応。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.00 は無料の公開ベータ版（日本語UI）。{% endblock %}
+{% block meta_description %}Sidekick Planner（サイドキック プランナー）は、太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。ダイヤモンド富士をはじめ、山・塔・城・寺院など100か所の被写体に対応。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.01 は無料の公開ベータ版（日本語UI）。{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/sidekick-planner{% endblock %}
 
-{% block og_title %}Sidekick Planner β1.00 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
+{% block og_title %}Sidekick Planner β1.01 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
 
-{% block og_description %}太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。構図プレビュー・地図・QR共有・スマホ用ビューアー。β1.00 は無料の公開ベータ版。{% endblock %}
+{% block og_description %}太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。構図プレビュー・地図・QR共有・スマホ用ビューアー。β1.01 は無料の公開ベータ版。{% endblock %}
 
 {% block extra_head %}
   <style>
@@ -345,7 +345,7 @@
     }
     .callout p{margin:0;color:var(--sub);font-size:15px;}
 
-    /* ── β1.00 について（本ページ固有） ── */
+    /* ── β1.01 について（本ページ固有） ── */
     .beta-table{
       width:100%;
       border-collapse:collapse;
@@ -476,10 +476,10 @@
     "@type": "SoftwareApplication",
     "name": "Sidekick Planner",
     "alternateName": "サイドキック プランナー",
-    "softwareVersion": "1.0.0-beta.1",
+    "softwareVersion": "1.0.0-beta.2",
     "operatingSystem": "Windows 10 (64-bit) 以降",
     "applicationCategory": "MultimediaApplication",
-    "description": "太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す写真家向けの撮影計画ソフトウェア。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.00 は無料の公開ベータ版。",
+    "description": "太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す写真家向けの撮影計画ソフトウェア。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.01 は無料の公開ベータ版。",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -504,7 +504,7 @@
       <div class="wrap hero-grid">
         <div>
           <div class="eyebrow">
-            🗺️ Sidekick Planner β1.00 ｜ Windows ｜ 無料の公開ベータ版
+            🗺️ Sidekick Planner β1.01 ｜ Windows ｜ 無料の公開ベータ版
           </div>
 
           <h1>
@@ -526,7 +526,7 @@
               ▶ β版を試す（無料）
             </a>
             <a class="btn btn-secondary" href="#beta">
-              β1.00 について →
+              β1.01 について →
             </a>
           </div>
 
@@ -538,7 +538,7 @@
 
         <figure class="shot">
           <img src="/images/planner/planner-overview.jpg" width="1440" height="900"
-               alt="Sidekick Planner β1.00 の画面。左に撮影計画の種類・被写体・ターゲット・参考ラインの設定パネル、右に関東から静岡にかけての地図。富士山を中心に、太陽と重なる撮影地点のラインが数本引かれている。">
+               alt="Sidekick Planner β1.01 の画面。左に撮影計画の種類・被写体・ターゲット・参考ラインの設定パネル、右に関東から静岡にかけての地図。富士山を中心に、太陽と重なる撮影地点のラインが数本引かれている。">
         </figure>
       </div>
     </section>
@@ -603,9 +603,9 @@
       <div class="wrap">
         <div class="section-head">
           <span class="section-label">Use cases</span>
-          <h2>β1.00 でできる撮影計画</h2>
+          <h2>β1.01 でできる撮影計画</h2>
           <p>
-            β1.00 は「太陽 × 被写体」の撮影計画に対応しています。
+            β1.01 は「太陽 × 被写体」の撮影計画に対応しています。
             代表例はダイヤモンド富士ですが、被写体は富士山だけではありません。
           </p>
         </div>
@@ -633,7 +633,7 @@
             <h3>パール（月 × 被写体）<span class="soon">近日対応</span></h3>
             <p>
               月を被写体に重ねる撮影計画は、近日対応予定です。
-              β1.00 では選択肢として表示されますが、計算はまだ始められません。
+              β1.01 では選択肢として表示されますが、計算はまだ始められません。
             </p>
           </div>
         </div>
@@ -813,13 +813,13 @@
     </section>
 
     <!-- ═══════════════════════════════════════════
-         β1.00 について
+         β1.01 について
     ═══════════════════════════════════════════ -->
     <section class="section" id="beta">
       <div class="wrap">
         <div class="section-head">
           <span class="section-label">About the beta</span>
-          <h2>β1.00 について</h2>
+          <h2>β1.01 について</h2>
           <p>
             正式版（Version 1）の公開に先立つ公開テスト版です。動作や使い勝手を確かめていただくために、無償で提供します。
           </p>
@@ -829,7 +829,7 @@
           <tbody>
             <tr>
               <th scope="row">バージョン</th>
-              <td>Sidekick Planner β1.00（1.0.0-beta.1）</td>
+              <td>Sidekick Planner β1.01（1.0.0-beta.2）</td>
             </tr>
             <tr>
               <th scope="row">対応 OS</th>
@@ -845,7 +845,7 @@
             </tr>
             <tr>
               <th scope="row">提供期間</th>
-              <td>一般公開日から 2026年10月31日（現時点の終了予定日）まで。終了予定日は開発・検証の進捗により変更することがあります。</td>
+              <td>一般公開日から 2026年10月31日（日本時間、現時点の終了予定日）まで。終了予定日を過ぎると、β版（β1.01 以降）は起動できなくなります。終了予定日は開発・検証の進捗により変更することがあります（延長する場合は新しいβ版を配布します）。</td>
             </tr>
             <tr>
               <th scope="row">ダウンロードサイズ</th>
@@ -885,7 +885,7 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>次のダイヤモンド富士を、計算しておく。</h2>
-          <p>β1.00 は無料です。使ってみて気づいたことは、ぜひ教えてください。</p>
+          <p>β1.01 は無料です。使ってみて気づいたことは、ぜひ教えてください。</p>
           <div class="cta-actions">
             <a class="btn btn-primary btn-lg"
                href="/register-dl?product=planner&src=sidekick-planner" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">

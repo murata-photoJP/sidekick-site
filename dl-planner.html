@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sidekick Planner β1.00 ダウンロード | Sidekick Lab</title>
+<title>Sidekick Planner β1.01 ダウンロード | Sidekick Lab</title>
 <!-- 2026-09-20 新設（Track planner-beta1-web-product-page、AI-10450）。
-     Sidekick Planner β1.00 のダウンロードページ。dl-star.html と同じ導線
+     Sidekick Planner β1.01 のダウンロードページ。dl-star.html と同じ導線
      （/register-dl?product=planner → メール登録 → sk_dl_authorized → 本ページ）だが、
      **配布 URL と配布 package の SHA-256 が確定するまでは fail-closed**（2026-09-20 AI-10850 で確定・有効化。
      配布停止は 2 定数を空文字へ戻す = fail-closed へ復帰）:
@@ -161,9 +161,11 @@
 
       <dl class="facts">
         <dt>バージョン</dt>
-        <dd>Sidekick Planner β1.00（1.0.0-beta.1）</dd>
+        <dd>Sidekick Planner β1.01（1.0.0-beta.2）</dd>
         <dt>対応 OS</dt>
         <dd>Windows 10（64-bit）以降</dd>
+        <dt>利用期限</dt>
+        <dd>2026年10月31日（日本時間）まで。期限を過ぎると、このβ版は起動できなくなります（<a href="/planner-terms">利用条件</a> 第3条）。</dd>
         <dt>配布形式・サイズ</dt>
         <dd>ZIP（約2GB。2027年分の年間撮影計画データを同梱）。インストーラーはなく、展開して SidekickPlanner.exe を実行します。</dd>
       </dl>
@@ -200,7 +202,7 @@
         下のボタンからダウンロードしてください。自動では始まりません（約2GB のため、回線とディスクの空き容量をご確認ください）。
       </p>
 
-      <a id="dl-btn" class="dl-btn" href="#">↓ Sidekick Planner β1.00 をダウンロード</a>
+      <a id="dl-btn" class="dl-btn" href="#">↓ Sidekick Planner β1.01 をダウンロード</a>
       <p class="dl-note">ZIP形式 / 約2GB / Windows 10（64-bit）以降</p>
 
 
@@ -233,13 +235,13 @@
 <script>
 // ---- Distribution Unit で埋める 2 定数（Human GO の後）。空文字の間は fail-closed ----
 // 配布 URL（official distribution source = 既存製品と同じ Cloudflare R2 `sidekick-downloads`、
-// object 名は versioned: Sidekick_Planner_1.0.0-beta.1_bea1697.zip。Human GO 後に埋める。
+// object 名は versioned: Sidekick_Planner_1.0.0-beta.2_c3faa92.zip（β1.01、RC14）。β1.00 の object Sidekick_Planner_1.0.0-beta.1_bea1697.zip は R2 に保存したまま（配布導線からは外す）。
 // 値は docs/PLANNER_PRODUCT_PAGE.md §3 に準備済み）。
-// 2026-09-20 AI-10850: R2 upload 済み・検証 PASS（bytes 1934309563 / sha256 93c27bf1…、DL 再検証・展開後 RC13 一致）。
-const PLANNER_DOWNLOAD_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.1_bea1697.zip';
+// 2026-09-20 AI-10850: β1.00 R2 upload・検証 PASS（bytes 1934309563 / sha256 93c27bf1…）。2026-09-21 AI-13050: β1.01 RC14 の ZIP（bytes 1934322758 / sha256 a577b809…、展開後 RC14 一致、R2 DL 再検証）へ切替。。
+const PLANNER_DOWNLOAD_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.2_c3faa92.zip';
 // 配布 ZIP の SHA-256（package 単位の hash。build_distribution_zip.py の identity.json の zip_sha256）。
 // 表示には使わない（内部 gate のみ。ユーザー向け UI に hash を出さない = 2026-09-20 Human Review）。
-const PLANNER_ZIP_SHA256 = '93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333ed0d3bca83e1';
+const PLANNER_ZIP_SHA256 = 'a577b809db480be0da29bb6a1a46f7e2521769d785af4045e148b4b0d3a91804';
 
 (function () {
   // dl-star.html と同じメール登録経路の bypass フラグ（一回使い捨て）。
@@ -256,17 +258,17 @@ const PLANNER_ZIP_SHA256 = '93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333
   const ready = /^https:\/\/\S+\.zip$/i.test(PLANNER_DOWNLOAD_URL) && /^[0-9a-f]{64}$/i.test(PLANNER_ZIP_SHA256);
   if (!ready) {
     // 配布開始前: ダウンロードリンクを出さない。
-    title.textContent = 'Sidekick Planner β1.00 の配布は準備中です';
+    title.textContent = 'Sidekick Planner β1.01 の配布は準備中です';
     title.hidden = false;
     document.getElementById('pending-state').style.display = 'block';
     return;
   }
-  title.textContent = 'Sidekick Planner β1.00 をダウンロード';
+  title.textContent = 'Sidekick Planner β1.01 をダウンロード';
   title.hidden = false;
   const btn = document.getElementById('dl-btn');
   btn.href = PLANNER_DOWNLOAD_URL;
   // 保存名は R2 の object 名（versioned）と一致させる（Distribution Preparation AI-10650）。
-  btn.setAttribute('download', 'Sidekick_Planner_1.0.0-beta.1_bea1697.zip');
+  btn.setAttribute('download', 'Sidekick_Planner_1.0.0-beta.2_c3faa92.zip');
   document.getElementById('dl-state').style.display = 'block';
 })();
 </script>

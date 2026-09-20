@@ -129,3 +129,7 @@ footer「Sidekick Planner（開発中）」→「Sidekick Planner β」→ `/sid
 3. ~~トップページ（index）~~ → solo カードで済み（上記）。
 4. Brevo 属性の作成（`HAS_PLANNER` / `VER_PLANNER`）。
 5. 配布開始時: hosting 先、配布 ZIP の SHA-256、`dl-planner.html` の 2 定数、`test_dl_planner_is_fail_closed_before_distribution` の更新。
+
+## 7. β1.01（2026-09-21、AI-13050）
+
+製品ページの表記を β1.01（1.0.0-beta.2）へ、「提供期間」行に「終了予定日を過ぎると β版（β1.01 以降）は起動できなくなる／延長は新しいβ版」を追加（Legal FINAL §3、`HD-PLANNERBETA1EXPIRYLEGAL-006`）。スクリーンショット 8 枚は RC13 UI の撮影のまま（UI は β1.01 でも同一、title 表記のみ異なる）。`tests/site/test_planner_product_page.py` §5 に expiry disclosure / JA-EN parity test を追加。

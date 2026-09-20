@@ -1,4 +1,4 @@
-# Sidekick Planner β1.00 — 配布（Distribution）手順書
+# Sidekick Planner β1.00 / β1.01 — 配布（Distribution）手順書
 
 2026-09-20 新設（自作リポジトリ Track `planner-beta1-distribution-preparation`、AI-10650）。
 製品ページ・登録導線は `docs/PLANNER_PRODUCT_PAGE.md`。本書は **ZIP を置く場所と、Human GO 後に配布を開始する最短手順**。
@@ -100,3 +100,17 @@ ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**�
 - 実行前に `--dry-run` で「Transferred 1 / 1」と対象 file 名を確認する。
 - 実行後に `lsl` で既存 7 object の bytes が不変であることを確認する。
 - credential（`rclone.conf`、`アップロード先/R2関係/アカウントAPIトークン.txt`）は表示・コピーしない。
+
+## 6. β1.01（RC14）への切替（2026-09-21、AI-13050、Human GO「β1.01 PUBLIC RELEASE UNIT」）
+
+| 項目 | 値 |
+|---|---|
+| candidate | RC14 `1.0.0-beta.2+20260920T132054Z.gc3faa92` / source `c3faa92` / EXE `d06df22643b8f79aa6648e337e91bee520296d03499d880387ed056f464e3d15`（cleanmachine10 Human PASS、OSM differential PASS、Legal FINAL） |
+| ZIP | `SideKick販売ページ/zip/Sidekick_Planner_1.0.0-beta.2_c3faa92.zip`（`build_distribution_zip.py`、RC14 manifest 照合 → zip → 展開再照合 OK）: **1,934,322,758 B / sha256 `a577b809db480be0da29bb6a1a46f7e2521769d785af4045e148b4b0d3a91804` / 2,185 entry**、identity: 同名 `.identity.json`（Planner 側 `manifests/release/` にも保存） |
+| R2 | `rclone copy` で新 versioned object として upload（dry-run 1/1 → 実行）。`lsl`: 9 object、**β1.00 object `Sidekick_Planner_1.0.0-beta.1_bea1697.zip` 1,934,309,563 B は不変（削除・上書きしない）**。public retrieval: HEAD 200 / Content-Length 1934322758 / Range 206 / 実 download sha256 一致 |
+| dl-planner | `PLANNER_DOWNLOAD_URL` / `PLANNER_ZIP_SHA256` を β1.01 object へ、`download` 属性 = object 名、facts に「利用期限 2026年10月31日（日本時間）」行、表記 β1.01（1.0.0-beta.2） |
+| Web | Legal FINAL（`PLANNER_BETA1_EXPIRY_LEGAL_FINAL_2026-09-21.md`）の exact-diff plan どおり: Terms 第3条 JA/EN、Privacy 9-1 JA/EN、製品ページ JA/EN（提供期間行 ＋ β1.01 表記 ＋ JSON-LD）、`register-dl` version `1.0.0-beta.2`、changelog JA/EN entry |
+| β1.00 | 配布導線から外れるだけ。R2 object・利用条件上の提供期間は同じ。β1.00 に expiry 機構は無い（非遡及、`HD-PLANNERBETA1EXPIRYLEGAL-007`） |
+| rollback | `dl-planner.html` の 2 定数を β1.00 の値（`…beta.1_bea1697.zip` / `93c27bf1…`）へ戻して push（object は両方 R2 にある） |
+
+release datetime・live 検証結果は Planner 側 `release_acceptance.json`（`public_beta_release`）と `docs/ai-analysis/PLANNER_BETA1_01_PUBLIC_RELEASE_2026-09-21.md` を正本とする。
