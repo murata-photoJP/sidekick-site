@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1320" width="800" height="1320" role="img" aria-labelledby="t"><title id="t">概念図。二段構成。上段はモニターで見る場合。100% 表示では画素を画面の点に一対一で対応させるので、画素数の多い画像（ハイレゾやスーパー解像度）は同じ細部を二倍の大きさで見ていることになる。画面に合わせた表示では、どちらの画像も同じ画面の画素数に縮小される。下段は B0 プリントを 50 cm、1 m、2 m から見る場合。各距離に、ノーマル（約 2,500 万画素）とハイレゾ／スーパー解像度（約 1 億画素）の二本の横棒で、画素の格子が目の中でどこまで細かく届くかを、目盛りのない対数軸に示す。距離を二倍にすると両方の棒が同じだけ右へ動き、二本の差は常に二倍のまま。横軸の中ほどに、目が拾える細かさの目安を、端のぼやけた帯で示す。帯の幅は人・コントラスト・照明・被写体・出力条件で動き、決まった境目はない。数値は本文の補足にある。測定値ではない。</title>
+<defs>
+<linearGradient id="band" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb14a" stop-opacity="0"/><stop offset="0.35" stop-color="#ffb14a" stop-opacity="0.22"/><stop offset="0.65" stop-color="#ffb14a" stop-opacity="0.22"/><stop offset="1" stop-color="#ffb14a" stop-opacity="0"/></linearGradient>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="42.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">同じ一枚が、見る条件でどこまで細かく目に届くか</text>
+<text x="20.0" y="92.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">モニターで見る</text>
+<rect x="20.0" y="142.0" width="70.0" height="70.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="34.0" y1="150.0" x2="34.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="48.0" y1="150.0" x2="48.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="62.0" y1="150.0" x2="62.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="76.0" y1="150.0" x2="76.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<rect x="130.0" y="112.0" width="140.0" height="140.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="158.0" y1="120.0" x2="158.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="186.0" y1="120.0" x2="186.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="214.0" y1="120.0" x2="214.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="242.0" y1="120.0" x2="242.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<text x="55.0" y="242.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">ノーマル</text>
+<text x="200.0" y="292.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">ハイレゾ／SR</text>
+<text x="270.0" y="142.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">100% 表示</text>
+<text x="270.0" y="180.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">画素を画面の点に一対一で対応させる。</text>
+<text x="270.0" y="216.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">画素数が多い方は、</text>
+<text x="270.0" y="252.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">同じ細部を 2 倍の大きさで見ている。</text>
+<rect x="20.0" y="312.0" width="70.0" height="70.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="34.0" y1="320.0" x2="34.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="48.0" y1="320.0" x2="48.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="62.0" y1="320.0" x2="62.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="76.0" y1="320.0" x2="76.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<rect x="130.0" y="312.0" width="70.0" height="70.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="144.0" y1="320.0" x2="144.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="158.0" y1="320.0" x2="158.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="172.0" y1="320.0" x2="172.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="186.0" y1="320.0" x2="186.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<text x="270.0" y="342.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">画面に合わせた表示</text>
+<text x="270.0" y="380.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">どちらも同じ画面の画素数に縮小される。</text>
+<text x="270.0" y="416.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">格子の差の上限は、</text>
+<text x="270.0" y="452.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">画面の画素数になる。</text>
+<text x="20.0" y="490.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">枠の中の縞は「同じ細部」の見え方の模式。測定値ではない。</text>
+<line x1="20.0" y1="512.0" x2="780.0" y2="512.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="556.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="start">B0 に伸ばして見る（見る距離を変える）</text>
+<rect x="105.5" y="598.0" width="325.0" height="326.0" rx="0" fill="url(#band)" stroke="none" stroke-width="0"/>
+<text x="268.0" y="1026.0" fill="#ffb14a" font-size="26" font-weight="600" text-anchor="middle">目が拾える細かさの目安</text>
+<text x="20.0" y="600.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">50 cm（手に取る）</text>
+<rect x="40.0" y="614.0" width="150.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<rect x="40.0" y="652.0" width="280.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="40.0" y1="702.0" x2="760.0" y2="702.0" stroke="#2b3140" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="3 8"/>
+<text x="20.0" y="720.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">1 m</text>
+<rect x="40.0" y="734.0" width="280.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<rect x="40.0" y="772.0" width="410.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="40.0" y1="822.0" x2="760.0" y2="822.0" stroke="#2b3140" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="3 8"/>
+<text x="20.0" y="840.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">2 m（会場の後ろから）</text>
+<rect x="40.0" y="854.0" width="410.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<rect x="40.0" y="892.0" width="540.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="40.0" y1="954.0" x2="760.0" y2="954.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="190.0" y1="948.0" x2="190.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="320.0" y1="948.0" x2="320.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="450.0" y1="948.0" x2="450.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="580.0" y1="948.0" x2="580.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<text x="40.0" y="988.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">粗い</text>
+<text x="760.0" y="988.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="end">細かい</text>
+<rect x="20.0" y="1092.0" width="50.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<text x="84.0" y="1110.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">ノーマル（約 2,500 万画素）の格子が届く細かさ</text>
+<rect x="20.0" y="1130.0" width="50.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<text x="84.0" y="1148.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">ハイレゾ／スーパー解像度（約 1 億画素）の格子が届く細かさ</text>
+<text x="20.0" y="1196.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">帯の幅は、人・コントラスト・照明・被写体・出力条件で動く。</text>
+<text x="20.0" y="1232.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">決まった境目はない。</text>
+<text x="20.0" y="1268.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">距離が 2 倍で両方の棒が同じだけ右へ。二本の差は、いつも 2 倍。</text>
+<text x="20.0" y="1064.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">横軸：目に届く細かさ（右へ 1 目盛 ＝ 2 倍。数値は本文の補足）</text>
+<line x1="20.0" y1="1280.0" x2="780.0" y2="1280.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="1310.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">概念図。数値・測定値・製品の優劣なし。本サイトの整理。</text>
+</g>
+</svg>
