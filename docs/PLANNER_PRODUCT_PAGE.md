@@ -113,12 +113,19 @@ py -3.10 tools/preview_static_site.py --port 3334
 - 確認済み（2026-09-20、Playwright/Chromium）: 1366 px / 390 px で横スクロール無し、console error 0、
   h1 1 つ、EN の CTA は `&lang=en` 付き。
 
-## 6. Human Decision が必要な残件
+## 6. Human Decision が必要な残件（2026-09-20 AI-11050 で解消した項目は打ち消し）
 
-1. **`/planner` の扱い**: 既存の開発中ページを残すか、`/sidekick-planner` へ 301（`vercel.json`）するか。
-   Distribution handoff D-1 と `/planner-terms` 第10条は `/planner` を「公式配布ページ」としている。
-2. 共通 footer の「🗺️ Sidekick Planner（開発中）」→ 製品ページへの表記変更（全ページ再ビルドが必要 = 4 系統）と、
-   ヘッダーのグローバルナビへ Planner を入れるか。
-3. トップページ（index）の製品一覧へ Planner を載せるか。
+2026-09-20（Public Beta Web 最終整理、AI-11050）: **二層構造を採用** — `/planner` = concept（考え方・何をする道具か。
+天の川など β1.00 で公開しない機能の記述を削除、「計算できることと、計算できないこと」を全面改稿、
+「いま試せる β1.00」→ `/sidekick-planner` 導線）、`/sidekick-planner` = product（機能・画面・登録・ダウンロード。
+「Sidekick Planner とは」→ `/planner` へ 1 link）。301 は採用しない（Human Decision 1）。
+footer「Sidekick Planner（開発中）」→「Sidekick Planner β」→ `/sidekick-planner`、header ナビに「🗺️ Planner β」、
+トップページ製品セクションに Planner の solo カード（JA/EN）。Terms 第10条の link 先を `/sidekick-planner` へ（文言不変）。
+共通 header / footer 変更のため 4 系統すべて再ビルド済み（差分 = nav 1 行＋footer 1 項目のみ、link check 0 broken）。
+
+
+1. ~~**`/planner` の扱い**~~ → 二層構造で解決（上記）。301 なし。Terms 第10条 link は `/sidekick-planner`。
+2. ~~共通 footer / ヘッダー~~ → 済み（上記）。
+3. ~~トップページ（index）~~ → solo カードで済み（上記）。
 4. Brevo 属性の作成（`HAS_PLANNER` / `VER_PLANNER`）。
 5. 配布開始時: hosting 先、配布 ZIP の SHA-256、`dl-planner.html` の 2 定数、`test_dl_planner_is_fail_closed_before_distribution` の更新。

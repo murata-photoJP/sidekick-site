@@ -89,6 +89,8 @@
       <a href="/sidekick-star" {% if nav_current == "sidekick-star" %}aria-current="page"{% endif %}>⭐ Star</a>
       <a href="/portrait" {% if nav_current == "portrait" %}aria-current="page"{% endif %}>👤 Portrait</a>
       <a href="/sky-effect" {% if nav_current == "sky-effect" %}aria-current="page"{% endif %}>☁️ Sky</a>
+{# 2026-09-20（AI-11050）: Sidekick Planner β1.00 の公開ベータにあわせ、製品 3 本の隣に製品ページへの入口を追加（最小限） #}
+      <a href="/sidekick-planner" {% if nav_current == "sidekick-planner" %}aria-current="page"{% endif %}>🗺️ Planner β</a>
       <a href="/knowledge" {% if nav_current == "knowledge" %}aria-current="page"{% endif %}>📚 打ち出の小槌</a>
 {%- if show_dof_nav|default(false) %}
       <a href="/tools/dof" {% if nav_current == "dof" %}aria-current="page"{% endif %}>📐 DOF計算</a>

@@ -232,6 +232,14 @@
     .hc-portrait::before{background:linear-gradient(180deg,#b07aff,#e0a0ff);}
     .hc-sky{background:linear-gradient(135deg,#0a1220,#102040);}
     .hc-sky::before{background:linear-gradient(180deg,#4e8cff,#7aaeff);}
+    /* 2026-09-20（AI-11050）: Sidekick Planner β1.00 の公開ベータ入口（製品 3 本の下に 1 枚、既存の solo grid を流用） */
+    .hc-planner{background:linear-gradient(135deg,#0a171a,#0f2a30);}
+    .hc-planner::before{background:linear-gradient(180deg,#2fc4d6,#7ae3ef);}
+    .hc-badge-teal{background:rgba(47,196,214,.1);border:1px solid rgba(47,196,214,.22);color:#7ae3ef;}
+    .hc-planner-note{margin-top:14px;text-align:center;font-size:12.5px;color:var(--muted);}
+    .hc-planner-note a{color:var(--sub);text-decoration:underline;text-underline-offset:3px;}
+    .hub-grid-solo + .hc-planner-note{margin-top:12px;}
+    .hub-grid + .hub-grid-solo{margin-top:14px;}
     .hc-workshop{background:linear-gradient(135deg,#0d1810,#142018);}
     .hc-workshop::before{background:linear-gradient(180deg,#36d988,#6de8b0);}
 
@@ -562,6 +570,27 @@
           </a>
 
         </div>
+
+        <!-- 2026-09-20（AI-11050）: Sidekick Planner β1.00（公開ベータ、無料）。Photoshop スクリプトではなく
+             Windows 用の撮影計画ソフトなので、3 本の下に 1 枚だけ置く（トップページの再設計はしない）。 -->
+        <div class="hub-grid hub-grid-solo">
+          <a href="/sidekick-planner" class="hub-card hc-planner">
+            <div class="hc-top">
+              <span class="hc-badge hc-badge-teal">🗺️ Windows ソフトウェア ・ 公開ベータ</span>
+              <span class="hc-icon">🌄</span>
+            </div>
+            <div class="hc-name">Sidekick Planner β1.00</div>
+            <div class="hc-desc">
+              撮りたいイメージから、撮れる場所と日時を探す。太陽と被写体（富士山・山・塔・城・寺院など100か所）が重なる
+              撮影計画を、場所からも日付からも検索。構図プレビュー、地図、QR共有、スマホ用ビューアー。
+            </div>
+            <div class="hc-footer">
+              <span class="hc-price">β期間中は無料 / 日本語UI / 約2GB</span>
+              <span class="hc-arr">β版を試す →</span>
+            </div>
+          </a>
+        </div>
+        <p class="hc-planner-note">Planner の考え方（何をするための道具か）は <a href="/planner">こちら</a>。</p>
       </div>
     </section>
 
@@ -798,6 +827,7 @@
       '/sidekick-star':'star',
       '/portrait':'portrait',
       '/sky-effect':'skyeffect',
+      '/sidekick-planner':'planner',
       '/workshop':'workshop'
     };
     document.querySelectorAll('.hub-card, .ba-half').forEach(function(card){

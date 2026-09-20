@@ -42,12 +42,29 @@
    「現在開発中」はバッジ・冒頭の注意書き・末尾の但し書きの3箇所で明示する
    （tests/story/test_ja_en_parity.py が「現在開発中」の存在を検証している）。
 
+   ── 2026-09-20 Human Decision（Public Beta Web 最終整理、AI-11050）────────────
+   Sidekick Planner β1.00 の公開ベータ配布にあたり、本ページは「開発中の受け皿」から
+   **concept ページ**（考え方・何をする道具か）へ役割を変えた。製品紹介・機能・画面・
+   登録・ダウンロードは /sidekick-planner（product ページ）が持つ。二層構造:
+     /planner（concept）→「いま試せる β1.00」→ /sidekick-planner → register-dl → dl-planner
+   /planner → /sidekick-planner の 301 は採用しない（Human Decision 1）。
+   Human Decision 2/3/4: 「天の川が思った位置に来る。」と「天の川の方向・高度・見える時間帯を
+   確認する」を削除（β1.00 の公開可能な scope = 太陽 × 被写体、月は近日対応。
+   HD-PLANNERBETA1GENERICSURFACE-009 により星景は public に出さない）。
+   「計算できることと、計算できないこと」は旧構想（新月・光害・天の川・透明度・水蒸気）を
+   全面改稿し、計算・データで分かるもの／現地でしか分からないものを区別する構成にした。
+   本ページで名指ししないもの（2026-08-31 の方針を維持）: ダイヤモンド／パール以外の将来機能名、
+   データソース名（PLATEAU 等）、価格・提供形態の詳細。パールの「近日対応」表示は -009 が許可。
+   「現在開発中」の 3 箇所明示は「β1.00 公開ベータ版」＋「正式版は開発中」へ置き換え
+   （tests/story/test_ja_en_parity.py の該当 test も同日更新）。
+   ──────────────────────────────────────────────────────────
+
    OGPあり（Storyから共有される前提。og_imageはbase.htmlの既定画像を使う）。 #}
 {% extends "base.html" %}
 
-{% block title %}Sidekick Planner（開発中）— 撮りたい天体と風景が重なる「いつ・どこ」を探す{% endblock %}
+{% block title %}Sidekick Planner とは — 撮りたいイメージから、撮れる場所と日時を探す（考え方）{% endblock %}
 
-{% block meta_description %}Sidekick Planner は、撮りたい天体と風景が重なる「いつ・どこ」を探す、写真家のための撮影計画ツールです。現在開発中。太陽・月と風景の位置関係から撮影候補地と日時を探し、天の川の見える方向・時間帯を確認できるソフトウェアを、Windows PC 向けに開発しています。{% endblock %}
+{% block meta_description %}Sidekick Planner は、太陽や月と被写体の位置関係から、撮れる可能性のある場所と日時を探し、写真家が判断するための材料を出す撮影計画ツールです。写真の正解を出すソフトではありません。計算で分かることと現地でしか分からないことの区別、なぜ作ったのか。β1.00 は公開ベータ版（Windows）。{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/planner{% endblock %}
 
@@ -205,16 +222,16 @@
     <section class="page-hero">
       <div class="wrap">
         <div class="page-hero-inner">
-          <div class="status-badge">現在開発中</div>
+          <div class="status-badge">β1.00 公開ベータ版</div>
           <h1 class="page-h1">Sidekick <em>Planner</em></h1>
           <p class="page-lead">
-            撮りたい天体と風景が重なる「いつ・どこ」を探す、<br>
+            撮りたいイメージから、撮れる場所と日時を探す。<br>
             写真家のための撮影計画ツール。
           </p>
           <div class="dev-note">
-            <strong>このページは製品ページではありません。</strong>
-            Sidekick Planner は現在開発中で、まだお使いいただけるものはありません。
-            提供時期・価格などは、決まり次第お知らせします。<br>
+            <strong>このページは、Sidekick Planner の考え方を説明するページです。</strong>
+            いま配布している β1.00 でできること・画面・ダウンロードは、
+            <a href="/sidekick-planner">製品ページ「Sidekick Planner β1.00」</a>にまとめています。<br>
             なぜこれを作っているのかは、
             <a href="/story/when-and-where-should-i-go">Story「『いつ、どこへ行けばいい？』から始まった」</a>
             に書きました。
@@ -230,7 +247,7 @@
           <h2 class="sec-h2">何をするソフトなのか</h2>
           <p class="sec-note">写真の正解を出すソフトではありません。</p>
           <p>
-            富士山の山頂に太陽が重なる。月が重なる。天の川が思った位置に来る。
+            富士山の山頂に太陽が重なる。月が重なる。
             そういう写真を撮ろうとすると、必要になるのは撮影技術だけではありません。
             <strong>いつ、どこへ行けばいいのか</strong>が分からなければ、そもそも始まりません。
           </p>
@@ -250,20 +267,21 @@
       </div>
     </section>
 
-    <!-- ── 現在開発している主な機能 ── -->
+    <!-- ── 主な機能 ── -->
     <section class="sec">
       <div class="wrap">
-        <h2 class="sec-h2">現在開発している主な機能</h2>
-        <p class="sec-note">開発中のため、内容は変わることがあります。</p>
+        <h2 class="sec-h2">Sidekick Planner がすること</h2>
+        <p class="sec-note">β1.00 で実際に使える範囲です。今後の更新で変わることがあります。</p>
         <div class="features">
           <ul>
-            <li>太陽・月と風景の位置関係から、撮影候補地と成立日時を探す</li>
-            <li>天の川の方向・高度・見える時間帯を確認する</li>
-            <li>山や建物にさえぎられないかを考慮しながら、撮影計画を検討する</li>
-            <li>選んだ日時・場所から、構図を確認する</li>
+            <li>太陽と被写体（山・塔・城・寺院など）の位置関係から、撮影候補地点と成立する日時を探す</li>
+            <li>撮影地点と被写体のあいだの地形にさえぎられないかを、稜線として描いて確かめる</li>
+            <li>選んだ日時・場所から、太陽の軌跡とレンズの画角を重ねて構図を確認する</li>
+            <li>できあがった撮影計画を QR コードにして、スマートフォンや別の PC へ持ち出す</li>
           </ul>
           <p class="features-foot">
-            現在は Windows PC 向けに、日本国内での利用を対象として開発しています。
+            月と被写体を重ねる撮影計画（パール）は近日対応予定です。
+            現在は Windows PC 向けに、日本国内での利用を対象としています。
           </p>
         </div>
       </div>
@@ -276,22 +294,44 @@
           <h2 class="sec-h2">計算できることと、計算できないこと</h2>
           <div class="principle">
             <p>
-              新月で、光害が少なくて、天気予報が快晴。
-              条件だけ見れば完璧です。それでも、
-              <strong>天の川の見え方は毎晩違います。</strong>
-              空気の透明度も、水蒸気の量も違うからです。
+              Sidekick Planner は、「ここへ行けば必ず撮れます」「この構図が正解です」と判断するソフトではありません。
+              太陽や月と、富士山などの被写体との位置関係を計算し、
+              <strong>撮れる可能性のある場所と日時を探して、写真家が判断するための材料を出す</strong>ソフトです。
             </p>
             <p>
-              天気予報が間違っているわけでも、天体計算が間違っているわけでもありません。
-              <strong>計算で分かることと、現場でしか分からないことがある</strong>——それだけです。
+              計算とデータで分かるのは、太陽や月がいつどこに見えるか、被写体とどう重なるか、
+              そのために立てる候補地点はどこか、成立する日時はいつか。
+              あいだにある地形の起伏に隠れないか、大気による見かけの高さの違いも、
+              標高データと標準的な大気を仮定して計算に含めています。
             </p>
             <p>
-              だから Sidekick Planner は、「ここへ行けばいい写真が撮れます」と保証しません。
-              分かることは先に計算しておいて、
+              現地でしか分からないのは、その日の天候と視界、手前の樹木、
+              地図や標高データに反映されていない建物、工事や立入制限、そして現場の安全。
+              これらは計算に入っていません。
+            </p>
+            <p>
+              だから Sidekick Planner は、「ここへ行けばいい写真が撮れます」とは言いません。
+              計算で分かることは先に済ませておいて、
               <strong>写真家が判断できるところまで持っていく。</strong>
               その先を見るために、写真家は現場へ行きます。
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 製品ページ導線 ── -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">いま試せる β1.00</h2>
+          <p class="sec-note">無料の公開ベータ版です。Windows 10（64-bit）以降、日本語 UI。</p>
+          <a class="story-link" href="/sidekick-planner">
+            <div class="story-link-label">Product</div>
+            <div class="story-link-title">Sidekick Planner β1.00</div>
+            <div class="story-link-sub">できること・画面・β版について・ダウンロード</div>
+            <div class="story-link-more">製品ページを見る →</div>
+          </a>
         </div>
       </div>
     </section>
@@ -311,10 +351,9 @@
 
           <div class="disc">
             <strong>このページの書き方について。</strong>
-            Sidekick Planner は開発中のソフトウェアです。
-            ここに書いた機能は現時点の開発方針であり、提供を約束するものではありません。
-            実装の都合で変わることがあります。提供時期・価格・購入方法は決まり次第、
-            <a href="/changelog">更新履歴</a>と<a href="/development-log">開発日誌</a>でお知らせします。<br>
+            Sidekick Planner は公開ベータ版として提供しているソフトウェアで、正式版（Version 1）は開発中です。
+            ここに書いた内容は β1.00 時点のもので、今後の更新で変わることがあります。
+            更新は<a href="/changelog">更新履歴</a>と<a href="/development-log">開発日誌</a>でお知らせします。<br>
             Story に登場するメーカー・雑誌・イベントは、村田一朗が<strong>過去にお受けした仕事</strong>として
             出てくるものであり、Sidekick Planner に対する各社の推薦・評価・公認を意味するものではありません。
             また、計算結果の正確さを保証するものでもありません。

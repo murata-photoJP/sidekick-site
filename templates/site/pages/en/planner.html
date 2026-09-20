@@ -43,13 +43,16 @@
      - that manufacturers do not endorse or approve Planner
    ---------------------------------------------------------------------------
 
-   "In development" appears in three places: the badge, the opening notice, and
-   the closing disclaimer (tests/story/test_ja_en_parity.py checks for it). #}
+   2026-09-20 (AI-11050): repositioned as the CONCEPT page for the public beta; the product
+   page /en/sidekick-planner holds features, screens, registration and download. Milky Way
+   wording removed (HD-PLANNERBETA1GENERICSURFACE-009 / Human Decisions 2-4); the
+   "what can be calculated" section rewritten. The badge now says public beta and the
+   disclaimer says Version 1 is in development (parity test updated the same day). #}
 {% extends "base.html" %}
 
-{% block title %}Sidekick Planner (in development) — Find the when and where{% endblock %}
+{% block title %}About Sidekick Planner — from the image you want, to where and when to shoot{% endblock %}
 
-{% block meta_description %}Sidekick Planner is a shot-planning tool for photographers: it looks for the "when and where" at which the sky object you want and the landscape you want line up. Currently in development for Windows PC, covering candidate locations and dates for the sun and moon, and where and when the Milky Way is visible.{% endblock %}
+{% block meta_description %}Sidekick Planner calculates how the sun or the moon lines up with a subject and finds the places and times where a photograph may be possible — material for the photographer's own judgement, not the right answer. What can be calculated and what only the location can tell you, and why it was built. Beta 1.00 is a free public beta for Windows (Japanese UI).{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/en/planner{% endblock %}
 
@@ -207,16 +210,17 @@
     <section class="page-hero">
       <div class="wrap">
         <div class="page-hero-inner">
-          <div class="status-badge">In development</div>
+          <div class="status-badge">Beta 1.00 — public beta</div>
           <h1 class="page-h1">Sidekick <em>Planner</em></h1>
           <p class="page-lead">
-            A shot-planning tool for photographers that finds the<br>
-            when and where your sky object and your landscape line up.
+            From the image you want, to where and when to shoot.<br>
+            A shot-planning tool for photographers.
           </p>
           <div class="dev-note">
-            <strong>This is not a product page.</strong>
-            Sidekick Planner is currently in development, and there is nothing to use yet.
-            Availability, pricing, and other details will be announced once decided.<br>
+            <strong>This page explains the thinking behind Sidekick Planner.</strong>
+            What the current beta 1.00 can do, its screens and the download are on the
+            <a href="/en/sidekick-planner">product page, "Sidekick Planner Beta 1.00"</a>
+            (the beta's product UI is Japanese).<br>
             Why it is being built is described in
             <a href="/en/story/when-and-where-should-i-go">Story: "It Started with 'When and Where Should I Go?'"</a>
           </div>
@@ -231,9 +235,8 @@
           <h2 class="sec-h2">What this software does</h2>
           <p class="sec-note">It is not software that produces the right answer for a photograph.</p>
           <p>
-            The sun sitting on the summit of Mt. Fuji. The moon sitting there. The Milky Way
-            arriving where you wanted it. Taking photographs like those requires more than
-            shooting technique. Without knowing
+            The sun sitting on the summit of Mt. Fuji. The moon sitting there.
+            Taking photographs like those requires more than shooting technique. Without knowing
             <strong>when and where to go</strong>, nothing begins.
           </p>
           <p>
@@ -252,20 +255,21 @@
       </div>
     </section>
 
-    <!-- -- Features in development -- -->
+    <!-- -- What it does today -- -->
     <section class="sec">
       <div class="wrap">
-        <h2 class="sec-h2">The main features being built</h2>
-        <p class="sec-note">This is software in development, so the details may change.</p>
+        <h2 class="sec-h2">What Sidekick Planner does</h2>
+        <p class="sec-note">What beta 1.00 actually offers today. It may change with later updates.</p>
         <div class="features">
           <ul>
-            <li>Find candidate locations and dates from how the sun or moon lines up with a landscape</li>
-            <li>Check the direction and altitude of the Milky Way, and when it is visible</li>
-            <li>Plan a shoot while checking whether mountains or buildings will block the view</li>
-            <li>Check the composition from a chosen date, time, and location</li>
+            <li>Find candidate shooting points and the dates on which the sun lines up with a subject (mountains, towers, castles, temples and more)</li>
+            <li>Draw the terrain between the shooting point and the subject as a skyline, to check nothing in between blocks the view</li>
+            <li>From a chosen date and place, overlay the sun's track and the lens's field of view to check the composition</li>
+            <li>Turn a finished plan into a QR code and take it to a smartphone or another PC</li>
           </ul>
           <p class="features-foot">
-            Development is currently aimed at Windows PC, for use in Japan.
+            Plans that place the moon on a subject (Pearl) are coming soon.
+            The software currently targets Windows PC, for use in Japan.
           </p>
         </div>
       </div>
@@ -278,23 +282,45 @@
           <h2 class="sec-h2">What can be calculated, and what cannot</h2>
           <div class="principle">
             <p>
-              A new moon, little light pollution, a forecast of clear skies. On conditions alone,
-              it is perfect. And even so,
-              <strong>the Milky Way looks different every night,</strong>
-              because the transparency of the air and the amount of water vapour differ.
+              Sidekick Planner is not software that decides "go here and you are certain to get the shot"
+              or "this composition is the right one". It calculates how the sun or the moon lines up with a
+              subject such as Mt. Fuji, and
+              <strong>finds the places and times where a photograph may be possible, as material for the photographer's own judgement.</strong>
             </p>
             <p>
-              The forecast is not wrong. The astronomical calculation is not wrong. It is simply
-              that <strong>some things can be known by calculation and some can only be known on
-              site.</strong>
+              Calculation and data can tell you where the sun or the moon will be and when, how it lines up
+              with the subject, which candidate points to stand on and on which dates it works. Whether the
+              terrain in between hides the subject, and how the atmosphere lifts the apparent position, are
+              also included — computed from elevation data and a standard atmosphere.
             </p>
             <p>
-              So Sidekick Planner does not promise that "go here and you will get a good photograph."
-              It calculates what can be known in advance and
+              Only the location can tell you that day's weather and visibility, the trees in front of you,
+              buildings that are not in the map or the elevation data, construction work, access restrictions,
+              and whether the spot is safe. None of that is in the calculation.
+            </p>
+            <p>
+              So Sidekick Planner does not say "go here and you will get a good photograph."
+              It gets the calculable part out of the way in advance and
               <strong>takes it as far as the point where a photographer can make a judgement.</strong>
               To see what lies beyond that, the photographer goes to the location.
             </p>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -- Product link -- -->
+    <section class="sec">
+      <div class="wrap">
+        <div class="sec-body">
+          <h2 class="sec-h2">Try beta 1.00 now</h2>
+          <p class="sec-note">A free public beta. Windows 10 (64-bit) or later; Japanese UI.</p>
+          <a class="story-link" href="/en/sidekick-planner">
+            <div class="story-link-label">Product</div>
+            <div class="story-link-title">Sidekick Planner Beta 1.00</div>
+            <div class="story-link-sub">What it does, screens, about the beta, download</div>
+            <div class="story-link-more">See the product page →</div>
+          </a>
         </div>
       </div>
     </section>
@@ -314,11 +340,10 @@
 
           <div class="disc">
             <strong>About how this page is written.</strong>
-            Sidekick Planner is software under development. What is described above reflects the
-            current development direction; it is not a commitment to deliver, and it may change for
-            implementation reasons. Availability, pricing, and how to obtain it will be announced in
+            Sidekick Planner is provided as a public beta; the full release (Version 1) is still in development.
+            What is described above reflects beta 1.00 and may change with later updates. Updates are announced in
             the <a href="/en/changelog">Changelog</a> and the
-            <a href="/en/development-log">Development Log</a> once decided.<br>
+            <a href="/en/development-log">Development Log</a>.<br>
             Manufacturers, magazines, and events named in the Story pages appear there as
             <strong>work Ichiro Murata was commissioned to do in the past</strong>. They do not imply
             endorsement, evaluation, or approval of Sidekick Planner by those companies, and they are

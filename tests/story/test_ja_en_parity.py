@@ -322,10 +322,28 @@ def test_planner_story_cross_links_exist() -> None:
     assert not problems, "\n".join(problems)
 
 
-def test_planner_page_states_it_is_in_development() -> None:
-    """完成製品として見せないための最低限の保証（村田さんの明示要件）。"""
-    assert "現在開発中" in _read(REPO_ROOT / "planner.html")
-    assert "In development" in _read(REPO_ROOT / "en" / "planner.html")
+def test_planner_page_states_beta_and_links_to_the_product_page() -> None:
+    """2026-08-31〜: 「現在開発中」を明示（完成製品として見せない、村田さんの明示要件）。
+    2026-09-20（AI-11050、Public Beta Web 最終整理、Human Decision 1）: /planner は concept ページ、
+    製品・配布入口は /sidekick-planner という二層構造になったため、「β1.00 公開ベータ版」であること・
+    正式版は開発中であること・製品ページへの導線があることを固定する（旧「現在開発中」表記は撤去）。"""
+    ja = _read(REPO_ROOT / "planner.html")
+    en = _read(REPO_ROOT / "en" / "planner.html")
+    assert "公開ベータ版" in ja and "開発中" in ja and 'href="/sidekick-planner"' in ja
+    assert "現在開発中" not in ja
+    assert "public beta" in en and "in development" in en and 'href="/en/sidekick-planner"' in en
+    assert "In development" not in en
+
+
+def test_planner_concept_page_has_no_unreleased_capability_wording() -> None:
+    """HD-PLANNERBETA1GENERICSURFACE-009 / Human Decisions 2〜4（2026-09-20）: /planner の公開本文に
+    星景・天の川など β1.00 で公開しない機能を出さない（Jinja コメントは対象外 = 生成 HTML を検査）。"""
+    for path, terms in ((REPO_ROOT / "planner.html", ("天の川", "星景", "光害", "水蒸気")),
+                        (REPO_ROOT / "en" / "planner.html", ("Milky Way", "light pollution", "water vapour"))):
+        html = _read(path)
+        body = html.split("<main>", 1)[1].split("</main>", 1)[0]
+        for term in terms:
+            assert term not in body, f"{path.name}: {term!r} が本文にある"
 
 
 # ---------------------------------------------------------------------------
