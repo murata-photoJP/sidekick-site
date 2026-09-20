@@ -85,7 +85,7 @@ ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**�
    `tests/site/test_planner_product_page.py::test_dl_planner_is_fail_closed_before_distribution` を「配布開始後」の形へ意図的に更新（URL・hash が上の値であること／`.zip` link が 1 つで R2 の Planner object を指すこと）。`pytest tests -q` PASS。
 4. **deploy** — `git push origin main`（= Vercel 本番。`docs/DEPLOY_CHECKLIST.md`）。Human Decision 残件（`/planner` の 301／footer・nav・index）は同時でも別でもよいが、少なくとも `/sidekick-planner` が本番に出ていること。
 5. **live 検証** — 本番で `/sidekick-planner` → 登録 → `/dl-planner` にボタンが出て R2 から DL できる、DL 後の `Get-FileHash` = `93c27bf1…`、展開後 EXE = `709afc4e…`。**この PASS 時点 = actual Public Beta release 日**（`HD-LR-40` の一般公開日。捏造しない）。
-6. **記録** — Planner 側 `release_acceptance.json` に `HD-RA-*` に従って release 記録（配布 package identity・URL・release 日）、CHANGELOG、`/changelog` ページ、Brevo 属性 `HAS_PLANNER`/`VER_PLANNER` 作成（`tools/create_brevo_attributes.py`）。
+6. **記録** — Planner 側 `release_acceptance.json` に `HD-RA-*` に従って release 記録（配布 package identity・URL・release 日）、CHANGELOG、`/changelog` ページ。Brevo 属性 `HAS_PLANNER`/`VER_PLANNER` は **2026-09-20 作成済み**（Human confirmation → `tools/create_brevo_attributes.py --dry-run`（既存 normal 22、作成対象 2 のみ）→ 実行 → API 再確認: 両属性 category `normal` / type `text`、normal 22 → 24、既存 HAS_*/VER_* 10 属性不変・削除 0）。
 
 ## 4. rollback / replacement / versioning
 

@@ -56,8 +56,8 @@ py -3.10 tools/create_brevo_attributes.py             # 作成
 
 | 属性 | 値 | 用途 |
 |---|---|---|
-| `HAS_STAR` / `HAS_PORTRAIT` / `HAS_SKY` / `HAS_AI` | `yes` | その製品をDLしたか |
-| `VER_STAR` / `VER_PORTRAIT` / `VER_SKY` / `VER_AI` | 例 `3.16` | 最後にDLしたバージョン |
+| `HAS_STAR` / `HAS_PORTRAIT` / `HAS_SKY` / `HAS_AI` / `HAS_PLANNER` | `yes` | その製品をDLしたか（`HAS_PLANNER` は 2026-09-20 作成） |
+| `VER_STAR` / `VER_PORTRAIT` / `VER_SKY` / `VER_AI` / `VER_PLANNER` | 例 `3.16` / `1.0.0-beta.1` | 最後にDLしたバージョン |
 | `LANG` | `ja` / `en` | 配信言語（最新のDLページの言語で上書き） |
 | `PRODUCT` | 例 `Sidekick_Star` | 最新のDL製品（従来からある。上書きされる） |
 | `LEAD_SOURCE` | 例 `lp-star` | 最新の流入元（上書きされる） |
