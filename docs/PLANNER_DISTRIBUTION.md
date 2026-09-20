@@ -3,10 +3,11 @@
 2026-09-20 新設（自作リポジトリ Track `planner-beta1-distribution-preparation`、AI-10650）。
 製品ページ・登録導線は `docs/PLANNER_PRODUCT_PAGE.md`。本書は **ZIP を置く場所と、Human GO 後に配布を開始する最短手順**。
 
-> **状態（2026-09-20 AI-10850、Distribution Unit）: R2 upload 済み・検証 PASS・`dl-planner` の有効化は local commit のみ。**
-> site の push（本番デプロイ）は未実施 = 一般ユーザーは `/sidekick-planner` にも `/dl-planner` にも到達できず、Public Beta は未開始。
-> object `Sidekick_Planner_1.0.0-beta.1_bea1697.zip` は public bucket に存在する（URL を知っていれば取得可能な状態）。
-> 配布停止が必要なら Cloudflare Dashboard で object を削除する（Human 操作）。
+> **状態（2026-09-20 AI-11450、Public Beta Release Unit、Human GO）: Sidekick Planner β1.00 Public Beta = RELEASED。**
+> site `b031cd1` を `origin/main` へ push（20:22:46 JST）→ Vercel 本番 live（20:23:48 JST）→ live 検証・実登録（Firestore / Brevo）・実 download 検証（bytes / sha256 / 展開 / manifest / EXE）・起動確認 = 全 PASS →
+> **actual release datetime = 2026-09-20 20:31 JST**（β期間の開始日 = 2026-09-20、planned end = 2026-10-31、β1.01 等で reset しない）。
+> canonical record: Planner 側 `clean_machine/release_acceptance.json` の `public_beta_release`（`HD-PLANNERBETA1PUBLICBETARELEASE-001`）。公開 `/changelog` に 2026-09-20 entry。
+> 配布停止が必要なら `dl-planner.html` の 2 定数を空へ戻して push（fail-closed）、急ぐ場合は Cloudflare Dashboard で object 削除（Human 操作）。
 
 ## 1. 配布基盤（fresh verify、2026-09-20）
 
