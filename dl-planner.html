@@ -7,7 +7,8 @@
 <!-- 2026-09-20 新設（Track planner-beta1-web-product-page、AI-10450）。
      Sidekick Planner β1.00 のダウンロードページ。dl-star.html と同じ導線
      （/register-dl?product=planner → メール登録 → sk_dl_authorized → 本ページ）だが、
-     **配布 URL と配布 package の SHA-256 が確定するまでは fail-closed**:
+     **配布 URL と配布 package の SHA-256 が確定するまでは fail-closed**（2026-09-20 AI-10850 で確定・有効化。
+     配布停止は 2 定数を空文字へ戻す = fail-closed へ復帰）:
        PLANNER_DOWNLOAD_URL / PLANNER_ZIP_SHA256 が空文字の間は「準備中」を表示し、
        ダウンロードリンクを一切出さない（tests/site/test_download_flow_links.py が固定）。
      Public Beta Distribution の開始（Distribution Unit、Human GO）で 2 定数を埋める。
@@ -244,9 +245,10 @@
 // 配布 URL（official distribution source = 既存製品と同じ Cloudflare R2 `sidekick-downloads`、
 // object 名は versioned: Sidekick_Planner_1.0.0-beta.1_bea1697.zip。Human GO 後に埋める。
 // 値は docs/PLANNER_PRODUCT_PAGE.md §3 に準備済み）。
-const PLANNER_DOWNLOAD_URL = '';
+// 2026-09-20 AI-10850: R2 upload 済み・検証 PASS（bytes 1934309563 / sha256 93c27bf1…、DL 再検証・展開後 RC13 一致）。
+const PLANNER_DOWNLOAD_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.1_bea1697.zip';
 // 配布 ZIP の SHA-256（package 単位の hash。build_distribution_zip.py の identity.json の zip_sha256）。
-const PLANNER_ZIP_SHA256 = '';
+const PLANNER_ZIP_SHA256 = '93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333ed0d3bca83e1';
 
 (function () {
   // dl-star.html と同じメール登録経路の bypass フラグ（一回使い捨て）。

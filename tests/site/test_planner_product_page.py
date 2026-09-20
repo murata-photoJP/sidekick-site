@@ -9,10 +9,9 @@
 3. Public Roadmap Concealment（HD-PLANNERBETA1GENERICSURFACE-009）:
    星景・天の川・将来ジャンルとしての「太陽・月」を製品ページに出さない。
    パールは「近日対応」の形でだけ出す。
-4. 配布導線が fail-closed であること:
-   dl-planner.html の PLANNER_DOWNLOAD_URL / PLANNER_ZIP_SHA256 が空で、
-   ページ内に配布 URL（.zip への https リンク）が 1 つも無いこと。
-   Public Beta Distribution を開始する Unit は、この test を意図的に更新する。
+4. 配布導線: 2026-09-20 の Distribution Unit（AI-10850）までは fail-closed（2 定数が空・.zip リンク 0）を
+   固定していた。以後は「検証済みの versioned R2 object 1 つだけを指す」ことを固定する
+   （test_dl_planner_points_at_the_verified_distribution_package）。
 5. スクリーンショット画像が実在し、テンプレートが参照する path と一致すること。
 
 リポジトリを読むだけで、何も書き込まない。
@@ -165,14 +164,24 @@ def test_register_dl_maps_planner_to_dl_planner() -> None:
     assert (REPO_ROOT / "dl-planner.html").exists()
 
 
-def test_dl_planner_is_fail_closed_before_distribution() -> None:
-    """Public Beta Distribution 未開始: 配布 URL / ZIP hash が空で、ページ内に .zip リンクが無い。
-    Distribution Unit（Human GO）で 2 定数を埋めるときに、この test を意図的に更新すること。"""
+# Distribution Unit（AI-10850、Human GO 2026-09-20）で確定した distribution package identity。
+# 正本は Planner 側 manifests/release/distribution_package_Sidekick_Planner_1.0.0-beta.1_bea1697.identity.json。
+PLANNER_ZIP_URL = "https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.1_bea1697.zip"
+PLANNER_ZIP_SHA256 = "93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333ed0d3bca83e1"
+
+
+def test_dl_planner_points_at_the_verified_distribution_package() -> None:
+    """配布開始後の形（2026-09-20 に意図的に更新。それまでは 2 定数が空の fail-closed を固定していた）:
+    配布 URL は既存製品と同じ R2 bucket の versioned object 1 つだけ、ZIP hash は canonical record の値、
+    準備中表示（fail-closed 経路）は残っていること。配布停止は 2 定数を空へ戻す。"""
     source = (REPO_ROOT / "dl-planner.html").read_text(encoding="utf-8")
-    assert "const PLANNER_DOWNLOAD_URL = '';" in source
-    assert "const PLANNER_ZIP_SHA256 = '';" in source
-    assert not re.search(r'https?://\S+\.zip', source), "配布開始前に配布 URL が書かれている"
-    assert 'id="pending-state"' in source and "配布は準備中" in source
+    assert f"const PLANNER_DOWNLOAD_URL = '{PLANNER_ZIP_URL}';" in source
+    assert f"const PLANNER_ZIP_SHA256 = '{PLANNER_ZIP_SHA256}';" in source
+    zips = set(re.findall(r'https?://\S+?\.zip', source))
+    assert zips == {PLANNER_ZIP_URL}, f"配布 URL は R2 の Planner object 1 つだけ: {zips}"
+    assert "pub-123781c638d64762ac2e397ce0e98259.r2.dev" in PLANNER_ZIP_URL   # dl-star.html と同じ bucket
+    assert "Sidekick_Planner_1.0.0-beta.1_bea1697.zip" in source.split("setAttribute('download'")[1][:80]
+    assert 'id="pending-state"' in source and "配布は準備中" in source          # fail-closed 経路は残す
     assert source.count("<h1") == 1
 
 

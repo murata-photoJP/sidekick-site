@@ -3,7 +3,10 @@
 2026-09-20 新設（自作リポジトリ Track `planner-beta1-distribution-preparation`、AI-10650）。
 製品ページ・登録導線は `docs/PLANNER_PRODUCT_PAGE.md`。本書は **ZIP を置く場所と、Human GO 後に配布を開始する最短手順**。
 
-> **状態: 準備完了・配布未開始。** R2 への upload・site の push（本番デプロイ）・`dl-planner` の URL 有効化はいずれも行っていない。
+> **状態（2026-09-20 AI-10850、Distribution Unit）: R2 upload 済み・検証 PASS・`dl-planner` の有効化は local commit のみ。**
+> site の push（本番デプロイ）は未実施 = 一般ユーザーは `/sidekick-planner` にも `/dl-planner` にも到達できず、Public Beta は未開始。
+> object `Sidekick_Planner_1.0.0-beta.1_bea1697.zip` は public bucket に存在する（URL を知っていれば取得可能な状態）。
+> 配布停止が必要なら Cloudflare Dashboard で object を削除する（Human 操作）。
 
 ## 1. 配布基盤（fresh verify、2026-09-20）
 
@@ -45,11 +48,23 @@ Sidekick Star / Portrait / SkyEffect / AI は **すべて同じ基盤** で ZIP 
 
 ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**。RC13 の EXE identity（`709afc4e…`）とは別物で、`dl-planner` には両方を表示する。
 
+## 2-2. upload と検証の記録（2026-09-20、AI-10850、Human GO）
+
+| 検証 | 結果 |
+|---|---|
+| upload | `rclone copy zip\Sidekick_Planner_1.0.0-beta.1_bea1697.zip r2:sidekick-downloads`（dry-run で 1/1 を確認後に実行、2m56s、Multi-thread Copied (new)） |
+| bucket | `rclone lsl` = 8 object。既存 7 object の bytes 不変（Star 3,479,181,062 / Star_Core 429,493,673 / Portrait 1,794,444 / SkyEffect 1,141,612 / AI 9,653,529 / PDF 2 件） |
+| HEAD | `200`、`Content-Type: application/zip`、`Content-Length: 1934309563`、`Accept-Ranges: bytes`、`Last-Modified: Sun, 20 Sep 2026 09:40:38 GMT` |
+| Range | `curl -r 0-1023` → `206`（レジューム可） |
+| 実 download | `200`、1,934,309,563 B、sha256 `93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333ed0d3bca83e1`（= canonical identity record） |
+| 展開 | 2,185 entry、top-level `Sidekick Planner/` のみ、zip64 なし → `expected_manifest_rc13.json` と全 file（path/bytes/sha256）一致、2,079,489,773 B、EXE sha256 `709afc4e…` 一致 |
+| site 側 | `dl-planner.html` の 2 定数を埋めた（local commit、未 push）。`tests/site` 224 PASS（fail-closed test は「検証済み object 1 つだけを指す」形へ意図的に更新） |
+
 ## 3. Human GO 後の最短手順（Public Beta 開始）
 
 前提: Human が「配布 GO」を出す。順番を変えない（URL 有効化は upload と live 検証の後）。
 
-1. **upload（Human または Human 立会いの Claude Code、既存 object に触れない）**
+1. **upload（済み、上記 2-2）**
    ```powershell
    $rclone = "C:\Program Files\Adobe\Adobe Photoshop (Beta)\Presets\Scripts\自作\SideKick販売ページ\アップロード先\rclone-v1.74.2-windows-amd64\rclone.exe"
    $zip    = "C:\Program Files\Adobe\Adobe Photoshop (Beta)\Presets\Scripts\自作\SideKick販売ページ\zip\Sidekick_Planner_1.0.0-beta.1_bea1697.zip"
@@ -62,7 +77,7 @@ ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**�
    curl.exe -sI https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.1_bea1697.zip   # 200 / Content-Length 1934309563
    ```
    さらに一度ダウンロードして `Get-FileHash` が `93c27bf1…` であること（egress 無料）。
-3. **dl-planner 有効化（site repo）** — `dl-planner.html` の 2 定数を埋める:
+3. **dl-planner 有効化（済み、local commit）** — `dl-planner.html` の 2 定数:
    ```js
    const PLANNER_DOWNLOAD_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.1_bea1697.zip';
    const PLANNER_ZIP_SHA256 = '93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333ed0d3bca83e1';
