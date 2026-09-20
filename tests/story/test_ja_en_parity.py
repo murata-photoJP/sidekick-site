@@ -36,7 +36,8 @@ SITEMAP = REPO_ROOT / "sitemap.xml"
 # Story以外にも、今回の公開単位でJA/ENが対になっているべきページ。
 # 今後この種のページが増えたら、ここへ1行足せば同じ検証が効く。
 PAGE_PAIRS = [
-    ("planner.html", "en/planner.html", "/planner", "/en/planner"),
+    # 2026-09-20（AI-11650）: /planner の対は 301 統合で廃止。Story 5 の受け皿は製品ページ。
+    ("sidekick-planner.html", "en/sidekick-planner.html", "/sidekick-planner", "/en/sidekick-planner"),
 ]
 
 CANONICAL_RE = re.compile(r'<link rel="canonical" href="([^"]+)">')
@@ -309,10 +310,11 @@ def test_planner_story_cross_links_exist() -> None:
     """Storyを読んだ人がPlannerへ、Plannerを見た人がStoryへ行けること。"""
     problems = []
     pairs = [
-        (OUT_JA / "when-and-where-should-i-go.html", "/planner"),
-        (OUT_EN / "when-and-where-should-i-go.html", "/en/planner"),
-        (REPO_ROOT / "planner.html", "/story/when-and-where-should-i-go"),
-        (REPO_ROOT / "en" / "planner.html", "/en/story/when-and-where-should-i-go"),
+        # 2026-09-20（AI-11650）: /planner は /sidekick-planner へ 301 統合。Story からは製品ページへ。
+        (OUT_JA / "when-and-where-should-i-go.html", "/sidekick-planner"),
+        (OUT_EN / "when-and-where-should-i-go.html", "/en/sidekick-planner"),
+        (REPO_ROOT / "sidekick-planner.html", "/story/when-and-where-should-i-go"),
+        (REPO_ROOT / "en" / "sidekick-planner.html", "/en/story/when-and-where-should-i-go"),
     ]
     for path, expected_href in pairs:
         if not path.exists():
@@ -322,28 +324,29 @@ def test_planner_story_cross_links_exist() -> None:
     assert not problems, "\n".join(problems)
 
 
-def test_planner_page_states_beta_and_links_to_the_product_page() -> None:
-    """2026-08-31〜: 「現在開発中」を明示（完成製品として見せない、村田さんの明示要件）。
-    2026-09-20（AI-11050、Public Beta Web 最終整理、Human Decision 1）: /planner は concept ページ、
-    製品・配布入口は /sidekick-planner という二層構造になったため、「β1.00 公開ベータ版」であること・
-    正式版は開発中であること・製品ページへの導線があることを固定する（旧「現在開発中」表記は撤去）。"""
-    ja = _read(REPO_ROOT / "planner.html")
-    en = _read(REPO_ROOT / "en" / "planner.html")
-    assert "公開ベータ版" in ja and "開発中" in ja and 'href="/sidekick-planner"' in ja
-    assert "現在開発中" not in ja
-    assert "public beta" in en and "in development" in en and 'href="/en/sidekick-planner"' in en
-    assert "In development" not in en
-
-
-def test_planner_concept_page_has_no_unreleased_capability_wording() -> None:
-    """HD-PLANNERBETA1GENERICSURFACE-009 / Human Decisions 2〜4（2026-09-20）: /planner の公開本文に
-    星景・天の川など β1.00 で公開しない機能を出さない（Jinja コメントは対象外 = 生成 HTML を検査）。"""
-    for path, terms in ((REPO_ROOT / "planner.html", ("天の川", "星景", "光害", "水蒸気")),
-                        (REPO_ROOT / "en" / "planner.html", ("Milky Way", "light pollution", "water vapour"))):
-        html = _read(path)
-        body = html.split("<main>", 1)[1].split("</main>", 1)[0]
-        for term in terms:
-            assert term not in body, f"{path.name}: {term!r} が本文にある"
+def test_old_planner_urls_are_redirected_not_served() -> None:
+    """2026-09-20（AI-11650、Human Decision「Planner public URL 一本化」）: /planner・/en/planner は
+    独立ページを廃止し vercel.json で 301（statusCode）。生成物・テンプレートが残っていないこと、
+    site 内の通常参照が /sidekick-planner に統一されていることを固定する。"""
+    import json as _json
+    import re as _re
+    for rel in ("planner.html", "en/planner.html", "templates/site/pages/planner.html", "templates/site/pages/en/planner.html"):
+        assert not (REPO_ROOT / rel).exists(), f"{rel} が残っている（301 統合後は削除）"
+    redirects = _json.loads((REPO_ROOT / "vercel.json").read_text(encoding="utf-8"))["redirects"]
+    by_src = {r["source"]: r for r in redirects}
+    assert by_src["/planner"]["destination"] == "/sidekick-planner" and by_src["/planner"]["statusCode"] == 301
+    assert by_src["/en/planner"]["destination"] == "/en/sidekick-planner" and by_src["/en/planner"]["statusCode"] == 301
+    offenders = []
+    for p in REPO_ROOT.rglob("*.html"):
+        rel = p.relative_to(REPO_ROOT).as_posix()
+        if rel.startswith(("build-output/", "BackUp/", "templates/")) or "sidekick_manual_package" in rel:
+            continue
+        if _re.search(r'href="/(?:en/)?planner"', p.read_text(encoding="utf-8", errors="replace")):
+            offenders.append(rel)
+    assert not offenders, f"旧 URL /planner への通常リンクが残っている: {offenders}"
+    sitemap = (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8-sig")
+    assert "<loc>https://www.sidekick-lab.com/planner</loc>" not in sitemap
+    assert "<loc>https://www.sidekick-lab.com/en/planner</loc>" not in sitemap
 
 
 # ---------------------------------------------------------------------------

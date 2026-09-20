@@ -7,8 +7,8 @@ date: "2026-08-31"
 status: "published"
 summary: "Sidekick Plannerは、撮影に失敗したから作ったのではない。「ここに立てと言われれば撮れる。でも、この『ここ』が分からない」。その「ここ」を簡単に探せるようにしたい、というところから始まった。"
 related_links:
-  - label: "Sidekick Planner（開発中）"
-    url: "/planner"
+  - label: "Sidekick Planner β1.00（製品ページ）"
+    url: "/sidekick-planner"
 ---
 
 Sidekick Plannerを作ろうと思ったきっかけは、私自身がダイヤモンド富士やパール富士を撮り続けていたからではありません。

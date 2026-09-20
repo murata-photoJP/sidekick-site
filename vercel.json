@@ -13,6 +13,16 @@
       "has": [{ "type": "host", "value": "sidekick-site-tawny.vercel.app" }],
       "destination": "https://www.sidekick-lab.com/$1",
       "permanent": true
+    },
+    {
+      "source": "/planner",
+      "destination": "/sidekick-planner",
+      "statusCode": 301
+    },
+    {
+      "source": "/en/planner",
+      "destination": "/en/sidekick-planner",
+      "statusCode": 301
     }
   ],
   "crons": [

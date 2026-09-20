@@ -214,11 +214,9 @@ _register_page_pair(
 # 移行元の手書きHTMLは無く、テンプレートが最初から正本になる（ichiro-murataと同じ）。
 # OGPあり（Storyから共有される前提）。en_redirect_urlは既定の.html付きを上書きする
 # （cleanUrls:true環境での余分なリダイレクトを防ぐ、terms/ichiro-murataと同じ扱い）。
-_register_page_pair(
-    "planner",
-    ja_extra={"enable_ogp": True, "en_redirect_url": "/en/planner"},
-    en_extra={"enable_ogp": True},
-)
+# 2026-09-20（AI-11650、Human Decision「Planner public URL 一本化」）: /planner・/en/planner は
+# 独立ページを廃止し、vercel.json で /sidekick-planner・/en/sidekick-planner へ 301。
+# テンプレート（templates/site/pages/planner.html・en/planner.html）と生成物は削除した。
 # Sidekick Planner β1.00 製品ページ（2026-09-20新設、Track planner-beta1-web-product-page、
 # AI-10450）。Star / Portrait / Sky Effect と同じ「製品ページ」系列。上の /planner
 # （開発中ページ）とは別ページで、両者の統合・リダイレクトは Human Decision 待ち

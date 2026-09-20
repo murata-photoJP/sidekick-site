@@ -115,7 +115,7 @@ py -3.10 tools/preview_static_site.py --port 3334
 
 ## 6. Human Decision が必要な残件（2026-09-20 AI-11050 で解消した項目は打ち消し）
 
-2026-09-20（Public Beta Web 最終整理、AI-11050）: **二層構造を採用** — `/planner` = concept（考え方・何をする道具か。
+2026-09-20（Public Beta Web 最終整理、AI-11050）: 二層構造を採用（→ **同日 AI-11650 の Human Decision で /planner・/en/planner は /sidekick-planner・/en/sidekick-planner へ 301 統合、concept ページは廃止**。以下は当時の記録） — `/planner` = concept（考え方・何をする道具か。
 天の川など β1.00 で公開しない機能の記述を削除、「計算できることと、計算できないこと」を全面改稿、
 「いま試せる β1.00」→ `/sidekick-planner` 導線）、`/sidekick-planner` = product（機能・画面・登録・ダウンロード。
 「Sidekick Planner とは」→ `/planner` へ 1 link）。301 は採用しない（Human Decision 1）。
