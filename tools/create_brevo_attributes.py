@@ -62,6 +62,9 @@ ATTRIBUTES = {
     "VER_PORTRAIT": "Portrait の最終DLバージョン",
     "VER_SKY": "Sky Effect の最終DLバージョン",
     "VER_AI": "AI の最終DLバージョン",
+    # 2026-09-20 に追加した属性（Sidekick Planner β1.00）
+    "HAS_PLANNER": "Sidekick Planner をDL済みか",
+    "VER_PLANNER": "Planner の最終DLバージョン",
     "LANG": "配信言語（ja / en）",
 }
 

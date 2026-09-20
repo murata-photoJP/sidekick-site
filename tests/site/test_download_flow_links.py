@@ -25,6 +25,7 @@ DOWNLOAD_FLOW_PAGES = [
     "dl-portrait.html",
     "dl-sky.html",
     "dl-ai.html",
+    "dl-planner.html",   # 2026-09-20 追加（Sidekick Planner β1.00、配布開始前は fail-closed）
 ]
 
 # JS で自ページから遷移する箇所
@@ -67,11 +68,11 @@ def test_遷移先のページが実在する():
 
 
 @pytest.mark.parametrize("name", ["dl-star.html", "dl-portrait.html",
-                                 "dl-sky.html", "dl-ai.html"])
+                                 "dl-sky.html", "dl-ai.html", "dl-planner.html"])
 def test_未認可時の戻り先が自分と同じ製品を指す(name):
     """dl-*.html をコピーして作った際に product が取り違えられていないことを確認する。"""
     product = {"dl-star.html": "star", "dl-portrait.html": "portrait",
-               "dl-sky.html": "sky", "dl-ai.html": "ai"}[name]
+               "dl-sky.html": "sky", "dl-ai.html": "ai", "dl-planner.html": "planner"}[name]
     source = (REPO / name).read_text(encoding="utf-8")
     match = re.search(r"location\.replace\('(/register-dl[^']*)'\)", source)
     assert match, f"{name}: 未認可時のリダイレクトが見つからない"

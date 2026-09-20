@@ -1,0 +1,908 @@
+{# Sidekick Planner β1.00 製品ページ（日本語版）。2026-09-20 新設
+   （Track planner-beta1-web-product-page、AI-10450、HD namespace HD-PLANNERBETA1WEBPRODUCTPAGE）。
+
+   位置づけ: Sidekick Star / Portrait / Sky Effect と同じ「製品ページ」の系列。
+   既存の /planner（開発中ページ、Story 5 の受け皿、2026-08-31）は本ページで置き換えず、
+   併存させたまま Human Review へ出す（/planner の扱い = Human Decision 待ち。
+   Distribution handoff D-1 は「/planner を配布 surface として整備」と書いており、
+   Terms 第10条も /planner を「公式配布ページ」としてリンクしている。本ページを
+   /sidekick-planner に置くのは今回の明示指示による。矛盾の解消は Human Review 時）。
+
+   本文の事実は canonical から取った（推測で書かない）:
+     - 版 / OS / 未署名 / SHA-256 / 提供期間: release_acceptance.json（record_version 4、
+       build 1.0.0-beta.1+20260920T004212Z.gbea1697、EXE sha256 709afc4e…、2,185 file /
+       2,079,489,773 B、annual asset 374）、HD-MC-12〜14（未署名で初期 Public Beta 可、
+       distribution page での disclosure）、HD-LR-40 / Terms 第3条（一般公開日〜2026-10-31 予定）、
+       HD-OS-01（Windows 10 64-bit 以降）、HD-PLANNERBETA1LOCALIZATIONPOLICY-001（初期 β は日本語 UI）
+     - 機能の範囲: beta_capability.py（太陽 = SUPPORTED、パール = COMING_SOON で計算開始不可）、
+       /api/poi-catalog（被写体 100 か所: 富士山・山岳・塔/建築物・城・寺院・橋・駅舎・巨大像）、
+       planner_runtime.html（参考ライン・検索B・展望プレビュー・QR 共有・共有QR読み込み）
+     - 公開してよい範囲: HD-PLANNERBETA1GENERICSURFACE-009（Diamond / Sun 系と Pearl「近日対応」
+       のみ。星景・将来ジャンル・中長期ロードマップ・未実装機能は出さない）
+   スクリーンショットはモックアップではなく、RC13 と同一の配布物コピーを起動して
+   tools/planner_product_page_screenshots.py で撮った実画面（docs/PLANNER_PRODUCT_PAGE.md）。
+
+   CTA は /register-dl?product=planner&src=sidekick-planner（Star と同じ導線）。
+   register-dl → /dl-planner は fail-closed（配布 URL 未確定の間は「準備中」を表示し、
+   ダウンロードリンクを出さない。docs/PLANNER_PRODUCT_PAGE.md 参照）。
+
+   CSS は sidekick-star.html の variables / .btn / .hero / .section / .card / .steps を
+   そのまま踏襲し、本ページ固有の分（.shot / .beta-table / .notice）だけ足した。
+   新しいデザインシステムは作らない。 #}
+{% extends "base.html" %}
+
+{% block title %}Sidekick Planner β1.00 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
+
+{% block meta_description %}Sidekick Planner（サイドキック プランナー）は、太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。ダイヤモンド富士をはじめ、山・塔・城・寺院など100か所の被写体に対応。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.00 は無料の公開ベータ版（日本語UI）。{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/sidekick-planner{% endblock %}
+
+{% block og_title %}Sidekick Planner β1.00 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
+
+{% block og_description %}太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。構図プレビュー・地図・QR共有・スマホ用ビューアー。β1.00 は無料の公開ベータ版。{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --muted:#5e6677;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
+        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* ── Buttons（sidekick-star と同じ） ── */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:52px;
+      padding:0 28px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:15px;
+      transition:.2s ease;
+      border:1px solid transparent;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#121212;
+      box-shadow:0 8px 32px rgba(255,138,0,.32);
+    }
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 40px rgba(255,138,0,.42);
+    }
+    .btn-secondary{
+      background:transparent;
+      border-color:rgba(255,255,255,.16);
+      color:var(--white);
+    }
+    .btn-secondary:hover{
+      border-color:rgba(255,255,255,.32);
+      background:rgba(255,255,255,.04);
+    }
+    .btn-lg{
+      min-height:60px;
+      padding:0 36px;
+      font-size:17px;
+      border-radius:16px;
+    }
+
+    /* ── Hero ── */
+    .hero{padding:88px 0 64px;}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:40px;
+      align-items:center;
+    }
+    .eyebrow{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:20px;
+    }
+    h1{
+      margin:0 0 20px;
+      font-size:clamp(32px, 5.5vw, 60px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+    h1 small{
+      display:block;
+      margin-top:14px;
+      font-size:clamp(18px, 2.4vw, 26px);
+      font-weight:800;
+      letter-spacing:-.01em;
+      color:var(--accent2);
+    }
+    .lead{
+      margin:0;
+      color:var(--sub);
+      font-size:clamp(16px, 2vw, 19px);
+      max-width:680px;
+      line-height:1.8;
+    }
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      margin-top:32px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .hero-note{
+      margin-top:16px;
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.9;
+    }
+    .hero-note strong{color:var(--accent2);}
+
+    /* ── Screenshot frame（本ページ固有） ── */
+    .shot{margin:0;}
+    .shot img{
+      width:100%;
+      height:auto;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:var(--shadow);
+      background:#fff;
+    }
+    .shot-caption{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+    }
+    .shot-grid{
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+    .shot-grid-qr{
+      grid-template-columns:1fr 1fr 1.2fr;
+      align-items:start;
+    }
+    .shot-phone{
+      max-width:300px;
+      margin:0 auto;
+    }
+
+    /* ── Section ── */
+    .section{padding:72px 0;}
+    .section-alt{
+      background:linear-gradient(180deg, transparent, rgba(5,8,20,.35) 20%, rgba(5,8,20,.35) 80%, transparent);
+    }
+    .section-head{margin-bottom:36px;}
+    .section-head h2{
+      margin:0 0 12px;
+      font-size:clamp(26px, 3.5vw, 40px);
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--sub);
+      max-width:720px;
+      font-size:clamp(15px, 1.8vw, 18px);
+    }
+    .section-label{
+      display:inline-block;
+      color:var(--accent2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    /* ── Cards ── */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+    .card-icon{font-size:28px;margin-bottom:14px;}
+    .card h3{margin:0 0 10px;font-size:18px;line-height:1.3;}
+    .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.75;}
+    .card p + p{margin-top:10px;}
+    .card .soon{
+      display:inline-block;
+      margin-left:6px;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--sub);
+      font-size:11px;
+      font-weight:800;
+      vertical-align:middle;
+    }
+
+    .feature-list{
+      list-style:none;
+      padding:0;
+      margin:14px 0 0;
+      display:grid;
+      gap:10px;
+    }
+    .feature-list li{
+      position:relative;
+      padding-left:18px;
+      font-size:15px;
+      color:var(--text);
+      line-height:1.6;
+    }
+    .feature-list li::before{
+      content:"•";
+      position:absolute;
+      left:0;
+      color:var(--accent2);
+      font-weight:900;
+    }
+
+    /* ── Steps ── */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:32px;
+      counter-reset:step;
+    }
+    .step{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      position:relative;
+      counter-increment:step;
+    }
+    .step::before{
+      content:counter(step);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#111;
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:16px;
+    }
+    .step h3{margin:0 0 8px;font-size:18px;}
+    .step p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── Callout ── */
+    .callout{
+      margin-top:32px;
+      padding:32px;
+      border-radius:24px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.10), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.18);
+      box-shadow:var(--shadow);
+    }
+    .callout strong{
+      display:block;
+      font-size:clamp(18px, 2.2vw, 24px);
+      line-height:1.5;
+      margin-bottom:12px;
+    }
+    .callout p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── β1.00 について（本ページ固有） ── */
+    .beta-table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      font-size:15px;
+    }
+    .beta-table th,
+    .beta-table td{
+      padding:14px 18px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      vertical-align:top;
+      text-align:left;
+    }
+    .beta-table tr:last-child th,
+    .beta-table tr:last-child td{border-bottom:0;}
+    .beta-table th{
+      width:11em;
+      color:var(--sub);
+      font-weight:700;
+      white-space:nowrap;
+      background:rgba(255,255,255,.02);
+    }
+    .beta-table td{color:var(--text);line-height:1.7;}
+    .beta-table code{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:12.5px;
+      color:var(--accent2);
+      word-break:break-all;
+    }
+    .beta-table a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+    .notice{
+      margin-top:20px;
+      padding:20px 22px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-left:3px solid var(--accent);
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.9;
+    }
+    .notice strong{color:var(--text);}
+    .notice a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+
+    /* ── CTA ── */
+    .cta-section{padding:72px 0 96px;}
+    .cta-card{
+      text-align:center;
+      padding:48px 28px;
+      border-radius:28px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.12), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.2);
+      box-shadow:var(--shadow);
+    }
+    .cta-card h2{
+      margin:0 0 12px;
+      font-size:clamp(24px, 3.2vw, 36px);
+      letter-spacing:-.02em;
+    }
+    .cta-card p{margin:0 0 24px;color:var(--sub);font-size:15px;}
+    .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .cta-foot{
+      margin:18px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.8;
+    }
+    .cta-foot a{color:var(--sub);text-decoration:underline;}
+
+    @media (max-width:980px){
+      .hero-grid,
+      .grid-2,
+      .shot-grid{
+        grid-template-columns:1fr;
+      }
+      .shot-grid-qr{grid-template-columns:1fr 1fr;}
+      .shot-grid-qr > :last-child{grid-column:1 / -1;}
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:640px){
+      .wrap{width:min(var(--max), calc(100% - 32px));}
+      .hero{padding:56px 0 40px;}
+      .grid-3,
+      .steps,
+      .shot-grid-qr{
+        grid-template-columns:1fr;
+      }
+      .btn{width:100%;}
+      .beta-table th{
+        display:block;
+        width:auto;
+        padding-bottom:4px;
+        border-bottom:0;
+      }
+      .beta-table td{display:block;padding-top:0;}
+      .cta-card{padding:36px 20px;}
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Sidekick Planner",
+    "alternateName": "サイドキック プランナー",
+    "softwareVersion": "1.0.0-beta.1",
+    "operatingSystem": "Windows 10 (64-bit) 以降",
+    "applicationCategory": "MultimediaApplication",
+    "description": "太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す写真家向けの撮影計画ソフトウェア。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.00 は無料の公開ベータ版。",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "村田一朗"
+    },
+    "url": "https://www.sidekick-lab.com/sidekick-planner"
+  }
+  </script>
+{% endblock %}
+
+{% block content %}
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">
+            🗺️ Sidekick Planner β1.00 ｜ Windows ｜ 無料の公開ベータ版
+          </div>
+
+          <h1>
+            撮りたいイメージから、<br>
+            撮れる場所と日時を探す。
+            <small>Sidekick Planner</small>
+          </h1>
+
+          <p class="lead">
+            太陽が山頂や塔の先端に重なる、その一瞬。
+            「いつ、どこへ行けばいいのか」を、
+            場所から探しても、日付から探しても答えが出る。
+            写真家のための撮影計画ソフトウェアです。
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg"
+               href="/register-dl?product=planner&src=sidekick-planner" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">
+              ▶ β版を試す（無料）
+            </a>
+            <a class="btn btn-secondary" href="#beta">
+              β1.00 について →
+            </a>
+          </div>
+
+          <div class="hero-note">
+            Windows 10（64-bit）以降 &nbsp;·&nbsp; 日本語UI &nbsp;·&nbsp; クレジットカード不要<br>
+            <strong>ダウンロードは約2GB</strong> — 2027年分の年間撮影計画データを同梱しているためです
+          </div>
+        </div>
+
+        <figure class="shot">
+          <img src="/images/planner/planner-overview.jpg" width="1440" height="900"
+               alt="Sidekick Planner β1.00 の画面。左に撮影計画の種類・被写体・ターゲット・参考ラインの設定パネル、右に関東から静岡にかけての地図。富士山を中心に、太陽と重なる撮影地点のラインが数本引かれている。">
+        </figure>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Planner とは何か
+    ═══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">What it is</span>
+          <h2>Sidekick Planner とは</h2>
+          <p>
+            天体の位置、被写体の座標、あいだにある地形。
+            日時と場所が決まれば計算できることは、コンピューターに任せる。
+            写真家は「撮る」判断に集中する。そのための道具です。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🧭</div>
+            <h3>場所と日時を両方向から探す</h3>
+            <p>
+              「この日にどこへ立てばいいか」も、「この場所ならいつ重なるか」も。
+              一方向だけでは決まらない撮影計画を、地図の上で往復しながら詰められます。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📐</div>
+            <h3>現地の見え方を先に確かめる</h3>
+            <p>
+              標高データから稜線を描き、太陽の軌跡とレンズの画角を重ねた構図プレビュー。
+              手前の山に隠れないか、画面のどこに来るかを出発前に見ておけます。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📱</div>
+            <h3>計画を持って現地へ</h3>
+            <p>
+              できあがった撮影計画は QR コードで共有。スマートフォンのブラウザで開けば、
+              日時・撮影地点・構図イメージ・位置関係が一画面で確認できます。
+            </p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>「ここへ行けばいい写真が撮れます」とは言いません。</strong>
+          <p>
+            計算で分かることと、現場でしか分からないことがあります。
+            天気、空気の透明度、その日の光。Sidekick Planner は、写真家が現場で判断できるところまでを計算で先回りします。
+            その先を見るために、写真家は現地へ行きます。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         代表的な使用例
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt" id="examples">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Use cases</span>
+          <h2>β1.00 でできる撮影計画</h2>
+          <p>
+            β1.00 は「太陽 × 被写体」の撮影計画に対応しています。
+            代表例はダイヤモンド富士ですが、被写体は富士山だけではありません。
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🌄</div>
+            <h3>ダイヤモンド富士</h3>
+            <p>
+              富士山の山頂に太陽が重なる瞬間。日の出・日の入りの両方について、
+              年間データから成立する日と撮影地点を探します。
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗼</div>
+            <h3>太陽 × 100か所の被写体</h3>
+            <p>
+              富士山、北・南・中央アルプスや八ヶ岳などの山岳、塔・高層建築、城、寺院、橋、駅舎、巨大像。
+              合計100か所の被写体を、ジャンルから選べます。
+            </p>
+            <p>被写体ごとに「重ねる基準（ターゲット）」を選び、山頂・先端など、どこに太陽を重ねるかを決められます。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌙</div>
+            <h3>パール（月 × 被写体）<span class="soon">近日対応</span></h3>
+            <p>
+              月を被写体に重ねる撮影計画は、近日対応予定です。
+              β1.00 では選択肢として表示されますが、計算はまだ始められません。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         検索
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="search">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Search</span>
+          <h2>場所から探す。日付から探す。</h2>
+          <p>
+            撮影計画は、場所が先に決まることもあれば、日付が先に決まることもあります。
+            Sidekick Planner は、その両方の入口を持っています。
+          </p>
+        </div>
+
+        <div class="shot-grid">
+          <figure class="shot">
+            <img src="/images/planner/search-b.jpg" width="1440" height="900" loading="lazy"
+                 alt="検索Bの画面。左パネルに緯度・経度・検索期間の入力欄と「最接近日・時刻を検索」ボタン、その下に結果として最良 2027-03-30 16:08:59、方位角差・高度角差・太陽半径比、「太陽とターゲットが重なる候補です。」と表示されている。地図には撮影地点のピンと、朝夕の参考ラインが引かれている。">
+            <figcaption class="shot-caption">
+              検索B｜撮影地点と期間を指定して「最接近日・時刻」を検索。富士山頂に太陽が重なる候補が、方位角差・高度角差とともに返ってきます（実画面）。
+            </figcaption>
+          </figure>
+
+          <div>
+            <div class="card">
+              <h3>撮影地から日時を探す（検索B）</h3>
+              <p>
+                地図のクリック、ピンのドラッグ、または座標入力で撮影地点を決め、検索期間を指定。
+                その場所で太陽が被写体のターゲットに最も近づく日時を探します。
+              </p>
+              <ul class="feature-list">
+                <li>方位角差・高度角差・太陽半径比で「重なるかどうか」を数値で確認</li>
+                <li>結果からそのまま構図プレビューへ</li>
+                <li>50m 刻みで前後を詳しく再計算し、立つ位置を追い込む</li>
+              </ul>
+            </div>
+            <div class="card" style="margin-top:18px">
+              <h3>日付から場所を探す（参考ライン）</h3>
+              <p>
+                基準日を決めると、その前後の日について「太陽と被写体が重なる撮影地点」が
+                朝夕それぞれのラインとして地図に引かれます。ライン上の候補地点を選んで、
+                そのままプレビューできます。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         構図プレビュー / 地図
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt" id="preview">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Composition preview</span>
+          <h2>行く前に、見え方を確かめる。</h2>
+          <p>
+            候補が見つかったら、その地点から被写体がどう見えるかを描きます。
+            稜線は国土地理院の標高データから、太陽の位置は天体暦から計算しています。
+          </p>
+        </div>
+
+        <figure class="shot">
+          <img src="/images/planner/composition-preview.jpg" width="1440" height="900" loading="lazy"
+               alt="展望プレビューの画面。2027/03/30 16:08 の撮影計画として、黒く塗られた富士山の稜線の上に太陽の軌跡（12:08 から 15:38 まで時刻付き）が弧を描き、山頂のターゲットに太陽が重なっている。レンズは 14mm 単焦点、白い枠が画角を示している。下に「この場所をGoogleマップで開く」「この地点の前後を50m刻みで詳しく計算」「この撮影計画をQRで共有」のボタン。">
+          <figcaption class="shot-caption">
+            展望プレビュー｜検索Bの最良日時（2027/03/30 16:08）。稜線・太陽の軌跡・画角の枠を重ねて表示（実画面）。
+          </figcaption>
+        </figure>
+
+        <div class="grid-3" style="margin-top:28px">
+          <div class="card">
+            <div class="card-icon">⛰️</div>
+            <h3>地形に隠れないか</h3>
+            <p>撮影地点と被写体のあいだの地形を稜線として描きます。手前の山に遮られる候補は、ここで分かります。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔭</div>
+            <h3>レンズと画角</h3>
+            <p>レンズを切り替えると画角の枠が変わります。矢印キーでカメラの向きを振り、画面のどこに被写体と太陽が来るかを確かめられます。</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗺️</div>
+            <h3>地図で撮影地点を確認</h3>
+            <p>候補・撮影地点・参考ラインは地図と連動します。「この場所をGoogleマップで開く」で、現地へのアクセスもすぐ確認できます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         QR → Smartphone Viewer
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="share">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">QR share &amp; smartphone viewer</span>
+          <h2>撮影計画を、QRでスマートフォンへ。</h2>
+          <p>
+            PC で作った撮影計画は QR コードにして共有できます。
+            読み取ったスマートフォンでは、アプリのインストールなしにブラウザで内容を確認できます。
+          </p>
+        </div>
+
+        <div class="shot-grid shot-grid-qr">
+          <figure class="shot">
+            <img src="/images/planner/qr-share.png" width="460" height="746" loading="lazy"
+                 alt="共有用QRコードのダイアログ。渡し方として「スマホで見る」と「Plannerへ渡す」の選択、QRコード画像、撮影計画・日時・ターゲットなどの内容、「PNGとして保存」ボタン。">
+            <figcaption class="shot-caption">
+              QR 共有｜「スマホで見る」または「Plannerへ渡す」を選んで QR を作成（実画面）。
+            </figcaption>
+          </figure>
+
+          <figure class="shot shot-phone">
+            <img src="/images/planner/viewer-mobile.png" width="780" height="1688" loading="lazy"
+                 alt="スマートフォン用ビューアーの画面。「ダイヤモンド富士」の見出し、2027/03/30(火) 16:08:59 の日時、撮影内容・被写体・撮影地点・焦点距離の表、そして被写体を中心にした構図イメージ。">
+            <figcaption class="shot-caption">
+              スマートフォン用ビューアー（iPhone 相当の画面幅）。日時・撮影地点・構図イメージ・位置関係の地図を一画面で（実画面）。
+            </figcaption>
+          </figure>
+
+          <div>
+            <div class="card">
+              <h3>スマホで見る</h3>
+              <p>
+                QR を読み取ると、Sidekick Lab の共有ページがブラウザで開きます。
+                日時、撮影地点、被写体、構図イメージ、撮影地点と被写体の位置関係。現地で見返すための一画面です。
+              </p>
+            </div>
+            <div class="card" style="margin-top:18px">
+              <h3>Planner へ渡す</h3>
+              <p>
+                別の PC の Sidekick Planner で QR 画像を読み込むと、その撮影計画を地図上で確認できます。
+                仲間と候補地を持ち寄るときに。
+              </p>
+            </div>
+            <div class="notice" style="margin-top:18px">
+              <strong>共有 QR には、正確な撮影地点（緯度・経度）がそのまま入ります。</strong>
+              作成前に必ず確認画面が出ます。公開したくない場所の撮影計画は、QR で共有しないでください。
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         使い始める流れ
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Getting started</span>
+          <h2>使い始める流れ</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <h3>β版をダウンロード</h3>
+            <p>メールアドレスを登録すると、ダウンロードページへ進みます。ZIP を展開するだけで、インストーラーはありません。</p>
+          </div>
+          <div class="step">
+            <h3>起動する</h3>
+            <p>SidekickPlanner.exe を実行すると、お使いのブラウザで Planner の画面が開きます。地図・標高データの取得にインターネット接続が必要です。</p>
+          </div>
+          <div class="step">
+            <h3>被写体を選んで探す</h3>
+            <p>まずは富士山と日付を選ぶだけで、参考ラインが地図に出ます。気になる地点を検索B で詰めて、プレビューで確かめてください。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         β1.00 について
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="beta">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">About the beta</span>
+          <h2>β1.00 について</h2>
+          <p>
+            正式版（Version 1）の公開に先立つ公開テスト版です。動作や使い勝手を確かめていただくために、無償で提供します。
+          </p>
+        </div>
+
+        <table class="beta-table">
+          <tbody>
+            <tr>
+              <th scope="row">バージョン</th>
+              <td>Sidekick Planner β1.00（1.0.0-beta.1）</td>
+            </tr>
+            <tr>
+              <th scope="row">対応 OS</th>
+              <td>Windows 10（64-bit）以降。macOS 版はありません。</td>
+            </tr>
+            <tr>
+              <th scope="row">表示言語</th>
+              <td>日本語。初期の公開ベータ版は日本語 UI で提供します。利用条件・プライバシーポリシーは日本語と英語で用意しています。</td>
+            </tr>
+            <tr>
+              <th scope="row">価格</th>
+              <td>無料（β期間中）。β版の利用期間は、正式版の無料期間には算入しません。</td>
+            </tr>
+            <tr>
+              <th scope="row">提供期間</th>
+              <td>一般公開日から 2026年10月31日（現時点の終了予定日）まで。終了予定日は開発・検証の進捗により変更することがあります。</td>
+            </tr>
+            <tr>
+              <th scope="row">ダウンロードサイズ</th>
+              <td>約2GB（ZIP）。2027年分の年間撮影計画データ（主要な被写体についての年間軌跡データ）を同梱しているため、この容量になります。データを同梱することで、検索が手元の PC で完結します。</td>
+            </tr>
+            <tr>
+              <th scope="row">コード署名</th>
+              <td>
+                現在の β版は、コード署名証明書の取得手続き中のため<strong>署名されていません</strong>。
+                起動時に Windows / Microsoft Defender SmartScreen などの警告が表示される場合があります。
+                ダウンロードページには配布物の SHA-256 を掲載し、照合できるようにします。
+                正式な配布元は、この Sidekick Lab の配布ページだけです。
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">利用条件</th>
+              <td>
+                <a href="/planner-terms">Sidekick Planner β版 利用条件</a> ／
+                <a href="/privacy#planner">プライバシーポリシー（Sidekick Planner に関する項目）</a><br>
+                β版のプログラムそのものの再配布はできません。紹介するときは、このページへのリンクを共有してください。
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="notice">
+          <strong>計算結果は、撮影できることを保証するものではありません。</strong>
+          被写体の座標・標高・地形データには誤差があり、β版では被写体の位置を「参考値」として扱っています。
+          結果は現地で確認してください。詳しくは<a href="/planner-terms">利用条件</a>をお読みください。
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         CTA
+    ═══════════════════════════════════════════ -->
+    <section class="cta-section">
+      <div class="wrap">
+        <div class="cta-card">
+          <h2>次のダイヤモンド富士を、計算しておく。</h2>
+          <p>β1.00 は無料です。使ってみて気づいたことは、ぜひ教えてください。</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary btn-lg"
+               href="/register-dl?product=planner&src=sidekick-planner" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">
+              ▶ β版を試す（無料）
+            </a>
+            <a class="btn btn-secondary" href="/story/when-and-where-should-i-go">
+              なぜ作ったのか（Story）→
+            </a>
+          </div>
+          <p class="cta-foot">
+            Windows 10（64-bit）以降 ・ 約2GB ・ 日本語UI<br>
+            <a href="/planner-terms">利用条件</a> ・ <a href="/privacy#planner">プライバシーポリシー</a> ・ <a href="/faq">FAQ</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+{% endblock %}

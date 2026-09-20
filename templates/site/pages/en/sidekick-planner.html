@@ -1,0 +1,876 @@
+{# Sidekick Planner beta 1.00 product page (English). Added 2026-09-20
+   (Track planner-beta1-web-product-page, AI-10450).
+
+   Mirrors templates/site/pages/sidekick-planner.html. The Japanese page is the
+   source of truth; keep both in step when either changes. Facts (version, OS,
+   unsigned build, beta period, feature scope, what may be published) come from
+   the same canonical records listed in the Japanese template's header comment.
+
+   The product UI of the initial public beta is Japanese only
+   (HD-PLANNERBETA1LOCALIZATIONPOLICY-001); this page says so explicitly and links
+   the English Terms / Privacy pages. The CTA goes to the same registration flow
+   with lang=en (/register-dl?product=planner&src=sidekick-planner&lang=en), which
+   is fail-closed until distribution starts (see docs/PLANNER_PRODUCT_PAGE.md).
+   Screenshots are real screens of the beta (Japanese UI), not mockups.
+   The <style> block is a copy of the Japanese template's; only the JSON-LD text differs. #}
+{% extends "base.html" %}
+
+{% block title %}Sidekick Planner Beta 1.00 | Find where and when to shoot, from the image you want{% endblock %}
+
+{% block meta_description %}Sidekick Planner is Windows software for photographers that finds where and when the sun lines up with a landmark — searching from either the place or the date. Diamond Fuji and 100 landmarks (mountains, towers, castles, temples). Composition preview, map, QR sharing, smartphone viewer. Beta 1.00 is a free public beta with a Japanese UI.{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/en/sidekick-planner{% endblock %}
+
+{% block og_title %}Sidekick Planner Beta 1.00 | Find where and when to shoot, from the image you want{% endblock %}
+
+{% block og_description %}Windows software that finds where and when the sun lines up with a landmark, from either the place or the date. Composition preview, map, QR sharing, smartphone viewer. Beta 1.00 is a free public beta (Japanese UI).{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --muted:#5e6677;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
+        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* ── Buttons（sidekick-star と同じ） ── */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:52px;
+      padding:0 28px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:15px;
+      transition:.2s ease;
+      border:1px solid transparent;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#121212;
+      box-shadow:0 8px 32px rgba(255,138,0,.32);
+    }
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 40px rgba(255,138,0,.42);
+    }
+    .btn-secondary{
+      background:transparent;
+      border-color:rgba(255,255,255,.16);
+      color:var(--white);
+    }
+    .btn-secondary:hover{
+      border-color:rgba(255,255,255,.32);
+      background:rgba(255,255,255,.04);
+    }
+    .btn-lg{
+      min-height:60px;
+      padding:0 36px;
+      font-size:17px;
+      border-radius:16px;
+    }
+
+    /* ── Hero ── */
+    .hero{padding:88px 0 64px;}
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:40px;
+      align-items:center;
+    }
+    .eyebrow{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:20px;
+    }
+    h1{
+      margin:0 0 20px;
+      font-size:clamp(32px, 5.5vw, 60px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+    h1 small{
+      display:block;
+      margin-top:14px;
+      font-size:clamp(18px, 2.4vw, 26px);
+      font-weight:800;
+      letter-spacing:-.01em;
+      color:var(--accent2);
+    }
+    .lead{
+      margin:0;
+      color:var(--sub);
+      font-size:clamp(16px, 2vw, 19px);
+      max-width:680px;
+      line-height:1.8;
+    }
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      margin-top:32px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .hero-note{
+      margin-top:16px;
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.9;
+    }
+    .hero-note strong{color:var(--accent2);}
+
+    /* ── Screenshot frame（本ページ固有） ── */
+    .shot{margin:0;}
+    .shot img{
+      width:100%;
+      height:auto;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:var(--shadow);
+      background:#fff;
+    }
+    .shot-caption{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.7;
+    }
+    .shot-grid{
+      display:grid;
+      grid-template-columns:1.4fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+    .shot-grid-qr{
+      grid-template-columns:1fr 1fr 1.2fr;
+      align-items:start;
+    }
+    .shot-phone{
+      max-width:300px;
+      margin:0 auto;
+    }
+
+    /* ── Section ── */
+    .section{padding:72px 0;}
+    .section-alt{
+      background:linear-gradient(180deg, transparent, rgba(5,8,20,.35) 20%, rgba(5,8,20,.35) 80%, transparent);
+    }
+    .section-head{margin-bottom:36px;}
+    .section-head h2{
+      margin:0 0 12px;
+      font-size:clamp(26px, 3.5vw, 40px);
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--sub);
+      max-width:720px;
+      font-size:clamp(15px, 1.8vw, 18px);
+    }
+    .section-label{
+      display:inline-block;
+      color:var(--accent2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    /* ── Cards ── */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;}
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+    .card-icon{font-size:28px;margin-bottom:14px;}
+    .card h3{margin:0 0 10px;font-size:18px;line-height:1.3;}
+    .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.75;}
+    .card p + p{margin-top:10px;}
+    .card .soon{
+      display:inline-block;
+      margin-left:6px;
+      padding:2px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      color:var(--sub);
+      font-size:11px;
+      font-weight:800;
+      vertical-align:middle;
+    }
+
+    .feature-list{
+      list-style:none;
+      padding:0;
+      margin:14px 0 0;
+      display:grid;
+      gap:10px;
+    }
+    .feature-list li{
+      position:relative;
+      padding-left:18px;
+      font-size:15px;
+      color:var(--text);
+      line-height:1.6;
+    }
+    .feature-list li::before{
+      content:"•";
+      position:absolute;
+      left:0;
+      color:var(--accent2);
+      font-weight:900;
+    }
+
+    /* ── Steps ── */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      margin-top:32px;
+      counter-reset:step;
+    }
+    .step{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      position:relative;
+      counter-increment:step;
+    }
+    .step::before{
+      content:counter(step);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#111;
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:16px;
+    }
+    .step h3{margin:0 0 8px;font-size:18px;}
+    .step p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── Callout ── */
+    .callout{
+      margin-top:32px;
+      padding:32px;
+      border-radius:24px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.10), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.18);
+      box-shadow:var(--shadow);
+    }
+    .callout strong{
+      display:block;
+      font-size:clamp(18px, 2.2vw, 24px);
+      line-height:1.5;
+      margin-bottom:12px;
+    }
+    .callout p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── β1.00 について（本ページ固有） ── */
+    .beta-table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      font-size:15px;
+    }
+    .beta-table th,
+    .beta-table td{
+      padding:14px 18px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      vertical-align:top;
+      text-align:left;
+    }
+    .beta-table tr:last-child th,
+    .beta-table tr:last-child td{border-bottom:0;}
+    .beta-table th{
+      width:11em;
+      color:var(--sub);
+      font-weight:700;
+      white-space:nowrap;
+      background:rgba(255,255,255,.02);
+    }
+    .beta-table td{color:var(--text);line-height:1.7;}
+    .beta-table code{
+      font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+      font-size:12.5px;
+      color:var(--accent2);
+      word-break:break-all;
+    }
+    .beta-table a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+    .notice{
+      margin-top:20px;
+      padding:20px 22px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-left:3px solid var(--accent);
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.9;
+    }
+    .notice strong{color:var(--text);}
+    .notice a{color:var(--accent2);text-decoration:underline;text-underline-offset:3px;}
+
+    /* ── CTA ── */
+    .cta-section{padding:72px 0 96px;}
+    .cta-card{
+      text-align:center;
+      padding:48px 28px;
+      border-radius:28px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.12), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.2);
+      box-shadow:var(--shadow);
+    }
+    .cta-card h2{
+      margin:0 0 12px;
+      font-size:clamp(24px, 3.2vw, 36px);
+      letter-spacing:-.02em;
+    }
+    .cta-card p{margin:0 0 24px;color:var(--sub);font-size:15px;}
+    .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+    .cta-foot{
+      margin:18px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.8;
+    }
+    .cta-foot a{color:var(--sub);text-decoration:underline;}
+
+    @media (max-width:980px){
+      .hero-grid,
+      .grid-2,
+      .shot-grid{
+        grid-template-columns:1fr;
+      }
+      .shot-grid-qr{grid-template-columns:1fr 1fr;}
+      .shot-grid-qr > :last-child{grid-column:1 / -1;}
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:640px){
+      .wrap{width:min(var(--max), calc(100% - 32px));}
+      .hero{padding:56px 0 40px;}
+      .grid-3,
+      .steps,
+      .shot-grid-qr{
+        grid-template-columns:1fr;
+      }
+      .btn{width:100%;}
+      .beta-table th{
+        display:block;
+        width:auto;
+        padding-bottom:4px;
+        border-bottom:0;
+      }
+      .beta-table td{display:block;padding-top:0;}
+      .cta-card{padding:36px 20px;}
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Sidekick Planner",
+    "softwareVersion": "1.0.0-beta.1",
+    "operatingSystem": "Windows 10 (64-bit) or later",
+    "applicationCategory": "MultimediaApplication",
+    "description": "Shot-planning software for photographers: find where and when the sun lines up with a landmark, from either the place or the date. Composition preview, map, QR sharing and a smartphone viewer. Beta 1.00 is a free public beta (Japanese UI).",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "JPY"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Ichiro Murata"
+    },
+    "url": "https://www.sidekick-lab.com/en/sidekick-planner"
+  }
+  </script>
+{% endblock %}
+
+{% block content %}
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">
+            🗺️ Sidekick Planner Beta 1.00 ｜ Windows ｜ Free public beta ｜ Japanese UI
+          </div>
+
+          <h1>
+            From the image you want,<br>
+            to where and when to shoot.
+            <small>Sidekick Planner</small>
+          </h1>
+
+          <p class="lead">
+            The moment the sun sits on a summit or the tip of a tower.
+            Start from a place or start from a date — Sidekick Planner works out the
+            "when and where" either way. Shot-planning software for photographers.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary btn-lg"
+               href="/register-dl?product=planner&src=sidekick-planner&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">
+              ▶ Try the beta (free)
+            </a>
+            <a class="btn btn-secondary" href="#beta">
+              About beta 1.00 →
+            </a>
+          </div>
+
+          <div class="hero-note">
+            Windows 10 (64-bit) or later &nbsp;·&nbsp; Japanese UI &nbsp;·&nbsp; no credit card<br>
+            <strong>The download is about 2 GB</strong> — it bundles the 2027 annual planning data
+          </div>
+        </div>
+
+        <figure class="shot">
+          <img src="/images/planner/planner-overview.jpg" width="1440" height="900"
+               alt="Sidekick Planner beta 1.00. Settings panel on the left (plan type, subject, target, reference lines) and a map of the Kanto–Shizuoka area on the right, with lines of shooting points where the sun lines up with Mount Fuji.">
+        </figure>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         What it is
+    ═══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">What it is</span>
+          <h2>What Sidekick Planner does</h2>
+          <p>
+            The position of the sun, the coordinates of the landmark, the terrain in between.
+            Once the date and the place are fixed, these can be computed — so let the computer do it,
+            and keep the photographer's attention on the shot.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🧭</div>
+            <h3>Search from either end</h3>
+            <p>
+              "Where should I stand on this date?" and "When will it line up from this spot?" —
+              a shooting plan rarely settles from one direction alone. Go back and forth on the map until it does.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📐</div>
+            <h3>Check the view before you go</h3>
+            <p>
+              A composition preview draws the skyline from elevation data and overlays the sun's track and
+              your lens's field of view. See whether a nearer ridge blocks the subject, and where it lands in the frame.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">📱</div>
+            <h3>Take the plan with you</h3>
+            <p>
+              Share a finished plan as a QR code. Opened in a smartphone browser, it shows the date and time,
+              the shooting point, the composition image and the geometry on one screen.
+            </p>
+          </div>
+        </div>
+
+        <div class="callout">
+          <strong>It does not promise "go here and you will get the shot".</strong>
+          <p>
+            Some things can be computed; some can only be seen on site — weather, transparency, the light of that day.
+            Sidekick Planner computes ahead as far as the photographer can then judge on the ground. For the rest, you go there.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Use cases
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt" id="examples">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Use cases</span>
+          <h2>What beta 1.00 can plan</h2>
+          <p>
+            Beta 1.00 covers "sun × landmark" plans. Diamond Fuji is the flagship example,
+            but the subject is not limited to Mount Fuji.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon">🌄</div>
+            <h3>Diamond Fuji</h3>
+            <p>
+              The sun on the summit of Mount Fuji. For both sunrise and sunset, the bundled annual data
+              gives the dates and the shooting points where it lines up.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗼</div>
+            <h3>Sun × 100 landmarks</h3>
+            <p>
+              Mount Fuji; peaks of the Northern, Southern and Central Alps and Yatsugatake; towers and tall buildings;
+              castles; temples; bridges; a station; giant statues — 100 subjects in all, chosen by genre.
+            </p>
+            <p>Each subject offers "targets" (summit, tip, …) so you decide exactly where the sun should sit.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🌙</div>
+            <h3>Pearl (moon × landmark)<span class="soon">coming soon</span></h3>
+            <p>
+              Plans that place the moon on a landmark are coming soon. Beta 1.00 shows the option,
+              but the calculation cannot be started yet.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Search
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="search">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Search</span>
+          <h2>From a place. From a date.</h2>
+          <p>Sometimes the place comes first, sometimes the date. Sidekick Planner has an entrance for each.</p>
+        </div>
+
+        <div class="shot-grid">
+          <figure class="shot">
+            <img src="/images/planner/search-b.jpg" width="1440" height="900" loading="lazy"
+                 alt="Search B screen (Japanese UI). Latitude, longitude and a date range on the left with the result: best 2027-03-30 16:08:59, azimuth and altitude differences, and the message that the sun overlaps the target. The map shows the shooting-point pin and the morning and evening reference lines.">
+            <figcaption class="shot-caption">
+              Search B — pick a shooting point and a period, then search for the closest approach. Here the sun lands on the summit of Mount Fuji (real screen, Japanese UI).
+            </figcaption>
+          </figure>
+
+          <div>
+            <div class="card">
+              <h3>From a place to a date (Search B)</h3>
+              <p>
+                Set the shooting point by clicking the map, dragging the pin or typing coordinates, choose a period,
+                and Planner finds when the sun comes closest to the target of your subject.
+              </p>
+              <ul class="feature-list">
+                <li>Azimuth difference, altitude difference and solar-radius ratio tell you whether it really overlaps</li>
+                <li>Jump straight from the result into the composition preview</li>
+                <li>Refine the standing position in 50 m steps</li>
+              </ul>
+            </div>
+            <div class="card" style="margin-top:18px">
+              <h3>From a date to a place (reference lines)</h3>
+              <p>
+                Choose a base date and Planner draws, for the days around it, the lines of shooting points where the sun
+                lines up with the subject — one for the morning and one for the evening. Pick a candidate on a line and preview it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Composition preview / map
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt" id="preview">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Composition preview</span>
+          <h2>Check the view before you leave.</h2>
+          <p>
+            Once you have a candidate, Planner draws how the subject will look from that point. The skyline comes from
+            Geospatial Information Authority of Japan elevation data, the sun's position from the ephemeris.
+          </p>
+        </div>
+
+        <figure class="shot">
+          <img src="/images/planner/composition-preview.jpg" width="1440" height="900" loading="lazy"
+               alt="Composition preview (Japanese UI) for 2027/03/30 16:08. The black skyline of Mount Fuji with the sun's track arcing across it, labelled with times from 12:08 to 15:38, the sun sitting on the summit target. Lens: 14 mm; a white frame shows the field of view. Buttons below open Google Maps, refine in 50 m steps, or share the plan by QR.">
+          <figcaption class="shot-caption">
+            Composition preview — the best time from Search B (2027/03/30 16:08). Skyline, sun track and frame overlaid (real screen).
+          </figcaption>
+        </figure>
+
+        <div class="grid-3" style="margin-top:28px">
+          <div class="card">
+            <div class="card-icon">⛰️</div>
+            <h3>Hidden by terrain?</h3>
+            <p>The terrain between you and the subject is drawn as a skyline. Candidates blocked by a nearer ridge show up here.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🔭</div>
+            <h3>Lens and field of view</h3>
+            <p>Switch lenses and the frame changes. Pan and tilt with the arrow keys to see where the subject and the sun fall in the frame.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">🗺️</div>
+            <h3>Confirm the point on the map</h3>
+            <p>Candidates, the shooting point and the reference lines stay linked to the map. "Open in Google Maps" checks access to the spot.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         QR → smartphone viewer
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="share">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">QR share &amp; smartphone viewer</span>
+          <h2>Your plan, on your phone, by QR.</h2>
+          <p>
+            A plan made on the PC can be shared as a QR code. The phone that scans it opens the plan in its browser —
+            no app to install.
+          </p>
+        </div>
+
+        <div class="shot-grid shot-grid-qr">
+          <figure class="shot">
+            <img src="/images/planner/qr-share.png" width="460" height="746" loading="lazy"
+                 alt="QR share dialog (Japanese UI): a choice between viewing on a phone or handing over to another Planner, the QR image, the plan's date, target and other facts, and a save-as-PNG button.">
+            <figcaption class="shot-caption">QR share — choose "view on phone" or "hand to Planner" and create the QR (real screen).</figcaption>
+          </figure>
+
+          <figure class="shot shot-phone">
+            <img src="/images/planner/viewer-mobile.png" width="780" height="1688" loading="lazy"
+                 alt="The smartphone viewer: the heading Diamond Fuji, the date and time 2027/03/30 (Tue) 16:08:59, a table with the plan, subject, shooting point and focal length, and the composition image centred on the subject.">
+            <figcaption class="shot-caption">Smartphone viewer at an iPhone-sized width — date, shooting point, composition image and geometry on one screen (real screen).</figcaption>
+          </figure>
+
+          <div>
+            <div class="card">
+              <h3>View on a phone</h3>
+              <p>
+                Scanning the QR opens a Sidekick Lab share page in the browser: date and time, shooting point, subject,
+                composition image and the geometry between point and subject. One screen to look back at on site.
+              </p>
+            </div>
+            <div class="card" style="margin-top:18px">
+              <h3>Hand to another Planner</h3>
+              <p>Load the QR image in Sidekick Planner on another PC to see that plan on the map — for comparing candidates with friends.</p>
+            </div>
+            <div class="notice" style="margin-top:18px">
+              <strong>A shared QR contains your exact shooting point (latitude and longitude).</strong>
+              A confirmation screen always appears first. Do not share plans for places you want to keep private.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Getting started
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Getting started</span>
+          <h2>Getting started</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <h3>Download the beta</h3>
+            <p>Register an e-mail address to reach the download page. Unzip — there is no installer.</p>
+          </div>
+          <div class="step">
+            <h3>Launch</h3>
+            <p>Run SidekickPlanner.exe and the Planner screen opens in your browser. An internet connection is needed for map and elevation tiles.</p>
+          </div>
+          <div class="step">
+            <h3>Pick a subject and search</h3>
+            <p>Choose Mount Fuji and a date and the reference lines appear on the map. Refine a spot with Search B and check it in the preview.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         About the beta
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="beta">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">About the beta</span>
+          <h2>About beta 1.00</h2>
+          <p>A public test release ahead of Version 1, provided free of charge so you can try how it works.</p>
+        </div>
+
+        <table class="beta-table">
+          <tbody>
+            <tr>
+              <th scope="row">Version</th>
+              <td>Sidekick Planner Beta 1.00 (1.0.0-beta.1)</td>
+            </tr>
+            <tr>
+              <th scope="row">Operating system</th>
+              <td>Windows 10 (64-bit) or later. There is no macOS version.</td>
+            </tr>
+            <tr>
+              <th scope="row">Language</th>
+              <td>The product UI of the initial public beta is Japanese only. The Terms of Use and the Privacy Policy are available in English.</td>
+            </tr>
+            <tr>
+              <th scope="row">Price</th>
+              <td>Free during the beta period. Beta usage does not count toward any free period of a future paid release.</td>
+            </tr>
+            <tr>
+              <th scope="row">Beta period</th>
+              <td>From the public release date until 31 October 2026 (the currently planned end date). The end date may change with the progress of development and testing.</td>
+            </tr>
+            <tr>
+              <th scope="row">Download size</th>
+              <td>About 2 GB (ZIP). It bundles the 2027 annual planning data (year-round track data for the main subjects), which is why the download is this large — and why searches run entirely on your PC.</td>
+            </tr>
+            <tr>
+              <th scope="row">Code signing</th>
+              <td>
+                The current beta is <strong>not code-signed</strong>; a code-signing certificate is being obtained.
+                Windows / Microsoft Defender SmartScreen may show a warning when you launch it.
+                The download page will list the SHA-256 of the package so you can verify it.
+                The only official source is this Sidekick Lab download page.
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Terms</th>
+              <td>
+                <a href="/en/planner-terms">Sidekick Planner Beta Terms of Use</a> ／
+                <a href="/en/privacy#planner">Privacy Policy (Sidekick Planner section)</a><br>
+                The beta program itself may not be redistributed. To introduce it, share a link to this page.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="notice">
+          <strong>Results do not guarantee that a shot can be taken.</strong>
+          Landmark coordinates, elevations and terrain data carry errors, and the beta treats subject positions as reference values.
+          Confirm on site. See the <a href="/en/planner-terms">Terms of Use</a> for details.
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         CTA
+    ═══════════════════════════════════════════ -->
+    <section class="cta-section">
+      <div class="wrap">
+        <div class="cta-card">
+          <h2>Have the next Diamond Fuji computed in advance.</h2>
+          <p>Beta 1.00 is free. If you notice anything while using it, please let us know.</p>
+          <div class="cta-actions">
+            <a class="btn btn-primary btn-lg"
+               href="/register-dl?product=planner&src=sidekick-planner&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">
+              ▶ Try the beta (free)
+            </a>
+            <a class="btn btn-secondary" href="/en/story/when-and-where-should-i-go">
+              Why it was built (Story) →
+            </a>
+          </div>
+          <p class="cta-foot">
+            Windows 10 (64-bit) or later ・ about 2 GB ・ Japanese UI<br>
+            <a href="/en/planner-terms">Terms of Use</a> ・ <a href="/en/privacy#planner">Privacy Policy</a> ・ <a href="/en/faq">FAQ</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+{% endblock %}

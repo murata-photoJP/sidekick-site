@@ -76,6 +76,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.sidekick-lab.com/sidekick-planner</loc>
+    <lastmod>2026-09-20</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.sidekick-lab.com/workshop</loc>
     <lastmod>2026-06-21</lastmod>
     <priority>0.6</priority>
@@ -199,6 +204,11 @@
     <loc>https://www.sidekick-lab.com/en/planner</loc>
     <lastmod>2026-08-31</lastmod>
     <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.sidekick-lab.com/en/sidekick-planner</loc>
+    <lastmod>2026-09-20</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.sidekick-lab.com/en/tools/dof</loc>

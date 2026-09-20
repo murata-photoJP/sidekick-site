@@ -182,7 +182,8 @@ def test_製品キーが3ファイルで一致している():
     register = (REPO / "register-dl.html").read_text(encoding="utf-8")
     add_contact = (REPO / "api" / "add-contact.js").read_text(encoding="utf-8")
     for key, name in [("star", "Sidekick_Star"), ("portrait", "Sidekick_Portrait"),
-                      ("sky", "Sidekick_SkyEffect"), ("ai", "Sidekick_AI")]:
+                      ("sky", "Sidekick_SkyEffect"), ("ai", "Sidekick_AI"),
+                      ("planner", "Sidekick_Planner")]:   # planner: 2026-09-20 追加
         assert rec.PRODUCT_NAME_TO_KEY[name] == key
         assert name in register
         assert name in add_contact

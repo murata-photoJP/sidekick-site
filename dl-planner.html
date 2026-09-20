@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sidekick Planner β1.00 ダウンロード | Sidekick Lab</title>
+<!-- 2026-09-20 新設（Track planner-beta1-web-product-page、AI-10450）。
+     Sidekick Planner β1.00 のダウンロードページ。dl-star.html と同じ導線
+     （/register-dl?product=planner → メール登録 → sk_dl_authorized → 本ページ）だが、
+     **配布 URL と配布 package の SHA-256 が確定するまでは fail-closed**:
+       PLANNER_DOWNLOAD_URL / PLANNER_ZIP_SHA256 が空文字の間は「準備中」を表示し、
+       ダウンロードリンクを一切出さない（tests/site/test_download_flow_links.py が固定）。
+     Public Beta Distribution の開始（Distribution Unit、Human GO）で 2 定数を埋める。
+     表示内容の根拠: HD-MC-13（未署名の disclosure = 証明書取得手続き中 / SmartScreen 警告の
+     可能性 / SHA-256 / 公式配布元）、HD-LR-40（提供期間）、Terms 第10条（再配布禁止）。
+     EXE の SHA-256 は release_acceptance.json（record_version 4）の値で、本ページ作成時に
+     canonical の dist/rc13 で再計算して一致を確認した。
+     Firebase Auth は読み込まない（β版は Google ログイン経路を持たず、メール登録経路のみ）。
+     noindex は付けない（dl-*.html 共通。test_deploy_policy が noindex の増加を方針判断として固定している）。 -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
+</script>
+<style>
+  :root {
+    --bg: #0a0a0d;
+    --card: #16181f;
+    --line: #252a36;
+    --text: #f0f3fa;
+    --sub: #9aa3b4;
+    --accent: #ff8a00;
+    --accent2: #ffb14a;
+    --green: #3ecf82;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans",
+      "Hiragino Kaku Gothic ProN", "Yu Gothic UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    line-height: 1.7;
+  }
+  .container { max-width: 600px; width: 100%; }
+  #loading-state { text-align: center; padding: 60px 0; }
+  .spinner {
+    width: 40px; height: 40px;
+    border: 3px solid var(--line);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #dl-state, #pending-state { display: none; }
+  .logo { text-align: center; margin-bottom: 20px; font-weight: 800; letter-spacing: .04em; }
+  .logo a { color: var(--sub); text-decoration: none; font-size: .9rem; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px 32px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgba(255,138,0,.12);
+    border: 1px solid rgba(255,138,0,.35);
+    color: var(--accent2);
+    font-size: .75rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+  h1 { font-size: 1.45rem; line-height: 1.35; margin: 0 0 14px; }
+  h1[hidden] { display: none; }
+  .subtitle { color: var(--sub); font-size: .95rem; margin-bottom: 24px; }
+  .dl-btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #121212;
+    font-weight: 800;
+    font-size: 1.05rem;
+    text-align: center;
+    text-decoration: none;
+  }
+  .dl-note { text-align: center; color: var(--sub); font-size: .8rem; margin-top: 10px; }
+  .facts {
+    margin-top: 24px;
+    border-top: 1px solid var(--line);
+    padding-top: 18px;
+    font-size: .9rem;
+  }
+  .facts dt { color: var(--sub); font-size: .78rem; font-weight: 700; margin-top: 12px; }
+  .facts dd { margin: 2px 0 0; }
+  .facts code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: .78rem;
+    color: var(--accent2);
+    word-break: break-all;
+  }
+  .warn {
+    margin-top: 22px;
+    padding: 16px 18px;
+    border-radius: 14px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    font-size: .88rem;
+    color: var(--sub);
+  }
+  .warn strong { color: var(--text); }
+  .warn ul { margin: 8px 0 0 18px; }
+  .warn li { margin-bottom: 4px; }
+  .links { margin-top: 20px; font-size: .85rem; color: var(--sub); }
+  .links a { color: var(--accent2); }
+  footer {
+    text-align: center;
+    padding: 28px 0 0;
+    color: var(--sub);
+    font-size: 0.75rem;
+  }
+  footer a { color: var(--sub); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="logo"><a href="/">Sidekick Lab</a></div>
+
+  <div id="loading-state">
+    <div class="spinner"></div>
+    <p style="color:var(--sub);font-size:0.9rem;">準備しています...</p>
+  </div>
+
+  <!-- h1 はページに 1 つ（状態に応じて JS が文言を入れる。test_remaining_heading_semantics が固定） -->
+  <h1 id="page-title" hidden></h1>
+
+  <!-- 配布開始前（fail-closed）。PLANNER_DOWNLOAD_URL が空の間はこちらだけを表示する。 -->
+  <div id="pending-state">
+    <div class="card">
+      <div class="badge">公開ベータ版 ・ 配布準備中</div>
+      <p class="subtitle">
+        ご登録ありがとうございます。β版の配布が始まりましたら、ご登録のメールアドレスへお知らせします。
+        配布の開始は<a href="/changelog" style="color:var(--accent2)">更新履歴</a>にも掲載します。
+      </p>
+
+      <dl class="facts">
+        <dt>バージョン</dt>
+        <dd>Sidekick Planner β1.00（1.0.0-beta.1）</dd>
+        <dt>対応 OS</dt>
+        <dd>Windows 10（64-bit）以降</dd>
+        <dt>配布形式・サイズ</dt>
+        <dd>ZIP（約2GB。2027年分の年間撮影計画データを同梱）。インストーラーはなく、展開して SidekickPlanner.exe を実行します。</dd>
+        <dt>SidekickPlanner.exe の SHA-256</dt>
+        <dd><code id="exe-sha256">709afc4e8a7b3ecd0073fc3926566b570a8c0fc8519080231ba598f18c720af7</code></dd>
+        <dt>配布 ZIP の SHA-256</dt>
+        <dd id="zip-sha256">配布開始時にこのページへ掲載します。</dd>
+      </dl>
+
+      <div class="warn">
+        <strong>β版はコード署名されていません。</strong>
+        <ul>
+          <li>コード署名証明書は現在取得手続き中です。</li>
+          <li>起動時に Windows / Microsoft Defender SmartScreen などの警告が表示される場合があります。</li>
+          <li>ダウンロードしたファイルは、上記の SHA-256 と照合してください。</li>
+          <li>正式な配布元は Sidekick Lab（www.sidekick-lab.com）のこのページだけです。ほかの場所で配布されているものは使わないでください。</li>
+          <li>Windows のセキュリティ機能を無効にする必要はありません。無効化をお願いすることもありません。</li>
+        </ul>
+      </div>
+
+      <p class="links">
+        ご利用前に <a href="/planner-terms">Sidekick Planner β版 利用条件</a> と
+        <a href="/privacy#planner">プライバシーポリシー（Sidekick Planner）</a> をお読みください。
+        β版のプログラムそのものの再配布はできません。紹介するときは <a href="/sidekick-planner">製品ページ</a> へのリンクを共有してください。
+      </p>
+    </div>
+
+    <footer>
+      <a href="/">トップ</a> &nbsp;·&nbsp;
+      <a href="/faq">FAQ</a> &nbsp;·&nbsp;
+      <a href="/sidekick-planner">製品詳細</a>
+    </footer>
+  </div>
+
+  <!-- 配布開始後。PLANNER_DOWNLOAD_URL / PLANNER_ZIP_SHA256 が両方埋まったときだけ表示する。 -->
+  <div id="dl-state">
+    <div class="card">
+      <div class="badge">公開ベータ版 ・ 無料</div>
+      <p class="subtitle">
+        下のボタンからダウンロードしてください。自動では始まりません（約2GB のため、回線とディスクの空き容量をご確認ください）。
+      </p>
+
+      <a id="dl-btn" class="dl-btn" href="#">↓ Sidekick Planner β1.00 をダウンロード</a>
+      <p class="dl-note">ZIP形式 / 約2GB / Windows 10（64-bit）以降</p>
+
+      <dl class="facts">
+        <dt>配布 ZIP の SHA-256</dt>
+        <dd><code id="zip-sha256-live"></code></dd>
+        <dt>SidekickPlanner.exe の SHA-256</dt>
+        <dd><code>709afc4e8a7b3ecd0073fc3926566b570a8c0fc8519080231ba598f18c720af7</code></dd>
+      </dl>
+
+      <div class="warn">
+        <strong>β版はコード署名されていません。</strong>
+        <ul>
+          <li>コード署名証明書は現在取得手続き中です。</li>
+          <li>起動時に Windows / Microsoft Defender SmartScreen などの警告が表示される場合があります。</li>
+          <li>ダウンロードしたファイルは、上記の SHA-256 と照合してください。</li>
+          <li>正式な配布元は Sidekick Lab（www.sidekick-lab.com）のこのページだけです。</li>
+          <li>Windows のセキュリティ機能を無効にする必要はありません。無効化をお願いすることもありません。</li>
+        </ul>
+      </div>
+
+      <p class="links">
+        <a href="/planner-terms">Sidekick Planner β版 利用条件</a> ・
+        <a href="/privacy#planner">プライバシーポリシー（Sidekick Planner）</a><br>
+        β版のプログラムそのものの再配布はできません。紹介するときは <a href="/sidekick-planner">製品ページ</a> へのリンクを共有してください。
+      </p>
+    </div>
+
+    <footer>
+      <a href="/">トップ</a> &nbsp;·&nbsp;
+      <a href="/faq">FAQ</a> &nbsp;·&nbsp;
+      <a href="/sidekick-planner">製品詳細</a>
+    </footer>
+  </div>
+
+</div>
+
+<script>
+// ---- Distribution Unit で埋める 2 定数（Human GO の後）。空文字の間は fail-closed ----
+// 配布 URL（official distribution source。hosting 先は未決）。
+const PLANNER_DOWNLOAD_URL = '';
+// 配布 ZIP の SHA-256（package 単位の hash。Distribution Unit で確定）。
+const PLANNER_ZIP_SHA256 = '';
+
+(function () {
+  // dl-star.html と同じメール登録経路の bypass フラグ（一回使い捨て）。
+  const emailBypass = localStorage.getItem('sk_dl_authorized') === '1';
+  if (!emailBypass) {
+    window.location.replace('/register-dl?product=planner&src=dl-planner');
+    return;
+  }
+  localStorage.removeItem('sk_dl_authorized');
+
+  document.getElementById('loading-state').style.display = 'none';
+  const title = document.getElementById('page-title');
+
+  const ready = /^https:\/\/\S+\.zip$/i.test(PLANNER_DOWNLOAD_URL) && /^[0-9a-f]{64}$/i.test(PLANNER_ZIP_SHA256);
+  if (!ready) {
+    // 配布開始前: ダウンロードリンクを出さない。
+    title.textContent = 'Sidekick Planner β1.00 の配布は準備中です';
+    title.hidden = false;
+    document.getElementById('pending-state').style.display = 'block';
+    return;
+  }
+  title.textContent = 'Sidekick Planner β1.00 をダウンロード';
+  title.hidden = false;
+  const btn = document.getElementById('dl-btn');
+  btn.href = PLANNER_DOWNLOAD_URL;
+  btn.setAttribute('download', 'Sidekick_Planner_beta1.00.zip');
+  document.getElementById('zip-sha256-live').textContent = PLANNER_ZIP_SHA256.toLowerCase();
+  document.getElementById('dl-state').style.display = 'block';
+})();
+</script>
+</body>
+</html>

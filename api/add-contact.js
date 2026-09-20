@@ -29,12 +29,15 @@ const admin = require('firebase-admin');
 
 const BREVO_API = 'https://api.brevo.com/v3/contacts';
 
-// productKey（star / portrait / sky / ai）→ Brevo 属性のサフィックス
+// productKey（star / portrait / sky / ai / planner）→ Brevo 属性のサフィックス
+// planner は 2026-09-20 追加（Sidekick Planner β1.00）。HAS_PLANNER / VER_PLANNER 属性は
+// Brevo 側に作成が必要（tools/create_brevo_attributes.py）。未作成でも従来属性へ自動再送する。
 const PRODUCT_SUFFIX = {
   star:     'STAR',
   portrait: 'PORTRAIT',
   sky:      'SKY',
-  ai:       'AI'
+  ai:       'AI',
+  planner:  'PLANNER'
 };
 
 // productKey が来なかった場合（キャッシュされた旧 register-dl.html 等）の保険
@@ -42,7 +45,8 @@ const PRODUCT_NAME_TO_KEY = {
   'Sidekick_Star':     'star',
   'Sidekick_Portrait': 'portrait',
   'Sidekick_SkyEffect':'sky',
-  'Sidekick_AI':       'ai'
+  'Sidekick_AI':       'ai',
+  'Sidekick_Planner':  'planner'
 };
 
 function resolveSuffix(productKey, product) {

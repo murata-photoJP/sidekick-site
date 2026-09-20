@@ -219,6 +219,19 @@ _register_page_pair(
     ja_extra={"enable_ogp": True, "en_redirect_url": "/en/planner"},
     en_extra={"enable_ogp": True},
 )
+# Sidekick Planner β1.00 製品ページ（2026-09-20新設、Track planner-beta1-web-product-page、
+# AI-10450）。Star / Portrait / Sky Effect と同じ「製品ページ」系列。上の /planner
+# （開発中ページ）とは別ページで、両者の統合・リダイレクトは Human Decision 待ち
+# （テンプレート冒頭コメント参照）。新規ページなので移行元の手書きHTMLは無く、
+# テンプレートが最初から正本になる。OGPあり（og_image は実画面のスクリーンショット。
+# base.html の og:image:width/height は 1200×630 固定のまま = 既存ページと同じ扱い）。
+# en_redirect_url は .html 無しで上書き（ichiro-murata / planner と同じ）。
+_PLANNER_OG_IMAGE = f"{SITE_ORIGIN}/images/planner/planner-overview.jpg"
+_register_page_pair(
+    "sidekick-planner",
+    ja_extra={"enable_ogp": True, "og_image": _PLANNER_OG_IMAGE, "en_redirect_url": "/en/sidekick-planner"},
+    en_extra={"enable_ogp": True, "og_image": _PLANNER_OG_IMAGE},
+)
 # lp-star.htmlは他ページ移行時に対象から漏れており、旧.site-headerのまま
 # （言語バナー・EN切替リンクが無い）だった。村田さんが本番で発見・報告し追加移行した
 # （2026-07-23）。OGPはJA/ENともtitle/meta descriptionと同一文言のため

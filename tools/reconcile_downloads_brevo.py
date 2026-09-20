@@ -61,12 +61,14 @@ PRODUCT_NAME_TO_KEY = {
     "Sidekick_Portrait": "portrait",
     "Sidekick_SkyEffect": "sky",
     "Sidekick_AI": "ai",
+    "Sidekick_Planner": "planner",
 }
 PRODUCT_SUFFIX = {
     "star": "STAR",
     "portrait": "PORTRAIT",
     "sky": "SKY",
     "ai": "AI",
+    "planner": "PLANNER",
 }
 
 

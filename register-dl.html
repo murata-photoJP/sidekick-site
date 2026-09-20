@@ -365,7 +365,10 @@ const DL_PAGES = {
   star:     '/dl-star',
   portrait: '/dl-portrait',
   sky:      '/dl-sky',
-  ai:       '/dl-ai'
+  ai:       '/dl-ai',
+  // 2026-09-20: Sidekick Planner β1.00（Track planner-beta1-web-product-page）。
+  // /dl-planner は配布 URL が確定するまで fail-closed（「準備中」表示・リンク無し）。
+  planner:  '/dl-planner'
 };
 const DL_PAGE = DL_PAGES[PRODUCT] || '/dl-star';
 
@@ -373,7 +376,8 @@ const PRODUCT_NAMES = {
   star:     'Sidekick_Star',
   portrait: 'Sidekick_Portrait',
   sky:      'Sidekick_SkyEffect',
-  ai:       'Sidekick_AI'
+  ai:       'Sidekick_AI',
+  planner:  'Sidekick_Planner'
 };
 const PRODUCT_NAME = PRODUCT_NAMES[PRODUCT] || 'Sidekick_Star';
 
@@ -402,6 +406,12 @@ const PRODUCT_INFO = {
     name: 'Sidekick AI',
     desc: 'Sidekick Star / Portrait / Sky Effect の<br>使い方相談・エラー診断ローカルアシスタント',
     tags: ['完全無料', 'ローカル動作', 'Windows 対応']
+  },
+  planner: {
+    badge: '公開ベータ版（無料）',
+    name: 'Sidekick Planner β1.00',
+    desc: '撮りたいイメージから、撮れる場所と日時を探す<br>写真家のための撮影計画ソフトウェア',
+    tags: ['β期間中は無料', 'Windows 10（64-bit）以降', '日本語UI', '約2GB']
   }
 };
 
@@ -433,7 +443,9 @@ const PRODUCT_VERSIONS = {
   star:     '3.16',
   portrait: '3.16',
   sky:      '3.16',
-  ai:       ''
+  ai:       '',
+  // planner は release_acceptance.json の product_version（1.0.0-beta.1 = β1.00）。
+  planner:  '1.0.0-beta.1'
 };
 const CURRENT_VERSION = PRODUCT_VERSIONS[PRODUCT] || '';
 
