@@ -122,7 +122,8 @@ def test_beta_facts(rendered: dict[str, str], key: str) -> None:
     assert "64-bit" in html                           # HD-OS-01
     assert "2026" in html and ("10月31日" in html or "31 October 2026" in html)  # HD-LR-40
     assert "SmartScreen" in html                      # HD-MC-13
-    assert "SHA-256" in html                          # HD-MC-13
+    # 2026-09-20 Human Review（AI-11250）: SHA-256 はユーザー向け UI に出さない（内部検証には残す）
+    assert "SHA-256" not in html.split("<main>", 1)[1]
     assert "2GB" in html or "2 GB" in html            # package_total_bytes ≈ 1.94 GiB
 
 
@@ -186,14 +187,22 @@ def test_dl_planner_points_at_the_verified_distribution_package() -> None:
 
 
 def test_dl_planner_discloses_unsigned_build_per_hd_mc_13() -> None:
+    """HD-MC-13 の disclosure（未署名・SmartScreen・証明書取得手続き中・公式配布元・security 無効化を案内しない）は維持。
+    2026-09-20 Human Review（AI-11250）: SHA-256 の値と照合の案内は **ユーザー向け UI から外す**
+    （dl-star 等の既存 DL ページと同じ）。hash は内部 gate（JS 定数）と canonical record にだけ残す。"""
     source = (REPO_ROOT / "dl-planner.html").read_text(encoding="utf-8")
-    assert RC13_EXE_SHA256 in source
-    assert "SmartScreen" in source
-    assert "署名されていません" in source
-    assert "取得手続き中" in source
-    assert "sidekick-lab.com" in source                        # 公式配布元
-    assert "無効にする必要はありません" in source               # security の無効化を案内しない
-    assert 'href="/planner-terms"' in source and 'href="/privacy#planner"' in source
+    body = source.split("<body>", 1)[1].split("<script>", 1)[0]
+    assert "SHA-256" not in body and "照合" not in body
+    assert RC13_EXE_SHA256 not in body
+    assert "SmartScreen" in body
+    assert "署名されていません" in body
+    assert "取得手続き中" in body
+    assert "sidekick-lab.com" in body                          # 公式配布元
+    assert "無効にする必要はありません" in body                 # security の無効化を案内しない
+    assert 'href="/planner-terms"' in body and 'href="/privacy#planner"' in body
+    # 既存製品と同じ方針（DL ページに hash を出さない）
+    for name in ("dl-star.html", "dl-portrait.html", "dl-sky.html", "dl-ai.html"):
+        assert "SHA-256" not in (REPO_ROOT / name).read_text(encoding="utf-8")
 
 
 def test_dl_planner_redirects_unauthorized_to_its_own_product() -> None:

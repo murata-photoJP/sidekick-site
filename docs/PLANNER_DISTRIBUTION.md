@@ -46,7 +46,7 @@ Sidekick Star / Portrait / SkyEffect / AI は **すべて同じ基盤** で ZIP 
 | 検証 | 入力 `dist/rc13` = `expected_manifest_rc13.json` 全 file 一致 → ZIP → 一時展開 = manifest 全 file 一致（Python）。独立検証: PowerShell `Get-FileHash` = 同 sha256、`Expand-Archive` 2,185 file・EXE sha256 一致・top-level 1 folder |
 | 作成ツール | `Sidekick Planner/validation/prototype/diamond_fuji_minimal/build_distribution_zip.py`（fail-closed: 入力が manifest と 1 件でも違えば作らない、既存出力を上書きしない、入力を変更しない） |
 
-ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**。RC13 の EXE identity（`709afc4e…`）とは別物で、`dl-planner` には両方を表示する。
+ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**。RC13 の EXE identity（`709afc4e…`）とは別物。**2026-09-20 Human Review（AI-11250）: SHA-256 はユーザー向け UI（`/dl-planner`・製品ページ）に表示しない**（Star / Portrait / SkyEffect / AI の DL ページと同じ方針）。検証は内部で厳密に続ける = 本書 §2 / §2-2 の記録、canonical identity record、release acceptance、R2 upload 検証、live E2E（§3 手順 5 の `Get-FileHash` 照合は Human / AI の内部作業として維持）。`dl-planner.html` の `PLANNER_ZIP_SHA256` 定数は「検証済み package が確定している」内部 gate（非表示）。
 
 ## 2-2. upload と検証の記録（2026-09-20、AI-10850、Human GO）
 

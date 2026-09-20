@@ -14,8 +14,10 @@
      Public Beta Distribution の開始（Distribution Unit、Human GO）で 2 定数を埋める。
      表示内容の根拠: HD-MC-13（未署名の disclosure = 証明書取得手続き中 / SmartScreen 警告の
      可能性 / SHA-256 / 公式配布元）、HD-LR-40（提供期間）、Terms 第10条（再配布禁止）。
-     EXE の SHA-256 は release_acceptance.json（record_version 4）の値で、本ページ作成時に
-     canonical の dist/rc13 で再計算して一致を確認した。
+     2026-09-20 Human Review（AI-11250）: SHA-256 は **ユーザー向け UI に表示しない**（dl-star 等の既存
+     Sidekick 製品の DL ページと同じ方針）。配布物の SHA-256 検証は内部（canonical identity record・
+     release acceptance・R2 upload 検証・live E2E・docs/PLANNER_DISTRIBUTION.md）で厳密に続ける。
+     下の PLANNER_ZIP_SHA256 は「検証済み package が確定している」ことの内部 gate（表示しない）。
      Firebase Auth は読み込まない（β版は Google ログイン経路を持たず、メール登録経路のみ）。
      noindex は付けない（dl-*.html 共通。test_deploy_policy が noindex の増加を方針判断として固定している）。 -->
 <!-- Google tag (gtag.js) -->
@@ -164,10 +166,6 @@
         <dd>Windows 10（64-bit）以降</dd>
         <dt>配布形式・サイズ</dt>
         <dd>ZIP（約2GB。2027年分の年間撮影計画データを同梱）。インストーラーはなく、展開して SidekickPlanner.exe を実行します。</dd>
-        <dt>SidekickPlanner.exe の SHA-256</dt>
-        <dd><code id="exe-sha256">709afc4e8a7b3ecd0073fc3926566b570a8c0fc8519080231ba598f18c720af7</code></dd>
-        <dt>配布 ZIP の SHA-256</dt>
-        <dd id="zip-sha256">配布開始時にこのページへ掲載します。</dd>
       </dl>
 
       <div class="warn">
@@ -175,7 +173,6 @@
         <ul>
           <li>コード署名証明書は現在取得手続き中です。</li>
           <li>起動時に Windows / Microsoft Defender SmartScreen などの警告が表示される場合があります。</li>
-          <li>ダウンロードしたファイルは、上記の SHA-256 と照合してください。</li>
           <li>正式な配布元は Sidekick Lab（www.sidekick-lab.com）のこのページだけです。ほかの場所で配布されているものは使わないでください。</li>
           <li>Windows のセキュリティ機能を無効にする必要はありません。無効化をお願いすることもありません。</li>
         </ul>
@@ -206,19 +203,12 @@
       <a id="dl-btn" class="dl-btn" href="#">↓ Sidekick Planner β1.00 をダウンロード</a>
       <p class="dl-note">ZIP形式 / 約2GB / Windows 10（64-bit）以降</p>
 
-      <dl class="facts">
-        <dt>配布 ZIP の SHA-256</dt>
-        <dd><code id="zip-sha256-live"></code></dd>
-        <dt>SidekickPlanner.exe の SHA-256</dt>
-        <dd><code>709afc4e8a7b3ecd0073fc3926566b570a8c0fc8519080231ba598f18c720af7</code></dd>
-      </dl>
 
       <div class="warn">
         <strong>β版はコード署名されていません。</strong>
         <ul>
           <li>コード署名証明書は現在取得手続き中です。</li>
           <li>起動時に Windows / Microsoft Defender SmartScreen などの警告が表示される場合があります。</li>
-          <li>ダウンロードしたファイルは、上記の SHA-256 と照合してください。</li>
           <li>正式な配布元は Sidekick Lab（www.sidekick-lab.com）のこのページだけです。</li>
           <li>Windows のセキュリティ機能を無効にする必要はありません。無効化をお願いすることもありません。</li>
         </ul>
@@ -248,6 +238,7 @@
 // 2026-09-20 AI-10850: R2 upload 済み・検証 PASS（bytes 1934309563 / sha256 93c27bf1…、DL 再検証・展開後 RC13 一致）。
 const PLANNER_DOWNLOAD_URL = 'https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.1_bea1697.zip';
 // 配布 ZIP の SHA-256（package 単位の hash。build_distribution_zip.py の identity.json の zip_sha256）。
+// 表示には使わない（内部 gate のみ。ユーザー向け UI に hash を出さない = 2026-09-20 Human Review）。
 const PLANNER_ZIP_SHA256 = '93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333ed0d3bca83e1';
 
 (function () {
@@ -276,7 +267,6 @@ const PLANNER_ZIP_SHA256 = '93c27bf1f37641cfc05109d8c0f5876b402bd975b2a01fd59333
   btn.href = PLANNER_DOWNLOAD_URL;
   // 保存名は R2 の object 名（versioned）と一致させる（Distribution Preparation AI-10650）。
   btn.setAttribute('download', 'Sidekick_Planner_1.0.0-beta.1_bea1697.zip');
-  document.getElementById('zip-sha256-live').textContent = PLANNER_ZIP_SHA256.toLowerCase();
   document.getElementById('dl-state').style.display = 'block';
 })();
 </script>
