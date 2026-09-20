@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Did Digital Change What a Lens Needs to Do? | Knowledge - Sidekick</title>
+<meta name="description" content="I thought a lens was still just a lens. Digital brought no wide angle, stripes against the light, a superb old 85mm, a failed 4×5 lens. What changed sat behind it.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/did-digital-change-what-a-lens-needs-to-do">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/did-digital-change-what-lenses-need-to-do">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/did-digital-change-what-a-lens-needs-to-do">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/did-digital-change-what-lenses-need-to-do">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/did-digital-change-what-lenses-need-to-do" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">Did Digital Change What a Lens Needs to Do?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">Did Digital Change What a Lens Needs to Do?</h1>
+    <p class="kzc-article-lead">I thought a lens was still just a lens. Digital brought no wide angle, stripes against the light, a superb old 85mm, a failed 4×5 lens. What changed sat behind it.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-20">Updated: 2026-09-20</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>— I thought a lens was still just a lens. What changed was what sat behind it.</p>
+<h2>I Thought a Lens Was Still Just a Lens</h2>
+<p>At the end of <a href="/en/knowledge/photography/why-i-bought-the-nikon-d1-anyway">the previous article</a>, I wrote that the lens stayed the same, yet what was asked of the lens changed. This article is about that. I will not repeat how I came to buy the D1. What I will write about is what happened with lenses once I had gone digital.</p>
+<p>When I bought the D1, I added one lens. I think it was a 24-120, probably. A stubby little zoom; I put extension rings on it and had a great deal of fun shooting with it. The mount was the same F mount, and the 35 mm Nikkors I already owned went straight on. A lens, I thought, was still just a lens.</p>
+<p>The first trouble came not from the lenses but from the body. Put the sun in the frame and the image became unusable — “smear,” if that is the word. I remember being told by Nikon, in all seriousness, something to the effect that the sensor would burn, so please do not shoot with the sun in the frame.</p>
+<p>From the sources' side, this was no joke. The D1's manual (the edition I was able to check is the English one) says not to take photographs with the camera focused on the sun or another strong light source, because excessive light may cause deterioration of the CCD and may produce a white blur in the photograph. The D1 and D1X are CCD cameras, and because of the way a CCD is read out, a strong light source can send bright streaks up and down the frame — the phenomenon called “smear.” In my memory, smear went away around the time the sensors became CMOS — around the D2X, I think. This matches the sources. The D2X was the first of Nikon's professional bodies to use a CMOS sensor, and CMOS has no transfer mechanism of the kind that produces smear.</p>
+<h2>There Was No Wide Angle</h2>
+<p>The next trouble was wide angle. The D1's sensor is smaller than 35 mm film, so the same lens takes in a narrower view. In Nikon's terms, the angle of view corresponds to 1.5× the marked focal length. Put on a 17-35 mm zoom and you get only the equivalent of 25.5–52.5 mm on 35 mm. In the mountains you need wide angle. It was a serious problem.</p>
+<p>I think I was shooting with a 17-35. Whether I bought it for the D1 or already had it, I do not remember. To fill this in from the sources' side: the AF-S 17-35mm F2.8D was announced on the same day as the D1 and went on sale at the same time as the D1, at the end of September 1999. In other words, it was the lens Nikon put out alongside the D1 as its wide angle.</p>
+<p>Later came a DX zoom — DX being the lenses Nikon designed to match its digital sensor size — that started right at the wide end, and I bought it as soon as it was released. I remember waiting quite a long time for a “digital-compatible” lens. Whether the product did not exist or the lineup was simply incomplete, I could not tell at the time. Now I can. Nikon's first DX lens, the 12-24mm F4, came out in 2003. Four years after the D1. Nikon's own account says it was welcomed by D1 and D100 users who had been longing to shoot wide. I was one of them.</p>
+<h2>Against the Light, a Stripe-Like Noise Appeared</h2>
+<p>If it had only been the lack of wide angle, I could have waited. The trouble was a noise, on lenses from standard to wide, that appeared in a way I had never seen before.</p>
+<p>“Some kind of rainbow noise,” I called it. If I put into words what I can still recall of how it looked, bands or stripes are the strongest memory. It appeared in the corners and along the edges too; sometimes it was a fine pattern — something that looked like moiré — and sometimes it appeared around bright areas. It tended to appear against the light, I think. Ghosting was a problem as well.</p>
+<p>My understanding at the time was this. Light does not enter the sensor straight on, so with wide and ultra-wide lenses this kind of noise appears. It was something that had never been a problem with film. So lenses from standard to wide basically had to be swapped for “compatible” ones. And in fact, whether I wanted to or not, some of the old lenses had to be replaced with lenses of the digital era.</p>
+<p>About ghosting, there is one clear experience from later on. Because in the mountains there is a real risk of knocking or scratching the front element, I used protective filters at first. At one point I sent my DX ultra-wide zoom in for repair and borrowed a replacement from NPS (Nikon Professional Services). Shooting with the borrowed lens, there was almost no ghosting. When I returned it, I asked whether my own lens might be defective. The answer that came back was, roughly: that's because you have a filter on it; take it off and try; if it still doesn't work, come back and we'll talk. I took it off and tried, and the ghosting was gone. I have not used a protective filter since.</p>
+<p>This does not turn into “protective filters are bad.” What I learned was something further upstream. The very small elements in front of and behind the lens — a single filter, a single plate in front of the sensor — change what you see around strong light. In the film days, I had never given that a thought.</p>
+<h2>Let Me Give the Answer Here</h2>
+<p>From my side, it comes to this. What changed with digital was that I had to start caring about what sat behind the lens. In the film days, I looked at a lens as a lens, and nothing more.</p>
+<p>From the sources' side, it comes to this. What was asked of a lens in the film era — resolving power, corrected aberrations, low flare, coatings, color — did not disappear with digital. What was added was how well the lens gets along with the structure of the sensor behind it. The angle at which light arrives, how much the corners darken, where light reflected off the sensor surface ends up, how finely the image is broken into points and recorded. These were conditions that never came to the surface with film. Some of them, like distortion and corner brightness, later became correctable by computation. Blur, areas crushed by flare, and information that has clipped do not come back.</p>
+<p>And what those stripes of mine were, I still do not know. This article is written without knowing.</p>
+<h2>What Did “Digital-Compatible” Actually Mean?</h2>
+<p>The “compatible” lenses I switched to were Nikon's DX lenses. By Nikon's own explanation, a DX lens is designed with a smaller image circle to fit the DX format — a sensor of about 24×16 mm. Of the first DX lens, the 12-24mm, its designer recalled that generous brightness in the corners across the whole zoom range was its greatest attraction, and that the aim was optical performance suited to digital. Image circle, and light in the corners. The “compatibility” Nikon spelled out with DX was, first of all, those two things.</p>
+<p>Other makers meant other things. The Four Thirds standard set out to bring light into the sensor as close to straight on as possible and to suppress ghosting from sensor reflections. Tamron's Di is a general phrase — “optical designs that take into account the characteristics of digital SLR cameras” — and Sigma's DC / DG is a division by sensor size. The words “digital-compatible” carry at least four different meanings. An image circle matched to the sensor size. Design attention to corner brightness and the angle of incidence. Claims about coatings and countermeasures against reflection. And a sales pitch. The same words did not mean the same thing.</p>
+<p>Let me make one thing clear here. “Light coming in close to straight on” is close to the idea called telecentric, but this is not to say that telecentric means a good lens. A design that brings the rays closer to perpendicular at the sensor trades against size, distortion, speed and image circle. It may get along better with the sensor, but that does not decide whether a lens is good or bad.</p>
+<h2>The Old 85mm f/1.4D Was the Best of Them</h2>
+<p>On the other hand, not every old lens was a failure. If anything, I had the opposite experience.</p>
+<p>The AF 85mm F1.4D, released in 1995. “This one, on digital, is actually ridiculously good. The lines are fine, and it draws delicately.” That is how it felt to me. At the time I read it as an old optical design that happened to suit digital.</p>
+<p>From the sources' side, a little can be added to that “happened to.” With a short telephoto like an 85 mm, the point the light appears to leave from (the exit pupil) is far from the sensor, so even in the corners the light arrives fairly close to straight on. And the D1's sensor uses only the central part of the 35 mm frame. One can say that the conditions were all in place for the plates in front of the sensor and the microlenses to cause the least trouble. This is not proof of why that one lens of mine was good; it is a description of the conditions.</p>
+<p>So the phrase “old lenses can't be used on digital” does not hold. That said, on digital I basically used my film-era Nikkors only for play. I did not want to use them for professional work. That was less a technical matter of how they rendered than a matter of trust.</p>
+<h2>A 4×5 Lens on the D1 Came Out Soft</h2>
+<p>There is one more experience, in the opposite direction.</p>
+<p>I once mounted a D1 — or a D1X — where the film back of a 4×5 camera body goes, using a home-made F-mount adapter, and shot with a large-format lens. In short, I put a digital back in place of the film back. The lens was probably a 150 mm or a 240 mm. Since the flange distance works against you, I must have used a longer lens. The result was a strangely soft rendering, and in the end it was unusable.</p>
+<p>At the time, I thought: that's just how they're designed. Large-format lenses are designed for 4×5, sometimes for even larger formats. Cut out only an APS-C-sized piece of that image, and you will not get the rendering you expect from large format — so I supposed.</p>
+<p>From the sources' side, the cause cannot be pinned down. But at least two reasons unrelated to the quality of the lens are visible. One is the enlargement ratio. Large-format lenses are designed and judged on the assumption that a 4×5 original will be enlarged four or five times. The D1's sensor is 23.7 mm across. Enlarged to the same size, it has to be blown up nearly five times more than the 4×5. As I wrote in <a href="/en/knowledge/photography/how-many-megapixels-is-4x5-film-equivalent">the article on how many megapixels 4×5 is</a>, the smaller the piece you cut out of the same image, the more you enlarge it to look at it. The other is diffraction. At the f/22 or f/32 I always used on large format, diffraction alone makes the spot of light two or three sizes larger than a D1 pixel. How the focus was set, the tilt of a home-made adapter, and stray light bouncing around inside the bellows remain candidates too. All that can be said is that this result does not seem to be a matter of “not a digital-compatible lens” or of “light not entering straight on.” At 150 mm or 240 mm, even in the corners of a small sensor, the light arrives almost straight on.</p>
+<h2>Three Simplifications, and None of Them Is Enough</h2>
+<p>Put all of this side by side, and three things one often hears turn out to be insufficient, every one of them.</p>
+<p>“Old lenses can't be used on digital.” The 85mm f/1.4D is the counterexample. “A digital-compatible lens and you're fine.” Since what “compatible” means differs from maker to maker, those words on their own say nothing. “Telecentric means high image quality.” The 150 mm large-format lens was bringing light in almost straight on, and it was still soft.</p>
+<p>I have said myself that lenses not made for digital end up behaving like soft-focus lenses. That came out of the 4×5 experience, but my 85 mm narrows its range. It differed lens by lens, condition by condition.</p>
+<h2>What Sits Behind the Lens Changed</h2>
+<p>Here, let me set these events in the way this series looks at things.</p>
+<p>It was not only the lens that changed. What sat behind the lens changed. — That is this series' way of putting it.</p>
+<p>With film, what sat behind the lens was film — layers of emulsion. That was not a condition that came forward when you chose a lens. When I wrote about <a href="/en/knowledge/photography/what-were-large-format-lenses-designed-to-do">what large-format lenses were designed to do</a>, what sat behind them did not come up either. With digital, behind the lens sit the plates — cover glass, infrared-cut filter, low-pass filter; beneath them the microlenses, the color filters and the pixels; and behind those, the processing. The angle at which light arrives, how much it bends in the plates, where light reflected off the sensor surface goes after bouncing back from the rear element. Things like these entered into how a lens is judged.</p>
+<p><img src="/images/knowledge/did-digital-change-what-lenses-need-to-do/f01-what-sits-behind-the-lens-en.svg" alt="Conceptual map. Two vertical cross-sections side by side. Left, &quot;the film era&quot;: lens -- (air) -- surface-side layers -- light-sensitive layers (vary by film stock) -- auxiliary layers -- base. Right, &quot;the digital era&quot;: lens -- cover glass / IR-cut / low-pass filter stack -- microlens -- color filter -- pixel (photosensitive region) -- processing (RAW development, corrections). Both are drawn with the same line weight and the same box style, with no arrows, no rays and no numbers. Note: schematic; layer thicknesses and proportions are not to scale. Not a ranking; it shows only that the structure receiving the lens image changed. This site's own drawing." /></p>
+<p>Figure 1: What sits behind the lens. Left, film — surface-side layers, light-sensitive layers (their number and thickness vary by stock), auxiliary layers, base. Right, digital — the cover glass / IR-cut / low-pass filter stack, microlenses, color filters, pixels, and then processing. A schematic; thicknesses and proportions are not to scale. Not a ranking: it shows only that the structure receiving the lens's image changed. This site's own drawing.</p>
+<p>To put it another way: in the film era, you could talk about a lens without saying which film it was for, and be understood. In digital, unless you say which sensor it sits in front of, the same lens gets a different verdict. — That, too, is this series' way of putting it. As I wrote in <a href="/en/knowledge/photography/was-large-format-image-quality-just-about-the-lens">the article on large-format focus, film flatness and stray light</a>, image quality was never decided by the lens alone, even with film. But the words used to talk about a lens could stay independent of what sat behind it. With digital, that became hard.</p>
+<p>In exchange, some of a lens's faults became correctable afterward. Distortion, lateral chromatic aberration, corner brightness. Keep a profile for each lens-and-camera combination, and the look can be tidied up by computation. But what gets fixed is the “look”; the price is cropping and more noise toward the edges, and blur, flare and clipped information do not come back. What comes back and what does not is for another article. In my own D1-era workflow, there was no such correction. Chromatic-aberration correction arrived in Nikon's RAW processing software in 2005.</p>
+<h2>My Answer to “Did It Change?”</h2>
+<p>Did digital change what a lens needs to do?</p>
+<p>Let me be honest. I remember struggling at the time, and thinking about a great many things. But what the conditions for a “good lens” changed from, and to, I cannot put in a sentence today. It was too long ago.</p>
+<p>What I can say is only what I actually did. I started caring about what sat in front of and behind the lens. I stopped using the old Nikkors for work. I took off the protective filter. That is my side of the answer. The sources' side of the answer is as I wrote in the previous section.</p>
+<p>So then: when the sensor itself becomes finer, does the lens have to be “enough” for it? Is it true that a high-pixel-count camera needs a high-resolution lens? That is for the next article.</p>
+<h2>For Those Who Want to Know a Little More</h2>
+<p>The conclusions this article needs are complete above. What follows is supplementary, for those who want a closer look at the grounds for what the main text kept short, and at what is not known. There are no new claims.</p>
+<h3>The D1, D1X and D2X Sensors, and Smear</h3>
+<p>The D1 (1999) has a 23.7×15.6 mm CCD with 2.74 million pixels; the D1X (2001) a CCD of the same size with 5.47 million; the D2X (announced September 2004, released January 2005) a CMOS sensor of the same size with 12.4 million. In between, the D2H (2003) used a sensor Nikon developed in-house, called LBCAST, based on CMOS principles; when the main text says “the first CMOS body,” it means the first of Nikon's professional bodies to call its sensor CMOS. Smear is a phenomenon of interline CCDs: light or charge from a strong light source leaks into the vertical transfer registers and is carried along during readout, so a bright column extends above and below the light source. CMOS reads out pixel by pixel and has no transfer registers, so smear in this sense does not occur. The D1's specifications list a single-blade mechanical shutter for smear prevention. Whether the streaks I saw on the D1 were smear, I have not checked against the photographs from the time.</p>
+<h3>What the D1 Manual Said</h3>
+<p>The manual I consulted was the English-language edition. Among the shooting notes, it says not to take photographs with the camera focused on the sun or another strong light source, as excessive light may cause deterioration of the CCD and may also produce a white blur effect in the photograph. In the section on optional accessories, it says that when shooting with a filter attached, moiré may be observed against the light or when a strong light source is in the frame, and in that case it recommends removing the filter. It also states that a low-pass filter to prevent moiré sits in front of the CCD and that almost all Nikkor lenses can be used, apart from non-AI lenses and a few others, and it carries a conversion table giving the angle of view as 1.5× the marked focal length. I have not checked the corresponding passages in the Japanese edition for this article.</p>
+<h3>Angle of Incidence and the Sensor — Smaller on DX Than on 35 mm</h3>
+<p>The plates in front of the sensor and the microlenses are affected more the more obliquely the light arrives. But a DX-size sensor like the D1's uses only the central part of the 35 mm frame. The distance to the corner is about two-thirds of that on 35 mm. With the same lens, the angle at which light reaches a DX corner is smaller than the angle at a 35 mm corner. On geometry alone, the degree to which “light not entering straight on” causes trouble should have been lighter on the D1 than on the later 35 mm-format digital bodies. A little different from my understanding at the time.</p>
+<h3>Phenomena That Could Fit “Some Kind of Rainbow Noise”</h3>
+<p>Without identifying any of them, here are phenomena that could fit my memory (bands or stripes, corners, moiré-like, around bright areas, tending to appear against the light). Moiré against the light with a filter attached (the phenomenon the D1 manual warns about). Ghosting from light reflected off the sensor or filter surface and bounced back by the lens's rear element. Color moiré from interference between the color filter array and fine patterns in the subject. A gentle color cast from light arriving obliquely at the edges. CCD smear. Banding originating in the readout. Of these, the closest to my memory — appearing against the light, looking like stripes, and going away with “compatible” lenses — are the first two; but while I certainly had a filter on, I cannot say those stripes were that.</p>
+<h3>Possible Reasons for the Softness of a 4×5 Lens on the D1</h3>
+<p>A mismatch in enlargement ratio (a lens meant for a 4×5 original enlarged four or five times, viewed through a sensor 23.7 mm across and enlarged nearly five times more). Diffraction (at f/22 the diameter of the spot of light is about 30 micrometers, at f/45 about 60; a D1 pixel is 11.8 micrometers). A shifted plane of focus, and the tilt or rigidity of a home-made adapter. Light striking the inside of the bellows — of a large-format lens's image circle, only about 2 percent by area reaches the sensor, and the rest lands on the bellows' inner walls. Mirror vibration. The performance of the lens itself. Which of these it was, I do not know. As for the angle of incidence, at 150 mm it is about 5 degrees in the corner, at 240 mm about 3 degrees — almost straight on. Whether or not the lens is telecentric does not explain this experiment.</p>
+<h3>What “Digital-Compatible” Contained</h3>
+<p>Nikon DX: an image circle matched to the DX format (about 24×16 mm). Design of the 12-24mm F4 began in spring 2001, and it was released in 2003 around the same time as the D2H; corner brightness is cited as its greatest attraction. Four Thirds: the standard's stated claims — near-straight-on incidence, a mount diameter about twice the image circle, and suppression of ghosting from sensor reflections. Tamron Di: “optical designs that take into account the characteristics of digital SLR cameras.” Sigma DC / DG: a division into APS-C and full-frame. No source showing by measurement that a lens is strictly telecentric was found within the scope of this article.</p>
+<h3>Sources</h3>
+<p>The sensors and the announcement and release dates of the D1, D1X, D2H and D2X are from the trade-press announcement reports of June 1999, February 2001, July 2003 and September 2004. The D1 manual's statements are from the English-language reference manual. The mechanism of smear is from a technical explanation by an industrial camera maker. The D1's “mechanical shutter for smear prevention” is from the specification table carried in a contemporary technical review. The announcement and release of the AF-S 17-35mm F2.8D, the release of the AI AF 24-120mm F3.5-5.6D (October 1996) and of the AI AF 85mm F1.4D (December 1995), the development and release of the AF-S DX 12-24mm F4G, and the statements on corner brightness are from Nikon's product information and its “Thousand and One Nights” lens essays. The explanation of the DX format and image circle is from Nikon's official description. The Four Thirds claims are from the standard's official materials, and the Tamron and Sigma terms from each maker's product information. Chromatic-aberration correction in Nikon's RAW software is from the June 2005 update notes for version 4.3. The summary of how lenses and sensors get along (angle of incidence, microlenses, refraction in the plates, reflection, the limits of computational correction) is from this site's own research records. My lenses, the phenomena, the experiment and the exchange with NPS are my memory.</p>
+<h3>What Is Not Known</h3>
+<p>Here, together, are the things this article treated as not known. The exact model of the zoom I added to the D1 (whether it was the 24-120 is memory). Whether I bought the 17-35 or already had it. The model of the DX ultra-wide zoom. What “some kind of rainbow noise” was. Whether the streaks I saw on the D1 were smear. Whether the 4×5 experiment used a D1 or a D1X, whether the lens was a 150 mm or a 240 mm, the aperture, and how focus was set. The cause of that softness. Whether the lens borrowed from NPS and my own were optically the same. The wording of the Japanese edition of the D1 manual. And how the conditions for a “good lens” changed at the time — that is not a question of sources but a limit of my memory.</p>
+<h3>The Scope of This Article</h3>
+<p>The sources for this article are makers' product information and manuals, trade-press articles from the time of the announcements, and the words of technical explanations — not measurements. My experience is what a single photographer, one who shoots mountains, saw with the lenses in hand around the time of the D1. It was not an experiment comparing old and new lenses under the same conditions. The two experiences, with the 85 mm and with the 4×5 lens, are also separate events, on different days, under different conditions. “Because light doesn't enter straight on” and “that's just how they're designed” are my understanding at the time. The sources' side's “what sat behind the lens changed” is this series' way of organizing things, not a phrase anyone used at the time.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/why-i-bought-the-nikon-d1-anyway">Film Still Had Better Image Quality. I Bought the Nikon D1 Anyway.</a>
+        <p class="kzc-related-desc">In 1999 the Nikon D1 cost ¥650,000. I still thought well-printed film was better. Then my scan and a D1 file met on the same A4 office laser, and my path changed.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/what-were-large-format-lenses-designed-to-do">What Were Large-Format Lenses Designed For?</a>
+        <p class="kzc-related-desc">Did large-format lenses trade resolution for gradation? What the makers&#39; catalogues actually sold, what f/22 meant, and what I looked at when choosing lenses.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/was-large-format-image-quality-just-about-the-lens">Was Large-Format Image Quality Just About the Lens?</a>
+        <p class="kzc-related-desc">Was large-format image quality just the lens? Ground glass, movements, film position, wind, dark slide — what 1980s manuals said to control, and my mistakes.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加: Sidekick Plannerはまだ製品ではないため、
+                 販売中の3本と誤解されないよう "(in development)" を必ず添える。 -->
+            <li><a href="/en/planner">🗺️ Sidekick Planner (in development)</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
