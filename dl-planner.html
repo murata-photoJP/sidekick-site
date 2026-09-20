@@ -241,9 +241,11 @@
 
 <script>
 // ---- Distribution Unit で埋める 2 定数（Human GO の後）。空文字の間は fail-closed ----
-// 配布 URL（official distribution source。hosting 先は未決）。
+// 配布 URL（official distribution source = 既存製品と同じ Cloudflare R2 `sidekick-downloads`、
+// object 名は versioned: Sidekick_Planner_1.0.0-beta.1_bea1697.zip。Human GO 後に埋める。
+// 値は docs/PLANNER_PRODUCT_PAGE.md §3 に準備済み）。
 const PLANNER_DOWNLOAD_URL = '';
-// 配布 ZIP の SHA-256（package 単位の hash。Distribution Unit で確定）。
+// 配布 ZIP の SHA-256（package 単位の hash。build_distribution_zip.py の identity.json の zip_sha256）。
 const PLANNER_ZIP_SHA256 = '';
 
 (function () {
@@ -270,7 +272,8 @@ const PLANNER_ZIP_SHA256 = '';
   title.hidden = false;
   const btn = document.getElementById('dl-btn');
   btn.href = PLANNER_DOWNLOAD_URL;
-  btn.setAttribute('download', 'Sidekick_Planner_beta1.00.zip');
+  // 保存名は R2 の object 名（versioned）と一致させる（Distribution Preparation AI-10650）。
+  btn.setAttribute('download', 'Sidekick_Planner_1.0.0-beta.1_bea1697.zip');
   document.getElementById('zip-sha256-live').textContent = PLANNER_ZIP_SHA256.toLowerCase();
   document.getElementById('dl-state').style.display = 'block';
 })();

@@ -27,6 +27,7 @@ explicit-path staging only, no `git add -A`, `reset --hard`, `stash`, `clean`, `
 3. For Web DOF: `docs/DOF_CALCULATOR_PHASE1_UNIT1.md` → `UNIT2.md` → `UNIT2_2.md` → `UNIT2_2_HANDOFF.md` (scope, decisions, what is Phase 2 / not implemented).
 4. The other build docs as needed: `KNOWLEDGE_BUILD.md`, `DEVELOPMENT_LOG_BUILD.md`, `STORY_BUILD.md`, `CHANGELOG_WORKFLOW.md`, `DOWNLOAD_CONTACTS.md`.
 5. For the Sidekick Planner product page and its (fail-closed) download flow: `docs/PLANNER_PRODUCT_PAGE.md` (2026-09-20).
+6. For where the Planner ZIP is hosted (same R2 bucket as Star) and the Human-GO release steps: `docs/PLANNER_DISTRIBUTION.md` (2026-09-20).
 
 ## 2. Web DOF — source map (actual import / route dependencies, verified 2026-09-16)
 

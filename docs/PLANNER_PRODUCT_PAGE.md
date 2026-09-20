@@ -53,7 +53,7 @@ HD namespace `HD-PLANNERBETA1WEBPRODUCTPAGE`）。
   `/register-dl?product=planner&src=dl-planner` へ戻す（`dl-star.html` と同じ）。
 - **配布開始前**: 2 定数が空文字なので `pending-state`（準備中）だけを表示する。EXE の SHA-256・未署名の
   disclosure・Terms / Privacy link・再配布禁止は準備中の状態でも表示する。
-- **配布開始（Distribution Unit、Human GO）で行うこと**: hosting 先の Human Decision → `PLANNER_DOWNLOAD_URL`
+- **配布開始（Distribution Unit、Human GO）で行うこと**（2026-09-20 追記: hosting 先・ZIP・hash は `docs/PLANNER_DISTRIBUTION.md` に準備済み。既存製品と同じ R2 `sidekick-downloads`）: `PLANNER_DOWNLOAD_URL`
   （`https://…/*.zip`）と `PLANNER_ZIP_SHA256`（配布 ZIP の hash、64 hex）を埋める →
   `tests/site/test_planner_product_page.py::test_dl_planner_is_fail_closed_before_distribution` を
   意図的に更新 → live 検証 PASS をもって actual Public Beta release（`HD-PLANNERBETA1PUBLICBETAAUTHORIZATION-001`）。
