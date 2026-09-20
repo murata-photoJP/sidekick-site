@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 900" width="800" height="900" role="img" aria-labelledby="t"><title id="t">概念図。左右に二つの縦の断面。左「フィルム時代」は、レンズ →（空気）→ 表面側の層 → 感光層（層の数や厚みは銘柄ごとに違う）→ 補助層 → 支持体（ベース）。右「デジタル時代」は、レンズ → カバーガラス・赤外線カット・ローパスフィルターの板 → マイクロレンズ → カラーフィルター → 画素（受光部）→ 処理（現像・補正）。両方とも同じ太さの線と同じ形の箱で描き、矢印も光線も数値もない。注記：模式図で、厚みや順序の比率は実際のものではない。優劣を示す図ではなく、レンズの像を受け取る側の構造が変わったことだけを示す。本サイトの整理。</title>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="42.0" fill="#8c96aa" font-size="30" font-weight="600" text-anchor="start">レンズの後ろにあるもの</text>
+<text x="195.0" y="96.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">フィルム時代</text>
+<text x="605.0" y="96.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">デジタル時代</text>
+<path d="M 173.0 140.0 Q 217.0 175.0 173.0 210.0 Q 129.0 175.0 173.0 140.0 Z" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="235.0" y="184.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">レンズ</text>
+<path d="M 583.0 140.0 Q 627.0 175.0 583.0 210.0 Q 539.0 175.0 583.0 140.0 Z" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="645.0" y="184.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">レンズ</text>
+<line x1="195.0" y1="214.0" x2="195.0" y2="246.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="4 6"/>
+<rect x="20.0" y="250.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="302.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">（空気）</text>
+<rect x="20.0" y="346.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="398.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">表面側の層</text>
+<rect x="20.0" y="442.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="476.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">感光層</text>
+<text x="195.0" y="514.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">層の数や厚みは銘柄ごとに違う</text>
+<rect x="20.0" y="538.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="590.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">補助層</text>
+<rect x="20.0" y="634.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="195.0" y="686.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">支持体（ベース）</text>
+<line x1="605.0" y1="214.0" x2="605.0" y2="246.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round" stroke-dasharray="4 6"/>
+<rect x="430.0" y="250.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="284.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">カバーガラス・赤外線カット・</text>
+<text x="605.0" y="322.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="middle">ローパスフィルターの板</text>
+<rect x="430.0" y="346.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="398.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">マイクロレンズ</text>
+<rect x="430.0" y="442.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="494.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">カラーフィルター</text>
+<rect x="430.0" y="538.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="590.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">画素（受光部）</text>
+<rect x="430.0" y="634.0" width="350.0" height="86.0" rx="12" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<text x="605.0" y="686.0" fill="#eef1f8" font-size="28" font-weight="600" text-anchor="middle">処理（現像・補正）</text>
+<text x="20.0" y="776.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">模式図。厚みや比率は実際のものではない。</text>
+<text x="20.0" y="812.0" fill="#eef1f8" font-size="26" font-weight="500" text-anchor="start">優劣の図ではない。像を受け取る側の構造が変わったことを示す。</text>
+<line x1="20.0" y1="852.0" x2="780.0" y2="852.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="884.0" fill="#8c96aa" font-size="26" font-weight="500" text-anchor="start">レンズから記録面までの断面。矢印・光線・数値なし。本サイトの整理。</text>
+</g>
+</svg>
