@@ -96,6 +96,11 @@
     .privacy-section li{
       margin-bottom:6px;
     }
+    .privacy-section h3{
+      margin:22px 0 8px;
+      font-size:16px;
+      color:var(--text);
+    }
     .updated{
       margin:0 0 36px;
       color:var(--sub);
@@ -143,7 +148,7 @@
     <section class="privacy-body">
       <div class="wrap">
 
-        <p class="updated">最終更新日：2026年3月</p>
+        <p class="updated">最終更新日：2026年9月20日</p>
 
         <div class="privacy-section">
           <h2>1. 基本方針</h2>
@@ -184,6 +189,8 @@
           <ul>
             <li><strong style="color:var(--text);">Stripe</strong>：決済処理（<a href="https://stripe.com/jp/privacy" target="_blank" rel="noopener">Stripeプライバシーポリシー</a>）</li>
             <li><strong style="color:var(--text);">Google Drive</strong>：ファイルの配信</li>
+            <li><strong style="color:var(--text);">Vercel Inc.</strong>：当サイトのホスティングとサーバーの運用（サイトのアクセスログの処理を含みます。Sidekick Planner の利用状況の記録も、ここを経由して当サイトへ届きます）（<a href="https://vercel.com/legal/privacy-notice" target="_blank" rel="noopener">Vercel プライバシー通知</a>）</li>
+            <li><strong style="color:var(--text);">Google（Firebase / Cloud Firestore）</strong>：AI Lab のサインイン認証と利用状況の管理、ダウンロード登録の記録、Sidekick Planner の利用状況の記録の保存（<a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase のプライバシーとセキュリティ</a>）</li>
           </ul>
         </div>
 
@@ -217,6 +224,30 @@
             本ポリシーは、必要に応じて変更することがあります。
             変更の際はこのページにて告知いたします。
           </p>
+        </div>
+
+        <div class="privacy-section" id="planner">
+          <h2>9. Sidekick Planner（β版）について</h2>
+          <p>Sidekick Planner β版の利用条件は <a href="/planner-terms">Sidekick Planner β版 利用条件</a> をご覧ください。</p>
+          <h3 id="planner-1">9-1. お使いの PC 上で動作します</h3>
+          <p>Sidekick Planner は、お使いの Windows PC 上で動作するソフトウェアです。アカウント登録やログインはありません。計算結果や設定は PC 内（配布フォルダーの <code>output</code> および <code>data</code> フォルダー）に保存され、利用者ご自身で削除できます。</p>
+          <h3 id="planner-2">9-2. 外部との通信</h3>
+          <p>Sidekick Planner は次の外部サーバーと通信します。</p>
+          <ul>
+            <li>国土地理院（<code>cyberjapandata.gsi.go.jp</code>）：背景地図と標高のタイルを、表示や計算に必要な範囲だけ、お使いの PC から直接取得します。通信の仕組み上、お使いの機器の IP アドレスなど通常の通信情報が国土地理院に届きます。</li>
+            <li>当サイト（<code>www.sidekick-lab.com</code>）：下記 9-3 の「利用状況の記録」だけを送ります。</li>
+            <li>Google マップ：「Googleマップで開く」を押したときだけ、撮影地点の緯度・経度を含む URL で Google マップを開きます。押すまで Google との通信は行われません。</li>
+          </ul>
+          <p>上記以外の外部通信（アクセス解析、広告、第三者の計測サービス）は組み込んでいません。</p>
+          <h3 id="planner-3">9-3. 利用状況の記録</h3>
+          <p>Sidekick Planner は、QR コードで撮影計画を共有したときに、「QR を発行した」という匿名の件数情報だけを当サイトのサーバーへ送ります。送るのは、出来事の種類、被写体の種別（山岳／建造物）、渡し方（スマホで見る／Planner へ渡す）、1 時間単位に丸めた時刻、無作為に作った識別子の 5 つです。撮影地点の緯度・経度、撮影日時、被写体の名前、QR の内容、あなたやお使いの PC を識別する情報は送りません。この記録は、Sidekick Planner がどれくらい使われているかを把握し、開発と改善に役立てる目的でのみ利用します。</p>
+          <p>この記録は初期設定で有効です。Sidekick Planner の設定「利用状況の記録」からいつでも無効にできます。無効の間は記録そのものを行わず、無効の間の利用状況が後から送られることはありません。無効にする前に記録され未送信だった分は PC 内に保持され、再び有効にすると送信を再開します。記録は PC 内の <code>output/activity</code> フォルダーにも残り、削除できます。</p>
+          <p>通信の仕組み上、お使いの機器の IP アドレスはサーバーの運用事業者（Vercel Inc.）に届きますが、当サイトはこれを保存しません。受け取った記録は Google のクラウドデータベース（Firebase / Cloud Firestore）に保存し、個々の記録は約 14 か月後に自動的に削除します。件数の集計のみを保持し、将来、Sidekick Planner の利用状況として公開することがあります（個々の記録や利用者が分かる形では公開しません。少数の値は表示しません）。</p>
+          <h3 id="planner-4">9-4. 共有ページ（<code>/share</code>）</h3>
+          <p>QR コードから開く共有ページは、撮影計画を URL の「#」以降に含んでおり、ブラウザの仕組み上この部分は当サイトのサーバーへ送られません。当サイトは共有された撮影計画を保存しません。共有ページは、表示に成功したこと（または失敗した理由の種類）と「同じ端末で見たことがあるか」の 1 ビットだけを、9-3 と同じ仕組みで当サイトへ送ります。撮影計画の内容は送りません。「同じ端末で見たことがあるか」の判定のため、閲覧した撮影計画のハッシュ値（内容を復元できない値）を、お使いのブラウザ内にのみ保存します。</p>
+          <p>共有ページの地図も 9-2 と同じく国土地理院のタイルを閲覧者のブラウザから直接取得します。共有ページのアクセスは、当サイトの他のページと同様に「サイトのアクセスログ」（2.）の対象です。</p>
+          <h3 id="planner-5">9-5. QR コードと位置情報</h3>
+          <p>共有用 QR コードと共有 URL には、撮影地点の正確な緯度・経度と撮影日時が含まれます。これらは当サイトを経由せず、QR を受け取った人の端末で読み取られます。QR 画像や URL が再共有されると、意図した相手以外にも撮影地点が伝わることがあります。</p>
         </div>
 
         <div class="contact-box">

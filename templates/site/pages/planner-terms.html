@@ -1,0 +1,233 @@
+{# Sidekick Planner β版 利用条件（独立 page、HD-LR-44）。2026-09-20 新設（site 配置 Unit）。
+   本文の正本 = 自作 repo `Sidekickシリーズ/本体/Sidekick Planner/docs/design_drafts/PLANNER_BETA1_WEB_LEGAL_DRAFT_2026-09-20.md`
+   v3 §B-2（JA canonical、全 14 条、HD-LR-35 / 40〜43 / 47〜49）。文言は draft v3 と同一。追加した要素は
+   内部 link（第8条 → /privacy#planner、第10条 → /planner）と各条の id（s1〜s14）のみ。
+   extra_head（CSS・analytics）は terms.html（AI Lab 利用規約）と同一。契約 UI・同意ボタンは置かない
+   （HD-LR-12 第3項 / HD-LR-34）。英語版あり（/en/planner-terms）。 #}
+{% extends "base.html" %}
+
+{% block title %}Sidekick Planner β版 利用条件 | Sidekick Lab{% endblock %}
+
+{% block meta_description %}Sidekick Planner β版（Windows 用ソフトウェア）の利用条件。提供期間、計算結果を保証しないこと、現地での確認、QR コードによる共有と位置情報、利用状況の記録、外部データ、免責、準拠法を定めます。{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/planner-terms{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --bg2:#121317;
+      --card:#17191f;
+      --line:#2a2f3a;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --muted:#5e6677;
+      --max:900px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.7;
+    }
+    a{color:var(--accent2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+    .page-hero{
+      padding:64px 0 40px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .page-hero h1{
+      margin:0 0 10px;
+      font-size:clamp(24px,4vw,36px);
+      letter-spacing:-.02em;
+    }
+    .page-hero p{
+      margin:0;
+      color:var(--sub);
+      font-size:14px;
+    }
+    .privacy-body{
+      padding:48px 0 80px;
+    }
+    .privacy-section{
+      margin-bottom:36px;
+    }
+    .privacy-section h2{
+      margin:0 0 14px;
+      font-size:18px;
+      color:var(--accent2);
+      border-left:3px solid var(--accent);
+      padding-left:12px;
+    }
+    .privacy-section p,
+    .privacy-section ul{
+      margin:0 0 10px;
+      color:var(--sub);
+      font-size:15px;
+      line-height:1.85;
+    }
+    .privacy-section ul{
+      padding-left:20px;
+    }
+    .privacy-section li{
+      margin-bottom:6px;
+    }
+    .updated{
+      margin:0 0 20px;
+      color:var(--sub);
+      font-size:13px;
+    }
+    .draft-note{
+      margin:0 0 36px;
+      padding:14px 18px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.25);
+      border-radius:10px;
+      color:var(--accent2);
+      font-size:13px;
+      line-height:1.7;
+    }
+    .contact-box{
+      margin-top:36px;
+      padding:20px 24px;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      font-size:14px;
+      color:var(--sub);
+      line-height:1.8;
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-K73T3Y352W');
+  </script>
+  <!-- Microsoft Clarity — GA4と共存、重複読み込みなし -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "xem6v4pdup");
+  </script>
+{% endblock %}
+
+{% block content %}
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <h1>Sidekick Planner β版 利用条件</h1>
+        <p>Terms of Use — Sidekick Planner Beta</p>
+      </div>
+    </section>
+
+    <section class="privacy-body">
+      <div class="wrap">
+
+        <p class="updated">最終更新日：2026年9月20日</p>
+
+        <div class="privacy-section">
+          <h2 id="s1">1. この文書について</h2>
+          <p>この利用条件は、Sidekick Lab（村田一朗。以下「当方」）が提供する Windows 用ソフトウェア「Sidekick Planner」のβ版（バージョン 1.0.0-beta.x。以下「本β版」）の利用条件を定めるものです。本β版をダウンロード・利用する前にお読みください。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s2">2. β版であること・無償であること</h2>
+          <p>本β版は、正式版（Version 1）の公開に先立ち、動作や使い勝手を確認していただくための公開テスト版です。無償で提供します。本β版の利用期間は、正式版の有料提供が始まった場合の無料期間には算入しません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s3">3. 提供期間と変更・終了</h2>
+          <p>本β版の提供期間は、本β版の一般公開日から <strong>2026年10月31日</strong>（現時点の終了予定日）までです。この終了予定日は確定した期限ではなく、開発・検証の進捗その他の事情により、当方が変更することがあります。変更した場合は、このページでお知らせします。</p>
+          <p>提供期間中、当方は本β版を随時更新します（例：β1.01、β1.02）。更新後のβ版にもこの利用条件と同じ終了予定日が適用され、更新のたびに新しい提供期間が始まるものではありません。</p>
+          <p>当方は、予告なく本β版の内容を変更し、提供を停止または終了することがあります。本β版は開発途上のソフトウェアであり、機能・表示・計算結果は正式版で変わることがあります。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s4">4. 計算結果を保証しないこと</h2>
+          <p>本β版は、太陽・月などの天体と地形・建物の位置関係から、撮影の候補となる場所と日時を計算して示すものです。計算結果は、公開されている地形データ・建物データ・惑星暦にもとづく推定であり、実際の見え方や撮影の成否を保証するものではありません。大気の状態、樹木・建物・季節による見え方の変化、データの更新時期、一時的な障害物などは計算に含まれていません。計算どおりの構図が実際に撮影できることを保証しません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s5">5. 現地で確認していただくこと</h2>
+          <p>本β版が示す地点は、計算上の候補です。その場所へ到達できるか、立ち入ってよい場所か（私有地・立入禁止区域・危険箇所を含みます）、交通規制や駐車の可否、天候、夜間・山岳・海岸・冬季の安全は、本β版では判定していません。これらは利用者ご自身で確認し、撮影の可否・安全・法令の遵守は利用者の責任でご判断ください。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s6">6. 撮影した写真</h2>
+          <p>本β版を使って計画・撮影した写真について、当方は本β版の利用条件として個人利用・商用利用を制限しません（ただし、撮影地の管理者による制限や第三者の権利は別です）。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s7">7. QR コードによる撮影計画の共有</h2>
+          <p>本β版の「QRで共有」機能で作られる QR コードおよび共有 URL には、撮影地点の正確な緯度・経度と撮影日時が含まれます。受け取った人はその地点をそのまま確認できます。QR 画像や URL が転送・スクリーンショット・SNS 投稿・印刷などで再共有されると、意図した相手以外にも撮影地点が伝わることがあります。公開したくない場所の撮影計画は共有しないでください。当方は、共有後の QR 画像や URL の広がりを止めることはできません。</p>
+          <p>この機能で共有されるのは撮影計画（場所・日時・計算結果）であり、本β版のプログラムそのものではありません（プログラムの再配布については第10条をご覧ください）。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s8">8. 利用状況の記録</h2>
+          <p>本β版は、QR コードを発行したときに「QR を発行した」という匿名の件数情報だけを記録し、当方のサーバーへ送ります（詳細は<a href="/privacy#planner">プライバシーポリシー</a>をご覧ください）。この記録は初期設定で有効になっており、本β版の設定「利用状況の記録」からいつでも無効にできます。無効の間は記録そのものを行いません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s9">9. 外部のデータ・ソフトウェア</h2>
+          <p>本β版は、国土地理院の地理院タイル（背景地図・標高）、国土交通省 PLATEAU の3D都市モデル、NASA/JPL の惑星暦 DE440、OpenStreetMap のデータ（© OpenStreetMap contributors、ODbL 1.0）を利用しています。地図・標高タイルは、本β版の動作中に利用者の PC から国土地理院のサーバーへ直接取得します。これらのデータおよび本β版に同梱されている第三者ソフトウェアには、それぞれの提供元の条件が適用されます（出典と条件は本β版の「出典・データについて」「ライセンスと法的情報」で確認できます）。当方は、これらの外部サービスの提供が続くこと、内容、可用性を保証しません。外部サービスの停止により本β版の機能の一部が使えなくなることがあります。</p>
+          <p>「Googleマップで開く」ボタンを押したときだけ、撮影地点の緯度・経度を含む URL で Google マップが開きます。Google のサービスには Google の利用規約が適用されます。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s10">10. 再配布の禁止</h2>
+          <p>本β版のプログラムおよび配布物そのもの（ダウンロードしたフォルダー・ファイル一式）を、第三者へ再配布することはできません。本β版を紹介する場合は、<a href="/planner">Sidekick Lab の公式配布ページ</a>へのリンクを共有してください。なお、本項は本β版に同梱されている第三者ソフトウェア・データに適用されるそれぞれのライセンスを制限するものではありません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s11">11. お問い合わせ</h2>
+          <p>本β版についてのご連絡は、Sidekick Lab のお問い合わせ窓口（<code>murata@mbg.nifty.com</code>）で受け付けます。応答時間・回答期限・解決期限は保証しません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s12">12. 免責</h2>
+          <p>本β版は現状有姿で提供されます。当方は、本β版の動作、計算結果の正確性および完全性、特定の目的への適合性、ならびに本β版の提供の継続を保証しません。</p>
+          <p>本β版の計算結果だけを根拠として、撮影の可否、現地の安全、立入の可否などを判断しないでください（第4条・第5条）。</p>
+          <p>本β版の利用または利用できなかったことにより生じた損害（撮影の機会を逃したこと、移動・宿泊等の費用、データの消失、機材や PC の不具合、現地での事故を含みます）について、当方は、当方の故意または重大な過失による場合を除き、責任を負いません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s13">13. 準拠法</h2>
+          <p>本利用条件は、日本法に準拠します。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s14">14. 変更</h2>
+          <p>この利用条件は必要に応じて変更することがあります。変更後の条件はこのページに掲載した時点から適用します。</p>
+        </div>
+
+        <div class="contact-box">
+          <strong style="color:var(--text);">お問い合わせ先</strong><br>
+          Sidekick Lab — 村田 一朗<br>
+          メール：<a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+{% endblock %}

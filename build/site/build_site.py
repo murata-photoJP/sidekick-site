@@ -256,6 +256,14 @@ _register_page_pair(
     en_extra={"nav_current": None},
 )
 
+# planner-terms は Sidekick Planner β版 利用条件（独立 page、HD-LR-44、2026-09-20 新設）。
+# terms と同じ扱い（グローバルナビ・フッターに項目なし。導線は /privacy 9 節と /share から）。
+_register_page_pair(
+    "planner-terms",
+    ja_extra={"nav_current": None, "en_redirect_url": "/en/planner-terms"},
+    en_extra={"nav_current": None},
+)
+
 # トップページ（index）はURLがルート（/、/en/）でslugベースの他ページと形式が違うため、
 # _register_page_pair()を使わずPAGESへ直接登録する。村田さんが本番で「Sidekick Lab」の
 # 折り返し表示・ナビ文字色不一致を発見・報告したことがきっかけで移行対象になった

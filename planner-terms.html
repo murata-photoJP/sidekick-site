@@ -15,24 +15,24 @@
     try {
       var pref = localStorage.getItem('sk_lang_pref');
       if (pref === 'ja') return;
-      if (pref === 'en') { location.replace('/en/privacy.html'); return; }
+      if (pref === 'en') { location.replace('/en/planner-terms'); return; }
       var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
       var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
       if (!isJapanese) {
         localStorage.setItem('sk_lang_pref', 'en');
-        location.replace('/en/privacy.html');
+        location.replace('/en/planner-terms');
       }
     } catch (e) { /* localStorageが使えない環境などは何もしない */ }
   })();
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>プライバシーポリシー | Sidekick</title>
-<meta name="description" content="Sidekickのプライバシーポリシーページです。">
-<link rel="canonical" href="https://www.sidekick-lab.com/privacy">
+<title>Sidekick Planner β版 利用条件 | Sidekick Lab</title>
+<meta name="description" content="Sidekick Planner β版（Windows 用ソフトウェア）の利用条件。提供期間、計算結果を保証しないこと、現地での確認、QR コードによる共有と位置情報、利用状況の記録、外部データ、免責、準拠法を定めます。">
+<link rel="canonical" href="https://www.sidekick-lab.com/planner-terms">
 
-<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/privacy">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/planner-terms">
 
-<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/privacy">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/planner-terms">
 
 
 <link rel="stylesheet" href="/assets/css/site-header.css">
@@ -109,15 +109,20 @@
     .privacy-section li{
       margin-bottom:6px;
     }
-    .privacy-section h3{
-      margin:22px 0 8px;
-      font-size:16px;
-      color:var(--text);
-    }
     .updated{
-      margin:0 0 36px;
+      margin:0 0 20px;
       color:var(--sub);
       font-size:13px;
+    }
+    .draft-note{
+      margin:0 0 36px;
+      padding:14px 18px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.25);
+      border-radius:10px;
+      color:var(--accent2);
+      font-size:13px;
+      line-height:1.7;
     }
     .contact-box{
       margin-top:36px;
@@ -198,7 +203,7 @@
 
 <div class="lang-banner" id="lang-banner">
   🇺🇸 This site is also available in English —
-  <a href="/en/privacy">View English page →</a>
+  <a href="/en/planner-terms">View English page →</a>
   <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
 </div>
 
@@ -234,7 +239,7 @@
       <a href="/faq" >Support</a>
       <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
 
-      <a href="/en/privacy" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+      <a href="/en/planner-terms" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
 
     </nav>
   </div>
@@ -287,8 +292,8 @@
   <main>
     <section class="page-hero">
       <div class="wrap">
-        <h1>プライバシーポリシー</h1>
-        <p>Privacy Policy</p>
+        <h1>Sidekick Planner β版 利用条件</h1>
+        <p>Terms of Use — Sidekick Planner Beta</p>
       </div>
     </section>
 
@@ -298,110 +303,85 @@
         <p class="updated">最終更新日：2026年9月20日</p>
 
         <div class="privacy-section">
-          <h2>1. 基本方針</h2>
-          <p>
-            Sidekick（以下「当サービス」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めます。
-            本ポリシーは、当サービスが取得・利用する情報の取り扱いについて説明するものです。
-          </p>
+          <h2 id="s1">1. この文書について</h2>
+          <p>この利用条件は、Sidekick Lab（村田一朗。以下「当方」）が提供する Windows 用ソフトウェア「Sidekick Planner」のβ版（バージョン 1.0.0-beta.x。以下「本β版」）の利用条件を定めるものです。本β版をダウンロード・利用する前にお読みください。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>2. 取得する情報</h2>
-          <p>当サービスでは、以下の情報を取得することがあります。</p>
-          <ul>
-            <li>お問い合わせ時にご記入いただいたメールアドレスおよびお名前</li>
-            <li>ご購入時に決済サービス（Stripe）を通じて処理される情報（クレジットカード情報は当サービスでは保持しません）</li>
-            <li>サイトのアクセスログ（IPアドレス、ブラウザ情報、閲覧ページ等）</li>
-          </ul>
+          <h2 id="s2">2. β版であること・無償であること</h2>
+          <p>本β版は、正式版（Version 1）の公開に先立ち、動作や使い勝手を確認していただくための公開テスト版です。無償で提供します。本β版の利用期間は、正式版の有料提供が始まった場合の無料期間には算入しません。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>3. 情報の利用目的</h2>
-          <p>取得した情報は、以下の目的にのみ使用します。</p>
-          <ul>
-            <li>購入した商品の提供・サポート</li>
-            <li>お問い合わせへの対応</li>
-            <li>サービス改善のためのアクセス解析</li>
-            <li>重要なお知らせの連絡（サービス変更・不具合通知等）</li>
-          </ul>
-          <p>上記以外の目的で個人情報を利用することはありません。</p>
+          <h2 id="s3">3. 提供期間と変更・終了</h2>
+          <p>本β版の提供期間は、本β版の一般公開日から <strong>2026年10月31日</strong>（現時点の終了予定日）までです。この終了予定日は確定した期限ではなく、開発・検証の進捗その他の事情により、当方が変更することがあります。変更した場合は、このページでお知らせします。</p>
+          <p>提供期間中、当方は本β版を随時更新します（例：β1.01、β1.02）。更新後のβ版にもこの利用条件と同じ終了予定日が適用され、更新のたびに新しい提供期間が始まるものではありません。</p>
+          <p>当方は、予告なく本β版の内容を変更し、提供を停止または終了することがあります。本β版は開発途上のソフトウェアであり、機能・表示・計算結果は正式版で変わることがあります。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>4. 第三者への提供</h2>
-          <p>
-            当サービスは、法令に基づく場合を除き、取得した個人情報を本人の同意なく第三者に提供することはありません。
-            ただし、以下のサービスを利用しており、これらのサービスの規約に基づく情報処理が行われます。
-          </p>
-          <ul>
-            <li><strong style="color:var(--text);">Stripe</strong>：決済処理（<a href="https://stripe.com/jp/privacy" target="_blank" rel="noopener">Stripeプライバシーポリシー</a>）</li>
-            <li><strong style="color:var(--text);">Google Drive</strong>：ファイルの配信</li>
-            <li><strong style="color:var(--text);">Vercel Inc.</strong>：当サイトのホスティングとサーバーの運用（サイトのアクセスログの処理を含みます。Sidekick Planner の利用状況の記録も、ここを経由して当サイトへ届きます）（<a href="https://vercel.com/legal/privacy-notice" target="_blank" rel="noopener">Vercel プライバシー通知</a>）</li>
-            <li><strong style="color:var(--text);">Google（Firebase / Cloud Firestore）</strong>：AI Lab のサインイン認証と利用状況の管理、ダウンロード登録の記録、Sidekick Planner の利用状況の記録の保存（<a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase のプライバシーとセキュリティ</a>）</li>
-          </ul>
+          <h2 id="s4">4. 計算結果を保証しないこと</h2>
+          <p>本β版は、太陽・月などの天体と地形・建物の位置関係から、撮影の候補となる場所と日時を計算して示すものです。計算結果は、公開されている地形データ・建物データ・惑星暦にもとづく推定であり、実際の見え方や撮影の成否を保証するものではありません。大気の状態、樹木・建物・季節による見え方の変化、データの更新時期、一時的な障害物などは計算に含まれていません。計算どおりの構図が実際に撮影できることを保証しません。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>5. Cookieについて</h2>
-          <p>
-            当サイトでは、アクセス解析のためCookieを使用する場合があります。
-            Cookieはブラウザの設定から無効にすることができますが、一部のサービス機能に影響が出る場合があります。
-          </p>
+          <h2 id="s5">5. 現地で確認していただくこと</h2>
+          <p>本β版が示す地点は、計算上の候補です。その場所へ到達できるか、立ち入ってよい場所か（私有地・立入禁止区域・危険箇所を含みます）、交通規制や駐車の可否、天候、夜間・山岳・海岸・冬季の安全は、本β版では判定していません。これらは利用者ご自身で確認し、撮影の可否・安全・法令の遵守は利用者の責任でご判断ください。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>6. 個人情報の保管・管理</h2>
-          <p>
-            取得した個人情報は、適切な安全管理措置を講じて保管します。
-            不要になった個人情報は、速やかに削除いたします。
-          </p>
+          <h2 id="s6">6. 撮影した写真</h2>
+          <p>本β版を使って計画・撮影した写真について、当方は本β版の利用条件として個人利用・商用利用を制限しません（ただし、撮影地の管理者による制限や第三者の権利は別です）。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>7. 開示・訂正・削除の請求</h2>
-          <p>
-            ご本人から個人情報の開示・訂正・削除の請求があった場合は、
-            合理的な期間内に対応いたします。下記お問い合わせ先までご連絡ください。
-          </p>
+          <h2 id="s7">7. QR コードによる撮影計画の共有</h2>
+          <p>本β版の「QRで共有」機能で作られる QR コードおよび共有 URL には、撮影地点の正確な緯度・経度と撮影日時が含まれます。受け取った人はその地点をそのまま確認できます。QR 画像や URL が転送・スクリーンショット・SNS 投稿・印刷などで再共有されると、意図した相手以外にも撮影地点が伝わることがあります。公開したくない場所の撮影計画は共有しないでください。当方は、共有後の QR 画像や URL の広がりを止めることはできません。</p>
+          <p>この機能で共有されるのは撮影計画（場所・日時・計算結果）であり、本β版のプログラムそのものではありません（プログラムの再配布については第10条をご覧ください）。</p>
         </div>
 
         <div class="privacy-section">
-          <h2>8. ポリシーの変更</h2>
-          <p>
-            本ポリシーは、必要に応じて変更することがあります。
-            変更の際はこのページにて告知いたします。
-          </p>
+          <h2 id="s8">8. 利用状況の記録</h2>
+          <p>本β版は、QR コードを発行したときに「QR を発行した」という匿名の件数情報だけを記録し、当方のサーバーへ送ります（詳細は<a href="/privacy#planner">プライバシーポリシー</a>をご覧ください）。この記録は初期設定で有効になっており、本β版の設定「利用状況の記録」からいつでも無効にできます。無効の間は記録そのものを行いません。</p>
         </div>
 
-        <div class="privacy-section" id="planner">
-          <h2>9. Sidekick Planner（β版）について</h2>
-          <p>Sidekick Planner β版の利用条件は <a href="/planner-terms">Sidekick Planner β版 利用条件</a> をご覧ください。</p>
-          <h3 id="planner-1">9-1. お使いの PC 上で動作します</h3>
-          <p>Sidekick Planner は、お使いの Windows PC 上で動作するソフトウェアです。アカウント登録やログインはありません。計算結果や設定は PC 内（配布フォルダーの <code>output</code> および <code>data</code> フォルダー）に保存され、利用者ご自身で削除できます。</p>
-          <h3 id="planner-2">9-2. 外部との通信</h3>
-          <p>Sidekick Planner は次の外部サーバーと通信します。</p>
-          <ul>
-            <li>国土地理院（<code>cyberjapandata.gsi.go.jp</code>）：背景地図と標高のタイルを、表示や計算に必要な範囲だけ、お使いの PC から直接取得します。通信の仕組み上、お使いの機器の IP アドレスなど通常の通信情報が国土地理院に届きます。</li>
-            <li>当サイト（<code>www.sidekick-lab.com</code>）：下記 9-3 の「利用状況の記録」だけを送ります。</li>
-            <li>Google マップ：「Googleマップで開く」を押したときだけ、撮影地点の緯度・経度を含む URL で Google マップを開きます。押すまで Google との通信は行われません。</li>
-          </ul>
-          <p>上記以外の外部通信（アクセス解析、広告、第三者の計測サービス）は組み込んでいません。</p>
-          <h3 id="planner-3">9-3. 利用状況の記録</h3>
-          <p>Sidekick Planner は、QR コードで撮影計画を共有したときに、「QR を発行した」という匿名の件数情報だけを当サイトのサーバーへ送ります。送るのは、出来事の種類、被写体の種別（山岳／建造物）、渡し方（スマホで見る／Planner へ渡す）、1 時間単位に丸めた時刻、無作為に作った識別子の 5 つです。撮影地点の緯度・経度、撮影日時、被写体の名前、QR の内容、あなたやお使いの PC を識別する情報は送りません。この記録は、Sidekick Planner がどれくらい使われているかを把握し、開発と改善に役立てる目的でのみ利用します。</p>
-          <p>この記録は初期設定で有効です。Sidekick Planner の設定「利用状況の記録」からいつでも無効にできます。無効の間は記録そのものを行わず、無効の間の利用状況が後から送られることはありません。無効にする前に記録され未送信だった分は PC 内に保持され、再び有効にすると送信を再開します。記録は PC 内の <code>output/activity</code> フォルダーにも残り、削除できます。</p>
-          <p>通信の仕組み上、お使いの機器の IP アドレスはサーバーの運用事業者（Vercel Inc.）に届きますが、当サイトはこれを保存しません。受け取った記録は Google のクラウドデータベース（Firebase / Cloud Firestore）に保存し、個々の記録は約 14 か月後に自動的に削除します。件数の集計のみを保持し、将来、Sidekick Planner の利用状況として公開することがあります（個々の記録や利用者が分かる形では公開しません。少数の値は表示しません）。</p>
-          <h3 id="planner-4">9-4. 共有ページ（<code>/share</code>）</h3>
-          <p>QR コードから開く共有ページは、撮影計画を URL の「#」以降に含んでおり、ブラウザの仕組み上この部分は当サイトのサーバーへ送られません。当サイトは共有された撮影計画を保存しません。共有ページは、表示に成功したこと（または失敗した理由の種類）と「同じ端末で見たことがあるか」の 1 ビットだけを、9-3 と同じ仕組みで当サイトへ送ります。撮影計画の内容は送りません。「同じ端末で見たことがあるか」の判定のため、閲覧した撮影計画のハッシュ値（内容を復元できない値）を、お使いのブラウザ内にのみ保存します。</p>
-          <p>共有ページの地図も 9-2 と同じく国土地理院のタイルを閲覧者のブラウザから直接取得します。共有ページのアクセスは、当サイトの他のページと同様に「サイトのアクセスログ」（2.）の対象です。</p>
-          <h3 id="planner-5">9-5. QR コードと位置情報</h3>
-          <p>共有用 QR コードと共有 URL には、撮影地点の正確な緯度・経度と撮影日時が含まれます。これらは当サイトを経由せず、QR を受け取った人の端末で読み取られます。QR 画像や URL が再共有されると、意図した相手以外にも撮影地点が伝わることがあります。</p>
+        <div class="privacy-section">
+          <h2 id="s9">9. 外部のデータ・ソフトウェア</h2>
+          <p>本β版は、国土地理院の地理院タイル（背景地図・標高）、国土交通省 PLATEAU の3D都市モデル、NASA/JPL の惑星暦 DE440、OpenStreetMap のデータ（© OpenStreetMap contributors、ODbL 1.0）を利用しています。地図・標高タイルは、本β版の動作中に利用者の PC から国土地理院のサーバーへ直接取得します。これらのデータおよび本β版に同梱されている第三者ソフトウェアには、それぞれの提供元の条件が適用されます（出典と条件は本β版の「出典・データについて」「ライセンスと法的情報」で確認できます）。当方は、これらの外部サービスの提供が続くこと、内容、可用性を保証しません。外部サービスの停止により本β版の機能の一部が使えなくなることがあります。</p>
+          <p>「Googleマップで開く」ボタンを押したときだけ、撮影地点の緯度・経度を含む URL で Google マップが開きます。Google のサービスには Google の利用規約が適用されます。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s10">10. 再配布の禁止</h2>
+          <p>本β版のプログラムおよび配布物そのもの（ダウンロードしたフォルダー・ファイル一式）を、第三者へ再配布することはできません。本β版を紹介する場合は、<a href="/planner">Sidekick Lab の公式配布ページ</a>へのリンクを共有してください。なお、本項は本β版に同梱されている第三者ソフトウェア・データに適用されるそれぞれのライセンスを制限するものではありません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s11">11. お問い合わせ</h2>
+          <p>本β版についてのご連絡は、Sidekick Lab のお問い合わせ窓口（<code>murata@mbg.nifty.com</code>）で受け付けます。応答時間・回答期限・解決期限は保証しません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s12">12. 免責</h2>
+          <p>本β版は現状有姿で提供されます。当方は、本β版の動作、計算結果の正確性および完全性、特定の目的への適合性、ならびに本β版の提供の継続を保証しません。</p>
+          <p>本β版の計算結果だけを根拠として、撮影の可否、現地の安全、立入の可否などを判断しないでください（第4条・第5条）。</p>
+          <p>本β版の利用または利用できなかったことにより生じた損害（撮影の機会を逃したこと、移動・宿泊等の費用、データの消失、機材や PC の不具合、現地での事故を含みます）について、当方は、当方の故意または重大な過失による場合を除き、責任を負いません。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s13">13. 準拠法</h2>
+          <p>本利用条件は、日本法に準拠します。</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s14">14. 変更</h2>
+          <p>この利用条件は必要に応じて変更することがあります。変更後の条件はこのページに掲載した時点から適用します。</p>
         </div>
 
         <div class="contact-box">
           <strong style="color:var(--text);">お問い合わせ先</strong><br>
-          Sidekick — 村田 一朗<br>
-          メール：<a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a><br>
-          <span style="font-size:13px;">通常、2営業日以内にご返信いたします。</span>
+          Sidekick Lab — 村田 一朗<br>
+          メール：<a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a>
         </div>
 
       </div>

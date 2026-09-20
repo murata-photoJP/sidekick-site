@@ -1,0 +1,133 @@
+{# Sidekick Planner Beta — Terms of Use (standalone page, HD-LR-44). Added 2026-09-20 (site placement Unit).
+   Canonical text: 自作 repo `Sidekickシリーズ/本体/Sidekick Planner/docs/design_drafts/PLANNER_BETA1_WEB_LEGAL_DRAFT_2026-09-20.md`
+   v3 §B-4 (faithful localization of the JA canonical, all 14 sections, semantic parity PASS §G v3).
+   Wording identical to draft v3; only internal links (section 8 -> /en/privacy#planner, section 10 -> /en/planner)
+   and section ids (s1-s14) were added. extra_head (CSS, analytics) is identical to en/terms.html. #}
+{% extends "base.html" %}
+
+{% block title %}Sidekick Planner Beta — Terms of Use | Sidekick Lab{% endblock %}
+{% block meta_description %}Terms of Use for the Sidekick Planner Beta (Windows software): beta period, no guarantee of calculation results, on-site checks, QR sharing and location data, usage records, external data, disclaimer and governing law.{% endblock %}
+{% block canonical %}https://www.sidekick-lab.com/en/planner-terms{% endblock %}
+
+{% block extra_head %}
+  <style>
+    :root{--bg:#0b0b0d;--bg2:#121317;--card:#17191f;--line:#2a2f3a;--text:#f5f7fb;--sub:#b8c0cc;--accent:#ff8a00;--accent2:#ffb14a;--white:#ffffff;--muted:#5e6677;--max:900px;--shadow:0 20px 60px rgba(0,0,0,.35)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:radial-gradient(circle at top right,rgba(255,138,0,.10),transparent 28%),var(--bg);color:var(--text);line-height:1.7}
+    a{color:var(--accent2);text-decoration:none}a:hover{text-decoration:underline}.wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+    .page-hero{padding:64px 0 40px;border-bottom:1px solid rgba(255,255,255,.06)}.page-hero h1{margin:0 0 10px;font-size:clamp(24px,4vw,36px);letter-spacing:-.02em}.page-hero p{margin:0;color:var(--sub);font-size:14px}
+    .privacy-body{padding:48px 0 80px}.privacy-section{margin-bottom:36px}.privacy-section h2{margin:0 0 14px;font-size:18px;color:var(--accent2);border-left:3px solid var(--accent);padding-left:12px}
+    .privacy-section p,.privacy-section ul{margin:0 0 10px;color:var(--sub);font-size:15px;line-height:1.85}.privacy-section ul{padding-left:20px}.privacy-section li{margin-bottom:6px}
+    .updated{margin:0 0 20px;color:var(--sub);font-size:13px}
+    .draft-note{margin:0 0 36px;padding:14px 18px;background:rgba(255,138,0,.08);border:1px solid rgba(255,138,0,.25);border-radius:10px;color:var(--accent2);font-size:13px;line-height:1.7}
+    .contact-box{margin-top:36px;padding:20px 24px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;font-size:14px;color:var(--sub);line-height:1.8}
+    .translation-note{margin:0 0 36px;padding:14px 18px;background:rgba(255,138,0,.06);border:1px solid rgba(255,138,0,.18);border-radius:12px;color:var(--sub);font-size:13px}
+  </style>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-K73T3Y352W');</script>
+  <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","xem6v4pdup");</script>
+{% endblock %}
+
+{% block content %}
+
+  <main>
+    <section class="page-hero">
+      <div class="wrap">
+        <h1>Sidekick Planner Beta — Terms of Use</h1>
+        <p>Sidekick Planner β版 利用条件</p>
+      </div>
+    </section>
+
+    <section class="privacy-body">
+      <div class="wrap">
+
+        <p class="updated">Last updated: September 20, 2026</p>
+
+        <p class="translation-note">This page is an English translation of <a href="/planner-terms">the original Japanese terms</a>. If there is any inconsistency, the Japanese version prevails.</p>
+
+        <div class="privacy-section">
+          <h2 id="s1">1. About these terms</h2>
+          <p>These terms govern the use of the beta version of "Sidekick Planner" (version 1.0.0-beta.x, the "Beta"), Windows software provided by Sidekick Lab (Ichiro Murata, "we" or "us"). Please read them before downloading or using the Beta.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s2">2. Beta software, provided free of charge</h2>
+          <p>The Beta is a public test version made available before the official release (Version 1) so that you can check how it works and how it feels to use. It is provided free of charge. The time you use the Beta will not be counted toward any free period that may be offered if the official version is later sold.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s3">3. Beta period; changes and termination</h2>
+          <p>The Beta is available from the date of its public release until <strong>October 31, 2026</strong>, which is the currently planned end date. This end date is not a fixed deadline; we may change it depending on the progress of development and testing or for other reasons. Any change will be announced on this page.</p>
+          <p>During the Beta period we will update the Beta from time to time (for example, beta 1.01, beta 1.02). Updated Beta versions are subject to these same terms and the same planned end date; an update does not start a new Beta period.</p>
+          <p>We may change the Beta, or suspend or end its availability, without prior notice. The Beta is software under development; its features, displays and calculation results may differ in the official version.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s4">4. No guarantee of calculation results</h2>
+          <p>The Beta calculates and shows candidate locations and times for photographs based on the positions of celestial bodies such as the sun and the moon relative to terrain and buildings. The results are estimates based on publicly available terrain data, building data and planetary ephemerides; they do not guarantee how a scene will actually look or that a photograph can be taken. Atmospheric conditions, changes in visibility caused by trees, buildings or seasons, the date of the underlying data, and temporary obstructions are not included in the calculation. We do not guarantee that the composition shown by the calculation can actually be photographed.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s5">5. Things you must check on site</h2>
+          <p>The locations shown by the Beta are calculated candidates. The Beta does not determine whether a location can be reached; whether entry is permitted (including private property, restricted areas and dangerous places); traffic restrictions or parking; weather; or safety at night, in the mountains, on the coast or in winter. Please check these yourself. Whether to photograph, your safety, and compliance with laws are your own responsibility.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s6">6. Your photographs</h2>
+          <p>We do not restrict, as a condition of using the Beta, the personal or commercial use of photographs you plan or take with the Beta (restrictions imposed by the managers of a location and the rights of third parties are a separate matter).</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s7">7. Sharing a shooting plan by QR code</h2>
+          <p>QR codes and share URLs created by the Beta's "Share by QR" feature contain the exact latitude and longitude of the shooting location and the shooting date and time. Anyone who receives them can see that location as it is. If a QR image or URL is passed on — by forwarding, screenshots, posting on social media, printing and so on — the shooting location may reach people you did not intend. Do not share plans for places you do not want to disclose. We cannot stop the spread of a QR image or URL once it has been shared.</p>
+          <p>What this feature shares is the shooting plan (location, date and time, and calculation results), not the Beta program itself (for redistribution of the program, see Section 10).</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s8">8. Usage records</h2>
+          <p>When you generate a QR code, the Beta records only anonymous count information — that "a QR code was generated" — and sends it to our server (see the <a href="/en/privacy#planner">Privacy Policy</a> for details). This recording is enabled by default and can be turned off at any time from the Beta's "Usage records" setting. While it is off, nothing is recorded.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s9">9. External data and software</h2>
+          <p>The Beta uses the GSI Tiles of the Geospatial Information Authority of Japan (base map and elevation), the PLATEAU 3D city models of the Ministry of Land, Infrastructure, Transport and Tourism, the NASA/JPL planetary ephemeris DE440, and OpenStreetMap data (© OpenStreetMap contributors, ODbL 1.0). Map and elevation tiles are fetched directly from the Geospatial Information Authority of Japan's servers by your PC while the Beta is running. These data and the third-party software bundled with the Beta are subject to their respective providers' terms (the sources and terms can be viewed in the Beta under "Data sources and credits" and "Licenses and legal information"). We do not guarantee the continued availability, content or uptime of these external services; if an external service stops, some features of the Beta may become unavailable.</p>
+          <p>Only when you press the "Open in Google Maps" button does Google Maps open with a URL containing the latitude and longitude of the shooting location. Google's services are subject to Google's terms of service.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s10">10. No redistribution</h2>
+          <p>You may not redistribute the Beta program or its distribution package itself (the downloaded folder and set of files) to third parties. If you want to introduce the Beta to others, please share a link to the <a href="/en/planner">official Sidekick Lab download page</a>. This section does not limit the licenses that apply to the third-party software and data bundled with the Beta.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s11">11. Contact</h2>
+          <p>Inquiries about the Beta are accepted through the Sidekick Lab contact address (<code>murata@mbg.nifty.com</code>). We do not guarantee response times, reply deadlines or resolution deadlines.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s12">12. Disclaimer</h2>
+          <p>The Beta is provided "as is". We do not warrant the operation of the Beta, the accuracy or completeness of its calculation results, its fitness for any particular purpose, or the continued availability of the Beta.</p>
+          <p>Do not decide whether you can shoot, whether a location is safe, or whether you may enter a location on the basis of the Beta's calculation results alone (see Sections 4 and 5).</p>
+          <p>Except where caused by our willful misconduct or gross negligence, we are not liable for any damage arising from the use of, or inability to use, the Beta, including missed shooting opportunities, travel and accommodation costs, loss of data, malfunction of equipment or PCs, and accidents on location.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s13">13. Governing law</h2>
+          <p>These Terms are governed by the laws of Japan.</p>
+        </div>
+
+        <div class="privacy-section">
+          <h2 id="s14">14. Changes</h2>
+          <p>These terms may be changed as necessary. The changed terms apply from the time they are posted on this page.</p>
+        </div>
+
+        <div class="contact-box">
+          <strong style="color:var(--text);">Contact</strong><br>
+          Sidekick Lab — Ichiro Murata<br>
+          Email: <a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+{% endblock %}

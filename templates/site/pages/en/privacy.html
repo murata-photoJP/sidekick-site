@@ -13,6 +13,7 @@
     .page-hero{padding:64px 0 40px;border-bottom:1px solid rgba(255,255,255,.06)}.page-hero h1{margin:0 0 10px;font-size:clamp(24px,4vw,36px);letter-spacing:-.02em}.page-hero p{margin:0;color:var(--sub);font-size:14px}
     .privacy-body{padding:48px 0 80px}.privacy-section{margin-bottom:36px}.privacy-section h2{margin:0 0 14px;font-size:18px;color:var(--accent2);border-left:3px solid var(--accent);padding-left:12px}
     .privacy-section p,.privacy-section ul{margin:0 0 10px;color:var(--sub);font-size:15px;line-height:1.85}.privacy-section ul{padding-left:20px}.privacy-section li{margin-bottom:6px}.updated{margin:0 0 20px;color:var(--sub);font-size:13px}
+    .privacy-section h3{margin:22px 0 8px;font-size:16px;color:var(--text)}
     .translation-note{margin:0 0 36px;padding:14px 18px;background:rgba(255,138,0,.06);border:1px solid rgba(255,138,0,.18);border-radius:12px;color:var(--sub);font-size:13px}
     .contact-box{margin-top:36px;padding:20px 24px;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;font-size:14px;color:var(--sub);line-height:1.8}
   </style>
@@ -25,7 +26,7 @@
   <main>
     <section class="page-hero"><div class="wrap"><h1>Privacy Policy</h1><p>プライバシーポリシー</p></div></section>
     <section class="privacy-body"><div class="wrap">
-      <p class="updated">Last updated: March 2026</p>
+      <p class="updated">Last updated: September 20, 2026</p>
       <p class="translation-note">This page is an English translation of the <a href="/privacy">original Japanese policy</a>. If there is any inconsistency, the Japanese version prevails.</p>
 
       <div class="privacy-section"><h2>1. Basic Policy</h2><p>Sidekick (“the Service”) respects users’ privacy and is committed to protecting personal information. This policy explains how the Service collects and uses information.</p></div>
@@ -43,11 +44,35 @@
       <div class="privacy-section"><h2>4. Disclosure to Third Parties</h2><p>Except where required by law, the Service does not provide collected personal information to third parties without the individual’s consent. The following services are used, and information is processed in accordance with their respective terms:</p><ul>
         <li><strong style="color:var(--text)">Stripe</strong>: Payment processing (<a href="https://stripe.com/privacy" target="_blank" rel="noopener">Stripe Privacy Policy</a>)</li>
         <li><strong style="color:var(--text)">Google Drive</strong>: File delivery</li>
+        <li><strong style="color:var(--text)">Vercel Inc.</strong>: hosting and operation of this website's servers (including processing of website access logs; Sidekick Planner usage records also reach this website through Vercel) (<a href="https://vercel.com/legal/privacy-notice" target="_blank" rel="noopener">Vercel Privacy Notice</a>)</li>
+        <li><strong style="color:var(--text)">Google (Firebase / Cloud Firestore)</strong>: sign-in authentication and usage management for AI Lab, records of download registrations, and storage of Sidekick Planner usage records (<a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Firebase Privacy and Security</a>)</li>
       </ul></div>
       <div class="privacy-section"><h2>5. Cookies</h2><p>This website may use cookies for analytics. You can disable cookies in your browser settings, although doing so may affect some features of the Service.</p></div>
       <div class="privacy-section"><h2>6. Storage and Management of Personal Information</h2><p>We take appropriate security measures to store collected personal information. Personal information that is no longer needed will be deleted promptly.</p></div>
       <div class="privacy-section"><h2>7. Requests for Disclosure, Correction, or Deletion</h2><p>If an individual requests disclosure, correction, or deletion of their personal information, we will respond within a reasonable period. Please contact us using the details below.</p></div>
       <div class="privacy-section"><h2>8. Changes to This Policy</h2><p>We may change this policy as necessary. Changes will be announced on this page.</p></div>
+      <div class="privacy-section" id="planner"><h2>9. Sidekick Planner (Beta)</h2>
+        <p>For the terms of use of the Sidekick Planner Beta, see <a href="/en/planner-terms">Sidekick Planner Beta — Terms of Use</a>.</p>
+        <h3 id="planner-1">9-1. Runs on your own PC</h3>
+        <p>Sidekick Planner is software that runs on your Windows PC. There is no account registration or login. Calculation results and settings are stored on your PC (in the <code>output</code> and <code>data</code> folders of the distribution folder) and can be deleted by you.</p>
+        <h3 id="planner-2">9-2. External communication</h3>
+        <p>Sidekick Planner communicates with the following external servers.</p>
+        <ul>
+          <li>Geospatial Information Authority of Japan (<code>cyberjapandata.gsi.go.jp</code>): base map and elevation tiles are fetched directly from your PC, only for the area needed for display and calculation. Because of how network communication works, ordinary connection information such as your device's IP address reaches the Geospatial Information Authority of Japan.</li>
+          <li>This website (<code>www.sidekick-lab.com</code>): only the "usage records" described in 9-3 are sent.</li>
+          <li>Google Maps: only when you press "Open in Google Maps", Google Maps opens with a URL containing the latitude and longitude of the shooting location. No communication with Google takes place until you press it.</li>
+        </ul>
+        <p>No other external communication (analytics, advertising, or third-party measurement services) is built in.</p>
+        <h3 id="planner-3">9-3. Usage records</h3>
+        <p>When you share a shooting plan by QR code, Sidekick Planner sends only anonymous count information — that "a QR code was generated" — to this website's server. Five items are sent: the type of event, the type of subject (mountain or structure), the sharing method (view on a phone or hand over to Planner), the time rounded to the hour, and a randomly generated identifier. The latitude and longitude of the shooting location, the shooting date and time, the name of the subject, the contents of the QR code, and any information identifying you or your PC are not sent. These records are used only to understand how much Sidekick Planner is used and to inform its development and improvement.</p>
+        <p>This recording is enabled by default. You can turn it off at any time from Sidekick Planner's "Usage records" setting. While it is off, nothing is recorded, and no usage from the off period is sent later. Records made before turning it off that have not yet been sent are kept on your PC and are sent again once you turn it back on. The records also remain in the <code>output/activity</code> folder on your PC and can be deleted.</p>
+        <p>Because of how network communication works, your device's IP address reaches the hosting provider of our server (Vercel Inc.), but this website does not store it. Received records are stored in Google's cloud database (Firebase / Cloud Firestore); individual records are deleted automatically after about 14 months. Only aggregated counts are retained and may be published in the future as Sidekick Planner usage statistics (never in a form that reveals individual records or users; small values are not shown).</p>
+        <h3 id="planner-4">9-4. The share page (<code>/share</code>)</h3>
+        <p>The share page opened from a QR code carries the shooting plan in the part of the URL after "#", which, by the way browsers work, is not sent to this website's server. This website does not store shared shooting plans. The share page sends only the fact that the plan was displayed successfully (or the type of reason it failed) and one bit indicating whether it has been viewed on the same device before, using the same mechanism as 9-3. The contents of the shooting plan are not sent. To determine "viewed on this device before", a hash value of the viewed plan (from which the contents cannot be recovered) is stored only in your browser.</p>
+        <p>The map on the share page also fetches tiles from the Geospatial Information Authority of Japan directly from the viewer's browser, as in 9-2. Access to the share page is covered by "website access logs" (Section 2) in the same way as other pages of this website.</p>
+        <h3 id="planner-5">9-5. QR codes and location information</h3>
+        <p>The share QR code and share URL contain the exact latitude and longitude of the shooting location and the shooting date and time. They are read on the recipient's device without passing through this website. If a QR image or URL is passed on, the shooting location may reach people you did not intend.</p>
+      </div>
       <div class="contact-box"><strong style="color:var(--text)">Contact</strong><br>Sidekick — Ichiro Murata<br>Email: <a href="mailto:murata@mbg.nifty.com">murata@mbg.nifty.com</a><br><span style="font-size:13px">We normally reply within two business days.</span></div>
     </div></section>
   </main>
