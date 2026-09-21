@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1320" width="800" height="1320" role="img" aria-labelledby="t"><title id="t">Conceptual figure in two parts. Top: viewing on a monitor. At 100% view each pixel maps to one screen pixel, so the image with more pixels (High Resolution mode or Super Resolution) shows the same detail at twice the size; in fit-to-screen view both images are resampled to the same screen pixel count. Bottom: a B0 print viewed from 50 cm, 1 m and 2 m. For each distance, two horizontal bars show how fine, in the eye, the pixel grid of each route can reach: normal (about 25 megapixels) and High Resolution / Super Resolution (about 100 megapixels), on a log axis without numeric ticks. Doubling the distance moves both bars one step to the right; the two bars always differ by a factor of two. A soft-edged band in the middle marks roughly the fineness the eye can pick up; its width moves with viewer, contrast, illumination, subject and output conditions, and there is no fixed boundary. Numbers are in the notes at the end of the article. Not measurements.</title>
+<defs>
+<linearGradient id="band" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ffb14a" stop-opacity="0"/><stop offset="0.35" stop-color="#ffb14a" stop-opacity="0.22"/><stop offset="0.65" stop-color="#ffb14a" stop-opacity="0.22"/><stop offset="1" stop-color="#ffb14a" stop-opacity="0"/></linearGradient>
+</defs>
+<g font-family="system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue','Hiragino Sans','Noto Sans JP',Arial,sans-serif">
+<text x="20.0" y="42.0" fill="#8c96aa" font-size="27" font-weight="600" text-anchor="start">How finely the same image reaches the eye</text>
+<text x="20.0" y="92.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">On a monitor</text>
+<rect x="20.0" y="142.0" width="70.0" height="70.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="34.0" y1="150.0" x2="34.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="48.0" y1="150.0" x2="48.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="62.0" y1="150.0" x2="62.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="76.0" y1="150.0" x2="76.0" y2="204.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<rect x="130.0" y="112.0" width="140.0" height="140.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="158.0" y1="120.0" x2="158.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="186.0" y1="120.0" x2="186.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="214.0" y1="120.0" x2="214.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="242.0" y1="120.0" x2="242.0" y2="244.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<text x="55.0" y="242.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">Normal</text>
+<text x="200.0" y="292.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="middle">High-res / SR</text>
+<text x="270.0" y="142.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">100% view</text>
+<text x="270.0" y="180.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">Each pixel maps to one screen pixel.</text>
+<text x="270.0" y="216.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">The image with more pixels shows</text>
+<text x="270.0" y="252.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">the same detail at 2× the size.</text>
+<rect x="20.0" y="312.0" width="70.0" height="70.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="34.0" y1="320.0" x2="34.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="48.0" y1="320.0" x2="48.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="62.0" y1="320.0" x2="62.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="76.0" y1="320.0" x2="76.0" y2="374.0" stroke="#eef1f8" stroke-width="2.0" stroke-linecap="round"/>
+<rect x="130.0" y="312.0" width="70.0" height="70.0" rx="6" fill="none" stroke="#2b3140" stroke-width="1.5"/>
+<line x1="144.0" y1="320.0" x2="144.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="158.0" y1="320.0" x2="158.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="172.0" y1="320.0" x2="172.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<line x1="186.0" y1="320.0" x2="186.0" y2="374.0" stroke="#ff8a00" stroke-width="2.0" stroke-linecap="round"/>
+<text x="270.0" y="342.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">Fit to screen</text>
+<text x="270.0" y="380.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">Both are resampled to the screen's pixel count.</text>
+<text x="270.0" y="416.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">The screen's pixel count</text>
+<text x="270.0" y="452.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">caps the grid difference.</text>
+<text x="20.0" y="490.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">The stripes are a sketch of the same detail. Not measurements.</text>
+<line x1="20.0" y1="512.0" x2="780.0" y2="512.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="556.0" fill="#eef1f8" font-size="26" font-weight="600" text-anchor="start">Printed at B0, viewed from different distances</text>
+<rect x="105.5" y="598.0" width="325.0" height="326.0" rx="0" fill="url(#band)" stroke="none" stroke-width="0"/>
+<text x="268.0" y="1026.0" fill="#ffb14a" font-size="24" font-weight="600" text-anchor="middle">roughly what the eye picks up</text>
+<text x="20.0" y="600.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">50 cm (in the hand)</text>
+<rect x="40.0" y="614.0" width="150.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<rect x="40.0" y="652.0" width="280.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="40.0" y1="702.0" x2="760.0" y2="702.0" stroke="#2b3140" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="3 8"/>
+<text x="20.0" y="720.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">1 m</text>
+<rect x="40.0" y="734.0" width="280.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<rect x="40.0" y="772.0" width="410.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="40.0" y1="822.0" x2="760.0" y2="822.0" stroke="#2b3140" stroke-width="1.0" stroke-linecap="round" stroke-dasharray="3 8"/>
+<text x="20.0" y="840.0" fill="#eef1f8" font-size="24" font-weight="600" text-anchor="start">2 m (back of the room)</text>
+<rect x="40.0" y="854.0" width="410.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<rect x="40.0" y="892.0" width="540.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<line x1="40.0" y1="954.0" x2="760.0" y2="954.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="190.0" y1="948.0" x2="190.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="320.0" y1="948.0" x2="320.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="450.0" y1="948.0" x2="450.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<line x1="580.0" y1="948.0" x2="580.0" y2="960.0" stroke="#8c96aa" stroke-width="1.5" stroke-linecap="round"/>
+<text x="40.0" y="988.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">coarser</text>
+<text x="760.0" y="988.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="end">finer</text>
+<rect x="20.0" y="1092.0" width="50.0" height="22.0" rx="4" fill="#eef1f8" stroke="none" stroke-width="0"/>
+<text x="84.0" y="1110.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">how fine the normal grid (about 25 MP) reaches</text>
+<rect x="20.0" y="1130.0" width="50.0" height="22.0" rx="4" fill="#ff8a00" stroke="none" stroke-width="0"/>
+<text x="84.0" y="1148.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">how fine the High-res / SR grid (about 100 MP) reaches</text>
+<text x="20.0" y="1196.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">The band moves with viewer, contrast, illumination, subject and output.</text>
+<text x="20.0" y="1232.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">There is no fixed boundary.</text>
+<text x="20.0" y="1268.0" fill="#eef1f8" font-size="24" font-weight="500" text-anchor="start">Doubling the distance moves both bars alike; the gap stays 2×.</text>
+<text x="20.0" y="1064.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">x axis: fineness reaching the eye (one step = 2×; notes at the end)</text>
+<line x1="20.0" y1="1280.0" x2="780.0" y2="1280.0" stroke="#2b3140" stroke-width="1.2" stroke-linecap="round"/>
+<text x="20.0" y="1310.0" fill="#8c96aa" font-size="24" font-weight="500" text-anchor="start">Schematic. No measurements, no product ranking. This site's drawing.</text>
+</g>
+</svg>
