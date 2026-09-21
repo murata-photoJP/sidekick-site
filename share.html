@@ -49,6 +49,10 @@
   background:var(--accent);color:var(--accentfg);font-weight:700;text-decoration:none;
   font-size:15px}
  .button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+ .button.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent);
+  font-weight:600;min-height:44px;box-sizing:border-box}
+ #planner-guide{background:transparent;margin-top:18px}
+ #planner-guide p{font-size:14px;line-height:1.7;color:var(--fg);margin:0 0 10px}
  details{border:1px solid var(--line);border-radius:8px;background:var(--card);
   padding:0 14px;margin:0 0 14px}
  details[open]{padding-bottom:12px}
@@ -165,9 +169,15 @@
   <dl id="detail-fields"></dl>
  </details>
 
+ <section id="planner-guide">
+  <h2>自分でも撮影計画を探す</h2>
+  <p>別の日・別の場所・別の被写体を探すときは、Sidekick Planner を使えます。</p>
+  <a class="button secondary" id="planner-link" target="_blank" rel="noopener noreferrer">Sidekick Planner を開く</a>
+ </section>
+
  <footer>
   この画面は<b>受け取った撮影計画を見るためのもの</b>です。別の日・別の地点・別の対象を探すことはできません。
-  探すときは <a id="planner-link" target="_blank" rel="noopener noreferrer">Sidekick Planner</a> を使ってください。<br>
+  探すときは Sidekick Planner を使ってください。<br>
   表示している値は<b>共有された時点のもの</b>で、丸めていません（距離・画角などの導出値を除く）。
  </footer>
 </main>
@@ -1231,7 +1241,7 @@ async function show() {
   }
 }
 
-/* 製品 link L1（HD-PLANNERPEARLQRSHAREVIEWERV1-007）: footer の「Sidekick Planner」を text link に。
+/* 製品 link L1（HD-PLANNERPEARLQRSHAREVIEWERV1-007）: #planner-guide の「Sidekick Planner を開く」。
    href は表示定数から付与（出典 link と同じ方式）。decode の成否によらず付ける（探す人のため）。
    通信は利用者の click だけ。 */
 $("planner-link").setAttribute("href", VIEWER.planner_product_url);
