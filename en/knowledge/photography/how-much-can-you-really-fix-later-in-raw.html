@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Much Can RAW Really Fix Later? | Knowledge - Sidekick</title>
+<meta name="description" content="How much can RAW really fix later? Its latitude is real, but only works on what the capture preserved: deferred decisions, estimates, and what never comes back.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/knowledge/photography/how-much-can-you-really-fix-later-in-raw">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/knowledge/photography/how-much-can-raw-really-fix-later">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/knowledge/photography/how-much-can-you-really-fix-later-in-raw">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/knowledge/photography/how-much-can-raw-really-fix-later">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+
+      <a href="/en/sidekick-planner" >🗺️ Planner Beta</a>
+      <a href="/en/knowledge" aria-current="page">📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/knowledge/photography/how-much-can-raw-really-fix-later" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/en/knowledge">Knowledge</a></li>
+    
+    <li>Photography</li>
+    <li aria-current="page">How Much Can RAW Really Fix Later?</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">How Much Can RAW Really Fix Later?</h1>
+    <p class="kzc-article-lead">How much can RAW really fix later? Its latitude is real, but only works on what the capture preserved: deferred decisions, estimates, and what never comes back.</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">Photography</span>
+      
+      <time datetime="2026-09-21">Updated: 2026-09-21</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">Ichiro Murata · Photographer / Sidekick Developer</p>
+
+  <div class="kzc-article-body">
+    <p>— RAW's latitude is real. But it only works on what the capture actually preserved.</p>
+<h2>How True Is “You Can Fix It Later in RAW”?</h2>
+<p><a href="/en/knowledge/photography/what-decides-the-best-image-quality-in-2026">The previous article</a> ended with this: the image quality a photograph needs is decided by the photograph. A magazine page, or B0? Moving, or still? Once that is decided, the tripod, the ISO, the aperture and the shutter all find their place. So, after the shutter is released, how much of that can really be changed?</p>
+<p>Let me first write down the story a reader is likely to have in mind. If you shoot RAW, exposure and white balance can be sorted out afterward. A blown-out sky, a foreground that came out too dark, focus that is slightly soft — open the RAW converter and a good deal of it comes back. So there is no need to be too nervous at capture.</p>
+<p>Half of that is true. RAW's latitude is real, and I use it every day. White balance and hue, I move after the shot. There is a lot I can move.</p>
+<p>The other half is what this article is about. What is that latitude working on? What has been “fixed,” what only “looks fixed,” and what was never there to begin with?</p>
+<h2>“There Is No Shot That RAW Saved”</h2>
+<p>While preparing this article, I was asked a question. Is there a photograph you thought was a failure when you shot it, and that RAW processing saved afterward?</p>
+<p>The answer was: “No.”</p>
+<p>To be clear, this is not a boast that I never fail. When I get the exposure wrong on a real star shot, I throw the whole take away; and a slightly soft frame, if it is the only one, I will sometimes use, though I try to use another frame whenever I can. Discarding and choosing are things I do all the time.</p>
+<p>Even so, there is no “shot that RAW saved.” Here is what that means.</p>
+<p>There was no failure to begin with. Basically I know on location, and I shoot with those settings — I already know what I will do in processing when I shoot. So it is not a failure. It is all within expectations. It is just that, compared with setting things on location, processing gives me more time and more room to adjust.</p>
+<p>If I have never “saved” anything in processing, it is not because RAW is all-powerful. It is because processing is not where saving happens. For me, RAW processing is the stage where what I decided on location gets carried out, in a place with more time and more room to adjust.</p>
+<h2>After the Shutter, the Routine Is Already Set</h2>
+<p>Let me be more concrete.</p>
+<p>Most of what I shoot, I have shot before. So the processing parameters are ones I have built up myself. They sit in the RAW converter (PhotoLab, in my case) as presets, and the RAW I bring back goes through them. What I actually touch in processing is white balance and hue. That is about all.</p>
+<p>It is the same as leaving film development to the lab.</p>
+<p>In short: after the shutter, the routine is already set. When I shoot, I just shoot so that the frame fits that routine.</p>
+<p>If something on location looks likely to fall outside the routine, I deal with it on location. A sunrise or a sunset, for instance, comes out closer to my taste when I do not shoot it the way the camera's auto exposure says, so I shift the center of my exposure bracket. Exposure bracketing itself is one of those on-location adjustments (more on that below).</p>
+<p>If that is so, then most of what I do in processing is carrying out decisions made on location. Seen from my side, the question “what can RAW fix later?” looks like this instead: what do I have to leave in place at capture, so that it can be carried out later?</p>
+<h2>Let Me Give the Answer Here</h2>
+<p>RAW's “fix it later” only works within the range of the information and the options the capture left behind. So I do not rescue afterward. I arrange, at capture, what the later routine will need.</p>
+<p>Put in technical terms, it goes like this. RAW is a record you can process again as many times as you like. But it is not “raw truth” — it is a record that keeps later options open. What the converter can do is reinterpret the recorded information with different settings. Information that was not recorded cannot be reinterpreted.</p>
+<p>So what processing can do falls, broadly, into three kinds. Decisions that did not have to be made at capture and were deferred (white balance and hue are this). Processing that recomputes or estimates from what was recorded and pulls the image toward a result (lens distortion correction and noise reduction are this). And what was never recorded, or has been lost, cannot be created.</p>
+<p>Let me start with the third.</p>
+<h2>Lost Information Does Not Come Back</h2>
+<p>A failed exposure is missing information in the highlights, or missing information in the shadows. Lost information does not come back.</p>
+<p>A blown-out sky is a sensor that saturated: what was there was not recorded. Darken it in processing and you get grey, but the shapes of the clouds do not come back. That is true in any converter.</p>
+<p>Blur and focus are on the same side. I do not use a frame that has camera shake across the whole image, at all. Out of focus is the same. What moved, what was not in focus, and the moment I was too late to press — none of those can be made afterward.</p>
+<p>I do not crop, either. Basically, the photograph is decided the moment I press the shutter — including how I will process it.</p>
+<p>When I know I have only one chance, the things I absolutely decide at capture are: focus, depth of field, exposure, white balance, the moment. In that order. I said earlier that white balance can be moved in processing. The reason it still belongs on this list, in a one-chance situation, is — in my own words — “if it is not going to RAW processing, the only option is to decide white balance at capture.”</p>
+<h2>“Gone” Is Not Just One Thing</h2>
+<p>Read this far and it may look like a simple split: what comes back and what does not. Look at what actually happens in processing and it is a little finer than that.</p>
+<p>First, what was never recorded. A saturated sky, a missed moment. That is gone.</p>
+<p>Second, what is degraded but still there. A foreground that came out too dark is a different case from a blown-out sky. The sensor recorded the dark areas too; there was just less light, so they are buried in randomness — noise. Lift them in processing and the detail does come out, but the noise comes up with it. Between “comes back” and “does not come back,” there is “comes back, at a cost.”</p>
+<p>Third, what is estimated. In most cameras each pixel on the sensor records only one color, so the converter is estimating color from neighboring pixels from the very start. Correcting lens distortion or vignetting is likewise a calculation that stretches the image or brightens the corners; stretch it and resolution drops a little, brighten it and the noise in the corners goes up. Correction is not free.</p>
+<p>Fourth, what is made up to look plausible. Some recent processing does not estimate from the recorded information; it generates plausible detail to fill the gap. Here is what I think about that.</p>
+<p>Even if AI advances to the point of restoring blur by generation, it is not the real thing.</p>
+<p>An image filled in by generation may well become presentable. But it is not the image that was captured at that moment. I do not use AI either. That is not a statement about AI's performance; it is about what I want from a photograph.</p>
+<h2>Noise Is the One That Is a Little Different</h2>
+<p>Within that classification, noise is the one thing I place a little differently.</p>
+<p>In my understanding, noise is something that was not there to begin with, added on top — so removing it moves the image back toward the original. Unlike a blown-out sky, the information has not gone; something extra is sitting on top of it. So removing it means something, is how I think about it.</p>
+<p>That way of thinking needs a small correction. The light reaching the sensor is itself random, so there is no “noise-free original” sitting inside the file. What noise reduction does is estimation: it reduces the randomness and pulls values toward what is likely. It does not retrieve detail that was never recorded. And estimation can erase detail that is really there.</p>
+<p>I have experienced that myself. High-ISO RAW files I process with noise-reduction software (I use PureRAW), and my feeling is that I can probably go one to three stops higher than I could with nothing at all. But with stars, the stars themselves can disappear, so sometimes I cannot use it.</p>
+<p>In practice my answer is simple: I do not raise the ISO beyond what noise reduction can handle. That has not been a problem. When there is no way to shoot except at high ISO, I shoot at high ISO anyway. And I keep the original RAW. Or rather, I basically only ever shoot RAW, so I may discard the processed file, but I keep the RAW. In ten or twenty years there may be better software. But going back in a time machine to reshoot seems difficult.</p>
+<p>(The relationship between ISO and noise itself is in <a href="/en/knowledge/photography/does-raising-iso-really-increase-noise">another article</a>.)</p>
+<h2>Choosing, Not Recovering</h2>
+<p>Back to exposure. When I am asked “how far could you bring back an underexposed shot?”, I struggle to answer. I have almost never brought one back.</p>
+<p>I bracket the exposure, so I just pick the right one. I do not rescue in processing.</p>
+<p>In landscapes, I shoot ±2 EV in 0.5 EV steps — nine frames. When that is not enough, I sometimes shoot eighteen, out to ±4 EV. After processing, I look at them on the monitor and choose by eye. Why not shoot one frame and adjust it in processing? Because adjusting means judging every single frame by hand. If I have bracketed, all I have to do is choose. The reason is just that. Time.</p>
+<p>The frames I do not choose sometimes sit unused, and sometimes go into an HDR merge. This, too, has to be taken care of at capture — it cannot be done afterward.</p>
+<p>In principle, taking several exposures raises the odds that some frame has unclipped highlights and some frame has shadows that are not buried in noise. Rather than leaning on the latitude of a single RAW, I leave the options between frames. But this is how I shoot, not a way of shooting I would recommend to everyone. With moving subjects, or light that changes by the second, the subject changes between frames. For stars I do not bracket; I set the exposure with a test shot, and if I get it wrong on the real take, I throw it all away. For portraits, I sometimes fine-tune in processing. I use each where it fits.</p>
+<h2>Nothing Has Changed Since Film. Only the Number of Frames.</h2>
+<p>This way of shooting is not something I picked up with digital.</p>
+<p>Nothing has changed since the film days. I bracketed on film too.</p>
+<p>What is different is the number of frames. The cost was completely different, so on film it was ±0.5 stops, three frames. That was it. In exchange, I decided the exposure carefully. Digital saves time by covering that with the number of frames instead.</p>
+<p>It is the same thing I wrote in the previous article: push it to the extreme, and nothing has changed since my 4×5 days. What I decide at capture has not changed. What changed is that I can check on the spot, that I can reprocess afterward, and the cost per frame. In the film era, <a href="/en/knowledge/photography/why-i-bought-the-nikon-d1-anyway">until it came back from the lab</a>, you usually could not know whether the exposure was right. Now I know on the spot, and I can process it again as many times as I like. So the exposure I used to decide so carefully can now be covered with frames. Not that judgment became unnecessary — there are simply more situations where judgment can be replaced by frames.</p>
+<h2>I Am a Photographer, Not a Retoucher</h2>
+<p>Finally, a word about the line between processing and retouching.</p>
+<p>For me, RAW processing is something I do because I have to. A RAW file cannot be printed as it is, and a publisher will not accept one. It has to become a JPEG or a TIFF. And a JPEG straight out of the camera often does not give me the colors I had in mind. So I process.</p>
+<p>From there, I could go on to build masks, cut paths and do retouching work, but I have no intention of spending a year on a single photograph for that. Producing something in processing that has “become presentable, but has not really been fixed” — basically, I do not do that kind of faking. I am a photographer, not a retoucher.</p>
+<p>I draw the same line with lenses. A lens's quirks cannot be fixed afterward. If I don't like them, I replace the lens. Prone to ghosting, has coma, distorts badly, vignettes, ugly bokeh. Some of them can be corrected, but it is simpler to buy a better lens. Distortion and vignetting can be tidied up in processing, but as I wrote above, that is not free, and ghosting and heavy flare cannot be tidied up at all. <a href="/en/knowledge/photography/is-a-lens-really-at-its-best-two-three-stops-down">The story of real lens aberrations and their correction</a> is in a separate article.</p>
+<p>This is not to say that people who spend time in post-processing are doing it wrong. It is about where I have decided to spend my time.</p>
+<h2>“Shoot the RAW Perfectly, So That Anything Can Be Done Later”</h2>
+<p>When I teach, I am sometimes told: “It's RAW, so we can fix it later, right?” My answer is always the same.</p>
+<p>“RAW means anything can be done later” does not mean “RAW means a failed shot can still be fixed.” It means: shoot the RAW perfectly, so that anything can be done later.</p>
+<p>If you have read this far, you will see that this “perfectly” does not mean a numerically perfect exposure. Do not blow the highlights. Do not let it shake. Do not miss focus. Do not miss the moment. Leave several frames if you need them. And keep it as RAW. Record, without gaps, the information and the options that later processing will need. That is what I mean by “shoot it perfectly.”</p>
+<p>The previous article asked how, once you have decided the image quality a photograph needs, you place the choices of capture. This article's answer is that, of those choices, the only ones that can really be moved after the shutter are the decisions that could be deferred, working on the recorded information. White balance moves. Hue moves. Shadows move, at a cost. Blown highlights do not move. Blur does not move. A missed moment does not move.</p>
+<p>RAW's latitude is real. I use it every day. But the only photographs that can use that latitude are the ones where, at capture, I left the material it needs.</p>
+<h2>For Those Who Want to Know a Little More</h2>
+<p>The conclusions this article needs are complete above. What follows is supporting detail for the places the main text kept short, and for what is not known, for anyone who wants to look a little closer. There are no new claims.</p>
+<h3>Blown Highlights and Blocked Shadows Are Not the Same Thing</h3>
+<p>On the bright side, what is lost is information the sensor saturated on. A saturated pixel does not record how bright that spot was. The dark side is different. The sensor records the dark areas too, but because less light arrived, the signal is small compared with the randomness of the light itself and the noise of the readout circuitry. Lift it in processing and signal and noise come up together. So the dark side is more accurately “buried in noise” than “absent,” and how much of it is usable depends on the amount of noise, the size of the output, and what you want from the photograph. When the main text says “lost information does not come back,” it is mainly about the bright side, and about blur, focus and the moment. The formulas and the way the measurements are thought about are in <a href="/en/knowledge/photography/does-raising-iso-really-increase-noise">the article on ISO and noise</a> and <a href="/en/knowledge/photography/does-lower-iso-really-mean-better-image-quality">the one on low ISO</a>.</p>
+<h3>What RAW Processing Actually Does</h3>
+<p>RAW processing reinterprets the recorded values with different settings. Estimation is built in from the start. Each pixel on the sensor holds only one color, so the remaining colors are estimated from neighboring pixels (demosaicing). Sharpening redistributes contrast along edges; it does not add resolution. Noise reduction trades less randomness for the risk of losing detail or creating unnatural patterns. Correction by lens profile can tidy up distortion, lateral chromatic aberration and vignetting, but it does so by resampling the image, cropping the edges, or raising the gain in the corners. All of these can be redone later with different settings, provided the original RAW is kept. Keep only the processed result and discard the RAW, and it cannot be redone. What the processing does changes with the software and its version, which is one reason it is worth recording what you processed with.</p>
+<h3>What Bracketing Assumes</h3>
+<p>Choosing from several frames assumes that the subject and the light do not change between them. With trees moving in the wind, people moving, or a sky changing by the second, frames that differ in exposure are no longer frames that differ only in exposure. All the more so if you merge them. That is why the main text says it is not a way of shooting I would recommend to everyone, and it is why I do not bracket stars.</p>
+<h3>What I Do Not Know</h3>
+<p>What AI-based processing of focus, blur and noise actually does, and whether the same processing will give the same result a few years from now, is not covered in this article. I don't use them not because I evaluated their performance, but because of what I ask of a photograph. I think that processing an old RAW with today's software gives a better result than it did at the time, but I have not verified it. Whether bokeh quality or coma can be tidied up afterward is also not covered here.</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="related articles">
+    <h2>Related Articles</h2>
+    <ul>
+      
+      <li>
+        <a href="/en/knowledge/photography/what-decides-the-best-image-quality-in-2026">What Decides the “Best” Image Quality in 2026?</a>
+        <p class="kzc-related-desc">Is the “best” image quality in 2026 a tripod, base ISO and f/8? A GH6 B0 print test taught me what a camera can deliver and what a photo needs differ.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/does-raising-iso-really-increase-noise">Does Raising ISO Really Increase Noise?</a>
+        <p class="kzc-related-desc">Does raising ISO really increase noise? With the same light, raising only the ISO does not add to the noise the light itself carries. The main reason the noise stood out was the small amount of light; ISO made it easier to see, and the rest depends on the camera&#39;s design. A photographer who shoots star landscapes at ISO 12800 re-examines a piece of common sense.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+      <li>
+        <a href="/en/knowledge/photography/why-i-bought-the-nikon-d1-anyway">Film Still Had Better Image Quality. I Bought the Nikon D1 Anyway.</a>
+        <p class="kzc-related-desc">In 1999 the Nikon D1 cost ¥650,000. I still thought well-printed film was better. Then my scan and a D1 file met on the same A4 office laser, and my path changed.</p>
+        <span class="kzc-related-category">Photography</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>About the Author</h2>
+      
+      <p>Ichiro Murata is a photographer and the developer of Sidekick. This article is written from his hands-on experience shooting, retouching, critiquing, and developing. AI is used to help organize past logs and draft the text, but the final review, edits, and publish decisions are always his own.</p>
+      <p><a href="/en/about">Read About →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-09-20 (AI-11050, public beta): points at the product page (distribution
+                 entry) and says "Beta" instead of "(in development)"; mirrors footer.html. -->
+            <li><a href="/en/sidekick-planner">🗺️ Sidekick Planner Beta</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
