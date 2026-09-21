@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトのindex.html等と同じ挙動（ブラウザが日本語以外なら英語ページへ誘導）。
+     2026-07-20: 打ち出の小槌の英語版(/en/knowledge)を実装したが、この自動リダイレクトの
+     遷移先は既存動作を変えないため引き続き他ページと同じ /en/ のままにしている
+     （記事単位の正確な言語切替はhreflangタグ・Header/Footerのリンクで提供する）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { location.replace('/en/'); return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        location.replace('/en/');
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「RAWなら後から直せる」は、どこまで本当なのか？｜打ち出の小槌 - SideKick</title>
+<meta name="description" content="「RAWなら後から直せる」は、どこまで本当か。露出も色もかなり動く。でもその余裕は、撮影が残した情報の上でしか働かない。後回しにできる決定、推定で寄せるもの、戻らないもの。「助かった一枚は、ない」と言う写真家の、撮影と現像の実際。">
+<link rel="canonical" href="https://www.sidekick-lab.com/knowledge/photography/how-much-can-raw-really-fix-later">
+
+<link rel="stylesheet" href="/assets/css/knowledge.css">
+</head>
+<body>
+<!-- 2026-07-17改訂: 打ち出の小槌専用の独自ヘッダーをやめ、既存サイト(index.html)の
+     言語バナー・ヘッダー構成をそのまま流用する（村田さんの方針転換：サイト全体としての
+     一貫性を優先する）。リンクはすべて打ち出の小槌ページ（/knowledge/配下、1〜2階層下）
+     からでも正しく機能するよう、相対パスではなくルート相対パス（先頭に/）にしている。
+     モバイル時に「単にdisplay:noneで隠すだけ」という既存サイトの実装は踏襲せず、
+     キーボード操作・aria-expanded対応のトグルボタンを付与している
+     （docs/COMPONENTS/01_GLOBAL_COMPONENTS.mdのモバイルナビ要件を維持）。
+
+     2026-07-22追記: サイト全体のJinja2共通化（templates/site/）にあたり、このヘッダーを
+     打ち出の小槌・開発日誌以外のページからも再利用する。show_lang_banner・show_en_link
+     （両方とも省略時はtrueで既存動作のまま）で英語案内の表示可否をページ単位で
+     切り替えられるようにした（Workshopページは対面開催の日本語限定ワークショップのため、
+     英語版を用意しない＝英語案内を出さない、村田さんの明示要件）。あわせて、
+     nav_currentによるaria-current付与を全リンクへ一般化した（従来は打ち出の小槌・
+     開発日誌のみ対応）。既存の呼び出し元（build_knowledge.py・build_development_log.py）は
+     これらの変数を渡していないため、defaultフィルタによりこれまでと同じ表示になる。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっており、Star〜打ち出の小槌との文字色・太さの不一致が村田さんの目視確認で判明。
+     アイコンの有無は揃えなくてよい（村田さんの明示指示）とのことなので、色の上書きだけを
+     削除し、全項目を`.nav a`の既定スタイル（色・太さ）に統一した。
+
+     2026-07-22三度目追記: index.htmlの移行検討中に、index.html自身のヘッダーには
+     「LP」（/lp-star）ナビ項目があるのに、このheader.html（2026-07-17新設時点）には
+     元から含まれていないことが判明した。つまりこのheader.htmlを使う全ページ
+     （workshop・gallery・portrait・sidekick-star・sidekick・sky-effect・changelog・
+     about・faq・ai-lab、および打ち出の小槌・開発日誌）でLPリンクが欠落していた。
+     index.htmlの構成に合わせてWorkshopとGalleryの間へ復元した。
+
+     2026-07-23四度目追記: 「🤖 AI Lab 無料」ボタンのリンク先を`/#ai-lab`（トップページ内
+     アンカー）から`/ai-lab`（専用ページ）へ変更した。英語版（header_en.html）は元々
+     `/en/ai-lab`という専用ページへ直接リンクしており、日本語版だけが「トップページに戻って
+     アンカーへスクロール」という別挙動になっていた。ai-lab.htmlには言語バナー・EN切替
+     リンクが既にあるため、専用ページへ統一した方が英語版との整合性が取れ、村田さんが
+     報告した「日本語ページのAI Labセクションだけ英語切替が無い（実際には#ai-labアンカー
+     経由でしか辿り着けず、専用ページの切替が使われていなかった）」という不整合も解消する。
+
+     2026-08-31五度目追記: 新しい読み物領域「Story」（/story）をAboutと開発日誌の間へ追加した。
+     位置の理由は、Storyが「なぜこういう道具を作ることになったのか」という背景（About寄り）で
+     あるのに対し、開発日誌が「いま何を作り、何を判断しているか」の記録であるため、
+     About → Story → 開発日誌 の順が時間軸として自然になること。
+     `docs/UX/04_NAVIGATION.md`（status: draft）は「グローバルナビは4本柱+Aboutで一定」と
+     しているが、実装は以前から13項目で運用されており、既存の開発日誌がナビにある以上
+     Storyだけ導線が無いのは不整合になるため、実装側の現状に合わせて追加している
+     （`.nav`はflex-wrapのため項目が増えても折り返しで破綻しない）。 -->
+
+
+<div class="lang-banner" id="lang-banner">
+  🇺🇸 This site is also available in English —
+  <a href="/en/knowledge">View English page →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu">
+      <span class="kzc-nav-toggle-label">メニュー</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu" aria-label="グローバルナビゲーション">
+      <a href="/sidekick-star" >⭐ Star</a>
+      <a href="/portrait" >👤 Portrait</a>
+      <a href="/sky-effect" >☁️ Sky</a>
+
+      <a href="/sidekick-planner" >🗺️ Planner β</a>
+      <a href="/knowledge" aria-current="page">📚 打ち出の小槌</a>
+      <a href="/tools/dof" >📐 DOF計算</a>
+      <a href="/workshop" >📷 Workshop</a>
+      <a href="/lp-star" >LP</a>
+      <a href="/gallery" >Gallery</a>
+      <a href="/sidekick" >Sidekickとは</a>
+      <a href="/about" >About</a>
+      <a href="/story" >Story</a>
+      <a href="/development-log" >開発日誌</a>
+      <a href="/changelog" >更新履歴</a>
+      <a href="/faq" >Support</a>
+      <a href="/ai-lab" class="nav-ai">🤖 AI Lab 無料</a>
+
+      <a href="/en/knowledge" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇺🇸 EN</a>
+
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu");
+  if (!toggle || !menu) { return; }
+
+  // JSが動いている場合のみ、折りたたみメニューを有効にする（progressive enhancement）。
+  // JSが読み込まれない/失敗した場合は、CSSの既定値により全リンクが常時表示のまま残る。
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+<main>
+
+<nav aria-label="breadcrumb" class="kzc-breadcrumb">
+  <ol>
+    <li><a href="/knowledge">打ち出の小槌</a></li>
+    
+    <li>写真</li>
+    <li aria-current="page">「RAWなら後から直せる」は、どこまで本当なのか？</li>
+  </ol>
+</nav>
+
+<article class="kzc-article">
+  <header class="kzc-article-header">
+    <h1 class="kzc-article-title">「RAWなら後から直せる」は、どこまで本当なのか？</h1>
+    <p class="kzc-article-lead">「RAWなら後から直せる」は、どこまで本当か。露出も色もかなり動く。でもその余裕は、撮影が残した情報の上でしか働かない。後回しにできる決定、推定で寄せるもの、戻らないもの。「助かった一枚は、ない」と言う写真家の、撮影と現像の実際。</p>
+    <p class="kzc-article-meta">
+      <span class="kzc-category">写真</span>
+      
+      <time datetime="2026-09-21">更新日：2026-09-21</time>
+    </p>
+  </header>
+
+  
+  <p class="kzc-author-short">村田一朗｜写真家・SideKick開発者</p>
+
+  <div class="kzc-article-body">
+    <p>――RAWの余裕は本物です。ただしそれは、撮影が残した情報の上でしか働きません</p>
+<h2>「RAWなら後から直せる」は、どこまで本当か</h2>
+<p><a href="/knowledge/photography/what-determines-maximum-image-quality-in-2026">前の記事</a>は、その写真に必要な画質は写真の側が決める、というところで終わりました。雑誌のページなのか、B0 なのか。動くのか、止まっているのか。それを決めたとき、三脚も、感度も、絞りも、シャッターも、置き場所が決まる。では、シャッターを切ったあと、そのうちのどれだけを、本当に動かせるのか。</p>
+<p>読者が持っていそうな筋書きを、先に書いておきます。RAW で撮っておけば、露出も、ホワイトバランスも、あとで何とでもなる。白飛びした空も、暗すぎた前景も、少し甘いピントも、現像ソフトを開けばかなりのところまで戻る。だから撮影時にはそれほど神経質にならなくていい。</p>
+<p>これは半分は本当です。RAW の余裕は本物で、私も毎日その余裕を使っています。ホワイトバランスも色相も、撮影のあとで動かします。動かせるものは、かなりたくさんある。</p>
+<p>もう半分が、この記事の話です。その余裕が、何の上で働いているのか。何が「直って」いて、何が「直ったように見えて」いて、何が最初から無いのか。</p>
+<h2>「助かった一枚は、ない」</h2>
+<p>この記事を書くにあたって、こういう質問を受けました。撮ったときは失敗だと思ったのに、あとから現像で助かった一枚はあるか。</p>
+<p>答えは、「ない。」でした。</p>
+<p>念のため言っておくと、これは失敗をしない、という自慢ではありません。星の撮影で露出を間違えた本番は全部捨てますし、少し甘いカットは、そのカットしかなければ場合によっては使いますが、できるだけ他のカットを使うようにしています。捨てたり、選んだりは、いつもしている。</p>
+<p>それでも「助かった一枚」が無い、というのは、こういう意味です。</p>
+<p>失敗したこと自体が無い。基本的に現場で判っててその設定で撮ってるから、現像するときにどうするか？判って撮ってる。だから失敗じゃない。すべて想定内。単に現場で設定するより現像時の方が時間と調整量に余裕があるだけ。</p>
+<p>現像で何かを「救った」経験が無いのは、RAW が万能だからではありません。現像が、救う場所ではないからです。私にとって現像は、現場で決めたことを、時間と調整量に余裕のある場所で実行する工程です。</p>
+<h2>シャッター以後は、ルーチンが決まっている</h2>
+<p>もう少し具体的に言います。</p>
+<p>私が撮る被写体は、たいてい、すでに撮ったことがあるものです。だから現像パラメータは自分で作り上げてあります。現像ソフト（私の場合は PhotoLab）にプリセットとして組んであって、撮った RAW はそこを通る。現像で実際に触るのは、ホワイトバランスと色相くらい。それくらいしかない。</p>
+<p>これは、フィルムで現像を現像所に任せるのと同じ。</p>
+<p>要するに、シャッター以後はルーチンが決まっている。撮影時にそのルーチンに乗るように撮影するだけ。</p>
+<p>ルーチンから外れそうなものが現場にあれば、現場で調整しておきます。たとえば朝焼けや夕焼けは、カメラの AE どおりに撮らない方が私の好みになるので、露出ブラケットの中心をずらして撮る。露出ブラケットそのものも、現場でしておく調整の一つです（これはあとで詳しく書きます）。</p>
+<p>だとすると、私が現像でしていることの大半は、現場で決めたことの実行です。「RAW で何が直せるのか」という問いは、私の側から見ると、こう見えます。後で実行するために、撮影のときに、何を残しておかなければならないのか。</p>
+<h2>ここで一度、答えを出します</h2>
+<p>RAW の「後から直せる」は、撮影が残した情報と選択肢の範囲でしか働きません。だから私は、後で救うのではなく、後のルーチンが必要とするものを、撮影のときに揃えています。</p>
+<p>技術的に言い直すと、こうです。RAW は、あとから何度でも現像し直せる記録です。ただし、それは「未加工の真実」ではなく、あとから使える選択肢を残した記録です。現像ソフトができるのは、記録されている情報を、別の設定で解釈し直すこと。記録されていない情報は、解釈のしようがない。</p>
+<p>だから、現像でできることは、大きく三つに分かれます。撮影時に決めなくてもよかったので、後回しにした決定（ホワイトバランスや色相は、これ）。記録された情報から計算し直したり、推定したりして寄せる処理（レンズの歪みの補正や、ノイズ除去は、これ）。そして、記録されなかったもの、失われたものを、作ることはできない。</p>
+<p>三つ目から書きます。</p>
+<h2>失われた情報は戻らない</h2>
+<p>露出を失敗したものは、ハイライトの情報が欠落してるか、シャドウの情報が欠落している。失われた情報は戻らない。</p>
+<p>白飛びした空は、センサーが飽和して、そこに何があったかが記録されていません。現像で暗くすれば灰色にはなりますが、雲の形は出てきません。これは、どのソフトでも同じです。</p>
+<p>ブレとピントも同じ側にあります。私は、全体がブレてしまったものは一切使いません。ピントが来ていないものも同じです。動いてしまったもの、合っていなかったもの、そして押すのが遅れた瞬間は、あとから作れない。</p>
+<p>トリミングもしません。基本的にシャッターを切った時に写真は決まってる。どういう現像をするか？を含めて。</p>
+<p>一回しか撮れないと分かっている場面で、私が撮影のときに絶対に決めておくものは、ピント、被写界深度、露出、ホワイトバランス、シャッターチャンス。その順番です。ホワイトバランスは現像で動かせる、と先に書きました。それでも一回勝負のときにここへ入る理由は、私の言葉で言えば「RAW現像に回さないなら、撮影時にWBを決めておくしかない」からです。</p>
+<h2>「無くなる」は、一種類ではない</h2>
+<p>ここまでを読むと、「戻らないものと、戻るものがある」という二分法に見えるかもしれません。実際に現像で起きていることを分けると、もう少し細かい。</p>
+<p>第一に、記録されなかったもの。飽和した白飛び、逃した瞬間。これは無い。</p>
+<p>第二に、劣化して残っているもの。暗すぎた前景は、白飛びとは事情が違います。センサーは暗い部分も記録しているのですが、光が少ないぶん、ばらつき（ノイズ）に埋もれている。現像で持ち上げれば細部は出てきますが、ノイズも一緒に持ち上がる。「戻る」と「戻らない」の間に、「戻るが、代償がある」がある。</p>
+<p>第三に、推定で寄せるもの。多くのカメラでは、センサーの各画素は色を一つしか記録していないので、現像ソフトは最初から、隣の画素から色を推定して画像を作っています。レンズの歪みや周辺の暗さを補正するのも、画像を伸ばしたり、周辺を明るくしたりする計算で、伸ばせば解像は少し落ち、明るくすれば周辺のノイズは増える。補正は、無償ではない。</p>
+<p>第四に、それらしく作るもの。最近の処理には、記録された情報を推定するのではなく、ありそうな細部を生成して埋めるものがあります。これについての私の考えは、こうです。</p>
+<p>ブレはAIが進化して生成で復元できても、実物とは異なる。</p>
+<p>生成で埋めた画像は、見られるようにはなるかもしれません。でもそれは、あのとき撮れた画像ではない。私は AI も使いません。それは AI の性能の話ではなく、私が写真に求めているものの話です。</p>
+<h2>ノイズだけが、少し違う</h2>
+<p>この分類の中で、ノイズの扱いだけ、私は少し違う位置に置いています。</p>
+<p>私の理解では、ノイズは本来ないものが加算されているので、除去すれば元の方向に近づく。白飛びのように情報が無くなったのではなく、余計なものが乗っている。だから除去には意味がある、と考えています。</p>
+<p>この考え方は、少しだけ言い直しが要ります。センサーに届く光そのものにばらつきがあるので、「ノイズの無い元画像」が記録の中にあるわけではありません。ノイズ除去がしているのは、ばらつきを減らして、ありそうな値へ寄せる推定です。記録されなかった細部を取り戻すのではない。そして、推定は実在する細部を消すことがある。</p>
+<p>私自身、それを経験しています。高感度の RAW はノイズ除去のソフト（私はピュアRAWを使っています）で処理していて、感度は何もしないときより、たぶん 1〜3 段は上げられる感覚があります。ただ、星の場合は星が消えたりするから使えないこともある。</p>
+<p>実用上の私の答えは単純で、ノイズ除去の限界以上には感度を上げない。それで困っていません。どうしても高感度でしか撮れないときには、高感度でも撮っておく。そして元の RAW は残す。というより、私は基本的に RAW でしか撮っていないので、現像したものは破棄することが有っても、RAWは残している。10 年後、20 年後にもっと良いソフトが出ているかもしれない。でも、タイムマシンで帰ってきて撮ることは難しそうです。</p>
+<p>（ISO とノイズの関係そのものは、<a href="/knowledge/photography/does-higher-iso-increase-noise">別の記事</a>に書きました。）</p>
+<h2>「戻す」より「選ぶ」</h2>
+<p>露出の話に戻ります。「暗すぎた写真をどこまで戻せたか」と聞かれると、私は答えに困ります。戻したことが、ほとんど無いからです。</p>
+<p>露出ブラケットしてるので、適正なものを選ぶだけ。現像で救済しない。</p>
+<p>風景では、0.5 EV ステップで ±2 EV、9 コマ撮ります。足りないときは ±4 EV になるように 18 コマ撮ることもある。現像後にモニターで見て、目で選ぶ。なぜ一枚を撮って現像で調整しないのか、と言えば、調整だと一こま一こま手作業で判断しなければならない。ブラケットしておけば、選ぶだけで済む。理由は、それだけです。時間の問題。</p>
+<p>選ばなかったコマは、そのまま死蔵することもあれば、HDR 合成に使うこともあります。これも、撮影時に対応しておかないと、後からはできない。</p>
+<p>原理の側から言えば、複数の露出を撮っておくことは、白飛びしていないコマと、暗部がノイズに埋もれていないコマが、どれかに存在する確率を上げる、ということです。一枚の RAW の余裕に頼るのではなく、コマの間に選択肢を残しておく。ただし、これは私の撮り方であって、誰にでも勧める撮り方ではありません。動くものや、刻々と変わる光では、コマの間で被写体が変わってしまう。星は、ブラケットではなくテスト撮影で露出を決めて、本番で間違えたら全部捨てます。ポートレートでは、現像で微調整することもある。用途で、使い分けています。</p>
+<h2>フィルムの頃と変わらない。枚数だけ、違う</h2>
+<p>この撮り方は、デジタルになって身についたものではありません。</p>
+<p>フィルムの頃と変わらない。フィルムでもブラケット撮影してた。</p>
+<p>違うのは枚数です。コストが全く違うので、フィルムでは ±0.5 段で 3 枚。それだけ。その分、しっかり露出を決めてた。デジタルはそこを枚数でカバーする考えで時短している。</p>
+<p>前の記事で「極論すれば、4ｘ5の頃と変わっていない」と書いたのと、同じことです。撮影のときに何を決めるか、という判断は変わっていない。変わったのは、その場で確認できること、あとから現像し直せること、そして枚数のコストです。フィルムの時代、<a href="/knowledge/photography/why-did-i-buy-the-nikon-d1">現像所から戻ってくるまで</a>、露出が合っていたかどうかは、ふつう分からなかった。今は、その場で分かり、あとから何度でも現像し直せる。だから、慎重に決めていた露出を、枚数で覆えるようになった。判断が要らなくなったのではなく、判断を枚数に置き換えられる場面が増えた、ということです。</p>
+<h2>私は写真家であって、レタッチャーではない</h2>
+<p>最後に、現像とレタッチの線について書いておきます。</p>
+<p>私にとって、現像は必要にかられてやっている工程です。RAW はそのままではプリントもできないし、出版社も受け取ってくれない。JPEG か TIFF にする必要がある。それに、撮って出しの JPEG では自分の思った色にならないことが多い。だから現像する。</p>
+<p>そこから先、マスクを作ったり、パスを切ったりしてレタッチ作業をしてもいいのですが、そのために一枚の写真に一年とか掛けるつもりはありません。現像で「見られるようにはなったけれど、本当に直ったわけではない」という状態を作ること——基本的にそういうごまかしはしない。私は写真家であって、レタッチャーではない。</p>
+<p>レンズについても同じ線を引いています。レンズの癖は後からどうにもならない。嫌なら、レンズを買い替える。ゴーストが出やすい、コマ収差がある、歪みがひどい、周辺光量が落ちる、ボケが汚い。補正できるものも有るけど、性能の良いものに買い替えた方が簡単。歪みや周辺光量は現像で整えられますが、先に書いたとおり無償ではないし、ゴーストや強いフレアは整えられない。<a href="/knowledge/photography/two-three-stops-best-aperture">実際のレンズの収差と補正の話</a>は別の記事にあります。</p>
+<p>これは、後処理に時間をかける人が間違っている、という話ではありません。私がどこに時間を使うと決めているか、という話です。</p>
+<h2>「後からどうにでもなるように、RAWを完璧に撮っておく」</h2>
+<p>教える場面で、「RAW だから後で直せますよね」と言われることがあります。私の答えは、いつも同じです。</p>
+<p>「RAWだから後からどうにでもなる」は「RAWだったら失敗しててもどうにでもなる」訳じゃない「後からどうにでもなるように、RAWを完璧に撮っておく」</p>
+<p>ここまで読んだ方には、この「完璧」が、露出を数値的に完璧にすることではないと分かると思います。白飛びさせない。ブレさせない。ピントを外さない。瞬間を逃さない。必要なら複数のコマを残す。そして RAW で残す。後の現像が必要とする情報と選択肢を、欠かさずに記録しておくこと。それが、私の言う「完璧に撮っておく」です。</p>
+<p>前の記事の問いは、その写真に必要な画質を決めたとき、撮影の選択をどう置くか、でした。この記事の答えは、その選択のうち、シャッターのあとで本当に動かせるのは、記録された情報の上で後回しにできる決定だけだ、ということです。ホワイトバランスは動く。色相も動く。暗部は代償つきで動く。白飛びは動かない。ブレは動かない。逃した瞬間は動かない。</p>
+<p>RAW の余裕は本物です。私はそれを毎日使っています。ただ、その余裕を使えるのは、撮影のときに、余裕を使うための材料を残しておいた写真だけです。</p>
+<h2>ここから先は、もう少し詳しく知りたい人へ</h2>
+<p>この記事で必要な結論は、ここまでで完結しています。ここから先は、本文で短く済ませたところの根拠と、分かっていないことを、もう少し細かく見たい人への補足です。新しい主張はありません。</p>
+<h3>白飛びと黒つぶれで、起きていることは違う</h3>
+<p>明るい側で失われるのは、センサーが飽和した情報です。飽和した画素には、そこがどれだけ明るかったかが記録されていません。暗い側は事情が違います。暗い部分もセンサーは記録していますが、届いた光の量が少ないぶん、光そのもののばらつきと読み出し回路のノイズに対して信号が小さい。現像で持ち上げると、信号とノイズが一緒に持ち上がります。だから、暗い側は「無い」というより「ノイズに埋もれている」と言う方が正確で、どこまで使えるかは、ノイズの量と、出力の大きさと、何を写真に求めるかで変わります。本文で「失われた情報は戻らない」と書いたのは、主に明るい側と、ブレ・ピント・瞬間のことです。数式や測定の考え方は、<a href="/knowledge/photography/does-higher-iso-increase-noise">ISO とノイズの記事</a>と<a href="/knowledge/photography/is-lower-iso-always-better">低 ISO の記事</a>に書きました。</p>
+<h3>現像ソフトは、何をしているのか</h3>
+<p>RAW 現像は、記録された値を別の設定で解釈し直す処理です。その中には、最初から推定が含まれています。センサーの各画素は一色しか持たないので、隣の画素から残りの色を推定する（デモザイク）。シャープネスは、輪郭のコントラストを再配分する処理で、解像を増やしているわけではない。ノイズ除去は、ばらつきを減らすかわりに、細部を失ったり、不自然な模様を作ったりする危険と引き換えです。レンズプロファイルによる補正は、歪みや倍率色収差や周辺光量を整えられますが、画像を伸ばし直したり、周辺を切ったり、周辺のゲインを上げたりする計算を伴います。これらはいずれも、元の RAW を残していれば、あとから別の設定でやり直せます。現像した結果だけを残して RAW を捨てると、やり直せない。処理の内容はソフトとバージョンで変わるので、何で現像したかを記録しておく意味もあります。</p>
+<h3>ブラケットの前提</h3>
+<p>複数のコマから選ぶ、という撮り方は、コマの間で被写体と光が変わらないことを前提にしています。風で揺れる木、動く人、刻々と変わる空では、露出の違うコマは、露出だけが違うコマではなくなる。合成するならなおさらです。本文で「誰にでも勧める撮り方ではない」と書いたのは、そのためです。私が星でブラケットをしないのも、同じ理由です。</p>
+<h3>分かっていないこと</h3>
+<p>AI を使ったピントやブレやノイズの処理が、実際にどこまで何をしているのか、同じ処理が数年後に同じ結果を出すのかは、この記事では扱っていません。私が使わないのは、性能を評価した結果ではなく、私の写真の求め方の問題です。古い RAW を今のソフトで現像し直すと当時より良くなる、と私は思っていますが、それを検証したわけではありません。ボケの質やコマ収差を後から整えられるかどうかも、ここでは扱っていません。</p>
+
+  </div>
+
+  
+  <section class="kzc-related-articles" aria-label="関連記事">
+    <h2>関連する記事</h2>
+    <ul>
+      
+      <li>
+        <a href="/knowledge/photography/what-determines-maximum-image-quality-in-2026">2026年の「最高画質」は、何で決まるのか？</a>
+        <p class="kzc-related-desc">2026年の高画素機で「最高画質」は何で決まるのか。三脚・低感度・F8・高速シャッターは全部必要なのか。GH6のノーマルとハイレゾをB0に伸ばして比べた経験から、出せる画質と写真に必要な画質は別だと気づいた話。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/does-higher-iso-increase-noise">「ISOを上げるとノイズが増える」は、本当なのか？</a>
+        <p class="kzc-related-desc">「ISOを上げるとノイズが増える」は本当なのか。同じ光でISOだけ上げても、光のゆらぎによるノイズは増えない。ノイズが目立った主な原因は少ない光で、増幅で何が起きるかはカメラの設計次第。星景写真でISO12800を使う私が、ISOとノイズの関係を調べ直します。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+      <li>
+        <a href="/knowledge/photography/why-did-i-buy-the-nikon-d1">フィルムの方がまだ高画質だった。それでも私はD1を買った</a>
+        <p class="kzc-related-desc">1999年秋に65万円で出たニコンD1。当時の私は、きちんとプリントしたフィルムの方がまだ上だと思っていた。それでも山のポジをスキャンして知人のD1と同じレーザーでA4に出したとき、私の経路は変わった。資料と私の経験から書きます。</p>
+        <span class="kzc-related-category">写真</span>
+      </li>
+      
+    </ul>
+  </section>
+  
+
+  
+
+  <footer class="kzc-article-footer">
+    <section class="kzc-author-block">
+      <h2>この記事を書いた人</h2>
+      
+      <p>
+        村田一朗は写真家であり、SideKickの開発者です。実際の撮影・現像・講評・開発の経験に基づいて、
+        この記事を書いています。AIは過去のログの整理や下書きに使いますが、最終的な確認・修正・公開の判断は本人が行っています。
+      </p>
+      <p><a href="/about">Aboutを読む →</a></p>
+      
+    </section>
+  </footer>
+</article>
+
+</main>
+
+<!-- 2026-07-17改訂: 既存サイト(index.html)のフッター構成をそのまま流用。
+     リンクはすべてルート相対パスにしている（/knowledge/配下からでも正しく機能するため）。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>写真家のための Photoshop スクリプトと<br>ワークショップ。</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-08-31追加時は「（開発中）」→ /planner だった。2026-09-20（AI-11050、Public Beta）:
+                 製品列に並ぶのは製品ページ（配布入口）なので /sidekick-planner へ、表記は「β」
+                 （無料の公開ベータ版であることを他の販売中 3 本と区別する）。考え方の
+                 /planner は製品ページと Story から辿れる。 -->
+            <li><a href="/sidekick-planner">🗺️ Sidekick Planner β</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-kozuchi">打ち出の小槌</p>
+          <ul role="list" aria-labelledby="footer-col-kozuchi">
+            <li><a href="/knowledge">📚 打ち出の小槌</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/ai-lab">🤖 AI Labを見る（無料）</a></li>
+            <li><a href="/ai-review">講評AI</a></li>
+            <li><a href="/camera-ai">カメラAI</a></li>
+            <li><a href="/shooting-ai">撮影AI</a></li>
+            <li><a href="/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-workshop">Workshop</p>
+          <ul role="list" aria-labelledby="footer-col-workshop">
+            <li><a href="/workshop">📷 Workshop</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">サポート</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/manual/マニュアル_SideKick_Star_JA.pdf" target="_blank">⭐ マニュアル (Star)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_Portrait_JA.pdf" target="_blank">👤 マニュアル (Portrait)</a></li>
+            <li><a href="/manual/マニュアル_SideKick_SkyEffect_JA.pdf" target="_blank">☁️ マニュアル (Sky)</a></li>
+            <li><a href="/faq">よくある質問</a></li>
+            <li><a href="/development-log">開発日誌</a></li>
+            <li><a href="/changelog">更新履歴</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">お問い合わせ</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/about">About</a></li>
+            <li><a href="/sidekick">Sidekickとは</a></li>
+            <li><a href="/story">Story</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+            <li><a href="/ichiro-murata">村田 一朗</a></li>
+            <li><a href="/legal">特定商取引法</a></li>
+            <li><a href="/privacy">プライバシーポリシー</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — 村田 一朗</span>
+      <div class="footer-legal">
+        <a href="/legal">特定商取引法に基づく表記</a>
+        <a href="/privacy">プライバシーポリシー</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
