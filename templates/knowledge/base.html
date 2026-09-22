@@ -29,6 +29,8 @@
 <link rel="alternate" hreflang="{{ hl }}" href="{{ url }}">
 {% endfor %}
 <link rel="stylesheet" href="/assets/css/knowledge.css">
+{# GA4（2026-09-22 導入。それ以前の /knowledge/ のPVは「0」ではなく未計測。components/ga4.html 参照） #}
+{% include "components/ga4.html" %}
 </head>
 <body>
 {% if language == 'en' %}{% include "header_en.html" %}{% else %}{% include "header.html" %}{% endif %}

@@ -42,6 +42,8 @@
 {% block extra_meta %}{% endblock %}
 <link rel="stylesheet" href="/assets/css/knowledge.css">
 <link rel="stylesheet" href="/assets/css/story.css">
+{# GA4（2026-09-22 導入。templates/knowledge/components/ga4.html を4系統で共用） #}
+{% include "components/ga4.html" %}
 </head>
 <body>
 {% if language == 'en' %}{% include "header_en.html" %}{% else %}{% include "header.html" %}{% endif %}

@@ -38,7 +38,7 @@ explicit-path staging only, no `git add -A`, `reset --hard`, `stash`, `clean`, `
 | modules | `assets/js/dof/calculator-ui.mjs` (entry) → `calculation-core.mjs` (**the calculation core**: sensor / criterion presets, validation, near / far / hyperfocal, curve sampling), `blur-chart.mjs`, `comparison-state.mjs` (previous-result comparison), `formatters.mjs`, `input-values.mjs`, `url-state.mjs` (URL sharing) |
 | styles | `assets/css/dof-calculator.css` (+ shared `assets/css/site-header.css`) |
 | tests | `tests/tools/test_dof_calculation_core.mjs`, `test_dof_comparison_state.mjs`, `test_dof_url_state.mjs` (Node built-in runner: `node --test tests/tools/<file>`; Node version is not pinned), `tests/tools/dof_golden_fixtures.mjs` (**golden fixtures VF01–VF12**), `tests/site/test_dof_page.py` (template ↔ generated HTML) |
-| external services | **none** — the DOF page uses no Firebase, API, analytics or fetch. `firebase-init.js` / `api/` belong to other pages (AI Lab, downloads) |
+| external services | **GA4 page tag only** (since 2026-09-22: `{% include "components/ga4.html" %}` in the page template's `extra_head`, same `G-K73T3Y352W` as every other public page; see `docs/ANALYTICS_GA4.md`). The calculator JS itself still uses no Firebase, API, analytics or fetch. `firebase-init.js` / `api/` belong to other pages (AI Lab, downloads) |
 
 Build / check: `.\.venv\Scripts\python.exe build/site/build_site.py --output build-output/site --validate-only`, then `pytest tests -q`.
 Local preview: the site is plain static files — serve the repository root with any static file server (there is no bundler / dev server).

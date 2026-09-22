@@ -303,3 +303,136 @@ def test_deploy_checklist_does_not_fix_a_total_test_count() -> None:
     bad = [ln.strip() for ln in section.splitlines()
            if re.search(r"pytest tests -q.*は\s*\d+件", ln)]
     assert not bad, f"合計件数が確定値として書かれている: {bad}"
+
+
+# ---------------------------------------------------------------------------
+# GA4（gtag.js）の配置ポリシー（2026-09-22新設）
+# ---------------------------------------------------------------------------
+#
+# **きっかけとなった問題**
+#
+# GA4タグは 2026-06-06（a80e497）に当時の手書きHTML 20ファイルへ個別に貼られた。
+# その後に Jinja2 テンプレートとして新設した打ち出の小槌（2026-07-17）・開発日誌・Story・
+# tools/dof・ichiro-murata には貼られず、本番で配信されていた 98 ページ（全体の 2/3）が
+# GA4「ページとスクリーン」に一切記録されていなかった。2026-09-21、村田さんが
+# 「記事を開くとリアルタイムには出るのに、30日レポートで記事URLが0件」という形で発見した
+# （リアルタイムに出ていたのは同セッションの別ページのイベント）。
+#
+# 上の sitemap / DEPLOY_CHECKLIST と同じ「増えた実体に手書き（貼付）が追随しなかった」失敗なので、
+# ここで固定する。**GA4導入以前の /knowledge/ 等のPVは「0」ではなく「未計測（UNKNOWN / NOT
+# MEASURED）」として扱う。** 導入日と計測境界は docs/ANALYTICS_GA4.md にある。
+#
+# 方針
+# - 本番HTMLは share.html（設計上 analytics なし）を除き、全ページが gtag.js を **ちょうど1回** 持つ。
+# - Measurement ID は G-K73T3Y352W の1つだけ。別IDが混ざったら気付けるようにする
+#   （firebase-init.js の measurementId G-SBJEMRYFZQ は Firebase 設定であり、
+#   getAnalytics を呼んでいないので HTML には現れない。HTML に現れたら混入）。
+# - テンプレート側でも固定する：knowledge / development-log / story の base.html と
+#   site 系の全ページテンプレートが、共用パーシャル `components/ga4.html` を include するか
+#   同等のスニペットを直書きしていること。本番HTMLの検査だけだと「再ビルドするまで気付かない」
+#   （この文書の「背景」と同じ構造）ので、テンプレートも見る。
+
+GA4_MEASUREMENT_ID = "G-K73T3Y352W"
+GA4_PARTIAL = REPO_ROOT / "templates" / "knowledge" / "components" / "ga4.html"
+GA4_INCLUDE = 'include "components/ga4.html"'
+
+GA4_LOADER_RE = re.compile(r'googletagmanager\.com/gtag/js\?id=(G-[A-Z0-9]+)')
+GA4_CONFIG_RE = re.compile(r"gtag\('config',\s*'(G-[A-Z0-9]+)'")
+
+# 設計上 analytics を持たないページ。`/share` は QR・共有リンクから開く道具ページで、
+# 「外部スクリプト・外部CSS・外部フォント・外部画像・analytics をいずれも持たない単一の静的HTML」
+# であることが Planner 側のテストで固定されている（docs/DEPLOY_CHECKLIST.md「Snapshot Viewer
+# （/share）の扱い」）。noindex と同じく、名指しの1件だけを許可する。
+NO_ANALYTICS_BY_DESIGN = {"share.html"}
+
+# テンプレートから生成する4系統のうち、base.html に GA4 を置く3系統。
+# site 系は各ページテンプレートが extra_head に置く（既存の手書き移行ページはスニペット直書き、
+# 2026-09-22 に追加した tools/dof・ichiro-murata はパーシャル include）ため、下の
+# test_every_site_page_template_carries_ga4 で全ページテンプレートを見る。
+GA4_BASE_TEMPLATES = [
+    Path("templates", "knowledge", "base.html"),
+    Path("templates", "development-log", "base.html"),
+    Path("templates", "story", "base.html"),
+]
+
+
+def _ga4_ids(text: str) -> tuple[list[str], list[str]]:
+    """(gtag.js ローダーのID一覧, gtag('config') のID一覧)。"""
+    return GA4_LOADER_RE.findall(text), GA4_CONFIG_RE.findall(text)
+
+
+def test_ga4_partial_defines_the_measurement_id_exactly_once() -> None:
+    """共用パーシャルが、ローダーと config の両方で意図したIDをちょうど1回ずつ持つこと。"""
+    assert GA4_PARTIAL.exists(), f"{GA4_PARTIAL.relative_to(REPO_ROOT).as_posix()} が無い"
+    loader, config = _ga4_ids(GA4_PARTIAL.read_text(encoding="utf-8-sig"))
+    assert loader == [GA4_MEASUREMENT_ID], f"loader={loader}"
+    assert config == [GA4_MEASUREMENT_ID], f"config={config}"
+
+
+def test_every_production_page_has_exactly_one_ga4_tag() -> None:
+    """share.html を除く全本番HTMLが gtag.js ローダーと gtag('config') をちょうど1回ずつ持つこと。
+
+    0回＝計測されない（今回の再発防止の本体）。2回以上＝page_view が二重に送られる
+    （base.html と個別ページの両方に置いた場合に起きる）。どちらも失敗にする。
+    """
+    bad = []
+    for p in PRODUCTION_PAGES:
+        rel = p.relative_to(REPO_ROOT).as_posix()
+        if rel in NO_ANALYTICS_BY_DESIGN:
+            continue
+        loader, config = _ga4_ids(p.read_text(encoding="utf-8-sig", errors="replace"))
+        if len(loader) != 1 or len(config) != 1:
+            bad.append(f"{rel}: loader={len(loader)} config={len(config)}")
+    assert not bad, (
+        "GA4タグが無い、または重複している本番ページ:\n  " + "\n  ".join(bad)
+    )
+
+
+def test_production_pages_use_only_the_intended_measurement_id() -> None:
+    """本番HTMLに現れる Measurement ID が G-K73T3Y352W だけであること。"""
+    found = {}
+    for p in PRODUCTION_PAGES:
+        rel = p.relative_to(REPO_ROOT).as_posix()
+        loader, config = _ga4_ids(p.read_text(encoding="utf-8-sig", errors="replace"))
+        for mid in loader + config:
+            if mid != GA4_MEASUREMENT_ID:
+                found.setdefault(mid, []).append(rel)
+    assert not found, f"意図しない Measurement ID が本番HTMLにある: {found}"
+
+
+@pytest.mark.parametrize("rel", sorted(NO_ANALYTICS_BY_DESIGN))
+def test_no_analytics_by_design_pages_stay_free_of_analytics(rel: str) -> None:
+    """設計上 analytics を持たないページに、黙って GA4 / Clarity が入らないこと（逆向きの固定）。"""
+    p = REPO_ROOT / rel
+    assert p.exists(), f"{rel} が存在しない"
+    t = p.read_text(encoding="utf-8-sig", errors="replace")
+    hits = [s for s in ("googletagmanager", "gtag(", "clarity.ms") if s in t]
+    assert not hits, f"{rel}: analytics が混入している: {hits}"
+
+
+@pytest.mark.parametrize("rel", [t.as_posix() for t in GA4_BASE_TEMPLATES])
+def test_template_family_base_includes_ga4(rel: str) -> None:
+    """knowledge / development-log / story の base.html が共用パーシャルを include していること。
+
+    本番HTMLの検査（上）だけだと、テンプレートから include を外しても次の再ビルドまで
+    気付かない。テンプレート側も固定する。
+    """
+    t = (REPO_ROOT / rel).read_text(encoding="utf-8-sig")
+    assert t.count(GA4_INCLUDE) == 1, f"{rel}: {GA4_INCLUDE} が {t.count(GA4_INCLUDE)} 回（期待は1回）"
+
+
+def test_every_site_page_template_carries_ga4() -> None:
+    """site 系の全ページテンプレートが GA4（include または直書き）をちょうど1回持つこと。
+
+    site 系は base.html に GA4 を置いていない（手書き移行ページが各自 extra_head に持つため、
+    base に置くと二重になる）。新しいページテンプレートを追加したときに漏れないよう、
+    ページテンプレート全件をここで見る。
+    """
+    bad = []
+    for p in sorted((REPO_ROOT / "templates" / "site" / "pages").rglob("*.html")):
+        rel = p.relative_to(REPO_ROOT).as_posix()
+        t = p.read_text(encoding="utf-8-sig")
+        n = t.count(GA4_INCLUDE) + len(GA4_CONFIG_RE.findall(t))
+        if n != 1:
+            bad.append(f"{rel}: {n}")
+    assert not bad, "GA4 が無い／重複している site ページテンプレート:\n  " + "\n  ".join(bad)

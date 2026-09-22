@@ -1,0 +1,24 @@
+{#- GA4（Google タグ gtag.js）。手書きHTML時代に各ページへ貼られたスニペット
+    （2026-06-06 a80e497、Measurement ID G-K73T3Y352W）と同一内容。
+
+    2026-09-22: 打ち出の小槌（knowledge）・開発日誌（development-log）・Story・
+    site系の一部ページ（tools/dof・ichiro-murata）は、a80e497 より後に Jinja2 テンプレートとして
+    新設されたため GA4 が入っておらず、GA4「ページとスクリーン」に一切記録されていなかった
+    （村田さんが 2026-09-21 に発見、調査結果を承認のうえ導入）。以後、テンプレートから生成する
+    ページはこのパーシャルを `<head>` 内で include する。Measurement ID を書く場所はここ1か所。
+
+    このパーシャルは templates/knowledge/ に置くが、development-log・story・site の各ビルドは
+    Jinja2 の検索パスに templates/knowledge/ を含むため、どの系統からも
+    `{% include "components/ga4.html" %}` で参照できる（header.html 等と同じ仕組み）。
+
+    Microsoft Clarity は含めない（今回のscope外。既存の手書きページだけが持つ）。
+    share.html（Snapshot Viewer）は設計上 analytics を持たないため対象外
+    （docs/DEPLOY_CHECKLIST.md「Snapshot Viewer（/share）の扱い」、tests/site/test_deploy_policy.py）。 -#}
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
+</script>

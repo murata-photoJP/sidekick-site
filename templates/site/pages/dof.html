@@ -2,7 +2,9 @@
 {% block title %}被写界深度計算 | Sidekick Lab{% endblock %}
 {% block meta_description %}焦点距離、F値、ピント距離、許容錯乱円から被写界深度を計算し、ボケの連続的な変化を確認できます。{% endblock %}
 {% block canonical %}https://www.sidekick-lab.com/tools/dof{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=6">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=6">
+{# GA4（2026-09-22 導入。計算機のJS自体は引き続き外部通信なし。ページ計測だけを他ページと揃える） #}
+{% include "components/ga4.html" %}{% endblock %}
 {% block content %}
 <main class="dof-page" id="main-content">
   <header class="dof-intro">

@@ -4,7 +4,7 @@
 デプロイ前に確認すべき手順をまとめる。個別機能の実装記録・運用ルールは
 それぞれの専用ドキュメント（`DEVELOPMENT_LOG_BUILD.md`・`KNOWLEDGE_BUILD.md`・
 `KNOWLEDGE_UI_PHASE_A2.md`・`STORY_BUILD.md`・`CHANGELOG_WORKFLOW.md`・
-`CODEX_CHANGELOG_PROMPT.md`・`DOWNLOAD_CONTACTS.md`）を参照すること。
+`CODEX_CHANGELOG_PROMPT.md`・`DOWNLOAD_CONTACTS.md`・`ANALYTICS_GA4.md`）を参照すること。
 このドキュメントはそれらを置き換えない。
 
 ## Pythonテスト環境
@@ -236,6 +236,26 @@ noindexでないことを名指しで固定している。
 再生成し、生成物をコピーし直す（Planner側 `web_viewer/DEPLOYMENT.md`を参照）。
 外部スクリプト・外部CSS・外部フォント・外部画像・analyticsをいずれも持たない
 単一の静的HTMLであることが、Planner側のテストで固定されている。
+
+## 2-3. GA4 タグは share.html 以外の全ページに「ちょうど1回」— 2026-09-22 村田さん承認
+
+GA4（gtag.js、Measurement ID `G-K73T3Y352W`）は 2026-06-06 に当時の手書きHTMLへ個別に
+貼られたもので、その後テンプレートとして新設した打ち出の小槌・開発日誌・Story・
+`tools/dof`・`ichiro-murata` には入っておらず、**本番 154 ページ中 98 ページが 2026-09-22 まで
+GA4 に一切記録されていなかった**（sitemap の追随漏れと同じ「実体が増えたのに手書きが
+追随しなかった」失敗）。2026-09-22 に共用パーシャル `templates/knowledge/components/ga4.html` を
+新設し、3系統の `base.html` と site 系の該当ページテンプレートから include する形で導入した。
+
+- 本番HTMLは `share.html`（設計上 analytics なし、上記）を除き、gtag.js ローダーと
+  `gtag('config')` を **ちょうど1回** 持つ。0回＝未計測、2回＝二重送信。どちらも
+  `tests/site/test_deploy_policy.py` の「GA4（gtag.js）の配置ポリシー」が失敗にする。
+- Measurement ID は `G-K73T3Y352W` の1つだけ。別IDが本番HTMLに現れたら同テストが検出する。
+- site 系に新しいページテンプレートを追加するときは、`{% block extra_head %}` に
+  `{% include "components/ga4.html" %}` を1回入れる（`templates/site/base.html` には置かない。
+  手書き移行ページが各自 `extra_head` にスニペットを持っているため二重になる）。
+- **導入デプロイ以前の上記 98 ページの PV は「0」ではなく「未計測（UNKNOWN / NOT MEASURED）」
+  として扱う。** 導入日時・計測境界・デプロイ後の確認手順・言語リダイレクトによる既知の
+  計測制約は `docs/ANALYTICS_GA4.md` にある。デプロイ後は同文書の「本番デプロイ日時」を記入すること。
 
 ---
 

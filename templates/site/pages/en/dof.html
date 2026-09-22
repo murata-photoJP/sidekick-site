@@ -2,7 +2,9 @@
 {% block title %}Depth of Field Calculator | Sidekick Lab{% endblock %}
 {% block meta_description %}Calculate depth of field from focal length, aperture, focus distance, and circle of confusion, and see how blur changes continuously.{% endblock %}
 {% block canonical %}https://www.sidekick-lab.com/en/tools/dof{% endblock %}
-{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=6">{% endblock %}
+{% block extra_head %}<link rel="stylesheet" href="/assets/css/dof-calculator.css?v=6">
+{# GA4 (introduced 2026-09-22; the calculator JS itself still makes no external requests) #}
+{% include "components/ga4.html" %}{% endblock %}
 {% block content %}
 <main class="dof-page" id="main-content">
   <header class="dof-intro">

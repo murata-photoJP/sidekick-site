@@ -34,7 +34,8 @@ templates/knowledge/
 └── components/
     ├── article-card.html      ← Article Card部品（カテゴリ別一覧から include）
     ├── mini-card.html          ← 小型カード部品（新着記事・おすすめ記事から include。2026-07-21追加）
-    └── category-nav.html       ← カテゴリnav（チップ型リンク）部品（2026-07-21追加）
+    ├── category-nav.html       ← カテゴリnav（チップ型リンク）部品（2026-07-21追加）
+    └── ga4.html                ← GA4 gtag.js スニペット（base.html の head から include。4系統共用。2026-09-22追加、docs/ANALYTICS_GA4.md）
 ```
 
 Jinja2の`extends`/`include`で分離しており、部品を増やしすぎないよう
