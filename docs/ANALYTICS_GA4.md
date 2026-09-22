@@ -36,24 +36,30 @@ GA4 タグは 2026-06-06（commit `a80e497`「全ページにGA4トラッキン�
 
 | 項目 | 値 |
 |---|---|
-| テンプレート修正・本番HTML再生成 commit（sidekick-site） | 2026-09-22（commit ハッシュは `git log -- docs/ANALYTICS_GA4.md` の初回 commit を参照） |
-| **本番デプロイ（Vercel）日時** | **未デプロイ（デプロイ後に村田さんが JST で記入する）** |
+| テンプレート修正・本番HTML再生成 commit（sidekick-site） | `8083165`（2026-09-22 09:43 JST、main） |
+| origin/main へ push（Vercel 自動デプロイ起動） | 2026-09-22 09:59:00 JST（00:59:00Z） |
+| 本番反映確認（技術的確認） | **2026-09-22 09:59:52 JST**（00:59:52Z）— curl で記事HTMLに gtag.js を確認。続けて 98 ページ全件を live vs `8083165` で比較し一致、`/share` は analytics なしを確認 |
+| **Human verification（GA4 Realtime 実発火確認）** | **2026-09-22 10:18 JST** — 村田さんが本番 `/knowledge/photography/is-0-03mm-blur-visible-in-print` を実際に開き、GA4 Realtime で記事固有タイトル「0.03 mmのボケは、プリントすると本当…」の表示回数 1、`page_view` = 1、`session_start` = 1 を確認（PASS）。**Research 上の正式な計測開始時刻はこの Human verification 時刻を基準とする**（push 時刻・反映確認時刻ではない） |
 | 計測が始まるページ | 上表の 98 ページ（JA/EN の打ち出の小槌トップ・全記事を含む） |
 | 変えていないもの | 記事本文・URL・title / meta description / canonical / hreflang・sitemap・taxonomy・記事ID・言語自動判定／リダイレクト仕様・Clarity |
 
 ### 数字を読むときの規則
 
-- **導入デプロイ以前の上記 98 ページの PV は「0」ではなく `UNKNOWN / NOT MEASURED`（欠測）として扱う。**
+- **2026-09-22 10:18 JST（Human verification）以前の上記 98 ページの PV は「0」ではなく `UNKNOWN / NOT MEASURED`（欠測）として扱う。**
   GA4 の「ページとスクリーン」で該当URLが0件・空欄になっているのは「訪問が無かった」ことを意味しない。
+  09:59:52 JST（本番反映確認）〜10:18 JST の間に実際には計測が始まっているが、Research 上は保守的に
+  Human verification 時刻を境界とし、この間の値は境界の内側として扱わない。
 - 導入デプロイ以後は、他ページと同じ既定動作（`gtag('config')` の自動 `page_view`）で
   `page_location`＝そのページの正規URL、`page_path`＝`/knowledge/...` 等のパス、`page_title`＝各ページ固有の `<title>`
   が記録される。SPA ではなく静的HTMLなので、ページ遷移ごとに通常のページ読み込みとして計測される。
 - **Sidekick Lab X Phase 2 prospective observation**（`D:\OSINT調査\04_発信分析\research-content-title-hook\phase2_design\`）
-  の `article_pv` は、この境界より前の観測窓では `missing_reason` に「GA4 tag absent on /knowledge/ until <デプロイ日時>」を
-  書いて `UNKNOWN` とする（事前登録 `01_phase2_preregistration.md`「欠測は0ではなく missing reason つき UNKNOWN」に従う）。
-  P2-C07（`/knowledge/photography/is-0-03mm-blur-visible-in-print`、X 投稿予定 2026-09-20 20:00 JST）は
-  この境界をまたぐ最初の候補なので、投稿〜デプロイ間の PV は欠測、デプロイ後の窓から計測値になる。
-  `article_analytics_source` には `GA4 G-K73T3Y352W (tag deployed <デプロイ日時>)` を書く。
+  の `article_pv` は、この境界より前の観測窓では `missing_reason` に
+  「GA4 tag absent on /knowledge/ until 2026-09-22 10:18 JST (Human verification)」を書いて `UNKNOWN` とする
+  （事前登録 `01_phase2_preregistration.md`「欠測は0ではなく missing reason つき UNKNOWN」に従う）。
+  **P2-C07**（`/knowledge/photography/is-0-03mm-blur-visible-in-print`、X 投稿 2026-09-20 20:00 JST）は
+  投稿が計測開始より前（pre-measurement）なので、**その article PV は欠測扱いを維持する**。境界以後の窓の値を
+  投稿反応として遡って解釈しない。`article_analytics_source` には
+  `GA4 G-K73T3Y352W (tag live 2026-09-22 09:59:52 JST; Human-verified 2026-09-22 10:18 JST)` を書く。
 - X（t.co）からの流入は、導入後は GA4 の既定の参照元判定（`t.co / referral`）で記録される。
   ただし下記「3. 既知の制約」の言語リダイレクトにより、非日本語ブラウザからの流入は記事URLに残らない。
 
@@ -102,8 +108,9 @@ base に置くと二重に送信される。site 系に新しいページテン�
 
 1. GA4 → リアルタイム → 記事URL（例 `/knowledge/photography/is-0-03mm-blur-visible-in-print`）を開き、
    `page_view` の **ページタイトル** がその記事の `<title>` になっていること（共通タイトルではない）。
-2. 翌日以降、「ページとスクリーン」で `/knowledge/` を検索して記事パスが並ぶこと。
-3. 本文書「1. 導入の記録」の **本番デプロイ日時** を JST で記入する。
+   → **2026-09-22 10:18 JST PASS**（上表「Human verification」）。
+2. 翌日以降、「ページとスクリーン」で `/knowledge/` を検索して記事パスが並ぶこと。→ 未確認（2026-09-23 以降）。
+3. 本文書「1. 導入の記録」の日時を JST で記入する。→ 記入済み。
 
 ---
 
