@@ -233,9 +233,10 @@ _register_page_pair(
 # Sidekick QR 製品ページ（2026-09-27新設、製品の正本は自作内の独立 repository
 # Sidekickシリーズ/本体/Sidekick QR、HD namespace HD-SIDEKICKQR）。Planner と同じ製品ページ系列。
 # /sidekick-qr は Sidekick QR が作る Card の Secondary QR の恒久的な行き先なので URL を変えない。
-# ダウンロードは「準備中」表示のみ（配布物が無い）。og_image は base.html の既定画像
-# （製品のスクリーンショットはまだ無い）。en_redirect_url は .html 無しで上書き（sidekick-planner と同じ）。
-# グローバルナビには足さない（共通 header の変更 = 4系統の全ページ再生成になるため、別判断）。
+# og_image は base.html の既定画像（製品のスクリーンショットはまだ無い）。en_redirect_url は .html 無しで上書き（sidekick-planner と同じ）。
+# 2026-09-28 Production Replacement（HD-SIDEKICKQR-021）: 日本語版 = 説明 ＋ Web 版（iframe、/sidekick-qr-app/app）＋ オフライン版の ZIP、
+# 英語版は Portable の製品ページのまま（D-4 = E2）。グローバルナビに「🔗 Sidekick QR」を追加した（DOF計算の直後、4系統の全ページ再生成）。
+# /sidekick-qr-app/ は Sidekick QR repository の tools/export_web_app.py の書き出し（analytics なし・noindex・sitemap に載せない）。
 _register_page_pair(
     "sidekick-qr",
     ja_extra={"enable_ogp": True, "en_redirect_url": "/en/sidekick-qr"},

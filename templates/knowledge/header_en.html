@@ -60,6 +60,8 @@
 {%- if show_dof_nav|default(false) %}
       <a href="/en/tools/dof" {% if nav_current == "dof" %}aria-current="page"{% endif %}>📐 DOF Calculator</a>
 {%- endif %}
+{#- 2026-09-28 (Sidekick QR HD-SIDEKICKQR-021): product-page entry right after DOF Calculator #}
+      <a href="/en/sidekick-qr" {% if nav_current == "sidekick-qr" %}aria-current="page"{% endif %}>🔗 Sidekick QR</a>
       <a href="/en/lp-star" {% if nav_current == "lp-star" %}aria-current="page"{% endif %}>LP</a>
       <a href="/en/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>
       <a href="/en/sidekick" {% if nav_current == "sidekick" %}aria-current="page"{% endif %}>What is Sidekick</a>

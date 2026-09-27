@@ -348,7 +348,11 @@ GA4_CONFIG_RE = re.compile(r"gtag\('config',\s*'(G-[A-Z0-9]+)'")
 # 「外部スクリプト・外部CSS・外部フォント・外部画像・analytics をいずれも持たない単一の静的HTML」
 # であることが Planner 側のテストで固定されている（docs/DEPLOY_CHECKLIST.md「Snapshot Viewer
 # （/share）の扱い」）。noindex と同じく、名指しの1件だけを許可する。
-NO_ANALYTICS_BY_DESIGN = {"share.html"}
+#
+# 2026-09-28、Sidekick QR Web 版の production app（/sidekick-qr-app/app、HD-SIDEKICKQR-018 D-1 / -021）を追加。
+# 写真・URL・Card を扱う app document には analytics を入れない（page_view は shell の /sidekick-qr だけが記録する）。
+# noindex は meta ではなく vercel.json の X-Robots-Tag（app の bytes は Portable 1.0.0 と一致させるため書き換えない）。
+NO_ANALYTICS_BY_DESIGN = {"share.html", "sidekick-qr-app/app.html"}
 
 # テンプレートから生成する4系統のうち、base.html に GA4 を置く3系統。
 # site 系は各ページテンプレートが extra_head に置く（既存の手書き移行ページはスニペット直書き、

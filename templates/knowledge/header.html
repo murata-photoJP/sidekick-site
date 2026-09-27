@@ -95,6 +95,8 @@
 {%- if show_dof_nav|default(false) %}
       <a href="/tools/dof" {% if nav_current == "dof" %}aria-current="page"{% endif %}>📐 DOF計算</a>
 {%- endif %}
+{#- 2026-09-28（Sidekick QR HD-SIDEKICKQR-021）: Web 版の公開にあわせ、DOF計算の直後・Workshop の直前に製品ページへの入口を追加 #}
+      <a href="/sidekick-qr" {% if nav_current == "sidekick-qr" %}aria-current="page"{% endif %}>🔗 Sidekick QR</a>
       <a href="/workshop" {% if nav_current == "workshop" %}aria-current="page"{% endif %}>📷 Workshop</a>
       <a href="/lp-star" {% if nav_current == "lp-star" %}aria-current="page"{% endif %}>LP</a>
       <a href="/gallery" {% if nav_current == "gallery" %}aria-current="page"{% endif %}>Gallery</a>

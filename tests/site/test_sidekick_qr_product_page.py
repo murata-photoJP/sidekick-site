@@ -11,6 +11,11 @@
    その file がこの repository にあり SHA-256 が Sidekick QR の canonical record と一致、「準備中 / Coming Soon」が残っていない、
    「すべて展開」→「Sidekick QR.html」の短い説明がある。
 4. まだ無い機能・内部の技術説明を載せない（Overlay・SNS テンプレート・一括・EXE・価格・Adobe RGB / ICC 等）。
+5. 2026-09-28 Production Replacement（HD-SIDEKICKQR-021）: 日本語版 = 説明 ＋ Web 版（iframe `/sidekick-qr-app/app`、Primary）＋
+   オフライン版の ZIP（Secondary、隠さない）。英語版は Portable の製品ページのまま（D-4 = E2）。
+   `/sidekick-qr-app/` は noindex（vercel.json の X-Robots-Tag）・sitemap に載せない・日本語の製品ページの iframe 以外から link しない
+   （app の bytes と analytics なしは tests/site/test_sidekick_qr_web_validation.py、GA4 の例外は test_deploy_policy.py）。
+   グローバルナビ: 「🔗 Sidekick QR」が JA は DOF計算の直後・Workshop の直前、EN は DOF Calculator の直後（全ページ、aria-current は製品ページだけ）。
 
 リポジトリを読むだけで、何も書き込まない。
 """
@@ -18,6 +23,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 import sys
 from pathlib import Path
@@ -114,7 +120,12 @@ def test_ja_required_content(rendered: dict[str, str]) -> None:
     for text in ("Sidekick QR", "by Sidekick Lab", "写真から、Webへつなぐ。", "写真 ＋ URL → QRカード", "JPEG / PNG", "プレビュー",
                  "PNG で保存", "Windows", "ZIP", "インストール不要", "Python などの追加ソフトも不要", "画像は sRGB を基準に処理します。",
                  "Sidekick QR の処理のために外部のサーバーへ送信されません。", "その QRコードが指す Web ページにアクセスします",
-                 "1.0.0", "TERMS.txt", "自動更新はありません"):
+                 "1.0.0", "TERMS.txt", "自動更新はありません",
+                 # Web 版（HD-SIDEKICKQR-021）と privacy / analytics の境界
+                 "このページの中で、そのまま使えます", "オフラインで使う", "［PNGを保存・共有］",
+                 "このページの表示（ページや画像、プログラムの読み込み）にはインターネットを使います。",
+                 "ページの閲覧だけを記録します", "カードを作る部分（Sidekick QR 本体）にはアクセス解析を入れていない",
+                 "保存先や共有先を選んだ後の扱いは、その端末やアプリによります"):
         assert text in main, text
 
 
@@ -131,15 +142,24 @@ def test_en_required_content(rendered: dict[str, str]) -> None:
 # 3. Download
 # ---------------------------------------------------------------------------
 
-@pytest.mark.parametrize("key,steps", [(JA_KEY, ("すべて展開", "Sidekick QR.html", "ダブルクリック")),
-                                       (EN_KEY, ("Extract All", "Sidekick QR.html", "Double-click"))])
-def test_download_links_to_the_release_artifact(rendered: dict[str, str], key: str, steps: tuple[str, ...]) -> None:
-    main = _main(rendered[key])
+def test_ja_download_is_the_offline_option(rendered: dict[str, str]) -> None:
+    main = _main(rendered[JA_KEY])
+    hrefs = re.findall(r'href="([^"]*)"', main)
+    assert hrefs.count(DOWNLOAD_HREF) == 1                                   # 「オフラインで使う」節（Secondary）
+    assert set(hrefs) == {DOWNLOAD_HREF, "#how", "#offline"}, hrefs         # ほかの link（validation URL・登録導線）なし
+    assert 'id="download-link"' in main and 'id="offline"' in main
+    assert "<button" not in main and "<form" not in main
+    for text in ("すべて展開", "Sidekick QR.html", "ダブルクリック"):
+        assert text in main, text
+
+
+def test_en_download_links_to_the_release_artifact(rendered: dict[str, str]) -> None:
+    main = _main(rendered[EN_KEY])
     hrefs = re.findall(r'href="([^"]*)"', main)
     assert hrefs.count(DOWNLOAD_HREF) == 2                                   # hero と Download 節
     assert set(hrefs) == {DOWNLOAD_HREF, "#how"}, hrefs                     # ほかの link（validation URL・登録導線）なし
-    assert "<button" not in main and "<form" not in main
-    for text in steps:
+    assert "<button" not in main and "<form" not in main and "<iframe" not in main   # 英語版は Web 版にしない（D-4 = E2）
+    for text in ("Extract All", "Sidekick QR.html", "Double-click"):
         assert text in main, text
 
 
@@ -158,3 +178,58 @@ def test_no_claims_beyond_the_product(rendered: dict[str, str], key: str) -> Non
     text = re.sub(r"<[^>]+>", " ", _main(rendered[key])).lower()
     for term in FORBIDDEN_IN_MAIN:
         assert re.search(rf"(?<![a-z]){re.escape(term.lower())}(?![a-z])", text) is None, term
+
+
+# ---------------------------------------------------------------------------
+# 5. Web 版（Production Replacement、HD-SIDEKICKQR-021）
+# ---------------------------------------------------------------------------
+
+APP_SRC = "/sidekick-qr-app/app"
+
+
+def test_ja_embeds_the_web_app_as_the_primary(rendered: dict[str, str]) -> None:
+    main = _main(rendered[JA_KEY])
+    frames = re.findall(r"<iframe[^>]*>", main)
+    assert len(frames) == 1
+    assert f'src="{APP_SRC}"' in frames[0] and 'allow="web-share"' in frames[0] and 'title="Sidekick QR（カードを作る）"' in frames[0]
+    assert main.index("<iframe") < main.index(DOWNLOAD_HREF)                 # Web 版が先（Primary）、ZIP は後（Secondary）
+    assert (REPO_ROOT / "sidekick-qr-app" / "app.html").is_file()
+
+
+def test_the_app_is_noindex_unlisted_and_only_embedded_by_the_ja_page() -> None:
+    vercel = json.loads((REPO_ROOT / "vercel.json").read_text(encoding="utf-8"))
+    rule = [h for h in vercel.get("headers", []) if h["source"] == "/sidekick-qr-app/(.*)"]
+    assert rule and {"key": "X-Robots-Tag", "value": "noindex, nofollow"} in rule[0]["headers"]
+    assert "sidekick-qr-app" not in (REPO_ROOT / "sitemap.xml").read_text(encoding="utf-8")
+    embedding = []
+    for p in REPO_ROOT.rglob("*.html"):
+        rel = p.relative_to(REPO_ROOT).as_posix()
+        if rel.startswith(("build-output/", "BackUp/", "templates/", "sidekick-qr-app/", "validation/")):
+            continue
+        if APP_SRC in p.read_text(encoding="utf-8", errors="replace"):
+            embedding.append(rel)
+    assert embedding == ["sidekick-qr.html"], embedding
+
+
+def _nav(html: str, menu: str) -> str:
+    return html.split(f'id="{menu}"')[1].split("</nav>")[0]
+
+
+def test_global_nav_has_sidekick_qr_right_after_dof() -> None:
+    rendered = bs.render_all(None)
+    for key, page in bs.PAGES.items():
+        html = rendered[page["output"]]
+        if key.startswith("en/"):
+            nav = _nav(html, "kzc-nav-menu-en")
+            order = ['href="/en/tools/dof"', 'href="/en/sidekick-qr"', 'href="/en/lp-star"']
+        else:
+            nav = _nav(html, "kzc-nav-menu")
+            order = ['href="/tools/dof"', 'href="/sidekick-qr"', 'href="/workshop"']
+        assert nav.count(order[1]) == 1, key
+        links = re.findall(r'<a href="([^"]+)"', nav)
+        i = links.index(order[1].split('"')[1])
+        assert links[i - 1] == order[0].split('"')[1] and links[i + 1] == order[2].split('"')[1], (key, links)
+        assert "🔗 Sidekick QR</a>" in nav
+        current = f'{order[1]} aria-current="page"' in nav
+        assert current == (key in (JA_KEY, EN_KEY)), key
+
