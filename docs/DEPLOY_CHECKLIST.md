@@ -237,6 +237,14 @@ noindexでないことを名指しで固定している。
 外部スクリプト・外部CSS・外部フォント・外部画像・analyticsをいずれも持たない
 単一の静的HTMLであることが、Planner側のテストで固定されている。
 
+### Sidekick QR Web 版の validation surface（/validation/sidekick-qr-web/…）の扱い — 2026-09-28 村田さん決定（HD-SIDEKICKQR-018 D-3）
+
+公開前の確認用ページ。**shell・app とも analytics なし、noindex**（shell は meta、`/validation/(.*)` は vercel.json の `X-Robots-Tag: noindex, nofollow`）、
+sitemap・navigation・製品ページから link しない。`tests/site/test_deploy_policy.py` は `validation/sidekick-qr-web/` の prefix だけを GA4・noindex の検査から外し、
+逆向き（analytics が入らない・noindex が付く・link されない・app の copy が Portable 1.0.0 と byte 一致）は `tests/site/test_sidekick_qr_web_validation.py` が固定する。
+app の copy の正本は Sidekick QR repository の `app/`（`tools/export_web_app.py` で書き出す。site では直接編集しない。改行を変換しないよう `.gitattributes` で `-text`）。
+production の `/sidekick-qr-app/`（analytics なし・noindex）と shell の GA4 page_view は Production Replacement Phase で扱う（HD-SIDEKICKQR-018 D-1 / D-2）。
+
 ## 2-3. GA4 タグは share.html 以外の全ページに「ちょうど1回」— 2026-09-22 村田さん承認
 
 GA4（gtag.js、Measurement ID `G-K73T3Y352W`）は 2026-06-06 に当時の手書きHTMLへ個別に

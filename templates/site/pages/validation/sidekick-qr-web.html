@@ -1,0 +1,418 @@
+{# Sidekick QR Web 版 —— validation surface の shell（日本語）。2026-09-28、HD-SIDEKICKQR-018 D-3、AI-15986。
+   **本番の /sidekick-qr ではない**（production の差し替えは Human Review PASS 後に Human が GO する）。
+   - app（iframe の中）は Sidekick QR repository の app/ を tools/export_web_app.py で書き出した copy（Portable 1.0.0 と byte 一致、analytics なし、
+     自前の CSP で connect-src 'none'）。同じ folder の sidekick-qr-app/sidekick-qr-web-manifest.json が source commit と SHA-256 を持つ。
+   - この shell も **analytics なし**（D-3。GA4 の partial を include しない）・**noindex**（meta ＋ vercel.json の X-Robots-Tag）・sitemap / navigation / 製品ページから link しない。
+   - production の shell（Replacement Phase）は、ここから validation の注記と noindex を外し、GA4 の page_view を戻す形になる（D-1）。
+   CSS は今の production /sidekick-qr（templates/site/pages/sidekick-qr.html）と同じもの ＋ iframe 用の数行。 #}
+{% extends "base.html" %}
+
+{% block title %}Sidekick QR（Web 版・検証用）| 写真から、Webへつなぐ。{% endblock %}
+
+{% block meta_description %}Sidekick QR Web 版の検証用ページ（公開前の確認用。検索の対象ではありません）。{% endblock %}
+
+{% block canonical %}https://www.sidekick-lab.com/sidekick-qr{% endblock %}
+
+{% block extra_head %}
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --muted:#5e6677;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
+        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* ── Hero（sidekick-planner と同じ） ── */
+    .hero{padding:88px 0 64px;}
+    .eyebrow{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:20px;
+    }
+    h1{
+      margin:0 0 20px;
+      font-size:clamp(36px, 6vw, 64px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+    h1 small{
+      display:block;
+      margin-top:14px;
+      font-size:clamp(20px, 2.6vw, 28px);
+      font-weight:800;
+      letter-spacing:-.01em;
+      color:var(--accent2);
+    }
+    .lead{
+      margin:0;
+      color:var(--sub);
+      font-size:clamp(16px, 2vw, 19px);
+      max-width:720px;
+      line-height:1.8;
+    }
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      margin-top:32px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* ── ダウンロード（本ページ固有。sidekick-planner の .btn-primary と同じ見た目） ── */
+    .btn-download{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      min-height:56px;
+      padding:0 30px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:16px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#121212;
+      box-shadow:0 8px 32px rgba(255,138,0,.32);
+      transition:.2s ease;
+    }
+    .btn-download:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,138,0,.42);}
+    .download-meta{margin:10px 0 0;color:var(--sub);font-size:13px;line-height:1.8;}
+    .download-steps{margin:22px auto 0;padding-left:1.4em;max-width:520px;text-align:left;color:var(--sub);font-size:15px;line-height:1.9;}
+    .download-steps strong{color:var(--text);}
+    .text-link{
+      color:var(--sub);
+      font-size:15px;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+    .text-link:hover{color:var(--white);}
+
+    /* ── Section ── */
+    .section{padding:72px 0;}
+    .section-alt{
+      background:linear-gradient(180deg, transparent, rgba(5,8,20,.35) 20%, rgba(5,8,20,.35) 80%, transparent);
+    }
+    .section-head{margin-bottom:36px;}
+    .section-head h2{
+      margin:0 0 12px;
+      font-size:clamp(26px, 3.5vw, 40px);
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--sub);
+      max-width:720px;
+      font-size:clamp(15px, 1.8vw, 18px);
+    }
+    .section-label{
+      display:inline-block;
+      color:var(--accent2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    /* ── Cards ── */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+    .card-icon{font-size:28px;margin-bottom:14px;}
+    .card h3{margin:0 0 10px;font-size:18px;line-height:1.3;}
+    .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.75;}
+
+    /* ── Steps ── */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      counter-reset:step;
+    }
+    .step{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      counter-increment:step;
+    }
+    .step::before{
+      content:counter(step);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#111;
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:16px;
+    }
+    .step h3{margin:0 0 8px;font-size:18px;}
+    .step p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── Callout ── */
+    .callout{
+      padding:32px;
+      border-radius:24px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.10), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.18);
+      box-shadow:var(--shadow);
+    }
+    .callout p{margin:0;color:var(--sub);font-size:15px;}
+    .callout p + p{margin-top:10px;}
+    .callout strong{color:var(--text);}
+
+    /* ── 現在の状態（sidekick-planner の .beta-table と同じ） ── */
+    .beta-table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      font-size:15px;
+    }
+    .beta-table th,
+    .beta-table td{
+      padding:14px 18px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      vertical-align:top;
+      text-align:left;
+    }
+    .beta-table tr:last-child th,
+    .beta-table tr:last-child td{border-bottom:0;}
+    .beta-table th{
+      width:11em;
+      color:var(--sub);
+      font-weight:700;
+      white-space:nowrap;
+      background:rgba(255,255,255,.02);
+    }
+    .beta-table td{color:var(--text);line-height:1.7;}
+    .notice{
+      margin-top:20px;
+      padding:20px 22px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-left:3px solid var(--accent);
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.9;
+    }
+    .notice strong{color:var(--text);}
+
+    /* ── CTA ── */
+    .cta-section{padding:72px 0 96px;}
+    .cta-card{
+      text-align:center;
+      padding:48px 28px;
+      border-radius:28px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.12), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.2);
+      box-shadow:var(--shadow);
+    }
+    .cta-card h2{
+      margin:0 0 12px;
+      font-size:clamp(24px, 3.2vw, 36px);
+      letter-spacing:-.02em;
+    }
+    .cta-card p{margin:0 0 24px;color:var(--sub);font-size:15px;}
+
+    @media (max-width:980px){
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:640px){
+      .wrap{width:min(var(--max), calc(100% - 32px));}
+      .hero{padding:56px 0 40px;}
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr;
+      }
+      .beta-table th{
+        display:block;
+        width:auto;
+        padding-bottom:4px;
+        border-bottom:0;
+      }
+      .beta-table td{display:block;padding-top:0;}
+      .cta-card{padding:36px 20px;}
+    }
+
+    /* ── Web 版（HD-SIDEKICKQR-018）: app を別 document（iframe）で動かす ── */
+    .validation-note{margin:0 0 18px;padding:10px 14px;border-radius:10px;border:1px dashed rgba(255,177,74,.5);color:var(--accent2);font-size:13px;line-height:1.7}
+    .hero-web{padding:40px 0 24px}
+    .app-frame-box{margin:26px auto 0;max-width:820px;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,.12);background:#f6f7f8;box-shadow:var(--shadow)}
+    #sqr-app{display:block;width:100%;height:1000px;border:0;background:#f6f7f8}
+    .app-frame-note{max-width:820px;margin:10px auto 0;color:var(--muted);font-size:12px;line-height:1.7}
+    @media (max-width:640px){.hero-web{padding:24px 0 16px}.app-frame-box{border-radius:12px}}
+  </style>
+{% endblock %}
+
+{% block content %}
+  <main>
+
+    <section class="hero-web">
+      <div class="wrap">
+        <p class="validation-note">これは公開前の確認用ページです（検証用・検索の対象外）。このページにはアクセス解析を入れていません。</p>
+        <div class="eyebrow">Sidekick QR ｜ by Sidekick Lab</div>
+        <h1>
+          Sidekick QR
+          <small>写真から、Webへつなぐ。</small>
+        </h1>
+        <p class="lead">
+          写真と Web への入口を、ひとつの画像に。
+          選んだ写真・入力した URL・作ったカードは、Sidekick QR の処理のために外部のサーバーへ送信されません。
+        </p>
+
+        <div class="app-frame-box">
+          <iframe id="sqr-app" src="{{ sqr_app_src }}" title="Sidekick QR（カードを作る）"></iframe>
+        </div>
+        <p class="app-frame-note">カードはこのブラウザの中で作ります。保存した PNG は、ブラウザのダウンロード先（スマートフォンでは写真やファイルの保存先）に入ります。</p>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">How it works</span>
+          <h2>使い方</h2>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <h3>写真を選ぶ</h3>
+            <p>カードにしたい写真（JPEG / PNG）を1枚選びます。</p>
+          </div>
+          <div class="step">
+            <h3>URL・タイトル・説明を入れる</h3>
+            <p>QRコードにする Web ページの URL と、カードに載せるタイトル・説明文を入れます。</p>
+          </div>
+          <div class="step">
+            <h3>カードを作って保存</h3>
+            <p>［カードを作成］でプレビューを確かめ、［PNGとして保存］で保存します。スマートフォンで QR を読み取ると、指定したページが開きます。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="privacy">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Privacy</span>
+          <h2>写真と入力した内容について</h2>
+        </div>
+        <div class="callout">
+          <p>
+            <strong>選んだ写真・入力した URL・タイトル・説明・作ったカードは、Sidekick QR の処理のために外部のサーバーへ送信されません。</strong>
+            カードはこのブラウザの中で作ります。写真をアップロードする必要も、アカウントを作る必要もありません。
+          </p>
+          <p>
+            このページの表示（ページや画像、プログラムの読み込み）はインターネット経由です。
+            カードを作る部分（Sidekick QR 本体）にはアクセス解析を入れていないため、写真や入力した内容がアクセス解析に送られることはありません。
+            （公開時は、サイト共通のアクセス解析でこのページの閲覧だけを記録する予定です。）
+          </p>
+          <p>
+            カードの QRコードを読み取ったスマートフォンは、その QRコードが指す Web ページにアクセスします。画像は sRGB を基準に処理します。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section" id="offline">
+      <div class="wrap">
+        <div class="cta-card">
+          <h2>オフラインで使う</h2>
+          <p>Sidekick QR 1.0.0（Windows 向け・無料・ZIP・インストール不要）</p>
+          <a class="btn-download" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>ダウンロード（ZIP・約 25 KB）</a>
+          <ol class="download-steps">
+            <li>ZIP をダウンロードします。</li>
+            <li>ZIP を右クリック →<strong>「すべて展開」</strong>を選びます。</li>
+            <li>展開したフォルダの<strong>「Sidekick QR.html」</strong>をダブルクリックします。</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+  </main>
+{% endblock %}
+
+{% block extra_body_end %}
+<script>
+  /* app（別 document・同じ origin）の高さに iframe を合わせる。app の file には触らない。 */
+  (function () {
+    var frame = document.getElementById("sqr-app");
+    if (!frame) return;
+    function fit() {
+      try {
+        var doc = frame.contentDocument;
+        if (doc && doc.documentElement) frame.style.height = Math.ceil(doc.documentElement.scrollHeight) + "px";
+      } catch (e) { /* 読めない場合は CSS の高さのまま */ }
+    }
+    frame.addEventListener("load", function () {
+      fit();
+      var win = frame.contentWindow;
+      if (win && win.ResizeObserver) new win.ResizeObserver(fit).observe(frame.contentDocument.documentElement);
+    });
+  })();
+</script>
+{% endblock %}

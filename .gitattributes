@@ -1,0 +1,4 @@
+# Sidekick QR の Web app の copy（Sidekick QR repository の tools/export_web_app.py が書き出す）。
+# Portable 1.0.0 と byte 一致を保つため、改行を変換しない（この repository は core.autocrlf=true の環境で使われる）。HD-SIDEKICKQR-018。
+validation/sidekick-qr-web/**/sidekick-qr-app/** -text
+sidekick-qr-app/** -text

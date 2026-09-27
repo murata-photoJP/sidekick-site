@@ -295,6 +295,28 @@ _INDEX_HREFLANG = {
     "ja": f"{SITE_ORIGIN}/",
     "en": f"{SITE_ORIGIN}/en",
 }
+# Sidekick QR Web 版の validation surface（2026-09-28、HD-SIDEKICKQR-018 D-3、Sidekick QR repository AI-15986）。
+# 公開前の確認用で、production の /sidekick-qr ではない。analytics なし（GA4 を include しない）・noindex（meta ＋ vercel.json の
+# X-Robots-Tag）・sitemap / navigation / 製品ページから link しない。app（iframe）は同じ folder の sidekick-qr-app/ に
+# Sidekick QR repository の tools/export_web_app.py で書き出した copy（Portable 1.0.0 と byte 一致）。
+# 日本語だけ（D-4 = E2）なので _register_page_pair() を使わず直接登録する（hreflang・英語の対なし）。
+# 非日本語 browser の自動誘導先は production /sidekick-qr と同じ /en/sidekick-qr。
+SIDEKICK_QR_WEB_VALIDATION_ID = "36429dd1d469d9cb"
+_SQR_WEB_VALIDATION_DIR = f"validation/sidekick-qr-web/{SIDEKICK_QR_WEB_VALIDATION_ID}"
+PAGES["validation/sidekick-qr-web"] = {
+    "template": "pages/validation/sidekick-qr-web.html",
+    "output": Path(_SQR_WEB_VALIDATION_DIR, "index.html"),
+    "context": {
+        "language": "ja",
+        "nav_current": None,
+        "show_dof_nav": True,
+        "show_lang_banner": False,
+        "show_en_link": False,
+        "en_redirect_url": "/en/sidekick-qr",
+        "sqr_app_src": f"/{_SQR_WEB_VALIDATION_DIR}/sidekick-qr-app/app",
+    },
+}
+
 PAGES["index"] = {
     "template": "pages/index.html",
     "output": Path("index.html"),

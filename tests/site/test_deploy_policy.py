@@ -68,6 +68,11 @@ STANDALONE_LP = {"star-lp.html", "kouzu-lp.html"}
 # 根拠は docs/DEPLOY_CHECKLIST.md「2-2.」の「Snapshot Viewer（/share）の扱い」にある。
 NOINDEX_BY_DESIGN = {"share.html"}
 
+# Sidekick QR Web 版の validation surface（2026-09-28、村田さん決定 HD-SIDEKICKQR-018 D-3）。公開前の確認用で、
+# shell・app とも analytics なし・noindex・sitemap / navigation / 製品ページから link しない。この prefix の下だけを例外にし、
+# 逆向き（analytics が入っていない・noindex が付いている）は tests/site/test_sidekick_qr_web_validation.py が固定する。
+SIDEKICK_QR_WEB_VALIDATION_PREFIX = "validation/sidekick-qr-web/"
+
 
 def _production_pages() -> list[Path]:
     """本番へ配置されるHTML。ビルドの一時出力・バックアップ・テンプレートは除く。"""
@@ -249,7 +254,7 @@ def test_no_production_page_declares_noindex() -> None:
     declared = []
     for p in PRODUCTION_PAGES:
         rel = p.relative_to(REPO_ROOT).as_posix()
-        if rel in NOINDEX_BY_DESIGN:
+        if rel in NOINDEX_BY_DESIGN or rel.startswith(SIDEKICK_QR_WEB_VALIDATION_PREFIX):
             continue
         r = _meta(p)["robots"]
         if r:
@@ -378,7 +383,7 @@ def test_every_production_page_has_exactly_one_ga4_tag() -> None:
     bad = []
     for p in PRODUCTION_PAGES:
         rel = p.relative_to(REPO_ROOT).as_posix()
-        if rel in NO_ANALYTICS_BY_DESIGN:
+        if rel in NO_ANALYTICS_BY_DESIGN or rel.startswith(SIDEKICK_QR_WEB_VALIDATION_PREFIX):
             continue
         loader, config = _ga4_ids(p.read_text(encoding="utf-8-sig", errors="replace"))
         if len(loader) != 1 or len(config) != 1:
@@ -431,6 +436,8 @@ def test_every_site_page_template_carries_ga4() -> None:
     bad = []
     for p in sorted((REPO_ROOT / "templates" / "site" / "pages").rglob("*.html")):
         rel = p.relative_to(REPO_ROOT).as_posix()
+        if rel.startswith("templates/site/pages/validation/"):      # validation surface（HD-SIDEKICKQR-018 D-3、analytics なし）
+            continue
         t = p.read_text(encoding="utf-8-sig")
         n = t.count(GA4_INCLUDE) + len(GA4_CONFIG_RE.findall(t))
         if n != 1:

@@ -25,6 +25,12 @@
       "statusCode": 301
     }
   ],
+  "headers": [
+    {
+      "source": "/validation/(.*)",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
+  ],
   "crons": [
     { "path": "/api/planner-activity-cleanup", "schedule": "30 18 * * *" }
   ]

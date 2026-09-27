@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Sidekick QR（HD-SIDEKICKQR-001〜003）。画像・URL・Card はこの page の外へ送らない:
+     connect-src 'none'（fetch / XHR / beacon / WebSocket を禁止）、form を使わない（URL が query に載らない）。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob:; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Sidekick QR</title>
+<style>
+  :root{--ink:#1d2328;--sub:#59636c;--line:#c7cdd2;--accent:#1f5f99;--error:#b3261e;--warn:#8a5a00;--bg:#f6f7f8}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI","Hiragino Sans","Yu Gothic UI",sans-serif}
+  header,main{max-width:760px;margin:0 auto;padding:16px}
+  .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  .brand h1{font-size:1.6rem;margin:0}
+  .brand .by{color:var(--sub);font-size:.9rem}
+  .tagline{margin:4px 0 0;color:var(--sub)}
+  .panel{background:#fff;border:1px solid var(--line);border-radius:8px;padding:16px;margin-bottom:16px}
+  label{display:block;font-weight:700;margin:14px 0 4px}
+  label .optional{font-weight:400;color:var(--sub)}
+  input[type=text],input[type=url]{width:100%;padding:10px;font:inherit;border:1px solid var(--line);border-radius:6px}
+  input[type=file]{font:inherit}
+  .hint{color:var(--sub);font-size:.875rem;margin:4px 0 0}
+  ul.messages{margin:6px 0 0;padding-left:1.2em;font-size:.9rem;color:var(--warn)}
+  ul.messages.error{color:var(--error)}
+  button{font:inherit;padding:10px 18px;border-radius:6px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer}
+  button:disabled{opacity:.5;cursor:default}
+  .actions{margin-top:18px}
+  #status{min-height:1.6em;margin:12px 0 0}
+  #status.error{color:var(--error)}
+  #card-image{display:block;width:100%;height:auto;border:1px solid var(--line);background:#fff}
+  .encoded{font-size:.85rem;color:var(--sub);word-break:break-all;margin:8px 0}
+  .note{font-size:.85rem;color:var(--sub)}
+  [hidden]{display:none !important}
+  /* 起動の確認（L-1 guard、HD-SIDEKICKQR-014 B）: 既定では 1.2 秒後に表示。部品が揃えば js/startup_check.js が表示前に取り除く。 */
+  #startup-guard{visibility:hidden;animation:startup-guard-appear 0s linear 1.2s forwards;border:2px solid var(--error);background:#fff5f4;color:var(--ink);border-radius:8px;padding:14px 16px;margin-bottom:16px}
+  #startup-guard.shown{visibility:visible;animation:none}
+  #startup-guard strong{display:block;color:var(--error);font-size:1.05rem;margin-bottom:6px}
+  #startup-guard p{margin:4px 0}
+  #startup-guard .en{color:var(--sub);font-size:.85rem;margin-top:8px}
+  @keyframes startup-guard-appear{to{visibility:visible}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><h1>Sidekick QR</h1><span class="by">by Sidekick Lab</span></div>
+  <!-- 暫定コピー（HD-SIDEKICKQR-003。商品コピーとして確定ではない presentation text）。 -->
+  <p class="tagline" id="tagline">写真から、Webへつなぐ。</p>
+</header>
+<main>
+  <div id="startup-guard" role="alert">
+    <strong>Sidekick QR を起動できませんでした。</strong>
+    <p>ZIP ファイルの中から直接開いている場合は、ZIP を右クリックして「すべて展開」し、展開したフォルダの「Sidekick QR.html」を開いてください。</p>
+    <p class="en">Sidekick QR could not start. If you opened it from inside the ZIP file, right-click the ZIP, choose “Extract All”, and open “Sidekick QR.html” in the extracted folder.</p>
+  </div>
+  <section class="panel" aria-labelledby="input-heading">
+    <h2 id="input-heading" hidden>入力</h2>
+    <label for="photo">1. 画像</label>
+    <input id="photo" type="file" accept="image/jpeg,image/png">
+    <p class="hint">JPEG / PNG を 1 枚。画像は切り取らずに全体を収めます。撮影位置などの画像の情報（EXIF）はカードに入りません。<span id="photo-info"></span></p>
+
+    <label for="url">2. リンク先URL</label>
+    <input id="url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://">
+    <ul id="url-messages" class="messages" hidden aria-live="polite"></ul>
+    <p class="hint">http:// または https:// で始まるURLをQRコードにします。</p>
+
+    <label for="title">3. タイトル</label>
+    <input id="title" type="text" maxlength="80" autocomplete="off" required>
+
+    <label for="description">説明 <span class="optional">（任意・1行）</span></label>
+    <input id="description" type="text" maxlength="120" autocomplete="off">
+
+    <div class="actions"><button id="make-card" type="button">カードを作成</button></div>
+    <p id="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="result" class="panel" hidden aria-labelledby="result-heading">
+    <h2 id="result-heading" style="font-size:1.1rem;margin:0 0 8px">できあがったカード</h2>
+    <img id="card-image" alt="作成したカード（保存される画像そのもの）">
+    <p class="encoded">QRコードに入っているURL: <code id="encoded-url"></code></p>
+    <button id="save-card" type="button" disabled>PNGとして保存</button>
+  </section>
+
+  <p class="note">画像・URL・カードはこのパソコンの中だけで処理され、どこにも送信されません。撮影地点を含むURLをQRコードにすると、カードを見た人にその地点が伝わります。渡す相手を選んでください。</p>
+</main>
+<script src="js/card_engine.js"></script>
+<script src="js/qr_encoder.js"></script>
+<script src="js/image_adapter.js"></script>
+<script src="js/url_policy.js"></script>
+<script src="js/card_template.js"></script>
+<script src="js/app.js"></script>
+<script src="js/startup_check.js"></script>
+</body>
+</html>

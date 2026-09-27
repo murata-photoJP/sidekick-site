@@ -53,3 +53,12 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 - 内部の検証事項（Validation Backlog）・色管理の技術説明（Adobe RGB / ICC 等）はページに載せない（`tests/site/test_sidekick_qr_product_page.py` が固定）。
 - validation 専用 ZIP（`/validation/sidekick-qr/…`、HD-SIDEKICKQR-014 A）は production smoke の PASS 後に削除する。
 
+## 6. Web 版の validation surface（2026-09-28、HD-SIDEKICKQR-018、Human Review 待ち）
+
+- production の `/sidekick-qr`・`/en/sidekick-qr`・global navigation は**変えていない**（Human Review PASS 後に Human が Production Replacement を GO）。
+- validation: `/validation/sidekick-qr-web/<id>`（id は `build_site.py` の `SIDEKICK_QR_WEB_VALIDATION_ID`）= shell（テンプレート `templates/site/pages/validation/sidekick-qr-web.html`、
+  今の製品ページの CSS、analytics なし・noindex）＋ iframe の app（同じ folder の `sidekick-qr-app/app`、Sidekick QR の `tools/export_web_app.py` の書き出し、
+  Portable 1.0.0 と byte 一致・analytics なし・自前 CSP）。入口を `app.html` にするのは、cleanUrls ＋ trailingSlash:false で folder の index.html だと
+  相対 `js/…` が 1 つ上を指すため。
+- 設計の正本: Sidekick QR repository の `docs/WEB_VERSION_ARCHITECTURE.md`。
+
