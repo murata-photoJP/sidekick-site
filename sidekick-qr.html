@@ -27,7 +27,7 @@
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sidekick QR | 写真から、Webへつなぐ。QRコード付きカードを作る</title>
-<meta name="description" content="Sidekick QR（サイドキック QR）は、写真と Web ページの URL から、QRコード付きのカード画像を1枚作るツール。JPEG / PNG の写真を選び、URL・タイトル・説明を入れて、プレビューを確かめて PNG で保存。写真・URL・カードはどこにも送信せず、手元のパソコンの中で作ります。ダウンロードは準備中。">
+<meta name="description" content="Sidekick QR（サイドキック QR）は、写真と Web ページの URL から、QRコード付きのカード画像を1枚作るツール。JPEG / PNG の写真を選び、URL・タイトル・説明を入れて、プレビューを確かめて PNG で保存。写真・URL・カードは外部のサーバーへ送信せず、手元のパソコンの中で作ります。Windows 用、インストール不要の ZIP を無料でダウンロードできます。">
 <link rel="canonical" href="https://www.sidekick-lab.com/sidekick-qr">
 
 <link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sidekick-qr">
@@ -39,14 +39,14 @@
 <meta property="og:site_name" content="Sidekick">
 <meta property="og:locale" content="ja_JP">
 <meta property="og:title" content="Sidekick QR | 写真から、Webへつなぐ。">
-<meta property="og:description" content="写真と Web ページの URL から、QRコード付きのカード画像を1枚作るツール。写真・URL・カードはどこにも送信しません。ダウンロードは準備中。">
+<meta property="og:description" content="写真と Web ページの URL から、QRコード付きのカード画像を1枚作るツール。写真・URL・カードは外部のサーバーへ送信しません。Windows 用、インストール不要。">
 <meta property="og:url" content="https://www.sidekick-lab.com/sidekick-qr">
 <meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Sidekick QR | 写真から、Webへつなぐ。">
-<meta name="twitter:description" content="写真と Web ページの URL から、QRコード付きのカード画像を1枚作るツール。写真・URL・カードはどこにも送信しません。ダウンロードは準備中。">
+<meta name="twitter:description" content="写真と Web ページの URL から、QRコード付きのカード画像を1枚作るツール。写真・URL・カードは外部のサーバーへ送信しません。Windows 用、インストール不要。">
 <meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
 
 <link rel="stylesheet" href="/assets/css/site-header.css">
@@ -133,27 +133,26 @@
       align-items:center;
     }
 
-    /* ── ダウンロード準備中の表示（本ページ固有）。押せる button / link に見せない ── */
-    .status-pill{
+    /* ── ダウンロード（本ページ固有。sidekick-planner の .btn-primary と同じ見た目） ── */
+    .btn-download{
       display:inline-flex;
       align-items:center;
-      gap:10px;
-      margin:0;
-      padding:8px 16px;
-      border-radius:999px;
-      border:1px dashed rgba(255,255,255,.28);
-      background:rgba(255,255,255,.03);
-      color:var(--sub);
+      justify-content:center;
+      gap:8px;
+      min-height:56px;
+      padding:0 30px;
+      border-radius:14px;
       font-weight:800;
-      font-size:15px;
-      cursor:default;
+      font-size:16px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#121212;
+      box-shadow:0 8px 32px rgba(255,138,0,.32);
+      transition:.2s ease;
     }
-    .status-pill .dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--muted);
-    }
+    .btn-download:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,138,0,.42);}
+    .download-meta{margin:10px 0 0;color:var(--sub);font-size:13px;line-height:1.8;}
+    .download-steps{margin:22px auto 0;padding-left:1.4em;max-width:520px;text-align:left;color:var(--sub);font-size:15px;line-height:1.9;}
+    .download-steps strong{color:var(--text);}
     .text-link{
       color:var(--sub);
       font-size:15px;
@@ -311,7 +310,6 @@
       letter-spacing:-.02em;
     }
     .cta-card p{margin:0 0 24px;color:var(--sub);font-size:15px;}
-    .cta-card .status-pill{margin:0 auto;}
 
     @media (max-width:980px){
       .grid-3,
@@ -505,9 +503,10 @@
         </p>
 
         <div class="hero-actions">
-          <p class="status-pill" id="download-status"><span class="dot" aria-hidden="true"></span>ダウンロード 準備中</p>
+          <a class="btn-download" id="download-link" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>ダウンロード（Windows・無料）</a>
           <a class="text-link" href="#how">使い方を見る</a>
         </div>
+        <p class="download-meta">Version 1.0.0 ・ ZIP（約 25 KB）・ インストール不要</p>
       </div>
     </section>
 
@@ -584,11 +583,12 @@
 
         <div class="callout">
           <p>
-            <strong>写真・URL・カードは、どこにも送信しません。</strong>
+            <strong>写真・入力した URL・作ったカードは、Sidekick QR の処理のために外部のサーバーへ送信されません。</strong>
             カードは手元のパソコンの中で作ります。写真をアップロードする必要も、アカウントを作る必要もありません。
           </p>
           <p>
             QRコードもパソコンの中で作るので、入れた URL が外部の QR 作成サービスに渡ることもありません。
+            なお、カードの QRコードを読み取ったスマートフォンは、その QRコードが指す Web ページにアクセスします。
           </p>
         </div>
       </div>
@@ -600,15 +600,27 @@
     <section class="section section-alt" id="status">
       <div class="wrap">
         <div class="section-head">
-          <span class="section-label">Status</span>
-          <h2>現在の状態</h2>
+          <span class="section-label">Spec</span>
+          <h2>動作環境と仕様</h2>
           <p>
-            作者自身が実際に使いながら、仕上げている段階です。
+            Windows 向けの正式版です。
           </p>
         </div>
 
         <table class="beta-table">
           <tbody>
+            <tr>
+              <th scope="row">バージョン</th>
+              <td>1.0.0</td>
+            </tr>
+            <tr>
+              <th scope="row">動作環境</th>
+              <td>Windows（Microsoft Edge または Google Chrome で開きます）</td>
+            </tr>
+            <tr>
+              <th scope="row">形式</th>
+              <td>ZIP（展開して使います）。インストール不要、Python などの追加ソフトも不要です。</td>
+            </tr>
             <tr>
               <th scope="row">対応する写真</th>
               <td>JPEG / PNG</td>
@@ -622,17 +634,20 @@
               <td>http / https で始まる Web ページの URL</td>
             </tr>
             <tr>
-              <th scope="row">ダウンロード</th>
-              <td>準備中です。配布を始めるときは、このページでお知らせします。</td>
+              <th scope="row">色</th>
+              <td>画像は sRGB を基準に処理します。</td>
+            </tr>
+            <tr>
+              <th scope="row">利用条件</th>
+              <td>ZIP の中の「TERMS.txt」をお読みください。</td>
+            </tr>
+            <tr>
+              <th scope="row">更新</th>
+              <td>新しい版はこのページからダウンロードしてください（自動更新はありません）。</td>
             </tr>
           </tbody>
         </table>
 
-        <div class="notice">
-          <strong>色の再現は検証中です。</strong>
-          写真の色がカードでもそのまま保たれるかどうか（カラープロファイルの扱い）は、まだ確かめている途中です。
-          色を正確に保つことは、現時点では保証していません。
-        </div>
       </div>
     </section>
 
@@ -643,8 +658,14 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>ダウンロード</h2>
-          <p>Sidekick QR は、配布の準備を進めています。</p>
-          <p class="status-pill"><span class="dot" aria-hidden="true"></span>ダウンロード 準備中</p>
+          <p>Sidekick QR 1.0.0（Windows 向け・無料）</p>
+          <a class="btn-download" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>ダウンロード（ZIP・約 25 KB）</a>
+          <ol class="download-steps">
+            <li>ZIP をダウンロードします。</li>
+            <li>ZIP を右クリック →<strong>「すべて展開」</strong>を選びます。</li>
+            <li>展開したフォルダの<strong>「Sidekick QR.html」</strong>をダブルクリックします。</li>
+          </ol>
+          <p class="download-meta">終わるときは、ブラウザのタブを閉じるだけです。</p>
         </div>
       </div>
     </section>

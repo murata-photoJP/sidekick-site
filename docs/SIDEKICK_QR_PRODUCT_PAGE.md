@@ -41,3 +41,15 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 ```
 
 本番反映は `origin/main` への push（= production deploy）で、**Human decision が必要**（`START_HERE_FOR_DEVELOPMENT.md` §6）。
+
+## 5. 正式版 1.0.0 の Download（2026-09-28、HD-SIDEKICKQR-016）
+
+- 正式 artifact: **`/downloads/sidekick-qr/SidekickQR-1.0.0.zip`**（25,381 bytes、SHA-256 `6bdaac3bd617b523195a07448d198ae013869a7ccd0d8c719f8862e666cbf405`、
+  Sidekick QR repository の `tools/build_portable_zip.py` で source `e9b3900` から build。identity と release record は同 repository の `docs/RELEASE_1.0.0.md`）。
+  この file を差し替えない（新しい版は新しい file 名で置き、ページの link を変える）。sitemap には載せない（ZIP は検索の対象にしない）。
+- 製品ページ: 「準備中」をやめ、hero と Download 節の 2 か所から上の ZIP へ直接 link（登録導線なし）。Download 節に「すべて展開」→「Sidekick QR.html」の 3 行。
+  仕様表に版・動作環境（Windows、Edge / Chrome）・形式（ZIP、インストール不要、Python 等も不要）・写真（JPEG / PNG）・色（sRGB 基準）・利用条件（ZIP 内の TERMS.txt）・更新（手動）。
+  privacy の表記は「Sidekick QR の処理のために外部のサーバーへ送信されません」と、QR を読んだ端末がその Web ページへアクセスすることの両方を書く。
+- 内部の検証事項（Validation Backlog）・色管理の技術説明（Adobe RGB / ICC 等）はページに載せない（`tests/site/test_sidekick_qr_product_page.py` が固定）。
+- validation 専用 ZIP（`/validation/sidekick-qr/…`、HD-SIDEKICKQR-014 A）は production smoke の PASS 後に削除する。
+

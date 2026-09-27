@@ -1,18 +1,19 @@
 {# Sidekick QR product page (English). Added 2026-09-27 as the pair of templates/site/pages/sidekick-qr.html
    (HD namespace HD-SIDEKICKQR). Same facts and the same limits as the Japanese page (see its header comment):
-   no download link (Coming Soon only), no claim about colour accuracy (VB-01), no features that do not exist.
+   download: a direct link to the 1.0.0 Portable ZIP (/downloads/sidekick-qr/SidekickQR-1.0.0.zip, HD-SIDEKICKQR-016, 2026-09-28; before that, no download link),
+   colour stated only as "processed on an sRGB basis" (HD-SIDEKICKQR-012), no features that do not exist.
    The CSS is the Japanese page's, unchanged. Fixed by tests/site/test_sidekick_qr_product_page.py. #}
 {% extends "base.html" %}
 
 {% block title %}Sidekick QR | Connect a photo to the web. Make a QR card{% endblock %}
 
-{% block meta_description %}Sidekick QR makes a single card image with a QR code from a photo and the URL of a web page. Choose a JPEG or PNG photo, enter the URL, a title and a description, check the preview and save it as PNG. The photo, the URL and the card are not sent anywhere: the card is made on your own computer. Download coming soon.{% endblock %}
+{% block meta_description %}Sidekick QR makes a single card image with a QR code from a photo and the URL of a web page. Choose a JPEG or PNG photo, enter the URL, a title and a description, check the preview and save it as PNG. The photo, the URL and the card are not sent to any external server: the card is made on your own computer. Free download for Windows, no installation.{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/en/sidekick-qr{% endblock %}
 
 {% block og_title %}Sidekick QR | Connect a photo to the web.{% endblock %}
 
-{% block og_description %}Make a card image with a QR code from a photo and the URL of a web page. The photo, the URL and the card are not sent anywhere. Download coming soon.{% endblock %}
+{% block og_description %}Make a card image with a QR code from a photo and the URL of a web page. The photo, the URL and the card are not sent to any external server. For Windows, no installation.{% endblock %}
 
 {% block extra_head %}
   <style>
@@ -97,27 +98,26 @@
       align-items:center;
     }
 
-    /* ── ダウンロード準備中の表示（本ページ固有）。押せる button / link に見せない ── */
-    .status-pill{
+    /* ── ダウンロード（本ページ固有。sidekick-planner の .btn-primary と同じ見た目） ── */
+    .btn-download{
       display:inline-flex;
       align-items:center;
-      gap:10px;
-      margin:0;
-      padding:8px 16px;
-      border-radius:999px;
-      border:1px dashed rgba(255,255,255,.28);
-      background:rgba(255,255,255,.03);
-      color:var(--sub);
+      justify-content:center;
+      gap:8px;
+      min-height:56px;
+      padding:0 30px;
+      border-radius:14px;
       font-weight:800;
-      font-size:15px;
-      cursor:default;
+      font-size:16px;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#121212;
+      box-shadow:0 8px 32px rgba(255,138,0,.32);
+      transition:.2s ease;
     }
-    .status-pill .dot{
-      width:8px;
-      height:8px;
-      border-radius:50%;
-      background:var(--muted);
-    }
+    .btn-download:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,138,0,.42);}
+    .download-meta{margin:10px 0 0;color:var(--sub);font-size:13px;line-height:1.8;}
+    .download-steps{margin:22px auto 0;padding-left:1.4em;max-width:520px;text-align:left;color:var(--sub);font-size:15px;line-height:1.9;}
+    .download-steps strong{color:var(--text);}
     .text-link{
       color:var(--sub);
       font-size:15px;
@@ -275,7 +275,6 @@
       letter-spacing:-.02em;
     }
     .cta-card p{margin:0 0 24px;color:var(--sub);font-size:15px;}
-    .cta-card .status-pill{margin:0 auto;}
 
     @media (max-width:980px){
       .grid-3,
@@ -326,9 +325,10 @@
         </p>
 
         <div class="hero-actions">
-          <p class="status-pill" id="download-status"><span class="dot" aria-hidden="true"></span>Download Coming Soon</p>
+          <a class="btn-download" id="download-link" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>Download (Windows, free)</a>
           <a class="text-link" href="#how">See how it works</a>
         </div>
+        <p class="download-meta">Version 1.0.0 · ZIP (about 25 KB) · no installation</p>
       </div>
     </section>
 
@@ -405,11 +405,12 @@
 
         <div class="callout">
           <p>
-            <strong>The photo, the URL and the card are not sent anywhere.</strong>
+            <strong>The photo, the URL you enter and the card you make are not sent to any external server for Sidekick QR's processing.</strong>
             The card is made on your own computer. There is nothing to upload and no account to create.
           </p>
           <p>
             The QR code is also made on your computer, so the URL you enter is never passed to an online QR code service.
+            A smartphone that scans a QR code on the card does, of course, open the web page that code points to.
           </p>
         </div>
       </div>
@@ -421,15 +422,27 @@
     <section class="section section-alt" id="status">
       <div class="wrap">
         <div class="section-head">
-          <span class="section-label">Status</span>
-          <h2>Current status</h2>
+          <span class="section-label">Spec</span>
+          <h2>Requirements and specifications</h2>
           <p>
-            The author is using it for real and finishing it.
+            The release version for Windows.
           </p>
         </div>
 
         <table class="beta-table">
           <tbody>
+            <tr>
+              <th scope="row">Version</th>
+              <td>1.0.0</td>
+            </tr>
+            <tr>
+              <th scope="row">Runs on</th>
+              <td>Windows (opens in Microsoft Edge or Google Chrome)</td>
+            </tr>
+            <tr>
+              <th scope="row">Format</th>
+              <td>ZIP (extract and use). No installation, and no Python or other extra software needed.</td>
+            </tr>
             <tr>
               <th scope="row">Photos</th>
               <td>JPEG / PNG</td>
@@ -443,17 +456,20 @@
               <td>Web page URLs starting with http / https</td>
             </tr>
             <tr>
-              <th scope="row">Download</th>
-              <td>Coming soon. When it becomes available, it will be announced on this page.</td>
+              <th scope="row">Colour</th>
+              <td>Images are processed on an sRGB basis.</td>
+            </tr>
+            <tr>
+              <th scope="row">Terms</th>
+              <td>See "TERMS.txt" in the ZIP (Japanese).</td>
+            </tr>
+            <tr>
+              <th scope="row">Updates</th>
+              <td>Download new versions from this page (there are no automatic updates).</td>
             </tr>
           </tbody>
         </table>
 
-        <div class="notice">
-          <strong>Colour reproduction is still being verified.</strong>
-          Whether the colours of your photo are kept exactly in the card (how colour profiles are handled) is still being checked.
-          Accurate colour is not guaranteed at this point.
-        </div>
       </div>
     </section>
 
@@ -464,8 +480,14 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>Download</h2>
-          <p>Sidekick QR is being prepared for distribution.</p>
-          <p class="status-pill"><span class="dot" aria-hidden="true"></span>Download Coming Soon</p>
+          <p>Sidekick QR 1.0.0 (for Windows, free)</p>
+          <a class="btn-download" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>Download (ZIP, about 25 KB)</a>
+          <ol class="download-steps">
+            <li>Download the ZIP.</li>
+            <li>Right-click the ZIP and choose <strong>"Extract All"</strong>.</li>
+            <li>Double-click <strong>"Sidekick QR.html"</strong> in the extracted folder.</li>
+          </ol>
+          <p class="download-meta">To finish, just close the browser tab.</p>
         </div>
       </div>
     </section>
