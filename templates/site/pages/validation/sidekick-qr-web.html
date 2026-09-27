@@ -4,6 +4,7 @@
      自前の CSP で connect-src 'none'）。同じ folder の sidekick-qr-app/sidekick-qr-web-manifest.json が source commit と SHA-256 を持つ。
    - この shell も **analytics なし**（D-3。GA4 の partial を include しない）・**noindex**（meta ＋ vercel.json の X-Robots-Tag）・sitemap / navigation / 製品ページから link しない。
    - production の shell（Replacement Phase）は、ここから validation の注記と noindex を外し、GA4 の page_view を戻す形になる（D-1）。
+   - iframe の allow="web-share": app の中の［PNGを保存・共有］（HD-SIDEKICKQR-020）が OS の共有シートを開けるように明示する（同じ origin の iframe は既定でも許可）。
    CSS は今の production /sidekick-qr（templates/site/pages/sidekick-qr.html）と同じもの ＋ iframe 用の数行。 #}
 {% extends "base.html" %}
 
@@ -326,7 +327,7 @@
         </p>
 
         <div class="app-frame-box">
-          <iframe id="sqr-app" src="{{ sqr_app_src }}" title="Sidekick QR（カードを作る）"></iframe>
+          <iframe id="sqr-app" src="{{ sqr_app_src }}" title="Sidekick QR（カードを作る）" allow="web-share"></iframe>
         </div>
         <p class="app-frame-note">カードはこのブラウザの中で作ります。保存した PNG は、ブラウザのダウンロード先（スマートフォンでは写真やファイルの保存先）に入ります。</p>
       </div>

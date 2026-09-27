@@ -5,7 +5,9 @@
 1. validation surface（`validation/sidekick-qr-web/<id>/`）: analytics なし（GA4 / Clarity なし）・shell は meta noindex・vercel.json の X-Robots-Tag（`/validation/(.*)`）、
    sitemap・他のページから link されない、shell の iframe が同じ folder の `sidekick-qr-app/app` を指す、shell = テンプレートの生成物。
 2. Web app の copy（`sidekick-qr-web-manifest.json` のある folder すべて）: 置いてある file = manifest（SHA-256）、manifest 以外の file なし、
-   中身が Portable 1.0.0 の artifact（SidekickQR-1.0.0.zip）の入口 HTML・js と byte 一致（D-5）、analytics / 通信の code なし、CSP connect-src 'none'。
+   core の js が Portable 1.0.0（SidekickQR-1.0.0.zip）と byte 一致、入口 app.html は Portable の入口 ＋ Web 版だけの script を読む 1 行
+   （その 1 行を除くと Portable の入口と byte 一致）、Web 版だけの module は web_share.js（HD-SIDEKICKQR-020）だけ（D-5）、
+   analytics / 通信の code なし、CSP connect-src 'none'、shell の iframe に allow="web-share"。
    正本は Sidekick QR repository の app/（tools/export_web_app.py で書き出す）。ここが落ちたら、site 側で直さず Sidekick QR 側から書き出し直す。
 
 リポジトリを読むだけで、何も書き込まない。
@@ -29,8 +31,10 @@ PREFIX = "validation/sidekick-qr-web/"
 VALIDATION_DIR = REPO_ROOT / "validation" / "sidekick-qr-web" / bs.SIDEKICK_QR_WEB_VALIDATION_ID
 MANIFEST = "sidekick-qr-web-manifest.json"
 # Sidekick QR 1.0.0（Portable、SidekickQR-1.0.0.zip sha256 6bdaac3b…）の入口 HTML と js の SHA-256（Sidekick QR repository docs/release_artifact_1.0.0.json）
+PORTABLE_ENTRY = "6cee5c4d3bd61e6d193eb615001a674d1fea9af88f3daa7e0c37129e30c30dd1"
+WEB_ENTRY_LINE = b'\n<script src="js/web_share.js"></script>'
+WEB_ONLY = {"js/web_share.js"}
 PORTABLE_1_0_0 = {
-    "app.html": "6cee5c4d3bd61e6d193eb615001a674d1fea9af88f3daa7e0c37129e30c30dd1",
     "js/app.js": "c82d776210b0f77b",
     "js/card_engine.js": "e230f82d88b4cd42f0c646b4963295afc8dd4af972aea3f3efe80aad1b83c9fc",
     "js/card_template.js": "dfdb766a5b0a50e3257af92eea797d854ce4bd647ae80fac5818b3586fa1d802",
@@ -87,6 +91,7 @@ def test_the_shell_embeds_its_own_app_copy_and_matches_the_template() -> None:
     shell = (VALIDATION_DIR / "index.html").read_text(encoding="utf-8")
     src = re.search(r'<iframe id="sqr-app" src="([^"]+)"', shell).group(1)
     assert src == "/" + VALIDATION_DIR.relative_to(REPO_ROOT).as_posix() + "/sidekick-qr-app/app"
+    assert 'allow="web-share"' in re.search(r'<iframe id="sqr-app"[^>]*>', shell).group(0)
     assert (VALIDATION_DIR / "sidekick-qr-app" / "app.html").is_file()
     assert shell == bs.render_all("validation/sidekick-qr-web")[bs.PAGES["validation/sidekick-qr-web"]["output"]]
     assert shell.count("<h1") == 1
@@ -108,8 +113,14 @@ def test_app_copy_matches_its_manifest_and_portable_1_0_0(copy: Path) -> None:
     assert present == sorted(listed), "manifest に無い file / 足りない file"
     for name, digest in listed.items():
         assert _sha(copy / name) == digest, f"{name}: manifest と違う（site で直さず Sidekick QR から書き出し直す）"
-        assert digest.startswith(PORTABLE_1_0_0[name]), f"{name}: Portable 1.0.0 と違う（D-5）"
-    assert sorted(listed) == sorted(PORTABLE_1_0_0)
+        if name in PORTABLE_1_0_0:
+            assert digest.startswith(PORTABLE_1_0_0[name]), f"{name}: Portable 1.0.0 と違う（D-5、core は fork しない）"
+    entry = (copy / "app.html").read_bytes()
+    assert entry.count(WEB_ENTRY_LINE) == 1
+    assert hashlib.sha256(entry.replace(WEB_ENTRY_LINE, b"")).hexdigest() == PORTABLE_ENTRY, "app.html が Portable の入口 ＋ 1 行ではない"
+    assert sorted(listed) == sorted(set(PORTABLE_1_0_0) | {"app.html"} | WEB_ONLY)
+    roles = {f["path"]: f.get("role", "") for f in manifest["files"]}
+    assert roles["js/web_share.js"] == "web only"
     assert manifest["version"] == "1.0.0"
     assert manifest["portable_identity"]["artifact_sha256"] == "6bdaac3bd617b523195a07448d198ae013869a7ccd0d8c719f8862e666cbf405"
 
