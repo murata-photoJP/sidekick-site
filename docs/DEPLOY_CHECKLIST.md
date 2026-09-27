@@ -243,7 +243,14 @@ noindexでないことを名指しで固定している。
 sitemap・navigation・製品ページから link しない。`tests/site/test_deploy_policy.py` は `validation/sidekick-qr-web/` の prefix だけを GA4・noindex の検査から外し、
 逆向き（analytics が入らない・noindex が付く・link されない・app の copy が Portable 1.0.0 と byte 一致）は `tests/site/test_sidekick_qr_web_validation.py` が固定する。
 app の copy の正本は Sidekick QR repository の `app/`（`tools/export_web_app.py` で書き出す。site では直接編集しない。改行を変換しないよう `.gitattributes` で `-text`）。
-production の `/sidekick-qr-app/`（analytics なし・noindex）と shell の GA4 page_view は Production Replacement Phase で扱う（HD-SIDEKICKQR-018 D-1 / D-2）。
+production の `/sidekick-qr-app/`（analytics なし・noindex）と shell の GA4 page_view は 2026-09-28 の Production Replacement で公開した（下の節）（HD-SIDEKICKQR-018 D-1 / D-2）。
+
+### Sidekick QR Web 版 production app（/sidekick-qr-app/）の扱い — 2026-09-28 村田さん GO（HD-SIDEKICKQR-021）
+
+日本語の製品ページ `/sidekick-qr`（shell）が iframe で読む app document。**analytics なし・noindex**（`/sidekick-qr-app/(.*)` に vercel.json の
+`X-Robots-Tag: noindex, nofollow`。app の bytes は Portable 1.0.0 と一致させるので meta は足さない）・sitemap に載せない・nav から直接 link しない。
+`tests/site/test_deploy_policy.py` は `sidekick-qr-app/app.html` を `NO_ANALYTICS_BY_DESIGN` に入れて GA4 の検査から外し、逆向き（analytics が入らない）を固定する。
+page_view は shell（`/sidekick-qr`）だけが記録する。app の copy は site で直接編集せず、Sidekick QR repository から `tools/export_web_app.py --dest sidekick-qr-app` で書き出し直す。
 
 ## 2-3. GA4 タグは share.html 以外の全ページに「ちょうど1回」— 2026-09-22 村田さん承認
 

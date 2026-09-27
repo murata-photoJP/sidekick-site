@@ -53,7 +53,7 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 - 内部の検証事項（Validation Backlog）・色管理の技術説明（Adobe RGB / ICC 等）はページに載せない（`tests/site/test_sidekick_qr_product_page.py` が固定）。
 - validation 専用 ZIP（`/validation/sidekick-qr/…`、HD-SIDEKICKQR-014 A）は production smoke の PASS 後に削除する。
 
-## 6. Web 版の validation surface（2026-09-28、HD-SIDEKICKQR-018、Human Review 待ち）
+## 6. Web 版の validation surface（2026-09-28、HD-SIDEKICKQR-018 → Human Review PASS、HD-SIDEKICKQR-021）
 
 - production の `/sidekick-qr`・`/en/sidekick-qr`・global navigation は**変えていない**（Human Review PASS 後に Human が Production Replacement を GO）。
 - validation: `/validation/sidekick-qr-web/<id>`（id は `build_site.py` の `SIDEKICK_QR_WEB_VALIDATION_ID`）= shell（テンプレート `templates/site/pages/validation/sidekick-qr-web.html`、
@@ -62,3 +62,14 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
   相対 `js/…` が 1 つ上を指すため。
 - 設計の正本: Sidekick QR repository の `docs/WEB_VERSION_ARCHITECTURE.md`。
 
+## 7. Production Replacement（2026-09-28、HD-SIDEKICKQR-021、site 76b63d7）
+
+- 日本語 `/sidekick-qr` = 説明 ＋ **Primary: その場で使える Web 版**（iframe `/sidekick-qr-app/app`、`allow="web-share"`）＋ **Secondary: オフラインで使う**
+  （Portable 1.0.0 の ZIP、URL・bytes・SHA-256 そのまま、`id="download-link"`）。コピーの中心は「Sidekick QR / 写真から、Webへつなぐ。」。
+  shell は GA4 の page_view だけ（写真・ファイル名・URL・タイトル・説明・Card・QR の内容・共有先は analytics に送らない）。
+- `/sidekick-qr-app/`: validation で Human PASS した app と byte 一致（manifest の source `7be38fd`、core = Portable 1.0.0）。analytics なし・noindex（X-Robots-Tag）・sitemap なし。
+- global navigation: 「🔗 Sidekick QR」—— JA は「📐 DOF計算」の直後・「📷 Workshop」の直前、EN は「📐 DOF Calculator」の直後（共通 header、4 系統の全ページを再生成）。
+- 英語 `/en/sidekick-qr` は Portable の製品ページのまま（D-4 = E2、本文不変、nav の 1 行だけ変わる）。
+- validation surface `/validation/sidekick-qr-web/36429dd1d469d9cb` は**残す**（noindex・analytics なし・link なし。削除は別の Human decision）。
+- 確認: Sidekick QR repository の `validation/web/production_gate_web.py`（deploy 前 `--site-root`、deploy 後 `--url https://www.sidekick-lab.com/sidekick-qr`）。
+  GA4 の collect は route で受け取って Google へ送らない。2026-09-28: local 20 / production smoke 20 checks PASS。
