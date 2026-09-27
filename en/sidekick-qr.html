@@ -1,0 +1,711 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- 言語自動判定：既存サイトの他ページと同じ挙動（打ち出の小槌base.htmlを踏襲）。
+     en_redirect_url未指定時は汎用/en/へ誘導するが、対応する英語版ページが存在する
+     場合はそのページ固有のURL（例: /en/gallery.html）をページ側から渡す
+     （2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     移行時、各ページが元々ページ固有のURLへリダイレクトしていたことが分かったため、
+     汎用/en/に後退させないようパラメータ化した）。 -->
+<script>
+  (function () {
+    try {
+      var pref = localStorage.getItem('sk_lang_pref');
+      if (pref === 'ja') return;
+      if (pref === 'en') { return; }
+      var langs = navigator.languages || [navigator.language || navigator.userLanguage || ''];
+      var isJapanese = langs.some(function (l) { return /^ja/i.test(l); });
+      if (!isJapanese) {
+        localStorage.setItem('sk_lang_pref', 'en');
+        
+      }
+    } catch (e) { /* localStorageが使えない環境などは何もしない */ }
+  })();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidekick QR | Connect a photo to the web. Make a QR card</title>
+<meta name="description" content="Sidekick QR makes a single card image with a QR code from a photo and the URL of a web page. Choose a JPEG or PNG photo, enter the URL, a title and a description, check the preview and save it as PNG. The photo, the URL and the card are not sent anywhere: the card is made on your own computer. Download coming soon.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/sidekick-qr">
+
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/sidekick-qr">
+
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/sidekick-qr">
+
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sidekick">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="Sidekick QR | Connect a photo to the web.">
+<meta property="og:description" content="Make a card image with a QR code from a photo and the URL of a web page. The photo, the URL and the card are not sent anywhere. Download coming soon.">
+<meta property="og:url" content="https://www.sidekick-lab.com/en/sidekick-qr">
+<meta property="og:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sidekick QR | Connect a photo to the web.">
+<meta name="twitter:description" content="Make a card image with a QR code from a photo and the URL of a web page. The photo, the URL and the card are not sent anywhere. Download coming soon.">
+<meta name="twitter:image" content="https://www.sidekick-lab.com/images/awards/milkyway_03_after.jpg">
+
+<link rel="stylesheet" href="/assets/css/site-header.css">
+
+  <style>
+    :root{
+      --bg:#0b0b0d;
+      --card:#17191f;
+      --text:#f5f7fb;
+      --sub:#b8c0cc;
+      --accent:#ff8a00;
+      --muted:#5e6677;
+      --accent2:#ffb14a;
+      --white:#ffffff;
+      --max:1180px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,
+        "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",Meiryo,sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(255,138,0,.10), transparent 28%),
+        radial-gradient(circle at top left, rgba(255,255,255,.04), transparent 18%),
+        linear-gradient(180deg, #06070b, #0b0b0d 35%, #0b0b0d);
+      color:var(--text);
+      line-height:1.75;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .wrap{
+      width:min(var(--max), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    /* ── Hero（sidekick-planner と同じ） ── */
+    .hero{padding:88px 0 64px;}
+    .eyebrow{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,138,0,.08);
+      border:1px solid rgba(255,138,0,.2);
+      color:var(--accent2);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.04em;
+      margin-bottom:20px;
+    }
+    h1{
+      margin:0 0 20px;
+      font-size:clamp(36px, 6vw, 64px);
+      line-height:1.08;
+      letter-spacing:-.03em;
+      word-break:keep-all;
+    }
+    h1 small{
+      display:block;
+      margin-top:14px;
+      font-size:clamp(20px, 2.6vw, 28px);
+      font-weight:800;
+      letter-spacing:-.01em;
+      color:var(--accent2);
+    }
+    .lead{
+      margin:0;
+      color:var(--sub);
+      font-size:clamp(16px, 2vw, 19px);
+      max-width:720px;
+      line-height:1.8;
+    }
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      margin-top:32px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    /* ── ダウンロード準備中の表示（本ページ固有）。押せる button / link に見せない ── */
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      margin:0;
+      padding:8px 16px;
+      border-radius:999px;
+      border:1px dashed rgba(255,255,255,.28);
+      background:rgba(255,255,255,.03);
+      color:var(--sub);
+      font-weight:800;
+      font-size:15px;
+      cursor:default;
+    }
+    .status-pill .dot{
+      width:8px;
+      height:8px;
+      border-radius:50%;
+      background:var(--muted);
+    }
+    .text-link{
+      color:var(--sub);
+      font-size:15px;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+    .text-link:hover{color:var(--white);}
+
+    /* ── Section ── */
+    .section{padding:72px 0;}
+    .section-alt{
+      background:linear-gradient(180deg, transparent, rgba(5,8,20,.35) 20%, rgba(5,8,20,.35) 80%, transparent);
+    }
+    .section-head{margin-bottom:36px;}
+    .section-head h2{
+      margin:0 0 12px;
+      font-size:clamp(26px, 3.5vw, 40px);
+      line-height:1.15;
+      letter-spacing:-.02em;
+    }
+    .section-head p{
+      margin:0;
+      color:var(--sub);
+      max-width:720px;
+      font-size:clamp(15px, 1.8vw, 18px);
+    }
+    .section-label{
+      display:inline-block;
+      color:var(--accent2);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+
+    /* ── Cards ── */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+    .card{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+    .card-icon{font-size:28px;margin-bottom:14px;}
+    .card h3{margin:0 0 10px;font-size:18px;line-height:1.3;}
+    .card p{margin:0;color:var(--sub);font-size:15px;line-height:1.75;}
+
+    /* ── Steps ── */
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+      counter-reset:step;
+    }
+    .step{
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01)),
+        var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      padding:26px;
+      counter-increment:step;
+    }
+    .step::before{
+      content:counter(step);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:36px;
+      height:36px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#111;
+      font-weight:900;
+      font-size:16px;
+      margin-bottom:16px;
+    }
+    .step h3{margin:0 0 8px;font-size:18px;}
+    .step p{margin:0;color:var(--sub);font-size:15px;}
+
+    /* ── Callout ── */
+    .callout{
+      padding:32px;
+      border-radius:24px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.10), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.18);
+      box-shadow:var(--shadow);
+    }
+    .callout p{margin:0;color:var(--sub);font-size:15px;}
+    .callout p + p{margin-top:10px;}
+    .callout strong{color:var(--text);}
+
+    /* ── 現在の状態（sidekick-planner の .beta-table と同じ） ── */
+    .beta-table{
+      width:100%;
+      border-collapse:collapse;
+      background:var(--card);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      font-size:15px;
+    }
+    .beta-table th,
+    .beta-table td{
+      padding:14px 18px;
+      border-bottom:1px solid rgba(255,255,255,.07);
+      vertical-align:top;
+      text-align:left;
+    }
+    .beta-table tr:last-child th,
+    .beta-table tr:last-child td{border-bottom:0;}
+    .beta-table th{
+      width:11em;
+      color:var(--sub);
+      font-weight:700;
+      white-space:nowrap;
+      background:rgba(255,255,255,.02);
+    }
+    .beta-table td{color:var(--text);line-height:1.7;}
+    .notice{
+      margin-top:20px;
+      padding:20px 22px;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.08);
+      border-left:3px solid var(--accent);
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.9;
+    }
+    .notice strong{color:var(--text);}
+
+    /* ── CTA ── */
+    .cta-section{padding:72px 0 96px;}
+    .cta-card{
+      text-align:center;
+      padding:48px 28px;
+      border-radius:28px;
+      background:
+        linear-gradient(135deg, rgba(255,138,0,.12), rgba(255,177,74,.04)),
+        var(--card);
+      border:1px solid rgba(255,138,0,.2);
+      box-shadow:var(--shadow);
+    }
+    .cta-card h2{
+      margin:0 0 12px;
+      font-size:clamp(24px, 3.2vw, 36px);
+      letter-spacing:-.02em;
+    }
+    .cta-card p{margin:0 0 24px;color:var(--sub);font-size:15px;}
+    .cta-card .status-pill{margin:0 auto;}
+
+    @media (max-width:980px){
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr 1fr;
+      }
+    }
+
+    @media (max-width:640px){
+      .wrap{width:min(var(--max), calc(100% - 32px));}
+      .hero{padding:56px 0 40px;}
+      .grid-3,
+      .steps{
+        grid-template-columns:1fr;
+      }
+      .beta-table th{
+        display:block;
+        width:auto;
+        padding-bottom:4px;
+        border-bottom:0;
+      }
+      .beta-table td{display:block;padding-top:0;}
+      .cta-card{padding:36px 20px;}
+    }
+  </style>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
+</script>
+
+</head>
+<body>
+<!-- 2026-07-20新規: 英語版Knowledge(/en/knowledge)専用ヘッダー。header.html（JA版）と
+     同じ構造・CSSクラス（knowledge.css）を使うが、ナビゲーションのラベル・リンク先は
+     英語版ページのみを対象にする。/en/配下に実在しないページ（Workshop・Legal・Privacy等）
+     へはリンクしない（英語ページが無いのに英語ナビからリンクする方が利用者を混乱させるため）。
+     JA版のheader.htmlは変更していない。
+
+     2026-07-22追記: gallery/portrait/sidekick-star/sidekick/sky-effect/changelogの
+     英語版移行にあたり、nav_currentによるaria-current付与を全リンクへ一般化した
+     （従来はknowledge・development-logのみ対応、header.html<JA版>と同じ修正）。
+
+     2026-07-22再追記: Gallery以降の項目だけ`style="color:var(--muted);"`で他より薄い色に
+     なっていた不一致を解消（header.html<JA版>と同じ修正、村田さんの目視確認による指摘）。
+
+     2026-07-22三度目追記: en/index.htmlには「LP」（/en/lp-star）ナビ項目があるのに、
+     このheader_en.htmlには含まれていなかったため復元した（header.html<JA版>と同じ修正）。
+
+     2026-08-31四度目追記: 新しい読み物領域「Story」（/en/story）をAboutとDevelopment Logの
+     間へ追加した（header.html<JA版>と同じ位置・同じ理由）。Storyは日本語版・英語版が
+     同時に揃った状態で公開するため、/en/配下に実在しないページへリンクしない、という
+     このファイルの原則には反しない。 -->
+
+<div class="lang-banner" id="lang-banner-en">
+  🇯🇵 このサイトは日本語でもご覧いただけます —
+  <a href="/sidekick-qr">日本語ページを見る →</a>
+  <button class="lang-banner-close" onclick="document.getElementById('lang-banner-en').style.display='none'" aria-label="Close">✕</button>
+</div>
+
+<header class="hdr">
+  <div class="wrap hdr-in">
+    <a href="/en" class="brand">
+      <div class="brand-mk">S</div>
+      <div>
+        <div class="brand-name">Sidekick Lab</div>
+        <span class="brand-sub">by Ichiro Murata</span>
+      </div>
+    </a>
+
+    <button type="button" class="kzc-nav-toggle" aria-expanded="false" aria-controls="kzc-nav-menu-en">
+      <span class="kzc-nav-toggle-label">Menu</span>
+    </button>
+
+    <nav class="nav" id="kzc-nav-menu-en" aria-label="Global navigation">
+      <a href="/en/sidekick-star" >⭐ Star</a>
+      <a href="/en/portrait" >👤 Portrait</a>
+      <a href="/en/sky-effect" >☁️ Sky</a>
+
+      <a href="/en/sidekick-planner" >🗺️ Planner Beta</a>
+      <a href="/en/knowledge" >📚 Knowledge</a>
+      <a href="/en/tools/dof" >📐 DOF Calculator</a>
+      <a href="/en/lp-star" >LP</a>
+      <a href="/en/gallery" >Gallery</a>
+      <a href="/en/sidekick" >What is Sidekick</a>
+      <a href="/en/about" >About</a>
+      <a href="/en/story" >Story</a>
+      <a href="/en/development-log" >Development Log</a>
+      <a href="/en/changelog" >Changelog</a>
+      <a href="/en/faq" >Support</a>
+      <a href="/en/ai-lab" class="nav-ai">🤖 AI Lab Free</a>
+      <a href="/sidekick-qr" style="display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:var(--muted);font-size:12px;font-weight:700;">🇯🇵 JA</a>
+    </nav>
+  </div>
+</header>
+
+<script>
+(function () {
+  var body = document.body;
+  var toggle = document.querySelector(".kzc-nav-toggle");
+  var menu = document.getElementById("kzc-nav-menu-en");
+  if (!toggle || !menu) { return; }
+
+  body.classList.add("kzc-js-nav");
+
+  function closeMenu() {
+    menu.setAttribute("data-open", "false");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+  function openMenu() {
+    menu.setAttribute("data-open", "true");
+    toggle.setAttribute("aria-expanded", "true");
+  }
+
+  closeMenu();
+
+  toggle.addEventListener("click", function () {
+    var isOpen = toggle.getAttribute("aria-expanded") === "true";
+    if (isOpen) { closeMenu(); } else { openMenu(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+      closeMenu();
+      toggle.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (toggle.getAttribute("aria-expanded") !== "true") { return; }
+    if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+      closeMenu();
+    }
+  });
+})();
+</script>
+
+  <main>
+
+    <!-- ═══════════════════════════════════════════
+         HERO
+    ═══════════════════════════════════════════ -->
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Sidekick QR ｜ by Sidekick Lab</div>
+
+        <h1>
+          Sidekick QR
+          <small>Connect a photo to the web.</small>
+        </h1>
+
+        <p class="lead">
+          A photo, and the URL of the web page you want people to see.
+          From those two, Sidekick QR makes a single card image with a QR code.
+          Scan the QR code on the card with a smartphone and that web page opens.
+        </p>
+
+        <div class="hero-actions">
+          <p class="status-pill" id="download-status"><span class="dot" aria-hidden="true"></span>Download Coming Soon</p>
+          <a class="text-link" href="#how">See how it works</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         What it does
+    ═══════════════════════════════════════════ -->
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">What it does</span>
+          <h2>Photo + URL → QR card</h2>
+          <p>
+            It makes an image with your photo, a QR code, a title and a description.
+            The photo is not cropped: the whole photo is fitted into the card.
+          </p>
+        </div>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon" aria-hidden="true">🖼️</div>
+            <h3>Choose a photo</h3>
+            <p>JPEG and PNG photos are supported. Portrait-orientation photos from a camera or a smartphone keep the right orientation.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon" aria-hidden="true">🔗</div>
+            <h3>Enter a URL</h3>
+            <p>Any web page (http / https) — a portfolio, a blog post, a page about your work — becomes the QR code.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon" aria-hidden="true">💾</div>
+            <h3>Check it, then save</h3>
+            <p>Check the finished card in the preview, then save it as a PNG image. What is saved is exactly the image you saw in the preview.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         How it works
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt" id="how">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">How it works</span>
+          <h2>How to use it</h2>
+        </div>
+
+        <div class="steps">
+          <div class="step">
+            <h3>Choose a photo</h3>
+            <p>Choose one photo (JPEG / PNG) for the card.</p>
+          </div>
+          <div class="step">
+            <h3>Enter the URL, a title and a description</h3>
+            <p>Enter the URL of the web page for the QR code, and the title and description to show on the card.</p>
+          </div>
+          <div class="step">
+            <h3>Make the card and save it</h3>
+            <p>Check the preview and save it as PNG. Scanning the QR code with a smartphone opens the page you entered.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Local only
+    ═══════════════════════════════════════════ -->
+    <section class="section" id="privacy">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Local only</span>
+          <h2>Your photo is not sent anywhere.</h2>
+        </div>
+
+        <div class="callout">
+          <p>
+            <strong>The photo, the URL and the card are not sent anywhere.</strong>
+            The card is made on your own computer. There is nothing to upload and no account to create.
+          </p>
+          <p>
+            The QR code is also made on your computer, so the URL you enter is never passed to an online QR code service.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Status
+    ═══════════════════════════════════════════ -->
+    <section class="section section-alt" id="status">
+      <div class="wrap">
+        <div class="section-head">
+          <span class="section-label">Status</span>
+          <h2>Current status</h2>
+          <p>
+            The author is using it for real and finishing it.
+          </p>
+        </div>
+
+        <table class="beta-table">
+          <tbody>
+            <tr>
+              <th scope="row">Photos</th>
+              <td>JPEG / PNG</td>
+            </tr>
+            <tr>
+              <th scope="row">Saved as</th>
+              <td>PNG</td>
+            </tr>
+            <tr>
+              <th scope="row">URLs for the QR code</th>
+              <td>Web page URLs starting with http / https</td>
+            </tr>
+            <tr>
+              <th scope="row">Download</th>
+              <td>Coming soon. When it becomes available, it will be announced on this page.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="notice">
+          <strong>Colour reproduction is still being verified.</strong>
+          Whether the colours of your photo are kept exactly in the card (how colour profiles are handled) is still being checked.
+          Accurate colour is not guaranteed at this point.
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════
+         Download
+    ═══════════════════════════════════════════ -->
+    <section class="cta-section" id="download">
+      <div class="wrap">
+        <div class="cta-card">
+          <h2>Download</h2>
+          <p>Sidekick QR is being prepared for distribution.</p>
+          <p class="status-pill"><span class="dot" aria-hidden="true"></span>Download Coming Soon</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+<!-- 2026-07-20新規: 英語版共通フッター。footer.html（JA版）と同じ構造・CSSクラスを使用。 -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-in">
+
+      <div class="footer-brand">
+        <a href="/en" class="brand">
+          <div class="brand-mk">S</div>
+          <div>
+            <div class="brand-name">Sidekick Lab</div>
+            <span class="brand-sub">by Ichiro Murata</span>
+          </div>
+        </a>
+        <p>Photoshop scripts and workshops<br>for photographers.</p>
+      </div>
+
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-products">Products</p>
+          <ul role="list" aria-labelledby="footer-col-products">
+            <li><a href="/en/sidekick-star">⭐ Sidekick Star</a></li>
+            <li><a href="/en/portrait">👤 Sidekick Portrait</a></li>
+            <li><a href="/en/sky-effect">☁️ Sidekick SkyEffect</a></li>
+            <!-- 2026-09-20 (AI-11050, public beta): points at the product page (distribution
+                 entry) and says "Beta" instead of "(in development)"; mirrors footer.html. -->
+            <li><a href="/en/sidekick-planner">🗺️ Sidekick Planner Beta</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-knowledge">Knowledge</p>
+          <ul role="list" aria-labelledby="footer-col-knowledge">
+            <li><a href="/en/knowledge">📚 Knowledge</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-ai-lab">AI Lab</p>
+          <ul role="list" aria-labelledby="footer-col-ai-lab">
+            <li><a href="/en/ai-lab">🤖 Try AI Lab (Free)</a></li>
+            <li><a href="/en/ai-review">AI Review</a></li>
+            <li><a href="/en/camera-ai">Camera AI</a></li>
+            <li><a href="/en/shooting-ai">Shooting AI</a></li>
+            <li><a href="/en/pc-ai">PC AI</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-support">Support</p>
+          <ul role="list" aria-labelledby="footer-col-support">
+            <li><a href="/en/faq">FAQ</a></li>
+            <li><a href="/en/development-log">Development Log</a></li>
+            <li><a href="/en/changelog">Changelog</a></li>
+            <li><a href="mailto:murata@mbg.nifty.com">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col">
+          <p class="footer-col-label" id="footer-col-lab">Sidekick Lab</p>
+          <ul role="list" aria-labelledby="footer-col-lab">
+            <li><a href="/en/about">About</a></li>
+            <li><a href="/en/sidekick">What is Sidekick</a></li>
+            <li><a href="/en/story">Story</a></li>
+            <li><a href="/en/gallery">Gallery</a></li>
+            <li><a href="/en/ichiro-murata">Ichiro Murata</a></li>
+            <li><a href="/en/terms">Terms</a></li>
+            <li><a href="/en/legal">Legal Notice</a></li>
+            <li><a href="/en/privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Sidekick Lab — Ichiro Murata</span>
+      <div class="footer-legal">
+        <a href="/en/terms">Terms</a>
+        <a href="/en/legal">Legal Notice</a>
+        <a href="/en/privacy">Privacy Policy</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

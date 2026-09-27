@@ -230,6 +230,17 @@ _register_page_pair(
     ja_extra={"enable_ogp": True, "og_image": _PLANNER_OG_IMAGE, "en_redirect_url": "/en/sidekick-planner"},
     en_extra={"enable_ogp": True, "og_image": _PLANNER_OG_IMAGE},
 )
+# Sidekick QR 製品ページ（2026-09-27新設、製品の正本は自作内の独立 repository
+# Sidekickシリーズ/本体/Sidekick QR、HD namespace HD-SIDEKICKQR）。Planner と同じ製品ページ系列。
+# /sidekick-qr は Sidekick QR が作る Card の Secondary QR の恒久的な行き先なので URL を変えない。
+# ダウンロードは「準備中」表示のみ（配布物が無い）。og_image は base.html の既定画像
+# （製品のスクリーンショットはまだ無い）。en_redirect_url は .html 無しで上書き（sidekick-planner と同じ）。
+# グローバルナビには足さない（共通 header の変更 = 4系統の全ページ再生成になるため、別判断）。
+_register_page_pair(
+    "sidekick-qr",
+    ja_extra={"enable_ogp": True, "en_redirect_url": "/en/sidekick-qr"},
+    en_extra={"enable_ogp": True},
+)
 # lp-star.htmlは他ページ移行時に対象から漏れており、旧.site-headerのまま
 # （言語バナー・EN切替リンクが無い）だった。村田さんが本番で発見・報告し追加移行した
 # （2026-07-23）。OGPはJA/ENともtitle/meta descriptionと同一文言のため
