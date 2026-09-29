@@ -15,6 +15,17 @@
       "permanent": true
     },
     {
+      "source": "/card/qr",
+      "has": [{ "type": "header", "key": "accept-language", "value": "(^|.*[, ])[jJ][aA]($|[-;, ].*)" }],
+      "destination": "/sidekick-qr?utm_source=sidekick-qr&utm_medium=qr-card&utm_campaign=secondary-qr",
+      "permanent": false
+    },
+    {
+      "source": "/card/qr",
+      "destination": "/en/sidekick-qr?utm_source=sidekick-qr&utm_medium=qr-card&utm_campaign=secondary-qr",
+      "permanent": false
+    },
+    {
       "source": "/planner",
       "destination": "/sidekick-planner",
       "statusCode": 301

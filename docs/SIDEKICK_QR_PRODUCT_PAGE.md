@@ -73,3 +73,12 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 - validation surface `/validation/sidekick-qr-web/36429dd1d469d9cb` は**残す**（noindex・analytics なし・link なし。削除は別の Human decision）。
 - 確認: Sidekick QR repository の `validation/web/production_gate_web.py`（deploy 前 `--site-root`、deploy 後 `--url https://www.sidekick-lab.com/sidekick-qr`）。
   GA4 の collect は route で受け取って Google へ送らない。2026-09-28: local 20 / production smoke 20 checks PASS。
+
+## 8. Secondary return endpoint `/card/qr`（2026-09-30、HD-SIDEKICKQR-023）
+
+- `vercel.json` の redirect 2 件（host → www の規則の後、評価順）: `Accept-Language` に `ja` の言語タグを含む → `/sidekick-qr?utm_source=sidekick-qr&utm_medium=qr-card&utm_campaign=secondary-qr`、
+  それ以外（header なしを含む）→ `/en/sidekick-qr?…`（同じ UTM）。どちらも **307**（`permanent: false`）。
+- regex `(^|.*[, ])[jJ][aA]($|[-;, ].*)` は、Vercel の `has` の string 値が完全一致・部分一致のどちらで評価されても同じ結果になる形（docs からは確定できないため）。
+- `/card/<product>` は入口専用: content を置かない・link しない・sitemap に載せない。**`/card/qr` は Card に刻まれたら永久に維持**、行き先・UTM の変更は `vercel.json` だけで行う。
+  `/sidekick-qr`（1.0.0 の Card の Secondary）は redirect しない・変えない。
+- 固定テスト: `tests/site/test_sidekick_qr_card_return.py`。production の実測と Card 側（1.0.1）の記録は Sidekick QR repository の release 記録。
