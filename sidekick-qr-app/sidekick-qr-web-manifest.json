@@ -10,7 +10,7 @@
     "note": "core の js/*.js = ZIP の「Sidekick QR/js/*.js」と byte 一致。app.html = ZIP の「Sidekick QR/Sidekick QR.html」＋ Web 版の script 1 行。Web 版だけの module: web_share.js"
   },
   "source_repository": "Sidekick QR（nas sidekickQR.git）",
-  "source_commit": "7be38fd8150fe1f22fd5d6cef61ad9c8ddcce0d5",
+  "source_commit": "f390d82cee1e660ed6bebd81f32ac83a62f0981b",
   "entry": "app.html",
   "exported_by": "tools/export_web_app.py",
   "files": [
@@ -72,8 +72,8 @@
     },
     {
       "path": "js/web_share.js",
-      "bytes": 4606,
-      "sha256": "56483d3a04691acc8b4a58d8779469ecdafbbdfc3c40a08ebe351c44c4387acb",
+      "bytes": 5507,
+      "sha256": "d65b782cd277bb48e9cb4388e680680274bbd27284f2ad26cbd1b1cd8a655b12",
       "source": "web/js/web_share.js（Web 版だけ）",
       "role": "web only"
     }

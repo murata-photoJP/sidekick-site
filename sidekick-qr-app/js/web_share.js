@@ -14,6 +14,8 @@
 
 (function (root) {
   const FILENAME = "sidekick-qr-card.png";
+  const OLD_LABEL = "［PNGとして保存］";                     // app.js の案内文にあるボタン名
+  const NEW_LABEL = "［PNGを保存・共有］";                   // 共有できる端末でのボタン名
   const blobs = new Map();                                   // object URL → Blob（app.js が作った Card の Blob を覚える）
   const create = URL.createObjectURL.bind(URL);
   const revoke = URL.revokeObjectURL.bind(URL);
@@ -56,6 +58,15 @@
     hint.className = "note";
     hint.textContent = "保存先や共有先を選べます（表示される選択肢は端末によって違います）。";
     button.insertAdjacentElement("afterend", hint);
+    // app.js（core）の案内文「［PNGとして保存］を押してください」を、ボタンの表示に合わせる（Human Review 2026-09-30）。
+    // core は Portable と byte 一致のまま変えないので、ここで表示だけ置き換える。共有できない端末・PC は元の文のまま。
+    if (status && typeof MutationObserver === "function") {
+      const align = () => {
+        if (status.textContent.includes(OLD_LABEL)) status.textContent = status.textContent.split(OLD_LABEL).join(NEW_LABEL);
+      };
+      new MutationObserver(align).observe(status, { childList: true, characterData: true, subtree: true });
+      align();
+    }
 
     document.addEventListener("click", (event) => {
       if (event.target !== button || button.disabled) return;
