@@ -82,3 +82,14 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 - `/card/<product>` は入口専用: content を置かない・link しない・sitemap に載せない。**`/card/qr` は Card に刻まれたら永久に維持**、行き先・UTM の変更は `vercel.json` だけで行う。
   `/sidekick-qr`（1.0.0 の Card の Secondary）は redirect しない・変えない。
 - 固定テスト: `tests/site/test_sidekick_qr_card_return.py`。production の実測と Card 側（1.0.1）の記録は Sidekick QR repository の release 記録。
+- 2026-09-29 22:19 UTC（2026-09-30 07:19 JST）: endpoint を production へ（site `16ce0d2`）。Gate A = production の curl（ja / ja-JP / mixed → JA、en-US / zh-CN / header なし / `*` → EN、
+  すべて 307・正確な Location、`/card/qr/` は 308 → `/card/qr`、`/CARD/QR` は 404、incoming query は保持され同名の UTM は server の値で上書き、host は固定）＋ 実ブラウザ
+  （Chromium / Firefox / WebKit、GA4 の collect は test browser 内で受け取り Google へ送らない）で PASS。
+
+## 9. Sidekick QR 1.0.1（2026-09-30、HD-SIDEKICKQR-023）
+
+- 新規 Card の Secondary QR = `https://www.sidekick-lab.com/card/qr`（Web 版・Portable とも）。Primary・Card の見た目は不変。
+- `/sidekick-qr-app/` = Sidekick QR source `6f53361` の書き出し（core = Portable 1.0.1）。validation surface の copy は 2026-09-28 の 1.0.0 のまま（今後の review には使わない）。
+- Download: 製品ページ（JA 1 か所・EN 2 か所）は **`/downloads/sidekick-qr/SidekickQR-1.0.1.zip`**（25,498 bytes、SHA-256 `0447c2e8fd69949e54ba1242835eca71623de491f7bc17c665de15722f4964e1`、
+  identity は Sidekick QR repository の `docs/release_artifact_1.0.1.json`）へ。**1.0.0 の ZIP は置いたまま・上書きしない**（link はしない。削除は別の Human decision）。
+- 固定テスト: `tests/site/test_sidekick_qr_product_page.py`（1.0.1 の link・SHA、1.0.0 が不変で残る）、`tests/site/test_sidekick_qr_web_validation.py`（copy ごとの版）。

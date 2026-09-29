@@ -1,6 +1,7 @@
 {# Sidekick QR product page (English). Added 2026-09-27 as the pair of templates/site/pages/sidekick-qr.html
    (HD namespace HD-SIDEKICKQR). Same facts and the same limits as the Japanese page (see its header comment):
-   download: a direct link to the 1.0.0 Portable ZIP (/downloads/sidekick-qr/SidekickQR-1.0.0.zip, HD-SIDEKICKQR-016, 2026-09-28; before that, no download link),
+   download: a direct link to the Portable ZIP (1.0.0 = HD-SIDEKICKQR-016, 2026-09-28; from 2026-09-30 1.0.1 = /downloads/sidekick-qr/SidekickQR-1.0.1.zip,
+   HD-SIDEKICKQR-023, the Secondary QR of new cards is /card/qr; the 1.0.0 ZIP stays in place, not overwritten),
    colour stated only as "processed on an sRGB basis" (HD-SIDEKICKQR-012), no features that do not exist.
    The CSS is the Japanese page's, unchanged. Fixed by tests/site/test_sidekick_qr_product_page.py. #}
 {% extends "base.html" %}
@@ -325,10 +326,10 @@
         </p>
 
         <div class="hero-actions">
-          <a class="btn-download" id="download-link" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>Download (Windows, free)</a>
+          <a class="btn-download" id="download-link" href="/downloads/sidekick-qr/SidekickQR-1.0.1.zip" download>Download (Windows, free)</a>
           <a class="text-link" href="#how">See how it works</a>
         </div>
-        <p class="download-meta">Version 1.0.0 · ZIP (about 25 KB) · no installation</p>
+        <p class="download-meta">Version 1.0.1 · ZIP (about 25 KB) · no installation</p>
       </div>
     </section>
 
@@ -433,7 +434,7 @@
           <tbody>
             <tr>
               <th scope="row">Version</th>
-              <td>1.0.0</td>
+              <td>1.0.1</td>
             </tr>
             <tr>
               <th scope="row">Runs on</th>
@@ -480,8 +481,8 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>Download</h2>
-          <p>Sidekick QR 1.0.0 (for Windows, free)</p>
-          <a class="btn-download" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>Download (ZIP, about 25 KB)</a>
+          <p>Sidekick QR 1.0.1 (for Windows, free)</p>
+          <a class="btn-download" href="/downloads/sidekick-qr/SidekickQR-1.0.1.zip" download>Download (ZIP, about 25 KB)</a>
           <ol class="download-steps">
             <li>Download the ZIP.</li>
             <li>Right-click the ZIP and choose <strong>"Extract All"</strong>.</li>

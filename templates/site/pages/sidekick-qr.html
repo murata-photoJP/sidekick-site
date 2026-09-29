@@ -4,11 +4,13 @@
    位置づけ: Sidekick Star / Portrait / Sky Effect / Planner と同じ「製品ページ」の系列。
    本ページの URL（https://www.sidekick-lab.com/sidekick-qr）は、Sidekick QR が作る Card の
    Secondary QR（「このカードを作る」）の恒久的な行き先になる。URL を変えない。
+   1.0.1 から Card の Secondary は return 入口 /card/qr（vercel.json の 307 で UTM 付きでこのページ / EN へ、HD-SIDEKICKQR-023）。
+   1.0.0 の Card の /sidekick-qr はそのまま有効（このページを redirect しない）。
 
    2026-09-28 Production Replacement（HD-SIDEKICKQR-021、Web Version Human Review COMPLETE / PASS の後）:
-     - Primary = このページの中でそのまま使える Web 版（iframe）。Secondary = オフラインで使う（Portable 1.0.0 の ZIP、隠さない）。
+     - Primary = このページの中でそのまま使える Web 版（iframe）。Secondary = オフラインで使う（Portable の ZIP、隠さない。2026-09-30 から 1.0.1）。
      - app（iframe の中、/sidekick-qr-app/app）は Sidekick QR repository の app/ を tools/export_web_app.py で書き出した copy
-       （core の js は Portable 1.0.0 と byte 一致・Web 版だけの web_share.js・自前の CSP で connect-src 'none'）。
+       （core の js は同じ版の Portable と byte 一致・Web 版だけの web_share.js・自前の CSP で connect-src 'none'）。
        **app に analytics は無い**（HD-SIDEKICKQR-018 D-1）・noindex（vercel.json の X-Robots-Tag）・sitemap に載せない。
      - この shell（ページ本体）は他の製品ページと同じく GA4 の page_view だけを記録する。写真・ファイル名・URL・タイトル・説明・
        Card・QR の内容・共有先は analytics に送らない（shell は app の中身に触らない。iframe の高さを合わせるだけ）。
@@ -19,7 +21,8 @@
      - Card のみ（Overlay 等は作っていない）: HD-SIDEKICKQR-002
      - 画像・URL・Card を外へ送らない: app の CSP（connect-src 'none'）と tests
      - 色について claim しない（sRGB 基準だけ）: HD-SIDEKICKQR-005 / VALIDATION_BACKLOG VB-01
-     - Download: 正式版 1.0.0 の Portable ZIP（/downloads/sidekick-qr/SidekickQR-1.0.0.zip）へ直接 link（HD-SIDEKICKQR-016）
+     - Download: 正式版の Portable ZIP へ直接 link（1.0.0 = HD-SIDEKICKQR-016、2026-09-30 から 1.0.1 = /downloads/sidekick-qr/SidekickQR-1.0.1.zip、
+       HD-SIDEKICKQR-023。1.0.0 の ZIP は置いたまま・上書きしない）
    tests/site/test_sidekick_qr_product_page.py が上記を固定する。
 
    CSS は sidekick-planner.html（= sidekick-star.html 由来）の variables / .hero / .section /
@@ -460,7 +463,7 @@
           <span class="section-label">Spec</span>
           <h2>動作環境と仕様</h2>
           <p>
-            このページの Web 版と、オフラインで使える Windows 版（ZIP）は、同じ Sidekick QR 1.0.0 です。
+            このページの Web 版と、オフラインで使える Windows 版（ZIP）は、同じ Sidekick QR 1.0.1 です。
           </p>
         </div>
 
@@ -468,7 +471,7 @@
           <tbody>
             <tr>
               <th scope="row">バージョン</th>
-              <td>1.0.0</td>
+              <td>1.0.1</td>
             </tr>
             <tr>
               <th scope="row">Web 版</th>
@@ -515,8 +518,8 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>オフラインで使う</h2>
-          <p>Sidekick QR 1.0.0（Windows 向け・無料・ZIP・インストール不要）</p>
-          <a class="btn-download" id="download-link" href="/downloads/sidekick-qr/SidekickQR-1.0.0.zip" download>ダウンロード（ZIP・約 25 KB）</a>
+          <p>Sidekick QR 1.0.1（Windows 向け・無料・ZIP・インストール不要）</p>
+          <a class="btn-download" id="download-link" href="/downloads/sidekick-qr/SidekickQR-1.0.1.zip" download>ダウンロード（ZIP・約 25 KB）</a>
           <ol class="download-steps">
             <li>ZIP をダウンロードします。</li>
             <li>ZIP を右クリック →<strong>「すべて展開」</strong>を選びます。</li>

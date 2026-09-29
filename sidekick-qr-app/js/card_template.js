@@ -5,14 +5,16 @@
 //   * Primary QR:   利用者が入れた URL。QR encoder が作った PNG（ECC M・quiet zone 4 module・1 module = 10 px）。Card Engine が等倍・整数座標・補間なしで置く
 //   * 文字: タイトル 1 行・説明 1 行（Card Engine が長い文字を「…」で省略）
 //   * branding: Sidekick QR / by Sidekick Lab（HD-SIDEKICKQR-003）／ このカードを作る →
-//   * Secondary QR: Sidekick QR の製品ページ（PRODUCT_PAGE_URL、固定）。branding の一部として左下に小さく（1 module = 5 px、quiet zone 4 module）。
+//   * Secondary QR: Sidekick QR の製品ページへの return 入口（PRODUCT_PAGE_URL、固定）。branding の一部として左下に小さく（1 module = 5 px、quiet zone 4 module）。
 //     Primary QR より必ず小さい（Card Engine が SECONDARY_QR_TOO_LARGE で拒否する）。QR にロゴ・文字を重ねない。
 // 由来: Generic Image Card prototype の `buildCard`（docs/PROVENANCE.md）。branding 以外は同じ組み立て。
 "use strict";
 
 (function (root) {
-  // Secondary QR の行き先。Sidekick Lab site の恒久 URL（2026-09-27 本番公開、site commit b7dba20）。一時 URL・preview URL を入れない。
-  const PRODUCT_PAGE_URL = "https://www.sidekick-lab.com/sidekick-qr";
+  // Secondary QR の行き先。Sidekick Lab site の恒久 URL。一時 URL・preview URL を入れない。
+  // 1.0.1 から return 入口 /card/qr（HD-SIDEKICKQR-023。site が 307 で製品ページへ送る。小文字・末尾 / なし・query なし）。
+  // 1.0.0 の Card に刻まれた /sidekick-qr（2026-09-27 本番公開、site commit b7dba20）はそのまま有効。
+  const PRODUCT_PAGE_URL = "https://www.sidekick-lab.com/card/qr";
   const BRANDING = Object.freeze({ name: "Sidekick QR", caption: "by Sidekick Lab", cta: "このカードを作る →" });
   const QR_SCALE = 10;
   const QR_BORDER = 4;
