@@ -113,3 +113,6 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
   EN は撮影情報ページが現在は日本語であることを明記。/exif の仕組み（fragment 等）は製品ページの主説明に書かない。
 - 変えていないもの: title・meta description・og・Download（1.1.0）・nav・sitemap・/sidekick-qr-app/・/exif・/card/qr・ZIP。
 - 固定テスト: `tests/site/test_sidekick_qr_product_page.py` の JA / EN の必須の内容に EXIF の文言を追加（JA と EN で同じ事実）。
+- **Human Acceptance PASS（2026-09-30、HD-SIDEKICKQR-031）**: URL / EXIF が同じ製品の 2 つの使い方として自然・EXIF 選択時の UI・撮影情報の説明・GPS 等を含めない説明・
+  「写真から、Webへつなぐ。」の性格・layout がすべて PASS。修正は上部の 1 文だけ（Primary は `/exif#…` への URL なので「撮影情報へつながる QR」が正確）:
+  JA「URLだけでなく、写真の撮影情報へつながるQRコードも作れます。」/ EN「You can also create a QR code that links to the photo's shooting information.」

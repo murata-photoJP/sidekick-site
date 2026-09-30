@@ -130,7 +130,7 @@ def test_ja_required_content(rendered: dict[str, str]) -> None:
                  "ページの閲覧だけを記録します", "カードを作る部分（Sidekick QR 本体）にはアクセス解析を入れていない",
                  "保存先や共有先を選んだ後の扱いは、その端末やアプリによります",
                  # 1.1.0 の EXIF モード（HD-SIDEKICKQR-026 / -028 / -030、2026-09-30 の紹介）: 2 つの mode・7 項目・入れないもの・事実だけ・送らない
-                 "URL の代わりに、写真の撮影情報を QRコードにすることもできます。", "URL か、撮影情報か", "URLモード", "EXIFモード",
+                 "URLだけでなく、写真の撮影情報へつながるQRコードも作れます。", "URL か、撮影情報か", "URLモード", "EXIFモード",
                  "カメラ・レンズ・焦点距離・絞り・シャッター速度・ISO・撮影日時",
                  "位置情報（GPS）、カメラのシリアル番号、撮影者名・著作権情報は入れません",
                  "撮影情報だけを表示します（評価や解説は付けません）", "撮影情報は Sidekick Lab のサーバーへ送られません。",
@@ -145,7 +145,7 @@ def test_en_required_content(rendered: dict[str, str]) -> None:
                  "not sent to any external server for Sidekick QR's processing.", "open the web page that code points to",
                  "1.1.0", "TERMS.txt", "no automatic updates",
                  # 1.1.0 EXIF mode（JA と同じ事実）
-                 "Instead of a URL, the QR code can also carry the photo's shooting information.", "A URL, or the shooting information",
+                 "You can also create a QR code that links to the photo's shooting information.", "A URL, or the shooting information",
                  "URL mode", "EXIF mode", "camera, lens, focal length, aperture, shutter speed, ISO and date taken",
                  "Location (GPS), the camera's serial number, the photographer's name and copyright information are left out.",
                  "no ratings or commentary", "The shooting information is not sent to the Sidekick Lab server.",
