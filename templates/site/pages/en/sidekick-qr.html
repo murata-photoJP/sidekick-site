@@ -3,6 +3,8 @@
    download: a direct link to the Portable ZIP (1.0.0 = HD-SIDEKICKQR-016, 2026-09-28; from 2026-09-30 1.0.1 = /downloads/sidekick-qr/SidekickQR-1.0.1.zip,
    HD-SIDEKICKQR-023, the Secondary QR of new cards is /card/qr; from 2026-09-30 1.1.0 = /downloads/sidekick-qr/SidekickQR-1.1.0.zip,
    HD-SIDEKICKQR-030; the 1.0.0 / 1.0.1 ZIPs stay in place, not overwritten),
+   EXIF mode of 1.1.0 (HD-SIDEKICKQR-026 / -028 / -030): seven fields only, no location (GPS) / serial number / photographer / copyright,
+   the QR code opens the Sidekick Lab shooting information page (/exif, currently in Japanese), facts only, not sent to the server,
    colour stated only as "processed on an sRGB basis" (HD-SIDEKICKQR-012), no features that do not exist.
    The CSS is the Japanese page's, unchanged. Fixed by tests/site/test_sidekick_qr_product_page.py. #}
 {% extends "base.html" %}
@@ -324,6 +326,7 @@
           A photo, and the URL of the web page you want people to see.
           From those two, Sidekick QR makes a single card image with a QR code.
           Scan the QR code on the card with a smartphone and that web page opens.
+          Instead of a URL, the QR code can also carry the photo's shooting information.
         </p>
 
         <div class="hero-actions">
@@ -343,7 +346,7 @@
           <span class="section-label">What it does</span>
           <h2>Photo + URL → QR card</h2>
           <p>
-            It makes an image with your photo, a QR code, a title and a description.
+            It makes an image with your photo, a QR code, a title and a description. Besides a URL, the QR code can also carry the photo's shooting information.
             The photo is not cropped: the whole photo is fitted into the card.
           </p>
         </div>
@@ -356,8 +359,8 @@
           </div>
           <div class="card">
             <div class="card-icon" aria-hidden="true">🔗</div>
-            <h3>Enter a URL</h3>
-            <p>Any web page (http / https) — a portfolio, a blog post, a page about your work — becomes the QR code.</p>
+            <h3>A URL, or the shooting information</h3>
+            <p>In URL mode, any web page (http / https) — a portfolio, a blog post, a page about your work — becomes the QR code. In EXIF mode, Sidekick QR reads the camera, lens, focal length, aperture, shutter speed, ISO and date taken from the photo, and the QR code opens a page that shows them.</p>
           </div>
           <div class="card">
             <div class="card-icon" aria-hidden="true">💾</div>
@@ -384,12 +387,12 @@
             <p>Choose one photo (JPEG / PNG) for the card.</p>
           </div>
           <div class="step">
-            <h3>Enter the URL, a title and a description</h3>
-            <p>Enter the URL of the web page for the QR code, and the title and description to show on the card.</p>
+            <h3>Enter the URL (or use the shooting information), a title and a description</h3>
+            <p>In URL mode, enter the URL of the web page for the QR code. In EXIF mode, the shooting information is read from the photo and shown. Then enter the title and description to show on the card.</p>
           </div>
           <div class="step">
             <h3>Make the card and save it</h3>
-            <p>Check the preview and save it as PNG. Scanning the QR code with a smartphone opens the page you entered.</p>
+            <p>Check the preview and save it as PNG. Scanning the QR code with a smartphone opens the page you entered (URL mode) or a page with the shooting information (EXIF mode).</p>
           </div>
         </div>
       </div>
@@ -413,6 +416,10 @@
           <p>
             The QR code is also made on your computer, so the URL you enter is never passed to an online QR code service.
             A smartphone that scans a QR code on the card does, of course, open the web page that code points to.
+          </p>
+          <p>
+            In EXIF mode, only the camera, lens, focal length, aperture, shutter speed, ISO and date taken go into the QR code. Location (GPS), the camera's serial number, the photographer's name and copyright information are left out.
+            Scanning the code opens a Sidekick Lab page that shows the shooting information and nothing else — no ratings or commentary. The shooting information is not sent to the Sidekick Lab server.
           </p>
         </div>
       </div>
@@ -456,6 +463,10 @@
             <tr>
               <th scope="row">URLs for the QR code</th>
               <td>Web page URLs starting with http / https</td>
+            </tr>
+            <tr>
+              <th scope="row">Shooting information for the QR code</th>
+              <td>Camera, lens, focal length, aperture, shutter speed, ISO and date taken (EXIF mode; location is not included; the page that shows it is currently in Japanese)</td>
             </tr>
             <tr>
               <th scope="row">Colour</th>

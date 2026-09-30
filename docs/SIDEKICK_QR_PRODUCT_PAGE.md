@@ -103,3 +103,13 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
   identity は Sidekick QR repository の `docs/release_artifact_1.1.0.json`）へ。**1.0.0 / 1.0.1 の ZIP は置いたまま・上書きしない**（link はしない）。
 - 製品ページの本文は版・Download・ZIP の大きさだけを変えた。EXIF mode の紹介文は入れていない（本文の追加は別の Human decision）。
 - 固定テスト: `tests/site/test_sidekick_qr_product_page.py`（1.1.0 の link・SHA、1.0.0 / 1.0.1 が不変で残る）、`tests/site/test_sidekick_qr_web_validation.py`（copy ごとの版、1.1.0 の core）。
+
+## 11. EXIF モードの紹介（2026-09-30、Sidekick QR 1.1.0、AI-15995）
+
+- 1.1.0 本体（CLOSED / PASS、HD-SIDEKICKQR-030）は変えず、製品ページ（JA / EN）の説明だけを今の製品に合わせた。大きな構成変更・新しい layout はしない。
+- 追加・変更した箇所: hero の lead に 1 文 / 「写真 ＋ URL → QRカード」の説明に 1 文、2 枚目の card を「URL か、撮影情報か」（URLモード / EXIFモード）/ 使い方の 2・3 / privacy の callout に 1 段落 / 仕様表に 1 行。
+- 事実は Sidekick QR の HD-SIDEKICKQR-026 / -028 / -030 と README・TERMS に合わせる: 撮影情報は 7 項目だけ（カメラ・レンズ・焦点距離・絞り・シャッター速度・ISO・撮影日時）、
+  位置情報（GPS）・シリアル番号・撮影者名・著作権情報は入れない、QR は Sidekick Lab の撮影情報ページ（/exif）を開き撮影情報だけを表示（評価・解説なし）、撮影情報はサーバーへ送られない。
+  EN は撮影情報ページが現在は日本語であることを明記。/exif の仕組み（fragment 等）は製品ページの主説明に書かない。
+- 変えていないもの: title・meta description・og・Download（1.1.0）・nav・sitemap・/sidekick-qr-app/・/exif・/card/qr・ZIP。
+- 固定テスト: `tests/site/test_sidekick_qr_product_page.py` の JA / EN の必須の内容に EXIF の文言を追加（JA と EN で同じ事実）。
