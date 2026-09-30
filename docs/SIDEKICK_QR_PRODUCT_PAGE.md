@@ -93,3 +93,13 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 - Download: 製品ページ（JA 1 か所・EN 2 か所）は **`/downloads/sidekick-qr/SidekickQR-1.0.1.zip`**（25,498 bytes、SHA-256 `0447c2e8fd69949e54ba1242835eca71623de491f7bc17c665de15722f4964e1`、
   identity は Sidekick QR repository の `docs/release_artifact_1.0.1.json`）へ。**1.0.0 の ZIP は置いたまま・上書きしない**（link はしない。削除は別の Human decision）。
 - 固定テスト: `tests/site/test_sidekick_qr_product_page.py`（1.0.1 の link・SHA、1.0.0 が不変で残る）、`tests/site/test_sidekick_qr_web_validation.py`（copy ごとの版）。
+
+## 10. Sidekick QR 1.1.0（2026-09-30、HD-SIDEKICKQR-030）
+
+- URL mode（Card の地 = 灰、Primary = 入力した URL を direct）/ EXIF mode（地 = 白、Primary = EXIF Viewer `https://www.sidekick-lab.com/exif#v=1&…`、撮影情報は fragment だけ）、
+  Secondary = `/card/qr`・「← このカードを作る」。Human Acceptance は 1.1.0-rc.2（HD-SIDEKICKQR-030）、EXIF Viewer は HD-SIDEKICKQR-028 / -029（`/exif` = site `0881f7a`、この release では変えない）。
+- `/sidekick-qr-app/` = Sidekick QR source `452cc6a` の書き出し（core = Portable 1.1.0）。validation surface の copy は 2026-09-28 の 1.0.0 のまま。
+- Download: 製品ページ（JA 1 か所・EN 2 か所）は **`/downloads/sidekick-qr/SidekickQR-1.1.0.zip`**（35,177 bytes、SHA-256 `67d36101f28f604918d5f70ecbfe4d9fbc26213da865bf572f55a294ed992564`、
+  identity は Sidekick QR repository の `docs/release_artifact_1.1.0.json`）へ。**1.0.0 / 1.0.1 の ZIP は置いたまま・上書きしない**（link はしない）。
+- 製品ページの本文は版・Download・ZIP の大きさだけを変えた。EXIF mode の紹介文は入れていない（本文の追加は別の Human decision）。
+- 固定テスト: `tests/site/test_sidekick_qr_product_page.py`（1.1.0 の link・SHA、1.0.0 / 1.0.1 が不変で残る）、`tests/site/test_sidekick_qr_web_validation.py`（copy ごとの版、1.1.0 の core）。

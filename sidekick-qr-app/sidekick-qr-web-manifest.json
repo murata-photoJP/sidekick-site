@@ -1,45 +1,52 @@
 {
   "product": "Sidekick QR",
   "role": "Web app（iframe の中で動く。analytics なし・noindex、HD-SIDEKICKQR-018）",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "portable_identity": {
-    "version": "1.0.1",
-    "artifact": "SidekickQR-1.0.1.zip",
-    "artifact_sha256": "0447c2e8fd69949e54ba1242835eca71623de491f7bc17c665de15722f4964e1",
-    "portable_entry_sha256": "6cee5c4d3bd61e6d193eb615001a674d1fea9af88f3daa7e0c37129e30c30dd1",
+    "version": "1.1.0",
+    "artifact": "SidekickQR-1.1.0.zip",
+    "artifact_sha256": "67d36101f28f604918d5f70ecbfe4d9fbc26213da865bf572f55a294ed992564",
+    "portable_entry_sha256": "3298f60fc5b81bb62578ec09bd27ef113a849c8ade322377f782c5dacb71337d",
     "note": "core の js/*.js = ZIP の「Sidekick QR/js/*.js」と byte 一致。app.html = ZIP の「Sidekick QR/Sidekick QR.html」＋ Web 版の script 1 行。Web 版だけの module: web_share.js"
   },
   "source_repository": "Sidekick QR（nas sidekickQR.git）",
-  "source_commit": "6f533617595662c81b909285e366b1b72fd5f67b",
+  "source_commit": "fd2bee3a9e13e8f662b35b3f082fba0ce208db5d",
   "entry": "app.html",
   "exported_by": "tools/export_web_app.py",
   "files": [
     {
       "path": "app.html",
-      "bytes": 6144,
-      "sha256": "e88df76419cc018d9835df89475efd0f3f0f5ec989c1f1f9a473a7b10f7a2524",
+      "bytes": 8527,
+      "sha256": "0abf105277c0f8d61a6c01037649fce1fe3ee205bdd0d46b5a8b3510e41090ea",
       "source": "app/index.html ＋ Web 版の script を読む 1 行（名前は app.html）",
       "role": "web entry（Portable の入口 ＋ 1 行）"
     },
     {
       "path": "js/app.js",
-      "bytes": 5669,
-      "sha256": "c82d776210b0f77bebcefd18f3bb95060dd7548f5e512e4fa53cdfd608096e97",
+      "bytes": 9374,
+      "sha256": "764aed0bce282f31ea1533eaa12720149c709d4dabf31ff8337c9f33cca72219",
       "source": "app/js/app.js",
       "role": "core（Portable と byte 一致）"
     },
     {
       "path": "js/card_engine.js",
-      "bytes": 8598,
-      "sha256": "e230f82d88b4cd42f0c646b4963295afc8dd4af972aea3f3efe80aad1b83c9fc",
+      "bytes": 9801,
+      "sha256": "119c899b37c0fd6365d17c8288e10ae0d4f0befadeec6a1ad86a521c7e4f2be0",
       "source": "app/js/card_engine.js",
       "role": "core（Portable と byte 一致）"
     },
     {
       "path": "js/card_template.js",
-      "bytes": 3087,
-      "sha256": "4d11ef85e90c11c8feae7bbc724670b073baa552e53291b05b76e1bbf20b73f9",
+      "bytes": 5686,
+      "sha256": "60004523eab497ca63f93369f0c3b914a93669c4f2a33fa9cffabe4505d33b01",
       "source": "app/js/card_template.js",
+      "role": "core（Portable と byte 一致）"
+    },
+    {
+      "path": "js/exif_reader.js",
+      "bytes": 14985,
+      "sha256": "5520ff92e66d1ced7dea714653e75135e8d1210b497a8c865b9946b08ae43c2a",
+      "source": "app/js/exif_reader.js",
       "role": "core（Portable と byte 一致）"
     },
     {
@@ -58,8 +65,8 @@
     },
     {
       "path": "js/startup_check.js",
-      "bytes": 1639,
-      "sha256": "860982c514cc7f7e3b5bff34f31f5a51a432f5f55315031c2d1a2749d6c1d7b0",
+      "bytes": 1657,
+      "sha256": "0e5f24c7e2e26ec3e75a0bcb746887e9c7c089d8b5542d0016da9daa7cc43684",
       "source": "app/js/startup_check.js",
       "role": "core（Portable と byte 一致）"
     },

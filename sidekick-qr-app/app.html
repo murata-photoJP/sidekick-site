@@ -33,6 +33,13 @@
   #card-image{display:block;width:100%;height:auto;border:1px solid var(--line);background:#fff}
   .encoded{font-size:.85rem;color:var(--sub);word-break:break-all;margin:8px 0}
   .note{font-size:.85rem;color:var(--sub)}
+  fieldset.modes{border:0;margin:0 0 4px;padding:0}
+  fieldset.modes legend{font-weight:700;padding:0;margin:0 0 4px}
+  .choices{display:flex;flex-wrap:wrap;gap:8px 18px}
+  .choices label{display:flex;align-items:center;gap:6px;font-weight:400;margin:0}
+  .field-title{font-weight:700;margin:14px 0 4px}
+  .exif-text{margin:4px 0 0;padding:10px;border:1px solid var(--line);border-radius:6px;background:var(--bg);font:inherit;font-size:.95rem;min-height:1.6em;white-space:pre-wrap}
+  .encoded code{white-space:pre-wrap}
   [hidden]{display:none !important}
   /* 起動の確認（L-1 guard、HD-SIDEKICKQR-014 B）: 既定では 1.2 秒後に表示。部品が揃えば js/startup_check.js が表示前に取り除く。 */
   #startup-guard{visibility:hidden;animation:startup-guard-appear 0s linear 1.2s forwards;border:2px solid var(--error);background:#fff5f4;color:var(--ink);border-radius:8px;padding:14px 16px;margin-bottom:16px}
@@ -57,14 +64,34 @@
   </div>
   <section class="panel" aria-labelledby="input-heading">
     <h2 id="input-heading" hidden>入力</h2>
+    <!-- mode（HD-SIDEKICKQR-026）: URL = 入力した URL を QR に（写真の EXIF はカードに入らない）/ EXIF = 許可した撮影情報だけを QR に。 -->
+    <fieldset class="modes">
+      <legend>QRコードに入れるもの</legend>
+      <div class="choices">
+        <label><input type="radio" name="mode" id="mode-url" value="url" checked> URL（Webページ）</label>
+        <label><input type="radio" name="mode" id="mode-exif" value="exif"> EXIF（写真の撮影情報）</label>
+      </div>
+      <p class="hint" id="mode-hint-url">URLモード：入力したURLをQRコードにします。写真の撮影情報（EXIF）はカードに入りません。</p>
+      <p class="hint" id="mode-hint-exif" hidden>EXIFモード：写真の撮影情報のうち、カメラ・レンズ・焦点距離・絞り・シャッター速度・ISO・撮影日時だけをQRコードに入れます。位置情報（GPS）・シリアル番号・撮影者名・著作権情報などは入れません。QRコードを読むと、Sidekick Lab の撮影情報ページにこの撮影情報だけが表示されます。</p>
+    </fieldset>
+
     <label for="photo">1. 画像</label>
     <input id="photo" type="file" accept="image/jpeg,image/png">
-    <p class="hint">JPEG / PNG を 1 枚。画像は切り取らずに全体を収めます。撮影位置などの画像の情報（EXIF）はカードに入りません。<span id="photo-info"></span></p>
+    <p class="hint">JPEG / PNG を 1 枚。画像は切り取らずに全体を収めます。<span id="photo-info"></span></p>
 
-    <label for="url">2. リンク先URL</label>
-    <input id="url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://">
-    <ul id="url-messages" class="messages" hidden aria-live="polite"></ul>
-    <p class="hint">http:// または https:// で始まるURLをQRコードにします。</p>
+    <div id="url-section">
+      <label for="url">2. リンク先URL</label>
+      <input id="url" type="url" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://">
+      <ul id="url-messages" class="messages" hidden aria-live="polite"></ul>
+      <p class="hint">http:// または https:// で始まるURLをQRコードにします。</p>
+    </div>
+
+    <div id="exif-section" hidden>
+      <p class="field-title" id="exif-heading">2. QRコードに入る撮影情報</p>
+      <pre id="exif-preview" class="exif-text" aria-labelledby="exif-heading" aria-live="polite"></pre>
+      <ul id="exif-messages" class="messages" hidden aria-live="polite"></ul>
+      <p class="hint">画像を選ぶと、ここに表示されます。表示された内容だけがQRコードに入り、読んだ人の画面にもこの内容だけが表示されます（撮影情報はページのアドレスの「#」より後ろに入り、Sidekick Lab のサーバーへは送られません）。</p>
+    </div>
 
     <label for="title">3. タイトル</label>
     <input id="title" type="text" maxlength="80" autocomplete="off" required>
@@ -79,15 +106,16 @@
   <section id="result" class="panel" hidden aria-labelledby="result-heading">
     <h2 id="result-heading" style="font-size:1.1rem;margin:0 0 8px">できあがったカード</h2>
     <img id="card-image" alt="作成したカード（保存される画像そのもの）">
-    <p class="encoded">QRコードに入っているURL: <code id="encoded-url"></code></p>
+    <p class="encoded"><span id="encoded-label">QRコードに入っているURL:</span> <code id="encoded-url"></code></p>
     <button id="save-card" type="button" disabled>PNGとして保存</button>
   </section>
 
-  <p class="note">画像・URL・カードはこのパソコンの中だけで処理され、どこにも送信されません。撮影地点を含むURLをQRコードにすると、カードを見た人にその地点が伝わります。渡す相手を選んでください。</p>
+  <p class="note">画像・URL・撮影情報・カードはこのパソコンの中だけで処理され、どこにも送信されません。撮影地点を含むURLをQRコードにすると、カードを見た人にその地点が伝わります。渡す相手を選んでください。</p>
 </main>
 <script src="js/card_engine.js"></script>
 <script src="js/qr_encoder.js"></script>
 <script src="js/image_adapter.js"></script>
+<script src="js/exif_reader.js"></script>
 <script src="js/url_policy.js"></script>
 <script src="js/card_template.js"></script>
 <script src="js/app.js"></script>

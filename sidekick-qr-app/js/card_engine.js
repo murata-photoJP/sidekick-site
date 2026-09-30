@@ -68,6 +68,9 @@
   //            上段の画像領域（高さ areaHeight）に source を (x, y, width, height) で描く。areaFill があれば先に領域をその色で塗る（contain の余白）。
   //   title:   見出し 1 行
   //   lines:   [[label, value], ...]（label が空なら値だけの行）
+  //            frame（任意、2026-09-30 追加）: {x, y, width, height, lineWidth, color} があれば、写真の周りにその矩形の細線を描く（Sidekick QR 1.1.0 の mat / frame）。
+  //   style（任意、2026-09-30 追加）: {background, rule}。Card の地の色と、写真と帯の区切り線（rule が null なら描かない）。無ければ今までの CARD の値。
+  //            QR の quiet zone は QR の PNG 自体が白で持っているので、地の色を変えても白のまま（QR の PNG は加工しない）。
   //   branding: {name, caption, qrPng?, cta?}（無ければ描かない）
   //            qrPng があれば（Sidekick QR の Secondary QR、2026-09-27 追加）、帯の左下に等倍・補間なしで置き、その右に name / caption / cta を並べる。
   //            Secondary QR は主 QR より小さくなければならない（SECONDARY_QR_TOO_LARGE）。qrPng が無いときの描画は追加前と同一。
@@ -100,7 +103,8 @@
     canvas.width = cardWidth;
     canvas.height = picture.areaHeight + bandHeight;
     const context = canvas.getContext("2d");
-    context.fillStyle = CARD.background;
+    const style = input.style || {};
+    context.fillStyle = style.background || CARD.background;
     context.fillRect(0, 0, canvas.width, canvas.height);
 
     // ① 上段の画像（Adapter が決めた位置と大きさのまま）
@@ -109,8 +113,20 @@
       context.fillRect(0, 0, cardWidth, picture.areaHeight);
     }
     context.drawImage(picture.source, picture.x, picture.y, picture.width, picture.height);
-    context.fillStyle = CARD.rule;
-    context.fillRect(0, picture.areaHeight, cardWidth, 2);
+    if (picture.frame) {
+      // 写真の周りの細線（整数座標の塗りつぶし 4 本。stroke の半 px のにじみを作らない）
+      const f = picture.frame;
+      context.fillStyle = f.color;
+      context.fillRect(f.x, f.y, f.width, f.lineWidth);
+      context.fillRect(f.x, f.y + f.height - f.lineWidth, f.width, f.lineWidth);
+      context.fillRect(f.x, f.y, f.lineWidth, f.height);
+      context.fillRect(f.x + f.width - f.lineWidth, f.y, f.lineWidth, f.height);
+    }
+    const rule = style.rule === undefined ? CARD.rule : style.rule;
+    if (rule) {
+      context.fillStyle = rule;
+      context.fillRect(0, picture.areaHeight, cardWidth, 2);
+    }
 
     // ② QR: 等倍・整数座標・補間なし。周りは白（quiet zone は PNG 自体が持っている）。
     const qrX = cardWidth - pad - qrWidth;

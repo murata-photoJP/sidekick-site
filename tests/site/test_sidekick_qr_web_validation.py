@@ -31,7 +31,10 @@ PREFIX = "validation/sidekick-qr-web/"
 VALIDATION_DIR = REPO_ROOT / "validation" / "sidekick-qr-web" / bs.SIDEKICK_QR_WEB_VALIDATION_ID
 MANIFEST = "sidekick-qr-web-manifest.json"
 # Sidekick QR 1.0.0（Portable、SidekickQR-1.0.0.zip sha256 6bdaac3b…）の入口 HTML と js の SHA-256（Sidekick QR repository docs/release_artifact_1.0.0.json）
-PORTABLE_ENTRY = "6cee5c4d3bd61e6d193eb615001a674d1fea9af88f3daa7e0c37129e30c30dd1"
+# 入口 HTML は 1.0.0 / 1.0.1 で同じ、1.1.0 で URL / EXIF の mode を足した（HD-SIDEKICKQR-026 / -030）
+PORTABLE_ENTRY = {"1.0.0": "6cee5c4d3bd61e6d193eb615001a674d1fea9af88f3daa7e0c37129e30c30dd1",
+                  "1.0.1": "6cee5c4d3bd61e6d193eb615001a674d1fea9af88f3daa7e0c37129e30c30dd1",
+                  "1.1.0": "3298f60fc5b81bb62578ec09bd27ef113a849c8ade322377f782c5dacb71337d"}
 WEB_ENTRY_LINE = b'\n<script src="js/web_share.js"></script>'
 WEB_ONLY = {"js/web_share.js"}
 # 1.0.1（HD-SIDEKICKQR-023、SidekickQR-1.0.1.zip sha256 0447c2e8…）: 1.0.0 と違うのは card_template.js（Secondary = /card/qr）だけ
@@ -43,6 +46,17 @@ PORTABLE_1_0_1 = {
     "js/qr_encoder.js": "60cb49d492b0d12e",
     "js/startup_check.js": "860982c514cc7f7e3b5bff34f31f5a51a432f5f55315031c2d1a2749d6c1d7b0",
     "js/url_policy.js": "15b3ae650ebceedf",
+}
+# 1.1.0（HD-SIDEKICKQR-030、SidekickQR-1.1.0.zip sha256 67d36101…）: URL / EXIF mode・exif_reader.js・EXIF Primary = /exif・「← このカードを作る」
+PORTABLE_1_1_0 = {
+    "js/app.js": "764aed0bce282f31ea1533eaa12720149c709d4dabf31ff8337c9f33cca72219",
+    "js/card_engine.js": "119c899b37c0fd6365d17c8288e10ae0d4f0befadeec6a1ad86a521c7e4f2be0",
+    "js/card_template.js": "60004523eab497ca63f93369f0c3b914a93669c4f2a33fa9cffabe4505d33b01",
+    "js/exif_reader.js": "5520ff92e66d1ced7dea714653e75135e8d1210b497a8c865b9946b08ae43c2a",
+    "js/image_adapter.js": "ca554d5468e41573cd8d72d293868821ef9cd8676a8eef47f968bdb1fbc03165",
+    "js/qr_encoder.js": "60cb49d492b0d12e70375f8a6ad56f70d2571bc71f3c69647880fc392608d1e9",
+    "js/startup_check.js": "0e5f24c7e2e26ec3e75a0bcb746887e9c7c089d8b5542d0016da9daa7cc43684",
+    "js/url_policy.js": "15b3ae650ebceedfb090498bc1af1ca592ed2601c52628cd03b54122e7fecd90",
 }
 PORTABLE_1_0_0 = {
     "js/app.js": "c82d776210b0f77b",
@@ -120,8 +134,10 @@ def test_there_is_an_app_copy() -> None:
 PORTABLE = {
     "1.0.0": (PORTABLE_1_0_0, "6bdaac3bd617b523195a07448d198ae013869a7ccd0d8c719f8862e666cbf405"),
     "1.0.1": (PORTABLE_1_0_1, "0447c2e8fd69949e54ba1242835eca71623de491f7bc17c665de15722f4964e1"),
+    "1.1.0": (PORTABLE_1_1_0, "67d36101f28f604918d5f70ecbfe4d9fbc26213da865bf572f55a294ed992564"),
 }
-EXPECTED_VERSION = {VALIDATION_DIR / "sidekick-qr-app": "1.0.0", REPO_ROOT / "sidekick-qr-app": "1.0.1"}
+# production の /sidekick-qr-app/ は 2026-09-30 から 1.1.0（HD-SIDEKICKQR-030）
+EXPECTED_VERSION = {VALIDATION_DIR / "sidekick-qr-app": "1.0.0", REPO_ROOT / "sidekick-qr-app": "1.1.0"}
 
 
 @pytest.mark.parametrize("copy", _app_copies(), ids=lambda p: p.relative_to(REPO_ROOT).as_posix())
@@ -143,7 +159,7 @@ def test_app_copy_matches_its_manifest_and_portable(copy: Path) -> None:
             assert digest.startswith(core[name]), f"{name}: Portable {manifest['version']} と違う（D-5、core は fork しない）"
     entry = (copy / "app.html").read_bytes()
     assert entry.count(WEB_ENTRY_LINE) == 1
-    assert hashlib.sha256(entry.replace(WEB_ENTRY_LINE, b"")).hexdigest() == PORTABLE_ENTRY, "app.html が Portable の入口 ＋ 1 行ではない"
+    assert hashlib.sha256(entry.replace(WEB_ENTRY_LINE, b"")).hexdigest() == PORTABLE_ENTRY[manifest["version"]], "app.html が Portable の入口 ＋ 1 行ではない"
     assert sorted(listed) == sorted(set(core) | {"app.html"} | WEB_ONLY)
     roles = {f["path"]: f.get("role", "") for f in manifest["files"]}
     assert roles["js/web_share.js"] == "web only"
