@@ -205,6 +205,17 @@ title / description / keywords も明確に検索流入を狙う作りになっ�
 `tests/site/test_deploy_policy.py`が、canonical・og:url・sitemap掲載・
 noindexでないことを名指しで固定している。
 
+### Sidekick QR EXIF Viewer（/exif）の扱い — 2026-09-30 村田さん決定（HD-SIDEKICKQR-028）
+
+`exif.html`（公開URLは`https://www.sidekick-lab.com/exif`）は、Sidekick QR の Card の QR（`/exif#v=1&…`）から開き、
+fragment に入った撮影情報（カメラ・レンズ・焦点距離・絞り・シャッター速度・ISO・撮影日時）を**表示するだけの道具ページ**である。
+評価・改善提案・検索・計算はしない。**方針：noindex（meta ＋ vercel.json の X-Robots-Tag）・analytics なし・sitemap へ載せない・どこからも link しない。**
+
+- 撮影情報は fragment にしか無く、**fragment はサーバーへ送られない**。page は通信しない（CSP `connect-src 'none'`、activity beacon なし）。
+- 正本は Sidekick QR repository の `viewer/exif.html`。この repository の `exif.html` は **byte 一致の copy**（ここで書き換えない。変えるときは正本を変えて copy し直す）。
+- `tests/site/test_deploy_policy.py` の `NOINDEX_BY_DESIGN` / `NO_ANALYTICS_BY_DESIGN` に名指しで追加し、
+  `tests/site/test_sidekick_qr_exif_viewer.py` が bytes（SHA-256）・header・analytics なし・sitemap / link なしを固定する。
+
 ### Snapshot Viewer（/share）の扱い — 2026-09-06 村田さん決定
 
 `share.html`（公開URLは`https://www.sidekick-lab.com/share`）は、Sidekick Plannerが

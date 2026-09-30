@@ -66,7 +66,10 @@ STANDALONE_LP = {"star-lp.html", "kouzu-lp.html"}
 # 共有された撮影計画がそもそも索引されることはない。
 # 2026-09-06、QR Share V1 Web Viewer（Planner側 AI-0373 が生成）の本番配置で追加。
 # 根拠は docs/DEPLOY_CHECKLIST.md「2-2.」の「Snapshot Viewer（/share）の扱い」にある。
-NOINDEX_BY_DESIGN = {"share.html"}
+# 2026-09-30、Sidekick QR EXIF Viewer（/exif、HD-SIDEKICKQR-028）を追加。QR の fragment（#v=1&…）の撮影情報を表示するだけの道具ページで、
+# fragment が無いと「撮影情報が含まれていません」しか表示しない。meta robots noindex ＋ vercel.json の X-Robots-Tag。
+# 逆向き（bytes・analytics なし・sitemap / link なし）は tests/site/test_sidekick_qr_exif_viewer.py が固定する。
+NOINDEX_BY_DESIGN = {"share.html", "exif.html"}
 
 # Sidekick QR Web 版の validation surface（2026-09-28、村田さん決定 HD-SIDEKICKQR-018 D-3）。公開前の確認用で、
 # shell・app とも analytics なし・noindex・sitemap / navigation / 製品ページから link しない。この prefix の下だけを例外にし、
@@ -352,7 +355,10 @@ GA4_CONFIG_RE = re.compile(r"gtag\('config',\s*'(G-[A-Z0-9]+)'")
 # 2026-09-28、Sidekick QR Web 版の production app（/sidekick-qr-app/app、HD-SIDEKICKQR-018 D-1 / -021）を追加。
 # 写真・URL・Card を扱う app document には analytics を入れない（page_view は shell の /sidekick-qr だけが記録する）。
 # noindex は meta ではなく vercel.json の X-Robots-Tag（app の bytes は Portable 1.0.0 と一致させるため書き換えない）。
-NO_ANALYTICS_BY_DESIGN = {"share.html", "sidekick-qr-app/app.html"}
+#
+# 2026-09-30、Sidekick QR EXIF Viewer（/exif、HD-SIDEKICKQR-028）を追加。fragment の撮影情報を server・analytics・beacon へ送らない
+# （CSP connect-src 'none'）。正本は Sidekick QR repository の viewer/exif.html で、この file は byte 一致の copy（書き換えない）。
+NO_ANALYTICS_BY_DESIGN = {"share.html", "sidekick-qr-app/app.html", "exif.html"}
 
 # テンプレートから生成する4系統のうち、base.html に GA4 を置く3系統。
 # site 系は各ページテンプレートが extra_head に置く（既存の手書き移行ページはスニペット直書き、

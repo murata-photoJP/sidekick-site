@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Sidekick QR EXIF Viewer v1（HD-SIDEKICKQR-028、AI-15995）。https://www.sidekick-lab.com/exif#v=1&... の fragment だけを読み、撮影情報を表示する。
+     fragment は HTTP の request・Referer に含まれない。この page は通信しない（connect-src 'none'）・analytics / activity beacon なし・noindex。
+     正本は Sidekick QR repository の viewer/exif.html。site へは byte 一致の copy（exif.html → cleanUrls で /exif）。 -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-WMBLKJ7yy2vp0vaaIf/ctS7z9WVnsH6ZW4yNa4BbI0Q='; style-src 'unsafe-inline'; img-src 'none'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>撮影情報 — Sidekick QR</title>
+<style>
+  :root{color-scheme:light dark;--fg:#1d2328;--sub:#59636c;--line:#d5dade;--bg:#ffffff;--card:#f6f7f8}
+  @media (prefers-color-scheme:dark){:root{--fg:#ececec;--sub:#a8b0b7;--line:#3a3f44;--bg:#161616;--card:#1f2124}}
+  *{box-sizing:border-box}
+  body{margin:0;padding:20px 16px 40px;background:var(--bg);color:var(--fg);
+       font:16px/1.7 -apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP","Yu Gothic UI","Segoe UI",sans-serif;-webkit-text-size-adjust:100%}
+  main{max-width:560px;margin:0 auto}
+  .brand{margin:0;color:var(--sub);font-size:12px;letter-spacing:.04em}
+  h1{margin:0 0 14px;font-size:22px;line-height:1.4}
+  #status{margin:0 0 14px;font-size:15px}
+  dl{margin:0 0 18px;padding:12px 16px;border:1px solid var(--line);border-radius:8px;background:var(--card);
+     display:grid;grid-template-columns:max-content 1fr;gap:6px 16px}
+  dt{color:var(--sub);font-size:14px}
+  dd{margin:0;font-size:16px;word-break:break-word;font-variant-numeric:tabular-nums}
+  .note{margin:0 0 18px;color:var(--sub);font-size:12px;line-height:1.7}
+  .make{margin:0;font-size:12px}
+  .make a{color:var(--sub)}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main>
+  <p class="brand">Sidekick QR</p>
+  <h1>撮影情報</h1>
+  <p id="status" role="status" hidden></p>
+  <dl id="fields" hidden></dl>
+  <noscript><p>撮影情報を表示するには、JavaScript を有効にしてください。</p></noscript>
+  <p class="note">表示している撮影情報は、カード作成時に画像から読み取られた情報です。Sidekick Lab は撮影内容の評価・確認を行っていません。</p>
+  <p class="make"><a href="/sidekick-qr">Sidekick QR でカードを作る</a></p>
+</main>
+<script>
+"use strict";
+/* Sidekick QR EXIF Viewer v1 —— fragment（v=1&c=…&l=…&f=…&a=…&s=…&i=…&t=…）を読んで、許可した項目だけを text として表示する。
+   事実の表示だけ（評価・改善提案・推測・検索・計算をしない）。通信しない・記録しない・fragment をどこにも送らない。
+   decoder contract（HD-SIDEKICKQR-028）: v=1 の key と値の意味は将来も変えない。未知の v は fail closed、未知の key は表示しない。 */
+(function () {
+  var MAX_FRAGMENT = 4096;                       /* これより長い fragment は読まない */
+  var MAX_TEXT = 64;                             /* カメラ・レンズの上限（code point） */
+  var INVISIBLE = [[0x00, 0x1f], [0x7f, 0x9f], [0x200b, 0x200f], [0x2028, 0x202e], [0x2060, 0x2069], [0xfeff, 0xfeff]];
+  var MESSAGES = {
+    empty: "このリンクには撮影情報が含まれていません。",
+    newer: "この撮影情報は新しい形式です。このページでは表示できません。",
+    invalid: "撮影情報を読み取れませんでした。",
+    nothing: "表示できる撮影情報がありません。"
+  };
+
+  function cleanText(value) {
+    var out = "";
+    for (var ch of String(value)) {
+      var code = ch.codePointAt(0);
+      var hidden = INVISIBLE.some(function (r) { return code >= r[0] && code <= r[1]; });
+      out += hidden ? " " : ch;
+    }
+    out = out.split(/\s+/).join(" ").trim();
+    if (!out) return null;
+    var chars = Array.from(out);
+    return chars.length <= MAX_TEXT ? out : chars.slice(0, MAX_TEXT - 1).join("").trimEnd() + "…";
+  }
+
+  function positive(text, pattern, max) {
+    if (typeof text !== "string" || !pattern.test(text)) return null;
+    var value = Number(text);
+    return value > 0 && value <= max ? value : null;
+  }
+
+  function decimal(value) {
+    return String(Math.round(value * 10) / 10);
+  }
+
+  /* v=1 の key → [label, 値を表示用にする関数]。この順で表示する。値が不正ならその行を出さない */
+  var FIELDS = [
+    ["c", "カメラ", function (v) { return cleanText(v); }],
+    ["l", "レンズ", function (v) { return cleanText(v); }],
+    ["f", "焦点距離", function (v) { var n = positive(v, /^[0-9]{1,5}(\.[0-9]{1,2})?$/, 10000); return n === null ? null : decimal(n) + " mm"; }],
+    ["a", "絞り", function (v) { var n = positive(v, /^[0-9]{1,3}(\.[0-9]{1,2})?$/, 1000); return n === null ? null : "f/" + decimal(n); }],
+    ["s", "シャッター速度", function (v) {
+      if (typeof v === "string" && /^1\/[0-9]{1,6}$/.test(v) && Number(v.slice(2)) >= 1) return "1/" + Number(v.slice(2)) + " s";
+      var n = positive(v, /^[0-9]{1,6}(\.[0-9]{1,2})?$/, 100000);
+      return n === null ? null : decimal(n) + " s";
+    }],
+    ["i", "ISO", function (v) { var n = positive(v, /^[0-9]{1,7}$/, 9999999); return n === null ? null : String(n); }],
+    ["t", "撮影日時", function (v) {
+      if (typeof v !== "string" || !/^[0-9]{12}$/.test(v)) return null;
+      var y = Number(v.slice(0, 4)), mo = Number(v.slice(4, 6)), d = Number(v.slice(6, 8)), h = Number(v.slice(8, 10)), mi = Number(v.slice(10, 12));
+      if (y < 1900 || y > 2999 || mo < 1 || mo > 12 || d < 1 || d > 31 || h > 23 || mi > 59) return null;
+      return v.slice(0, 4) + "-" + v.slice(4, 6) + "-" + v.slice(6, 8) + " " + v.slice(8, 10) + ":" + v.slice(10, 12);   /* timezone は付けない */
+    }]
+  ];
+
+  /* fragment（先頭の # を除いた文字列）→ {status: "ok" | "empty" | "newer" | "invalid" | "nothing", rows: [[label, text], ...]} */
+  function parse(fragment) {
+    var raw = String(fragment || "");
+    if (raw.charAt(0) === "#") raw = raw.slice(1);
+    if (!raw) return { status: "empty", rows: [] };
+    if (raw.length > MAX_FRAGMENT) return { status: "invalid", rows: [] };
+    var params;
+    try { params = new URLSearchParams(raw); } catch (error) { return { status: "invalid", rows: [] }; }
+    var version = params.get("v");
+    if (version === null || !/^[0-9]{1,4}$/.test(version)) return { status: "invalid", rows: [] };
+    if (version !== "1") return { status: "newer", rows: [] };
+    var rows = [];
+    FIELDS.forEach(function (field) {
+      var value = params.get(field[0]);
+      if (value === null) return;
+      var shown = field[2](value);
+      if (shown) rows.push([field[1], shown]);
+    });
+    return { status: rows.length ? "ok" : "nothing", rows: rows };
+  }
+
+  function show() {
+    var result = parse(location.hash);
+    var status = document.getElementById("status");
+    var list = document.getElementById("fields");
+    var items = [];
+    result.rows.forEach(function (row) {
+      var dt = document.createElement("dt");
+      dt.textContent = row[0];                   /* 表示は text だけ（HTML として解釈しない・link にしない） */
+      var dd = document.createElement("dd");
+      dd.textContent = row[1];
+      items.push(dt, dd);
+    });
+    list.replaceChildren.apply(list, items);
+    list.hidden = result.status !== "ok";
+    status.textContent = result.status === "ok" ? "" : MESSAGES[result.status];
+    status.hidden = result.status === "ok";
+  }
+
+  window.SidekickExifViewer = Object.freeze({ parse: parse, VERSION: "1" });
+  show();
+  window.addEventListener("hashchange", show);   /* 同じ tab で別の撮影情報を開いたとき、古い表示を残さない */
+})();
+</script>
+</body>
+</html>

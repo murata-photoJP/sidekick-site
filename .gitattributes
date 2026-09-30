@@ -2,3 +2,5 @@
 # Portable 1.0.0 と byte 一致を保つため、改行を変換しない（この repository は core.autocrlf=true の環境で使われる）。HD-SIDEKICKQR-018。
 validation/sidekick-qr-web/**/sidekick-qr-app/** -text
 sidekick-qr-app/** -text
+# Sidekick QR EXIF Viewer の copy（正本 = Sidekick QR repository の viewer/exif.html、HD-SIDEKICKQR-028）。改行を変換しない。
+/exif.html -text

@@ -44,6 +44,10 @@
     {
       "source": "/sidekick-qr-app/(.*)",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    },
+    {
+      "source": "/exif",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
   ],
   "crons": [
