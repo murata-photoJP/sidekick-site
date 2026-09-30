@@ -51,6 +51,10 @@
  .button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
  .button.secondary{background:transparent;color:var(--accent);border:1px solid var(--accent);
   font-weight:600;min-height:44px;box-sizing:border-box}
+ button.button{width:100%;border:0;cursor:pointer;font-family:inherit;line-height:inherit}
+ button.button:disabled{opacity:.6;cursor:default}
+ #share-url{margin:8px 0 0;padding:8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);
+  font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all;user-select:all;-webkit-user-select:all}
  #planner-guide{background:transparent;margin-top:18px}
  #planner-guide p{font-size:14px;line-height:1.7;color:var(--fg);margin:0 0 10px}
  details{border:1px solid var(--line);border-radius:8px;background:var(--card);
@@ -141,7 +145,7 @@
  </section>
 
  <section id="map" hidden data-map="pending">
-  <h2>撮影地点と被写体の位置関係</h2>
+  <h2 id="map-heading">撮影地点と被写体の位置関係</h2>
   <div class="figure" id="map-figure"></div>
   <p class="caption" id="map-caption"></p>
  </section>
@@ -150,6 +154,14 @@
   <h2>地図アプリで開く</h2>
   <a class="button" id="gmaps-link" target="_blank" rel="noopener noreferrer">Google マップで撮影地点を開く</a>
   <p class="caption">外部サイト（Google）が開きます。押すまで Google への通信は行われません。</p>
+ </section>
+
+ <section id="share-page" hidden>
+  <h2>この撮影計画を共有する</h2>
+  <button type="button" class="button secondary" id="share-button">このページを共有</button>
+  <p class="caption">共有すると、受け取った人にも<b>正確な撮影地点</b>が伝わります。SNS などへ公開すると、誰でも撮影地点を見られるようになります。</p>
+  <p class="caption" id="share-status" role="status" aria-live="polite"></p>
+  <p id="share-url" hidden></p>
  </section>
 
  <p class="notice" id="privacy">
@@ -183,7 +195,7 @@
 </main>
 <script>
 "use strict";
-const SPEC = {"codes": {"DECOMPRESSED_TOO_LARGE": "DECOMPRESSED_TOO_LARGE", "DUPLICATE_KEY": "DUPLICATE_KEY", "EMPTY_FRAGMENT": "EMPTY_FRAGMENT", "ENCODED_TOO_LARGE": "ENCODED_TOO_LARGE", "INVALID_CONTAINER": "INVALID_CONTAINER", "INVALID_DATETIME": "INVALID_DATETIME", "INVALID_ENUM": "INVALID_ENUM", "INVALID_JSON": "INVALID_JSON", "INVALID_LENGTH": "INVALID_LENGTH", "INVALID_RANGE": "INVALID_RANGE", "INVALID_SCHEMA": "INVALID_SCHEMA", "INVALID_TIMEZONE": "INVALID_TIMEZONE", "INVALID_TYPE": "INVALID_TYPE", "NON_FINITE_NUMBER": "NON_FINITE_NUMBER", "NOT_SIDEKICK_QR": "NOT_SIDEKICK_QR", "PAYLOAD_TOO_LARGE": "PAYLOAD_TOO_LARGE", "TRAILING_DATA": "TRAILING_DATA", "UNSUPPORTED_BROWSER": "UNSUPPORTED_BROWSER", "UNSUPPORTED_GENRE": "UNSUPPORTED_GENRE", "UNSUPPORTED_VERSION": "UNSUPPORTED_VERSION"}, "datetime_length": 20, "decompressed_max": 8192, "detail_fields": [["resolved_target_latitude_deg", "ターゲット 緯度"], ["resolved_target_longitude_deg", "ターゲット 経度"], ["resolved_target_elevation_m", "ターゲット 標高 (m)"]], "fields": [{"kind": "version", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "share_format_version", "vocabulary": null, "wire": "v"}, {"kind": "genre", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "plan_genre", "vocabulary": null, "wire": "g"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "observer_latitude_deg", "vocabulary": null, "wire": "ox"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "observer_longitude_deg", "vocabulary": null, "wire": "oy"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_ground_elevation_m", "vocabulary": null, "wire": "oz"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_height_m", "vocabulary": null, "wire": "oh"}, {"kind": "datetime", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "utc_datetime", "vocabulary": null, "wire": "td"}, {"kind": "timezone", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "timezone", "vocabulary": null, "wire": "tz"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "poi_id", "vocabulary": null, "wire": "pi"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "alignment_target_id", "vocabulary": null, "wire": "ti"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "resolved_target_latitude_deg", "vocabulary": null, "wire": "rx"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "resolved_target_longitude_deg", "vocabulary": null, "wire": "ry"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "resolved_target_elevation_m", "vocabulary": null, "wire": "rz"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "celestial_azimuth_deg", "vocabulary": null, "wire": "ca"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "celestial_altitude_deg", "vocabulary": null, "wire": "ce"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "target_azimuth_deg", "vocabulary": null, "wire": "ta"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "target_elevation_angle_deg", "vocabulary": null, "wire": "te"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "dem_elevation_status", "vocabulary": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "wire": "sd"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "elevation_convergence_status", "vocabulary": ["DEM_FIXED_POINT_CONVERGED", "ELEVATION_ITERATION_CONVERGED", "NOT_EXECUTED"], "wire": "sc"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_resolution_status", "vocabulary": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "wire": "sa"}, {"kind": "number_or_null", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "focal_length_mm", "vocabulary": null, "wire": "fl"}, {"kind": "label", "max_utf8": 128, "maximum": null, "minimum": null, "semantic": "poi_label", "vocabulary": null, "wire": "pl"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_target_resolver_kind", "vocabulary": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "wire": "rk"}], "internal_only_fields": ["alignment_target_id", "plan_genre", "poi_id", "alignment_target_resolver_kind", "dem_elevation_status", "elevation_convergence_status", "alignment_resolution_status", "share_format_version"], "primary_fields": [["poi_label", "被写体"], ["observer_latitude_deg", "撮影地点 緯度"], ["observer_longitude_deg", "撮影地点 経度"], ["observer_ground_elevation_m", "撮影地点の地面標高 (m)"], ["observer_height_m", "目線の高さ (m)"], ["celestial_azimuth_deg", "{celestial}の方位角 (°)"], ["celestial_altitude_deg", "{celestial}の高度角 (°)"], ["target_azimuth_deg", "ターゲットの方位角 (°)"], ["target_elevation_angle_deg", "ターゲットの仰角 (°)"], ["focal_length_mm", "焦点距離 (mm)"]], "raw_compressed_max": 2953, "supported_genres": ["diamond_fuji", "pearl_fuji"], "supported_versions": [1], "viewer": {"earth_radius_m": 6371008.8, "fuji_genre_labels": {"diamond_fuji": "ダイヤモンド富士", "pearl_fuji": "パール富士"}, "fuji_poi_ids": ["POI-FUJI-PROTOTYPE"], "genre_celestial_labels": {"diamond_fuji": "太陽", "pearl_fuji": "月"}, "google_maps_search_base": "https://www.google.com/maps/search/?api=1&query=", "gsi_attribution_label": "地理院タイル", "gsi_attribution_suffix": "（国土地理院）", "gsi_attribution_url": "https://maps.gsi.go.jp/development/ichiran.html", "gsi_basemap_tile_id": "pale", "gsi_basemap_zoom_max": 17, "gsi_basemap_zoom_min": 5, "gsi_tile_base": "https://cyberjapandata.gsi.go.jp/xyz/", "map_tile_timeout_ms": 12000, "planner_product_url": "https://www.sidekick-lab.com/sidekick-planner", "poi_display_names": {"POI-AIZUWAKAMATSU-CASTLE-PROTOTYPE": "会津若松城", "POI-AKADAKE-YATSUGATAKE-PROTOTYPE": "赤岳（八ヶ岳）", "POI-AKAISHIDAKE-PROTOTYPE": "赤石岳", "POI-AKAUSHIDAKE-PROTOTYPE": "赤牛岳", "POI-AKITA-PORT-TOWER-PROTOTYPE": "秋田ポートタワー・セリオン", "POI-AMIDADAKE-PROTOTYPE": "阿弥陀岳", "POI-ASAMAYAMA-PROTOTYPE": "浅間山", "POI-BANDAISAN-PROTOTYPE": "磐梯山", "POI-BAY-BRIDGE-PROTOTYPE": "横浜ベイブリッジ", "POI-BEPPU-TOWER-PROTOTYPE": "別府タワー", "POI-BITCHU-MATSUYAMA-CASTLE-PROTOTYPE": "備中松山城", "POI-CHOGATAKE-PROTOTYPE": "蝶ヶ岳", "POI-CHOKAISAN-PROTOTYPE": "鳥海山", "POI-DAIGOJI-PAGODA-PROTOTYPE": "醍醐寺五重塔", "POI-DAISEN-PROTOTYPE": "大山", "POI-EBOSHIDAKE-PROTOTYPE": "烏帽子岳", "POI-EITAI-BRIDGE-PROTOTYPE": "永代橋", "POI-FUJI-PROTOTYPE": "富士山", "POI-FUKUOKA-TOWER-PROTOTYPE": "福岡タワー", "POI-GENBAKU-DOME-PROTOTYPE": "原爆ドーム", "POI-GOLD-TOWER-PROTOTYPE": "ゴールドタワー", "POI-GORYOKAKU-TOWER-PROTOTYPE": "五稜郭タワー", "POI-GORYUDAKE-PROTOTYPE": "五竜岳", "POI-HAKATA-PORT-TOWER-PROTOTYPE": "博多ポートタワー", "POI-HAKUSAN-PROTOTYPE": "白山", "POI-HIJIRIDAKE-PROTOTYPE": "聖岳", "POI-HIKONE-CASTLE-PROTOTYPE": "彦根城", "POI-HIMEJI-CASTLE-PROTOTYPE": "姫路城", "POI-HIROSAKI-CASTLE-PROTOTYPE": "弘前城", "POI-HOKKAIDO-TENTOKU-DAIKANNON-PROTOTYPE": "北海道天徳大観音", "POI-HORYUJI-PAGODA-PROTOTYPE": "法隆寺五重塔", "POI-INUYAMA-CASTLE-PROTOTYPE": "犬山城", "POI-ISHIYAMADERA-PAGODA-PROTOTYPE": "石山寺多宝塔", "POI-ISHIZUCHISAN-PROTOTYPE": "石鎚山", "POI-IWAKISAN-PROTOTYPE": "岩木山", "POI-JONENDAKE-PROTOTYPE": "常念岳", "POI-KACHIDOKI-BRIDGE-PROTOTYPE": "勝鬨橋", "POI-KAIKOMAGATAKE-PROTOTYPE": "甲斐駒ヶ岳", "POI-KAIKYO-YUME-TOWER-PROTOTYPE": "海峡ゆめタワー", "POI-KANNONDAKE-PROTOTYPE": "観音岳（鳳凰三山）", "POI-KARAMATSUDAKE-PROTOTYPE": "唐松岳", "POI-KARASAWADAKE-PROTOTYPE": "涸沢岳", "POI-KASAGATAKE-PROTOTYPE": "笠ヶ岳", "POI-KASHIMAYARIGATAKE-PROTOTYPE": "鹿島槍ヶ岳", "POI-KAWASAKIDAISHI-PAGODA-PROTOTYPE": "川崎大師八角五重塔", "POI-KISOKOMAGATAKE-PROTOTYPE": "木曽駒ヶ岳", "POI-KITADAKE-PROTOTYPE": "北岳", "POI-KITAHOTAKADAKE-PROTOTYPE": "北穂高岳", "POI-KIYOSU-BRIDGE-PROTOTYPE": "清洲橋", "POI-KOBE-PORT-TOWER-PROTOTYPE": "神戸ポートタワー", "POI-KOCHI-CASTLE-PROTOTYPE": "高知城", "POI-KOFUKUJI-PAGODA-PROTOTYPE": "興福寺五重塔", "POI-KUMAMOTO-CASTLE-PROTOTYPE": "熊本城", "POI-KUROBEGORODAKE-PROTOTYPE": "黒部五郎岳", "POI-KYOTO-TOWER-PROTOTYPE": "京都タワー", "POI-MAEHOTAKADAKE-PROTOTYPE": "前穂高岳", "POI-MARUGAME-CASTLE-PROTOTYPE": "丸亀城", "POI-MARUOKA-CASTLE-PROTOTYPE": "丸岡城", "POI-MATSUE-CASTLE-PROTOTYPE": "松江城", "POI-MATSUMOTO-CASTLE-PROTOTYPE": "松本城", "POI-MATSUYAMA-CASTLE-PROTOTYPE": "松山城", "POI-MITSUMATARENGEDAKE-PROTOTYPE": "三俣蓮華岳", "POI-MYOKOSAN-PROTOTYPE": "妙高山", "POI-NAGOYA-CASTLE-PROTOTYPE": "名古屋城", "POI-NAGOYA-TV-TOWER-PROTOTYPE": "名古屋テレビ塔", "POI-NARITASAN-PAGODA-PROTOTYPE": "成田山新勝寺三重塔", "POI-NISHIHOTAKADAKE-PROTOTYPE": "西穂高岳", "POI-NOGUCHIGORODAKE-PROTOTYPE": "野口五郎岳", "POI-NORIKURADAKE-PROTOTYPE": "乗鞍岳", "POI-ODAWARA-CASTLE-PROTOTYPE": "小田原城", "POI-OKUHOTAKADAKE-PROTOTYPE": "奥穂高岳", "POI-ONTAKESAN-PROTOTYPE": "御嶽山", "POI-OSAKA-CASTLE-PROTOTYPE": "大阪城", "POI-OTENJODAKE-PROTOTYPE": "大天井岳", "POI-RAINBOW-BRIDGE-PROTOTYPE": "レインボーブリッジ", "POI-SAPPORO-TV-TOWER-PROTOTYPE": "さっぽろテレビ塔", "POI-SEA-CANDLE-PROTOTYPE": "江の島シーキャンドル", "POI-SENJOGATAKE-PROTOTYPE": "仙丈ヶ岳", "POI-SENSOJI-PAGODA-PROTOTYPE": "浅草寺五重塔", "POI-SHIOMIDAKE-PROTOTYPE": "塩見岳", "POI-SHIROUMADAKE-PROTOTYPE": "白馬岳", "POI-SKYTREE-PROTOTYPE": "東京スカイツリー", "POI-SUGOROKUDAKE-PROTOTYPE": "双六岳", "POI-SUISHODAKE-PROTOTYPE": "水晶岳", "POI-TATEYAMA-PROTOTYPE": "立山（雄山）", "POI-TOJI-PAGODA-PROTOTYPE": "東寺五重塔", "POI-TOKYO-STATION-PROTOTYPE": "東京駅丸の内駅舎", "POI-TOKYO-TOWER-PROTOTYPE": "東京タワー", "POI-TSUBAKURODAKE-PROTOTYPE": "燕岳", "POI-TSURUGIDAKE-PROTOTYPE": "剱岳", "POI-TSUTENKAKU-PROTOTYPE": "通天閣", "POI-USHIKU-DAIBUTSU-PROTOTYPE": "牛久大仏", "POI-UTSUGIDAKE-PROTOTYPE": "空木岳", "POI-UWAJIMA-CASTLE-PROTOTYPE": "宇和島城", "POI-WARUSAWADAKE-PROTOTYPE": "悪沢岳（荒川三山）", "POI-WASHIBADAKE-PROTOTYPE": "鷲羽岳", "POI-YAKUSHIDAKE-PROTOTYPE": "薬師岳", "POI-YARIGATAKE-PROTOTYPE": "槍ヶ岳", "POI-YOKOHAMA-LANDMARK-TOWER-PROTOTYPE": "横浜ランドマークタワー", "POI-YOKOHAMA-MARINE-TOWER-PROTOTYPE": "横浜マリンタワー"}, "sensor_height_mm": 24.0, "sensor_width_mm": 36.0, "sun_semi_diameter_deg": 0.2665, "terrain": {"azimuth_count_max": 241, "azimuth_count_min": 61, "azimuth_step_deg": 0.08, "distance_step_far_m": 300, "distance_step_near_m": 150, "elevation_tile_id": "dem_png", "far_zoom": 12, "far_zoom_wide": 11, "fov_margin": 1.1, "fuji_terrain_radius_m": 22000, "max_half_fov_deg": 60.0, "maximum_range_m": 120000, "minimum_range_m": 1000, "near_range_m": 15000, "near_zoom": 13, "range_beyond_target_m": 10000, "wide_fov_deg": 40.0}}, "wire_keys": ["v", "g", "ox", "oy", "oz", "oh", "td", "tz", "pi", "ti", "rx", "ry", "rz", "ca", "ce", "ta", "te", "sd", "sc", "sa", "fl", "pl", "rk"]};
+const SPEC = {"codes": {"DECOMPRESSED_TOO_LARGE": "DECOMPRESSED_TOO_LARGE", "DUPLICATE_KEY": "DUPLICATE_KEY", "EMPTY_FRAGMENT": "EMPTY_FRAGMENT", "ENCODED_TOO_LARGE": "ENCODED_TOO_LARGE", "INVALID_CONTAINER": "INVALID_CONTAINER", "INVALID_DATETIME": "INVALID_DATETIME", "INVALID_ENUM": "INVALID_ENUM", "INVALID_JSON": "INVALID_JSON", "INVALID_LENGTH": "INVALID_LENGTH", "INVALID_RANGE": "INVALID_RANGE", "INVALID_SCHEMA": "INVALID_SCHEMA", "INVALID_TIMEZONE": "INVALID_TIMEZONE", "INVALID_TYPE": "INVALID_TYPE", "NON_FINITE_NUMBER": "NON_FINITE_NUMBER", "NOT_SIDEKICK_QR": "NOT_SIDEKICK_QR", "PAYLOAD_TOO_LARGE": "PAYLOAD_TOO_LARGE", "TRAILING_DATA": "TRAILING_DATA", "UNSUPPORTED_BROWSER": "UNSUPPORTED_BROWSER", "UNSUPPORTED_GENRE": "UNSUPPORTED_GENRE", "UNSUPPORTED_VERSION": "UNSUPPORTED_VERSION"}, "datetime_length": 20, "decompressed_max": 8192, "detail_fields": [["resolved_target_latitude_deg", "ターゲット 緯度"], ["resolved_target_longitude_deg", "ターゲット 経度"], ["resolved_target_elevation_m", "ターゲット 標高 (m)"]], "fields": [{"kind": "version", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "share_format_version", "vocabulary": null, "wire": "v"}, {"kind": "genre", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "plan_genre", "vocabulary": null, "wire": "g"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "observer_latitude_deg", "vocabulary": null, "wire": "ox"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "observer_longitude_deg", "vocabulary": null, "wire": "oy"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_ground_elevation_m", "vocabulary": null, "wire": "oz"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_height_m", "vocabulary": null, "wire": "oh"}, {"kind": "datetime", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "utc_datetime", "vocabulary": null, "wire": "td"}, {"kind": "timezone", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "timezone", "vocabulary": null, "wire": "tz"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "poi_id", "vocabulary": null, "wire": "pi"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "alignment_target_id", "vocabulary": null, "wire": "ti"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "resolved_target_latitude_deg", "vocabulary": null, "wire": "rx"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "resolved_target_longitude_deg", "vocabulary": null, "wire": "ry"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "resolved_target_elevation_m", "vocabulary": null, "wire": "rz"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "celestial_azimuth_deg", "vocabulary": null, "wire": "ca"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "celestial_altitude_deg", "vocabulary": null, "wire": "ce"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "target_azimuth_deg", "vocabulary": null, "wire": "ta"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "target_elevation_angle_deg", "vocabulary": null, "wire": "te"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "dem_elevation_status", "vocabulary": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "wire": "sd"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "elevation_convergence_status", "vocabulary": ["DEM_FIXED_POINT_CONVERGED", "ELEVATION_ITERATION_CONVERGED", "NOT_EXECUTED"], "wire": "sc"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_resolution_status", "vocabulary": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "wire": "sa"}, {"kind": "number_or_null", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "focal_length_mm", "vocabulary": null, "wire": "fl"}, {"kind": "label", "max_utf8": 128, "maximum": null, "minimum": null, "semantic": "poi_label", "vocabulary": null, "wire": "pl"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_target_resolver_kind", "vocabulary": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "wire": "rk"}], "internal_only_fields": ["alignment_target_id", "plan_genre", "poi_id", "alignment_target_resolver_kind", "dem_elevation_status", "elevation_convergence_status", "alignment_resolution_status", "share_format_version"], "primary_fields": [["poi_label", "被写体"], ["observer_latitude_deg", "撮影地点 緯度"], ["observer_longitude_deg", "撮影地点 経度"], ["observer_ground_elevation_m", "撮影地点の地面標高 (m)"], ["observer_height_m", "目線の高さ (m)"], ["celestial_azimuth_deg", "{celestial}の方位角 (°)"], ["celestial_altitude_deg", "{celestial}の高度角 (°)"], ["target_azimuth_deg", "ターゲットの方位角 (°)"], ["target_elevation_angle_deg", "ターゲットの仰角 (°)"], ["focal_length_mm", "焦点距離 (mm)"]], "raw_compressed_max": 2953, "supported_genres": ["diamond_fuji", "pearl_fuji"], "supported_versions": [1], "v2": {"celestial_models": ["APPARENT_STANDARD"], "compass_labels": ["北", "北北東", "北東", "東北東", "東", "東南東", "南東", "南南東", "南", "南南西", "南西", "西南西", "西", "西北西", "北西", "北北西"], "dem_statuses": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "display_mode_labels": {"guide": "軌跡ガイド", "real": "実在星"}, "display_modes": ["guide", "real"], "duration_max_minutes": 525600, "genre_labels": {"solar_lunar": "太陽・月", "star_landscape": "星景", "star_trails": "星景（星の軌跡）"}, "genre_titles": {"solar_lunar": "太陽・月の撮影計画", "star_landscape": "星景の撮影計画", "star_trails": "星の軌跡"}, "genres": ["solar_lunar", "star_landscape", "star_trails"], "identifier_max_utf8": 64, "interval_state": "VISIBLE", "keys": {"instant": ["a", "h", "m", "w"], "interval": ["a", "b", "d", "e", "q", "s", "w", "x"], "moon": ["a", "e", "f", "p"], "observer": ["h", "s", "x", "y", "z"], "presentation": ["a", "e", "f", "t"], "reference": ["a", "e", "i", "k", "l", "p", "s", "x", "y", "z"], "sector": ["a", "h", "l", "r"], "solar_lunar": ["m", "n", "s"], "star": ["c", "k", "o"], "star_trails": ["d", "k", "m"], "sun": ["a", "e"], "time": ["d", "z"], "top": ["b", "g", "o", "p", "r", "t", "v"]}, "label_max_utf8": 128, "milky_way": "milky_way", "resolution_statuses": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "resolver_kinds": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "sky_object_ids": ["big_dipper", "cassiopeia", "jupiter", "m31", "mars", "milky_way", "moon", "orion", "pleiades", "polaris", "saturn", "scorpius", "sirius", "summer_triangle", "ursa_minor", "vega", "venus", "winter_triangle"], "sky_object_names": {"big_dipper": "北斗七星", "cassiopeia": "カシオペヤ座", "jupiter": "木星", "m31": "アンドロメダ銀河(M31)", "mars": "火星", "milky_way": "天の川", "moon": "月", "orion": "オリオン座", "pleiades": "すばる", "polaris": "北極星", "saturn": "土星", "scorpius": "さそり座", "sirius": "シリウス", "summer_triangle": "夏の大三角", "ursa_minor": "こぐま座", "vega": "ベガ(織姫星)", "venus": "金星", "winter_triangle": "冬の大三角"}, "terrain_range_max_m": 200000, "terrain_range_min_m": 1000, "timezone_max_utf8": 64, "version": 2}, "viewer": {"earth_radius_m": 6371008.8, "fuji_genre_labels": {"diamond_fuji": "ダイヤモンド富士", "pearl_fuji": "パール富士"}, "fuji_poi_ids": ["POI-FUJI-PROTOTYPE"], "genre_celestial_labels": {"diamond_fuji": "太陽", "pearl_fuji": "月"}, "google_maps_search_base": "https://www.google.com/maps/search/?api=1&query=", "gsi_attribution_label": "地理院タイル", "gsi_attribution_suffix": "（国土地理院）", "gsi_attribution_url": "https://maps.gsi.go.jp/development/ichiran.html", "gsi_basemap_tile_id": "pale", "gsi_basemap_zoom_max": 17, "gsi_basemap_zoom_min": 5, "gsi_tile_base": "https://cyberjapandata.gsi.go.jp/xyz/", "map_point_zoom": 13, "map_tile_timeout_ms": 12000, "planner_product_url": "https://www.sidekick-lab.com/sidekick-planner", "poi_display_names": {"POI-AIZUWAKAMATSU-CASTLE-PROTOTYPE": "会津若松城", "POI-AKADAKE-YATSUGATAKE-PROTOTYPE": "赤岳（八ヶ岳）", "POI-AKAISHIDAKE-PROTOTYPE": "赤石岳", "POI-AKAUSHIDAKE-PROTOTYPE": "赤牛岳", "POI-AKITA-PORT-TOWER-PROTOTYPE": "秋田ポートタワー・セリオン", "POI-AMIDADAKE-PROTOTYPE": "阿弥陀岳", "POI-ASAMAYAMA-PROTOTYPE": "浅間山", "POI-BANDAISAN-PROTOTYPE": "磐梯山", "POI-BAY-BRIDGE-PROTOTYPE": "横浜ベイブリッジ", "POI-BEPPU-TOWER-PROTOTYPE": "別府タワー", "POI-BITCHU-MATSUYAMA-CASTLE-PROTOTYPE": "備中松山城", "POI-CHOGATAKE-PROTOTYPE": "蝶ヶ岳", "POI-CHOKAISAN-PROTOTYPE": "鳥海山", "POI-DAIGOJI-PAGODA-PROTOTYPE": "醍醐寺五重塔", "POI-DAISEN-PROTOTYPE": "大山", "POI-EBOSHIDAKE-PROTOTYPE": "烏帽子岳", "POI-EITAI-BRIDGE-PROTOTYPE": "永代橋", "POI-FUJI-PROTOTYPE": "富士山", "POI-FUKUOKA-TOWER-PROTOTYPE": "福岡タワー", "POI-GENBAKU-DOME-PROTOTYPE": "原爆ドーム", "POI-GOLD-TOWER-PROTOTYPE": "ゴールドタワー", "POI-GORYOKAKU-TOWER-PROTOTYPE": "五稜郭タワー", "POI-GORYUDAKE-PROTOTYPE": "五竜岳", "POI-HAKATA-PORT-TOWER-PROTOTYPE": "博多ポートタワー", "POI-HAKUSAN-PROTOTYPE": "白山", "POI-HIJIRIDAKE-PROTOTYPE": "聖岳", "POI-HIKONE-CASTLE-PROTOTYPE": "彦根城", "POI-HIMEJI-CASTLE-PROTOTYPE": "姫路城", "POI-HIROSAKI-CASTLE-PROTOTYPE": "弘前城", "POI-HOKKAIDO-TENTOKU-DAIKANNON-PROTOTYPE": "北海道天徳大観音", "POI-HORYUJI-PAGODA-PROTOTYPE": "法隆寺五重塔", "POI-INUYAMA-CASTLE-PROTOTYPE": "犬山城", "POI-ISHIYAMADERA-PAGODA-PROTOTYPE": "石山寺多宝塔", "POI-ISHIZUCHISAN-PROTOTYPE": "石鎚山", "POI-IWAKISAN-PROTOTYPE": "岩木山", "POI-JONENDAKE-PROTOTYPE": "常念岳", "POI-KACHIDOKI-BRIDGE-PROTOTYPE": "勝鬨橋", "POI-KAIKOMAGATAKE-PROTOTYPE": "甲斐駒ヶ岳", "POI-KAIKYO-YUME-TOWER-PROTOTYPE": "海峡ゆめタワー", "POI-KANNONDAKE-PROTOTYPE": "観音岳（鳳凰三山）", "POI-KARAMATSUDAKE-PROTOTYPE": "唐松岳", "POI-KARASAWADAKE-PROTOTYPE": "涸沢岳", "POI-KASAGATAKE-PROTOTYPE": "笠ヶ岳", "POI-KASHIMAYARIGATAKE-PROTOTYPE": "鹿島槍ヶ岳", "POI-KAWASAKIDAISHI-PAGODA-PROTOTYPE": "川崎大師八角五重塔", "POI-KISOKOMAGATAKE-PROTOTYPE": "木曽駒ヶ岳", "POI-KITADAKE-PROTOTYPE": "北岳", "POI-KITAHOTAKADAKE-PROTOTYPE": "北穂高岳", "POI-KIYOSU-BRIDGE-PROTOTYPE": "清洲橋", "POI-KOBE-PORT-TOWER-PROTOTYPE": "神戸ポートタワー", "POI-KOCHI-CASTLE-PROTOTYPE": "高知城", "POI-KOFUKUJI-PAGODA-PROTOTYPE": "興福寺五重塔", "POI-KUMAMOTO-CASTLE-PROTOTYPE": "熊本城", "POI-KUROBEGORODAKE-PROTOTYPE": "黒部五郎岳", "POI-KYOTO-TOWER-PROTOTYPE": "京都タワー", "POI-MAEHOTAKADAKE-PROTOTYPE": "前穂高岳", "POI-MARUGAME-CASTLE-PROTOTYPE": "丸亀城", "POI-MARUOKA-CASTLE-PROTOTYPE": "丸岡城", "POI-MATSUE-CASTLE-PROTOTYPE": "松江城", "POI-MATSUMOTO-CASTLE-PROTOTYPE": "松本城", "POI-MATSUYAMA-CASTLE-PROTOTYPE": "松山城", "POI-MITSUMATARENGEDAKE-PROTOTYPE": "三俣蓮華岳", "POI-MYOKOSAN-PROTOTYPE": "妙高山", "POI-NAGOYA-CASTLE-PROTOTYPE": "名古屋城", "POI-NAGOYA-TV-TOWER-PROTOTYPE": "名古屋テレビ塔", "POI-NARITASAN-PAGODA-PROTOTYPE": "成田山新勝寺三重塔", "POI-NISHIHOTAKADAKE-PROTOTYPE": "西穂高岳", "POI-NOGUCHIGORODAKE-PROTOTYPE": "野口五郎岳", "POI-NORIKURADAKE-PROTOTYPE": "乗鞍岳", "POI-ODAWARA-CASTLE-PROTOTYPE": "小田原城", "POI-OKUHOTAKADAKE-PROTOTYPE": "奥穂高岳", "POI-ONTAKESAN-PROTOTYPE": "御嶽山", "POI-OSAKA-CASTLE-PROTOTYPE": "大阪城", "POI-OTENJODAKE-PROTOTYPE": "大天井岳", "POI-RAINBOW-BRIDGE-PROTOTYPE": "レインボーブリッジ", "POI-SAPPORO-TV-TOWER-PROTOTYPE": "さっぽろテレビ塔", "POI-SEA-CANDLE-PROTOTYPE": "江の島シーキャンドル", "POI-SENJOGATAKE-PROTOTYPE": "仙丈ヶ岳", "POI-SENSOJI-PAGODA-PROTOTYPE": "浅草寺五重塔", "POI-SHIOMIDAKE-PROTOTYPE": "塩見岳", "POI-SHIROUMADAKE-PROTOTYPE": "白馬岳", "POI-SKYTREE-PROTOTYPE": "東京スカイツリー", "POI-SUGOROKUDAKE-PROTOTYPE": "双六岳", "POI-SUISHODAKE-PROTOTYPE": "水晶岳", "POI-TATEYAMA-PROTOTYPE": "立山（雄山）", "POI-TOJI-PAGODA-PROTOTYPE": "東寺五重塔", "POI-TOKYO-STATION-PROTOTYPE": "東京駅丸の内駅舎", "POI-TOKYO-TOWER-PROTOTYPE": "東京タワー", "POI-TSUBAKURODAKE-PROTOTYPE": "燕岳", "POI-TSURUGIDAKE-PROTOTYPE": "剱岳", "POI-TSUTENKAKU-PROTOTYPE": "通天閣", "POI-USHIKU-DAIBUTSU-PROTOTYPE": "牛久大仏", "POI-UTSUGIDAKE-PROTOTYPE": "空木岳", "POI-UWAJIMA-CASTLE-PROTOTYPE": "宇和島城", "POI-WARUSAWADAKE-PROTOTYPE": "悪沢岳（荒川三山）", "POI-WASHIBADAKE-PROTOTYPE": "鷲羽岳", "POI-YAKUSHIDAKE-PROTOTYPE": "薬師岳", "POI-YARIGATAKE-PROTOTYPE": "槍ヶ岳", "POI-YOKOHAMA-LANDMARK-TOWER-PROTOTYPE": "横浜ランドマークタワー", "POI-YOKOHAMA-MARINE-TOWER-PROTOTYPE": "横浜マリンタワー"}, "sensor_height_mm": 24.0, "sensor_width_mm": 36.0, "sun_semi_diameter_deg": 0.2665, "terrain": {"azimuth_count_max": 241, "azimuth_count_min": 61, "azimuth_step_deg": 0.08, "distance_step_far_m": 300, "distance_step_near_m": 150, "elevation_tile_id": "dem_png", "far_zoom": 12, "far_zoom_wide": 11, "fov_margin": 1.1, "fuji_terrain_radius_m": 22000, "max_half_fov_deg": 60.0, "maximum_range_m": 120000, "minimum_range_m": 1000, "near_range_m": 15000, "near_zoom": 13, "range_beyond_target_m": 10000, "wide_fov_deg": 40.0}}, "wire_keys": ["v", "g", "ox", "oy", "oz", "oh", "td", "tz", "pi", "ti", "rx", "ry", "rz", "ca", "ce", "ta", "te", "sd", "sc", "sa", "fl", "pl", "rk"]};
 const CODES = SPEC.codes;
 const VIEWER = SPEC.viewer;
 
@@ -270,12 +282,100 @@ function checkDatetimeWire(value) {
   if (h > 23 || m > 59 || s > 59) fail(CODES.INVALID_DATETIME, "時刻が範囲外です。");
 }
 
+/* 厳格 JSON（2026-09-30、AI-15989。Python の parse_strict_json と同じ判定）。
+   JSON.parse は重複 key を後勝ちで黙って受け、数値 token の整数表記 / 小数表記を区別しない。Python と同じく
+   重複 key = DUPLICATE_KEY（object が閉じた時点で判定 = object_pairs_hook と同じ順）、NaN / Infinity = NON_FINITE_NUMBER、
+   top level が object でない = INVALID_SCHEMA、その他 = INVALID_JSON。整数表記の数値 token を持つ key を object ごとに
+   記録する（Python は 2.0 を float として v / b.d / b.k の整数検査で拒否するため）。 */
+const integerTokenKeys = new WeakMap();
+function isIntegerToken(object, key) {
+  const keys = integerTokenKeys.get(object);
+  return !!keys && keys.has(key);
+}
+const JSON_STRING = /"(?:[^"\\\u0000-\u001f]|\\["\\/bfnrt]|\\u[0-9a-fA-F]{4})*"/y;
+const JSON_NUMBER = /-?(?:0|[1-9][0-9]*)(\.[0-9]+)?([eE][-+]?[0-9]+)?/y;
 function parseStrictJson(text) {
-  let value;
-  try { value = JSON.parse(text); }
-  catch (error) { fail(CODES.INVALID_JSON, "リンクの内容を読み取れませんでした。"); }
+  let i = 0;
+  let integerToken = false;
+  const invalid = () => fail(CODES.INVALID_JSON, "リンクの内容を読み取れませんでした。");
+  const skip = () => {
+    while (i < text.length && (text[i] === " " || text[i] === "\t" || text[i] === "\n" || text[i] === "\r")) i += 1;
+  };
+  const token = (pattern) => {
+    pattern.lastIndex = i;
+    const match = pattern.exec(text);
+    if (!match) invalid();
+    i = pattern.lastIndex;
+    return match;
+  };
+  const define = (object, key, value) =>
+    Object.defineProperty(object, key, {value: value, enumerable: true, writable: true, configurable: true});
+  function parseValue() {
+    skip();
+    integerToken = false;
+    const c = text[i];
+    if (c === "{") return parseObject();
+    if (c === "[") return parseArray();
+    if (c === "\"") return JSON.parse(token(JSON_STRING)[0]);
+    for (const [word, value] of [["true", true], ["false", false], ["null", null]]) {
+      if (text.startsWith(word, i)) { i += word.length; return value; }
+    }
+    for (const word of ["NaN", "Infinity", "-Infinity"]) {
+      if (text.startsWith(word, i)) fail(CODES.NON_FINITE_NUMBER, "共有データの数値が不正です。");
+    }
+    const match = token(JSON_NUMBER);
+    integerToken = match[1] === undefined && match[2] === undefined;
+    return Number(match[0]);
+  }
+  function parseObject() {
+    i += 1;
+    const out = {};
+    const integers = new Set();
+    let duplicate = false;
+    skip();
+    if (text[i] === "}") { i += 1; integerTokenKeys.set(out, integers); integerToken = false; return out; }
+    for (;;) {
+      skip();
+      if (text[i] !== "\"") invalid();
+      const key = JSON.parse(token(JSON_STRING)[0]);
+      skip();
+      if (text[i] !== ":") invalid();
+      i += 1;
+      const value = parseValue();
+      const integer = typeof value === "number" && integerToken;
+      if (Object.prototype.hasOwnProperty.call(out, key)) duplicate = true;
+      define(out, key, value);                     /* "__proto__" も普通の key として持つ */
+      if (integer) integers.add(key); else integers.delete(key);
+      skip();
+      if (text[i] === ",") { i += 1; continue; }
+      if (text[i] === "}") { i += 1; break; }
+      invalid();
+    }
+    if (duplicate) fail(CODES.DUPLICATE_KEY, "共有データの項目が重複しています。");
+    integerTokenKeys.set(out, integers);
+    integerToken = false;
+    return out;
+  }
+  function parseArray() {
+    i += 1;
+    const out = [];
+    skip();
+    if (text[i] === "]") { i += 1; integerToken = false; return out; }
+    for (;;) {
+      out.push(parseValue());
+      skip();
+      if (text[i] === ",") { i += 1; continue; }
+      if (text[i] === "]") { i += 1; break; }
+      invalid();
+    }
+    integerToken = false;
+    return out;
+  }
+  const value = parseValue();
+  skip();
+  if (i !== text.length) invalid();
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    fail(CODES.INVALID_JSON, "リンクの内容を読み取れませんでした。");
+    fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
   }
   return value;
 }
@@ -366,9 +466,200 @@ async function decodeFragment(fragment) {
   }
   const inflated = await inflate(bytes);
   let text;
-  try { text = new TextDecoder("utf-8", {fatal: true}).decode(inflated); }
+  /* ignoreBOM: 先頭の BOM を黙って外さない（Python json.loads と同じく INVALID_JSON にする） */
+  try { text = new TextDecoder("utf-8", {fatal: true, ignoreBOM: true}).decode(inflated); }
   catch (error) { fail(CODES.INVALID_JSON, "リンクの内容を読み取れませんでした。"); }
-  return fromWireDict(parseStrictJson(text));
+  const wire = parseStrictJson(text);
+  /* v を最初に読む（Python share_v2_codec.decode_any_share_payload と同じ）。v1 は従来の decoder そのまま */
+  const version = Object.prototype.hasOwnProperty.call(wire, "v") ? wire.v : undefined;
+  if (typeof version !== "number" || !isIntegerToken(wire, "v")) {
+    fail(CODES.INVALID_TYPE, "共有データの形式が不正です。");
+  }
+  if (version === 1) return fromWireDict(wire);
+  if (version === SPEC.v2.version) return fromWireDictV2(wire);
+  fail(CODES.UNSUPPORTED_VERSION, "この共有データは、このページが対応していない形式です。");
+}
+
+/* ---- SharePlan v2（2026-09-30、HD-PLANNERSHAREV2-030 / -031、AI-15989）-------------------------
+   share_v2_codec.from_wire_dict_v2() ＋ validate_share_plan_v2() と同じ順・同じ code。語彙・上限は SPEC.v2
+   （build 時に share_v2_contract から書き出す）。受信値は変えない（丸めない・補わない・再計算しない）。 */
+const V2 = SPEC.v2;
+const hasOwn = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+const isJsonObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+/* Python str.strip() が落とす空白（str.isspace）。前後にあれば INVALID_LENGTH（check_string と同じ） */
+const PY_SPACE_EDGE = /^[\t\n\v\f\r\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]|[\t\n\v\f\r\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000]$/;
+const LONE_SURROGATE = /[\ud800-\udbff](?![\udc00-\udfff])|(?:^|[^\ud800-\udbff])[\udc00-\udfff]/;
+function v2Object(value, keys) {
+  if (!isJsonObject(value)) fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
+  if (keys.some((key) => !hasOwn(value, key))) fail(CODES.INVALID_SCHEMA, "共有データの項目が足りません。");
+  if (Object.keys(value).some((key) => !keys.includes(key))) {
+    fail(CODES.INVALID_SCHEMA, "共有データに未知の項目があります。");
+  }
+  return value;
+}
+/* YYYY-MM-DDTHH:MM:SSZ（UTC、canonical）→ epoch ms */
+function v2Datetime(value) {
+  if (typeof value !== "string") fail(CODES.INVALID_TYPE, "日時の形式が不正です。");
+  if (value.length !== SPEC.datetime_length || !/^[\x00-\x7f]*$/.test(value) || value[value.length - 1] !== "Z") {
+    fail(CODES.INVALID_DATETIME, "日時の形式が不正です。");
+  }
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z$/.exec(value);
+  if (!match) fail(CODES.INVALID_DATETIME, "日時の形式が不正です。");
+  const [Y, M, D, h, m, s] = match.slice(1).map((part) => parseInt(part, 10));
+  if (Y < 1 || M < 1 || M > 12 || D < 1 || D > daysInMonth(Y, M) || h > 23 || m > 59 || s > 59) {
+    fail(CODES.INVALID_DATETIME, "日時が範囲外です。");
+  }
+  const date = new Date(0);
+  date.setUTCFullYear(Y, M - 1, D);
+  date.setUTCHours(h, m, s, 0);
+  return date.getTime();
+}
+function v2Number(value, minimum, maximum, exclusive) {
+  if (typeof value !== "number" || !Number.isFinite(value)) fail(CODES.INVALID_TYPE, "共有データの数値が不正です。");
+  if (minimum !== undefined && minimum !== null && value < minimum) fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+  if (maximum !== undefined && maximum !== null && (exclusive ? value >= maximum : value > maximum)) {
+    fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+  }
+}
+function v2NullableNumber(value, minimum, maximum, exclusive) {
+  if (value !== null) v2Number(value, minimum, maximum, exclusive);
+}
+function v2String(value, maxUtf8) {
+  if (typeof value !== "string") fail(CODES.INVALID_TYPE, "共有データの文字列が不正です。");
+  if (value === "" || PY_SPACE_EDGE.test(value) || LONE_SURROGATE.test(value)) {
+    fail(CODES.INVALID_LENGTH, "共有データの文字列が不正です。");
+  }
+  if (utf8Length(value) > maxUtf8) fail(CODES.INVALID_LENGTH, "共有データの文字列が長すぎます。");
+}
+function v2Timezone(value) {
+  v2String(value, V2.timezone_max_utf8);
+  if (!/^[A-Za-z0-9/_+-]+$/.test(value)) fail(CODES.INVALID_TIMEZONE, "タイムゾーンが不正です。");
+}
+function v2Enum(value, vocabulary) {
+  if (typeof value !== "string") fail(CODES.INVALID_TYPE, "共有データの状態値が不正です。");
+  if (!vocabulary.includes(value)) fail(CODES.INVALID_ENUM, "共有データの状態値が不正です。");
+}
+function v2Bool(value) {
+  if (typeof value !== "boolean") fail(CODES.INVALID_TYPE, "共有データの値の型が不正です。");
+}
+function v2Integer(object, key, minimum, maximum) {
+  if (typeof object[key] !== "number" || !isIntegerToken(object, key)) {
+    fail(CODES.INVALID_TYPE, "共有データの数値が不正です。");
+  }
+  v2Number(object[key], minimum, maximum);
+}
+
+function fromWireDictV2(wire) {
+  /* version は decodeFragment が読んだ。genre を key 集合より先に読む（Python と同じ） */
+  const genre = hasOwn(wire, "g") ? wire.g : undefined;
+  if (typeof genre !== "string") fail(CODES.INVALID_TYPE, "共有データの形式が不正です。");
+  if (!V2.genres.includes(genre)) fail(CODES.UNSUPPORTED_GENRE, "この共有データの種類には対応していません。");
+  v2Object(wire, V2.keys.top);
+  const o = v2Object(wire.o, V2.keys.observer);
+  const t = v2Object(wire.t, V2.keys.time);
+  const planTime = v2Datetime(t.d);
+  v2Timezone(t.z);
+  const trails = genre === "star_trails";
+  let r = null;
+  if (trails) {
+    /* 星の軌跡には方向の基準（被写体）が無い。null 以外は拒否（偽の被写体を受け取らない） */
+    if (wire.r !== null) fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
+  } else {
+    r = v2Object(wire.r, V2.keys.reference);
+  }
+  let b = wire.b;
+  let times = null;
+  if (trails) {
+    b = v2Object(b, V2.keys.star_trails);
+  } else if (genre === "solar_lunar") {
+    b = v2Object(b, V2.keys.solar_lunar);
+    v2Object(b.s, V2.keys.sun);
+    v2Object(b.n, V2.keys.moon);
+  } else {
+    b = v2Object(b, V2.keys.star);
+    v2Enum(b.k, ["interval", "instant"]);
+    if (b.k === "interval") {
+      const c = v2Object(b.c, V2.keys.interval);
+      if (!Array.isArray(c.w) || c.w.length !== 2) fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
+      v2Object(c.x, V2.keys.sector);
+      times = {s: v2Datetime(c.s), e: v2Datetime(c.e), w0: v2Datetime(c.w[0]), w1: v2Datetime(c.w[1])};
+    } else {
+      const c = v2Object(b.c, V2.keys.instant);
+      times = {m: v2Datetime(c.m), w: v2Datetime(c.w)};
+    }
+  }
+  const p = v2Object(wire.p, V2.keys.presentation);
+  if (p.t !== null) v2Datetime(p.t);
+
+  /* ---- 値の検証（validate_share_plan_v2 と同じ順）---- */
+  v2Number(o.x, -90, 90);
+  v2Number(o.y, -180, 180);
+  v2Number(o.z);
+  v2Number(o.h);
+  v2Enum(o.s, V2.dem_statuses);
+  v2Timezone(t.z);
+  if (!trails) {
+    v2String(r.p, V2.identifier_max_utf8);
+    v2String(r.i, V2.identifier_max_utf8);
+    v2String(r.l, V2.label_max_utf8);
+    v2Number(r.x, -90, 90);
+    v2Number(r.y, -180, 180);
+    v2Number(r.z);
+    v2Enum(r.k, V2.resolver_kinds);
+    v2Enum(r.s, V2.resolution_statuses);
+    v2Number(r.a, 0, 360, true);
+    v2Number(r.e, -90, 90);
+  }
+  if (trails) {
+    /* 条件だけ（HD-PLANNERSHAREV2-022）。360° なので焦点距離・仰角・表示時刻は無い */
+    v2Integer(b, "d", 1, V2.duration_max_minutes);
+    v2Integer(b, "k", V2.terrain_range_min_m, V2.terrain_range_max_m);
+    v2Enum(b.m, V2.display_modes);
+    if (p.t !== null || p.f !== null || p.e !== null) fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
+    if (p.a === null) fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
+  } else if (genre === "solar_lunar") {
+    v2Enum(b.m, V2.celestial_models);
+    v2Number(b.s.a, 0, 360, true);
+    v2Number(b.s.e, -90, 90);
+    v2Number(b.n.a, 0, 360, true);
+    v2Number(b.n.e, -90, 90);
+    v2Number(b.n.f, 0, 1);
+    v2Number(b.n.p, 0, 360, true);
+  } else {
+    v2Enum(b.o, V2.sky_object_ids);
+    /* 検索の種類は天体で決まる（天の川 = interval、それ以外 = 瞬間候補）。混ぜない */
+    const expected = b.o === V2.milky_way ? "interval" : "instant";
+    if (b.k !== expected) fail(CODES.INVALID_SCHEMA, "共有データの形式が不正です。");
+    const c = b.c;
+    let candidateTime;
+    if (expected === "interval") {
+      if (c.q !== V2.interval_state) fail(CODES.INVALID_ENUM, "共有データの状態値が不正です。");
+      if (!(times.e > times.s)) fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+      v2Number(c.d, 0);
+      if (c.d <= 0 || Math.abs(c.d - (times.e - times.s) / 60000) > 1e-9) {
+        fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+      }
+      v2Bool(c.a);
+      v2Bool(c.b);
+      if (!(times.w0 <= times.s && times.e <= times.w1)) fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+      v2Number(c.x.a, 0, 360, true);
+      v2Number(c.x.h, 0, 180);
+      v2Number(c.x.l, -360, 720);
+      v2Number(c.x.r, -360, 720);
+      candidateTime = times.s;
+    } else {
+      v2Number(c.h, -90, 90);
+      v2Number(c.a, 0, 360, true);
+      candidateTime = times.m;
+      if (times.m < times.w) fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+    }
+    /* 星景の plan 時刻は候補の時刻そのもの（D5） */
+    if (planTime !== candidateTime) fail(CODES.INVALID_RANGE, "共有データの値が範囲外です。");
+  }
+  v2NullableNumber(p.f, 1, 10000);
+  v2NullableNumber(p.a, 0, 360, true);
+  v2NullableNumber(p.e, -90, 90);
+  return {share_format_version: 2, plan_genre: genre, wire: wire};
 }
 
 /* ---- generic label（HD-VIEWER-BETA1-04）---------------------------------- */
@@ -534,10 +825,18 @@ function destination(latDeg, lonDeg, bearingDeg, distanceM) {
 
 /* Real map の model（純関数）。撮影地点と被写体の両方が padding 内に収まる最大 zoom を選ぶ。
    zoom / center を渡すと（＋ − 全体 の操作）その view を返す。 */
+/* 2026-09-30（v2 星の軌跡、HD-PLANNERSHAREV2-031）: 被写体（target）が無い plan は撮影地点だけを中心に置く。
+   target を作らない。v1 の plan は必ず target を持つので従来どおり。 */
+function hasMapTarget(plan) {
+  return isPlainNumber(plan.resolved_target_latitude_deg) && isPlainNumber(plan.resolved_target_longitude_deg);
+}
 function tileMapModel(plan, width, height, zoom, center) {
+  const withTarget = hasMapTarget(plan);
   const lat0 = plan.observer_latitude_deg, lon0 = plan.observer_longitude_deg;
-  const lat1 = plan.resolved_target_latitude_deg, lon1 = plan.resolved_target_longitude_deg;
+  const lat1 = withTarget ? plan.resolved_target_latitude_deg : lat0;
+  const lon1 = withTarget ? plan.resolved_target_longitude_deg : lon0;
   const pad = 36;
+  if (!withTarget && !isPlainNumber(zoom)) zoom = VIEWER.map_point_zoom;
   if (!isPlainNumber(zoom)) {
     zoom = VIEWER.gsi_basemap_zoom_min;
     for (let z = VIEWER.gsi_basemap_zoom_max; z >= VIEWER.gsi_basemap_zoom_min; z -= 1) {
@@ -568,7 +867,7 @@ function tileMapModel(plan, width, height, zoom, center) {
   return {
     zoom: zoom, width: width, height: height, tiles: tiles,
     center: {lat: centerLat, lon: center.x / (n * TILE) * 360 - 180},
-    observer: {x: o.x - left, y: o.y - top}, target: {x: t.x - left, y: t.y - top},
+    observer: {x: o.x - left, y: o.y - top}, target: withTarget ? {x: t.x - left, y: t.y - top} : null,
     meters_per_px: metersPerPixel(centerLat, zoom),
   };
 }
@@ -970,7 +1269,7 @@ function renderMap(plan, zoom, center) {
   for (const [label, aria, action] of [
       ["＋", "地図を拡大", () => renderMap(plan, mapState.zoom + 1, mapState.center)],
       ["－", "地図を縮小", () => renderMap(plan, mapState.zoom - 1, mapState.center)],
-      ["全体", "撮影地点と被写体の全体を表示", () => renderMap(plan)]]) {
+      ["全体", model.target ? "撮影地点と被写体の全体を表示" : "撮影地点を中心に表示", () => renderMap(plan)]]) {
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = label;
@@ -986,23 +1285,55 @@ function renderMap(plan, zoom, center) {
   wrap.appendChild(attr);
   replaceFigure($("map-figure"), wrap);
   $("map").dataset.map = "pending";
+  if (!model.target) {
+    $("map-caption").textContent = pointMapCaption(plan);
+    return;
+  }
   const m0 = m0Model(plan);
   $("map-caption").textContent = m0.bearing_deg === null
     ? "撮影地点と被写体が同じ位置です。"
     : "撮影地点 ● から被写体 ▲ まで 約 " + distanceText(m0.distance_m) + "、方位 "
-      + fmt1(m0.bearing_deg) + "°（北を 0° として時計回り）。扇形は共有された画角の目安です。";
+      + fmt1(m0.bearing_deg) + "°（北を 0° として時計回り）。" + mapFanNote(plan);
+}
+/* 扇形の意味。v1 = 共有された画角（従来の文）、v2 = adapter が決める（画角 / 探した方位の範囲 / 無し） */
+function mapFanNote(plan) {
+  return hasOwn(plan, "map_fan_note") ? plan.map_fan_note : "扇形は共有された画角の目安です。";
+}
+function mapFanDeg(plan) {
+  return hasOwn(plan, "map_fov_deg") ? plan.map_fov_deg : compositionModel(plan).fov_horizontal_deg;
+}
+/* 被写体の無い plan（v2 星の軌跡）: 撮影地点と見る方向だけ */
+function pointMapCaption(plan) {
+  return "撮影地点 ● と見る方向（矢印、" + plan.map_direction_text + "）。北を上にしています。";
+}
+/* 見る方向の矢印の先（撮影地点から length px、方位 deg） */
+function directionTip(o, deg, length) {
+  const b = deg * DEG;
+  return {x: o.x + Math.sin(b) * length, y: o.y - Math.cos(b) * length};
+}
+function appendArrow(svg, from, to, lineClass, headClass, headLen, headHalf) {
+  const dx = to.x - from.x, dy = to.y - from.y, len = Math.hypot(dx, dy);
+  if (len <= 0) return;
+  const ux = dx / len, uy = dy / len;
+  const bx = to.x - ux * headLen, by = to.y - uy * headLen;
+  svg.appendChild(svgEl("line", {x1: fmt1(from.x), y1: fmt1(from.y), x2: fmt1(bx), y2: fmt1(by), class: lineClass}));
+  svg.appendChild(svgEl("polygon", {
+    points: fmt1(to.x) + "," + fmt1(to.y) + " " + fmt1(bx - uy * headHalf) + "," + fmt1(by + ux * headHalf)
+            + " " + fmt1(bx + uy * headHalf) + "," + fmt1(by - ux * headHalf), class: headClass}));
 }
 function mapOverlay(plan, model) {
   const W = model.width, H = model.height;
-  const svg = svgEl("svg", {viewBox: "0 0 " + W + " " + H, role: "img",
-                            "aria-label": "撮影地点と被写体の位置（地理院タイル上）"});
   const o = model.observer, t = model.target;
-  const comp = compositionModel(plan);
+  const svg = svgEl("svg", {viewBox: "0 0 " + W + " " + H, role: "img",
+                            "aria-label": t ? "撮影地点と被写体の位置（地理院タイル上）"
+                                            : "撮影地点と見る方向（地理院タイル上）"});
+  if (!t) return pointMapOverlay(plan, model, svg);
+  const fanDeg = mapFanDeg(plan);
   const ta = plan.target_azimuth_deg;
   /* 画角の扇（撮影方向）。長さは被写体までの距離か枠の 45% の短い方 */
   const reach = Math.min(Math.hypot(t.x - o.x, t.y - o.y) || Infinity, Math.min(W, H) * 0.45);
-  if (isFinite(reach) && reach > 0) {
-    const half = Math.min(comp.fov_horizontal_deg / 2, 60);
+  if (isPlainNumber(fanDeg) && isFinite(reach) && reach > 0) {
+    const half = Math.min(fanDeg / 2, 60);
     const pts = [o.x + "," + o.y];
     for (let k = 0; k <= 12; k += 1) {
       const b = (ta - half + 2 * half * k / 12) * DEG;
@@ -1053,12 +1384,38 @@ function mapOverlay(plan, model) {
   svg.appendChild(svgEl("text", {x: 10, y: H - 17, class: "m1-text"}, distanceText(barM)));
   return svg;
 }
+/* 被写体の無い plan（v2 星の軌跡）の overlay: 撮影地点 ● と見る方向の矢印・N・scale だけ（被写体 ▲・線・扇は描かない） */
+function pointMapOverlay(plan, model, svg) {
+  const W = model.width, H = model.height, o = model.observer;
+  const tip = directionTip(o, plan.map_direction_deg, Math.min(W, H) * 0.38);
+  appendArrow(svg, o, tip, "m1-line", "m1-arrow", 12, 6);
+  svg.appendChild(svgEl("circle", {cx: o.x, cy: o.y, r: 7, class: "m1-observer"}));
+  const below = tip.y < o.y;                                  /* 矢印と反対側へ撮影地点の label を置く */
+  svg.appendChild(svgEl("text", {x: fmt1(o.x), y: fmt1(clamp(below ? o.y + 24 : o.y - 14, 14, H - 22)),
+                                 "text-anchor": "middle", class: "m1-text"}, "撮影地点"));
+  svg.appendChild(svgEl("text", {x: fmt1(clamp(tip.x, 40, W - 40)), y: fmt1(clamp(tip.y + (below ? -10 : 20), 14, H - 22)),
+                                 "text-anchor": "middle", class: "m1-text"}, "見る方向"));
+  const nx = W - 18, ny = 26;
+  svg.appendChild(svgEl("line", {x1: nx, y1: ny + 12, x2: nx, y2: ny - 8, class: "m1-north"}));
+  svg.appendChild(svgEl("polygon", {points: nx + "," + (ny - 14) + " " + (nx - 5) + "," + (ny - 4)
+                                    + " " + (nx + 5) + "," + (ny - 4), class: "m1-north-arrow"}));
+  svg.appendChild(svgEl("text", {x: nx, y: ny + 25, "text-anchor": "middle", class: "m1-text"}, "N"));
+  const nice = [100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000];
+  const target = model.meters_per_px * W * 0.25;
+  let barM = nice[0];
+  for (const m of nice) if (m <= target) barM = m;
+  const barPx = barM / model.meters_per_px;
+  svg.appendChild(svgEl("line", {x1: 10, y1: H - 12, x2: 10 + barPx, y2: H - 12, class: "m1-scale"}));
+  svg.appendChild(svgEl("text", {x: 10, y: H - 17, class: "m1-text"}, distanceText(barM)));
+  return svg;
+}
 window.addEventListener("resize", () => {
   if (mapState && mapState.mode === "tiles" && mapState.plan) renderMap(mapState.plan, mapState.zoom, mapState.center);
 });
 
 /* Simple Map M0（HD-VIEWER-BETA1-02）。tileless。実地図が取れないときの fallback。 */
 function renderM0(plan, fallback) {
+  if (!hasMapTarget(plan)) { renderPointM0(plan, fallback); return; }
   const model = m0Model(plan);
   const W = model.width, H = model.height;
   const svg = svgEl("svg", {viewBox: "0 0 " + W + " " + H, role: "img",
@@ -1104,6 +1461,29 @@ function renderM0(plan, fallback) {
       + fmt1(model.bearing_deg) + "°（北を 0° として時計回り）。道路・地形は表示していません。")
     + (fallback ? "地図タイルを取得できなかったため略図を表示しています。" : "");
 }
+/* 被写体の無い plan（v2 星の軌跡）の略図: 撮影地点 ● と見る方向の矢印だけ */
+function renderPointM0(plan, fallback) {
+  const W = 320, H = 240, o = {x: W / 2, y: H / 2};
+  const svg = svgEl("svg", {viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "撮影地点と見る方向（略図）"});
+  svg.appendChild(svgEl("rect", {x: 0.5, y: 0.5, width: W - 1, height: H - 1, class: "m0-bg"}));
+  const nx = W - 22, ny = 30;
+  svg.appendChild(svgEl("line", {x1: nx, y1: ny + 14, x2: nx, y2: ny - 10, class: "m0-north"}));
+  svg.appendChild(svgEl("polygon", {points: nx + "," + (ny - 16) + " " + (nx - 5) + "," + (ny - 6)
+                                    + " " + (nx + 5) + "," + (ny - 6), class: "m0-arrow"}));
+  svg.appendChild(svgEl("text", {x: nx, y: ny + 27, "text-anchor": "middle", class: "m0-text"}, "N"));
+  const tip = directionTip(o, plan.map_direction_deg, 80);
+  appendArrow(svg, o, tip, "m0-line", "m0-arrow", 10, 5);
+  svg.appendChild(svgEl("circle", {cx: o.x, cy: o.y, r: 6, class: "m0-observer"}));
+  const below = tip.y < o.y;
+  svg.appendChild(svgEl("text", {x: o.x, y: below ? o.y + 22 : o.y - 12, "text-anchor": "middle", class: "m0-text"},
+                        "撮影地点"));
+  svg.appendChild(svgEl("text", {x: fmt1(clamp(tip.x, 40, W - 40)), y: fmt1(clamp(tip.y + (below ? -8 : 18), 14, H - 8)),
+                                 "text-anchor": "middle", class: "m0-text"}, "見る方向"));
+  replaceFigure($("map-figure"), svg);
+  $("map").dataset.map = fallback ? "fallback" : "m0";
+  $("map-caption").textContent = pointMapCaption(plan) + "道路・地形は表示していません。"
+    + (fallback ? "地図タイルを取得できなかったため略図を表示しています。" : "");
+}
 function distanceText(meters) {
   return meters >= 1000 ? fmt1(meters / 1000) + " km" : Math.round(meters) + " m";
 }
@@ -1114,11 +1494,264 @@ function renderGoogleMaps(plan) {
   $("open-map").hidden = false;
 }
 
+/* ---- SharePlan v2 の表示（2026-09-30、HD-PLANNERSHAREV2-030 / -031、AI-15989）----------------
+   schema にある値だけを出す。再計算しない。導出は (a) 現地時刻 (b) 星の軌跡の終了時刻（開始 ＋ 整数分）
+   (c) 16 方位の語 (d) 地図上の距離・scale だけ。星の軌跡に被写体（target）を作らない。 */
+const MAP_HEADING_V1 = "撮影地点と被写体の位置関係";
+function v2SubjectName(reference) {
+  return subjectName({poi_id: reference.p, poi_label: reference.l});
+}
+function v2ObjectName(id) {
+  return hasOwn(V2.sky_object_names, id) ? V2.sky_object_names[id] : id;
+}
+function v2Title(plan) {
+  const w = plan.wire;
+  if (plan.plan_genre === "star_landscape") {
+    /* 送信側 Card の見出しと同じ規則: 「被写体と天体」（例: 富士山と天の川） */
+    const object = v2ObjectName(w.b.o), subject = v2SubjectName(w.r);
+    return subject && object ? subject + "と" + object : (object || V2.genre_titles.star_landscape);
+  }
+  return V2.genre_titles[plan.plan_genre];
+}
+function compassName(deg) {
+  return V2.compass_labels[((Math.round(deg / 22.5) % 16) + 16) % 16];
+}
+function localParts(epochMs, timezone) {
+  const parts = {};
+  const format = new Intl.DateTimeFormat("ja-JP", {
+    timeZone: timezone, year: "numeric", month: "2-digit", day: "2-digit", weekday: "short",
+    hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23"});
+  for (const part of format.formatToParts(new Date(epochMs))) parts[part.type] = part.value;
+  return parts;
+}
+const isoFromMs = (epochMs) => new Date(epochMs).toISOString().slice(0, 19) + "Z";
+/* 現地の日時（導出値）。tzdata が無い環境では UTC の wire 表記 */
+function localDateTime(epochMs, timezone, withSeconds) {
+  try {
+    const p = localParts(epochMs, timezone);
+    return p.year + "/" + p.month + "/" + p.day + "(" + p.weekday + ") " + p.hour + ":" + p.minute
+      + (withSeconds ? ":" + p.second : "");
+  } catch (error) {
+    return "UTC " + isoFromMs(epochMs);
+  }
+}
+/* 開始〜終了。同じ日なら終了は時刻だけ（送信側の共有 dialog と同じ書き方） */
+function localRange(startMs, endMs, timezone) {
+  const a = localDateTime(startMs, timezone, false), b = localDateTime(endMs, timezone, false);
+  const day = (text) => text.slice(0, text.lastIndexOf(" "));
+  return a + "〜" + (day(a) === day(b) ? b.slice(b.lastIndexOf(" ") + 1) : b);
+}
+function durationText(minutes) {
+  if (!Number.isInteger(minutes)) return displayValue(minutes) + "分";
+  const hours = Math.floor(minutes / 60), rest = minutes % 60;
+  return ((hours ? hours + "時間" : "") + (rest ? rest + "分" : "")) || "0分";
+}
+function skyPositionText(azimuth, altitude) {
+  return "方位 " + displayValue(azimuth) + "°（" + compassName(azimuth) + "）・高度 " + displayValue(altitude) + "°"
+    + (altitude < 0 ? "（地平線の下）" : "");
+}
+function renderRows(container, rows) {
+  while (container.firstChild) container.removeChild(container.firstChild);
+  for (const [label, value] of rows) {
+    const dt = document.createElement("dt");
+    dt.textContent = label;
+    const dd = document.createElement("dd");
+    dd.textContent = value;                 /* untrusted 文字列は textContent のみ */
+    container.append(dt, dd);
+  }
+}
+function renderWhenRange(startMs, endMs, timezone) {
+  $("when-local").textContent = localRange(startMs, endMs, timezone);
+  $("when-utc").textContent = "UTC " + isoFromMs(startMs) + " 〜 " + isoFromMs(endMs) + "　/　タイムゾーン " + timezone;
+  $("when").hidden = false;
+}
+/* 地図・Google マップへ渡す形（v1 の field 名に写すだけ。値は受信値そのまま） */
+function v2MapPlan(plan) {
+  const w = plan.wire;
+  const out = {observer_latitude_deg: w.o.x, observer_longitude_deg: w.o.y};
+  if (!w.r) {
+    const azimuth = Math.round(w.p.a) % 360;           /* 送信側の表示と同じ（整数の度） */
+    out.map_direction_deg = w.p.a;
+    out.map_direction_text = compassName(azimuth) + " " + azimuth + "°";
+    return out;
+  }
+  out.resolved_target_latitude_deg = w.r.x;
+  out.resolved_target_longitude_deg = w.r.y;
+  out.poi_id = w.r.p;
+  out.poi_label = w.r.l;
+  const c = w.b.c;
+  if (plan.plan_genre === "star_landscape" && w.b.k === "interval") {
+    /* 天の川: 探した方位の範囲（共有された扇形）を描く */
+    out.target_azimuth_deg = c.x.a;
+    out.map_fov_deg = 2 * c.x.h;
+    out.map_fan_note = "扇形は探した方位の範囲（" + displayValue(c.x.a) + "° ±" + displayValue(c.x.h) + "°）です。";
+  } else if (isPlainNumber(w.p.f)) {
+    out.target_azimuth_deg = w.p.a !== null ? w.p.a : w.r.a;
+    out.map_fov_deg = 2 * Math.atan(VIEWER.sensor_width_mm / (2 * w.p.f)) / DEG;
+    out.map_fan_note = "扇形は共有された焦点距離（" + displayValue(w.p.f) + " mm）の画角の目安です。";
+  } else {
+    out.target_azimuth_deg = w.r.a;
+    out.map_fov_deg = null;
+    out.map_fan_note = "";
+  }
+  return out;
+}
+function renderV2(plan) {
+  const w = plan.wire, genre = plan.plan_genre, tz = w.t.z;
+  const planMs = v2Datetime(w.t.d);
+  $("title").textContent = v2Title(plan);
+  const rows = [["撮影計画の種類", V2.genre_labels[genre]]];
+  const tech = [["撮影地点 緯度", w.o.x], ["撮影地点 経度", w.o.y], ["撮影地点の地面標高 (m)", w.o.z],
+                ["目線の高さ (m)", w.o.h]];
+  if (genre === "star_landscape") rows.push(["天体", v2ObjectName(w.b.o)]);
+  if (w.r) {
+    rows.push(["方向の基準", v2SubjectName(w.r)]);
+    tech.push(["方向の基準 緯度", w.r.x], ["方向の基準 経度", w.r.y], ["方向の基準 標高 (m)", w.r.z],
+              ["方向の基準の方位角 (°)", w.r.a], ["方向の基準の仰角 (°)", w.r.e]);
+  }
+  rows.push(["撮影地点", "緯度 " + displayValue(w.o.x) + " / 経度 " + displayValue(w.o.y)]);
+  if (genre === "solar_lunar") {
+    renderWhen({utc_datetime: w.t.d, timezone: tz});
+    rows.push(["太陽", skyPositionText(w.b.s.a, w.b.s.e)]);
+    rows.push(["月", skyPositionText(w.b.n.a, w.b.n.e) + "・輝面比 " + displayValue(w.b.n.f)]);
+    tech.push(["太陽の方位角 (°)", w.b.s.a], ["太陽の高度角 (°)", w.b.s.e], ["月の方位角 (°)", w.b.n.a],
+              ["月の高度角 (°)", w.b.n.e], ["月の輝面比", w.b.n.f], ["月の位相角 (°)", w.b.n.p]);
+  } else if (genre === "star_landscape" && w.b.k === "interval") {
+    const c = w.b.c, s = v2Datetime(c.s), e = v2Datetime(c.e);
+    renderWhenRange(s, e, tz);
+    rows.push(["見える時間帯", localRange(s, e, tz) + "（" + durationText(c.d) + "）"]);
+    if (c.a) rows.push(["開始について", "探した時間の範囲の始まりで区切っています（その前から見えている場合があります）"]);
+    if (c.b) rows.push(["終了について", "探した時間の範囲の終わりで区切っています（その後も見えている場合があります）"]);
+    rows.push(["探した方位", displayValue(c.x.a) + "°（" + compassName(c.x.a) + "）を中心に ±" + displayValue(c.x.h)
+               + "°（" + displayValue(c.x.l) + "° 〜 " + displayValue(c.x.r) + "°）"]);
+    rows.push(["探した時間の範囲", localRange(v2Datetime(c.w[0]), v2Datetime(c.w[1]), tz)]);
+    tech.push(["見える時間帯の開始 (UTC)", c.s], ["見える時間帯の終了 (UTC)", c.e], ["長さ (分)", c.d],
+              ["探した時間の範囲 (UTC)", c.w[0] + " 〜 " + c.w[1]], ["探した方位の中心 (°)", c.x.a],
+              ["探した方位の半幅 (°)", c.x.h], ["探した方位の左端 (°)", c.x.l], ["探した方位の右端 (°)", c.x.r]);
+  } else if (genre === "star_landscape") {
+    const c = w.b.c;
+    renderWhen({utc_datetime: c.m, timezone: tz});
+    rows.push(["候補の時刻", localDateTime(v2Datetime(c.m), tz, true)]);
+    rows.push(["その時刻の天体の高度", displayValue(c.h) + "°"]);
+    rows.push(["探した方位", displayValue(c.a) + "°（" + compassName(c.a) + "、方向の基準の方位）"]);
+    rows.push(["探し始めた時刻", localDateTime(v2Datetime(c.w), tz, false)]);
+    tech.push(["候補の時刻 (UTC)", c.m], ["天体の高度角 (°)", c.h], ["探した方位 (°)", c.a], ["探し始めた時刻 (UTC)", c.w]);
+  } else {
+    /* 星の軌跡: 条件だけ（HD-PLANNERSHAREV2-031）。終了時刻 = 開始 ＋ 撮影時間（整数分） */
+    const b = w.b, endMs = planMs + b.d * 60000;
+    const azimuth = Math.round(w.p.a) % 360;
+    renderWhenRange(planMs, endMs, tz);
+    rows.push(["開始時刻", localDateTime(planMs, tz, false)]);
+    rows.push(["撮影時間", durationText(b.d)]);
+    rows.push(["終了時刻", localDateTime(endMs, tz, false)]);
+    rows.push(["表示", V2.display_mode_labels[b.m]]);
+    rows.push(["見る方向", compassName(azimuth) + " " + azimuth + "°"]);
+    rows.push(["地形の範囲", displayValue(b.k / 1000) + " km"]);
+    tech.push(["開始 (UTC)", w.t.d], ["撮影時間 (分)", b.d], ["見る方向 (°)", w.p.a], ["地形の範囲 (m)", b.k]);
+  }
+  if (genre !== "star_trails") {
+    if (w.p.t !== null) {
+      rows.push(["プレビューで見ていた時刻", localDateTime(v2Datetime(w.p.t), tz, false)]);
+      tech.push(["プレビューで見ていた時刻 (UTC)", w.p.t]);
+    }
+    if (w.p.f !== null) {
+      rows.push(["焦点距離", displayValue(w.p.f) + " mm"]);
+      tech.push(["焦点距離 (mm)", w.p.f]);
+    }
+    if (w.p.a !== null) tech.push(["視線の方位角 (°)", w.p.a]);
+    if (w.p.e !== null) tech.push(["視線の仰角 (°)", w.p.e]);
+  }
+  renderRows($("summary-fields"), rows);
+  renderRows($("primary-fields"), tech.map(([label, value]) => [label, displayValue(value)]));
+  $("map-heading").textContent = w.r ? "撮影地点と方向の基準（被写体）の位置関係" : "撮影地点と見る方向";
+  const mapPlan = v2MapPlan(plan);
+  renderMap(mapPlan);
+  renderGoogleMaps(mapPlan);
+  for (const id of ["summary", "map", "primary"]) $(id).hidden = false;
+  $("composition").dataset.terrain = "none";            /* v2 は構図イメージを出さない（D7。稜線を取りに行かない） */
+}
+
+/* ---- U2: このページを共有（HD-PLANNERSHARESYSTEM-003 / -006、D15、AI-15989）------------------------
+   明示的な click からだけ。Web Share（secure context ＋ feature detection）→ 非対応・失敗は clipboard → それも
+   使えなければ URL を選択状態で出す（手でコピー）。利用者のキャンセル（AbortError）では何もしない。
+   共有する URL は開いているページそのもの（fragment をそのまま、query は付けない）。Sidekick の server へは何も送らない。 */
+function webShareAvailable() {
+  return window.isSecureContext === true && typeof navigator.share === "function";
+}
+function currentShareUrl() {
+  return location.origin + location.pathname + location.hash;
+}
+function setShareStatus(text) {
+  $("share-status").textContent = text;
+}
+function renderShare() {
+  const button = $("share-button");
+  button.textContent = webShareAvailable() ? "このページを共有" : "このページのURLをコピー";
+  button.disabled = false;
+  setShareStatus("");
+  $("share-url").textContent = "";
+  $("share-url").hidden = true;
+  $("share-page").hidden = false;
+}
+async function shareCurrentPage() {
+  const button = $("share-button");
+  if (button.disabled) return "busy";
+  const generation = viewGeneration;
+  const url = currentShareUrl();
+  const data = {title: $("title").textContent, url: url};
+  const current = () => generation === viewGeneration;
+  button.disabled = true;
+  setShareStatus("");
+  try {
+    if (webShareAvailable()) {
+      let can = true;
+      try { can = typeof navigator.canShare !== "function" || navigator.canShare(data); } catch (error) { can = false; }
+      if (can) {
+        try {
+          await navigator.share(data);
+          return "shared";
+        } catch (error) {
+          if (error && error.name === "AbortError") return "aborted";   /* 利用者のキャンセル */
+        }
+      }
+    }
+    if (window.isSecureContext === true && navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      try {
+        await navigator.clipboard.writeText(url);
+        if (current()) setShareStatus("このページのURLをコピーしました。");
+        return "copied";
+      } catch (error) { /* 手でコピーへ */ }
+    }
+    if (!current()) return "stale";
+    const field = $("share-url");                     /* 読み取り専用の文字（入力欄は置かない） */
+    field.textContent = url;
+    field.hidden = false;
+    const range = document.createRange();
+    range.selectNodeContents(field);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    setShareStatus("URLを選択しました。コピーして送ってください。");
+    return "manual";
+  } finally {
+    button.disabled = false;
+  }
+}
+$("share-button").addEventListener("click", () => { shareCurrentPage(); });
+window.SidekickShareViewer.shareCurrentPage = shareCurrentPage;
+window.SidekickShareViewer.currentShareUrl = currentShareUrl;
+window.SidekickShareViewer.v2Title = v2Title;
+window.SidekickShareViewer.v2MapPlan = v2MapPlan;
+
 function clearAll() {
   $("title").textContent = "共有された撮影計画";
-  for (const id of ["when", "summary", "composition", "map", "open-map", "primary", "detail"]) {
+  for (const id of ["when", "summary", "composition", "map", "open-map", "primary", "detail", "share-page"]) {
     $(id).hidden = true;
   }
+  $("map-heading").textContent = MAP_HEADING_V1;
+  setShareStatus("");
+  $("share-url").textContent = "";
+  $("share-url").hidden = true;
   $("gmaps-link").removeAttribute("href");        /* 失敗時に古い地点を残さない */
   renderList($("primary-fields"), SPEC.primary_fields, {});
   renderList($("detail-fields"), SPEC.detail_fields, {});
@@ -1208,6 +1841,16 @@ async function show() {
     const raw = location.hash.startsWith("#") ? location.hash.slice(1) : location.hash;
     const plan = await decodeFragment(raw);
     if (generation !== viewGeneration) return;
+    if (plan.share_format_version === 2) {
+      /* v2（太陽・月 / 星景 / 星の軌跡）: 前の表示を消してから描く（v1 の構図イメージ・ターゲット詳細を残さない） */
+      clearAll();
+      renderV2(plan);
+      renderShare();
+      setStatus("撮影計画を読み込みました。", true);
+      reportActivity("share_viewed", raw, {});
+      return;
+    }
+    $("map-heading").textContent = MAP_HEADING_V1;
     $("title").textContent = planTitle(plan);
     renderWhen(plan);
     renderSummary(plan);
@@ -1217,6 +1860,7 @@ async function show() {
     renderList($("primary-fields"), SPEC.primary_fields, plan);
     renderList($("detail-fields"), SPEC.detail_fields, plan);
     for (const id of ["summary", "composition", "map", "primary", "detail"]) $(id).hidden = false;
+    renderShare();
     setStatus("撮影計画を読み込みました。", true);
     reportActivity("share_viewed", raw, {});           /* 表示が終わってから。待たない */
     terrainModel(plan, generation).then((terrain) => {
