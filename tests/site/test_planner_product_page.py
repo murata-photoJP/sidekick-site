@@ -159,6 +159,24 @@ def test_four_plan_types_are_described_as_beta_features(rendered: dict[str, str]
     assert "coming soon" not in en and "cannot be started yet" not in en
 
 
+@pytest.mark.parametrize("key", [JA_KEY, EN_KEY])
+def test_beta_1_02_screens_and_mode_meanings(rendered: dict[str, str], key: str) -> None:
+    """β1.02 Human Review（H-1 / H-3、2026-10-02）: 4 種の名前と意味の対応を導入に列挙し、
+    星の軌跡［実在星］の新規画像を載せ、QR 共有の画像は QR＋プレビューの実画面（460×774）。"""
+    html = rendered[key]
+    assert html.count('src="/images/planner/star-trails-real.jpg" width="1440" height="900"') == 1
+    assert 'src="/images/planner/qr-share.png" width="460" height="774"' in html
+    if key == JA_KEY:
+        for line in ("<strong>太陽</strong>（ダイヤモンド富士・太陽 × 被写体）", "<strong>パール</strong>（月 × 被写体）",
+                     "<strong>星景</strong>（地上の風景と星空の構図）", "<strong>風景</strong>（撮影地点から太陽・月を探す）"):
+            assert line in html
+    else:
+        for line in ("<strong>Sun</strong> (Diamond Fuji and sun × landmark)", "<strong>Pearl</strong> (moon × landmark)",
+                     "<strong>Starscape</strong> (landscape and starry sky)", "<strong>Landscape</strong> (sun and moon from a shooting point)"):
+            assert line in html
+    assert "star-landscape-milky-way" not in html   # H-3: 天の川の screenshot は今回採用しない
+
+
 # ---------------------------------------------------------------------------
 # 4. 配布導線が fail-closed
 # ---------------------------------------------------------------------------
