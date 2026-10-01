@@ -35,10 +35,12 @@ EN_KEY = "en/sidekick-planner"
 # release_acceptance.json（record_version 4）の artifact_identity。ページ作成時に
 # canonical の dist/rc13/Sidekick Planner/SidekickPlanner.exe で再計算して一致を確認した値。
 RC13_EXE_SHA256 = "709afc4e8a7b3ecd0073fc3926566b570a8c0fc8519080231ba598f18c720af7"
-PRODUCT_VERSION = "1.0.0-beta.2"   # β1.01 = RC14（2026-09-21 release）。β1.00 = 1.0.0-beta.1 は history
+PRODUCT_VERSION = "1.0.0-beta.3"   # β1.02 = RC15（release candidate、自作 AI-16567）。β1.01 = 1.0.0-beta.2 / β1.00 = 1.0.0-beta.1 は history
 
 # HD-PLANNERBETA1GENERICSURFACE-009: β1.00 の public surface に出さない語。
-CONCEALED_TERMS = ("星景", "天の川", "太陽・月", "Milky Way", "starscape", "スキャン")
+# β1.02（HD-PLANNERSHAREV2-034 / -037 で星景・風景が public、Human 指示 2026-10-02）: 星景・天の川・太陽・月・Milky Way・
+# starscape は公開する機能の説明に使う。未公開のままの語だけを残す。
+CONCEALED_TERMS = ("スキャン",)
 
 
 @pytest.fixture(scope="module")
@@ -120,7 +122,7 @@ def test_beta_facts(rendered: dict[str, str], key: str) -> None:
     html = rendered[key]
     assert PRODUCT_VERSION in html                    # 版
     assert "64-bit" in html                           # HD-OS-01
-    assert "2026" in html and ("10月31日" in html or "31 October 2026" in html)  # HD-LR-40
+    assert "2026" in html and ("11月30日" in html or "30 November 2026" in html)  # HD-LR-40 / HD-PLANNERBETAEXPIRYEXTENSION-001
     assert "SmartScreen" in html                      # HD-MC-13
     # 2026-09-20 Human Review（AI-11250）: SHA-256 はユーザー向け UI に出さない（内部検証には残す）
     assert "SHA-256" not in html.split("<main>", 1)[1]
@@ -145,11 +147,16 @@ def test_concealed_roadmap_terms_absent(rendered: dict[str, str], key: str) -> N
         assert term not in body, f"{key}: 公開しない語 {term!r} が本文にある（HD-PLANNERBETA1GENERICSURFACE-009）"
 
 
-def test_pearl_is_shown_only_as_coming_soon(rendered: dict[str, str]) -> None:
+def test_four_plan_types_are_described_as_beta_features(rendered: dict[str, str]) -> None:
+    """β1.02: パールは「近日対応」ではなくβ機能。撮影計画 4 種（太陽 / パール / 星景 / 風景）を説明する。"""
     ja = rendered[JA_KEY]
-    assert "パール" in ja and "近日対応" in ja
+    for term in ("パール（月 × 被写体）", "星景（地上の風景と星空の構図）", "風景（撮影地点から太陽・月を探す）", "天の川", "星の軌跡"):
+        assert term in ja
+    assert "近日対応" not in ja and "計算はまだ始められません" not in ja
     en = rendered[EN_KEY]
-    assert "Pearl" in en and "coming soon" in en
+    for term in ("Pearl (moon × landmark)", "Starscape", "Landscape", "Milky Way", "Star trails"):
+        assert term in en
+    assert "coming soon" not in en and "cannot be started yet" not in en
 
 
 # ---------------------------------------------------------------------------
@@ -160,16 +167,18 @@ def test_register_dl_maps_planner_to_dl_planner() -> None:
     source = (REPO_ROOT / "register-dl.html").read_text(encoding="utf-8")
     assert re.search(r"planner:\s*'/dl-planner'", source)
     assert re.search(r"planner:\s*'Sidekick_Planner'", source)
-    assert re.search(r"planner:\s*'1\.0\.0-beta\.2'", source), "register-dl の PRODUCT_VERSIONS は release の product_version"
-    assert "Sidekick Planner β1.01" in source
+    assert re.search(r"planner:\s*'1\.0\.0-beta\.3'", source), "register-dl の PRODUCT_VERSIONS は release の product_version"
+    assert "Sidekick Planner β1.02" in source
     assert (REPO_ROOT / "dl-planner.html").exists()
 
 
 # β1.01 Release Unit（AI-13050、Human GO 2026-09-21）で確定した distribution package identity（RC14）。
 # 正本は Planner 側 manifests/release/distribution_package_Sidekick_Planner_1.0.0-beta.2_c3faa92.identity.json。
 # β1.00（Sidekick_Planner_1.0.0-beta.1_bea1697.zip / 93c27bf1…、AI-10850）は R2 に保存したまま配布導線から外した。
-PLANNER_ZIP_URL = "https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.2_c3faa92.zip"
-PLANNER_ZIP_SHA256 = "a577b809db480be0da29bb6a1a46f7e2521769d785af4045e148b4b0d3a91804"
+# β1.02 release candidate（自作 AI-16567）: RC15 の distribution package identity。正本は Planner 側
+# manifests/release/distribution_package_Sidekick_Planner_1.0.0-beta.3_f07d84f.zip.identity.json。β1.01（RC14、a577b809…）は R2 に保存したまま導線から外す。
+PLANNER_ZIP_URL = "https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.3_f07d84f.zip"
+PLANNER_ZIP_SHA256 = "340c2d93e376451389aaa13691e66b6980d933045b9affbf8af9a1d32201907c"
 
 
 def test_dl_planner_points_at_the_verified_distribution_package() -> None:
@@ -182,7 +191,8 @@ def test_dl_planner_points_at_the_verified_distribution_package() -> None:
     zips = set(re.findall(r'https?://\S+?\.zip', source))
     assert zips == {PLANNER_ZIP_URL}, f"配布 URL は R2 の Planner object 1 つだけ: {zips}"
     assert "pub-123781c638d64762ac2e397ce0e98259.r2.dev" in PLANNER_ZIP_URL   # dl-star.html と同じ bucket
-    assert "Sidekick_Planner_1.0.0-beta.2_c3faa92.zip" in source.split("setAttribute('download'")[1][:80]
+    assert "Sidekick_Planner_1.0.0-beta.3_f07d84f.zip" in source.split("setAttribute('download'")[1][:80]
+    assert "Sidekick_Planner_1.0.0-beta.2_c3faa92.zip" not in source.split("const PLANNER_DOWNLOAD_URL")[1].split(";")[0]
     assert "Sidekick_Planner_1.0.0-beta.1_bea1697.zip" not in source.split("const PLANNER_DOWNLOAD_URL")[1].split(";")[0]
     assert 'id="pending-state"' in source and "配布は準備中" in source          # fail-closed 経路は残す
     assert source.count("<h1") == 1
@@ -262,11 +272,11 @@ def test_terms_section3_states_expiry_after_the_planned_end_date_ja_en() -> None
     """Terms 第3条: 2026-10-31 日本時間、β1.01 以降は期限後起動不可、延長は新しいβ版、告知だけでは期限は変わらない。
     EN は JA の忠実 localization。β1.00 へ遡及しない（「β1.01 以降」/ "beta 1.01 and later"）。"""
     ja = _page("planner-terms.html"); en = _page("en/planner-terms.html")
-    assert "2026年10月31日</strong>（日本時間。現時点の終了予定日）" in ja
+    assert "2026年11月30日</strong>（日本時間。現時点の終了予定日）" in ja   # HD-PLANNERBETAEXPIRYEXTENSION-001
     assert "終了予定日を過ぎると、本β版（β1.01 以降）は起動できなくなり、通常の機能を利用できなくなります。" in ja
     assert "延長後の終了予定日を組み込んだ新しいβ版を配布します" in ja
     assert "このページの告知だけでは変わりません" in ja
-    assert "October 31, 2026</strong> (Japan time; the currently planned end date)" in en
+    assert "November 30, 2026</strong> (Japan time; the currently planned end date)" in en
     assert "After the planned end date, the Beta (beta 1.01 and later) can no longer be started and its normal functions can no longer be used." in en
     assert "we will distribute a new Beta version that carries the extended end date" in en
     assert "does not change by an announcement on this page alone" in en
@@ -287,27 +297,36 @@ def test_privacy_9_1_discloses_local_last_seen_ja_en() -> None:
 
 
 @pytest.mark.parametrize("key", [JA_KEY, EN_KEY])
-def test_product_page_discloses_expiry_and_beta_1_01(rendered: dict[str, str], key: str) -> None:
+def test_product_page_discloses_expiry_and_beta_1_02(rendered: dict[str, str], key: str) -> None:
     html = rendered[key]
     if key == JA_KEY:
-        assert "Sidekick Planner β1.01（1.0.0-beta.2）" in html
+        assert "Sidekick Planner β1.02（1.0.0-beta.3）" in html
         assert "終了予定日を過ぎると、β版（β1.01 以降）は起動できなくなります" in html
         assert "延長する場合は新しいβ版を配布します" in html
         assert "β1.00" not in html.split("<main>", 1)[1]
     else:
-        assert "Sidekick Planner Beta 1.01 (1.0.0-beta.2)" in html
+        assert "Sidekick Planner Beta 1.02 (1.0.0-beta.3)" in html
         assert "After the planned end date, the beta (beta 1.01 and later) can no longer be started." in html
         assert "an extension is delivered as a new beta version" in html
         assert "1.00" not in html.split("<main>", 1)[1]
 
 
-def test_dl_planner_discloses_expiry_and_beta_1_01() -> None:
+def test_dl_planner_discloses_expiry_and_beta_1_02() -> None:
     source = (REPO_ROOT / "dl-planner.html").read_text(encoding="utf-8")
     body = source.split("<body>", 1)[1].split("<script>", 1)[0]
     assert "<dt>利用期限</dt>" in body
-    assert "2026年10月31日（日本時間）まで。期限を過ぎると、このβ版は起動できなくなります" in body
-    assert "Sidekick Planner β1.01（1.0.0-beta.2）" in body
+    assert "2026年11月30日（日本時間）まで。期限を過ぎると、このβ版は起動できなくなります" in body
+    assert "Sidekick Planner β1.02（1.0.0-beta.3）" in body
     assert "β1.00" not in body
+
+
+def test_changelog_has_the_beta_1_02_release_entry_ja_en() -> None:
+    ja = _page("changelog.html"); en = _page("en/changelog.html")
+    assert "Sidekick Planner β1.02 を公開しました — 撮影計画は 4 種類に" in ja
+    assert "すでに配布した β1.01 の利用期限（2026年10月31日）は変わりません" in ja
+    assert "Sidekick Planner Beta 1.02 released — four plan types" in en
+    assert "The expiry of beta 1.01 copies already distributed (31 October 2026) does not change" in en
+    assert ja.index("β1.02 を公開しました") < ja.index("β1.01 を公開しました")   # 新しい entry が上
 
 
 def test_changelog_has_the_beta_1_01_release_entry_ja_en() -> None:
