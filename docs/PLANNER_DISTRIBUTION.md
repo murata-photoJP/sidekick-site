@@ -114,3 +114,17 @@ ZIP の identity（sha256 `93c27bf1…`）は **distribution package identity**�
 | rollback | `dl-planner.html` の 2 定数を β1.00 の値（`…beta.1_bea1697.zip` / `93c27bf1…`）へ戻して push（object は両方 R2 にある） |
 
 release datetime・live 検証結果は Planner 側 `release_acceptance.json`（`public_beta_release`）と `docs/ai-analysis/PLANNER_BETA1_01_PUBLIC_RELEASE_2026-09-21.md` を正本とする。
+
+## 7. β1.02（RC15）への切替（2026-10-02、自作 AI-16570、Human 指示「公開して」）
+
+| 項目 | 値 |
+|---|---|
+| candidate | RC15 `1.0.0-beta.3+20261001T200831Z.gf07d84f` / source `f07d84f` / EXE `8d860340bb5a2a4722615ff6ebfc95328d7a3826600d509527c6c2f6ca2b499a`（Human Review PASS `HD-PLANNERBETA102RELEASEPREP-004`、cleanmachine11 Human PASS、Legal / OSM は carry forward `-010` / `-011`） |
+| ZIP | `SideKick販売ページ/zip/Sidekick_Planner_1.0.0-beta.3_f07d84f.zip`（`build_distribution_zip.py`、RC15 manifest 照合 → zip → 展開再照合 OK）: **1,954,972,766 B / sha256 `340c2d93e376451389aaa13691e66b6980d933045b9affbf8af9a1d32201907c` / 2,203 entry**、identity: 同名 `.identity.json`（Planner 側 `manifests/release/` にも保存） |
+| R2 | `rclone copy --dry-run`（1/1）→ `rclone copy`（176 s）。`lsl`: 10 object、β1.00 / β1.01 の object を含む既存 9 object の bytes は不変。public: HEAD 200 / `Content-Length: 1954972766` / Range 206 / 実 download sha256 一致・展開 2,203 file = `expected_manifest_rc15.json` |
+| dl-planner | `PLANNER_DOWNLOAD_URL` / `PLANNER_ZIP_SHA256` / `download` 属性を β1.02 object へ、利用期限 2026年11月30日、表記 β1.02（1.0.0-beta.3） |
+| Web | Terms 第3条 JA/EN の終了予定日 11/30（最終更新日 2026-10-02）、製品ページ JA/EN（β1.02・撮影計画 4 種・screenshot を RC15 の実画面へ、星の軌跡の画像を追加）、`register-dl` version `1.0.0-beta.3`、changelog JA/EN entry |
+| β1.01 | 配布導線から外れるだけ。R2 object は保存。β1.01 の利用期限は 2026-10-31 のまま（`HD-PLANNERBETAEXPIRYEXTENSION-002`） |
+| rollback | `dl-planner.html` の 2 定数と `download` 属性を β1.01 の値（`…beta.2_c3faa92.zip` / `a577b809…`）へ戻して push。その場合 Terms / 製品ページの終了予定日も 10/31 へ戻す（β1.01 の期限は延びない） |
+
+release datetime・live 検証結果は Planner 側 `release_acceptance.json`（`public_beta_release`）と `docs/ai-analysis/PLANNER_BETA102_PUBLIC_RELEASE_2026-10-02.md` を正本とする。
