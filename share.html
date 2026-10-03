@@ -110,8 +110,10 @@
  .cp-terrain{fill:#7d7d7d;stroke:#5a5a5a;stroke-width:1;stroke-linejoin:round}
  .cp-terrain-fuji{fill:#1b1b1b;stroke:#000;stroke-width:1;stroke-linejoin:round}
  .cp-terrain-occluded{fill:none;stroke:#1b1b1b;stroke-width:1.2;stroke-dasharray:4 3}
+ .cp-structure{fill:#1b1b1b;stroke:#000;stroke-width:0.6;stroke-linejoin:round}
  @media (prefers-color-scheme:dark){.cp-terrain{fill:#6a6a6a;stroke:#8a8a8a}
-  .cp-terrain-fuji{fill:#2c3440;stroke:#8fa0b4}.cp-terrain-occluded{stroke:#c9d2dc}}
+  .cp-terrain-fuji{fill:#2c3440;stroke:#8fa0b4}.cp-terrain-occluded{stroke:#c9d2dc}
+  .cp-structure{fill:#2c3440;stroke:#8fa0b4}}
  .cp-legend{font-size:9px;fill:var(--fg);paint-order:stroke;stroke:var(--bg);stroke-width:2.5px;stroke-linejoin:round}
  .attr{font-size:11px;color:var(--sub);margin:6px 0 0}
  .attr a{color:var(--accent)}
@@ -195,7 +197,7 @@
 </main>
 <script>
 "use strict";
-const SPEC = {"codes": {"DECOMPRESSED_TOO_LARGE": "DECOMPRESSED_TOO_LARGE", "DUPLICATE_KEY": "DUPLICATE_KEY", "EMPTY_FRAGMENT": "EMPTY_FRAGMENT", "ENCODED_TOO_LARGE": "ENCODED_TOO_LARGE", "INVALID_CONTAINER": "INVALID_CONTAINER", "INVALID_DATETIME": "INVALID_DATETIME", "INVALID_ENUM": "INVALID_ENUM", "INVALID_JSON": "INVALID_JSON", "INVALID_LENGTH": "INVALID_LENGTH", "INVALID_RANGE": "INVALID_RANGE", "INVALID_SCHEMA": "INVALID_SCHEMA", "INVALID_TIMEZONE": "INVALID_TIMEZONE", "INVALID_TYPE": "INVALID_TYPE", "NON_FINITE_NUMBER": "NON_FINITE_NUMBER", "NOT_SIDEKICK_QR": "NOT_SIDEKICK_QR", "PAYLOAD_TOO_LARGE": "PAYLOAD_TOO_LARGE", "TRAILING_DATA": "TRAILING_DATA", "UNSUPPORTED_BROWSER": "UNSUPPORTED_BROWSER", "UNSUPPORTED_GENRE": "UNSUPPORTED_GENRE", "UNSUPPORTED_VERSION": "UNSUPPORTED_VERSION"}, "datetime_length": 20, "decompressed_max": 8192, "detail_fields": [["resolved_target_latitude_deg", "ターゲット 緯度"], ["resolved_target_longitude_deg", "ターゲット 経度"], ["resolved_target_elevation_m", "ターゲット 標高 (m)"]], "fields": [{"kind": "version", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "share_format_version", "vocabulary": null, "wire": "v"}, {"kind": "genre", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "plan_genre", "vocabulary": null, "wire": "g"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "observer_latitude_deg", "vocabulary": null, "wire": "ox"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "observer_longitude_deg", "vocabulary": null, "wire": "oy"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_ground_elevation_m", "vocabulary": null, "wire": "oz"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_height_m", "vocabulary": null, "wire": "oh"}, {"kind": "datetime", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "utc_datetime", "vocabulary": null, "wire": "td"}, {"kind": "timezone", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "timezone", "vocabulary": null, "wire": "tz"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "poi_id", "vocabulary": null, "wire": "pi"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "alignment_target_id", "vocabulary": null, "wire": "ti"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "resolved_target_latitude_deg", "vocabulary": null, "wire": "rx"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "resolved_target_longitude_deg", "vocabulary": null, "wire": "ry"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "resolved_target_elevation_m", "vocabulary": null, "wire": "rz"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "celestial_azimuth_deg", "vocabulary": null, "wire": "ca"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "celestial_altitude_deg", "vocabulary": null, "wire": "ce"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "target_azimuth_deg", "vocabulary": null, "wire": "ta"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "target_elevation_angle_deg", "vocabulary": null, "wire": "te"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "dem_elevation_status", "vocabulary": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "wire": "sd"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "elevation_convergence_status", "vocabulary": ["DEM_FIXED_POINT_CONVERGED", "ELEVATION_ITERATION_CONVERGED", "NOT_EXECUTED"], "wire": "sc"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_resolution_status", "vocabulary": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "wire": "sa"}, {"kind": "number_or_null", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "focal_length_mm", "vocabulary": null, "wire": "fl"}, {"kind": "label", "max_utf8": 128, "maximum": null, "minimum": null, "semantic": "poi_label", "vocabulary": null, "wire": "pl"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_target_resolver_kind", "vocabulary": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "wire": "rk"}], "internal_only_fields": ["alignment_target_id", "plan_genre", "poi_id", "alignment_target_resolver_kind", "dem_elevation_status", "elevation_convergence_status", "alignment_resolution_status", "share_format_version"], "primary_fields": [["poi_label", "被写体"], ["observer_latitude_deg", "撮影地点 緯度"], ["observer_longitude_deg", "撮影地点 経度"], ["observer_ground_elevation_m", "撮影地点の地面標高 (m)"], ["observer_height_m", "目線の高さ (m)"], ["celestial_azimuth_deg", "{celestial}の方位角 (°)"], ["celestial_altitude_deg", "{celestial}の高度角 (°)"], ["target_azimuth_deg", "ターゲットの方位角 (°)"], ["target_elevation_angle_deg", "ターゲットの仰角 (°)"], ["focal_length_mm", "焦点距離 (mm)"]], "raw_compressed_max": 2953, "supported_genres": ["diamond_fuji", "pearl_fuji"], "supported_versions": [1], "v2": {"celestial_models": ["APPARENT_STANDARD"], "compass_labels": ["北", "北北東", "北東", "東北東", "東", "東南東", "南東", "南南東", "南", "南南西", "南西", "西南西", "西", "西北西", "北西", "北北西"], "dem_statuses": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "display_mode_labels": {"guide": "軌跡ガイド", "real": "実在星"}, "display_modes": ["guide", "real"], "duration_max_minutes": 525600, "genre_labels": {"solar_lunar": "太陽・月", "star_landscape": "星景", "star_trails": "星景（星の軌跡）"}, "genre_titles": {"solar_lunar": "太陽・月の撮影計画", "star_landscape": "星景の撮影計画", "star_trails": "星の軌跡"}, "genres": ["solar_lunar", "star_landscape", "star_trails"], "identifier_max_utf8": 64, "interval_state": "VISIBLE", "keys": {"instant": ["a", "h", "m", "w"], "interval": ["a", "b", "d", "e", "q", "s", "w", "x"], "moon": ["a", "e", "f", "p"], "observer": ["h", "s", "x", "y", "z"], "presentation": ["a", "e", "f", "t"], "reference": ["a", "e", "i", "k", "l", "p", "s", "x", "y", "z"], "sector": ["a", "h", "l", "r"], "solar_lunar": ["m", "n", "s"], "star": ["c", "k", "o"], "star_trails": ["d", "k", "m"], "sun": ["a", "e"], "time": ["d", "z"], "top": ["b", "g", "o", "p", "r", "t", "v"]}, "label_max_utf8": 128, "milky_way": "milky_way", "resolution_statuses": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "resolver_kinds": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "sky_object_ids": ["big_dipper", "cassiopeia", "jupiter", "m31", "mars", "milky_way", "moon", "orion", "pleiades", "polaris", "saturn", "scorpius", "sirius", "summer_triangle", "ursa_minor", "vega", "venus", "winter_triangle"], "sky_object_names": {"big_dipper": "北斗七星", "cassiopeia": "カシオペヤ座", "jupiter": "木星", "m31": "アンドロメダ銀河(M31)", "mars": "火星", "milky_way": "天の川", "moon": "月", "orion": "オリオン座", "pleiades": "すばる", "polaris": "北極星", "saturn": "土星", "scorpius": "さそり座", "sirius": "シリウス", "summer_triangle": "夏の大三角", "ursa_minor": "こぐま座", "vega": "ベガ(織姫星)", "venus": "金星", "winter_triangle": "冬の大三角"}, "terrain_range_max_m": 200000, "terrain_range_min_m": 1000, "timezone_max_utf8": 64, "version": 2}, "viewer": {"earth_radius_m": 6371008.8, "fuji_genre_labels": {"diamond_fuji": "ダイヤモンド富士", "pearl_fuji": "パール富士"}, "fuji_poi_ids": ["POI-FUJI-PROTOTYPE"], "genre_celestial_labels": {"diamond_fuji": "太陽", "pearl_fuji": "月"}, "google_maps_search_base": "https://www.google.com/maps/search/?api=1&query=", "gsi_attribution_label": "地理院タイル", "gsi_attribution_suffix": "（国土地理院）", "gsi_attribution_url": "https://maps.gsi.go.jp/development/ichiran.html", "gsi_basemap_tile_id": "pale", "gsi_basemap_zoom_max": 17, "gsi_basemap_zoom_min": 5, "gsi_tile_base": "https://cyberjapandata.gsi.go.jp/xyz/", "map_point_zoom": 13, "map_tile_timeout_ms": 12000, "planner_product_url": "https://www.sidekick-lab.com/sidekick-planner", "poi_display_names": {"POI-AIZUWAKAMATSU-CASTLE-PROTOTYPE": "会津若松城", "POI-AKADAKE-YATSUGATAKE-PROTOTYPE": "赤岳（八ヶ岳）", "POI-AKAISHIDAKE-PROTOTYPE": "赤石岳", "POI-AKAUSHIDAKE-PROTOTYPE": "赤牛岳", "POI-AKITA-PORT-TOWER-PROTOTYPE": "秋田ポートタワー・セリオン", "POI-AMIDADAKE-PROTOTYPE": "阿弥陀岳", "POI-ASAMAYAMA-PROTOTYPE": "浅間山", "POI-BANDAISAN-PROTOTYPE": "磐梯山", "POI-BAY-BRIDGE-PROTOTYPE": "横浜ベイブリッジ", "POI-BEPPU-TOWER-PROTOTYPE": "別府タワー", "POI-BITCHU-MATSUYAMA-CASTLE-PROTOTYPE": "備中松山城", "POI-CHOGATAKE-PROTOTYPE": "蝶ヶ岳", "POI-CHOKAISAN-PROTOTYPE": "鳥海山", "POI-DAIGOJI-PAGODA-PROTOTYPE": "醍醐寺五重塔", "POI-DAISEN-PROTOTYPE": "大山", "POI-EBOSHIDAKE-PROTOTYPE": "烏帽子岳", "POI-EITAI-BRIDGE-PROTOTYPE": "永代橋", "POI-FUJI-PROTOTYPE": "富士山", "POI-FUKUOKA-TOWER-PROTOTYPE": "福岡タワー", "POI-GENBAKU-DOME-PROTOTYPE": "原爆ドーム", "POI-GOLD-TOWER-PROTOTYPE": "ゴールドタワー", "POI-GORYOKAKU-TOWER-PROTOTYPE": "五稜郭タワー", "POI-GORYUDAKE-PROTOTYPE": "五竜岳", "POI-HAKATA-PORT-TOWER-PROTOTYPE": "博多ポートタワー", "POI-HAKUSAN-PROTOTYPE": "白山", "POI-HIJIRIDAKE-PROTOTYPE": "聖岳", "POI-HIKONE-CASTLE-PROTOTYPE": "彦根城", "POI-HIMEJI-CASTLE-PROTOTYPE": "姫路城", "POI-HIROSAKI-CASTLE-PROTOTYPE": "弘前城", "POI-HOKKAIDO-TENTOKU-DAIKANNON-PROTOTYPE": "北海道天徳大観音", "POI-HORYUJI-PAGODA-PROTOTYPE": "法隆寺五重塔", "POI-INUYAMA-CASTLE-PROTOTYPE": "犬山城", "POI-ISHIYAMADERA-PAGODA-PROTOTYPE": "石山寺多宝塔", "POI-ISHIZUCHISAN-PROTOTYPE": "石鎚山", "POI-IWAKISAN-PROTOTYPE": "岩木山", "POI-JONENDAKE-PROTOTYPE": "常念岳", "POI-KACHIDOKI-BRIDGE-PROTOTYPE": "勝鬨橋", "POI-KAIKOMAGATAKE-PROTOTYPE": "甲斐駒ヶ岳", "POI-KAIKYO-YUME-TOWER-PROTOTYPE": "海峡ゆめタワー", "POI-KANNONDAKE-PROTOTYPE": "観音岳（鳳凰三山）", "POI-KARAMATSUDAKE-PROTOTYPE": "唐松岳", "POI-KARASAWADAKE-PROTOTYPE": "涸沢岳", "POI-KASAGATAKE-PROTOTYPE": "笠ヶ岳", "POI-KASHIMAYARIGATAKE-PROTOTYPE": "鹿島槍ヶ岳", "POI-KAWASAKIDAISHI-PAGODA-PROTOTYPE": "川崎大師八角五重塔", "POI-KISOKOMAGATAKE-PROTOTYPE": "木曽駒ヶ岳", "POI-KITADAKE-PROTOTYPE": "北岳", "POI-KITAHOTAKADAKE-PROTOTYPE": "北穂高岳", "POI-KIYOSU-BRIDGE-PROTOTYPE": "清洲橋", "POI-KOBE-PORT-TOWER-PROTOTYPE": "神戸ポートタワー", "POI-KOCHI-CASTLE-PROTOTYPE": "高知城", "POI-KOFUKUJI-PAGODA-PROTOTYPE": "興福寺五重塔", "POI-KUMAMOTO-CASTLE-PROTOTYPE": "熊本城", "POI-KUROBEGORODAKE-PROTOTYPE": "黒部五郎岳", "POI-KYOTO-TOWER-PROTOTYPE": "京都タワー", "POI-MAEHOTAKADAKE-PROTOTYPE": "前穂高岳", "POI-MARUGAME-CASTLE-PROTOTYPE": "丸亀城", "POI-MARUOKA-CASTLE-PROTOTYPE": "丸岡城", "POI-MATSUE-CASTLE-PROTOTYPE": "松江城", "POI-MATSUMOTO-CASTLE-PROTOTYPE": "松本城", "POI-MATSUYAMA-CASTLE-PROTOTYPE": "松山城", "POI-MITSUMATARENGEDAKE-PROTOTYPE": "三俣蓮華岳", "POI-MYOKOSAN-PROTOTYPE": "妙高山", "POI-NAGOYA-CASTLE-PROTOTYPE": "名古屋城", "POI-NAGOYA-TV-TOWER-PROTOTYPE": "名古屋テレビ塔", "POI-NARITASAN-PAGODA-PROTOTYPE": "成田山新勝寺三重塔", "POI-NISHIHOTAKADAKE-PROTOTYPE": "西穂高岳", "POI-NOGUCHIGORODAKE-PROTOTYPE": "野口五郎岳", "POI-NORIKURADAKE-PROTOTYPE": "乗鞍岳", "POI-ODAWARA-CASTLE-PROTOTYPE": "小田原城", "POI-OKUHOTAKADAKE-PROTOTYPE": "奥穂高岳", "POI-ONTAKESAN-PROTOTYPE": "御嶽山", "POI-OSAKA-CASTLE-PROTOTYPE": "大阪城", "POI-OTENJODAKE-PROTOTYPE": "大天井岳", "POI-RAINBOW-BRIDGE-PROTOTYPE": "レインボーブリッジ", "POI-SAPPORO-TV-TOWER-PROTOTYPE": "さっぽろテレビ塔", "POI-SEA-CANDLE-PROTOTYPE": "江の島シーキャンドル", "POI-SENJOGATAKE-PROTOTYPE": "仙丈ヶ岳", "POI-SENSOJI-PAGODA-PROTOTYPE": "浅草寺五重塔", "POI-SHIOMIDAKE-PROTOTYPE": "塩見岳", "POI-SHIROUMADAKE-PROTOTYPE": "白馬岳", "POI-SKYTREE-PROTOTYPE": "東京スカイツリー", "POI-SUGOROKUDAKE-PROTOTYPE": "双六岳", "POI-SUISHODAKE-PROTOTYPE": "水晶岳", "POI-TATEYAMA-PROTOTYPE": "立山（雄山）", "POI-TOJI-PAGODA-PROTOTYPE": "東寺五重塔", "POI-TOKYO-STATION-PROTOTYPE": "東京駅丸の内駅舎", "POI-TOKYO-TOWER-PROTOTYPE": "東京タワー", "POI-TSUBAKURODAKE-PROTOTYPE": "燕岳", "POI-TSURUGIDAKE-PROTOTYPE": "剱岳", "POI-TSUTENKAKU-PROTOTYPE": "通天閣", "POI-USHIKU-DAIBUTSU-PROTOTYPE": "牛久大仏", "POI-UTSUGIDAKE-PROTOTYPE": "空木岳", "POI-UWAJIMA-CASTLE-PROTOTYPE": "宇和島城", "POI-WARUSAWADAKE-PROTOTYPE": "悪沢岳（荒川三山）", "POI-WASHIBADAKE-PROTOTYPE": "鷲羽岳", "POI-YAKUSHIDAKE-PROTOTYPE": "薬師岳", "POI-YARIGATAKE-PROTOTYPE": "槍ヶ岳", "POI-YOKOHAMA-LANDMARK-TOWER-PROTOTYPE": "横浜ランドマークタワー", "POI-YOKOHAMA-MARINE-TOWER-PROTOTYPE": "横浜マリンタワー"}, "sensor_height_mm": 24.0, "sensor_width_mm": 36.0, "sun_semi_diameter_deg": 0.2665, "terrain": {"azimuth_count_max": 241, "azimuth_count_min": 61, "azimuth_step_deg": 0.08, "distance_step_far_m": 300, "distance_step_near_m": 150, "elevation_tile_id": "dem_png", "far_zoom": 12, "far_zoom_wide": 11, "fov_margin": 1.1, "fuji_terrain_radius_m": 22000, "max_half_fov_deg": 60.0, "maximum_range_m": 120000, "minimum_range_m": 1000, "near_range_m": 15000, "near_zoom": 13, "range_beyond_target_m": 10000, "wide_fov_deg": 40.0}}, "wire_keys": ["v", "g", "ox", "oy", "oz", "oh", "td", "tz", "pi", "ti", "rx", "ry", "rz", "ca", "ce", "ta", "te", "sd", "sc", "sa", "fl", "pl", "rk"]};
+const SPEC = {"codes": {"DECOMPRESSED_TOO_LARGE": "DECOMPRESSED_TOO_LARGE", "DUPLICATE_KEY": "DUPLICATE_KEY", "EMPTY_FRAGMENT": "EMPTY_FRAGMENT", "ENCODED_TOO_LARGE": "ENCODED_TOO_LARGE", "INVALID_CONTAINER": "INVALID_CONTAINER", "INVALID_DATETIME": "INVALID_DATETIME", "INVALID_ENUM": "INVALID_ENUM", "INVALID_JSON": "INVALID_JSON", "INVALID_LENGTH": "INVALID_LENGTH", "INVALID_RANGE": "INVALID_RANGE", "INVALID_SCHEMA": "INVALID_SCHEMA", "INVALID_TIMEZONE": "INVALID_TIMEZONE", "INVALID_TYPE": "INVALID_TYPE", "NON_FINITE_NUMBER": "NON_FINITE_NUMBER", "NOT_SIDEKICK_QR": "NOT_SIDEKICK_QR", "PAYLOAD_TOO_LARGE": "PAYLOAD_TOO_LARGE", "TRAILING_DATA": "TRAILING_DATA", "UNSUPPORTED_BROWSER": "UNSUPPORTED_BROWSER", "UNSUPPORTED_GENRE": "UNSUPPORTED_GENRE", "UNSUPPORTED_VERSION": "UNSUPPORTED_VERSION"}, "datetime_length": 20, "decompressed_max": 8192, "detail_fields": [["resolved_target_latitude_deg", "ターゲット 緯度"], ["resolved_target_longitude_deg", "ターゲット 経度"], ["resolved_target_elevation_m", "ターゲット 標高 (m)"]], "fields": [{"kind": "version", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "share_format_version", "vocabulary": null, "wire": "v"}, {"kind": "genre", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "plan_genre", "vocabulary": null, "wire": "g"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "observer_latitude_deg", "vocabulary": null, "wire": "ox"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "observer_longitude_deg", "vocabulary": null, "wire": "oy"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_ground_elevation_m", "vocabulary": null, "wire": "oz"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "observer_height_m", "vocabulary": null, "wire": "oh"}, {"kind": "datetime", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "utc_datetime", "vocabulary": null, "wire": "td"}, {"kind": "timezone", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "timezone", "vocabulary": null, "wire": "tz"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "poi_id", "vocabulary": null, "wire": "pi"}, {"kind": "identifier", "max_utf8": 64, "maximum": null, "minimum": null, "semantic": "alignment_target_id", "vocabulary": null, "wire": "ti"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "resolved_target_latitude_deg", "vocabulary": null, "wire": "rx"}, {"kind": "number", "max_utf8": null, "maximum": 180.0, "minimum": -180.0, "semantic": "resolved_target_longitude_deg", "vocabulary": null, "wire": "ry"}, {"kind": "number", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "resolved_target_elevation_m", "vocabulary": null, "wire": "rz"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "celestial_azimuth_deg", "vocabulary": null, "wire": "ca"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "celestial_altitude_deg", "vocabulary": null, "wire": "ce"}, {"kind": "number", "max_utf8": null, "maximum": 360.0, "minimum": 0.0, "semantic": "target_azimuth_deg", "vocabulary": null, "wire": "ta"}, {"kind": "number", "max_utf8": null, "maximum": 90.0, "minimum": -90.0, "semantic": "target_elevation_angle_deg", "vocabulary": null, "wire": "te"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "dem_elevation_status", "vocabulary": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "wire": "sd"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "elevation_convergence_status", "vocabulary": ["DEM_FIXED_POINT_CONVERGED", "ELEVATION_ITERATION_CONVERGED", "NOT_EXECUTED"], "wire": "sc"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_resolution_status", "vocabulary": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "wire": "sa"}, {"kind": "number_or_null", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "focal_length_mm", "vocabulary": null, "wire": "fl"}, {"kind": "label", "max_utf8": 128, "maximum": null, "minimum": null, "semantic": "poi_label", "vocabulary": null, "wire": "pl"}, {"kind": "enum", "max_utf8": null, "maximum": null, "minimum": null, "semantic": "alignment_target_resolver_kind", "vocabulary": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "wire": "rk"}], "internal_only_fields": ["alignment_target_id", "plan_genre", "poi_id", "alignment_target_resolver_kind", "dem_elevation_status", "elevation_convergence_status", "alignment_resolution_status", "share_format_version"], "primary_fields": [["poi_label", "被写体"], ["observer_latitude_deg", "撮影地点 緯度"], ["observer_longitude_deg", "撮影地点 経度"], ["observer_ground_elevation_m", "撮影地点の地面標高 (m)"], ["observer_height_m", "目線の高さ (m)"], ["celestial_azimuth_deg", "{celestial}の方位角 (°)"], ["celestial_altitude_deg", "{celestial}の高度角 (°)"], ["target_azimuth_deg", "ターゲットの方位角 (°)"], ["target_elevation_angle_deg", "ターゲットの仰角 (°)"], ["focal_length_mm", "焦点距離 (mm)"]], "raw_compressed_max": 2953, "supported_genres": ["diamond_fuji", "pearl_fuji"], "supported_versions": [1], "v2": {"celestial_models": ["APPARENT_STANDARD"], "compass_labels": ["北", "北北東", "北東", "東北東", "東", "東南東", "南東", "南南東", "南", "南南西", "南西", "西南西", "西", "西北西", "北西", "北北西"], "dem_statuses": ["DEM_ELEVATION_BILINEAR", "DEM_NO_DATA_OR_SEA_UNDISTINGUISHED", "NOT_REQUESTED", "TILE_FETCH_FAILED"], "display_mode_labels": {"guide": "軌跡ガイド", "real": "実在星"}, "display_modes": ["guide", "real"], "duration_max_minutes": 525600, "genre_labels": {"solar_lunar": "太陽・月", "star_landscape": "星景", "star_trails": "星景（星の軌跡）"}, "genre_titles": {"solar_lunar": "太陽・月の撮影計画", "star_landscape": "星景の撮影計画", "star_trails": "星の軌跡"}, "genres": ["solar_lunar", "star_landscape", "star_trails"], "identifier_max_utf8": 64, "interval_state": "VISIBLE", "keys": {"instant": ["a", "h", "m", "w"], "interval": ["a", "b", "d", "e", "q", "s", "w", "x"], "moon": ["a", "e", "f", "p"], "observer": ["h", "s", "x", "y", "z"], "presentation": ["a", "e", "f", "t"], "reference": ["a", "e", "i", "k", "l", "p", "s", "x", "y", "z"], "sector": ["a", "h", "l", "r"], "solar_lunar": ["m", "n", "s"], "star": ["c", "k", "o"], "star_trails": ["d", "k", "m"], "sun": ["a", "e"], "time": ["d", "z"], "top": ["b", "g", "o", "p", "r", "t", "v"]}, "label_max_utf8": 128, "milky_way": "milky_way", "resolution_statuses": ["DEM_PEAK_REFINED_CANDIDATE", "EXISTING_PROTOTYPE_FIXED_REFERENCE", "NOT_RESOLVED", "REAL_DEM_COMPARISON_CANDIDATE"], "resolver_kinds": ["DEM_PEAK_REFINED_FROM_FIXED_POINT", "FIXED_POINT", "REAL_DEM_COMPARISON_FIXED_POINT"], "sky_object_ids": ["big_dipper", "cassiopeia", "jupiter", "m31", "mars", "milky_way", "moon", "orion", "pleiades", "polaris", "saturn", "scorpius", "sirius", "summer_triangle", "ursa_minor", "vega", "venus", "winter_triangle"], "sky_object_names": {"big_dipper": "北斗七星", "cassiopeia": "カシオペヤ座", "jupiter": "木星", "m31": "アンドロメダ銀河(M31)", "mars": "火星", "milky_way": "天の川", "moon": "月", "orion": "オリオン座", "pleiades": "すばる", "polaris": "北極星", "saturn": "土星", "scorpius": "さそり座", "sirius": "シリウス", "summer_triangle": "夏の大三角", "ursa_minor": "こぐま座", "vega": "ベガ(織姫星)", "venus": "金星", "winter_triangle": "冬の大三角"}, "terrain_range_max_m": 200000, "terrain_range_min_m": 1000, "timezone_max_utf8": 64, "version": 2}, "viewer": {"earth_radius_m": 6371008.8, "fuji_genre_labels": {"diamond_fuji": "ダイヤモンド富士", "pearl_fuji": "パール富士"}, "fuji_poi_ids": ["POI-FUJI-PROTOTYPE"], "genre_celestial_labels": {"diamond_fuji": "太陽", "pearl_fuji": "月"}, "google_maps_search_base": "https://www.google.com/maps/search/?api=1&query=", "gsi_attribution_label": "地理院タイル", "gsi_attribution_suffix": "（国土地理院）", "gsi_attribution_url": "https://maps.gsi.go.jp/development/ichiran.html", "gsi_basemap_tile_id": "pale", "gsi_basemap_zoom_max": 17, "gsi_basemap_zoom_min": 5, "gsi_tile_base": "https://cyberjapandata.gsi.go.jp/xyz/", "map_point_zoom": 13, "map_tile_timeout_ms": 12000, "planner_product_url": "https://www.sidekick-lab.com/sidekick-planner", "plateau_attribution_label": "PLATEAU", "plateau_attribution_suffix": "（国土交通省）の3D都市モデルを加工して作成", "plateau_attribution_url": "https://www.mlit.go.jp/plateau/", "poi_display_names": {"POI-AIZUWAKAMATSU-CASTLE-PROTOTYPE": "会津若松城", "POI-AKADAKE-YATSUGATAKE-PROTOTYPE": "赤岳（八ヶ岳）", "POI-AKAISHIDAKE-PROTOTYPE": "赤石岳", "POI-AKAUSHIDAKE-PROTOTYPE": "赤牛岳", "POI-AKITA-PORT-TOWER-PROTOTYPE": "秋田ポートタワー・セリオン", "POI-AMIDADAKE-PROTOTYPE": "阿弥陀岳", "POI-ASAMAYAMA-PROTOTYPE": "浅間山", "POI-BANDAISAN-PROTOTYPE": "磐梯山", "POI-BAY-BRIDGE-PROTOTYPE": "横浜ベイブリッジ", "POI-BEPPU-TOWER-PROTOTYPE": "別府タワー", "POI-BITCHU-MATSUYAMA-CASTLE-PROTOTYPE": "備中松山城", "POI-CHOGATAKE-PROTOTYPE": "蝶ヶ岳", "POI-CHOKAISAN-PROTOTYPE": "鳥海山", "POI-DAIGOJI-PAGODA-PROTOTYPE": "醍醐寺五重塔", "POI-DAISEN-PROTOTYPE": "大山", "POI-EBOSHIDAKE-PROTOTYPE": "烏帽子岳", "POI-EITAI-BRIDGE-PROTOTYPE": "永代橋", "POI-FUJI-PROTOTYPE": "富士山", "POI-FUKUOKA-TOWER-PROTOTYPE": "福岡タワー", "POI-GENBAKU-DOME-PROTOTYPE": "原爆ドーム", "POI-GOLD-TOWER-PROTOTYPE": "ゴールドタワー", "POI-GORYOKAKU-TOWER-PROTOTYPE": "五稜郭タワー", "POI-GORYUDAKE-PROTOTYPE": "五竜岳", "POI-HAKATA-PORT-TOWER-PROTOTYPE": "博多ポートタワー", "POI-HAKUSAN-PROTOTYPE": "白山", "POI-HIJIRIDAKE-PROTOTYPE": "聖岳", "POI-HIKONE-CASTLE-PROTOTYPE": "彦根城", "POI-HIMEJI-CASTLE-PROTOTYPE": "姫路城", "POI-HIROSAKI-CASTLE-PROTOTYPE": "弘前城", "POI-HOKKAIDO-TENTOKU-DAIKANNON-PROTOTYPE": "北海道天徳大観音", "POI-HORYUJI-PAGODA-PROTOTYPE": "法隆寺五重塔", "POI-INUYAMA-CASTLE-PROTOTYPE": "犬山城", "POI-ISHIYAMADERA-PAGODA-PROTOTYPE": "石山寺多宝塔", "POI-ISHIZUCHISAN-PROTOTYPE": "石鎚山", "POI-IWAKISAN-PROTOTYPE": "岩木山", "POI-JONENDAKE-PROTOTYPE": "常念岳", "POI-KACHIDOKI-BRIDGE-PROTOTYPE": "勝鬨橋", "POI-KAIKOMAGATAKE-PROTOTYPE": "甲斐駒ヶ岳", "POI-KAIKYO-YUME-TOWER-PROTOTYPE": "海峡ゆめタワー", "POI-KANNONDAKE-PROTOTYPE": "観音岳（鳳凰三山）", "POI-KARAMATSUDAKE-PROTOTYPE": "唐松岳", "POI-KARASAWADAKE-PROTOTYPE": "涸沢岳", "POI-KASAGATAKE-PROTOTYPE": "笠ヶ岳", "POI-KASHIMAYARIGATAKE-PROTOTYPE": "鹿島槍ヶ岳", "POI-KAWASAKIDAISHI-PAGODA-PROTOTYPE": "川崎大師八角五重塔", "POI-KISOKOMAGATAKE-PROTOTYPE": "木曽駒ヶ岳", "POI-KITADAKE-PROTOTYPE": "北岳", "POI-KITAHOTAKADAKE-PROTOTYPE": "北穂高岳", "POI-KIYOSU-BRIDGE-PROTOTYPE": "清洲橋", "POI-KOBE-PORT-TOWER-PROTOTYPE": "神戸ポートタワー", "POI-KOCHI-CASTLE-PROTOTYPE": "高知城", "POI-KOFUKUJI-PAGODA-PROTOTYPE": "興福寺五重塔", "POI-KUMAMOTO-CASTLE-PROTOTYPE": "熊本城", "POI-KUROBEGORODAKE-PROTOTYPE": "黒部五郎岳", "POI-KYOTO-TOWER-PROTOTYPE": "京都タワー", "POI-MAEHOTAKADAKE-PROTOTYPE": "前穂高岳", "POI-MARUGAME-CASTLE-PROTOTYPE": "丸亀城", "POI-MARUOKA-CASTLE-PROTOTYPE": "丸岡城", "POI-MATSUE-CASTLE-PROTOTYPE": "松江城", "POI-MATSUMOTO-CASTLE-PROTOTYPE": "松本城", "POI-MATSUYAMA-CASTLE-PROTOTYPE": "松山城", "POI-MITSUMATARENGEDAKE-PROTOTYPE": "三俣蓮華岳", "POI-MYOKOSAN-PROTOTYPE": "妙高山", "POI-NAGOYA-CASTLE-PROTOTYPE": "名古屋城", "POI-NAGOYA-TV-TOWER-PROTOTYPE": "名古屋テレビ塔", "POI-NARITASAN-PAGODA-PROTOTYPE": "成田山新勝寺三重塔", "POI-NISHIHOTAKADAKE-PROTOTYPE": "西穂高岳", "POI-NOGUCHIGORODAKE-PROTOTYPE": "野口五郎岳", "POI-NORIKURADAKE-PROTOTYPE": "乗鞍岳", "POI-ODAWARA-CASTLE-PROTOTYPE": "小田原城", "POI-OKUHOTAKADAKE-PROTOTYPE": "奥穂高岳", "POI-ONTAKESAN-PROTOTYPE": "御嶽山", "POI-OSAKA-CASTLE-PROTOTYPE": "大阪城", "POI-OTENJODAKE-PROTOTYPE": "大天井岳", "POI-RAINBOW-BRIDGE-PROTOTYPE": "レインボーブリッジ", "POI-SAPPORO-TV-TOWER-PROTOTYPE": "さっぽろテレビ塔", "POI-SEA-CANDLE-PROTOTYPE": "江の島シーキャンドル", "POI-SENJOGATAKE-PROTOTYPE": "仙丈ヶ岳", "POI-SENSOJI-PAGODA-PROTOTYPE": "浅草寺五重塔", "POI-SHIOMIDAKE-PROTOTYPE": "塩見岳", "POI-SHIROUMADAKE-PROTOTYPE": "白馬岳", "POI-SKYTREE-PROTOTYPE": "東京スカイツリー", "POI-SUGOROKUDAKE-PROTOTYPE": "双六岳", "POI-SUISHODAKE-PROTOTYPE": "水晶岳", "POI-TATEYAMA-PROTOTYPE": "立山（雄山）", "POI-TOJI-PAGODA-PROTOTYPE": "東寺五重塔", "POI-TOKYO-STATION-PROTOTYPE": "東京駅丸の内駅舎", "POI-TOKYO-TOWER-PROTOTYPE": "東京タワー", "POI-TSUBAKURODAKE-PROTOTYPE": "燕岳", "POI-TSURUGIDAKE-PROTOTYPE": "剱岳", "POI-TSUTENKAKU-PROTOTYPE": "通天閣", "POI-USHIKU-DAIBUTSU-PROTOTYPE": "牛久大仏", "POI-UTSUGIDAKE-PROTOTYPE": "空木岳", "POI-UWAJIMA-CASTLE-PROTOTYPE": "宇和島城", "POI-WARUSAWADAKE-PROTOTYPE": "悪沢岳（荒川三山）", "POI-WASHIBADAKE-PROTOTYPE": "鷲羽岳", "POI-YAKUSHIDAKE-PROTOTYPE": "薬師岳", "POI-YARIGATAKE-PROTOTYPE": "槍ヶ岳", "POI-YOKOHAMA-LANDMARK-TOWER-PROTOTYPE": "横浜ランドマークタワー", "POI-YOKOHAMA-MARINE-TOWER-PROTOTYPE": "横浜マリンタワー"}, "sensor_height_mm": 24.0, "sensor_width_mm": 36.0, "structure_faces": {"POI-BAY-BRIDGE-PROTOTYPE": "bay_bridge_faces.json", "POI-EITAI-BRIDGE-PROTOTYPE": "eitai_bridge_faces.json", "POI-GENBAKU-DOME-PROTOTYPE": "genbaku_dome_faces.json", "POI-HIMEJI-CASTLE-PROTOTYPE": "himeji_castle_faces.json", "POI-KACHIDOKI-BRIDGE-PROTOTYPE": "kachidoki_bridge_faces.json", "POI-KIYOSU-BRIDGE-PROTOTYPE": "kiyosu_bridge_faces.json", "POI-KOCHI-CASTLE-PROTOTYPE": "kochi_castle_faces.json", "POI-KUMAMOTO-CASTLE-PROTOTYPE": "kumamoto_castle_faces.json", "POI-KYOTO-TOWER-PROTOTYPE": "kyoto_tower_faces.json", "POI-MATSUE-CASTLE-PROTOTYPE": "matsue_castle_faces.json", "POI-MATSUMOTO-CASTLE-PROTOTYPE": "matsumoto_castle_faces.json", "POI-MATSUYAMA-CASTLE-PROTOTYPE": "matsuyama_castle_faces.json", "POI-NAGOYA-CASTLE-PROTOTYPE": "nagoya_castle_faces.json", "POI-NAGOYA-TV-TOWER-PROTOTYPE": "nagoya_tv_tower_faces.json", "POI-OSAKA-CASTLE-PROTOTYPE": "osaka_castle_faces.json", "POI-RAINBOW-BRIDGE-PROTOTYPE": "rainbow_bridge_faces.json", "POI-SAPPORO-TV-TOWER-PROTOTYPE": "sapporo_tv_tower_faces.json", "POI-SEA-CANDLE-PROTOTYPE": "sea_candle_faces.json", "POI-SENSOJI-PAGODA-PROTOTYPE": "sensoji_pagoda_faces.json", "POI-SKYTREE-PROTOTYPE": "skytree_faces.json", "POI-TOJI-PAGODA-PROTOTYPE": "toji_pagoda_faces.json", "POI-TOKYO-STATION-PROTOTYPE": "tokyo_station_faces.json", "POI-TOKYO-TOWER-PROTOTYPE": "tokyo_tower_faces.json", "POI-YOKOHAMA-LANDMARK-TOWER-PROTOTYPE": "yokohama_landmark_tower_faces.json", "POI-YOKOHAMA-MARINE-TOWER-PROTOTYPE": "yokohama_marine_tower_faces.json"}, "structure_faces_base": "/share-assets/plateau/", "sun_semi_diameter_deg": 0.2665, "terrain": {"azimuth_count_max": 241, "azimuth_count_min": 61, "azimuth_step_deg": 0.08, "distance_step_far_m": 300, "distance_step_near_m": 150, "elevation_tile_id": "dem_png", "far_zoom": 12, "far_zoom_wide": 11, "fov_margin": 1.1, "fuji_terrain_radius_m": 22000, "max_half_fov_deg": 60.0, "maximum_range_m": 120000, "minimum_range_m": 1000, "near_range_m": 15000, "near_zoom": 13, "range_beyond_target_m": 10000, "wide_fov_deg": 40.0}}, "wire_keys": ["v", "g", "ox", "oy", "oz", "oh", "td", "tz", "pi", "ti", "rx", "ry", "rz", "ca", "ce", "ta", "te", "sd", "sc", "sa", "fl", "pl", "rk"]};
 const CODES = SPEC.codes;
 const VIEWER = SPEC.viewer;
 
@@ -730,9 +732,13 @@ function compositionModel(plan) {
     tanHalfH = sw / (2 * focal); tanHalfV = sh / (2 * focal); mode = "focal";
   } else {
     const ax = behind ? 0 : Math.abs(x), ay = behind ? 0 : Math.abs(y);
-    /* 太陽が余白つきで収まる scale。水平線は近い（仰角が小さい）ときだけ枠内へ入れる */
-    const horizonTerm = Math.abs(horizonY) <= 0.25 ? Math.abs(horizonY) / 0.5 * (sw / sh) : 0;
+    /* 太陽が余白つきで収まる scale。水平線は近い（仰角が小さい）ときだけ枠内へ入れる。
+       2026-10-03（Human 判断）: 建物の形を描く被写体（structure_faces）は、仰角が大きくても水平線 ≒ 建物の足元まで
+       枠に入れる（塔の全体と太陽の関係が分かるように）。広がりすぎないよう半画角は地形と同じ上限で止める */
+    const isStructure = Object.prototype.hasOwnProperty.call(VIEWER.structure_faces || {}, plan.poi_id);
+    const horizonTerm = (isStructure || Math.abs(horizonY) <= 0.25) ? Math.abs(horizonY) / 0.5 * (sw / sh) : 0;
     tanHalfH = Math.max(ax / 0.6, (ay / 0.6) * (sw / sh), horizonTerm, 0.07);
+    if (isStructure) tanHalfH = Math.min(tanHalfH, Math.max(Math.tan(VIEWER.terrain.max_half_fov_deg * DEG), ax / 0.6));
     tanHalfV = tanHalfH * sh / sw; mode = "auto";
   }
   const u = behind ? null : 0.5 + 0.5 * x / tanHalfH;
@@ -929,6 +935,138 @@ const yieldToBrowser = () => new Promise((resolve) => window.setTimeout(resolve,
 let viewGeneration = 0;
 let lastTerrain = null;
 
+/* 被写体の建物の形（2026-10-03）: Planner の構図プレビューと同じ処理（buildEnvelope）。 */
+(function (global) {
+  "use strict";
+
+
+  const EARTH_RADIUS_M = 6371008.8;
+  const AZIMUTH_COLUMN_STEP_DEG = 0.0025;
+  const MAXIMUM_REASONABLE_AZIMUTH_SPAN_DEG = 60;
+
+  function bearingDeg(lat1, lon1, lat2, lon2) {
+    const phi1 = (lat1 * Math.PI) / 180;
+    const phi2 = (lat2 * Math.PI) / 180;
+    const delta = ((lon2 - lon1) * Math.PI) / 180;
+    const y = Math.sin(delta) * Math.cos(phi2);
+    const x = Math.cos(phi1) * Math.sin(phi2) - Math.sin(phi1) * Math.cos(phi2) * Math.cos(delta);
+    return ((Math.atan2(y, x) * 180) / Math.PI + 360) % 360;
+  }
+
+  function surfaceDistanceM(lat1, lon1, lat2, lon2) {
+    const phi1 = (lat1 * Math.PI) / 180;
+    const phi2 = (lat2 * Math.PI) / 180;
+    const deltaPhi = ((lat2 - lat1) * Math.PI) / 180;
+    const deltaLambda = ((lon2 - lon1) * Math.PI) / 180;
+    const value =
+      Math.sin(deltaPhi / 2) ** 2 +
+      Math.cos(phi1) * Math.cos(phi2) * Math.sin(deltaLambda / 2) ** 2;
+    return 2 * EARTH_RADIUS_M * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+  }
+
+  function makeProjector(observerLat, observerLon, observerElevationM) {
+    return function project(lat, lon, elevationM) {
+      const azimuth = bearingDeg(observerLat, observerLon, lat, lon);
+      const distanceM = surfaceDistanceM(observerLat, observerLon, lat, lon);
+      if (distanceM <= 0) return { azimuth, altitude: 90 };
+      const curvatureDropM = distanceM ** 2 / (2 * EARTH_RADIUS_M);
+      const altitude =
+        (Math.atan2(elevationM - observerElevationM - curvatureDropM, distanceM) * 180) / Math.PI;
+      return { azimuth, altitude };
+    };
+  }
+
+  function faceAltitudeAtAzimuth(face2d, azimuth) {
+    let best = null;
+    const pointCount = face2d.length;
+    for (let index = 0; index < pointCount; index += 1) {
+      const [az1, alt1] = face2d[index];
+      const [az2, alt2] = face2d[(index + 1) % pointCount];
+      const low = Math.min(az1, az2);
+      const high = Math.max(az1, az2);
+      if (low === high) continue;
+      if (azimuth >= low && azimuth <= high) {
+        const fraction = (azimuth - az1) / (az2 - az1);
+        const altitude = alt1 + fraction * (alt2 - alt1);
+        if (best === null || altitude > best) best = altitude;
+      }
+    }
+    return best;
+  }
+
+  function buildEnvelope(faces, observerLat, observerLon, observerElevationM) {
+    const project = makeProjector(observerLat, observerLon, observerElevationM);
+
+    let cheapMinAz = Infinity;
+    let cheapMaxAz = -Infinity;
+    for (const face of faces) {
+      for (const [lat, lon] of face) {
+        const { azimuth } = project(lat, lon, 0);
+        if (azimuth < cheapMinAz) cheapMinAz = azimuth;
+        if (azimuth > cheapMaxAz) cheapMaxAz = azimuth;
+      }
+    }
+    if (!Number.isFinite(cheapMinAz) || cheapMaxAz - cheapMinAz > MAXIMUM_REASONABLE_AZIMUTH_SPAN_DEG) {
+      return null;
+    }
+
+    const faces2d = faces.map((face) =>
+      face.map(([lat, lon, elevationM]) => {
+        const { azimuth, altitude } = project(lat, lon, elevationM);
+        return [azimuth, altitude];
+      }),
+    );
+    const allAzimuths = faces2d.flat().map((point) => point[0]);
+    const minAzimuth = Math.min(...allAzimuths);
+    const maxAzimuth = Math.max(...allAzimuths);
+    const columnCount = Math.floor((maxAzimuth - minAzimuth) / AZIMUTH_COLUMN_STEP_DEG) + 1;
+
+    const envelope = [];
+    for (let index = 0; index <= columnCount; index += 1) {
+      const azimuth = minAzimuth + index * AZIMUTH_COLUMN_STEP_DEG;
+      let maxAltitude = null;
+      for (const face2d of faces2d) {
+        const altitude = faceAltitudeAtAzimuth(face2d, azimuth);
+        if (altitude !== null && (maxAltitude === null || altitude > maxAltitude)) {
+          maxAltitude = altitude;
+        }
+      }
+      if (maxAltitude !== null) envelope.push({ azimuth, altitude: maxAltitude });
+    }
+    return envelope.length > 0 ? envelope : null;
+  }
+
+  global.PlateauBuildingSilhouette = Object.freeze({ buildEnvelope, bearingDeg, surfaceDistanceM });
+})(globalThis);
+
+let lastStructure = null;
+const structureFacesCache = new Map();             /* file 名 → Promise<faces | null>（被写体ごとに 1 回だけ読む） */
+function structureFacesFor(file) {
+  if (!structureFacesCache.has(file)) {
+    /* Viewer で唯一の fetch。同一サイトの静的 file（path は被写体の file 名だけ。撮影地点・日時・fragment は入らない） */
+    const request = fetch(VIEWER.structure_faces_base + file,
+                          {method: "GET", credentials: "omit", referrerPolicy: "no-referrer", cache: "force-cache"})
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data) => (data && Array.isArray(data.faces) && data.faces.length > 0 ? data.faces : null))
+      .catch(() => null);
+    structureFacesCache.set(file, request);
+  }
+  return structureFacesCache.get(file);
+}
+/* 被写体の建物 silhouette: [{azimuth_deg, altitude_deg}]。対象外・取得失敗・近すぎるときは null（従来表示） */
+async function structureModel(plan) {
+  const map = VIEWER.structure_faces || {};
+  if (!Object.prototype.hasOwnProperty.call(map, plan.poi_id)) return null;
+  const faces = await structureFacesFor(map[plan.poi_id]);
+  if (!faces) return {available: false};
+  const envelope = globalThis.PlateauBuildingSilhouette.buildEnvelope(
+    faces, plan.observer_latitude_deg, plan.observer_longitude_deg,
+    plan.observer_ground_elevation_m + plan.observer_height_m);
+  if (!envelope) return {available: false};
+  return {available: true,
+          outline: envelope.map((q) => ({azimuth_deg: q.azimuth, altitude_deg: q.altitude}))};
+}
+
 /* 稜線: 被写体方位を中心に画角（余白 10%）の範囲を方位ごとに歩き、各方位の最大仰角を取る。
    撮影地点の標高は SharePlan の oz + oh（DEM で置き換えない）。海・欠損 tile は 0 m 扱い
    （Planner と同じ暫定海面）。 */
@@ -1015,6 +1153,7 @@ window.SidekickShareViewer = {
   planTitle: planTitle, compositionModel: compositionModel, m0Model: m0Model,
   googleMapsUrl: googleMapsUrl, tileMapModel: tileMapModel, terrainModel: terrainModel, subjectName: subjectName,
   frameProject: frameProject, lastTerrain: () => lastTerrain,
+  structureModel: structureModel, lastStructure: () => lastStructure,
   mapState: () => mapState,
 };
 
@@ -1093,7 +1232,7 @@ function replaceFigure(container, svg) {
 const fmt1 = (value) => (Math.round(value * 10) / 10).toFixed(1);
 const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 
-function renderComposition(plan, terrain) {
+function renderComposition(plan, terrain, structure) {
   const model = compositionModel(plan);
   const W = 320, H = 213;                              /* 3:2（36×24 と同じ比） */
   const svg = svgEl("svg", {viewBox: "0 0 " + W + " " + H, role: "img",
@@ -1106,7 +1245,8 @@ function renderComposition(plan, terrain) {
     svg.appendChild(svgEl("text", {x: W - 6, y: hy - 4, "text-anchor": "end", class: "cp-text sub"}, "水平線"));
   }
   const terrainReady = !!(terrain && terrain.available);
-  if (terrainReady) {
+  const structureReady = !!(structure && structure.available);
+  if (terrainReady || structureReady) {
     /* 稜線 polygon（表示用。SharePlan の値は変えない）。枠外は SVG が clip する。
        null（その方位に該当地形なし）で区切って segment ごとに閉じる = Planner の appendTerrain */
     const toFrame = (samples) => {
@@ -1121,15 +1261,18 @@ function renderComposition(plan, terrain) {
       flush();
       return segments;
     };
-    const appendLayer = (samples, cls) => {
+    const appendLayer = (samples, cls, baseY) => {
+      const bottom = baseY === undefined ? H + 2 : baseY;
       for (const seg of toFrame(samples)) {
         const pts = seg.map((xy) => xy[0] + "," + xy[1]).join(" ");
         svg.appendChild(svgEl("polygon", {
-          points: pts + " " + seg[seg.length - 1][0] + "," + (H + 2) + " " + seg[0][0] + "," + (H + 2),
+          points: pts + " " + seg[seg.length - 1][0] + "," + bottom + " " + seg[0][0] + "," + bottom,
           class: cls}));
       }
     };
-    if (terrain.fuji_separated) {
+    if (!terrainReady) {
+      /* 地形が取れないときも建物の形だけは描く（下の structure 層） */
+    } else if (terrain.fuji_separated) {
       /* Planner drawPreview と同じ順: 富士山（濃）→ 周辺・遮蔽地形（灰）→ 隠れた富士山の輪郭（点線） */
       appendLayer(terrain.fuji_skyline, "cp-terrain-fuji");
       appendLayer(terrain.surrounding_skyline, "cp-terrain");
@@ -1150,11 +1293,15 @@ function renderComposition(plan, terrain) {
     } else {
       appendLayer(terrain.skyline, "cp-terrain");
     }
+    /* 被写体の建物（Planner の構図プレビューと同じく、地形の上に重ねる） */
+    /* 建物の足元はほぼ水平線（高度 0）。水平線が枠内なら、そこで閉じる（手前の地面へ食い込ませない） */
+    if (structureReady) appendLayer(structure.outline, "cp-structure",
+                                    model.horizon.in_frame ? fmt1(model.horizon.v * H) : undefined);
   }
   /* Target: frame 中心。稜線が無いときは頂点から下へ延びる schematic silhouette、
      稜線があるときは実地形に任せて位置 marker だけ */
   const tx = model.target.u * W, ty = model.target.v * H;
-  if (!terrainReady) {
+  if (!terrainReady && !structureReady) {
     const baseY = model.horizon.in_frame ? Math.max(model.horizon.v * H, ty + 8) : H - 1;
     const halfWidth = Math.min(36, Math.max(10, (baseY - ty) * 0.6));
     svg.appendChild(svgEl("polygon", {
@@ -1194,7 +1341,9 @@ function renderComposition(plan, terrain) {
   const side = dAz > 0 ? "右" : dAz < 0 ? "左" : "同じ方位";
   const vert = dAlt > 0 ? "上" : dAlt < 0 ? "下" : "同じ高さ";
   const terrainNote = terrainReady
-    ? "構図イメージです。稜線は国土地理院の標高タイルから表示用に描いたもので、共有された計画値（撮影地点・日時・被写体の方位と仰角）は変更していません。地形だけを描いており、建物・塔などの構造物の形は含まれていません。実際のレンズの画角・大気の影響は反映していません。"
+    ? (structureReady
+      ? "構図イメージです。稜線は国土地理院の標高タイルから、被写体の建物の形は3D都市モデルから表示用に描いたもので、共有された計画値（撮影地点・日時・被写体の方位と仰角）は変更していません。被写体以外の建物は含まれていません。実際のレンズの画角・大気の影響は反映していません。"
+      : "構図イメージです。稜線は国土地理院の標高タイルから表示用に描いたもので、共有された計画値（撮影地点・日時・被写体の方位と仰角）は変更していません。地形だけを描いており、建物・塔などの構造物の形は含まれていません。実際のレンズの画角・大気の影響は反映していません。")
     : (terrain ? "構図イメージです。地形（稜線）を取得できませんでした。地形による遮蔽や実際のレンズの画角は反映していません。"
                : "構図イメージです。地形（稜線）を読み込んでいます…");
   $("composition-caption").textContent =
@@ -1209,7 +1358,18 @@ function renderComposition(plan, terrain) {
     attr.appendChild(attributionLink());
     attr.appendChild(document.createTextNode(VIEWER.gsi_attribution_suffix + " 標高タイル"));
   }
-  attr.hidden = !terrainReady;
+  if (structureReady) {
+    if (terrainReady) attr.appendChild(document.createTextNode("　/　"));
+    attr.appendChild(document.createTextNode("建物の形: "));
+    const a = document.createElement("a");
+    a.setAttribute("href", VIEWER.plateau_attribution_url);
+    a.setAttribute("target", "_blank");
+    a.setAttribute("rel", "noopener noreferrer");
+    a.textContent = VIEWER.plateau_attribution_label;
+    attr.appendChild(a);
+    attr.appendChild(document.createTextNode(VIEWER.plateau_attribution_suffix));
+  }
+  attr.hidden = !(terrainReady || structureReady);
 }
 
 function attributionLink() {
@@ -1764,6 +1924,7 @@ function clearAll() {
   $("map").dataset.map = "pending";
   mapState = null;
   lastTerrain = null;
+  lastStructure = null;
 }
 /* ---- Activity（HD-PLANNERACTIVITY-002 / -005 / -011、HD-QR-107 第1項 AMEND、AI-6250）------------
    first-party・同一 origin・best-effort の beacon 1 本。**撮影計画の中身（fragment・緯度経度・
@@ -1854,7 +2015,9 @@ async function show() {
     $("title").textContent = planTitle(plan);
     renderWhen(plan);
     renderSummary(plan);
-    renderComposition(plan, null);                     /* まず schematic。稜線は後から重ねる */
+    lastTerrain = null;                                /* 前の計画の稜線・形で描き直さない */
+    lastStructure = null;
+    renderComposition(plan, null, null);               /* まず schematic。稜線と建物の形は後から重ねる */
     renderMap(plan);
     renderGoogleMaps(plan);
     renderList($("primary-fields"), SPEC.primary_fields, plan);
@@ -1863,14 +2026,20 @@ async function show() {
     renderShare();
     setStatus("撮影計画を読み込みました。", true);
     reportActivity("share_viewed", raw, {});           /* 表示が終わってから。待たない */
+    /* 建物の形（対象の被写体だけ）。地形より先に来ても後に来ても、そのときの地形と一緒に描き直す */
+    structureModel(plan).then((structure) => {
+      if (generation !== viewGeneration || structure === null) return;
+      lastStructure = structure;
+      if (lastTerrain !== null) renderComposition(plan, lastTerrain, structure);
+    }).catch(() => {});
     terrainModel(plan, generation).then((terrain) => {
       if (generation !== viewGeneration || terrain === null) return;
       lastTerrain = terrain;
-      renderComposition(plan, terrain);
+      renderComposition(plan, terrain, lastStructure);
     }).catch(() => {
       if (generation !== viewGeneration) return;
       lastTerrain = {available: false, skyline: [], error: true};
-      renderComposition(plan, lastTerrain);
+      renderComposition(plan, lastTerrain, lastStructure);
     });
   } catch (error) {
     /* 内部情報・stack trace・payload を画面へ出さない */
