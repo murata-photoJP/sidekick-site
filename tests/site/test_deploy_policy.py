@@ -69,7 +69,9 @@ STANDALONE_LP = {"star-lp.html", "kouzu-lp.html"}
 # 2026-09-30、Sidekick QR EXIF Viewer（/exif、HD-SIDEKICKQR-028）を追加。QR の fragment（#v=1&…）の撮影情報を表示するだけの道具ページで、
 # fragment が無いと「撮影情報が含まれていません」しか表示しない。meta robots noindex ＋ vercel.json の X-Robots-Tag。
 # 逆向き（bytes・analytics なし・sitemap / link なし）は tests/site/test_sidekick_qr_exif_viewer.py が固定する。
-NOINDEX_BY_DESIGN = {"share.html", "exif.html"}
+# 2026-10-05、プランナーQRマップ（/planner-map、G-3 開発版、HD-PLANNERQRMAP-001）を追加。撮影地点（exact）を載せる地図なので
+# 初期は noindex（meta）。本番 navigation からはまだ link しない。
+NOINDEX_BY_DESIGN = {"share.html", "exif.html", "planner-map.html"}
 
 # Sidekick QR Web 版の validation surface（2026-09-28、村田さん決定 HD-SIDEKICKQR-018 D-3）。公開前の確認用で、
 # shell・app とも analytics なし・noindex・sitemap / navigation / 製品ページから link しない。この prefix の下だけを例外にし、
@@ -359,7 +361,10 @@ GA4_CONFIG_RE = re.compile(r"gtag\('config',\s*'(G-[A-Z0-9]+)'")
 #
 # 2026-09-30、Sidekick QR EXIF Viewer（/exif、HD-SIDEKICKQR-028）を追加。fragment の撮影情報を server・analytics・beacon へ送らない
 # （CSP connect-src 'none'）。正本は Sidekick QR repository の viewer/exif.html で、この file は byte 一致の copy（書き換えない）。
-NO_ANALYTICS_BY_DESIGN = {"share.html", "sidekick-qr-app/app.html", "exif.html"}
+#
+# 2026-10-05、プランナーQRマップ（/planner-map、G-3 開発版）を追加。外部 script を持たず（CSP script-src 'self'）、
+# 通信は自サイトの /api/qr-map と地理院タイル（画像）だけ。analytics は入れない（G-3 では計測しない）。
+NO_ANALYTICS_BY_DESIGN = {"share.html", "sidekick-qr-app/app.html", "exif.html", "planner-map.html"}
 
 # テンプレートから生成する4系統のうち、base.html に GA4 を置く3系統。
 # site 系は各ページテンプレートが extra_head に置く（既存の手書き移行ページはスニペット直書き、

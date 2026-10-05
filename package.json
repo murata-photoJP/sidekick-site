@@ -5,7 +5,9 @@
   "scripts": {
     "qr-map:extract-decoder": "node tools/qr_map/extract_viewer_decoder.mjs",
     "test:qr-map:unit": "node --test tests/qr_map/unit/*.mjs",
-    "test:qr-map:emulator": "npx --yes firebase-tools@15.32.1 emulators:exec --config firebase/qr-map/firebase.json --only firestore --project demo-sidekick-qr-map \"node --test --test-concurrency=1 tests/qr_map/emulator/*.mjs\""
+    "test:qr-map:emulator": "npx --yes firebase-tools@15.32.1 emulators:exec --config firebase/qr-map/firebase.test.json --only firestore --project demo-sidekick-qr-map \"node --test --test-concurrency=1 tests/qr_map/emulator/*.mjs\"",
+    "test:qr-map:browser": "npx --yes firebase-tools@15.32.1 emulators:exec --config firebase/qr-map/firebase.test.json --only firestore --project demo-sidekick-qr-map \"node tools/qr_map/run_browser_tests.mjs\"",
+    "qr-map:dev": "npx --yes firebase-tools@15.32.1 emulators:exec --config firebase/qr-map/firebase.json --only firestore --project demo-sidekick-qr-map \"node tools/qr_map/dev_server.mjs --seed\""
   },
   "dependencies": {
     "firebase-admin": "^12.0.0",

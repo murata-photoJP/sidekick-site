@@ -4,3 +4,5 @@ validation/sidekick-qr-web/**/sidekick-qr-app/** -text
 sidekick-qr-app/** -text
 # Sidekick QR EXIF Viewer の copy（正本 = Sidekick QR repository の viewer/exif.html、HD-SIDEKICKQR-028）。改行を変換しない。
 /exif.html -text
+# Leaflet 1.9.4（self-host、Planner の vendored copy と byte 一致。assets/vendor/leaflet-1.9.4/README.md）。改行を変換しない。
+assets/vendor/** -text

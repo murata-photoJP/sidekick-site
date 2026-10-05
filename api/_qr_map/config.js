@@ -51,7 +51,12 @@ function readEnv(env = process.env) {
     serviceAccountJson: env.QR_MAP_FIREBASE_SERVICE_ACCOUNT || "",
     emulatorHost: env.FIRESTORE_EMULATOR_HOST || "",
     // "1" のとき emulator 以外への接続を拒否する（tests / local 開発は必ず 1）
-    requireEmulator: env.QR_MAP_REQUIRE_EMULATOR === "1"
+    requireEmulator: env.QR_MAP_REQUIRE_EMULATOR === "1",
+    // local 確認用 server（http://127.0.0.1:port）の Origin。emulator 専用の設定でだけ効く（本番では無視）
+    devAllowedOrigins: env.QR_MAP_REQUIRE_EMULATOR === "1"
+      ? String(env.QR_MAP_DEV_ALLOWED_ORIGINS || "").split(",").map((s) => s.trim())
+        .filter((s) => /^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(s))
+      : []
   };
 }
 

@@ -1,0 +1,50 @@
+/* プランナーQRマップ（G-3）。Human が Map の UX を判断できる最小限の見た目（最終の visual polish ではない） */
+:root {
+  --pm-bg: #f7f6f2;
+  --pm-fg: #1f2328;
+  --pm-muted: #5b6168;
+  --pm-accent: #0f6e78;
+  --pm-accent-fg: #ffffff;
+  --pm-panel: #ffffff;
+  --pm-border: #d8d6cf;
+  --pm-error: #a3242e;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--pm-bg); color: var(--pm-fg);
+  font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif; }
+body { display: flex; flex-direction: column; }
+.pm-header { padding: 10px 16px; border-bottom: 1px solid var(--pm-border); background: var(--pm-panel); }
+.pm-header h1 { margin: 0; font-size: 1.15rem; }
+.pm-lead { margin: 2px 0 0; color: var(--pm-muted); font-size: 0.85rem; }
+.pm-main { position: relative; flex: 1; min-height: 0; display: flex; }
+#pm-map { flex: 1; min-height: 0; }
+.pm-panel { width: 360px; max-width: 100%; overflow-y: auto; background: var(--pm-panel);
+  border-left: 1px solid var(--pm-border); padding: 12px 16px 20px; position: relative; }
+.pm-panel[hidden] { display: none; }
+.pm-panel-close { position: absolute; top: 8px; right: 8px; border: 1px solid var(--pm-border); background: var(--pm-panel);
+  border-radius: 6px; padding: 4px 10px; font-size: 0.9rem; cursor: pointer; }
+.pm-panel-title { font-size: 1.05rem; margin: 4px 40px 10px 0; }
+.pm-genre { font-weight: 600; margin: 0 0 4px; }
+.pm-line { margin: 2px 0; font-size: 0.92rem; }
+.pm-note { margin: 10px 0; font-size: 0.82rem; color: var(--pm-muted); }
+.pm-view, .pm-open { display: inline-block; margin-top: 8px; padding: 8px 14px; border-radius: 6px; border: 0;
+  background: var(--pm-accent); color: var(--pm-accent-fg); text-decoration: none; font-size: 0.95rem; cursor: pointer; }
+.pm-group-list { list-style: none; margin: 0; padding: 0; }
+.pm-group-item { border-top: 1px solid var(--pm-border); padding: 10px 0; }
+.pm-status { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 500;
+  background: rgba(255, 255, 255, 0.95); border: 1px solid var(--pm-border); border-radius: 8px; padding: 8px 12px;
+  font-size: 0.9rem; max-width: calc(100% - 32px); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
+.pm-status[hidden] { display: none; }
+.pm-status[data-kind="error"] { color: var(--pm-error); border-color: var(--pm-error); }
+.pm-retry { margin-left: 8px; border: 1px solid currentColor; background: transparent; color: inherit; border-radius: 6px;
+  padding: 2px 8px; cursor: pointer; }
+.pm-pin-wrap { background: transparent; border: 0; }
+.pm-pin { width: 22px; height: 22px; margin: 6px; border-radius: 50%; background: var(--pm-accent);
+  border: 3px solid #ffffff; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35); }
+.pm-pin-group { width: 34px; height: 34px; margin: 0; display: flex; align-items: center; justify-content: center;
+  color: var(--pm-accent-fg); font-weight: 700; font-size: 0.85rem; }
+@media (max-width: 700px) {
+  .pm-main { flex-direction: column; }
+  .pm-panel { width: 100%; max-height: 45vh; border-left: 0; border-top: 1px solid var(--pm-border); }
+  .pm-status { bottom: auto; top: 12px; }
+}

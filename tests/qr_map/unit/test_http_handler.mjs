@@ -53,6 +53,14 @@ test("Origin: 付いていれば www.sidekick-lab.com だけ。無し（Planner�
   assert.equal((await call({ op: "open", body: { plan_id: "p" } })).statusCode, 200);
 });
 
+test("local 確認用 Origin は emulator 専用設定のときだけ。本番設定では無視される", () => {
+  const req = { headers: { origin: "http://127.0.0.1:8787" } };
+  assert.equal(handler.originAllowed(req, { QR_MAP_DEV_ALLOWED_ORIGINS: "http://127.0.0.1:8787" }), false);
+  assert.equal(handler.originAllowed(req, { QR_MAP_DEV_ALLOWED_ORIGINS: "http://127.0.0.1:8787", QR_MAP_REQUIRE_EMULATOR: "1" }), true);
+  assert.equal(handler.originAllowed({ headers: { origin: "https://evil.example" } },
+    { QR_MAP_DEV_ALLOWED_ORIGINS: "https://evil.example", QR_MAP_REQUIRE_EMULATOR: "1" }), false); // http://127.0.0.1 / localhost だけ
+});
+
 test("Content-Type が JSON でなければ 415", async () => {
   assert.equal((await call({ op: "publish", body: "{}", headers: { "content-type": "text/plain" } })).statusCode, 415);
 });

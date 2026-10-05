@@ -12,7 +12,7 @@
 // 保存も log もしないもの: IP / IP hash / User-Agent / raw token / fragment の中身。
 "use strict";
 
-const { CONSTANTS } = require("./_qr_map/config");
+const { CONSTANTS, readEnv } = require("./_qr_map/config");
 const { getQrMapFirestore, QrMapConfigError } = require("./_qr_map/firestore");
 const { createStore, QrMapError } = require("./_qr_map/store");
 
@@ -23,10 +23,12 @@ function send(res, status, body, cacheControl) {
   return res.status(status).json(body);
 }
 
-function originAllowed(req) {
+function originAllowed(req, env = process.env) {
   const origin = req.headers && req.headers.origin;
   if (!origin) return true; // Sidekick Planner（desktop、Python 側から送る）は Origin を付けない
-  return CONSTANTS.ALLOWED_ORIGINS.includes(origin);
+  if (CONSTANTS.ALLOWED_ORIGINS.includes(origin)) return true;
+  // local 確認（Firestore Emulator 専用設定のときだけ。本番では readEnv が空を返す）
+  return readEnv(env).devAllowedOrigins.includes(origin);
 }
 
 function isJsonRequest(req) {
@@ -58,7 +60,7 @@ async function handler(req, res) {
   const op = req.query && typeof req.query.op === "string" ? req.query.op : "";
   const env = process.env;
   try {
-    if (!originAllowed(req)) return send(res, 403, { error: "ORIGIN_NOT_ALLOWED" });
+    if (!originAllowed(req, env)) return send(res, 403, { error: "ORIGIN_NOT_ALLOWED" });
 
     if (op === "tile") {
       if (req.method !== "GET") { res.setHeader("Allow", "GET"); return send(res, 405, { error: "METHOD_NOT_ALLOWED" }); }

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>プランナーQRマップ（開発版） | Sidekick Lab</title>
+<meta name="description" content="Sidekick Planner で立てた撮影計画のうち、公開を選んだものを地図で見られます。">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cyberjapandata.gsi.go.jp; connect-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<link rel="stylesheet" href="/assets/vendor/leaflet-1.9.4/leaflet.css">
+<link rel="stylesheet" href="/assets/planner-map/planner-map.css">
+</head>
+<body>
+<!-- プランナーQRマップ（G-3 Map Viewer、開発版）。本番 navigation からはまだ link しない（HD-PLANNERQRMAP-001）。
+     計画は G-2 の /api/qr-map（tile / open）だけで取る。地理院タイルは browser から直接取得。analytics なし。 -->
+<header class="pm-header">
+  <h1>プランナーQRマップ</h1>
+  <p class="pm-lead">こんな場所から、こんな撮影計画を立てた人がいます。</p>
+</header>
+<main class="pm-main">
+  <div id="pm-map" role="region" aria-label="撮影計画の地図"></div>
+  <aside id="pm-panel" class="pm-panel" aria-live="polite" hidden>
+    <button type="button" id="pm-panel-close" class="pm-panel-close" aria-label="閉じる">閉じる</button>
+    <div id="pm-panel-body"></div>
+  </aside>
+  <div id="pm-status" class="pm-status" role="status" hidden></div>
+</main>
+<script src="/assets/vendor/leaflet-1.9.4/leaflet.js"></script>
+<script src="/assets/planner-map/map-core.js"></script>
+<script src="/assets/planner-map/planner-map.js"></script>
+</body>
+</html>
