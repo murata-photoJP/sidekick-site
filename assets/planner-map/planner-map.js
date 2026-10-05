@@ -90,6 +90,23 @@
     return s;
   }
 
+  // 複数の pin（G-3.2）: 1 件の pin と同じ形（同じ path）の前に件数、後ろにもう 1 本の pin を重ねて「束」に見せる。
+  // 先端（前の pin）が地点を指す。件数は 99 まで数字、それ以上は「99+」（正確な件数は aria-label / tooltip）。
+  var PIN_PATH = "M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z";
+  function groupPinSvg(count, className) {
+    var s = svg("svg", { viewBox: "0 0 48 56", width: 48, height: 56, "class": className || "pm-pin-svg pm-pin-svg-group", "aria-hidden": "true", focusable: "false" });
+    s.appendChild(svg("path", { "class": "pm-pin-shape pm-pin-stack", d: PIN_PATH, transform: "translate(8 0)" }));
+    var front = svg("g", { transform: "translate(0 4)" });
+    front.appendChild(svg("path", { "class": "pm-pin-shape", d: PIN_PATH }));
+    var label = count > 99 ? "99+" : String(count);
+    var t = svg("text", { x: 20, y: 19, "class": "pm-group-count", "text-anchor": "middle", "dominant-baseline": "central",
+      "font-size": label.length === 1 ? 19 : label.length === 2 ? 16 : 12 });
+    t.textContent = label;
+    front.appendChild(t);
+    s.appendChild(front);
+    return s;
+  }
+
   function setStatus(kind, text, retry) {
     statusEl.textContent = "";
     statusEl.dataset.kind = kind || "";
@@ -112,7 +129,8 @@
     maxZoom: 18,
     attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener noreferrer">地理院タイル</a>（国土地理院）に撮影計画の位置を追記して表示'
   }).addTo(map);
-  map.setView([37.5, 137.8], 6); // 日本全体（北海道〜九州）が入る中心
+  // 初期表示は map-core の INITIAL_VIEW（関東〜中部。MVP の暫定。開いた瞬間に撮影計画の pin が見える範囲）
+  map.setView(core.INITIAL_VIEW.center, core.INITIAL_VIEW.zoom);
 
   var markerLayer = L.layerGroup().addTo(map);
 
@@ -159,14 +177,14 @@
     var level = core.serverLevelFor(zoom);
     if (level === null) {
       markerLayer.clearLayers();
-      setStatus("hint", "地図を拡大すると、撮影計画のピンが表示されます。");
+      setStatus("hint", "もう少し地図を拡大すると、撮影計画を表示できます。");
       return;
     }
     var b = map.getBounds();
     var plan = core.tilesForBounds({ north: b.getNorth(), south: b.getSouth(), east: b.getEast(), west: b.getWest() }, level);
     if (plan.tooMany) {
       markerLayer.clearLayers();
-      setStatus("hint", "表示範囲が広すぎます。地図を拡大してください。");
+      setStatus("hint", "もう少し地図を拡大すると、撮影計画を表示できます。");
       return;
     }
     setStatus("loading", "撮影計画を読み込んでいます…");
@@ -191,7 +209,8 @@
     });
   }
 
-  // 1 件 = pin（記号入り）、複数 = 「N 件」の吹き出し。形・文字・大きさで区別する（色だけにしない）
+  // 1 件 = pin（ジャンル記号入り）、複数 = 同じ pin ＋ 件数 ＋ 後ろに重なったもう 1 本（G-3.2）。
+  // 同じ「撮影計画がある地点」の family として見せ、中身（記号 / 数字）と重なりで区別する（色だけにしない）
   function markerIcon(plans) {
     var node;
     if (plans.length === 1) {
@@ -203,12 +222,10 @@
       return L.divIcon({ html: node, className: "pm-marker-wrap", iconSize: [44, 56], iconAnchor: [22, 54] });
     }
     node = el("div", "pm-marker pm-pin-group");
-    var bubble = el("div", "pm-group-bubble");
-    bubble.appendChild(el("span", "pm-group-count", plans.length));
-    bubble.appendChild(el("span", "pm-group-unit", "件"));
-    node.appendChild(bubble);
-    node.appendChild(el("div", "pm-group-tip"));
-    return L.divIcon({ html: node, className: "pm-marker-wrap", iconSize: [64, 56], iconAnchor: [32, 54] });
+    node.dataset.symbol = "count";
+    node.appendChild(groupPinSvg(plans.length));
+    // 前の pin の先端 = (2 + 20, 4 + 54.5)（wrap 52×60 の下端中央寄せ）
+    return L.divIcon({ html: node, className: "pm-marker-wrap", iconSize: [52, 60], iconAnchor: [22, 58] });
   }
 
   function render(plans) {
@@ -220,7 +237,7 @@
     core.groupPoints(points, GROUP_RADIUS_PX).forEach(function (g) {
       var count = g.plans.length;
       var label = count > 1
-        ? "近くの撮影計画 " + count + " 件。選ぶと一覧を表示します"
+        ? count + "件の撮影計画がこの付近にあります。選ぶと一覧を表示します"
         : "撮影計画: " + core.planCaption(g.plans[0]) + "、" + core.formatJstCompact(g.plans[0].t_d) + "。選ぶと詳細を表示します";
       var m = L.marker([g.lat, g.lon], { icon: markerIcon(g.plans), title: label, alt: label, keyboard: true, riseOnHover: true });
       m.on("click", function () {

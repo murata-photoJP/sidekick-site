@@ -124,3 +124,8 @@ test("G-3.1: card の短い日時と、marker の名前（ジャンル ＋ 被�
   assert.equal(core.planCaption({ genre_label: "星景", target_label: "富士山", sky_object_label: "オリオン座" }), "星景（オリオン座）");
   assert.equal(core.planCaption({ genre_label: "星景（星の軌跡）", target_label: null }), "星景（星の軌跡）");
 });
+
+test("G-3.2: 初期表示は server の段（6）で取れる zoom。開いた瞬間に計画を取りに行く", () => {
+  assert.equal(core.serverLevelFor(core.INITIAL_VIEW.zoom), 6);
+  assert.ok(core.INITIAL_VIEW.zoom >= core.MIN_FETCH_ZOOM);
+});

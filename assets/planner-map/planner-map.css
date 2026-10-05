@@ -28,13 +28,15 @@ body { display: flex; flex-direction: column; }
 .pm-legend { display: inline-flex; vertical-align: middle; }
 .pm-legend-pin .pm-pin-shape { fill: var(--pm-pin); stroke: #ffffff; stroke-width: 3; }
 .pm-legend-dot { fill: #ffffff; }
-.pm-legend-group { margin-left: 6px; padding: 0 6px; border: 2px solid var(--pm-pin-selected); border-radius: 8px;
-  background: #ffffff; color: var(--pm-pin); font-weight: 700; font-size: 0.8rem; line-height: 1.4; }
+.pm-legend-group { margin-left: 4px; }
+.pm-legend-group .pm-pin-stack { fill: #f0a27c; stroke: #ffffff; stroke-width: 3; }
+.pm-legend-group .pm-pin-shape { fill: var(--pm-pin); stroke: #ffffff; stroke-width: 3; }
+.pm-legend-count { fill: #ffffff; font-weight: 800; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
 
 .pm-main { position: relative; flex: 1; min-height: 0; display: flex; }
 #pm-map { flex: 1; min-height: 0; }
 
-/* ---- marker（Leaflet の divIcon。anchor = pin の先端 / 吹き出しの先端） ---- */
+/* ---- marker（Leaflet の divIcon。anchor = 前の pin の先端） ---- */
 .pm-marker-wrap { background: transparent; border: 0; cursor: pointer; }
 .pm-marker-wrap:focus { outline: none; }
 .pm-marker-wrap:focus-visible .pm-marker { outline: 3px solid var(--pm-focus); outline-offset: 2px; border-radius: 10px; }
@@ -49,22 +51,15 @@ body { display: flex; flex-direction: column; }
 .pm-sym .pm-sym-stroke { stroke: var(--pm-pin-ink); stroke-width: 2; stroke-linecap: round; fill: none; }
 .pm-sym .pm-sym-arc { stroke-width: 1.6; }
 
-/* 複数: 「N 件」の吹き出し（白地・濃い枠・重なった影で「束」に見せる）。pin とは形も文字も違う */
-.pm-pin-group { justify-content: flex-end; }
-.pm-group-bubble { display: flex; align-items: baseline; gap: 1px; min-width: 46px; justify-content: center;
-  padding: 3px 8px 2px; border: 2.5px solid var(--pm-pin-selected); border-radius: 10px; background: #ffffff;
-  box-shadow: 3px 3px 0 -1px #ffffff, 3px 3px 0 1px var(--pm-pin-selected), 0 3px 6px rgba(0, 0, 0, 0.35); }
-.pm-group-count { color: var(--pm-pin); font-weight: 800; font-size: 1.15rem; line-height: 1.2; }
-.pm-group-unit { color: var(--pm-pin-selected); font-weight: 700; font-size: 0.8rem; }
-.pm-group-tip { width: 0; height: 0; margin-top: -1px; border-left: 8px solid transparent; border-right: 8px solid transparent;
-  border-top: 10px solid var(--pm-pin-selected); }
+/* 複数（G-3.2）: 1 件と同じ pin の中に件数、後ろに淡いもう 1 本を重ねて「束」に見せる（同じ family、中身と重なりで区別） */
+.pm-pin-svg .pm-pin-stack { fill: #f0a27c; stroke: #ffffff; stroke-width: 2.5; }
+.pm-group-count { fill: var(--pm-pin-ink); font-weight: 800; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
 
-/* 選択中: 大きく ＋ 黄色の外枠 ＋ 濃い色（3 つで示す） */
+/* 選択中: 大きく ＋ 黄色の外枠 ＋ 濃い色（3 つで示す。1 件・複数で同じ） */
 .pm-selected .pm-marker { transform: scale(1.22); }
 .pm-selected:hover .pm-marker { transform: scale(1.22); }
 .pm-selected .pm-pin-svg .pm-pin-shape { fill: var(--pm-pin-selected); stroke: var(--pm-ring); stroke-width: 3.5; }
-.pm-selected .pm-group-bubble { background: var(--pm-pin-selected); outline: 3px solid var(--pm-ring); outline-offset: 0; }
-.pm-selected .pm-group-count, .pm-selected .pm-group-unit { color: #ffffff; }
+.pm-selected .pm-pin-svg .pm-pin-stack { fill: #6b7280; stroke: var(--pm-ring); stroke-width: 2.5; }
 
 /* ---- panel と card ---- */
 .pm-panel { width: 380px; max-width: 100%; overflow-y: auto; background: var(--pm-bg);

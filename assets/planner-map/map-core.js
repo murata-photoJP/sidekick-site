@@ -16,6 +16,12 @@
   var SERVER_LEVELS = [6, 10, 14];
   var MIN_FETCH_ZOOM = 6;          // これより引いた表示では計画を取りに行かない（日本全体より広い）
   var MAX_TILES_PER_VIEW = 30;     // 1 画面で要求する data tile の上限（超えたら取りに行かない）
+
+  // 初期表示（G-3.2、MVP の暫定戦略）。開いた瞬間に撮影計画の pin が見えるよう、関東〜中部が入る範囲にする。
+  // zoom 8 は data tile 段 6 を使い、大きな画面（1920×1080）でも要求は十数枚に収まる（日本全体の zoom 6 は
+  // 大きな画面で上限 30 枚を超え「拡大してください」だけになった = G-3.1 Human Review）。
+  // 計画が全国に増えたら、存在範囲への fit・地域選択・現在地周辺・全国用の粗い index 等で別途見直す（未実装）。
+  var INITIAL_VIEW = { center: [35.75, 138.6], zoom: 8 };
   var MAX_LAT = 85.05112878;
 
   // 表示 zoom → server の data tile 段。data tile が画面の tile より細かくならないようにする
@@ -175,6 +181,7 @@
   }
 
   return {
+    INITIAL_VIEW: INITIAL_VIEW,
     GENRE_SYMBOLS: GENRE_SYMBOLS,
     genreSymbol: genreSymbol,
     planCaption: planCaption,

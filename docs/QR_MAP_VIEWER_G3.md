@@ -85,3 +85,14 @@ PublicPlan / Firestore / tile・open API / activity / expiry / SharePlan / QR / 
 | card | genre（記号 ＋ 名前）／ 主題（被写体・天体）／ 日時（YYYY/MM/DD HH:MM 日本時間）／ actions。近くの計画は card を縦に並べ「詳しく見る」（= open）、詳細は「計画を見る」（= 既存 Viewer）、一覧へ戻る（open しない）。写真（`.pm-card-media`）・撮影者は将来 header の前・body の後に足せる構造（今は placeholder を出さない） |
 | keyboard | marker は `role="button"`・tabindex 0・Enter / Space で選ぶ。focus-visible の枠 |
 | 初期表示 | 中心 37.5°N（北海道〜九州が入る） |
+
+## 11. G-3.2 First Impression / Cluster Pin Polish（2026-10-05、Human Review: 「複数の吹き出しが別種の注釈に見える」「開いた瞬間に何も無く『なにこれ？』」）
+
+| 項目 | 内容 |
+|---|---|
+| 複数の pin | 1 件と同じ pin（同じ path）の中に件数（数字だけ、100 以上は「99+」）、後ろに淡いもう 1 本を重ねて「束」に見せる。先端（前の pin）が地点を指す。ジャンル記号の代わりに数字。aria-label / tooltip は「N件の撮影計画がこの付近にあります」。選択中の見た目・keyboard・押した後の動き（一覧 → 詳しく見る → POST open）は 1 件・G-3.1 と同じ |
+| 凡例 | header の「3件」チップを、同じ形の小さな数字入り pin（「数字のピンは、近くにある計画の件数です。」）へ |
+| 初期表示 | `map-core.js` の `INITIAL_VIEW`（中心 35.75°N 138.6°E、zoom 8 = 関東〜中部）。data tile 段 6 のまま、1920×1080 でも要求は十数枚。**MVP の暫定戦略**: 計画が全国に増えたら、存在範囲への fit・地域選択・現在地周辺・全国用の粗い index 等で見直す（未実装）。旧 zoom 6（日本全体）は大きな画面で上限 30 枚を超え「拡大してください」だけになっていた |
+| 引いた表示 | 手で zoom 5 以下・上限超えの範囲へ引いた場合のガードは維持。文言を「もう少し地図を拡大すると、撮影計画を表示できます。」へ |
+
+変更なし: PublicPlan / Firestore / tile・open API / activity / expiry / z6・z10・z14 / grouping（36 px）/ 1 件の pin / card / Viewer。

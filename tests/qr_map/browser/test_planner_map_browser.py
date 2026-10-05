@@ -349,10 +349,16 @@ def test_31_pins_groups_and_genre_symbols(browser):
         m = groups.nth(i)
         count = m.get_attribute("data-count")
         assert int(count) > 1
-        assert m.locator(".pm-group-count").inner_text() == count       # 件数を強く表示
-        assert m.locator(".pm-group-unit").inner_text() == "件"
-        assert m.locator("svg path.pm-pin-shape").count() == 0          # 1 件の pin とは形が違う
-        assert f"{count} 件" in m.get_attribute("aria-label")
+        # G-3.2: 複数も pin（同じ path）の中に件数。後ろにもう 1 本重ねて 1 件と区別する
+        assert m.locator("svg text.pm-group-count").text_content() == count
+        assert m.locator("svg path.pm-pin-shape:not(.pm-pin-stack)").count() == 1
+        assert m.locator("svg path.pm-pin-stack").count() == 1
+        assert m.locator(".pm-sym").count() == 0                          # ジャンル記号の代わりに数字
+        assert f"{count}件の撮影計画" in m.get_attribute("aria-label")
+    # 同じ family: 前の pin の形（path）は 1 件と同じ
+    single_d = singles.nth(0).locator("svg path.pm-pin-shape").get_attribute("d")
+    group_d = groups.nth(0).locator("svg path.pm-pin-shape:not(.pm-pin-stack)").get_attribute("d")
+    assert single_d == group_d
     assert rec.ops("open") == []
     context.close()
 
@@ -429,5 +435,92 @@ def test_34_mobile_selected_point_stays_visible_and_tappable(browser):
     assert mb["y"] <= sb["y"] and sb["y"] + sb["height"] <= mb["y"] + mb["height"] + 1   # 選んだ地点が地図の見える範囲にある
     assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
     page.screenshot(path=str(ARTIFACTS / "mobile_group_selected.png"))
+    assert rec.ops("open") == []
+    context.close()
+
+
+# ---- G-3.2 First Impression / Cluster Pin Polish ----------------------------------------------
+def tip_offset(page, marker, lat, lon):
+    """pin の先端（marker の下端中央付近）と、地点の画面座標とのずれ（px）。"""
+    pt = page.evaluate("([a, b]) => { const p = window.PlannerMap.map.latLngToContainerPoint([a, b]);"
+                       " const r = document.getElementById('pm-map').getBoundingClientRect();"
+                       " return [p.x + r.left, p.y + r.top]; }", [lat, lon])
+    svg_box = marker.locator("svg").bounding_box()
+    return pt, svg_box
+
+
+def test_41_pin_tips_point_at_the_location(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    pearl = PLANS["pearl"]
+    set_view(page, pearl["lat"], pearl["lon"], 13)
+    (px, py), box = tip_offset(page, marker_for(page, pearl["plan_id"]), pearl["lat"], pearl["lon"])
+    # 1 件: svg（40×52）の先端 = (20, 50.5)
+    assert abs(box["x"] + 20 - px) <= 2 and abs(box["y"] + 50.5 - py) <= 2
+    sm = PLANS["sunmoon"]
+    set_view(page, sm["lat"], sm["lon"], 18)
+    group = marker_for(page, sm["plan_id"])
+    assert int(group.get_attribute("data-count")) == 3                    # 同じ地点の 3 件
+    (px, py), box = tip_offset(page, group, sm["lat"], sm["lon"])
+    # 複数: svg（48×56）の前の pin の先端 = (20, 4 + 50.5)
+    assert abs(box["x"] + 20 - px) <= 2 and abs(box["y"] + 54.5 - py) <= 2
+    context.close()
+
+
+@pytest.mark.parametrize("size", [(1280, 800), (1920, 1080), (375, 812)])
+def test_42_initial_view_shows_real_plans_without_wide_warning(browser, size):
+    context, page, rec = new_page(browser, *size)
+    page.goto(BASE + "/planner-map")
+    page.wait_for_function("() => window.PlannerMap && window.PlannerMap.map")
+    settle(page)
+    tiles = rec.ops("tile")
+    assert tiles and len(tiles) <= 30 and {r["q"]["z"] for r in tiles} == {"6"}     # 対応している段（6）だけ
+    status = page.locator("#pm-status")
+    assert status.get_attribute("data-kind") not in ("hint", "error", "empty")      # 「拡大してください」から始まらない
+    ids = all_marker_plan_ids(page)
+    seeded = {p["plan_id"] for p in VISIBLE}
+    assert ids and ids <= seeded                                                     # 実際に seed した PublicPlan
+    mb = page.locator("#pm-map").bounding_box()
+    shown = 0
+    for m in page.locator(".leaflet-marker-icon").all():
+        b = m.bounding_box()
+        if b and mb["x"] <= b["x"] + b["width"] / 2 <= mb["x"] + mb["width"] and mb["y"] <= b["y"] + b["height"] <= mb["y"] + mb["height"]:
+            shown += 1
+    assert shown >= 1                                                                # 画面の中に見えている
+    assert page.locator(".leaflet-marker-icon:has(.pm-pin-group)").count() >= 1     # 複数の pin も最初から見える
+    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+    assert rec.ops("open") == []
+    context.close()
+
+
+def test_43_manual_zoom_out_shows_guidance_safely(browser):
+    context, page, rec = new_page(browser, 1920, 1080)
+    goto_map(page)
+    before = len(rec.ops("tile"))
+    set_view(page, 37.5, 137.8, 5)
+    status = page.locator("#pm-status")
+    assert status.get_attribute("data-kind") == "hint"
+    assert "もう少し地図を拡大すると、撮影計画を表示できます。" in status.inner_text()
+    assert page.locator(".leaflet-marker-icon").count() == 0
+    assert len(rec.ops("tile")) == before                                            # 取りに行かない
+    set_view(page, 37.5, 137.8, 6)                                                   # 大きな画面の日本全体 = 上限超え
+    assert status.get_attribute("data-kind") == "hint"
+    assert "もう少し地図を拡大すると" in status.inner_text()
+    assert all(r["q"]["z"] == "6" for r in rec.ops("tile")) and len(rec.ops("tile")) - before <= 30
+    assert rec.ops("open") == []
+    context.close()
+
+
+def test_44_group_pin_keyboard_selects_list_without_open(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    sm = PLANS["sunmoon"]
+    set_view(page, sm["lat"], sm["lon"], 13)
+    group = marker_for(page, sm["plan_id"])
+    group.focus()
+    page.keyboard.press("Enter")
+    page.wait_for_selector(".pm-card-list")
+    assert group.get_attribute("data-selected") == "true"
+    assert group.get_attribute("aria-pressed") == "true"
     assert rec.ops("open") == []
     context.close()
