@@ -14,17 +14,17 @@
 <body>
 <!-- プランナーQRマップ（G-3 Map Viewer、開発版）。本番 navigation からはまだ link しない（HD-PLANNERQRMAP-001）。
      計画は G-2 の /api/qr-map（tile / open）だけで取る。地理院タイルは browser から直接取得。analytics なし。 -->
-<header class="pm-header">
-  <div class="pm-header-text">
-    <h1>プランナーQRマップ</h1>
-    <p class="pm-lead">みんなの撮影計画から、撮影場所を探す地図です。</p>
-  </div>
-  <p class="pm-howto">
-    <span class="pm-legend" aria-hidden="true"><svg class="pm-legend-pin" viewBox="0 0 40 52" width="15" height="20" focusable="false"><path class="pm-pin-shape" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><circle class="pm-legend-dot" cx="20" cy="19" r="6"/></svg></span>
-    ピンを選ぶと、撮影日時・被写体・撮影計画を確認できます。
-    <span class="pm-legend pm-legend-group" aria-hidden="true"><svg viewBox="0 0 48 56" width="18" height="21" focusable="false"><path class="pm-pin-shape pm-pin-stack" transform="translate(8 0)" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><g transform="translate(0 4)"><path class="pm-pin-shape" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><text class="pm-legend-count" x="20" y="19" text-anchor="middle" dominant-baseline="central" font-size="19">3</text></g></svg></span>
-    数字のピンは、近くにある計画の件数です。
-  </p>
+<!-- G-3.3 導入カード: 地図とは別の層。h1 の中で「何ができる画面か」（headline）を製品名（eyebrow）より強く見せる。
+     凡例は実物と同じ形の pin（装飾なので aria-hidden、意味は文で伝える）。 -->
+<header class="pm-intro">
+  <h1 class="pm-intro-title">
+    <span class="pm-intro-eyebrow">プランナーQRマップ</span>
+    <span class="pm-intro-headline"><span class="pm-phrase">みんなの撮影計画から、</span><span class="pm-phrase">次に撮りたい場所を探そう。</span></span>
+  </h1>
+  <ul class="pm-intro-legend">
+    <li><span class="pm-legend" aria-hidden="true"><svg class="pm-legend-pin" viewBox="0 0 40 52" width="20" height="26" focusable="false"><path class="pm-pin-shape" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><circle class="pm-legend-dot" cx="20" cy="19" r="6"/></svg></span><span><span class="pm-phrase">ピンを選ぶと、</span><span class="pm-phrase">撮影日時・被写体・撮影計画を見ることができます。</span></span></li>
+    <li><span class="pm-legend pm-legend-group" aria-hidden="true"><svg viewBox="0 0 48 56" width="22" height="26" focusable="false"><path class="pm-pin-shape pm-pin-stack" transform="translate(8 0)" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><g transform="translate(0 4)"><path class="pm-pin-shape" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><text class="pm-legend-count" x="20" y="19" text-anchor="middle" dominant-baseline="central" font-size="19">3</text></g></svg></span><span><span class="pm-phrase">数字のピンは、</span><span class="pm-phrase">この付近にある計画の数です。</span></span></li>
+  </ul>
 </header>
 <main class="pm-main">
   <div id="pm-map" role="region" aria-label="撮影計画の地図"></div>
@@ -33,6 +33,9 @@
     <div id="pm-panel-body"></div>
   </aside>
   <div id="pm-status" class="pm-status" role="status" hidden></div>
+  <!-- First Action Cue（G-3.3）: 地図の操作を妨げない（pointer-events: none）小さな誘導。導入カードと同じ内容なので
+       読み上げない。最初に pin を選んだら消える（記憶しない。次に開いたときはまた出る）。 -->
+  <p id="pm-cue" class="pm-cue" aria-hidden="true" hidden>気になるピンを選んでみてください<span class="pm-cue-sub">撮影日時や撮影計画を見ることができます</span></p>
 </main>
 <script src="/assets/vendor/leaflet-1.9.4/leaflet.js"></script>
 <script src="/assets/planner-map/map-core.js"></script>

@@ -25,6 +25,13 @@
   var panelEl = document.getElementById("pm-panel");
   var panelBody = document.getElementById("pm-panel-body");
   var panelClose = document.getElementById("pm-panel-close");
+  var cueEl = document.getElementById("pm-cue");
+
+  // First Action Cue（G-3.3）: pin が見えている間だけ出し、最初に pin を選んだら消す（この page を開いている間だけ。記憶しない）
+  var cueDismissed = false;
+  function updateCue() {
+    cueEl.hidden = cueDismissed || markerLayer.getLayers().length === 0;
+  }
 
   function el(tag, className, text) {
     var e = document.createElement(tag);
@@ -177,6 +184,7 @@
     var level = core.serverLevelFor(zoom);
     if (level === null) {
       markerLayer.clearLayers();
+      updateCue();
       setStatus("hint", "もう少し地図を拡大すると、撮影計画を表示できます。");
       return;
     }
@@ -184,6 +192,7 @@
     var plan = core.tilesForBounds({ north: b.getNorth(), south: b.getSouth(), east: b.getEast(), west: b.getWest() }, level);
     if (plan.tooMany) {
       markerLayer.clearLayers();
+      updateCue();
       setStatus("hint", "もう少し地図を拡大すると、撮影計画を表示できます。");
       return;
     }
@@ -194,6 +203,7 @@
       results.forEach(function (r) { if (r.truncated) truncatedCount += r.count - r.plans.length; });
       var plans = core.uniquePlans(results.map(function (r) { return r.plans; }));
       render(plans);
+      updateCue();
       var visible = plans.filter(function (p) { return b.contains([p.lat, p.lon]); }).length;
       if (truncatedCount > 0) {
         setStatus("hint", "この範囲には、表示しきれない撮影計画があります（ほか " + truncatedCount + " 件）。地図を拡大してください。");
@@ -205,6 +215,7 @@
     }, function () {
       if (seq !== requestSeq) return;
       markerLayer.clearLayers();
+      updateCue();
       setStatus("error", "撮影計画を読み込めませんでした。時間をおいてもう一度お試しください。", refresh);
     });
   }
@@ -241,6 +252,8 @@
         : "撮影計画: " + core.planCaption(g.plans[0]) + "、" + core.formatJstCompact(g.plans[0].t_d) + "。選ぶと詳細を表示します";
       var m = L.marker([g.lat, g.lon], { icon: markerIcon(g.plans), title: label, alt: label, keyboard: true, riseOnHover: true });
       m.on("click", function () {
+        cueDismissed = true;
+        updateCue();
         if (count === 1) { lastGroup = null; openDetail(g.plans[0].plan_id, [g.lat, g.lon]); } // 人が 1 件を選んだ = 明示的に開く
         else showGroup(g.plans, [g.lat, g.lon]);                                 // 一覧を出すだけ（open しない）
       });

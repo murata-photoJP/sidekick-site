@@ -131,7 +131,8 @@ def test_01_03_page_loads_with_attribution_and_local_leaflet(browser):
     scripts = []
     page.on("request", lambda r: scripts.append(r.url) if r.resource_type == "script" else None)
     goto_map(page)
-    assert page.locator("h1").inner_text() == "プランナーQRマップ"
+    assert page.locator("h1").count() == 1
+    assert "プランナーQRマップ" in page.locator("h1").inner_text()   # G-3.3: h1 = 製品名（eyebrow）＋ 何ができるか（headline）
     attribution = page.locator(".leaflet-control-attribution")
     assert "地理院タイル" in attribution.inner_text()
     assert attribution.locator("a[href='https://maps.gsi.go.jp/development/ichiran.html']").count() == 1
@@ -523,4 +524,88 @@ def test_44_group_pin_keyboard_selects_list_without_open(browser):
     assert group.get_attribute("data-selected") == "true"
     assert group.get_attribute("aria-pressed") == "true"
     assert rec.ops("open") == []
+    context.close()
+
+
+# ---- G-3.3 First Visit UX / Introduction ------------------------------------------------------
+HEADLINE = "みんなの撮影計画から、次に撮りたい場所を探そう。"
+
+
+def test_51_intro_structure_and_reading_order(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    h1 = page.locator("h1")
+    assert h1.count() == 1
+    assert page.locator("h1 .pm-intro-eyebrow").inner_text() == "プランナーQRマップ"
+    assert page.locator("h1 .pm-intro-headline").inner_text().replace("\n", "") == HEADLINE
+    legend = page.locator(".pm-intro-legend li")
+    assert legend.count() == 2
+    # 文の span だけを読む（装飾の pin の SVG 内の数字は aria-hidden で読み上げないので含めない）
+    text_of = lambda li: li.locator("> span:not(.pm-legend)").inner_text().replace("\n", "")
+    assert text_of(legend.nth(0)) == "ピンを選ぶと、撮影日時・被写体・撮影計画を見ることができます。"
+    assert text_of(legend.nth(1)) == "数字のピンは、この付近にある計画の数です。"
+    assert page.locator(".pm-intro-legend .pm-legend[aria-hidden='true']").count() == 2   # 装飾の pin は読み上げない
+    assert page.locator("#pm-cue").get_attribute("aria-hidden") == "true"                # cue は intro と重複するので読み上げない
+    # headline は製品名より大きい（何ができるかを最も強く）
+    sizes = page.evaluate("() => ['.pm-intro-eyebrow', '.pm-intro-headline'].map(s => parseFloat(getComputedStyle(document.querySelector(s)).fontSize))")
+    assert sizes[1] > sizes[0] * 1.4
+    # 見出し階層: h1 の次は panel の h2（飛ばさない）
+    assert page.locator("h3, h4, h5, h6").count() == 0
+    context.close()
+
+
+@pytest.mark.parametrize("size,max_intro", [((1280, 800), 110), ((1920, 1080), 110), ((375, 812), 170)])
+def test_52_intro_and_map_visible_together_on_first_view(browser, size, max_intro):
+    context, page, rec = new_page(browser, *size)
+    page.goto(BASE + "/planner-map")
+    page.wait_for_function("() => window.PlannerMap && window.PlannerMap.map")
+    settle(page)
+    intro = page.locator(".pm-intro").bounding_box()
+    headline = page.locator(".pm-intro-headline").bounding_box()
+    mp = page.locator("#pm-map").bounding_box()
+    assert intro["height"] <= max_intro                                         # 説明が地図を奪いすぎない
+    assert headline["y"] >= 0 and headline["y"] + headline["height"] <= size[1]  # 開いた瞬間に main message が見える
+    assert mp["y"] <= max_intro and mp["height"] >= size[1] * 0.6              # 地図が早い位置から大きく見える
+    assert page.locator(".leaflet-marker-icon").count() >= 1                     # pin も同時に見える
+    cue = page.locator("#pm-cue")
+    assert cue.is_visible()
+    cb = cue.bounding_box()
+    assert mp["y"] <= cb["y"] and cb["y"] + cb["height"] <= mp["y"] + mp["height"]
+    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+    assert rec.ops("open") == []
+    context.close()
+
+
+def test_53_cue_never_blocks_and_disappears_after_first_selection(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    cue = page.locator("#pm-cue")
+    assert cue.is_visible()
+    cb = cue.bounding_box()
+    # cue の上で押しても cue ではなく地図に届く（操作を妨げない）
+    hit = page.evaluate("([x, y]) => { const e = document.elementFromPoint(x, y); return !!(e && e.closest('#pm-map')) && !e.closest('#pm-cue'); }",
+                        [cb["x"] + cb["width"] / 2, cb["y"] + cb["height"] / 2])
+    assert hit
+    page.evaluate("() => window.PlannerMap.map.panBy([30, 20], {animate: false})")
+    settle(page)
+    assert cue.is_visible()                                                     # pan だけでは消えない
+    page.locator(".leaflet-marker-icon:has(.pm-pin-group)").first.click()        # 最初の選択（複数 pin）
+    page.wait_for_selector(".pm-card-list")
+    assert not cue.is_visible()
+    assert rec.ops("open") == []                                                # cue も複数 pin も open しない
+    page.locator("#pm-panel-close").click()
+    page.wait_for_timeout(300)
+    assert not cue.is_visible()                                                 # 一度選んだら、この page では出さない
+    context.close()
+
+
+def test_54_cue_hidden_when_no_pins_are_shown(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    set_view(page, 37.5, 137.8, 5)                                              # 引きすぎ（pin なし）
+    assert not page.locator("#pm-cue").is_visible()
+    set_view(page, 30.0, 150.0, 9)                                              # 計画の無い範囲
+    assert not page.locator("#pm-cue").is_visible()
+    set_view(page, 35.75, 138.6, 8)                                             # pin が戻れば cue も戻る（まだ選んでいない）
+    assert page.locator("#pm-cue").is_visible()
     context.close()

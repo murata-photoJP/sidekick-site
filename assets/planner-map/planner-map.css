@@ -19,16 +19,21 @@ html, body { margin: 0; height: 100%; background: var(--pm-bg); color: var(--pm-
   font-family: system-ui, -apple-system, "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif; }
 body { display: flex; flex-direction: column; }
 
-/* ---- header（説明は短く。地図を圧迫しない） ---- */
-.pm-header { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 4px 24px; padding: 10px 16px;
-  border-bottom: 1px solid var(--pm-border); background: var(--pm-panel); }
-.pm-header h1 { margin: 0; font-size: 1.2rem; }
-.pm-lead { margin: 2px 0 0; font-size: 0.95rem; font-weight: 600; }
-.pm-howto { margin: 0; color: var(--pm-muted); font-size: 0.85rem; line-height: 1.6; }
-.pm-legend { display: inline-flex; vertical-align: middle; }
+/* ---- 導入カード（G-3.3）: 地図とは別の層。何ができる画面か（headline）を最も強く。地図の縦を奪いすぎない ---- */
+.pm-intro { position: relative; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 32px;
+  padding: 12px 20px 12px 18px; background: var(--pm-panel); border-left: 6px solid var(--pm-pin);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.16); }
+.pm-intro-title { margin: 0; display: flex; flex-direction: column; gap: 2px; font-weight: 400; }
+.pm-intro-eyebrow { color: #9a3412; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; }
+.pm-intro-headline { color: var(--pm-fg); font-size: 1.45rem; font-weight: 800; line-height: 1.3; }
+.pm-intro-legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px;
+  font-size: 0.92rem; color: var(--pm-fg); }
+.pm-intro-legend li { display: flex; align-items: center; gap: 8px; }
+.pm-legend { display: inline-flex; flex: none; justify-content: center; width: 24px; }
+/* 読点の後でだけ折り返す（「探そ／う。」のような分かれ方をさせない） */
+.pm-phrase { display: inline-block; }
 .pm-legend-pin .pm-pin-shape { fill: var(--pm-pin); stroke: #ffffff; stroke-width: 3; }
 .pm-legend-dot { fill: #ffffff; }
-.pm-legend-group { margin-left: 4px; }
 .pm-legend-group .pm-pin-stack { fill: #f0a27c; stroke: #ffffff; stroke-width: 3; }
 .pm-legend-group .pm-pin-shape { fill: var(--pm-pin); stroke: #ffffff; stroke-width: 3; }
 .pm-legend-count { fill: #ffffff; font-weight: 800; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
@@ -98,7 +103,7 @@ article.pm-card { margin-top: 6px; }
 .pm-loading { color: var(--pm-muted); }
 
 /* ---- status ---- */
-.pm-status { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 500;
+.pm-status { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); z-index: 500;
   background: rgba(255, 255, 255, 0.96); border: 1px solid var(--pm-border); border-radius: 8px; padding: 8px 12px;
   font-size: 0.9rem; max-width: calc(100% - 32px); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); }
 .pm-status[hidden] { display: none; }
@@ -106,14 +111,25 @@ article.pm-card { margin-top: 6px; }
 .pm-retry { margin-left: 8px; border: 1px solid currentColor; background: transparent; color: inherit; border-radius: 6px;
   padding: 2px 8px; cursor: pointer; }
 
+/* ---- First Action Cue（G-3.3）: 地図の操作を妨げない小さな誘導。最初の選択で消える ---- */
+.pm-cue { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 450; margin: 0;
+  pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: 1px; max-width: calc(100% - 32px);
+  padding: 8px 16px; border-radius: 999px; background: rgba(31, 41, 55, 0.88); color: #ffffff; text-align: center;
+  font-size: 0.95rem; font-weight: 700; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3); }
+.pm-cue[hidden] { display: none; }
+.pm-cue-sub { font-size: 0.78rem; font-weight: 400; opacity: 0.92; }
+
 @media (max-width: 700px) {
-  .pm-header { padding: 8px 12px; }
-  .pm-header h1 { font-size: 1.05rem; }
-  .pm-lead { font-size: 0.88rem; }
-  .pm-howto { font-size: 0.78rem; }
+  .pm-intro { padding: 8px 12px 8px 12px; gap: 4px; border-left-width: 5px; }
+  .pm-intro-eyebrow { font-size: 0.75rem; }
+  .pm-intro-headline { font-size: 1.08rem; }
+  .pm-intro-legend { font-size: 0.78rem; gap: 2px; }
+  .pm-legend { width: 20px; }
+  .pm-legend svg { width: 16px; height: 20px; }
+  .pm-cue { bottom: 44px; font-size: 0.85rem; padding: 6px 14px; white-space: nowrap; }
+  .pm-cue-sub { display: none; }
   .pm-main { flex-direction: column; }
   .pm-panel { width: 100%; max-height: 52vh; border-left: 0; border-top: 1px solid var(--pm-border); }
-  .pm-status { bottom: auto; top: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .pm-marker { transition: none; }

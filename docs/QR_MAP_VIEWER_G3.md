@@ -96,3 +96,14 @@ PublicPlan / Firestore / tile・open API / activity / expiry / SharePlan / QR / 
 | 引いた表示 | 手で zoom 5 以下・上限超えの範囲へ引いた場合のガードは維持。文言を「もう少し地図を拡大すると、撮影計画を表示できます。」へ |
 
 変更なし: PublicPlan / Firestore / tile・open API / activity / expiry / z6・z10・z14 / grouping（36 px）/ 1 件の pin / card / Viewer。
+
+## 12. G-3.3 First Visit UX / Introduction（2026-10-05、Human Review: 「上部の説明が地図に溶け込み読まれない。『なにこれ？閉じちゃえ』になり得る」）
+
+| 項目 | 内容 |
+|---|---|
+| 導入カード | header を地図とは別の層のカードへ（白地・左に朱色の帯・下に影）。h1 の中に 製品名（小さな eyebrow「プランナーQRマップ」）＋ **何ができるか（headline「みんなの撮影計画から、次に撮りたい場所を探そう。」、最大の文字）**。その下に実物と同じ形の pin の凡例 2 行（「ピンを選ぶと、撮影日時・被写体・撮影計画を見ることができます。」「数字のピンは、この付近にある計画の数です。」）。読点の後でだけ折り返す |
+| 高さ | desktop 80 px（1280×800 / 1920×1080）、mobile 375 px で 137 px。地図は viewport の 83〜93 % |
+| First Action Cue | **採用**。地図の下中央に小さく「気になるピンを選んでみてください」（desktop は 2 行目に「撮影日時や撮影計画を見ることができます」）。`pointer-events: none`（地図の操作を妨げない）、`aria-hidden`（導入カードと重複するので読み上げない）、modal にしない・閉じる操作も要らない。pin が見えているときだけ出し、最初に pin / 複数の pin を選んだら消える（その page を開いている間だけの状態。localStorage 等に記憶しない） |
+| status | 読込中・拡大を促す・空・失敗の表示を地図の上中央へ（cue と重ならない） |
+
+変更なし: 地図の pin・複数の pin・選択・card・Viewer への導線・初期表示（35.75°N 138.6°E zoom 8）・tile guard・activity・keyboard・panel、API / schema。
