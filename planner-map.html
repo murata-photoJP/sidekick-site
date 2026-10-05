@@ -15,13 +15,21 @@
 <!-- プランナーQRマップ（G-3 Map Viewer、開発版）。本番 navigation からはまだ link しない（HD-PLANNERQRMAP-001）。
      計画は G-2 の /api/qr-map（tile / open）だけで取る。地理院タイルは browser から直接取得。analytics なし。 -->
 <header class="pm-header">
-  <h1>プランナーQRマップ</h1>
-  <p class="pm-lead">こんな場所から、こんな撮影計画を立てた人がいます。</p>
+  <div class="pm-header-text">
+    <h1>プランナーQRマップ</h1>
+    <p class="pm-lead">みんなの撮影計画から、撮影場所を探す地図です。</p>
+  </div>
+  <p class="pm-howto">
+    <span class="pm-legend" aria-hidden="true"><svg class="pm-legend-pin" viewBox="0 0 40 52" width="15" height="20" focusable="false"><path class="pm-pin-shape" d="M20 50.5 C20 50.5 4 31.5 4 19 A16 16 0 1 1 36 19 C36 31.5 20 50.5 20 50.5 Z"/><circle class="pm-legend-dot" cx="20" cy="19" r="6"/></svg></span>
+    ピンを選ぶと、撮影日時・被写体・撮影計画を確認できます。
+    <span class="pm-legend pm-legend-group" aria-hidden="true">3件</span>
+    は近くに複数の計画があります。
+  </p>
 </header>
 <main class="pm-main">
   <div id="pm-map" role="region" aria-label="撮影計画の地図"></div>
   <aside id="pm-panel" class="pm-panel" aria-live="polite" hidden>
-    <button type="button" id="pm-panel-close" class="pm-panel-close" aria-label="閉じる">閉じる</button>
+    <div class="pm-panel-bar"><button type="button" id="pm-panel-close" class="pm-panel-close" aria-label="閉じる">閉じる</button></div>
     <div id="pm-panel-body"></div>
   </aside>
   <div id="pm-status" class="pm-status" role="status" hidden></div>

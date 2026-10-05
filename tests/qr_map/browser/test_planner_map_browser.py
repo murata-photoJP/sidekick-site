@@ -240,7 +240,7 @@ def test_20_21_nearby_plans_stay_individually_selectable(browser):
     group_marker = marker_for(page, sm["plan_id"])
     assert group_marker.get_attribute("data-count") == "5"
     group_marker.click()
-    page.wait_for_selector(".pm-group-list")
+    page.wait_for_selector(".pm-card-list")
     assert rec.ops("open") == []                         # 一覧を出すだけでは open しない
     items = page.locator(".pm-group-item")
     assert items.count() == 5
@@ -250,7 +250,7 @@ def test_20_21_nearby_plans_stay_individually_selectable(browser):
     for i in range(5):
         if i > 0:
             group_marker.click()
-            page.wait_for_selector(".pm-group-list")
+            page.wait_for_selector(".pm-card-list")
         page.locator(".pm-group-item").nth(i).locator("button.pm-open").click()
         page.wait_for_selector(".pm-detail")
         opened.append(page.locator(".pm-detail").get_attribute("data-plan-id"))
@@ -320,4 +320,114 @@ def test_26_no_external_hosts_besides_gsi(browser):
     set_view(page, 35.418, 138.87, 13)
     assert rec.blocked == []          # Firebase / Google / CDN 等への要求は 0（API は 127.0.0.1 の dev server だけ）
     assert all(urlparse(BASE).hostname == "127.0.0.1" for _ in rec.api)
+    context.close()
+
+
+# ---- G-3.1 Visual / UX Polish ----------------------------------------------------------------
+EXPECTED_SYMBOL = {"diamond_fuji": "sun", "pearl_fuji": "moon", "solar_lunar": "sunmoon",
+                   "star_landscape": "star", "star_trails": "trails"}
+
+
+def test_31_pins_groups_and_genre_symbols(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    set_view(page, 35.40, 138.75, 10)
+    singles = page.locator(".leaflet-marker-icon:has(.pm-pin-single)")
+    groups = page.locator(".leaflet-marker-icon:has(.pm-pin-group)")
+    assert singles.count() >= 2 and groups.count() >= 2
+    for i in range(singles.count()):
+        m = singles.nth(i)
+        pin = m.locator(".pm-pin-single")
+        assert m.locator("svg path.pm-pin-shape").count() == 1          # pin の形（先端が撮影地点）
+        assert m.get_attribute("data-count") == "1"
+        genre = pin.get_attribute("data-genre")
+        assert pin.get_attribute("data-symbol") == EXPECTED_SYMBOL[genre]  # Planner 正本 ☀ / ☾ に合わせた記号
+        assert m.locator(".pm-sym").count() == 1
+        assert m.get_attribute("role") == "button" and m.get_attribute("tabindex") == "0"
+        assert "撮影計画:" in m.get_attribute("aria-label")              # 名前は文字でも出す（色・形だけにしない）
+    for i in range(groups.count()):
+        m = groups.nth(i)
+        count = m.get_attribute("data-count")
+        assert int(count) > 1
+        assert m.locator(".pm-group-count").inner_text() == count       # 件数を強く表示
+        assert m.locator(".pm-group-unit").inner_text() == "件"
+        assert m.locator("svg path.pm-pin-shape").count() == 0          # 1 件の pin とは形が違う
+        assert f"{count} 件" in m.get_attribute("aria-label")
+    assert rec.ops("open") == []
+    context.close()
+
+
+def test_32_selected_state_survives_pan_and_clears_on_close(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    pearl = PLANS["pearl"]
+    set_view(page, pearl["lat"], pearl["lon"], 12)
+    marker_for(page, pearl["plan_id"]).click()
+    page.wait_for_selector(".pm-detail")
+    selected = page.locator(".leaflet-marker-icon.pm-selected")
+    assert selected.count() == 1 and pearl["plan_id"] in selected.get_attribute("data-plan-ids")
+    assert selected.get_attribute("aria-pressed") == "true"
+    others = page.locator(".leaflet-marker-icon:not(.pm-selected)")
+    assert all(others.nth(i).get_attribute("data-selected") != "true" for i in range(others.count()))
+    opens = len(rec.ops("open"))
+    page.evaluate("() => window.PlannerMap.map.panBy([40, 30], {animate: false})")
+    settle(page)
+    assert marker_for(page, pearl["plan_id"]).get_attribute("data-selected") == "true"   # 再描画しても保つ
+    assert len(rec.ops("open")) == opens                                                # pan では open しない
+    page.locator("#pm-panel-close").click()
+    page.wait_for_timeout(300)
+    assert page.locator(".leaflet-marker-icon.pm-selected").count() == 0
+    context.close()
+
+
+def test_33_group_cards_back_and_keyboard(browser):
+    context, page, rec = new_page(browser)
+    goto_map(page)
+    sm = PLANS["sunmoon"]
+    set_view(page, sm["lat"], sm["lon"], 13)
+    group = marker_for(page, sm["plan_id"])
+    group.click()
+    page.wait_for_selector(".pm-card-list")
+    assert page.locator(".pm-card-list .pm-card").count() == 5
+    assert group.get_attribute("data-selected") == "true"
+    for i in range(5):
+        card = page.locator(".pm-card-list .pm-card").nth(i)
+        assert card.locator(".pm-card-genre-label").inner_text()
+        assert card.locator(".pm-card-date").inner_text()
+    assert rec.ops("open") == []
+    page.locator(".pm-group-item button.pm-open").nth(2).click()
+    page.wait_for_selector(".pm-detail")
+    assert len(rec.ops("open")) == 1
+    page.locator("button.pm-back").click()                       # 一覧へ戻る（open しない）
+    page.wait_for_selector(".pm-card-list")
+    assert len(rec.ops("open")) == 1
+    # keyboard: 1 件の pin に focus して Enter で開く
+    kyoto = PLANS["trails-kyoto"]
+    set_view(page, kyoto["lat"], kyoto["lon"], 13)
+    marker_for(page, kyoto["plan_id"]).focus()
+    page.keyboard.press("Enter")
+    page.wait_for_function(f"() => document.querySelector('.pm-detail[data-plan-id=\"{kyoto['plan_id']}\"]')")
+    assert len(rec.ops("open")) == 2
+    context.close()
+
+
+def test_34_mobile_selected_point_stays_visible_and_tappable(browser):
+    context, page, rec = new_page(browser, 375, 812)
+    goto_map(page)
+    sm = PLANS["sunmoon"]
+    set_view(page, sm["lat"], sm["lon"], 13)
+    group = marker_for(page, sm["plan_id"])
+    box = group.bounding_box()
+    assert box["width"] >= 44 and box["height"] >= 44                       # 指で選べる大きさ
+    group.click()
+    page.wait_for_selector(".pm-card-list")
+    settle(page)
+    sel = page.locator(".leaflet-marker-icon.pm-selected")
+    assert sel.count() == 1
+    mb = page.locator("#pm-map").bounding_box()
+    sb = sel.bounding_box()
+    assert mb["y"] <= sb["y"] and sb["y"] + sb["height"] <= mb["y"] + mb["height"] + 1   # 選んだ地点が地図の見える範囲にある
+    assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+    page.screenshot(path=str(ARTIFACTS / "mobile_group_selected.png"))
+    assert rec.ops("open") == []
     context.close()

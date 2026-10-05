@@ -141,7 +141,44 @@
     return v.year + "年" + v.month + "月" + v.day + "日 " + v.hour + ":" + v.minute + "（日本時間）";
   }
 
+  // 一覧・カード用の短い日時（例 "2027/04/07 17:43"）。日本時間
+  function formatJstCompact(utc) {
+    var d = new Date(utc);
+    if (isNaN(d.getTime())) return "";
+    var parts = new Intl.DateTimeFormat("ja-JP", {
+      timeZone: "Asia/Tokyo", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", hourCycle: "h23"
+    }).formatToParts(d);
+    var v = {};
+    parts.forEach(function (p) { v[p.type] = p.value; });
+    return v.year + "/" + v.month + "/" + v.day + " " + v.hour + ":" + v.minute;
+  }
+
+  // ジャンル → pin の記号（表示だけ）。意味は Planner の正本 SUN_MOON_OBJECT_GLYPHS（☀ = 太陽、☾ = 月、
+  // planner.js）に合わせる。星景・星の軌跡は Planner に正本の記号が無いので形で表し、名前は必ず文字でも出す。
+  // 未知の genre は汎用の点（新しい genre が増えても壊れない）。
+  var GENRE_SYMBOLS = {
+    diamond_fuji: "sun",
+    pearl_fuji: "moon",
+    solar_lunar: "sunmoon",
+    star_landscape: "star",
+    star_trails: "trails"
+  };
+  function genreSymbol(genre) {
+    return Object.prototype.hasOwnProperty.call(GENRE_SYMBOLS, genre) ? GENRE_SYMBOLS[genre] : "generic";
+  }
+
+  // 1 件の計画の短い説明（marker の名前・tooltip 用）。例 "ダイヤモンド富士（富士山）"
+  function planCaption(p) {
+    var subject = p.sky_object_label || p.target_label || "";
+    return (p.genre_label || "撮影計画") + (subject ? "（" + subject + "）" : "");
+  }
+
   return {
+    GENRE_SYMBOLS: GENRE_SYMBOLS,
+    genreSymbol: genreSymbol,
+    planCaption: planCaption,
+    formatJstCompact: formatJstCompact,
     SERVER_LEVELS: SERVER_LEVELS,
     MIN_FETCH_ZOOM: MIN_FETCH_ZOOM,
     MAX_TILES_PER_VIEW: MAX_TILES_PER_VIEW,

@@ -107,3 +107,20 @@ test("self-host の Leaflet は Planner の vendored copy と byte 一致（asse
     assert.equal(createHash("sha256").update(bytes).digest("hex"), sha, name);
   }
 });
+
+test("G-3.1: ジャンル → pin の記号（Planner 正本 ☀ / ☾ に合わせる。未知の genre は汎用）", () => {
+  assert.equal(core.genreSymbol("diamond_fuji"), "sun");
+  assert.equal(core.genreSymbol("pearl_fuji"), "moon");
+  assert.equal(core.genreSymbol("solar_lunar"), "sunmoon");
+  assert.equal(core.genreSymbol("star_landscape"), "star");
+  assert.equal(core.genreSymbol("star_trails"), "trails");
+  assert.equal(core.genreSymbol("future_genre"), "generic");
+  assert.equal(core.genreSymbol("__proto__"), "generic");
+});
+
+test("G-3.1: card の短い日時と、marker の名前（ジャンル ＋ 被写体 / 天体）", () => {
+  assert.equal(core.formatJstCompact("2027-04-07T08:43:58Z"), "2027/04/07 17:43");
+  assert.equal(core.planCaption({ genre_label: "ダイヤモンド富士", target_label: "富士山" }), "ダイヤモンド富士（富士山）");
+  assert.equal(core.planCaption({ genre_label: "星景", target_label: "富士山", sky_object_label: "オリオン座" }), "星景（オリオン座）");
+  assert.equal(core.planCaption({ genre_label: "星景（星の軌跡）", target_label: null }), "星景（星の軌跡）");
+});

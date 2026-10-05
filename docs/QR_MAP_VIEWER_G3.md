@@ -68,3 +68,20 @@ derived = 実 SharePlan（VALID_V2-ST-1、被写体なし）の観測点だけ�
 
 本番 navigation（Planner 製品 page の #share 付近・top hub）への link、本番 Firebase、地理院タイルの公開 Web Map 形態の Human 判断の記録、
 privacy / terms 改定、Planner publish UI（G-4）。
+
+## 10. G-3.1 Visual / UX Polish（2026-10-05、Human Review: 「緑の○が地図に埋もれ、何の地図か分からない」）
+
+方針（Human Decision）: 地図を主役にせず、**撮影計画を主役にし、地図は計画を見つけるために使う**。見た目と表示だけを変え、
+PublicPlan / Firestore / tile・open API / activity / expiry / SharePlan / QR / Viewer / tile 構造 / grouping 規則は変えない。
+
+| 項目 | 内容 |
+|---|---|
+| 1 件の marker | 先端が撮影地点を指す pin（40×52、当たり判定 44×56）。地理院 pale に埋もれない朱色 `#c2410c` ＋ 白い記号 ＋ 白縁 ＋ 影 |
+| ジャンル記号 | 意味は Planner の正本 `SUN_MOON_OBJECT_GLYPHS`（☀ 太陽 / ☾ 月、planner.js）に合わせ SVG で描く（emoji・OS の字形に頼らない）: ダイヤモンド富士 = 太陽、パール富士 = 月、太陽・月（風景）= 太陽＋月、星景 = 星、星の軌跡 = 同心の弧、未知 = 点。名前は必ず文字でも出す（aria-label・tooltip・card） |
+| 複数の marker | 「N 件」の吹き出し（白地・濃い枠・重なった影 ＋ 下向きの先端）。pin とは形も文字も違う |
+| 選択中 | 大きさ（1.22 倍）＋ 黄色の外枠 ＋ 濃い塗り（色だけにしない）。`aria-pressed`。pan・zoom で再描画しても保ち、panel を閉じると消える |
+| 選択した地点 | panel が開いて地図が狭くなっても、選んだ地点が見える範囲に残るよう `panInside`（表示だけ。open しない） |
+| header | 「みんなの撮影計画から、撮影場所を探す地図です。」＋ pin と「3件」の小さな凡例つきの 1 行説明 |
+| card | genre（記号 ＋ 名前）／ 主題（被写体・天体）／ 日時（YYYY/MM/DD HH:MM 日本時間）／ actions。近くの計画は card を縦に並べ「詳しく見る」（= open）、詳細は「計画を見る」（= 既存 Viewer）、一覧へ戻る（open しない）。写真（`.pm-card-media`）・撮影者は将来 header の前・body の後に足せる構造（今は placeholder を出さない） |
+| keyboard | marker は `role="button"`・tabindex 0・Enter / Space で選ぶ。focus-visible の枠 |
+| 初期表示 | 中心 37.5°N（北海道〜九州が入る） |
