@@ -1,0 +1,1346 @@
+{
+ "artifact_type": "share_viewer_cross_language_vectors",
+ "share_format_version": 1,
+ "share_format_versions": [
+  1,
+  2
+ ],
+ "note": "Python canonical codec/contract の判定（v1 / v2 共通の受信口 share_v2_codec.decode_any_share_payload）。browser / Node 実装と 機械的に突き合わせるための正本。",
+ "cases": [
+  {
+   "id": "VALID_GV-1",
+   "payload": "eNpNUV1vm0AQ_CvRPTWSTe_2PvbgjZpzRWsDojRK8nKybCemdsEyuIoT5b9nL_JD37iZ2d2Z4Y39Y4mYsGeWsE27-tt3G_90_tOyCetfWCJ1JLURXMVCoTYWCb7QgLSRRRREKW40YMBfSY6RMhCD5BKV4WgI3pE80hM2bugEcMApV1OODbeJkom2j3RqpFmWDu3qa9PvLz0hx5aQqsyn898_8mlVl03ZPFQuaAMz7C-Httv6Xfu82w6jP_ZtNxJ5uno2gForzoHHMZk4XT2jVCDAIGpUwdzp07PCiJKA4NJyEJK8rlcsoQ0R5QALYIWMgeTrLUtUFJ4GOYW0EiEk-1RTdFqiNRcWDCf1SGodoUVFVZhYaSWsIfkQisjc0ruFu0ubvCz8t3yRFy6tKcGwvrLz_N5lniooGj8riztXf3dZEKyugsqlP33t5jSZ-VlaZHmWNqGhpwNLuvPhQC3SF1v25268mdNPvflSnfqxHy_H7W0oa09s7dKFD-tm5bJK6_wX2fnvNHv_AOWDjZU",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan": {
+    "share_format_version": 1,
+    "plan_genre": "diamond_fuji",
+    "observer_latitude_deg": 35.35610491475687,
+    "observer_longitude_deg": 138.87715614065277,
+    "observer_ground_elevation_m": 37.46292303746076,
+    "observer_height_m": 1.5,
+    "utc_datetime": "2027-04-07T08:43:58Z",
+    "timezone": "Asia/Tokyo",
+    "poi_id": "POI-FUJI-PROTOTYPE",
+    "alignment_target_id": "skyline_highest_point",
+    "resolved_target_latitude_deg": 35.36275540020996,
+    "resolved_target_longitude_deg": 138.73421267757476,
+    "resolved_target_elevation_m": 3747.1562103802135,
+    "celestial_azimuth_deg": 275.3032822813926,
+    "celestial_altitude_deg": 4.281367023083725,
+    "target_azimuth_deg": 277.4562550182606,
+    "target_elevation_angle_deg": 5.7874460694541865,
+    "dem_elevation_status": "DEM_ELEVATION_BILINEAR",
+    "elevation_convergence_status": "DEM_FIXED_POINT_CONVERGED",
+    "alignment_resolution_status": "DEM_PEAK_REFINED_CANDIDATE",
+    "focal_length_mm": null,
+    "poi_label": "Mount Fuji (Prototype)",
+    "alignment_target_resolver_kind": "REAL_DEM_COMPARISON_FIXED_POINT"
+   }
+  },
+  {
+   "id": "VALID_GV-2",
+   "payload": "eNo9kM9u00AQxt9lz7GZ_Ttr3yqykQI0DqmDSi9WlKSNSYmj2CAC4pJcitRrxYHe4IYqyBGpEg9jGY59BWajiNvsN7_Z-b75wN6ymLfYBYvZJB-9LhaT7PzNq5y1WPGOxVKHUhsOKuIKtbFI8poGpA0tIqeWAqMFev094RgqIyIhQaIygIbkGYshhBarJrRCgMAAVACYgo2VjLU9o1UVzbKjMh89Sov5uiBlmZPST7pBZ_ikG_QHSZqkL_vOs75TzteX-WKazfKL2bSssmWRLypqrg6ejUCtFYCAKCITq4NnlEpwYRA1Km9utfesMKQkgoO0ILjULTYesZh-CCmHsEJYLiNB-HjKYj0NgIhqT1BcGtQauBUGiKg8EaJFRfFNpLTi1hBe-vC9JM0G7vnQnaSuTWbL8UF0p-7x8KCN_oMnybMXe-380rvX_ohLKlnz47r5-r3Z7R7ur-rt53p7V2-v6s3vevONng_3n5rdzZ_bL83tz7-bX_4ocxpqu-Os746e0sedbs-1s84gOc463VMq6c69lH38BwAimJ4",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan": {
+    "share_format_version": 1,
+    "plan_genre": "diamond_fuji",
+    "observer_latitude_deg": 35.35610491475687,
+    "observer_longitude_deg": 138.87715614065277,
+    "observer_ground_elevation_m": 37.46292303746076,
+    "observer_height_m": 0.0,
+    "utc_datetime": "2027-04-07T08:43:58Z",
+    "timezone": "Asia/Tokyo",
+    "poi_id": "POI-FUJI-PROTOTYPE",
+    "alignment_target_id": "skyline_highest_point",
+    "resolved_target_latitude_deg": 35.36275540020996,
+    "resolved_target_longitude_deg": 138.73421267757476,
+    "resolved_target_elevation_m": 3747.1562103802135,
+    "celestial_azimuth_deg": 275.3032822813926,
+    "celestial_altitude_deg": 5e-05,
+    "target_azimuth_deg": 277.4562550182606,
+    "target_elevation_angle_deg": 5.7874460694541865,
+    "dem_elevation_status": "NOT_REQUESTED",
+    "elevation_convergence_status": "NOT_EXECUTED",
+    "alignment_resolution_status": "NOT_RESOLVED",
+    "focal_length_mm": 135.0,
+    "poi_label": "富士山（プロトタイプ）展望地点",
+    "alignment_target_resolver_kind": "DEM_PEAK_REFINED_FROM_FIXED_POINT"
+   }
+  },
+  {
+   "id": "VALID_GV-3",
+   "payload": "eNptkU9P4zAQxb8K8omV0uB4_De3QByUXUiiKKDdvVgVTWloaKokXdFd8d0Zi15YkHyw3vzGM-_5H_lD4iggjyQm-3Y59m59eOpIQIYXEoMIueJGQCRNJCTjKB8RBx0KzZhgmnMmjJCo_yWxoTTkwng9okIZg_IG8VAEZF7hAEaZWlCGp2E0Bogj-RtHzdhLkqlbXjTD9jigsu9Qqcp8kd19zxdVXTZl86uynvWVaXvsu13rNt3jpp1mtx-63exW7bNDC1s3tmusrpAe302ApMC1EVwJkGhiPJlQTIGIhImoERGaGHERUBJdaK2NUZpLARCQh6XnITQAaA9AgQSFcktifERLRYEyDgxl3PAzrJlP4H8at9EBmXwwqb119sbeJ01eFu4yv8kLm9RoYHo4VbP8p00dRlI07qos7m19bVMPLE9AZZMfrrYZdqbuKinSPE0an9i6J_Hu0PeYKt7I7XDYzWcZfvLZeTUO8zAf9-03n9X2q5eyuvwwnLy-Ae0-lB8",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan": {
+    "share_format_version": 1,
+    "plan_genre": "pearl_fuji",
+    "observer_latitude_deg": 35.47495316915624,
+    "observer_longitude_deg": 138.58225284425956,
+    "observer_ground_elevation_m": 900.4592528105799,
+    "observer_height_m": 1.5,
+    "utc_datetime": "2027-02-02T20:33:16Z",
+    "timezone": "Asia/Tokyo",
+    "poi_id": "POI-FUJI-PROTOTYPE",
+    "alignment_target_id": "skyline_highest_point_dem_peak_refined",
+    "resolved_target_latitude_deg": 35.36034895475364,
+    "resolved_target_longitude_deg": 138.72735159109516,
+    "resolved_target_elevation_m": 3760.4888997846533,
+    "celestial_azimuth_deg": 133.9335923373637,
+    "celestial_altitude_deg": 8.78670302432363,
+    "target_azimuth_deg": 133.93359233736825,
+    "target_elevation_angle_deg": 8.786703024324758,
+    "dem_elevation_status": "DEM_ELEVATION_BILINEAR",
+    "elevation_convergence_status": "DEM_FIXED_POINT_CONVERGED",
+    "alignment_resolution_status": "DEM_PEAK_REFINED_CANDIDATE",
+    "focal_length_mm": null,
+    "poi_label": "Mount Fuji (Prototype)",
+    "alignment_target_resolver_kind": "DEM_PEAK_REFINED_FROM_FIXED_POINT"
+   }
+  },
+  {
+   "id": "UNKNOWN_KEY",
+   "payload": "eNpNkU9vm0AQxb9KtKdUsunu7J9ZuFGzjkhsQJRGbS8ry3Ziagcsg6M4Ub97ZyMfemNnfjPz3uODvbJETNgzS9imXb303cY_nf-0bML6N5ZIHUltBFexUKiNRSpfaEDayCIKailuNGCovxOOkTIQg-QSleFoqLwjPNITNm7oBHDAKVdTjg23iZKJtr_p1EizLB3a1dem3196qhxbqlRlPp3_uM-nVV02ZfOrcoENnWF_ObTd1u_a5912GP2xb7uRmqerZgOoteIceByTiNNVM0oFAgyiRhXEnT41K4zICQguLQchSet6xRLaEJEPsABWyBgIX29ZoqLwNMjJpJUIwdknTdZpidZcWDCc6JFoHaFFRVGYWGklrCF8CEFkbundwj2mTV4W_lu-yAuX1uRgWF-78_ynyzxFUDR-VhaPrr5zWQBWV6By6YOv3ZwmMz9LiyzP0iYk9HRgSXc-HChF-mLL_tyNN3P6qTe31akf-_Fy3H4JYe2pW7t04cO6Wbms0jr_TnL-O03YO4Uk_v4DyouPZA",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "zz",
+   "python_layer": true
+  },
+  {
+   "id": "MISSING_KEY",
+   "payload": "eNpNUctu2zAQ_JWApxSwVXL5WEo3xaIDJbYkqGrQ9kIYthMrdiTDkoO4Rf-9y8CH3sid2eHM8A97Z4mYsBeWsE27euu7jX8-v7ZswvoLIdJGFlFoIxQ3GhBp_pslEiNlIAbJJSrD0dB4R_RIT9i4IS3ggFOuphwbbhMlE21_keZIuywd2tXXpt9fepocW5pUZT6df3_Ip1VdNmXzs3KBG5Bhfzm03dbv2pfddhj9sW-7kcDTB5nQkTSAWivOgccxmThdPaNUIMAgalTB3OnTs8KIkoDg0nIQkryuVywhhYhygAWwQsZA9PWWJSoKV4OcQlqJEJJ9sik6iWjNhQXDiT0SW0doUVEVJlZaCWuIPoQiMrf0buGe0iYvC3-XL_LCpTUlGNZXdJ7_cJmnCorGz8riydX3LguE1ZVQufTR125Om5mfpUWWZ2kTGno-sKQ7Hw7UIp3Ysj93482cfu_mtjr1Yz9ejtsvoaw9obVLFz7Izcplldb5N7Lz39Ps7z8lr4iM",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "ox",
+   "python_layer": true
+  },
+  {
+   "id": "V1_KEYS_WITH_V2",
+   "payload": "eNpNUctu2zAQ_JWApxSwVXL5WEo3xaIDJbYkqGrQ9kIYthMrdiTDkoO4Rf-9y8CH3siZ4e7M8A97ZwlM2AtL2KZdvfXdxj-fX1s2Yf0HS6SOpDaCq1go1MYiwReWCGkjiyiIUtxowID_JjlGykAMkktUhqMheEfySE_YuKEVwAGnXE05NtwmSiba_qJVI71l6dCuvjb9_tITcmwJqcp8Ov_-kE-rumzK5mflgjYww_5yaLut37Uvu-0w-mPfdiORp6tnA6i14hx4HJOJ09UzSgUCDKJGFcydPj0rjCgJCC4tByHJ63pFpSDN4RIsgBUyBpKvtyxRUbga5BTSSoSQ7FNN0WmI1lxYMJzUI6l1hBYVVWFipZWwhuRDKCJzS-8W7ilt8rLwd_kiL1xaU4JhfWXn-Q-XeaqgaPysLJ5cfe-yIFhdBZVLH33t5vQy87O0yPIsbUJDzweWdOfDgVqkE1v25268mdOn3txWp37sx8tx-yWUtSe2dunCh3Gzclmldf6N7Py3mv39B-egjZY",
+   "accepted": false,
+   "code": "UNSUPPORTED_GENRE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "UNSUPPORTED_VERSION",
+   "payload": "eNpNUctu2zAQ_JWApwawVXL5WEo31aILtbYkqGqQ5EIYthOrdiXDkos4Qf49y8CH3siZ4e7M8I39Y4mcsGeWsE27-tt3G_90_tOyCetfiNGR1EZwFQuF2lgk-MISIW1kEQVRihsNGPBXkmOkDMQguURlOBqCdySP9ISNG1oBHHDK1ZRjw22iZKLtI60a6S1Lh3b1ten3l56QY0tIVebT-e8f-bSqy6ZsHioXtIEZ9pdD2239rn3ebYfRH_u2G4k8XT0bQK0V58DjmEycrp5RKhBgEDWqYO706VlhRElAcGk5CEle1yuW0ISIcoAFsELGQPL1liUqCleDnEJaiRCSfaopOg3RmgsLhpN6JLWO0KKiKkystBLWkHwIRWRu6d3C3aVNXhb-W77IC5fWlGBYX9l5fu8yTxUUjZ-VxZ2rv7ssCFZXQeXSn752c3qZ-VlaZHmWNqGhpwNLuvPhQC3SiS37czfezOlTb75Up37sx8txexvK2hNbu3Thw7hZuazSOv9Fdv5bzd4_AOm9jZc",
+   "accepted": false,
+   "code": "UNSUPPORTED_VERSION",
+   "field": "v",
+   "python_layer": true
+  },
+  {
+   "id": "V1_VERSION_MISSING",
+   "payload": "eNpNUU1P4zAU_CvIp0WiWfv54zm5hcZdBdokymYRcLGqttDQblI1qbQF8d95Rj3szZ4Zvzcz_mCvLGHrdvm379b-5fTWshvW_2OJ1JHURnAVC4XaWCT4zBIhbWQRBVGKGw0Y8HeSY6QMxCC5RGU4GoK3JI_0DRvXtAI44ISrCceG20TJRNtnWjXSW5YO7fJn0-_OPSGHlpCqzCezP3f5pKrLpmyeKhe0gRl2533bbfy2fd1uhtEf-rYbiTxePBtArRXnwOOYTBwvnlEqEGAQNapg7vjtWWFESUBwaTkISV5XS5bQhIhygAWwQsZA8tWGJSoKV4OcQlqJEJJ9qyk6DdGaCwuGk3oktY7QoqIqTKy0EtaQfAhFZG7h3dw9pE1eFv42n-eFS2tKMKwu7Cx_dJmnCorGT8viwdW_XBYEy4ugcum9r92MXmZ-mhZZnqVNaOhlz5LutN9Ti3Rii_7UjVcz-tSrH9WxH_vxfNhch7J2xNYunfswblouqrTOf5Od_1azzy8YFIxE",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "v",
+   "python_layer": true
+  },
+  {
+   "id": "UNSUPPORTED_GENRE",
+   "payload": "eNpNkM1u2zAQhF8l4KkFbJVc_iylm2rRgVpbElQlaHIhDNeNVSuWYclN1KDv3mXgQ2_kzsflzLyx3ywRM_bEEvbcdofJv2wmNmP9K0ukjqQ2gqtYKNTGIo0noqWNLKIgSXGjAcP8D-EYKQMxSC5RGY6GxnvCIz1j4w_aDxxwztWcY8NtomSi7SN9NdJblg7t5lPTH6aeJqeWJlWZz5d3X_J5VZdN2TxULrBBGQ5T1x53ft8-7XfD6E99exxJPF89G0CtFefA45hMnK-eUSoQYBA1qmDu_O5ZYURJQHBpOQhJXrcbltCGiHKABbBCxkD4dscSFYWrQU4hrUQIyd5pik5LtObCguFEj0TrCC0qqsLESithDeFDKCJza-9W7j5t8rLwn_NVXri0pgTD9qou8-8u81RB0fhFWdy7-tZlAdhcgcqlX33tlvQy84u0yPIsbUJDPzuWHC9dRy3Sia37y3G8WV5-tTcfqnM_9uN02n0MZR1IrV268mHdolxXaZ1_Izv_fc3-_gOfhIyC",
+   "accepted": false,
+   "code": "UNSUPPORTED_GENRE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_RANGE_LAT",
+   "payload": "eNpNkV9v2jAUxb9K5adOAs__r-O3lJgqLSRRllXbXiwEtKTQBJFQlU377ruueNibc-_Px-ec_CHvxPEJeSGObNrVW99twvP5tSUT0n8Ql3DK8HRBRlpqAbg2XDGjBQDOfxMngSojEiGZBGUYGBzvEKd6QsYNqgomYMrUlEHDrFPSafsL1Ue8S9KhXX1t-v2lx8mxxUlV5tP594d8WtVlUzY_Kx_ZuBn2l0PbbcOufdlthzEc-7YbcXlCm1JTaQRorRgTLEnQxOnqGaQSXBgADSqaO316VkAxieBMWia4RK_rFXGoQDGHsEJYLhOB-HpLnKLx0wDDkFaCiMk-aYyOIlozboVhSI9IawoWFFZhEqUVtwbxIRaR-WXwC_-UNnlZhLt8kRc-rTHBsL5u5_kPnwWsoGjCrCyefH3vswisrkDl08dQ-znezMIsLbI8S5vY0POBuO58OGCLeCLL_tyNN3P8jze31akf-_Fy3H6JZe1xW_t0EaLcrFxWaZ1_Qzv_PU3-_gMTbYrl",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "ox",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_RANGE_LON",
+   "payload": "eNpNkc1u2zAQhF8l4KkBLJb_S_GmWnSh1pYEVQ3SXgjDdmLVrmRYchEn6Lt3GfjQG7X7cTgzeiN_iOMz8kwc2Xbr30O_DU-XXx2ZkeGFOKmp1IYzlXIF2ljA8ZW4hFtOGZ5fEQGqjEiFZBKUYWBwvEdNqmdk2qKsYAISphIGLbNOSaftT5Sf8C7Jxm79sR0O1wEnpw4ndVUki-9fiqRuqrZqf9Q-snEzHq7Hrt-Fffe8341TOA1dP-HyfPNpBGitGBMsTdHEGX1yaSlIJbgwABpUNHd-96yAcm0EZ9IywSV63ayJQwWKOYQVwnKZCsQ3O-IUjZ8GGIa0EkRM9k5jdBTRmnErDEN6QlpTsKCwCpMqrbg1iI-xiNyvgl_6h6wtqjJ8KpZF6bMGE4yb23ZRPPo8YAVlG-ZV-eCbzz6PwPoG1D77Ghq_wJt5mGdlXuRZGxt6OhLXX45HbBFPZDVc-ulugT_y7kN9HqZhup5297GsA24bny1DlJtXqzprim9o57-nyd9_atKLDg",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "oy",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_TYPE_NUMBER",
+   "payload": "eNpNkclOwzAURX8FeQVSGzw_J7vQuCjQJlEIFbCxqo6hJalIiiiIf-cZdcHOvve8wdff5INEbEA2JCLLev7WNku3Pr7WZEDaTxIJFQilGZUhk6C0AZRPWCBMYAAYWpJqxcHrX9hCgC_cIhGoAemXKHHKYUjlkEJFTSRFpMwLQr3H466eX1ft7tSicqhRKfJ0OH68S4dFmVd59VxYz3qn2532dbNy23qzXXW9O7R106P5fl5Tc1BKUsppGGqUz2uCkJxxDaBAgtdxrsBjgMtzRoWhnAncdTEnEXYIBBXccG6YCDniixWJZOCvGigX1Ajg_mV_NAQSmyhFmeGaIt0jrQIwICXeQ6kkMxrxzgeR2KmzEzuLqzTP3E06STMbl_iCbnF2x-mTTRxGkFVulGczW97axAPzM1DY-N6VdoyViRvFWZImceUTWu9J1Bz3e0wRT2TaHpv-Yoz_eHFZvLd9258Oqysf1g7d0sYT59uN8mkRl-kDrvNvNPn5BeaCitA",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "oz",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_TYPE_BOOL",
+   "payload": "eNpNUU2P0zAU_Csrn0Bqg7-f41toXBRokyiEFXCxqja7DS1JlbhoC-K_87zqgVs8M--9mckf8otYtiDPxJJDv_s5Dgf_dP3RkwUZX4gVKhFKMypTJkFpAwjfcECYxAAwpCTVikPEf6McEql5ygUVIDUFjfCR2DBduwUJB7zBKYcllUsKLTVWCqvMd7wVcJhkc797146n24jIpUekrorl-svHYlk3VVu132oXtZGZT7dzP3T-2D8fuzn4y9gPAcnpblpzUEpSymmaoovpbhqE5IxrAAUyupteTUtIMApnVBjKmVALst8RixsSDMIN54aJlKN83xErk_jUQDGlEcBRHV7VmB2XKEWZ4ZqiOqBaJWBAYhc6lUoyo1E-xyJyt_Vu4x6ztqhK_77YFKXLGkww7-_suvjqco8VlK1fVeWjaz64PAp2d0Htsk--cWuczP0qK_Miz9rY0NOZ2OF6PmOL-EW243UID2v8qw9v6mkMY7hdurexrBOyjcs2Pq5bVds6a4rPaOe_0-TvPwemjsE",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "oh",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_DATETIME_DAY",
+   "payload": "eNpNUV1vm0AQ_CvRPTWSTe72PvbgjZpzRWsDIjRK8nKybCemdsEyuIpb9b93z_JDJR5gZnZ3ZvjDfrFETNg7S9imXf3su41_O_9o2YT1HyyROpLaCK5ioVAbiwRfaEDayCIKohQ3GjDgv0mOkTIQg-QSleFoCN6RPNITNm7oBHDAKYep5A3nyfV5pVMjzbJ0aFcPTb-_9IQcW0KqMp_Ov3_Np1VdNmXzUrmgDcywvxzabut37ftuO4z-2LfdSOTp5tkAaq04Bx7HZOJ084xSgQCDqFEFc6erZ4URJQHBpeUgJHldr1hCGyLKARbAChkDyddblqgofBrkFNJKhJDsqqbotERrLiwYTuqR1DpCi4qqMLHSSlhD8iEUkbmldwv3lDZ5WfjP-SIvXFpTgmF9Y-f5s8s8VVA0flYWT67-4rIgWN0ElUu_-drNaTLzs7TI8ixtQkNvB5Z058OBWqQ3tuzP3Xg3p59696k69WM_Xo7b-1DWntjapQsf1s3KZZXW-SPZ-e80-_sPrZqNcw",
+   "accepted": false,
+   "code": "INVALID_DATETIME",
+   "field": "td",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_DATETIME_SHAPE",
+   "payload": "eNpNUV1v2kAQ_CvonhoJ3Lu9jz37zcVH5RZsy3Gi9OmEgAQXaiNsqtIq_z17iIdKfrBnZndnxv_Yb5aIKXtjCdu26199t_Wvl58tm7L-D0ukjqQ2gqtYKNTGIsFXGpA2soiCKMWNBgz4X5JjpAzEILlEZTgagvckj_SUjVs6ARxwxmEGdsJ5cnvo0kijLB3a9eemP1x7Qk4tIVWZzxZP3_JZVZdN2fyoXNAGZjhcj2238_v2bb8bRn_q224k8ny3bAC1VpwDj2PycL5bRqlAgEHUqIK3882ywoiCgODSchCSrG7WLKENEcUAC2CFjIHkmx1LVBQ-DXLKaCVCCHZTU3JaojUXFgwn9UhqHaFFRU2YWGklrCH5EHrI3Mq7pXtOm7ws_Jd8mRcurSnBsLmzi_zFZZ4qKBo_L4tnV391WRCs74LKpd997RY0mfl5WmR5ljahodcjS7rL8Ugt0htb9ZdunCzon04-Ved-7MfrafcQyjoQW7t06cO6ebmq0jp_JDv_nWbvH7ISjOw",
+   "accepted": false,
+   "code": "INVALID_DATETIME",
+   "field": "td",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_ENUM",
+   "payload": "eNpNkctOwzAQRX-l8gqkNtjjxzjZRU2KAjSJQkDAJqr6DC1J1aSIgvh3xlUX7Ow7xzP3jn_YJwvEkK1ZwBb17KNtFtXq-F6zIWu_WCC1J7URXPlCoTYWST7RA2k9iyiopLjRgE7_Jhw9ZcAHySUqw9GQvCHc00PWL2gEcMARVyOOJbeBkoG2bzSqp7cs7OrZTdluTy0p-5qUPEtGk6e7ZJQXWZmVr3nsWFfptqdd3SyrTb3eLLu-2rd101PxcPFsALVWnAP3fTJxuHhGqUCAQdSonLnD2bNCj5KA4NJyEJK8zmcsoA4e5QALYIX0gfD5kgXKc1eDnEJaieCSnWmKTk205sKC4UT3RGsPLSpahfGVVsIawju3iDQ7h-nmdI7iaTVJXuKoosBpWY2z9DkubuPIAbMLkMfhfVXEkyQlbhymURKFpWux2rGgOe52tDM6sWl7bPrBhL5wcJUf2r7tT_vltVvNlqpFHD5Urt04m-ZhkTxm6f_R7PcPGrOIRg",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "sd",
+   "python_layer": true
+  },
+  {
+   "id": "INVALID_TIMEZONE_EMPTY",
+   "payload": "eNpNUU1P6zAQ_CvIJ5DayF5_rJNbaFwUaJMoLw89uFhVW2igJFWbIgriv7NGPbyT7Z3Z3ZnxF3tniRixZ5awVbt467uVfzq-tGzE-g-WSB1JbQRXsVCojUUqn6hB2sgiCoIUNxow1D-JjpEyEIPkEpXhaKi8IXqkR2xY0QrggGOuxhwbbhMlE20fadVAvYzOXUtnVebj6d_bfFzVZVM2D5ULjIAcXk_btlv7Tfu8WR8Gv-vbbiBwf1ZqALVWnAOPY1q9PytFqUCAQdSogqT9r1KFEekHwaXlICQpXC5YQhMiUg8WwAoZA9GXa5aoKDwNcrJmJULw88smwzREay4sGE7sgdg6QouKAjCx0kpYQ_RDsJ-5uXczd582eVn463yWFy6tycFheUan-T-XeYqgaPykLO5dfeOyQFicCZVL73ztptSZ-UlaZHmWNiGhpy1LuuN2SynSjc37YzdcTOkrLy6rfT_0w2m3vgphvRJau3Tmw7hJOa_SOv9Dcv5bzb5_ALF9idI",
+   "accepted": false,
+   "code": "INVALID_TIMEZONE",
+   "field": "tz",
+   "python_layer": true
+  },
+  {
+   "id": "LABEL_TOO_LONG",
+   "payload": "eNrtU8tu2zAQ_BeebYVcPpbSTbXoQK0jCaoatLkQgh-xYtcKLCWoG-SQ_mp_pMvAh35Ajgb2QM3OkjOD1Qt7ZomYsHuWsFXX_uwPK795eujYhPW_WCJ1JLURXMVCoTYWCT7RgLSRRRTUUtxowID_JjpGykAMkktUhqMheEv0SE_YuKIngANOuZpybLhNlEy0vaOnRppl6dC1V02_O_WEPHaEVGU-nX_7nE-rumzK5kflAjd0ht1p3x3Wftvdb9fD6B_77jBS83jWbAC1VpwDj2MScTxrRqlAgEHUqIK447tmhRE5AcGl5SAkaV22LKEbIvIBFsAKGQPRl2uWqCh8GuRk0kqE4OydTdbpEq25sGA4sUdi6wgtKorCxEorYQ3RhxBE5m68W7jbtMnLwn_KF3nh0pocDMtzd55_d5mnCIrGz8ri1tXXLguE9kyoXPrF125Ok5mfpUWWZ2kTEtrsWXJ42u8pRTqxv29_LnWpD6_wu-1ov2qXLnxYyFl5U6V1_pUW-r_lZa__AArQAVs",
+   "accepted": false,
+   "code": "INVALID_LENGTH",
+   "field": "pl",
+   "python_layer": true
+  },
+  {
+   "id": "XSS_LABEL",
+   "payload": "eNpNkN1um0AQhV8l2qtGssn-z4KcSNSsK1oHEKVR2xuEMLGpibGAVHGrvHtmUy56B2e-2Tnn_CW_ScAWZE8Csmurp_60Kx-ff7VkQfoXEgjlCaUZlT6ToLQBlC-4IIxnABiOJNWKg9P_IA6e1NznggqQmoJG-YC4pxZk2uEJTjksqVxSKKgJpAiU-YmnJtwl4dhWN0V_vPSonFtUsjRebr59jpdZnhZp8SOzjnWT8Xjp2lNTHtr9oRmn8ty3pwmHw-xZc1BKUsqp76OJYfYMQnLGNYAC6cwN754leJiEMyoM5Uyg17oiAb7gYQ5uODdM-BzxuiGB9NyvBoohjQDukr3TGB0fUYoywzVFekJaeWBAYhXal0oyoxEfXRGRvS_t1j6ERZwm5cd4Gyc2zDHBWM_TTfzdRiVWkBTlOk0ebP7JRg6oZiCz4ZcytxvcjMp1mERxFBauoceOBKfnrsMW8Yus2qf91TjUty9X_akZhn64rbpmmD6w67vVWA_tebr7J_Dr1c0suC6PuJzbcFu6a-v0Pgvz-Cu6_c8ZeX0D_O-YRw",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan": {
+    "share_format_version": 1,
+    "plan_genre": "diamond_fuji",
+    "observer_latitude_deg": 35.35610491475687,
+    "observer_longitude_deg": 138.87715614065277,
+    "observer_ground_elevation_m": 37.46292303746076,
+    "observer_height_m": 1.5,
+    "utc_datetime": "2027-04-07T08:43:58Z",
+    "timezone": "Asia/Tokyo",
+    "poi_id": "POI-FUJI-PROTOTYPE",
+    "alignment_target_id": "skyline_highest_point",
+    "resolved_target_latitude_deg": 35.36275540020996,
+    "resolved_target_longitude_deg": 138.73421267757476,
+    "resolved_target_elevation_m": 3747.1562103802135,
+    "celestial_azimuth_deg": 275.3032822813926,
+    "celestial_altitude_deg": 4.281367023083725,
+    "target_azimuth_deg": 277.4562550182606,
+    "target_elevation_angle_deg": 5.7874460694541865,
+    "dem_elevation_status": "DEM_ELEVATION_BILINEAR",
+    "elevation_convergence_status": "DEM_FIXED_POINT_CONVERGED",
+    "alignment_resolution_status": "DEM_PEAK_REFINED_CANDIDATE",
+    "focal_length_mm": null,
+    "poi_label": "<img src=x onerror=alert(1)><script>alert(2)</script>",
+    "alignment_target_resolver_kind": "REAL_DEM_COMPARISON_FIXED_POINT"
+   }
+  },
+  {
+   "id": "FOCAL_NULL_OK",
+   "payload": "eNpNUV1vm0AQ_CvRPTWSTe_2PvbgjZpzRWsDojRK8nKybCemdsEyuIoT5b9nL_JD37iZ2d2Z4Y39Y4mYsGeWsE27-tt3G_90_tOyCetfWCJ1JLURXMVCoTYWCb7QgLSRRRREKW40YMBfSY6RMhCD5BKV4WgI3pE80hM2bugEcMApV1OODbeJkom2j3RqpFmWDu3qa9PvLz0hx5aQqsyn898_8mlVl03ZPFQuaAMz7C-Httv6Xfu82w6jP_ZtNxJ5uno2gForzoHHMZk4XT2jVCDAIGpUwdzp07PCiJKA4NJyEJK8rlcsoQ0R5QALYIWMgeTrLUtUFJ4GOYW0EiEk-1RTdFqiNRcWDCf1SGodoUVFVZhYaSWsIfkQisjc0ruFu0ubvCz8t3yRFy6tKcGwvrLz_N5lniooGj8riztXf3dZEKyugsqlP33t5jSZ-VlaZHmWNqGhpwNLuvPhQC3SF1v25268mdNPvflSnfqxHy_H7W0oa09s7dKFD-tm5bJK6_wX2fnvNHv_AOWDjZU",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan": {
+    "share_format_version": 1,
+    "plan_genre": "diamond_fuji",
+    "observer_latitude_deg": 35.35610491475687,
+    "observer_longitude_deg": 138.87715614065277,
+    "observer_ground_elevation_m": 37.46292303746076,
+    "observer_height_m": 1.5,
+    "utc_datetime": "2027-04-07T08:43:58Z",
+    "timezone": "Asia/Tokyo",
+    "poi_id": "POI-FUJI-PROTOTYPE",
+    "alignment_target_id": "skyline_highest_point",
+    "resolved_target_latitude_deg": 35.36275540020996,
+    "resolved_target_longitude_deg": 138.73421267757476,
+    "resolved_target_elevation_m": 3747.1562103802135,
+    "celestial_azimuth_deg": 275.3032822813926,
+    "celestial_altitude_deg": 4.281367023083725,
+    "target_azimuth_deg": 277.4562550182606,
+    "target_elevation_angle_deg": 5.7874460694541865,
+    "dem_elevation_status": "DEM_ELEVATION_BILINEAR",
+    "elevation_convergence_status": "DEM_FIXED_POINT_CONVERGED",
+    "alignment_resolution_status": "DEM_PEAK_REFINED_CANDIDATE",
+    "focal_length_mm": null,
+    "poi_label": "Mount Fuji (Prototype)",
+    "alignment_target_resolver_kind": "REAL_DEM_COMPARISON_FIXED_POINT"
+   }
+  },
+  {
+   "id": "NOT_BASE64URL",
+   "payload": "not*base64!",
+   "accepted": false,
+   "code": "NOT_SIDEKICK_QR",
+   "python_layer": false
+  },
+  {
+   "id": "EMPTY_FRAGMENT",
+   "payload": "",
+   "accepted": false,
+   "code": "EMPTY_FRAGMENT",
+   "python_layer": false
+  },
+  {
+   "id": "INVALID_JSON",
+   "payload": "eNqrzssvUcgqzs8DABJ6A6c",
+   "accepted": false,
+   "code": "INVALID_JSON",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "DECOMPRESSED_TOO_LARGE",
+   "payload": "eNrtwjENACAQBDAvN7PA-G7Axgfv6CBp2s5OzQEAAAAAAAAAAAD_y0mt-wAn7Bu7",
+   "accepted": false,
+   "code": "DECOMPRESSED_TOO_LARGE",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "PAYLOAD_TOO_LARGE",
+   "payload": "eAEBAA3_8gABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5_gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp-goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2-v8DBwsPExcbHyMnKy8zNzs_Q0dLT1NXW19jZ2tvc3d7f4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4_QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1-f4CBgoOEhYaHiImKi4yNjo-QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr_AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3-Dh4uPk5ebn6Onq6-zt7u_w8fLz9PX29_j5-vv8_f7_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn-AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq-wsbKztLW2t7i5uru8vb6_wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t_g4eLj5OXm5-jp6uvs7e7v8PHy8_T19vf4-fr7_P3-_wABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5_gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp-goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2-v8DBwsPExcbHyMnKy8zNzs_Q0dLT1NXW19jZ2tvc3d7f4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4_QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1-f4CBgoOEhYaHiImKi4yNjo-QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr_AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3-Dh4uPk5ebn6Onq6-zt7u_w8fLz9PX29_j5-vv8_f7_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn-AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq-wsbKztLW2t7i5uru8vb6_wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t_g4eLj5OXm5-jp6uvs7e7v8PHy8_T19vf4-fr7_P3-_wABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5_gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp-goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2-v8DBwsPExcbHyMnKy8zNzs_Q0dLT1NXW19jZ2tvc3d7f4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4_QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1-f4CBgoOEhYaHiImKi4yNjo-QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr_AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3-Dh4uPk5ebn6Onq6-zt7u_w8fLz9PX29_j5-vv8_f7_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn-AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq-wsbKztLW2t7i5uru8vb6_wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t_g4eLj5OXm5-jp6uvs7e7v8PHy8_T19vf4-fr7_P3-_wABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5_gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp-goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2-v8DBwsPExcbHyMnKy8zNzs_Q0dLT1NXW19jZ2tvc3d7f4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8AAQIDBAUGBwgJCgsMDQ4PEBESExQVFhcYGRobHB0eHyAhIiMkJSYnKCkqKywtLi8wMTIzNDU2Nzg5Ojs8PT4_QEFCQ0RFRkdISUpLTE1OT1BRUlNUVVZXWFlaW1xdXl9gYWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXp7fH1-f4CBgoOEhYaHiImKi4yNjo-QkZKTlJWWl5iZmpucnZ6foKGio6SlpqeoqaqrrK2ur7CxsrO0tba3uLm6u7y9vr_AwcLDxMXGx8jJysvMzc7P0NHS09TV1tfY2drb3N3e3-Dh4uPk5ebn6Onq6-zt7u_w8fLz9PX29_j5-vv8_f7_AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4vMDEyMzQ1Njc4OTo7PD0-P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5fYGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn-AgYKDhIWGh4iJiouMjY6PkJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq-wsbKztLW2t7i5uru8vb6_wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t_g4eLj5OXm5-jp6uvs7e7v8PHy8_T19vf4-fr7_P3-_wABAgMEBQYHCAkKCwwNDg8QERITFBUWFxgZGhscHR4fICEiIyQlJicoKSorLC0uLzAxMjM0NTY3ODk6Ozw9Pj9AQUJDREVGR0hJSktMTU5PUFFSU1RVVldYWVpbXF1eX2BhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ent8fX5_gIGCg4SFhoeIiYqLjI2Oj5CRkpOUlZaXmJmam5ydnp-goaKjpKWmp6ipqqusra6vsLGys7S1tre4ubq7vL2-v8DBwsPExcbHyMnKy8zNzs_Q0dLT1NXW19jZ2tvc3d7f4OHi4-Tl5ufo6err7O3u7_Dx8vP09fb3-Pn6-_z9_v8c2nnb",
+   "accepted": false,
+   "code": "PAYLOAD_TOO_LARGE",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "NOT_ZLIB",
+   "payload": "AAECA25vdC1hLXpsaWItc3RyZWFt",
+   "accepted": false,
+   "code": "NOT_SIDEKICK_QR",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "V1_DUPLICATE_KEY",
+   "payload": "eNpNUstuo0AQ_JVoTolkT-bdAzfWjCN2bUCERNm9jCzbiVk7YBkcxYn237cn4pAbVFV3VxV8kjcS8wl5ITHZNKvXrt345_PfhkxI905iqanUhjMVcQXaWED4ggPSUgvAkVLMaAEB_0A5UGVEJCSToAwDg_AO5VRPyLDBE4IJmDI1ZVAzGysZa_sHTw04S5K-Wd3W3f7SIXJsECmLbDp_-JlNy6qoi_p36YI2MP3-cmjard81L7ttP_hj17QDkqfRsxGgtWJMsChCE6fRM0gluDAAGlQwd_ryrIBiEsGZtExwiV7XKxLjBoo5hBXCchkJlK-3JFY0vBpgGNJKECHZlxqj4xKtGbfCMFQPqNYULCiswkRKK24NyvtQROqW3i3cY1JnRe5_ZIssd0mFCfr1yM6zJ5d6rCCv_azIH11159IgWI2C0iW_fOXmOJn6WZKnWZrUoaHnA4nb8-GALeITWXbndria40e9ui5P3dANl-P2JpS1R7ZyycKHdbNiWSZVdo92vp0e_wNO2b__6OyPtQ",
+   "accepted": false,
+   "code": "DUPLICATE_KEY",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "V1_NAN",
+   "payload": "eNpNUU1vm0AU_CvRnhrJpvv9lr1Rs65obUCEREkvK2Q7MbULlsGVnSj_vW9TH3JjZ-a9NzO8kb_Esgl5IZas2-ZP36398-l3SyakPxObN_mEvL4SK1QklGZUxkyC0gaQv-CkMJEBYEhJqhWHgAc5RFLzmAsqQGoKGuEtyiM1IeMab3HKYUrllEJNjZXCKvMLb444S5Khbb7W_e7SI3JoESmLbDq__5FNy6qoi_qpdEEbmGF32bfdxm_bl-1mGP2hb7sRyeP5v2fNQSlJKadxjCaOV88gJGdcAyiQwdzxw7OECJNwRoWhnAn0umqIxQ0R5uCGc8NEzFG-2hAro_DUQDGkEcBDsg81RsclSlFmuKaoHlGtIjAgsQodSyWZ0SgfQhGpW3q3cA9JnRW5_5YtstwlFSYYVld2nj261GMFee1nRf7gqu8uDYLmKihd8tNXbo6TqZ8leZqlSR0aet4T2532e2wRv8iyP3XjzRz_7s2X8tiP_Xg5bG5DWTtkK5csfFg3K5ZlUmV3aOfTafL-D4YMkDA",
+   "accepted": false,
+   "code": "NON_FINITE_NUMBER",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "TOP_LEVEL_ARRAY",
+   "payload": "eNqLNtQxigUAA9UBSA",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "UTF8_BOM",
+   "payload": "eNpNUctu2zAQ_JWApwawFXL5WEo31aILtbYkqEqQ9kIYthOrdiXDkou6Rb-sh35SfqHLwIfcxJnZ3ZnRy99_v9kPlogJe2YJ27Sr73238U_nby2bsP4nS6SOpDaCq1go1MYiwRcakDayiIIoxY0GDPgvkmOkDMQguURlOBqCdySP9ISNGzoBHHDK1ZRjw22iZKLtVzo10ixLh3Z11_T7S0_IsSWkKvPp_P5jPq3qsimbL5UL2sAM-8uh7bZ-1z7vtsPoj33bjUSerp4NoNaKc-BxTCZOV88oFQgwiBpVMHd69awwoiQguLQchCSv6xVLaENEOcACWCFjIPl6yxIVhadBTiGtRAjJXtUUnZZozYUFw0k9klpHaFFRFSZWWglrSD6EIjK39G7hHtImLwv_Pl_khUtrSjCsr-w8f3SZpwqKxs_K4sHVH1wWBKuroHLpJ1-7OU1mfpYWWZ6lTWjo6cCS7nw4UIv0xZb9uRtv5vRTb95Vp37sx8txexvK2hNbu3Thw7pZuazSOv9Mdt6cZn_-Aw7Uj_4",
+   "accepted": false,
+   "code": "INVALID_JSON",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "DEEP_NESTING",
+   "payload": "eNqrVipTsjLSUapQsooeJiB2mIBaAPeXkwE",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "TRAILING_TEXT",
+   "payload": "eNpNUV1v2kAQ_CvonhoJnLu9jz37zcVH5RZsy3GjtC8nBCS4UBthU4VW-e_Zi3jom29mdndm_I_9YYmYsheWsG27_t13W_98-dWyKetfWSJ1JLURXMVCoTYWCb7SgLSRRRREKW40YMD_khwjZSAGySUqw9EQvCd5pKds3NIJ4IAzrmYcG24TJRNtf9KpkWZZOrTr-6Y_XHtCTi0hVZnPFt-_5rOqLpuy-VG5oA3McLge227n9-3LfjeM_tS33Ujk-ebZAGqtOAcex2TifPOMUoEAg6hRBXPnD88KI0oCgkvLQUjyulmzhDZElAMsgBUyBpJvdixRUXga5BTSSoSQ7ENN0WmJ1lxYMJzUI6l1hBYVVWFipZWwhuRDKCJzK--W7jFt8rLwn_NlXri0pgTD5sYu8ieXeaqgaPy8LB5d_cVlQbC-CSqXfvO1W9Bk5udpkeVZ2oSGno8s6S7HI7VIX2zVX7pxsqCfOvlUnfuxH6-n3V0o60Bs7dKlD-vm5apK6_yB7Px3mr1NXt8BAYOOLQ",
+   "accepted": false,
+   "code": "INVALID_JSON",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "VALID_V2-SL-1",
+   "payload": "eNptUV2PmzAQ_CunfWolcP2Jjd_oQSSqBBDnntq-oFSlFxoKUUKqphH_vWtQ-3RPtnd2Z2fGd_gFlgfwAhYuY78_N_112J8hgBHsHX6DFYpIZgK4gWXCEKMD-AM2NpSoAA5Y9OcFx9Ns12Tb7DlxeVk07_NtXmRJDXMAk6f6hi2cch1SGVLmqLGCWkq_wMIHyaXbv3Pj8Tb6ibOfOGG5KvNw8_FDHlZ16Ur3ucqwv_Nij7e-G9rm0L0c2svUnMZumBDrEduN12F62Fx_dA9vqvM4jdPt1L5FcLUjIq6VkpRyGsfRf2daSM54pLXSUkeLKoE3wlTEGRWGcibQ6hEX1Fmybbzfx3JXJXX-hIY3-acsbVBv4WAN5LWux6RI8zRx3sYek5eCRCyWWkVKcWMw5xbVMMKNFExprrSKmYgwkq8-kp8-qQrJssI1Tw7Jkjpd190XPs0IpStLRKQxODj8w0xMOFuxUGnCNX7ld7AUl8WBT5vHijA2z8vj7r9tuPb90sTlond9t-tlnv8CLvuUvg",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "solar_lunar",
+    "o": {
+     "x": 35.418,
+     "y": 138.87,
+     "z": 980.5,
+     "h": 1.5,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T08:30:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": {
+     "p": "POI-FUJI-PROTOTYPE",
+     "i": "skyline_highest_point",
+     "l": "Mount Fuji (Prototype)",
+     "x": 35.36275540020996,
+     "y": 138.73421267757476,
+     "z": 3747.1562103802135,
+     "k": "REAL_DEM_COMPARISON_FIXED_POINT",
+     "s": "REAL_DEM_COMPARISON_CANDIDATE",
+     "a": 243.6194756552888,
+     "e": 11.284315725759136
+    },
+    "b": {
+     "m": "APPARENT_STANDARD",
+     "s": {
+      "a": 271.008,
+      "e": 6.488
+     },
+     "n": {
+      "a": 289.218,
+      "e": -57.277,
+      "f": 0.289,
+      "p": 295.11
+     }
+    },
+    "p": {
+     "t": null,
+     "f": 24,
+     "a": null,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "VALID_V2-SLMW-1",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ysG8kxhKVL8ihUdqqQjQhMTUFanASavHvnQU7taL2idm5nDnnDAd4As0seAQNTZvukiIt75u7tM7Aggr0AV5Ac2kL6lrQgabctV1lwW_QnktsacEGk-bbIMI0WCTBPLjx43C1TC7DebgM_DX0FrQG6h5bGGFqQsSE0JgSLYgm5AsMeOA3efohrrZdZSZ2ZqLGdLQKJ7NPH8NJtF7Fq_hzFGB_bvhuuyIvs2STP26ypk3qKi9brBVYW1T7sr2Y7X_kF--iXdVWbVdn77E4yuEOU1IKQhjxPOdVmeKCUeYoJZVQzsCKY2RT6TBKuEsY5Sh1iwvWgT9PjN6r1SLy1-E1Cp6Ft8E0Qb7LGEZD_tV15S-n4dSPjYwUzRfcdqgnlHSkZK6LPmfIhtrMFZxKxaSSHuUOWvLdWIJHgZ95se2S57SDkQzqznZPaYHPO9PT_N_o7E1JaH4q4XkYJzax4Bc23YTX4eX8SPIhLZpsIHCMnkF_PcchHoIccc7SjJ3S3wbrD2eKx3-HDQvxZIydsnh55oyPvkfZtZlr3_Bmf_c9oF1ioFnui2KQaIK-_wPfhbnV",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_landscape",
+    "o": {
+     "x": 35.418,
+     "y": 138.87,
+     "z": 980.5,
+     "h": 1.5,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T10:40:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": {
+     "p": "POI-FUJI-PROTOTYPE",
+     "i": "skyline_highest_point",
+     "l": "Mount Fuji (Prototype)",
+     "x": 35.36275540020996,
+     "y": 138.73421267757476,
+     "z": 3747.1562103802135,
+     "k": "REAL_DEM_COMPARISON_FIXED_POINT",
+     "s": "REAL_DEM_COMPARISON_CANDIDATE",
+     "a": 243.6194756552888,
+     "e": 11.284315725759136
+    },
+    "b": {
+     "o": "milky_way",
+     "k": "interval",
+     "c": {
+      "s": "2027-04-01T10:40:00Z",
+      "e": "2027-04-01T14:30:00Z",
+      "d": 230.0,
+      "q": "VISIBLE",
+      "a": false,
+      "b": false,
+      "w": [
+       "2027-04-01T09:00:00Z",
+       "2027-04-01T22:00:00Z"
+      ],
+      "x": {
+       "a": 243.6195,
+       "h": 20.0,
+       "l": 223.6195,
+       "r": 263.6195
+      }
+     }
+    },
+    "p": {
+     "t": "2027-04-01T12:00:00Z",
+     "f": 14,
+     "a": null,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "VALID_V2-SLST-1",
+   "payload": "eNp1UV1L40AU_Styn1ZIs_M9k3mLNoVI24SaXdSXEDXa2GwmNKm7Xel_906LCwsKA3O5H-eec-4bvIJlATyDhWGstmVbdY_DQ9XXEIAD-wZ_wHIZCmoC2IOl3IRGB_AXbGRIKANYY9L_AyJMk0WZzJOfcZFmy_IinafLJF7BIYDRQz1iCyNMT4iYEFpQaom0wtzBEQ_ioam-F26zd35i6yd6TOdZOpn9uEon-SorsuI2T7C_8Xw3-7bp6nLdPK_rYSx713Qj1lqsLdyuG89mu5fm7Fu-daMb9319jsWTHK6YllIQwkgUqX_KNBeMMqW11EKrIyuOUUilYpRwQxjlKHWDC1ZJPC-93stskcer9BoFz9KbZFoi32UBJ0M-67qMl9N0GhdeRoXmCx4qGgktlZTMGPS5RjY0ZEZwKjWTWkaUK7Tk3luCRwG3bVwHJyJNh3c76n7w5V9fe4yX4iQUXEWMGWkUi4j8isLv_2FIZAnBdwcH5NH7RXjRbte2ATx9BNVHUJ-Cw-EdCmydPw",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_landscape",
+    "o": {
+     "x": 35.418,
+     "y": 138.87,
+     "z": 980.5,
+     "h": 1.5,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T11:05:48Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": {
+     "p": "POI-FUJI-PROTOTYPE",
+     "i": "skyline_highest_point",
+     "l": "Mount Fuji (Prototype)",
+     "x": 35.36275540020996,
+     "y": 138.73421267757476,
+     "z": 3747.1562103802135,
+     "k": "REAL_DEM_COMPARISON_FIXED_POINT",
+     "s": "REAL_DEM_COMPARISON_CANDIDATE",
+     "a": 243.6194756552888,
+     "e": 11.284315725759136
+    },
+    "b": {
+     "o": "orion",
+     "k": "instant",
+     "c": {
+      "m": "2027-04-01T11:05:48Z",
+      "h": 30.43692285862905,
+      "a": 243.6194756552888,
+      "w": "2027-04-01T09:00:00Z"
+     }
+    },
+    "p": {
+     "t": null,
+     "f": null,
+     "a": null,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "VALID_V2-ST-1",
+   "payload": "eNo1jckOglAMRf_lrgu-9xiM3WFkQeKQGOLCDcGoSEAxgMYh_LtFpemibc65feMONoQMjKZN66St07xsQKjAbzzAjmc7yvg-4QnWzsT2jOtOCC_ZjO0RTmBFaCRgFi6ScB5ugjhaLZNpNI-WYbBGR2j7sL0gRpmxpVxL6VhrVkp6i28YgiZPR3FVPKveqMGXW1kSdn9VG_lyFi675fuDOAXYV1ICX3umHYzjMKS95RAOv0PXfQDHBz8M",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_trails",
+    "o": {
+     "x": 35.30266,
+     "y": 139.52449,
+     "z": 12.5,
+     "h": 0,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T11:00:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": null,
+    "b": {
+     "d": 120,
+     "m": "guide",
+     "k": 60000
+    },
+    "p": {
+     "t": null,
+     "f": null,
+     "a": 123,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "VALID_V2-ST-REAL",
+   "payload": "eNo1jssOgkAMRf_lrisOwyt0h5EFiY_EEBduyBjxEVEMoBEJ_27xMemibc65nQ4PsCYcwKgbU2VNZU5FDUIJ7vAEO57lKO37hBZsO6HladcNCS-ZtOURjmBFqCVgGs-zeBavozRZLrJJMksWcbRCT2iGsJ0gWulgpNyRslPbZqWkNviEIapPZpyW57YcjAp8vRcFYftTA0-uXISrclOIcgb7Sp6wtwFp_sL-35jhhw4h_y76_g2DBz6r",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_trails",
+    "o": {
+     "x": 35.30266,
+     "y": 139.52449,
+     "z": 12.5,
+     "h": 0,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T11:00:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": null,
+    "b": {
+     "d": 750,
+     "m": "real",
+     "k": 60000
+    },
+    "p": {
+     "t": null,
+     "f": null,
+     "a": 123,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "V2_VERSION_FLOAT",
+   "payload": "eNptUV2PmzAQ_CunfWolcP2Jjd_oQSSqBBDnntq-oFSlFxoKUUKqphH_vWtQ-3RPtnd2Z2fGd_gFlhMawAtYuIz9_tz012F_hgBGsHf4DVYoIpkJ4AaWCUOMDuAP2NhQogI4YNGfFxxPs12TbbPnxOVl0bzPt3mRJTXMAUye6hu2cMp1SGVImaPGCmop_QILHySXbv_Ojcfb6CfOfuKE5arMw83HD3lY1aUr3ecqw_7Oiz3e-m5om0P3cmgvU3Mau2FCrEdsN16H6WFz_dE9vKnO4zROt1P7FsHVjoi4VkpSymkcR_-daSE545HWSksdLaoE3ghTEWdUGMqZQKtHXFBnybbxfh_LXZXU-RMa3uSfsrRBvYWDNZDXuh6TIs3TxHkbe8xeChKxWGoVKcWNwZxbVMMIN1IwpbnSKmYiwki--kh--qQqJMsK1zw5JEvqdF13X_g0I5SuLBGRxuDg8A8zMeFsxUKlCdf4ld_BUlwWBz5tHivC2Dwvj7v_tuHa90sTl4ve9d2ul3n-CwNqlRw",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "v",
+   "python_layer": true
+  },
+  {
+   "id": "V2_VERSION_BOOL",
+   "payload": "eNptUV2PmzAQ_CunfWolcP2Jjd_oQSSqBBBHT21fUKrSCw2FiEDVNOK_dw1qn-7J9s7u7Mz4Dr_ATuPcePACFq5Ddxzrbu6PI3gwgL3Db7BCEcmMBzewTBhitAd_wIaGEuXBCYvuvOJ4nBzqZJ88R1WaZ_X7dJ9mSVTC4sHkqL5hC6dc-1T6lFXUWEEtpV9g5YPo2h7fVcP5NriJ0U1csFzkqb_7-CH1izKv8upzkWB_68Seb13bN_WpfTk116m-DG0_IdYhdhjmfnrYzT_ahzfFOEzDdLs0bxHc7IiAa6UkpZyGYfDfmRaSMx5orbTUwapK4I0wFXBGhaGcCbR6xgVlEu1r5_cxPxRRmT6h4V36KYlr1JtVsAXyWtdjlMVpHFXOxhEsl4IELJRaBUpxYzDnBtUwwo0UTGmutAqZCDCSry6Sny6pAsmSrKqfKiSLynhbd1_5NCOUbiwBkcbgYP8PMyHhbMN8pQnX-JXfwVJcFnoubR4qwtiyrI-7-7Z-7rq1ictV7_Zutsuy_AWqy5ZM",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "v",
+   "python_layer": true
+  },
+  {
+   "id": "V2_VERSION_STRING",
+   "payload": "eNptUV2PmzAQ_CunfWolcP2Jjd_oQSSqBBDnntq-oFSlFxoKUUKqphH_vWtQ-3RPtnd2Z2fGd_gFFjgE8ILnZez356a_DvszVkawd_gNVigimQngBpYJQ4wO4A_Y2FCiAjhg0Z8XHE-zXZNts-fE5WXRvM-3eZElNcwBTJ7qm99EuQ6pDClz1FhBLaVfYOGD5NLt37nxeBv9xNlPnLBclXm4-fghD6u6dKX7XGXY33mxx1vfDW1z6F4O7WVqTmM3TIj1iO3G6zA9bK4_uoc31Xmcxul2at8iuNoREddKSUo5jePovzMtJGc80lppqaNFlcAbYSrijApDORNo9YgL6izZNt7vY7mrkjp_QsOb_FOWNqi3cLAG8lrXY1KkeZo4b2MPlktBIhZLrSKluDGYc4tqGOFGCqY0V1rFTEQYyVcfyU-fVIVkWeGaJ4dkSZ2u6-4Ln2aE0pUlItIYHBz-YSYmnK1YqDThGr_yO1iKy-LAp81jRRib5-Vx9982XPt-aeJy0bu-2_Uyz38ByXWVAg",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "v",
+   "python_layer": true
+  },
+  {
+   "id": "V2_UNSUPPORTED_VERSION",
+   "payload": "eNptUV2PmzAQ_CunfWolcP2Jjd_oQSSqBBDnntq-oFSlFxoKUUKqphH_vWtQ-3RPtnd2Z2fGd_gFVgTwAhYuY78_N_112J8hgBHsHX4jqIhkJoAbWCYMMTqAP2BjQ4kK4IBFf15wPM12TbbNnhOXl0XzPt_mRZbUMAcweapv2MIp1yGVIWWOGiuopfQLLHyQXLr9Ozceb6OfOPuJE5arMg83Hz_kYVWXrnSfqwz7Oy_2eOu7oW0O3cuhvUzNaeyGCbEesd14HaaHzfVH9_CmOo_TON1O7VsEVzsi4lopSSmncRz9d6aF5IxHWistdbSoEngjTEWcUWEoZwKtHnFBnSXbxvt9LHdVUudPaHiTf8rSBvUWDtZAXut6TIo0TxPnbezBcilIxGKpVaQUNwZzblENI9xIwZTmSquYiQgj-eoj-emTqpAsK1zz5JAsqdN13X3h04xQurJERBqDg8M_zMSEsxULlSZc41d-B0txWRz4tHmsCGPzvDzu_tuGa98vTVwuetd3u17m-S8xNJS_",
+   "accepted": false,
+   "code": "UNSUPPORTED_VERSION",
+   "field": "v",
+   "python_layer": true
+  },
+  {
+   "id": "V2_GENRE_MISSING",
+   "payload": "eNptUU2PmzAQ_SurObUSuP628Y0uRKJKALHuatsL2qq0oUkh2pCq2Yj_3jGoPfXk8byZN_Pe3OAXOB7BCO4Gv8EJRSSzEVzBMWGJNRG8gkssJSqCPSbDewYHWb5r823-mPqiKtv3xbYo87SBOYIpUH3FEk65iamMKfPUOkEdpZ9h4YP03D-_8-PhOoaOl9BxwnRdFfHm44cirpvKV_5TnWN9j8D5cD32Q9fu--_77jy1p7EfJsSOiO3GyzDdbS4_-rs39cs4jdP11L1FcJUjNDdKSUo5TRL9T5kRkjOujVFGGr1sJTAiTGnOqLCUM4FSDzigydNtG_TeV7s6bYoHFLwpnvKsxX1LD6sh_6u6T8usyFIfZDyjz1IQzRJplFaKW4s-d7gNI9xKwZThyqiECY2WfAmW_AxO1UiWl7598EiWNtk67rbwGUYoXVk0kdZi4_AXswnhbMViZQg3eMpv4CgOS6LgNk8UYWyel88tnG24HI9LEZfLvuu_W4N5_gMM147H",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "V2_GENRE_NOT_STRING",
+   "payload": "eNptUU2PmzAQ_SurObUSuP628Y0uRKJKALHuqu0FbVW6oUkh2pCqacR_7xjUnvbk8byZN_Pe3OAXOB7BMzgWwQjuBr_BCUUksxFcMSsssSaCP-ASS4mKYI_J8J7BQZbv2nybP6a-qMr2fbEtyjxtYI5gClTfsIRTbmIqY8o8tU5QR-kXWPggPfdP7_x4uI6h4yV0nDBdV0W8-fihiOum8pX_XOdY3yNwPlyP_dC1-_55352n9jT2w4TYEbHdeBmmu83lR3_3pn4Zp3G6nrq3CK5yhOZGKUkpp0mi_yszQnLGtTHKSKOXrQRGhCnNGRWWciZQ6gEHNHm6bYPe-2pXp03xgII3xac8a3Hf0sNqyGtV92mZFVnqg4wndFsKolkijdJKcWvR5w63YYRbKZgyXBmVMKHRkq_Bkp_BqRrJ8tK3Dx7J0iZbx90WPsMIpSuLJtJabBz-YTYhnK1YrAzhBk_5HRzFYUkU3OaJIozN8_K5hbMNl-NxKeJy2Xf9d2swz38BzuaQCQ",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "V2_UNSUPPORTED_GENRE",
+   "payload": "eNptUU1vm0AQ_SvRnFoJtvvJLtxIwBKVDYhso6QX5Kg0piZgxbgttfjvnQW1p5x2dt7Mm3lvrvATIu7BC0Tw2nbHqf61n8CDAaIr_IZIKCKZ8WCCiAlDjPbgD0ShoUR5cMCke8_YnKS7Ot2mD7HNiry-zbZZnsYVzB6MjuoblnDKtU-lT5mlJhI0ovQrLHwQn9v9Jzscp8F1vLmOE6bLIvM3Xz5nflkVtrBPZYr1LQLn49S1fVMf2pdDcx7r09D2I2IdYrvh0o83m8uP9uZD-TaMwzidmo8IrnJEwLVSklJOwzD4r0wLyRkPtFZa6mDZSmBEmAo4o8JQzgRKPeKAKo23tdN7V-zKuMruUfAme0yTGvfNLayGvFd1F-dJlsTWydij71KQgIVSq0Apbgz63OA2jHAjBVOaK61CJgK05NlZ8uqcKpEszW19b5EsrpJ13HXh04xQurIERBqDjf0_zISEsxXzlSZc4ym_Q0RxWOg5t3moCGPzvHyu7mz9peuWIi6Xfdd_swbz_BdpSpPy",
+   "accepted": false,
+   "code": "UNSUPPORTED_GENRE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "V2_V1_GENRE",
+   "payload": "eNptUU1vm0AQ_SvRnFoJtvu9CzcasERlAyLbKO0FuTKJqR2wYlzVsfjvnQW1p552dt7Mm3lvbvALYh7AC8Sw67avQ79rni8_OwhggPgGvyEWikhmA7hCzIQl1gTwDnFkKVEB7DHp3zP2p9mmydbZY-Lysmg-5-u8yJIapgBGT7XDEk65CakMKXPUxoLGlH6HmQ-Sc7f95IbDdfAdb77jhOmqzMPV1y95WNWlK923KsP6DoHz4Xrs-rbZdy_79jw2p6HrR8SOiG2GSz_erVDH3YfqbRiH8XpqPyK4yBGaG6UkpZxGkf6nzAjJGdfGKCONnrcSGBGmNGdUWMqZQKkHHFBnybrxeu_LTZXU-QMKXuVPWdrgvoWDxZD_Vd0nRZqnifMytmi9FESzSBqlleLWos8tbsMIt1IwZbgyKmJCoyU_vCWv3qkKybLCNQ8OyZI6XcbdZj7DCKULiybSWmzs_2I2IpwtWKgM4QZP-QwxxWFR4N3mkSKMTdP8ufmz9ZfjcS7ict53-bdLME1_AM5zlQU",
+   "accepted": false,
+   "code": "UNSUPPORTED_GENRE",
+   "field": "g",
+   "python_layer": true
+  },
+  {
+   "id": "V2_UNKNOWN_TOP_KEY",
+   "payload": "eNptUV2PmzAQ_CunfWolcP1twxt3EIkqAcS51V1fUE6lFxoKUUKq5qL891uD2qc-2d6Znd0ZX-E3xDyAV4jhNPbbY9Ofh-0RAhghvsIfiIUiktkALhAzYYk1AbxBHFlKVAA7LPrzhO1ptmmydfY1cXlZNPf5Oi-ypIZbAJOX-o4UTrkJqQwpc9TGgsaUfoNZD5JTt_3kxv1l9B1H33HAclXm4erL5zys6tKV7rnKkN_5ZfeXvhvaZte97trT1BzGbpgQ6xHbjOdhuludf3Z3H6rjOI3T5dB-RHCxIzQ3SklKOY0i_c-ZEZIzro1RRho9byXwRpjSnFFhKWcCre5xQJ0l68b7fSg3VVLnj2h4lT9laYP7Fg6WQP7HekiKNE8T521sMXkpiGaRNEorxa3FnFvchhFupWDKcGVUxITGSF58JL98UhWKZYVrHh2KJXW6jLvOeoYRShcVTaS12Dj8xWxEOFuwUBnCDX7lD4gpDosCnzaPFGHsdpsfV_9tw7nvZxKX877Lu10uyHvDkNjtHUYilo0",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "$",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MISSING_TOP_KEY",
+   "payload": "eNptUU2P2jAU_CvonVopcf1tx7d0E6SsIImy7qrtJaIqhRSaIAhVWcR_32ei7WlPtjxv5s2Mr_AXHI9gAw5Ow351bPfnfnWECAZwV_gHTigimY3gAo4JS6yJ4AVcYilREWzxMZwnpGf5ss0X-XPqi6psPxeLoszTBm4RjEHqJ45wyk1MZUyZp9YJ6ij9Dnc9SE_d6pMfdpchMI6BccDnuiri-ZfHIq6bylf-W53jfBfM7i77rl-3226zXZ_G9jB0_YjYHrHlcO7H2fz8u5t9qI_DOIyXw_ojglMcoblRSlLKaZLo_8mMkJxxbYwy0ui7K4E3wpTmjApLORMYdYcLmjxdtCHvQ7Ws06Z4wsDz4muetei39DAV8t7UQ1pmRZb6EGOFzUtBNEukUVopbi32vEY3jHArBVOGK6MSJjRW8iNU8ic0VaNYXvr2yaNY2mTTuutdzzBC6aSiibQWif0bZhPC2YTFyhBu8Ct_gaO4LIlC2zxRhLHb7fYK7BCI-Q",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "$",
+   "python_layer": true
+  },
+  {
+   "id": "V2_OBSERVER_NOT_OBJECT",
+   "payload": "eNp1UV2PmzAQ_CunfWol49rrT_yGDiJRNQHlqNQPVShV6R0NhSghVdOI_94F1Me-7XrGM-PxHX5BQAbPEOAydIdz3V37wxkYDBA-S4ZfGIwQ7vCNCCjQRUJHQlbCByWCEJ-I-Yeg5NIe3lTD8TbAxOA83zjRcVnk0eb92zwq90VVVB_LjPjt7HW8dW3f1C_t80tzGevT0PYjYR1h2-Hajw-b64_24VV5HsZhvJ2a1wT-hqAMVxadMVoIFHFsGdwgSOW5UxolWueM084uqRRNXBqLUigvUCrD4EgG-yx5V6fZtn4stmWyz5-KXb3JP2RpTXl3FTld_sN6THZpnibV_IwDFacVtzLWzlhj0HvPoKE0kqPXShqHxplYKkuVfJ0r-Tk3VZJYtqvqp4rEkn262t0XPSe5EKuK5dp7utj_w3zMUa5YZBxH5xh8hyDILGZz2xgbLuU0Lct9_rb-2nULCfWSd92bdZimvzy-hNg",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "o",
+   "python_layer": true
+  },
+  {
+   "id": "V2_OBSERVER_UNKNOWN_KEY",
+   "payload": "eNptUV2vk0AQ_Ss386QJrPvJLvuGF5pgWiDc1agvpEa8xSLUlhp7G_67sxB98ml355w5M-fsHX6B5QE8g4XL2O_PTX8d9mcIYAR7h99ghSKSmQBuYJkwxOgAXsDGhhIVwAGL_rxge5rtmmybfUhcXhbN23ybF1lSo9JPJM0BTF7wKxI55TqkMqTMUWMFtZR-hkUVkku3f-PG420E7Dj7jhOWqzIPN-_f5WFVl650n6oM-Z1f-Xjru6FtDt3zob1MzWnshgmxHrHdeB2mh831e_fwqjqP0zjdTu1rBFdTIuJaKUkpp3Ec_fOnheSMR1orLXW0bCXwRpiKOKPCUM4EGj7igDpLto13_VjuqqTOn9D2Jv-YpQ3uWzhYY_kf6zEp0jxNnLexx_ylIBGLpVaRUtwYTLvFbRjhRgqmNFdaxUxEGMkXH8kPn1SFYlnhmieHYkmdruPui55mhNJVJSLSGGwc_mImJpytWKg04Ro_9BtYisPiwKfNY0UYm-flcfffNlz7fiFxuey7vtv1Ms9_ADVFlgo",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "o",
+   "python_layer": true
+  },
+  {
+   "id": "V2_OBSERVER_LAT_RANGE",
+   "payload": "eNptUV2PmzAQ_CunfWolcP1twxs9iESVAOLcU9sXlKr0QkMhSkjVNOK_dw1qn-7J9s7u7Mz4Dr8g5gG8QAyXsd-fm_467M8QwAjxHX5DHLEAbhAzYYk1AfzBiqVEBXDAoj8vOJpmuybbZs-Jy8uieZ9v8yJLapgDmDzNN2zhlJuQypAyR20saEzpF1j4ILl0-3duPN5GP3H2EycsV2Uebj5-yMOqLl3pPlcZ9nde6PHWd0PbHLqXQ3uZmtPYDRNiPWK78TpMD5vrj-7hTXUep3G6ndq3CKIVoYjQ3CglKeU0ivR_Z0ZIzrg2Rhlp9KJK4I0wpTmjwlLOBFo94oI6S7aN9_tY7qqkzp_Q8Cb_lKUN6i0crIG81vWYFGmeJs7b2GPqUhDNImmUVopbawNoUQ0j3ErBlOHKqIgJjZF89ZH89ElVSJYVrnlySJbU6bruvvAZRihdWTSR1uLg8A-zEeFsxUJlCDf4ld8hprgsCnzaPFKEsXleHnf_bcO175cmLhe967tdL_P8F1-Fk_U",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "o.x",
+   "python_layer": true
+  },
+  {
+   "id": "V2_OBSERVER_LON_TYPE",
+   "payload": "eNptUU2PmzAU_Curd2olcP2JjW90IRJVAoh1q91eUKrSDQ2FKCFVsxH_vc-g3nrC9sybNzPc4TdYHsArWLiM_f7c9Ndhf4YARrB3-ANWKCKZCeCGDCYMMRrBN7CxoUQFcADL_PeCcJrtmmybfUlcXhbNx3ybF1lSwxzA5MW-I4VTrkMqQ8ocNVZQS-nXVQ-SS7f_4MbjbfQTZz9xwueqzMPN5095WNWlK91LlSG_83aPt74b2ubQvR7ay9Scxm6YEOsR243XYXrYXH92D--q8ziN0-3UvkdwDSQirpWSlHIax9GSzUfTQnLGI62VljpaXAk8EaYizqgwlDOBUY-4oM6SbePzPpa7KqnzJwy8yZ-ztEG_hYO1kP-xHpMizdPE-Rh77F4KErFYahUpxY3Bplt0wwg3UjCludIqZiLCSr75Sn75pioUywrXPDkUS-p0XXdf9DQjlK4qEZHG4ODwDzMx4WzFQqUJ1zqAH2ApLosD3zaPFWFsnpfL3f-24dr3C4nLxe96b9fDPP8F1USVAg",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "o.y",
+   "python_layer": true
+  },
+  {
+   "id": "V2_OBSERVER_STATUS_ENUM",
+   "payload": "eNptUV1vm0AQ_CvRPqUSXO77jntDAUtUNSCbSklekKuQmJqCZeOqrsV_zx6ofcrT7e3czM7O3eA3OB7AOzg4D93uVHeXfneCAAZwN_gDTigimQ3gCo4JS6wJ4C-4yFKiAthj059npOdFmcIUwOiJr9jglJuQypCyilonqKP0BWY2xOd291ANh-vgGSfPOGK7LLJw9f1rFpaboiqqZxQMoPXWDteu7Zt6377vm_NYH4e2HxHrEFsPl368W11-tnf35WkYh_F6bL4guJgXmhulJKWcRpH-v4cRkjOujVFGGj27ElgRpjRnVFjKmcDFDjhgk8bf6iRd14_Fuow32bbI61X2lCY1-s0rWNb_7NVjnCdZEld-jR3mLAXRLJJGaaW4tZhqg24Y4VYKpgxXRkVMaIzkh4_kl0-qRLE0r-pthWLxJlnG3WY9wwili4om0lok9v8wGxHOFixUhnCDH_cGjuKwKPBp80gRxqZpvtz8t_WXrpsfcTn7Xe7NUkzTB7C5j28",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "o.s",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TIME_INVALID_DAY",
+   "payload": "eNptUV2Pk0AU_Sub-6QJjPM9A2-40ATTAmHHjfpCasQtFqFpqbE2_HfvQPRpk0nm49x77jln7vALYh7AC8RwGfv9uemvw_4MAYwQ3-E3xEIRyWwAN4iZsMSaAP5AHFlKVAAHfPT7BdvTbNdk2-w5cXlZNO_zbV5kSQ1zAJOn-oYlnHITUh4K6iiNl_UFFj5ILt3-nRuPt9F3nH3HCZ-rMg83Hz_kYVWXrnSfqwzrOy_2eOu7oW0O3cuhvUzNaeyGCbEesd14HaaHzfVH9_CmOo_TON1O7VsEVztCc6OUpJTTKNL_nRkhOePaGGWk0YsqgSfClOaMCks5E2j1iAPqLNk23u9juauSOn9Cw5v8U5Y2qLdwsAbyWtVjUqR5mjhvY4_JS0E0i6RRWiluLebcohpGuJWCKcOVURETGiP56iP56ZOqkCwrXPPkkCyp03XcfeEzjFC6smgircXG4R9mI8LZioXKEG7wK79DTHFYFPi0eaQIY_O8XO7-24Zr3y9FXC5613u7Hub5LxuSlLM",
+   "accepted": false,
+   "code": "INVALID_DATETIME",
+   "field": "t.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TIME_NOT_UTC",
+   "payload": "eNptUV2PmzAQ_CunfWpVcP1t4zd6EIkqAcRxp_YJpSq90FCIElI1jfjvXYPapz7Z3tmdnRnf4Sc4HsArOLiM_f7c9Ndhf4YARnB3-AVOKCKZDeAGjglLrAngN7jIUqICOGDRnxccT9Jdk27Tl7jOirz5kG2zPI0rmAOYPNVXbOGUm5DKkLKaWieoo_QdjWBhhPjS7d_X4_E2-pmznzlhuSyycPP8MQvLqqiL-nOZYn_n5R5vfTe0zaF7PbSXqTmN3TAh1iO2G6_D9LC5fu8e3pTncRqn26l9i-BqSGhulJKUchpF-p83IyRnXBujjDR6USXwRpjSnFFhKWcCzR5xQZXG28Y7fix2ZVxlT2h5k31Kkwb15jWskfyv6zHOkyyJa29jj9lLQTSLpFFaKW4tJt2iGka4lYIpw5VRERMaI_niI_nhkyqRLM3r5qlGsrhK1nX3hc8wQunKoom0FgeHv5iNCGcrFipDuMHP_AaO4rIo8GnzSBHG5nl53P3HDde-X5q4XPSu73a9zPMf1QWU-A",
+   "accepted": false,
+   "code": "INVALID_DATETIME",
+   "field": "t.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TIMEZONE_CHAR",
+   "payload": "eNptUdtum0AU_JXoPLUSbPfKLrzRgCUqGxDZRmlekKPSmJqCZeOqrsUn5LPyXz0Lap7yxC5zZs7M7BV-Q8Q9eIYITkO3Pdbdud8ewYMBoiv8gUgoIpnx4AIRE4YY7cFfiEJDifJghz_d94T0JN3U6Tq9j21W5PXnbJ3laVzB5MHopL7jCKdc-1T6lFlqIkEjSh9h1oP41G4_2deX_eX1xXGOjnNAoCwyf_X1S-aXVWEL-61MkdE6u_tL1_ZNvWufd81prA9D24-IdYhthnM_3qzOP9ubD-VxGIfxcmg-IrgEEgHXSklKOQ3D4C2bFpIzHmittNTB7EvgiTAVcEaFoZwJDLvHBVUar2uX-LbYlHGV3WHkVfaQJjX6zS0slbw3dRvnSZbE1sXYYvdSkICFUqtAKW4MNt2gG0a4kYIpzZVWIRMBVvLkKvnluipRLM1tfWdRLK6SZd111tOMULqoBEQag8T-P2ZCwtmC-UoTrvExf0BEcVnoubZ5qAhj0zRfru7h-nPXzUNczn6Xe7McpukfdNGWhA",
+   "accepted": false,
+   "code": "INVALID_TIMEZONE",
+   "field": "t.z",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TIMEZONE_SPACE",
+   "payload": "eNptUV2vk0AQ_SvNPGkC637vwtt6oQmmBcJFo76QGvEWi9C01Fgb_ruzEH3yaXfnzDkz5-wDfkLMA3iBGK5jf7g0_W04XCCAEeIH_IJYKCKZDeAOMROWWBPAb4gjS4kK4IhFf16RnqT7Jt2lH1ydFXnzNttleeoqmAOYvNRXbOGUm5DKkLKa2ljQmNLPsOjBxl27w5t6PN1HT7l4yhnrZZGF2_fvsrCsirqoP5UpEjq_7ened0PbHLuXY3udmvPYDRNiPWL78TZMm-3te7d5VV7GaZzu5_Y1gqsfoblRSlLKaRTpf9aMkJxxbYwy0uhlLYE3wpTmjApLORPo9YQDqtTtGm_4qdiXrsqe0fE2-5gmDe6b17Am8r-uJ5cnWeJqb-OA0UtBNIukUVopbi0G3eI2jHArBVOGK6MiJjRG8sVH8gNlXYliaV43zzWKuSpZxz0WPcMIpauKJtJaJA5_MRsRzlYsVIZwg3_5DWKKw6LAp80jRRib5-Xx8P823Pp-aeJy2Xd9t-tlnv8Ah9aU3g",
+   "accepted": false,
+   "code": "INVALID_LENGTH",
+   "field": "t.z",
+   "python_layer": true
+  },
+  {
+   "id": "V2_REFERENCE_NULL",
+   "payload": "eNo1T01PhDAQ_S_vXOq0gJS5dQMHkhU3SDx4IWxcVyOCAde4Ev67LcTTfLyPeTPjG6wFzmBMQ9eOTXfp2xECA3jGDziMZaSMwBWsQiNNIvALTg3JWODVLX2dnDzL75p8nz_aurgvm12xL8rcVlgEvrzVs6No0klAUUCqJsMhMdETVj_Y6a29qYf36-AVI7i_dJ3A0Us_PH442Cov6-ahtmVmqwzr1Rmty58oSeQynsC3MjLGOfT_mEmlVhsWxInUiXvgBUzSIQKfjpHGUqllWYfZh91OO5KOhPfY5tPWLMsft9VPaw",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "r",
+   "python_layer": true
+  },
+  {
+   "id": "V2_REFERENCE_UNKNOWN_KEY",
+   "payload": "eNptUV2vk0AQ_Ss386QJrPvJLvuGF5pgWiDc1agvpEa8xSLUlhp7G_67sxB98ml358ycOefsHX6B5QE8g4XL2O_PTX8d9mcIYAR7h99ghSKSmQBuYJkwxOgAXsDGhhIVwAGL_rzgeJrtmmybfUhcXhbN23ybF1lSwxzA5Km-YgunXIdUhpQ5aqygltLPsPBBcun2b9x4vI1-4uwnTliuyjzcvH-Xh1VdutJ9qjLs77zY463vhrY5dM-H9jI1p7EbJsR6xHbjdZgeNtfv3cOr6jxO43Q7ta8RXO2IiGulJKWcxnH0z5kWkjMeaa201NGiSuCNMBVxRoWhnAm0esQFdZZsG-_3sdxVSZ0_oeFN_jFLG9RbOFgD-V_XY1KkeZo4b2OPyUtBIhZLrSKluDGYc4tqGOFGCqY0V1rFTKCan1jGYL74YH74vCqkzArXPDmkTOp0XXpfWDUjlK5cEZHG4ODwFzMx4WzFQqUJ1_ih38BSXBkHPnMeK8LYPC-Pu_-84dr3SxOXi-r13a6Xef4DjHmWCg",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "r",
+   "python_layer": true
+  },
+  {
+   "id": "V2_REFERENCE_AZIMUTH_360",
+   "payload": "eNptUV1vmzAU_SvVfWolcP2BsfEbK0RiSgBRt9r6gjKNNSwMooRUzSL--65B61OfbN9zzz33HF_hDQz34BUMnIZue6y7c789ggcDmCu8gxGSBEx7cAHDhCZaefAXTKQpkR7ssOjOE9KTdFOn6_Q5tlmR11-ydZancQWTB6Mb9RNbOOXKp4FPmaXaCGoofYF5HsSndntvh_1lcIyjYxywXBaZv3r6mvllVdjCfi9T7G_dsvtL1_ZNvWtfd81prA9D24-IdYhthnM_3qzOv9ub2_I4jMN4OTR3CC52RMiVlAGlnEZR-OFMiYAzHiolVaDCeSuBN8JkyBkVmnIm0OoeBao0XtfO70OxKeMqe0TDq-xbmtS4b25hCeSzroc4T7Ikts7GFgVC6kGD-oxwHQgmFZdKRkyEGMIPF8Ifl02J9DS39aNFelwli8DVTeCKEUr1PCUkgdZI7P9jOiKcLZgvFeEKP-8XGIpikefy5ZEkjE3T_Li6j-rPXTc38WDecHk3y2Wa_gGDjJHW",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "r.a",
+   "python_layer": true
+  },
+  {
+   "id": "V2_REFERENCE_ID_EMPTY",
+   "payload": "eNptUctOwzAQ_BW0J5BS47cd30KTSpHatCoRQlyiIgINDUnVpohS5d9ZJ4ITJ9s7u7Mz4wt8guMBvIGDY1tvDkV9ajYHCKAFd4EvcEIRyWwAZ3BMWGJNAN_gQkuJCmCLRX8ecTxOFkUyTx6iPF1mxV06T7MkWkMfQOepXrCFU24mVE4oy6l1gjpKn2Dgg-hYbW7zdndu_cTBT-yxjGjlpe3OddWUxbZ625bHrti3VdMhViO2aE9NdzU7vVdX16tD27XdeV_eIDiKF5obpSSlnIah_vNhhOSMa2OUkUYPGgTeCFOaMyos5UygsR0uWCfRvPDupsvFKlqn92hvlj4mcbFaplkOo_3_uqZRFqdxlCfYs8GcpSCahdIorRS3FlMtUQ0j3ErBlOHKqJAJjQE8-wA-fC4rJEuyvLjPkSxax-O6y8BnGKF0ZNFEWouDzS9mQ8LZiE2UIdzgx72Co7gsDHy2PFSEsb4fHhf_Sc2procmLge947scL33_A_CXj3g",
+   "accepted": false,
+   "code": "INVALID_LENGTH",
+   "field": "r.p",
+   "python_layer": true
+  },
+  {
+   "id": "V2_REFERENCE_LABEL_TOO_LONG",
+   "payload": "eNrNUktu2zAQvcusJZZ_UtwpkQKocCRBYYskG8FF3ViwKgW2U8Q1tGiumotkKCFd5QABCHC-b4bv8Qx_wPEIHsDBYezX-7Z_GtZ7iGAEd4ZncEIRyWwEJ3BMWGJNBH_BJZYSFcEWg-E-YHuWX7f5Kv-e-qIq24tiVZR52sAUwTFA_cQSTrmJqYwp89Q6QR2l9zDjQXro1l_8uDuNoWMfOh4xXFdFfPXtaxHXTeUrf1fnWN-FZXenvhs27bZ72G4Ox_Zx7IYj5nrMvf57-YQHl1voFJobpSSlnCaJ_s-sEZIzro1RRho9syLQIkxpzqiwlDOBVO_wgU2ertrA92V1XadNcYOEXxW3edYiX6WHRZCPqi7TMiuy1Aca16i8FESzRBqlleLWos4b3IYRbqVgynBlVMKERkl-BEl-B6VqBMtL3954BEubbBl3nvEMI5QuKJpIa7FxeM_ZhHC25GJlCDf4lX6BozgsiYLaPFGEsWmanXP4NsNT389FXM77Lv5mMabpDfXK66I",
+   "accepted": false,
+   "code": "INVALID_LENGTH",
+   "field": "r.l",
+   "python_layer": true
+  },
+  {
+   "id": "V2_REFERENCE_KIND_ENUM",
+   "payload": "eNo9UV1vm0AQ_CvRPqUSXO77jnujMZGobECYREpfkKPQmJqCZeOqrsV_7x6oebq9nd2Znd0b_AbHA_gAB-eh253q7tLvThDAAO4Gf8AJRSSzAVzBMWGJNQH8BRdZSlQAe0z694ztq2RTJ-vkJa7SPKu_pus0S-ISpgBGT_WOJZxyE1IZUlZR6wR1lH6HmQ_ic7t7qIbDdfAdJ99xxHSRp-HT87c0LMq8yqvXIsH61g97uHZt39T79mPfnMf6OLT9iFiH2Ga49OPd0-Vne3dfnIZxGK_H5guCix2huVFKUsppFOlPZ0ZIzrg2Rhlp9DyVwIgwpTmjwlLOBFo9oECWz3N412USr2tv_THfFHGZbtH7Y5yt0lVc-ZodrlcKolkkjdJKcWtxmQ1KMsKtFEwZroyKmNDo-837_uXXUSBZklX1tkKyuFwtcreZzzBC6cKiibQWG_v_mI0IZwsWKkO4wXv9AEdRLAr8SnmkCGPTNH9u_jb9pevmIi7neZd_swTT9A-JSIyF",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "r.k",
+   "python_layer": true
+  },
+  {
+   "id": "V2_XSS_LABEL",
+   "payload": "eNptUV1vm0AQ_CvRPjUSXO6TO5ATiQYiUTmACK3aviCaUhuZgAVOFdfiv3cP2j716fZ2d2Z3Zy7wEwLuwA4CmIauHqvuta9HcGCA4AJvEAhFJDMOnCFgwhCjHfgFgW8oUQ7sMWnfCeFR_FjF2_hTWCZZWr1PtkkahwXMDpws1Xds4ZRrl0qXspKaQNCA0q-w8EE4tfVNORzOg0WMFnHEdJ4l7sPHD4mbF1mZlV_yGPtbu-zh3LV9U-3b3b6ZTtVxaPsT1jqsbdqX3dU0Pt--XQ19M47DeFt3zXh6x67vNtPz2B5Pd2uCX29u_iQQu14rPK6VkpRy6vvev8O1kJxxT2ulpfaWpQVGhCmPMyoM5UygEgecX8ThtrJy3GePeVgkT6jHQ_I5jio8Jy1h1et_XfdhGiVRWNorazRGCuIxX2rlKcWNQRsa3IYRbqRgSnOllc-Eh4p9s4q9WCFzJIvTsnoqkSwsonXcZeHTjFC6snhEGoPA_m_N-ISzteYqTbhGp39AQHGY71gzuK8IY_O8fC7W1f6165YmLpd913-zBvP8GwBwn3A",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "solar_lunar",
+    "o": {
+     "x": 35.418,
+     "y": 138.87,
+     "z": 980.5,
+     "h": 1.5,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T08:30:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": {
+     "p": "POI-FUJI-PROTOTYPE",
+     "i": "skyline_highest_point",
+     "l": "<img src=x onerror=alert(1)><script>alert(2)</script>",
+     "x": 35.36275540020996,
+     "y": 138.73421267757476,
+     "z": 3747.1562103802135,
+     "k": "REAL_DEM_COMPARISON_FIXED_POINT",
+     "s": "REAL_DEM_COMPARISON_CANDIDATE",
+     "a": 243.6194756552888,
+     "e": 11.284315725759136
+    },
+    "b": {
+     "m": "APPARENT_STANDARD",
+     "s": {
+      "a": 271.008,
+      "e": 6.488
+     },
+     "n": {
+      "a": 289.218,
+      "e": -57.277,
+      "f": 0.289,
+      "p": 295.11
+     }
+    },
+    "p": {
+     "t": null,
+     "f": 24,
+     "a": null,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "V2_UNKNOWN_POI_LABEL_FALLBACK",
+   "payload": "eNp1UU2vmzAQ_CtPe2olcP2JjW_04UioCUSEfqgXlKr0hYZCFEjVNOK_dw1qbz3Z3tmdnRk_4CdYHsALWBiH7nitu1t_vEIAA9gH_AIrFJHMBHAHy4QhRgfwG2xsKFEBnLDozxHHU7er3dZ9SKqsyOu32TbLXVLCHMDkqb5iC6dch1SGlFXUWEEtpZ9h4YNkbI9vquF8H_zE1U9csLwvsvB9_i4vPubhpijDyh0qnGi93PO9a_umPrUvp2ac6svQ9hNiHWK74dZPT5vb9_bp1f46TMN0vzSvEVwNiYhrpSSlnMZx9M-bFpIzHmmttNTRokvgjTAVcUaFoZwJNHvGBaVLtrV3_Fzs9kmZHdDyJvvk0hoV517i-J-u5yRPszSpHPYcMXspSMRiqVWkFDcGk25QDSPcSMGU5kqrmIkIQ_niQ_nhs9ojmcur-lAhWVKm67rHwqcZoXRliYg0Bgf7v5iJCWcrFipNuMbP_AaW4rI48HnzWBHG5nl5PPzH9beuW5q4XPSu72a9zPMfUvGVPg",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "solar_lunar",
+    "o": {
+     "x": 35.418,
+     "y": 138.87,
+     "z": 980.5,
+     "h": 1.5,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T08:30:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": {
+     "p": "POI-UNKNOWN-FOR-TEST",
+     "i": "skyline_highest_point",
+     "l": "Mount Fuji (Prototype)",
+     "x": 35.36275540020996,
+     "y": 138.73421267757476,
+     "z": 3747.1562103802135,
+     "k": "REAL_DEM_COMPARISON_FIXED_POINT",
+     "s": "REAL_DEM_COMPARISON_CANDIDATE",
+     "a": 243.6194756552888,
+     "e": 11.284315725759136
+    },
+    "b": {
+     "m": "APPARENT_STANDARD",
+     "s": {
+      "a": 271.008,
+      "e": 6.488
+     },
+     "n": {
+      "a": 289.218,
+      "e": -57.277,
+      "f": 0.289,
+      "p": 295.11
+     }
+    },
+    "p": {
+     "t": null,
+     "f": 24,
+     "a": null,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "V2_SL_MODEL_ENUM",
+   "payload": "eNptUc3O0zAQfJVPewIpMf6341toXRTUNlEICLhERYSvoSGp2hRRqrw760Rw4mR7Z2d3ZvyAn-B4BM_g4Dp0h0vd3frDBSIYwD3gFzihiGQ2gjs4JiyxJoLf4BJLiYrgiMVwXpG-9rvab_2HtMryff0622Z7n5YwRTCGUV-xhVNuYipjyipqnaCO0s8wz4P02h5eVcPpPgTGJTDOWC7yLN68f5vFRZlXefWp8NjfBrGne9f2TX1sn4_NdazPQ9uPiHWI7YZbPz5tbt_bpxfFZRiH8X5uXiK42BGaG6UkpZwmif7nzAjJGdfGKCONnlUJvBGmNGdUWMqZQKsnXFD6dFsHv6t8V6Rl9g4Nb7KPfl2j3n0FSyD_61ql-3W2Tqtg44DJS0E0S6RRWiluLebcoBpGuJWCKcOVUQkTGiP5EiL5gWPf-HznqzJbLWse8xzDCKULWxNpLRL6v5hNCGcLFitDuMEv_AaO4pIkCinzRBHGpml-PMJ39beum5u4nHUu72a5TNMfXNmSUg",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "b.m",
+   "python_layer": true
+  },
+  {
+   "id": "V2_SL_SUN_MISSING",
+   "payload": "eNptUV2PmzAQ_CunfWolcP2Jjd_oQSSqBBDnntq-oFSlFxoKUUKqphH_vWtQ-3RPtndnZ2fGd_gFlgfwAhYuY78_N_112J8hgBHsHX6DFYpIZgK4gWXCEKMD-AM2NpSoAA5Y9OcFx9Ns12Tb7DlxeVk07_NtXmRJDXMAk6f6hhBOuQ6pDClz1FhBLaVfYOGD5NLt37nxeBv9xNlPnLBclXm4-fghD6u6dKX7XGWI77zY463vhrY5dC-H9jI1p7EbJuz12NuN12F62Fx_dA9vqvM4jdPt1L7F5mpHRFwrJSnlNI6j_860kJzxSGulpY4WVQJvhKmIMyoM5Uyg1SMuqLNk23i_j-WuSur8CQ1v8k9Z2qDewsEayGuox6RI8zRx3sYek5eCRCyWWkVKcWMw5xbVMMKNFExprrSKmYgwkq8-kp8-qQrJssI1Tw7Jkjpd190XPs0IpQbhw7-KiQlnK2-oNOEaP_A7WIor4sBnzGNFGJvn5XH3nzVc-34BcbmoXN_tepnnv5hTkqc",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b.s",
+   "python_layer": true
+  },
+  {
+   "id": "V2_SL_MOON_FRACTION_RANGE",
+   "payload": "eNptUV2vk0AQ_Ss386QJrPu9C294oQmmBcJdjfpCasRbLELTUmNvw393FtQnn_bjzJw558wdfkLMA3iGGC5jvz83_XXYnyGAEeI7_IJYKCKZDeAGMROWWBPAC8SRpUQFcMBPf16wPc12TbbNPiQuL4vmbb7NiyypYQ5g8lRfsYRTbkIqQ8octbGgMaWfYeGD5NLt37jxeBt9x9l3nPC7KvNw8_5dHlZ16Ur3qcqwvvNij7e-G9rm0D0f2svUnMZumBDrEduN12F62Fy_dw-vqvM4jdPt1L5GcLUjNDdKSUo5jSL9z5kRkjOujVFGGr2oEngjTGnOqLCUM4FWjzigzpJt4_0-lrsqqfMnNLzJP2Zpg3oLB2sg_6t6TIo0TxPnbewxeSmIZpE0SivFrcWcW1TDCLdSMGW4MipiQmMkX3wkP3xSFZJlhWueHJIldbqOuy98hhFKVxZNpLXYOPzFbEQ4W7FQGcINrvLbnwVi1jxShLF5Xh53v7Th2vdLCZeL2vXdrpd5_g0NvZRR",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.n.f",
+   "python_layer": true
+  },
+  {
+   "id": "V2_SL_MOON_PHASE_360",
+   "payload": "eNptUV2PmzAQ_CunfWolcP1twxs9iESVAOLcU9sXlKr0QkMhSkjVNOK_dw1qn-7Ja8_u7Mz4Dr8g5gG8QAyXsd-fm_467M8QwAjxHX5DLBSRzAZwg5gJS6wJ4A_EkaVEBXDAR39ecDzNdk22zZ4Tl5dF8z7f5kWW1DAHMHmqb9jCKTchlSFljtpY0JjSL7DwQXLp9u_ceLyNfuLsJ074XJV5uPn4IQ-runSl-1xl2N95scdb3w1tc-heDu1lak5jN0yI9YjtxuswPWyuP7qHN9V5nMbpdmrfIrjaEZobpSSlnEaR_u_MCMkZ18YoI41eVAmsCFOaMyos5Uyg1SMuqLNk23i_j-WuSur8CQ1v8k9Z2qDewsEayGtdj0mR5mnivI09Ji8F0SySRmmluLWYc4tqGOFWCqYMV0ZFTGiM5KuP5KdPqkKyrHDNk0OypE7XdfeFzzBC6cqiibQWB4d_mI0IZysWKkO4wa_8DjHFZVHg0xaazvNS3f2fDde-Xzq4XMSu93Yt5vkvf4WUJw",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.n.p",
+   "python_layer": true
+  },
+  {
+   "id": "V2_SL_STAR_BODY",
+   "payload": "eNp1UVuPk0AU_iub87QmFOc-w7zhliaYtpCKRn0hqLhlyzINUHe7Tf_7noHERKNPc-Zcv8sFfoFlAdyDhcG1VV-2p67qIQAH9gLPYLkMBTUBnMFSbkKjA3gBGxkSygD2mPTvgOPLZFMm6-RTXKTZtnyXrtNtEu_gGsDoV_3AFkaYXhCxILQgxnJiCfkK0z6Ih6Z6W7jD2fmJ3k8cMZ1n6WL18X26yHdZkRVf8gT7Gw_2cG6bri73zf2-Hsby6JpuxFqLtY07dePN6vTQ3NzmvRvdeD7Wb7A40-GKaSkFIYxEkfrNTHPBKFNaSy20mlBxjEIqFaOEG8IoR6oHPLBL4nXp-d5lmzzepR-Q8Cr9nCxLxLstYBbkX1138XaZLuPC06hQecFDRSOhpZKSGYM614iGhswITqVmUsuIcoWSfPOSoCng-sZ1MANpumGsJt7fffnxT40ptURaYbzG6BQnoeAqYsxIo1hE5P8gPP1lVYQ-TVZdEcfRH0JHu1PbBvDTL5j2zP96Dq7XVwwQmsA",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b",
+   "python_layer": true
+  },
+  {
+   "id": "V2_SL_FOCAL_RANGE",
+   "payload": "eNptUV2vk0AQ_Ss386QJrPvBfrBveKEJpgXCXY36QmrEWyxC01Jjb8N_dxbUJ592d87MmXPO3uEnWB7AM1i4jP3-3PTXYX-GAEawd_gFVkgSMRPADSwThhgdwAvY2FAiAzhg0Z8XHE-zXZNtsw-Jy8uieZtv8yJLapgDmDzVV2zhlOuQRiFljhorqKX0Myx8kFy6_Rs3Hm-jnzj7iROWqzIPN-_f5WFVl650n6oM-zsv9njru6FtDt3zob1MzWnshgmxHrHdeB2mh831e_fwqjqP0zjdTu1rBFc7QnEtZUQpp3Gs_jnTIuKMK62ljrRaVAm8ESYVZ1QYyplAq0dcUGfJtvF-H8tdldT5Exre5B-ztEG9hYM1kP91PSZFmqeJ8zb2mHwkiGJxpKWSkhuDObeohhFuIsGk5lLLmAmFkXzxkfzwSVVIlhWueXJIltTpuu6-8GlGKF1ZFImMwcHhL2ZiwtmKhVITrvErv4GluCwOfNo8loSxeV4ed_9tw7Xv_zTJRfBaaNfLPP8GwNaU6w",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "p.f",
+   "python_layer": true
+  },
+  {
+   "id": "V2_SL_PREVIEW_TIME_BAD",
+   "payload": "eNptUcuOm0AQ_JVVnxIJJvOeYW7sgiUiGxBLoiQX5Gi9a9YELBtH8Vr8e3pAiXLIaR7VXV1VfYOf4HgAL-DgPHTbU9Nd-u0JAhjA3eAXOKGIZDaAKzgmLLEmgDdwkaVEBbDHT3-esT1JN026Tj_HdVbkzX22zvI0rmAKYPRUT1jCKTchlSFlNbVOUEfpN5j5ID632w_1cLgOvuPkO474XRZZuPr0MQvLqqiL-muZYn3rxR6uXdvvmn37st-dx-Y4tP2IWIfYZrj0493q8trevStPwziM1-PuPYKLHaG5UUpSymkU6b_OjJCccW2MMtLoWZXAG2FKc0aFpZwJtHrAAVUarxvv96HYlHGVPaLhVfYlTRrUm9ewBPK_qoc4T7Ikrr2NLSYvBdEskkZppbi1mPMO1TDCrRRMGa6MipjQGMl3H8kPn1SJZGleN481ksVVsoy7zXyGEUoXFk2ktdjY_8FsRDhbsFAZwg2u8hkcxWFR4NPmkSKMTdP8uPm1_bMxmIu5nHX3l66bifxlmn4DnVSVMQ",
+   "accepted": false,
+   "code": "INVALID_DATETIME",
+   "field": "p.t",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_NOT_VISIBLE",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ywBuJsURlA3JolLaqEE1ITE2BGpyEWvx7Z8FOrah9YnYuZ845wwGewGUGPIILbZft0jKr7tu7rMnBgBrcA7yAy6UpqG1ADy7ltmkrA36D69jElAZsMKm_LSLM_VXqL_0bLwmiML0MlkHoe2sYDOg01D22MMLUjIgZoQklriAuIV9gxAOvLbIPSb3taz2x0xMNpuMomC0-fQxm8TpKouRz7GN_oflu-7Ko8nRTPG7ytkubuqg6rJVYW9X7qrtY7H8UF-_iXd3VXd_k77E4yeEWU1IKQhhxHOtVmeKCUWYpJZVQ1siKY2RSaTFKuE0Y5Sh1iwvWvrdMtd6raBV76-AaBS-CW3-eIt8wgcmQf3VdeeE8mHuJlpGh-YKbFnWEkpaUzLbR5xzZUJPZglOpmFTSodxCS75rS_Ao8LMot336nPUwkUHd-e4pK_F5p3va_xudvykJl59KeB7GiUkM-IVNYZSkN8F1cLk8En3IyjYfSRyjZ3C_nmMRB4GOWGdpxk7pb6P9hzPV0__DxqV4NsZOWbw-s6bHMKD0Rs91b7izv_se0DIx0qz2ZTnK1MEw_AEN5bsl",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "b.c.q",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_DURATION_MISMATCH",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ysG8kxhKVL8ihUdqqQjQhMTUFanASavHvnQU7taL2idm5nDnnDAd4As0seAQNTZvukiIt75u7tM7Aggr0AV5Ac2kL6lrQgabctV1lwW_QnktsacEGk-bbIMI0WCTBPLjx43C1TC7DebgM_DX0FrQG6h5bGGFqQsSE0JgSLYgm5AsMeOA3efohrrZdZSZ2ZqLGdLQKJ7NPH8NJtF7Fq_hzFGB_bvhuuyIvs2STP26ypk3qKi9brBVYW1T7sr2Y7X_kF--iXdVWbVdn77E4yuEOU1IKQhjxPOdVmeKCUeYoJZVQzsCKY2RT6TBKuEsY5Sh1iwvWgT9PjN6r1SLy1-E1Cp6Ft8E0Qb7LGEZD_tV15S-n4dSPjYwUzRfcdqgnlHSkZK6LPmfIhtrMFZxKxaSSHuUOWvLdWIJHgZ95se2S57SDkQzqznZPaYHPO9PT_N_o7E1JaH4q4XkYpxb8wpab8Dq8nB8pPqRFkw3rj9Ez6K_nKMRDiCPKWZqxU_rbYPzhTO_45zBik-FgjJ2yeHfmjI--R9G1mWvfsGZ_9z2gWWKgWe6LYhBogr7_A4OYuXg",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.c.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_WINDOW_SHAPE",
+   "payload": "eNqFUttum0AQ_ZVonloJ072ywBuJsbSVbZBDo15UIZqQmJoCNTgJtfj3zoJTWVGrPu3sXM6ec2aP8Ag-s-ABfGi7bJ-WWXXX3mZNDhbU4B_hGXwubUFdC3rwKXdtV1nwC3zPJba0YItJc7aIMA9XabgMb4JER-v0Ui_1Ogw2MFjQGag7bGGEqRkRM0ITSnxBfEI-w4gHQVtk75J619dmYm8mGkzHkZ4tPrzXs3gTJVHyKQ6xvzB8d31ZVHm6LR62edulTV1UHdZKrK3qQ9VdLA7fi4s38b7u6q5v8rdYnORwhykpBSGMeJ7zR5niglHmKCWVUM7IimNkU-kwSrhLGOUodYcPbMJgmRq9V9EqDjb6GgUv9MdwniLfdQKTIX_rugrWcz0PEiMjQ_MFtx3qCSUdKZnros85sqE2cwWnUjGppEe5g5Z8M5bgUuBHUe769CnrYSKDuvP9Y1bi9db0tP82On9VEj5_KeF6GCc2seAnNt3oa325PJG8z8o2Hwmcoifwv5zjEA9BTjhnacb-k_46buR4ZsT0pdjIAzfJ2EsWPwRzpsswoBuNmeteyTl77x5dFCP76lCWo3ITDMNvWZO-dQ",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b.c.w",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_OUTSIDE_WINDOW",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ywBuJsbSVbZBDorRVhWhCYmoK1OCk1OLfOwtOG0XpE7NzOXPOGY7wCD6z4AF8aLtsn5ZZddfeZk0OFtTgH-EX-FzagroW9OBT7tqusuA3-J5LbGnBFpPm2yLCPFyl4TK8DhIdrdNzvdTrMNjAYEFnoO6whRGmZkTMCE0o8QXxCfkMIx4EbZF9SOpdX5uJvZloMB1Hera4-qhn8SZKouRTHGJ_Yfju-rKo8nRbPGzztkubuqg6rJVYW9WHqjtbHL4XZ-_ifd3VXd_k77E4yeEOU1IKQhjxPOevMsUFo8xRSiqhnJEVx8im0mGUcJcwylHqDhdswmCZGr0X0SoONvoSBS_0TThPke86gcmQt7ougvVcz4PEyMjQfMFth3pCSUdK5rroc45sqM1cwalUTCrpUe6gJd-MJXgU-FGUuz59ynqYyKDufP-Ylfi8NT3t_43OX5WEz59LeB7GiU0s-IlN1_pSny9PJO-zss1HAqfoCfwvL3GIhyAnnDc3fx2tP75QPP07bFyIJ2PsOYuXZ870GAaU3Zi57hVv9m_fPdolRprVoSxHiSYYhj_f-bnW",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.c.w",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_PLAN_TIME_MISMATCH",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ysG8kxhKVL8ihUdqqQjQhMTUFanASavHvnQU7taL2idm5nDnnDAd4As0seAQNTZvukiIt75u7tM7Aggr0AV5Ac2kL6lrQgabctV1lwW_QnktsacEGk-bbIMI0WCTBPLjx43C1TC7DebgM_DX0FrQG6h5bGGFqQsSE0JgKzYkm5AsMeOA3efohrrZdZSZ2ZqLGdLQKJ7NPH8NJtF7Fq_hzFGB_bvhuuyIvs2STP26ypk3qKi9brBVYW1T7sr2Y7X_kF--iXdVWbVdn77E4yuEOU1IKQhjxPOdVmeKCUeYoJZVQzsCKY2RT6TBKuEsY5Sh1iwvWgT9PjN6r1SLy1-E1Cp6Ft8E0Qb7LGEZD_tV15S-n4dSPjYwUzRfcdqgnlHSkZK6LPmfIhtrMFZxKxaSSHuUOWvLdWIJHgZ95se2S57SDkQzqznZPaYHPO9PTvDGaaHEyOvv_DfA8jBObWPALm27C6_ByfiT5kBZNNhA4Rs-gv57jEA9BjjhnacZO6W-D9YczxeO_w4aFeDLGTlm8PHPGR9-j7NrMtW94s7_7HtAuMdAs90UxSDRB3_8B5qe52A",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "t.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_CLIPPED_TYPE",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ysG8kxhKVbZBDo15UIZqQmJoCNTgJtfj3zkLcWlH7tLtzOXPOmT3CI2hmwQNoaLtsn5ZZddfeZk0OFtSgj_AMmktbUNeCHjTlru0qC36B9lxiSwu2GDRniwjzYJUGy-DGT8JonV6Gy3Ad-BsYLOgM1B2WMMLUjIgZoQklWhBNyGcY8cBvi-xdUu_62nTsTUeD4TgKZ4sP78NZvImSKPkUB1hfGL67viyqPN0WD9u87dKmLqoOcyXmVvWh6i4Wh-_FxZt4X3d11zf5W0xOcrjDlJSCEEY8z_mjTHHBKHOUkkooZ2TF8WZT6TBKuEsY5Sh1hwM2gb9Mjd6raBX7m_AaBS_Cj8E8Rb7rBCZD_lV15a_n4dxPjIwMzRfcdqgnlHSkZK6LPufIhtrMFZxKxaSSHuUOWvLNWIJLgR9FuevTp6yHiQzqzvePWYnPW1PT_t_o_FVKaH5K4XoYJzax4CcW3YTX4eXyhSQZh99nZZtb8AT6yzkG8RDgBeMszNgp_HW0_Ximdvo3bByG62LsFMWtM2d6DANKbkxf94oz-zvvHq0SI8XqUJajPHMZht9ZGLf6",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "b.c.a",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_AS_INSTANT",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ysG8kxhKVbZBDo15UIZqQmJoCNbgptfj3zoLdWlH7xDCXM-ec2SP8AM0seAINbZft0zKrHtr7rMnBghr0EX6C5tIW1LWgB025a7vKgl-gPZfY0oItJs23RYR5sEqDZXDnJ2G0Tq_DZbgO_A0MFnQG6gFbGGFqRsSM0IQSLYgm5COMeOC3RfYmqXd9bSb2ZqLBdByFs8W7t-Es3kRJlHyIA-wvDN9dXxZVnm6Lp23edmlTF1WHtRJrq_pQdVeLw9fi6lW8r7u665v8NRYnOdxhSkpBCCOe5_xRprhglDlKSSWUM7LiGNlUOowS7hJGOUrd4YJN4C9To_cmWsX-JrxFwYvwfTBPke86gcmQf3Xd-Ot5OPcTIyND8wW3HeoJJR0pmeuizzmyoTZzBadSMamkR7mDlnwxluBR4FtR7vr0OethIlNUeLtR-71paf_vc_6iJDQ_l_A6jBObWPAdm-7C2_B6eeL4mJVtPu4_Rc-gP13iEA9BTjgXacbO6c-j88cLwdPTYeNCvBhj5ywenjnTzzCg6sbMdS94s7_7HtEtMdKsDmU5SjTBMPwG-rS5cQ",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b.c",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_KIND_ENUM",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ywBuJsbSVL8ghUS-qEE2ITU2BGtyUWvx7ZsFurah9YpjLmXPO7BF-gs8s2IAPTZvukyItH5uHtM7Aggr8I_wCn0tbUNeCDnzKXdtVFvwG33OJLS3YYtJ8G0SYhosknIf3QaxXy-Raz_UyDNbQW9AaqEdsYYSpCRETQmNKfEF8Qj7BgAdBk6fv4mrXVWZibyZqTEcrPZndvdeTaL2KV_HHKMT-3PDddUVeZsk232yzpk3qKi9brBVYW1SHsr2aHb7lV2-ifdVWbVdnb7E4yuEOU1IKQhjxPOePMsUFo8xRSiqhnIEVx8im0mGUcJcwylHqDhesw2CeGL03q0UUrPUtCp7pD-E0Qb7LGEZD_tV1EyynehrERkaK5gtuO9QTSjpSMtdFnzNkQ23mCk6lYlJJj3IHLflqLMGjwPe82HXJc9rBSGaflhtzsAfT0Pzf5exVSfj8XMLbME5sYsEPbLrXt_p6fmL4lBZNNmw_Rc_gf77EIR6CnHAu0oyd018G348XcseHw4aFeC_Gzlk8O3PGn75HzbWZa1_xZn_3PaFXYqBZHopikGiCvn8BA4-4fQ",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "b.k",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_UNKNOWN_OBJECT",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ywBuJsbSVL8ghUS-qEI1JTE2BAk7rWvx7ZsFurah9YnYuZ845wxGewWcWPIEPbZc2SZGWm_YhrTOwoAL_CL_A59IW1LXgAD7lru0qC36D77nElhZsMWm-LSJMw0USzsP7INarZXKt53oZBmvoLegM1AZbGGFqQsSE0JgSXxCfkE8w4EHQ5um7uNodKjPRmIka09FKT2Z37_UkWq_iVfwxCrE_N3x3hyIvs2SbP22ztkvqKi87rBVYW1T7srua7b_lV2-ipuqq7lBnb7E4yuEOU1IKQhjxPOePMsUFo8xRSiqhnIEVx8im0mGUcJcwylHqDhesw2CeGL03q0UUrPUtCp7pD-E0Qb7LGEZD_tV1EyynehrERkaK5gtuO9QTSjpSMtdFnzNkQ23mCk6lYlJJj3IHLflqLMGjAN6oqb5nmxRGMqg7a57TAp8Ppqf9v9HZq5Lw-bmE52Gc2MSCH9h0r2_19fxE8jEt2mwgcIp-gv_5Eod4CHLCuUgzdk5_Gaw_Xige_x02LMSTMXbO4uWZMz76HmXXZq57xZv93feIdomBZrkvikGiCfr-Ba7nuao",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "b.o",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_ORION_INTERVAL",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ysG8kxhKVbZBDo15UIZqQmBoBBZzUtfj3zoLdWlH7xOxczpxzhiM8g2YWPIGGrs_atMyqh-4-a3KwoAZ9hJ-gubQFdS04gKbctV1lwS_QnktsacEWk-bbIcI8WKXBMrjzkzBap9fhMlwH_gYGC3oD9YAtjDA1I2JGaEKJFkQT8hlGPPC7InuX1LtDbSZaM9FgOo7C2eLD-3AWb6IkSj7FAfYXhu_uUBZVnm6Lp23e9WlTF1WPtRJrq3pf9VeL_ffi6k3c1n3dH5r8LRYnOdxhSkpBCCOe5_xRprhglDlKSSWUM7LiGNlUOowS7hJGOUrd4YJN4C9To_cmWsX-JrxFwYvwYzBPke86gcmQf3Xd-Ot5OPcTIyND8wW3HeoJJR0pmeuizzmyoTZzBadSMamkR7mDlnwzluBRoG6LuoKJCGrO2-esxOe9qXf_Nzl_VRKan0t4GsaJTSz4gU134W14vTwRfMzKLh-Xn6IX0F8ucYiHICecizRj5_TX0fbjhdrpv2HjQjwXY-csXp0502MYUHJj5vpXvNnffY9olRhpVvuyHCWaYBh-AyfguCY",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b.k",
+   "python_layer": true
+  },
+  {
+   "id": "V2_MW_HALF_WIDTH_RANGE",
+   "payload": "eNp1Uttum0AQ_ZVonloJ072ywBuJsbSVbZBDo7RVhWhCYmoK1OAk1OLfO4vt1Irap52dy9lzzuwensBnFjyCD22XbdMyq-7bu6zJwYIa_D28gM-lLahrQQ8-5a7tKgt-g--5xJYWrDFpzhYRpuEiDefhTZDoaJle6rlehsEKBgs6A3WPLYwwNSFiQmhCiS-IT8gXGPEgaIvsQ1Jv-tpMbM1Eg-k40pPZp496Eq-iJEo-xyH2F4bvpi-LKk_XxeM6b7u0qYuqw1qJtUW9q7qL2e5HcfEu3tZd3fVN_h6LBzncYUpKQQgjnue8KlNcMMocpaQSyhlZcYxsKh1GCXcJoxylbvCBVRjMU6P3KlrEwUpfo-CZvg2nKfJdJnAw5F9dV8FyqqdBYmRkaL7gtkM9oaQjJXNd9DlHNtRmruBUKiaV9Ch30JLvxhJcCvwsyk2fPmc9HMig7nz7lJV4vTM97f-Nzt-UhM9PJVwP48QmFvzCpht9rS_nR5IPWdnmI4Fj9Az-13Mc4iHIEecszdgp_W20fn-m-Ph3XDpujLFTEhfPnMNlGFB1Y8a6N7TZ3-ceEESMLKtdWY4KTTAMfwAuirmv",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.c.x.h",
+   "python_layer": true
+  },
+  {
+   "id": "V2_ST_ALTITUDE_RANGE",
+   "payload": "eNp1Udtu2kAQ_RU0T61knL161_vmgJFcAbaIE7W8WA644OJ6LWza0oh_zywokSo10ko7msuZc868wC8wzIMdGOiH8lg0ZbvtN2VXgQcWzAv8AcOlL6j24AyGcu1r5cFfMKEmvvRgj0n394gwjRdFPI-fojxJl8V9Mk-WcbSCiweDg9piCyNMjYkYE5pTaog0Qq_higdRX5d3uT2crZs4uokO01majGePX5JxtkrzNP-WxdhfO76Hc1O3VbGvd_uqH4rO1u2AtQZrC3tqh9Hs9KMefcqOdrDDuas-Y_EmhwdMSSkIYSQMg3dligtGWaCUVEIFV1YcI5_KgFHCNWGUo9QDLljF0bxweifpIotWyQMKniVf42mBfJc53Az5X9ckWk6TaZQ7GSWaL7gf0FAoGUjJtEafK2RDfaYFp1IxqWRIeYCWPDtL8Chgj7Vt4UakbvFuV90bV_75scd4qZB-tPP3v3MkNITgW8MFF3cOGU_YnprGg-9vQfkWVLfgcnkFPUSaMw",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.c.h",
+   "python_layer": true
+  },
+  {
+   "id": "V2_ST_BEFORE_SEARCH",
+   "payload": "eNp1UdtO20AQ_RU0T1Ry3L3vet8McSRXSWwFt2p5sQy4xI3xWrFTCFH-ndlEVDwUaaUdzeXMOWcO8BcsC-ARLAxjtS3bqnsY7qu-hgAc2AO8gOUyFNQEsAdLuQmNDuAVbGRIKANYY9L_AyJMk0WZzJMfcZFmy_IqnafLJF7BMYDRQz1gCyNMT4iYEFpQaom0wtzCCQ_ioam-Fm6zd35i6yd6TOdZOpl9_5ZO8lVWZMWvPMH-xvPd7Numq8t187iuh7HsXdONWGuxtnC7bryY7f40F5f51o1u3Pf1Fyye5XDFtJSCEEaiSP1TprlglCmtpRZanVhxjEIqFaOEG8IoR6kbXLBK4nnp9V5nizxepTcoeJb-TKYl8l0WcDbkf13X8XKaTuPCy6jQfMFDRSOhpZKSGYM-18iGhswITqVmUsuIcoWW3HlL8Cjgto3r4Eyk6fBuJ933vvz0ucd4KU5CwVXEmJFGsYjIzyg8f4RhBSH29G7hiDx6vwgv2u3aNoDf70H1HtTn4Hh8Awi_nTc",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.c.m",
+   "python_layer": true
+  },
+  {
+   "id": "V2_ST_PLAN_TIME_MISMATCH",
+   "payload": "eNp1Udtu00AQ_ZVqnkByzN5vb27jSEZJbAWDSl8s07qNifFasQOEKv_ObKIiIYq00o7mcuacM8_wHRyL4AkcjFO9r7q6fxjv66GBCDy4Z_gJjstYUBPBERzlJjY6gl_grCGxjGCLyfCPiDBPV1W6TD8lZZavq-tsma3TZAOnCKYA9YAtjDA9I2JGaEmpI8oJewdnPEjGtn5X-t3Rh4l9mBgwXeTZbPHxfTYrNnmZl5-LFPvbwHd37Nq-qbbt07YZp2rwbT9hrcPayh_66Wpx-NpevSn2fvLTcWjeYvEihyumpRSEMGKt-qNMc8EoU1pLLbQ6s-IYxVQqRgk3hFGOUne4YJMmyyrovclXRbLJPqDgRXabzivkuy7hYshrXTfJep7NkzLIqNF8wWNFrdBSScmMQZ8bZENjZgSnUjOppaVcoSVfgiV4FPD71vdwIdL2eLez7vtQ_vavx9IJEzzGS3ESC64sY0YaxSyR_6Pw428YYh0h-O7ghDyGsAgv2h-6LoLHl6B-CZpLcDr9Bg4lnUE",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "t.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_ST_AS_INTERVAL",
+   "payload": "eNp1UV1P2zAU_SvoPjEpzfxtx28ZTaWgtom6bNp4iTLIaGiIoyQFCup_55qKSUhDsuRj369zzn2BB7AsgFuwME7VULZVdzNeV30NATiwL_AElstQUBPAASzlJjQ6gGewkSGhDGCLn_4escM8WZXJMvkZF2m2Lr-ly3SdxBs4BjD5VjeYwgjTMyJmhBaUWiKtMFfw1g_isam-Fm53cL5i8BU9fudZOlv8uExn-SYrsuJ3nmB-4_nuDm3T1eW2ud3W41T2rukmjLUYW7l9N50t9nfN2Xk-uMlNh77-gsGTHK6YllIQwkgUqX_KNBeMMqW11EKrN1YcUUilYpRwQxjlKHWHAzZJvCy93otslceb9DsKXqS_knmJfNcFnAz5X9ZFvJ6n87jwMio0X_BQ0UhoqaRkxqDPNbKhITOCU6mZ1DKiXKElf7wluBRwQ-M6OBFBzfXwULX4vPbx-89NxlVxEgquIsaMNIpFRH7G4fFjGxJZQvBcwRGJ9H4QrrTbt20Af99B9Q7qEzgeXwG95Z2j",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b.c",
+   "python_layer": true
+  },
+  {
+   "id": "V2_ST_MOON",
+   "payload": "eNp1Udtq20AQ_ZUwTy3I6t53tW9qLIOCbQlXKa1fhOqosWpFKyw5jWv87521SaDQwMIOczlzzpkTPINlATyChWGs9mVbdQ_DpuprCMCBPcELWC5DQU0AR7CUm9DoAP6AjQwJZQBbTPp_QIRpsiiTefI1LtJsWX5O5-kyiVdwDmD0UA_YwgjTEyImhBaUWiKtMGu44EE8NNWnwu2Ozk_s_USP6TxLJ7P7u3SSr7IiK77nCfY3nu_u2DZdXW6bx209jGXvmm7EWou1hTt0483s8Ku5-ZDv3ejGY19_xOJVDldMSykIYSSK1JsyzQWjTGkttdDqwopjFFKpGCXcEEY5St3hglUSz0uv9zZb5PEq_YKCZ-m3ZFoi32UBV0P-13UbL6fpNC68jArNFzxUNBJaKimZMehzjWxoyIzgVGomtYwoV2jJD28JHgWenOvgyqPp8GwX2RtffXrfYjwUJ6HgKmLMSKNYROR7DH7_C0MiSwi-NZyRRu8X4UG7Q9sG8PM1qF6D-hqcz38BT7-c0Q",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_landscape",
+    "o": {
+     "x": 35.418,
+     "y": 138.87,
+     "z": 980.5,
+     "h": 1.5,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T11:05:48Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": {
+     "p": "POI-FUJI-PROTOTYPE",
+     "i": "skyline_highest_point",
+     "l": "Mount Fuji (Prototype)",
+     "x": 35.36275540020996,
+     "y": 138.73421267757476,
+     "z": 3747.1562103802135,
+     "k": "REAL_DEM_COMPARISON_FIXED_POINT",
+     "s": "REAL_DEM_COMPARISON_CANDIDATE",
+     "a": 243.6194756552888,
+     "e": 11.284315725759136
+    },
+    "b": {
+     "o": "moon",
+     "k": "instant",
+     "c": {
+      "m": "2027-04-01T11:05:48Z",
+      "h": 30.43692285862905,
+      "a": 243.6194756552888,
+      "w": "2027-04-01T09:00:00Z"
+     }
+    },
+    "p": {
+     "t": null,
+     "f": null,
+     "a": null,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "V2_TR_REFERENCE_PRESENT",
+   "payload": "eNptUE1Pg0AQ_SvNnDRZcL8XuGGhCaYtBNGoF4IptlgsTaHG2vS_O1vtzc0eZmfevH3vHeETAk5gCQH0Q7Urh13VtD0Q6CA4whcEQrmCcq0JHCBgwncVl9In8I0v7ioCKwgogR4JonhWxtP4MSySdF7eJtNkHoc5nAgMlmyBEE65cah0KCsYCyjF-wJnMgj7propuvWhsxs7u7HFdpYmzuThLnGyPC3S4jmLEd9YuetD22zqctUsV3U_lNuu2Qw4a3E26_abYTTZvzejq2zXDd1w2NbXOPwzpLlRSlLKqe9fnHmuEZIzro1RRhp9ViWwcpnSnFHhUc4EGl7jB3kcTkvrd5zOsjBP7tHwJHmKoxL1zgv4DeQ_1DicR0kUFtZGhdlL4WrmS6O0UtzzPAI1qmEu96RgynBllM-Exkhe_0JkHPP-QPrlvlnUcBakKR7EbC0G097s25bA26Wo7JY4U9vG6fQDGjKEXw",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "r",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_DURATION_ZERO",
+   "payload": "eNo1jssOglAMRP9l1gUvl4exO4wsSBATQ1y4IRhfRBTDw4iGf7eoNF10mjPTvvEAa8IJjLrJqrSpsryoQSjBbzzBtmvaSnseoQNb9sx0tePMCC9R2nQJZ7Ai1BKwCJZpEAUbPwlXcToPozAO_DV6QjOE7QXRSk8N5RjKSiyLlZLe4hsGv86zSVJeunJwVOBbWxSE3d8qN65Cndp8fxDHBewpKUHvA9GM_HEcsuFBm3D4Lfr-A1TBPqk",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_DURATION_FLOAT",
+   "payload": "eNo1jckOglAMRf_lriv2PQZjdxhZkDgkhrhwQzBORBQDaBzCv1scmi7a5pzbF24QS9hDUDdZlTZVlhc1CCXkhTvE9R2XbRAQHhDjDh3fet6Q8NTNOj7hAGFCrQHjaJpGk2gZJvF8lo7iSTyLwgVaQtOFbRSxbAc99npsEmOEWXuFTxjCOs_6SXl8lJ1RQc7XoiCsf6qx7Oifk5L7a77ZqnWEBKyl-KWjmr-z-w9Z57mE7ffQtm840j9q",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "b.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_DURATION_STRING",
+   "payload": "eNo1jskKwmAMhN9lzrHm_7uIuVXsoeACUjx4KRW3YrXSVnGh726qNOQwE74Z8sEDYglHCOomq9KmyvKiBqGEfPCEuL7jsg0Cwgti3LHjW88bE97qrOMTThAm1FowjeZpNIvWYRIvF-kknsWLKFyhJTRd2U4Ry3Y0YG_AJjFGmHU3-JUhrPNsmJTnV9klKsj1XhSEbR81lpW8qDre891e9RkSsI7it45q-syhF1n3pEvY_w9t-wUx5T9Q",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "b.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_DURATION_BOOL",
+   "payload": "eNo1js0KglAQRt_lW492vf6EszNyIZRBSIs2YmQlWYZeIxPfvWvlMIuZ4ZyP6fEES8IZjEZldarqrCgbECpwjxfYdk1bSM8jdGDL9k1XOo5PeOtNmi7hAhaERgcsw3UarsJdkESbOF1EqygOgy0GghrDjhqRQs4N4RjCSiyLhdC9xzcMQVNks6S6dtVo1OB7W5aEw19VdZsTbho8t8Ux19IV7Aldmn6MkJqU0zRk4482If8dhuEDQudAOQ",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "b.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_DURATION_MAX",
+   "payload": "eNo1jskOglAMRf_lriv2PXgYu8PIggQ1McSFG4JxIqIYBuMQ_t2HQ9NF25xz0xduEE04QFA3WZU2VZYXNQgl5IU7xDWOy9r3CQ-IcseO0Z43Jjztph1DOEKYUNuAaThLwzhcBUm0mKeTKI7mYbBER2j6sK1FNOvRgL0Bq0QpYba9xicMQZ1nw6Q8PcreqCCXtigIm59qtPFZEc4WPbT5dme1E8RnW5a_9ljzl_b_Ieu_dAm776Hr3ncQP6w",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.d",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_TERRAIN_RANGE",
+   "payload": "eNo1jUsLglAQhf_LWY8296qFszNyIfSAkBZtxLCHZBlqUYn_vWslzGLm8H1nWjwgmnCEoG7SKmmqNC9qEEpIiyfE8WyH9XhMeEGU49uedl2f8DaXtj3CCcKE2hTMwkUSzsNNEEerZTKN5tEyDNboCE1flhlEs55Y7FqsYqWE2cwW3zIEdZ6O4vL8KnujglzvRUHY_VWlzZeL4Y73PNsb5wzxmA1664lm4A_DkvaOQ9j_gq77AFKvPqs",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "b.k",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_MODE_ENUM",
+   "payload": "eNo1jckOglAMRf_lriu-9xiM3WFkQeKQGOLCDcE4QEAx8DQO4d8tDk0XbXPO7Qs3sCEcwWht1qS2yYqqBaEGv3AHu77jKhMEhAdYu2PHN543JjxlM45PyMGK0ErANJqn0Sxah0m8XKSTeBYvonCFjmD7sJ0gRpnRQHkDpROtWSnpDT5hCNsiGyZ1-ah7owGfr1VF2P5UbeTLSbhtbXNRSnCgpIS99Ij9C4f_kPWSS9h_D133BoKVPqs",
+   "accepted": false,
+   "code": "INVALID_ENUM",
+   "field": "b.m",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_FOCAL_PRESENT",
+   "payload": "eNo1j8sKglAQht_lX092zvESzs7IhVAGIS3aiNFNsgy1yMR3b-wyzGaG7_uH6fAAG8IRjLrJqrSpsryoQSjBHZ5g27VsZTyP0IK17VuucRyf8JLJWC7hBFaEWgJm4SIN5-E6SKJlnE6jeRSHwQo9oRnCdoIYZSYj5YyUTrRmpaQ3-IQhqPNsnJTnthyMCny9FwVh-1O1kSsX4Y73fLcX5wz2lJTAt4Fp_sZBPnII2eDYhP133_dvOh09tw",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "p",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_VIEW_MISSING",
+   "payload": "eNo1jUsLglAQhf_LWV_t3usjnJ2RC6EMQlq0EUMzyTJ8RA_8742VwyzOwPedeeMO0gIFCG2XNknXpGXVQqAGvfEAWY5pSe26Ak-QsjzT0bbtCbz40qYjcAJJgZYLlsE6CVbBzo_DTZQswlUYBf4Wg0A3lmWMaKnnhrQNqWKlSErePb5l8NsyncX1-VmPRgO69lUlcPirSvOXC3NFX2Y5O2eQK3kYvo1MNxnHKaRTyH9hGD4RkEAx",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "p.a",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_VIEW_360",
+   "payload": "eNo1jssOgjAQRf_lriu2BWqcHUYWJIiJIS7cEIwvIoqBYkTDvzv4aGYxMznnTl-4g7TAEYTG5nVm67woGwhUoBceINd3XKmNEehAyp06vva8qcCTJ-34AieQFGg4YB4usjAO10EaLZNsFsVREgYr9AJ2CNsxoqWejKQ3kipViqTk2uAThqAp8nFanbtqMGrQtS1Lge1PVZqvXJg7tsVuz84ZZCQ_hm8DY__G4d_k_HvD1v676Ps3xzM_Dw",
+   "accepted": false,
+   "code": "INVALID_RANGE",
+   "field": "p.a",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_BODY_KEY_MISSING",
+   "payload": "eNo1jcsKgkAUht_lXx9tZryEszNyIZhBSIs2YmgmWYaXyMR3b6YLnMW5fP93JjwgBaGERNdnbdq3WVV3IDSQE56QlmNaTLguYYTklmc6wrY9wktNwnQIZ0hG6JRgHWzSIAr2fhJu43QVRmEc-DvMhF7LcoUIJpYGsw3GE84lY6oO-Mjgd1W2SJrL2OhEC3kb6ppw_EW5UF-uiiuHKi80cteX_s-d_k2mWYtQfBfz_AaC4j0B",
+   "accepted": false,
+   "code": "INVALID_SCHEMA",
+   "field": "b",
+   "python_layer": true
+  },
+  {
+   "id": "V2_TR_DURATION_ONE_YEAR",
+   "payload": "eNo1jskOglAMRf_lriuWBw9jdxhZkDgkhrhwQzBORBQDaBzCv1scki7a5pzbvnCDGMIegrrJqrSpsryoQSghL9whnnU8NkFAeEBcb-hY4_tDwlMn41jCAcKEWgPG0TSNJtEyTOL5LB3Fk3gWhQu0hKYL2yhi2Ax67PfYTVxXmLVW-IQhrPOsn5THR9kZFeR8LQrC-qdaYwPWQydF99d8s1XtCNEds_KXDmv-0u7fZN2XHmH7XbTtG3bOP6s",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_trails",
+    "o": {
+     "x": 35.30266,
+     "y": 139.52449,
+     "z": 12.5,
+     "h": 0,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T11:00:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": null,
+    "b": {
+     "d": 525600,
+     "m": "guide",
+     "k": 60000
+    },
+    "p": {
+     "t": null,
+     "f": null,
+     "a": 123,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "V2_TR_OVER_MIDNIGHT",
+   "payload": "eNo1jstug0AMRf_lrg3xDI803hGFBRJNpQp10Q0iCqUIEiogUdOIf49py8gL2zrneu64QiyhgmAYiz4f-6JuBxA6yB3fEC9wPbZhSLhBjLdxA-v7G8KPTtYNCJ8QJgwasIuf8ziN36Isednn2yRN9nH0iokwzmFHRSzbtcO-wyYzRpi13vEbhmioi1XWNbduNnrI-dK2hMO_ap5Yj50UrC71sVSpgYSsT-mvGRoX5WNpivmPHqH8W0zTAwMBP0c",
+   "accepted": true,
+   "code": null,
+   "python_layer": true,
+   "plan_v2": {
+    "v": 2,
+    "g": "star_trails",
+    "o": {
+     "x": 35.30266,
+     "y": 139.52449,
+     "z": 12.5,
+     "h": 0,
+     "s": "DEM_ELEVATION_BILINEAR"
+    },
+    "t": {
+     "d": "2027-04-01T11:00:00Z",
+     "z": "Asia/Tokyo"
+    },
+    "r": null,
+    "b": {
+     "d": 1805,
+     "m": "guide",
+     "k": 60000
+    },
+    "p": {
+     "t": null,
+     "f": null,
+     "a": 123,
+     "e": null
+    }
+   }
+  },
+  {
+   "id": "V2_DUPLICATE_KEY",
+   "payload": "eNplj8kKwkAMht_lP8c6M13E3Cr2UNAKUjx4KZW6FKuVLuJC393U5eSQQxK-7w_zxBVsCHsw6iatkqZK86IGoQQ_cQPbrmUr43mEO1jbY8s1jjMmPGQylks4gBWhloBpME-CWbDy43ARJZNwFkaBv0RHaPqwTBCjzGignIHSsdaslNQa7zD4dZ4O4_J4L3ujAp_boiBsvqo2cuUk3L7Ns604R7Cn5Al86ZnmZ-x-TdpbNmH7WXT_3-xeZtxFCQ",
+   "accepted": false,
+   "code": "DUPLICATE_KEY",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "V2_INFINITY",
+   "payload": "eNo1jcuugkAMht_lX1ecGS7G7jCHBYlHE0NcuCEYbxM5cAKjEQ3vbvHSdNE23_f3gSvYEI5gtK5octcUtmxBqMEP3MB-6PnKRBGhA2t_6oUmCKaEu2zGCwknsCK0EvCT_ObJPFnHWbpc5LN0ni6SeIWe4IawnSBGmclIBSOlM61ZKekNXmGIW1uMs_rc1YPRgKtLWRK2H1Ub-fIn3PFid3txzuBISQn8PzDuaxy-QwFOq4OtrOsI-_e1758XQEHA",
+   "accepted": false,
+   "code": "NON_FINITE_NUMBER",
+   "field": null,
+   "python_layer": true
+  },
+  {
+   "id": "V2_EXPONENT_OVERFLOW",
+   "payload": "eNo1jcsOgkAMRf_lrkfsDA9jdxhZkCgmhrhwQzCgElEMoBEN_27x0XTRNufcvnAHG4UDGE2b1klbp0XZQKECv_AA265lk_E8hQ6s7anlGseZKjxlM5arcASTQiMB82CZBItg48fhKkpm4SKMAn-NXqEdwjJBDJnJiJwR6VhrJpLe4hMGvynScVydumowavDlVpYKu5-qjXw5C3e4FVkuzgnskZTA14Fp_8b-P6Ri5Q6Jl39Pff8GRWE_oA",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "p.a",
+   "python_layer": true
+  },
+  {
+   "id": "V2_DURATION_EXPONENT",
+   "payload": "eNo1jEsLglAQhf_LWY927_URzc7IhWAGIS3aiKGVZBk-Igv_e9fKYRZzhu87bzzAinACo2nTOmnrtCgbECrwG0-w5ZiWUK5L6MHSWpiOsu0F4aWTMh3CGSwIjS5Y-evED_2dFwebKFkGYRD53hYDoR3LMo0ooeaGsA0hYylZCL17fMvgNUU6i6tLX41GDb51ZUk4_FWpckm4avDUFVmupQvYFXo0fR-hdlKO05GOmkXIf49h-AAOQD9y",
+   "accepted": false,
+   "code": "INVALID_TYPE",
+   "field": "b.d",
+   "python_layer": true
+  }
+ ]
+}

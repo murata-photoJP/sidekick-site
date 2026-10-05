@@ -82,7 +82,8 @@ def _production_pages() -> list[Path]:
     pages = []
     for p in sorted(REPO_ROOT.rglob("*.html")):
         rel = p.relative_to(REPO_ROOT).as_posix()
-        if rel.startswith(("build-output/", "BackUp/", "templates/")):
+        # node_modules/: npm の依存（gitignore・配信しない。tslib 等が HTML を同梱している）
+        if rel.startswith(("build-output/", "BackUp/", "templates/", "node_modules/")):
             continue
         if "sidekick_manual_package" in rel or p.name.startswith("google"):
             continue

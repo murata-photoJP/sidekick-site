@@ -58,5 +58,9 @@ tools/*.py
 requirements-build.txt
 requirements-test.txt
 
+# --- プランナーQRマップ G-2（Firebase emulator 設定・rules・index 定義、decoder 書き出し script）。配信しない ---
+firebase/
+tools/qr_map/
+
 # --- 開発者向け入口（2026-09-16 Phase 3F.1。内部 path を含むため配信しない。公開 HTML/JS/CSS からの参照なし） ---
 START_HERE_FOR_DEVELOPMENT.md
