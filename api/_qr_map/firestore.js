@@ -24,6 +24,15 @@ function loadAdmin() {
 }
 
 // 純関数: env から接続方法を決める（test 対象）。戻り値 { mode: "emulator" | "production", projectId, credentialJson }
+//
+// G-5.1（HD-PLANNERQRMAP-044、Production Safety Infrastructure）: 本番接続は **positive allow**。次がすべて
+// 揃ったときだけ production を返し、1 つでも欠ければ QrMapConfigError（API は 503）:
+//   1. VERCEL_ENV === "production"（Preview / Development / Vercel 外では、credential が入っていても接続しない）
+//   2. QR_MAP_PRODUCTION_FIRESTORE === "enabled"（本番接続そのものの明示 switch。公開の switch とは別）
+//   3. QR_MAP_FIREBASE_PROJECT_ID が CONSTANTS.PRODUCTION_PROJECT_IDS に含まれる（打ち間違い・別 project を拒否）
+//   4. QR_MAP_FIREBASE_SERVICE_ACCOUNT の project_id が 3 と一致
+//   5. emulator 設定（FIRESTORE_EMULATOR_HOST / QR_MAP_REQUIRE_EMULATOR=1）と NODE_ENV=test が無い
+// emulator は Vercel の preview / production では使わない（local と test だけ）。
 function resolveConnection(env = process.env) {
   const cfg = readEnv(env);
   const projectId = cfg.projectId;
@@ -32,6 +41,9 @@ function resolveConnection(env = process.env) {
     throw new QrMapConfigError("既存サイトの Firebase project には接続しない: " + projectId);
   }
   if (cfg.emulatorHost) {
+    if (cfg.vercelEnv === "production" || cfg.vercelEnv === "preview") {
+      throw new QrMapConfigError("Vercel の " + cfg.vercelEnv + " では emulator 設定を受け付けない");
+    }
     if (!projectId.startsWith("demo-")) {
       throw new QrMapConfigError("emulator では demo- で始まる project ID だけを使う");
     }
@@ -45,6 +57,15 @@ function resolveConnection(env = process.env) {
   }
   if (projectId.startsWith("demo-")) {
     throw new QrMapConfigError("demo- project は emulator 専用");
+  }
+  if (cfg.vercelEnv !== "production") {
+    throw new QrMapConfigError("本番 Firestore へは VERCEL_ENV=production でだけ接続する（現在: " + (cfg.vercelEnv || "unset") + "）");
+  }
+  if (!cfg.productionFirestore) {
+    throw new QrMapConfigError("QR_MAP_PRODUCTION_FIRESTORE=enabled が無い（本番接続の明示 switch）");
+  }
+  if (!CONSTANTS.PRODUCTION_PROJECT_IDS.includes(projectId)) {
+    throw new QrMapConfigError("本番として許可された project ではない: " + projectId);
   }
   let serviceAccount;
   try { serviceAccount = JSON.parse(cfg.serviceAccountJson || ""); }

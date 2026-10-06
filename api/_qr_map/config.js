@@ -37,8 +37,19 @@ const CONSTANTS = Object.freeze({
   }),
   // 既存サイトの Firebase project（AI Lab / DL 登録 / Activity）。QR Map は絶対に接続しない（HD-G1-001）
   DENIED_PROJECT_IDS: Object.freeze(["sidekick-6cfee"]),
+  // G-5.1（HD-PLANNERQRMAP-035 / -036 / -044）: 本番として接続してよい project はこの一覧だけ（positive allow）。
+  // project はまだ作っていない（作成は Production 接続の直前の Human Action）。id を変えるときはここを変える。
+  PRODUCTION_PROJECT_IDS: Object.freeze(["sidekick-map-prod"]),
+  // G-5.1: 物理削除 1 回あたりの上限（collection ごと）。Vercel Cron（1 日 1 回）で少しずつ消す
+  CLEANUP_BATCH_LIMIT: 200,
   ALLOWED_ORIGINS: Object.freeze(["https://www.sidekick-lab.com"])
 });
+
+// Vercel の実行環境（system environment variable）。"production" / "preview" / "development"。
+// Vercel の外（local・test）では空。
+function vercelEnv(env) {
+  return String(env.VERCEL_ENV || "");
+}
 
 // 環境変数を読む（毎回読む: test が env を切り替えられるように）
 function readEnv(env = process.env) {
@@ -52,8 +63,16 @@ function readEnv(env = process.env) {
     emulatorHost: env.FIRESTORE_EMULATOR_HOST || "",
     // "1" のとき emulator 以外への接続を拒否する（tests / local 開発は必ず 1）
     requireEmulator: env.QR_MAP_REQUIRE_EMULATOR === "1",
-    // local 確認用 server（http://127.0.0.1:port）の Origin。emulator 専用の設定でだけ効く（本番では無視）
-    devAllowedOrigins: env.QR_MAP_REQUIRE_EMULATOR === "1"
+    // G-5.1: Vercel の実行環境と、本番 Firestore への接続そのものの明示 switch（公開の switch とは別）。
+    // 本番接続は VERCEL_ENV === "production" かつ この値が "enabled" のときだけ（firestore.js resolveConnection）
+    vercelEnv: vercelEnv(env),
+    productionFirestore: env.QR_MAP_PRODUCTION_FIRESTORE === "enabled",
+    // G-5.1: 物理削除（cleanup）の明示 switch と Vercel Cron の secret。どちらか無ければ cleanup は動かない
+    cleanupEnabled: env.QR_MAP_CLEANUP_ENABLED === "true",
+    cronSecret: String(env.CRON_SECRET || ""),
+    // local 確認用 server（http://127.0.0.1:port）の Origin。emulator 専用の設定でだけ効き、
+    // Vercel の preview / production では常に無視する（G-5.1）
+    devAllowedOrigins: env.QR_MAP_REQUIRE_EMULATOR === "1" && !["production", "preview"].includes(vercelEnv(env))
       ? String(env.QR_MAP_DEV_ALLOWED_ORIGINS || "").split(",").map((s) => s.trim())
         .filter((s) => /^http:\/\/(127\.0\.0\.1|localhost):\d+$/.test(s))
       : []

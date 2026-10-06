@@ -50,7 +50,33 @@ function isDeletionEligible(doc, nowMs) {
   return Number.isFinite(at) && nowMs >= at;
 }
 
+// G-5.1（HD-PLANNERQRMAP-044）: 物理削除してよいかの判定（cleanup は query の delete_after だけを信用しない）。
+//   "delete"    : 削除してよい
+//   "keep"      : まだ削除しない（active・猶予 30 日の途中・delete_after と state の不一致など）
+//   "malformed" : 形が壊れている（state 不明・時刻が無い / Timestamp でない）→ 削除せず数えるだけ
+// 誤削除防止を最優先: active（published かつ now < expires_at）は delete_after が何であっても削除しない。
+// 削除するのは「state から導いた削除可能時刻」と「保存された delete_after」の両方が now 以前のときだけ。
+function planCleanupVerdict(doc, nowMs) {
+  if (!doc || typeof doc !== "object" || !STATES.includes(doc.state)) return "malformed";
+  const deleteAfter = toMs(doc.delete_after);
+  const expires = toMs(doc.expires_at);
+  if (!Number.isFinite(deleteAfter) || !Number.isFinite(expires)) return "malformed";
+  if (doc.state !== "published" && !Number.isFinite(toMs(doc.state_changed_at))) return "malformed";
+  if (isActive(doc, nowMs)) return "keep";
+  if (nowMs < deleteAfter) return "keep";
+  return isDeletionEligible(doc, nowMs) ? "delete" : "keep";
+}
+
+// idempotency / counter の補助 document: delete_after だけで決まる（Timestamp でなければ malformed）
+function auxCleanupVerdict(doc, nowMs) {
+  if (!doc || typeof doc !== "object") return "malformed";
+  const deleteAfter = toMs(doc.delete_after);
+  if (!Number.isFinite(deleteAfter)) return "malformed";
+  return nowMs >= deleteAfter ? "delete" : "keep";
+}
+
 module.exports = {
   STATES, toMs, expiresAtFrom, deleteAfterFrom,
-  isActive, shouldRecordActivity, deletionEligibleAtMs, isDeletionEligible
+  isActive, shouldRecordActivity, deletionEligibleAtMs, isDeletionEligible,
+  planCleanupVerdict, auxCleanupVerdict
 };

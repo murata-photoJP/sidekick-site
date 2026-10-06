@@ -324,3 +324,115 @@ test("live local smoke（HTTP 経由）: publish → tile → open（元の frag
   assert.deepEqual([un.statusCode, un.body.state], [200, "unpublished"]);
   assert.equal((await http("POST", "open", { plan_id: planId })).statusCode, 404);
 });
+
+// ---- G-5.1 Production Safety Infrastructure（HD-PLANNERQRMAP-044）------------------------------------------
+const cleanupHandler = require("../../../api/qr-map-cleanup.js");
+
+async function withEnv(patch, fn) {
+  const saved = {};
+  for (const [k, v] of Object.entries(patch)) {
+    saved[k] = process.env[k];
+    if (v === undefined) delete process.env[k]; else process.env[k] = v;
+  }
+  try { return await fn(); }
+  finally {
+    for (const [k, v] of Object.entries(saved)) { if (v === undefined) delete process.env[k]; else process.env[k] = v; }
+  }
+}
+
+test("G-5.1 cleanup: active は残す・期限切れ / 取り消しは猶予 30 日の後だけ削除・再実行は安全", async () => {
+  const active = await publish();
+  const expired = await publish(GV1, { nowMs: T0 - 200 * DAY_MS });           // 180 日前に期限切れ ＋ 20 日経過
+  const expiredGone = await publish(GV1, { nowMs: T0 - 220 * DAY_MS });       // 期限切れ ＋ 40 日経過
+  const unpublished = await publish();
+  const unpublishedGone = await publish(GV1, { nowMs: T0 - 40 * DAY_MS });
+  await store.unpublish({ planId: unpublished.plan_id, manageToken: unpublished.manage_token, nowMs: T0 - 10 * DAY_MS });
+  await store.unpublish({ planId: unpublishedGone.plan_id, manageToken: unpublishedGone.manage_token, nowMs: T0 - 31 * DAY_MS });
+  const report = await store.cleanupEligible({ nowMs: T0 });
+  assert.equal(report.deleted.plans, 2, JSON.stringify(report));
+  assert.equal(report.malformed, 0);
+  assert.ok(await planDoc(active.plan_id), "active は残る");
+  assert.ok(await planDoc(expired.plan_id), "期限切れ ＋ 猶予の途中は残る");
+  assert.ok(await planDoc(unpublished.plan_id), "取り消し ＋ 猶予の途中は残る");
+  assert.equal(await planDoc(expiredGone.plan_id), null);
+  assert.equal(await planDoc(unpublishedGone.plan_id), null);
+  const again = await store.cleanupEligible({ nowMs: T0 });                    // 再実行（retry）
+  assert.deepEqual(again.deleted, { plans: 0, idempotency: 0, counters: 0 });
+  assert.ok(await planDoc(active.plan_id));
+});
+
+test("G-5.1 cleanup: 壊れた document は消さずに数える（他の削除は続ける）", async () => {
+  const gone = await publish(GV1, { nowMs: T0 - 40 * DAY_MS });
+  await store.unpublish({ planId: gone.plan_id, manageToken: gone.manage_token, nowMs: T0 - 31 * DAY_MS });
+  const past = admin.firestore.Timestamp.fromMillis(T0 - 100 * DAY_MS);
+  const plans = db.collection(CONSTANTS.COLLECTION_PLANS);
+  await plans.doc("f".repeat(32)).set({ state: "deleted", delete_after: past, expires_at: past });   // 未知の state
+  await plans.doc("e".repeat(32)).set({ state: "unpublished", delete_after: past });                 // 時刻が欠けている
+  const report = await store.cleanupEligible({ nowMs: T0 });
+  assert.equal(report.malformed, 2, JSON.stringify(report));
+  assert.equal(report.deleted.plans, 1);
+  assert.ok((await plans.doc("f".repeat(32)).get()).exists);
+  assert.ok((await plans.doc("e".repeat(32)).get()).exists);
+  assert.equal(await planDoc(gone.plan_id), null);
+});
+
+test("G-5.1 cleanup: 1 回の件数には上限がある（more: true、次回で続きを消す）。補助 document も期限後に消す", async () => {
+  const ids = [];
+  for (let i = 0; i < 3; i += 1) {
+    const r = await publish(GV1, { nowMs: T0 - 40 * DAY_MS });
+    await store.unpublish({ planId: r.plan_id, manageToken: r.manage_token, nowMs: T0 - 31 * DAY_MS });
+    ids.push(r.plan_id);
+  }
+  const first = await store.cleanupEligible({ nowMs: T0, limit: 2 });
+  assert.equal(first.deleted.plans, 2);
+  assert.equal(first.more, true);
+  const second = await store.cleanupEligible({ nowMs: T0, limit: 2 });
+  assert.equal(second.deleted.plans, 1);
+  for (const id of ids) assert.equal(await planDoc(id), null);
+  // 上限を超える limit は CONSTANTS.CLEANUP_BATCH_LIMIT に丸める（無制限の削除経路を作らない）
+  const huge = await store.cleanupEligible({ nowMs: T0, limit: 10 ** 9 });
+  assert.equal(huge.more, false);
+  // idempotency（created + 30 日）と日次 counter（+30 日）も、期限後の実行で消える（上の実行で一部は消えている）
+  const total = first.deleted.idempotency + second.deleted.idempotency + huge.deleted.idempotency;
+  assert.equal(total, 3, JSON.stringify({ first, second, huge }));
+  assert.ok((await db.collection(CONSTANTS.COLLECTION_IDEMPOTENCY).get()).empty);
+  assert.ok((await db.collection(CONSTANTS.COLLECTION_COUNTERS).get()).empty);
+});
+
+test("G-5.1 circuit breaker: 公開だけを止める（tile・詳細・取り消しは動く）", async () => {
+  const r = await publish();
+  const doc = await planDoc(r.plan_id);
+  const [z, x, y] = doc.tiles.z10.split("/");
+  await withEnv({ QR_MAP_PUBLISH_ENABLED: undefined }, async () => {
+    await rejects(publish(), "PUBLISH_DISABLED");
+    const tile = await store.getTile({ z, x, y, nowMs: T0 + 1 });
+    assert.ok(tile.plans.some((p) => p.plan_id === r.plan_id));            // Map の読み取りは続く
+    const detail = await store.openDetail({ planId: r.plan_id, nowMs: T0 + 2 * DAY_MS });
+    assert.equal(detail.fragment, GV1);                                    // 詳細 → 既存 Viewer へ渡せる
+    assert.equal(lifecycle.toMs((await planDoc(r.plan_id)).last_activity_at), T0 + 2 * DAY_MS);   // activity 更新も動く
+    const un = await store.unpublish({ planId: r.plan_id, manageToken: r.manage_token, nowMs: T0 + 3 * DAY_MS });
+    assert.equal(un.state, "unpublished");                                 // 緊急停止中でも利用者は取り消せる
+  });
+});
+
+test("G-5.1 live local smoke（HTTP 経由・Cron endpoint）: publish → 詳細 → 取り消し → 猶予後に cleanup で削除", async () => {
+  const pub = await http("POST", "publish", { fragment: GV1, idempotency_key: newKey(), consent_version: "qr-map-consent/1" });
+  assert.equal(pub.statusCode, 201);
+  const planId = pub.body.plan_id;
+  assert.equal((await http("POST", "open", { plan_id: planId })).statusCode, 200);
+  // 取り消しの時刻を 31 日前にする（実時間を待たない）
+  await store.unpublish({ planId, manageToken: pub.body.manage_token, nowMs: Date.now() - 31 * DAY_MS });
+  const call = async (env, auth) => withEnv(env, async () => {
+    const res = fakeRes();
+    await cleanupHandler({ method: "GET", headers: auth ? { authorization: auth } : {}, query: {} }, res);
+    return res;
+  });
+  assert.equal((await call({ CRON_SECRET: undefined, QR_MAP_CLEANUP_ENABLED: undefined })).statusCode, 503);
+  assert.ok(await planDoc(planId), "switch が無ければ何も消さない");
+  assert.equal((await call({ CRON_SECRET: "local-secret", QR_MAP_CLEANUP_ENABLED: "true" }, "Bearer nope")).statusCode, 401);
+  const ok = await call({ CRON_SECRET: "local-secret", QR_MAP_CLEANUP_ENABLED: "true" }, "Bearer local-secret");
+  assert.equal(ok.statusCode, 200, JSON.stringify(ok.body));
+  assert.ok(ok.body.deleted.plans >= 1);
+  assert.equal(JSON.stringify(ok.body).includes(planId), false);           // 応答に plan_id を出さない
+  assert.equal(await planDoc(planId), null);
+});

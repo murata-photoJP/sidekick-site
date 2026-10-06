@@ -51,6 +51,7 @@
     }
   ],
   "crons": [
-    { "path": "/api/planner-activity-cleanup", "schedule": "30 18 * * *" }
+    { "path": "/api/planner-activity-cleanup", "schedule": "30 18 * * *" },
+    { "path": "/api/qr-map-cleanup", "schedule": "50 18 * * *" }
   ]
 }

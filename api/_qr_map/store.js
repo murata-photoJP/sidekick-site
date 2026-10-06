@@ -222,21 +222,46 @@ function createStore({ db, Timestamp }, env = process.env) {
     });
   }
 
-  // 物理削除（HD-G1-005）。delete_after <= now のものを上限付きで消す。cron への配線は後続 Gate
-  async function deleteEligible({ nowMs = Date.now(), limit = 500 } = {}) {
-    const result = { plans: 0, idempotency: 0, counters: 0 };
-    for (const [name, col] of [["plans", plans], ["idempotency", idempotency], ["counters", counters]]) {
-      const snap = await col.where("delete_after", "<=", ts(nowMs)).limit(limit).get();
-      if (snap.empty) continue;
-      const batch = db.batch();
-      snap.docs.forEach((d) => batch.delete(d.ref));
-      await batch.commit();
-      result[name] = snap.size;
+  // 物理削除（HD-G1-005 → G-5.1 HD-PLANNERQRMAP-044）。Vercel Cron（api/qr-map-cleanup.js）から 1 日 1 回。
+  //   - bounded: collection ごとに最大 CONSTANTS.CLEANUP_BATCH_LIMIT 件（それ以上は more: true、次回へ）
+  //   - query（delete_after <= now）の結果を信用せず、1 件ずつ lifecycle の判定を通す（active は消さない）
+  //   - 壊れた document は消さずに数える（1 件の異常で全体を止めない・誤って消さない）
+  //   - 読んだ後に更新された document は消さない（lastUpdateTime 前提条件。例: 詳細を開いて延長された）
+  //   - idempotent: 何度実行しても、消えるのは削除可能なものだけ。途中で失敗しても次回の実行で続きを消す
+  async function cleanupEligible({ nowMs = Date.now(), limit = CONSTANTS.CLEANUP_BATCH_LIMIT } = {}) {
+    const max = Number.isInteger(limit) && limit > 0 ? Math.min(limit, CONSTANTS.CLEANUP_BATCH_LIMIT) : CONSTANTS.CLEANUP_BATCH_LIMIT;
+    const report = {
+      deleted: { plans: 0, idempotency: 0, counters: 0 },
+      kept: 0, malformed: 0, conflicts: 0, more: false
+    };
+    for (const [name, col, verdictOf] of [
+      ["plans", plans, lifecycle.planCleanupVerdict],
+      ["idempotency", idempotency, lifecycle.auxCleanupVerdict],
+      ["counters", counters, lifecycle.auxCleanupVerdict]
+    ]) {
+      const snap = await col.where("delete_after", "<=", ts(nowMs)).orderBy("delete_after", "asc").limit(max).get();
+      if (snap.size >= max) report.more = true;
+      for (const d of snap.docs) {
+        const verdict = verdictOf(d.data(), nowMs);
+        if (verdict === "malformed") { report.malformed += 1; continue; }
+        if (verdict !== "delete") { report.kept += 1; continue; }
+        try {
+          await d.ref.delete({ lastUpdateTime: d.updateTime });
+          report.deleted[name] += 1;
+        } catch (_) {
+          report.conflicts += 1; // 読んだ後に更新された・既に消えた: 消さない（次回の判定に任せる）
+        }
+      }
     }
-    return result;
+    return report;
   }
 
-  return { publish, unpublish, openDetail, getTile, removeByOperator, deleteEligible };
+  // G-2 の呼び方（collection ごとの削除件数）。中身は cleanupEligible と同じ安全な判定
+  async function deleteEligible(options = {}) {
+    return (await cleanupEligible(options)).deleted;
+  }
+
+  return { publish, unpublish, openDetail, getTile, removeByOperator, cleanupEligible, deleteEligible };
 }
 
 module.exports = { createStore, QrMapError, publicView, idempotencyDocId, dayKey };

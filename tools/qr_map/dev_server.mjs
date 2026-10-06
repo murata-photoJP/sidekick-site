@@ -73,9 +73,15 @@ async function readBody(req) {
 export async function startServer({ port = 8787, host = "127.0.0.1" } = {}) {
   assertEmulatorOnly();
   const handler = require(join(ROOT, "api", "qr-map.js"));
+  const cleanupHandler = require(join(ROOT, "api", "qr-map-cleanup.js"));
   const server = http.createServer(async (req, res) => {
     try {
       const url = new URL(req.url, "http://" + host);
+      if (url.pathname === "/api/qr-map-cleanup") {
+        // G-5.1: 物理削除の Cron endpoint（emulator 専用。CRON_SECRET / QR_MAP_CLEANUP_ENABLED が無ければ 503）
+        await cleanupHandler({ method: req.method, headers: req.headers, query: {}, body: undefined }, adaptRes(res));
+        return;
+      }
       if (url.pathname === "/api/qr-map") {
         const raw = req.method === "POST" ? await readBody(req) : undefined;
         let body = raw;

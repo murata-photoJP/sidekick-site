@@ -72,13 +72,16 @@ test("tile: 公開時の key は段ごとに 1 つ。要求は決まった段・
 });
 
 test("接続先 guard: 既存サイトの project・emulator 無しの test・demo の本番接続を拒否する", () => {
-  const SA = JSON.stringify({ project_id: "sidekick-qr-map-prod" });
+  // G-5.1: 本番接続は positive allow（VERCEL_ENV=production・QR_MAP_PRODUCTION_FIRESTORE=enabled・許可 project・
+  // service account 一致がすべて揃ったときだけ）。組み合わせの網羅は test_production_safety.mjs
+  const SA = JSON.stringify({ project_id: "sidekick-map-prod" });
+  const PROD = { VERCEL_ENV: "production", QR_MAP_PRODUCTION_FIRESTORE: "enabled", QR_MAP_FIREBASE_PROJECT_ID: "sidekick-map-prod" };
   assert.throws(() => resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "sidekick-6cfee", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8085" }), /既存サイト/);
   assert.throws(() => resolveConnection({}), /未設定/);
   assert.throws(() => resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "demo-x", QR_MAP_REQUIRE_EMULATOR: "1" }), /本番へ倒れない/);
   assert.throws(() => resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "prod-x", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8085" }), /demo-/);
-  assert.throws(() => resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "sidekick-qr-map-prod", QR_MAP_FIREBASE_SERVICE_ACCOUNT: SA, NODE_ENV: "test" }), /NODE_ENV=test/);
-  assert.throws(() => resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "sidekick-qr-map-prod", QR_MAP_FIREBASE_SERVICE_ACCOUNT: "{}" }), /一致しない/);
+  assert.throws(() => resolveConnection({ ...PROD, QR_MAP_FIREBASE_SERVICE_ACCOUNT: SA, NODE_ENV: "test" }), /NODE_ENV=test/);
+  assert.throws(() => resolveConnection({ ...PROD, QR_MAP_FIREBASE_SERVICE_ACCOUNT: "{}" }), /一致しない/);
   assert.equal(resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "demo-x", FIRESTORE_EMULATOR_HOST: "127.0.0.1:8085", QR_MAP_REQUIRE_EMULATOR: "1" }).mode, "emulator");
-  assert.equal(resolveConnection({ QR_MAP_FIREBASE_PROJECT_ID: "sidekick-qr-map-prod", QR_MAP_FIREBASE_SERVICE_ACCOUNT: SA }).mode, "production");
+  assert.equal(resolveConnection({ ...PROD, QR_MAP_FIREBASE_SERVICE_ACCOUNT: SA }).mode, "production");
 });
