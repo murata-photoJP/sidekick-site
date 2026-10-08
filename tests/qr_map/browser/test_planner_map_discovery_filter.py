@@ -5,8 +5,9 @@ npm run test:qr-map:browser（tools/qr_map/run_browser_tests.mjs）から起動�
   分類（ダイヤ / パール / 天の川 / その他）× 撮影日時（過去・今日・今週末・7〜30 日・30 日より先）× 表示範囲の内 / 外。
 
 固定すること（HD G-6 / HD-4 訂正）:
-  - 初期は「これから」× すべての撮影対象。過去の計画は出ない。G-3 の seed（未来）は G-6 前と同じく全部出る
-  - Discovery の単位は 撮影地点 × 撮影日時 × 分類。通常の Discovery（これから・今週末・7日間・30日間・期間指定）は t_d >= 今だけ
+  - 初期は「今後すべて」（t_d >= 今・終わり無し。Human Review で「これから」から表記変更）× すべての撮影対象。過去の計画は出ない。G-3 の seed（未来）は G-6 前と同じく全部出る
+  - Discovery の単位は 撮影地点 × 撮影日時 × 分類。通常の Discovery（今後すべて・今週末・7日間・30日間・期間指定）は t_d >= 今だけ
+  - 期間指定は max(開始, 今) から。今をまたぐ / すべて過去 のときは「過去を見る」へ案内する（自動で切り替えない）
   - 過去は「過去を見る」でだけ出し、「現在も同じ条件で撮影できることを示すものではありません」を表示する
   - 撮影対象は複数選択・0 件可（ピン 0 ＋「撮影対象が選ばれていません［すべて選ぶ］」）
   - 地域 = 表示範囲。地図を動かすと自動で取り直す（「この範囲で検索」は無い）
@@ -35,6 +36,8 @@ ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 CENTER = (31.60, 130.56)          # 鹿児島付近（G-3 の seed・他の test が見ない）
 OUTSIDE = (32.75, 129.87)         # 長崎（CENTER を zoom 11 で見たときの範囲の外）
 PAST_NOTICE = "過去の撮影計画を表示しています。現在も同じ条件で撮影できることを示すものではありません。"
+CUSTOM_PAST_HINT = "過去の撮影計画は含まれません。過去の計画は「過去を見る」から確認できます。"
+CUSTOM_ALL_PAST_HINT = "指定した期間はすでに過ぎています。過去の撮影計画は「過去を見る」から確認できます。"
 
 
 def iso(dt: datetime) -> str:
@@ -160,7 +163,9 @@ def test_g6_initial_is_upcoming_all_categories_and_hides_past(browser, g6):
     try:
         upcoming = ids_where(g6, lambda p: p["when"] >= g6["now"])
         assert g6_ids_on_map(page, g6) == upcoming
-        assert "これから・すべての撮影対象" in page.text_content("#pm-filter-summary")
+        assert page.text_content("#pm-filter-summary") == "今後すべて・すべての撮影対象"
+        labels = page.eval_on_selector_all('input[name="pm-period"]', "els => els.map(e => e.parentElement.textContent.trim())")
+        assert labels == ["今後すべて", "今週末", "7日間", "30日間", "期間指定", "過去を見る"]
         assert page.is_hidden("#pm-past-notice")
         assert count_text(page).startswith("この範囲 ")
         assert rec.ops("open") == []                     # 絞り込み・表示では open しない
@@ -252,12 +257,25 @@ def test_g6_custom_range_never_mixes_past(browser, g6):
         end = (now_jst.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=26)) - timedelta(microseconds=1)
         assert g6_ids_on_map(page, g6) == ids_where(g6, lambda p: g6["now"] <= p["when"] <= end)
         assert page.is_visible("#pm-filter-custom-hint")       # 今より前は含めない →「過去を見る」へ案内
+        assert page.text_content("#pm-filter-custom-hint") == CUSTOM_PAST_HINT
         assert page.is_hidden("#pm-past-notice")
+        # 数日前〜数日後（今をまたぐ。次の Human Review の操作と同じ形）
+        page.fill("#pm-filter-from", (now_jst - timedelta(days=3)).strftime("%Y-%m-%d"))
+        page.fill("#pm-filter-to", (now_jst + timedelta(days=3)).strftime("%Y-%m-%d"))
+        page.dispatch_event("#pm-filter-to", "change")
+        page.wait_for_timeout(150)
+        end3 = (now_jst.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=4)) - timedelta(microseconds=1)
+        assert g6_ids_on_map(page, g6) == ids_where(g6, lambda p: g6["now"] <= p["when"] <= end3)
+        assert page.text_content("#pm-filter-custom-hint") == CUSTOM_PAST_HINT
         page.fill("#pm-filter-from", (now_jst - timedelta(days=60)).strftime("%Y-%m-%d"))
         page.fill("#pm-filter-to", (now_jst - timedelta(days=1)).strftime("%Y-%m-%d"))
         page.dispatch_event("#pm-filter-to", "change")
         page.wait_for_timeout(150)
         assert g6_ids_on_map(page, g6) == set()                # すべて過去の期間指定でも、過去は出さない
+        assert page.text_content("#pm-filter-custom-hint") == CUSTOM_ALL_PAST_HINT
+        assert CUSTOM_ALL_PAST_HINT in page.text_content("#pm-status")   # 空状態も同じ案内
+        assert page.is_checked('input[name="pm-period"][value="custom"]')  # 自動で「過去を見る」にはしない
+        assert page.is_hidden("#pm-past-notice")
     finally:
         context.close()
 

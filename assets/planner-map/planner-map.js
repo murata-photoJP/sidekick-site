@@ -215,7 +215,7 @@
 
   // ---- G-6 Map Discovery Filter: 取得済みの計画（表示範囲の tile）を 期間 × 撮影対象 で絞る ----
   // server へ全件を求めない（地域 = 表示範囲。地図を動かすと今までどおり自動で取り直す、HD-1）。
-  // 初期は「これから」× すべての撮影対象。過去は「過去を見る」で明示的に選んだときだけ（HD-4 訂正）。
+  // 初期は「今後すべて」× すべての撮影対象。過去は「過去を見る」で明示的に選んだときだけ（HD-4 訂正）。
   var Filter = window.PlannerMapFilter;
   var filterState = Filter.defaultState();
   var lastResult = null;   // { plans, truncatedCount, bounds }（最後に取得した表示範囲の計画。絞る前）
@@ -232,6 +232,8 @@
       setStatus("hint", "この範囲には、表示しきれない撮影計画があります（ほか " + lastResult.truncatedCount + " 件）。地図を拡大してください。");
     } else if (filterState.categories.length === 0) {
       setStatus("empty", "撮影対象が選ばれていません", selectAllCategories, "すべて選ぶ");
+    } else if (Filter.customPastState(filterState, Date.now()) === "all") {
+      setStatus("empty", Filter.CUSTOM_ALL_PAST_HINT);   // 自動で「過去を見る」には切り替えない
     } else if (visible === 0 && lastResult.plans.length === 0) {
       setStatus("empty", "この範囲には、公開された撮影計画はまだありません。");
     } else if (visible === 0) {
@@ -277,7 +279,7 @@
     return wrap;
   }
 
-  // 期間: 未来の検索（これから・今週末・7日間・30日間・期間指定）と、過去を見る を分けて置く
+  // 期間: 未来の検索（今後すべて・今週末・7日間・30日間・期間指定）と、過去を見る を分けて置く
   var periodSet = el("fieldset", "pm-filter-group");
   periodSet.appendChild(el("legend", null, "撮影日時"));
   Filter.PERIODS.forEach(function (p) {
@@ -345,7 +347,10 @@
     filterToggle.dataset.filtered = Filter.isDefault(filterState) ? "false" : "true";
     customBox.hidden = filterState.period !== "custom";
     pastNoticeEl.hidden = !Filter.pastNotice(filterState);
-    customHintEl.hidden = !Filter.customOmitsPast(filterState, Date.now());
+    var customPast = Filter.customPastState(filterState, Date.now());
+    customHintEl.hidden = customPast === "none";
+    customHintEl.textContent = customPast === "all" ? Filter.CUSTOM_ALL_PAST_HINT : Filter.CUSTOM_PAST_HINT;
+    customHintEl.dataset.pastState = customPast;
     if (typeof visible === "number") {
       filterCount.textContent = "この範囲 " + visible + "件" + (lastResult && lastResult.truncatedCount > 0 ? "以上" : "");
       filterCount.hidden = false;

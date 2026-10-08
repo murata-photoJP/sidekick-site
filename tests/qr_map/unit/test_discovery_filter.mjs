@@ -1,7 +1,7 @@
 // G-6（Map Discovery Filter）U2: 期間 × 撮影対象の絞り込み（純関数）を固定する。
-//   - 未来と過去を分ける（HD-4 訂正）: 初期は「これから」（撮影日時が今以降）。過去は「過去を見る」で明示的に選んだときだけ。
-//     「これから」と「過去を見る」を合わせると、G-6 前の Map に出ていた計画をちょうど覆う（重複・欠落なし）。
-//   - 過去を含む表示（過去を見る・過去を含む期間指定）では、現在も撮れるとは限らないことを知らせる（pastNotice）
+//   - 未来と過去を分ける（HD-4 訂正）: 初期は「今後すべて」（撮影日時が今以降・終わり無し。Human Review で「これから」から表記変更）。
+//     過去は「過去を見る」で明示的に選んだときだけ。「今後すべて」と「過去を見る」を合わせると、G-6 前の Map に出ていた計画をちょうど覆う（重複・欠落なし）。
+//   - 「過去を見る」では、現在も撮れるとは限らないことを知らせる（pastNotice）。期間指定は max(開始, 今) からで、過去は案内だけ
 //   - 撮影対象は複数選択・0 件可（HD-2）・「その他」あり（HD-3）・UI に無い分類は「その他」
 //   - 「今週末」等の境目は Asia/Tokyo（HD-5）、t_d は UTC のまま比べる
 import assert from "node:assert/strict";
@@ -24,11 +24,11 @@ const PLANS = [
   plan("legacy-d", undefined, "2026-10-10T05:00:00Z", "diamond_fuji"),   // 分類の無い応答 → genre から
   plan("past-p", ["pearl"], "2025-01-01T00:00:00Z"),
   plan("past-m", ["milky_way"], "2026-10-08T02:59:59Z"),          // 今（03:00Z）の 1 秒前
-  plan("now", ["diamond"], "2026-10-08T03:00:00Z")                // ちょうど今 = これから
+  plan("now", ["diamond"], "2026-10-08T03:00:00Z")                // ちょうど今 = 今後すべて
 ];
 const ids = (list) => list.map((p) => p.plan_id);
 
-test("初期は「これから」× すべての撮影対象。過去の計画は出ない", () => {
+test("初期は「今後すべて」× すべての撮影対象。過去の計画は出ない", () => {
   const state = f.defaultState();
   assert.equal(state.period, "upcoming");
   assert.equal(f.DEFAULT_PERIOD, "upcoming");
@@ -38,7 +38,7 @@ test("初期は「これから」× すべての撮影対象。過去の計画�
   assert.equal(f.pastNotice(state, NOW), false);
 });
 
-test("regression: 「これから」∪「過去を見る」= G-6 前の Map に出ていた計画（重複も欠落も無い、並びも保つ）", () => {
+test("regression: 「今後すべて」∪「過去を見る」= G-6 前の Map に出ていた計画（重複も欠落も無い、並びも保つ）", () => {
   const all = f.CATEGORY_IDS;
   const upcoming = f.filterPlans(PLANS, { period: "upcoming", categories: all }, NOW);
   const past = f.filterPlans(PLANS, { period: "past", categories: all }, NOW);
@@ -65,7 +65,15 @@ test("通常の Discovery はどの期間も t_d >= 今 だけ（ダイヤ / パ
 });
 
 test("期間指定に今より前の日付があれば、その部分は含めず「過去を見る」へ案内する", () => {
-  assert.equal(f.CUSTOM_PAST_HINT, "今より前の撮影計画は含めていません。過去の撮影計画は「過去を見る」で表示できます。");
+  assert.equal(f.CUSTOM_PAST_HINT, "過去の撮影計画は含まれません。過去の計画は「過去を見る」から確認できます。");
+  assert.equal(f.CUSTOM_ALL_PAST_HINT, "指定した期間はすでに過ぎています。過去の撮影計画は「過去を見る」から確認できます。");
+  assert.equal(f.customPastState({ period: "custom", from: "2026-10-01", to: "2026-10-05" }, NOW), "all");
+  assert.equal(f.customPastState({ period: "custom", from: "2026-10-05", to: "2026-10-15" }, NOW), "partial");
+  assert.equal(f.customPastState({ period: "custom", from: "2026-10-09", to: "2026-10-20" }, NOW), "none");
+  assert.equal(f.customPastState({ period: "custom", from: "x", to: "y" }, NOW), "none");
+  for (const period of ["upcoming", "weekend", "days7", "days30", "past"]) {
+    assert.equal(f.customPastState({ period, from: "2026-10-01", to: "2026-10-05" }, NOW), "none", period);
+  }
   assert.equal(f.customOmitsPast({ period: "custom", from: "2026-10-01", to: "2026-10-05" }, NOW), true);   // すべて過去 → 0 件
   assert.deepEqual(f.filterPlans(PLANS, { period: "custom", from: "2026-10-01", to: "2026-10-05", categories: f.CATEGORY_IDS }, NOW), []);
   assert.equal(f.customOmitsPast({ period: "custom", from: "2026-10-08", to: "2026-10-20" }, NOW), true);   // 今日 00:00 から = 今より前を含む
@@ -76,7 +84,7 @@ test("期間指定に今より前の日付があれば、その部分は含め�
   assert.equal(f.customOmitsPast({ period: "upcoming" }, NOW), false);
 });
 
-test("撮影対象: 4 種の全 16 通り（0 件を含む）で、選んだ分類のどれかに当たる計画だけ（これから）", () => {
+test("撮影対象: 4 種の全 16 通り（0 件を含む）で、選んだ分類のどれかに当たる計画だけ（今後すべて）", () => {
   const all = f.CATEGORY_IDS;
   const pool = f.filterPlans(PLANS, { period: "upcoming", categories: all }, NOW);
   for (let mask = 0; mask < 16; mask += 1) {
@@ -151,10 +159,12 @@ test("期間 × 撮影対象の組み合わせ（例: 今週末 × ダイヤ / �
 });
 
 test("要約の文", () => {
-  assert.equal(f.summary(f.defaultState()), "これから・すべての撮影対象");
+  assert.equal(f.summary(f.defaultState()), "今後すべて・すべての撮影対象");
+  assert.equal(f.summary({ period: "upcoming", categories: ["diamond"] }), "今後すべて・ダイヤモンド");
+  assert.equal(f.summary({ period: "past", categories: ["diamond"] }), "過去・ダイヤモンド");
   assert.equal(f.summary({ period: "weekend", categories: ["diamond", "pearl"] }), "今週末・ダイヤモンド / パール");
   assert.equal(f.summary({ period: "past", categories: f.CATEGORY_IDS }), "過去・すべての撮影対象");
-  assert.equal(f.summary({ period: "upcoming", categories: [] }), "これから・撮影対象なし");
+  assert.equal(f.summary({ period: "upcoming", categories: [] }), "今後すべて・撮影対象なし");
   assert.equal(f.summary({ period: "custom", from: "2026-10-10", to: "2026-10-12", categories: ["milky_way"] }), "2026/10/10〜2026/10/12・天の川");
 });
 
@@ -162,4 +172,71 @@ test("server の分類（api/_qr_map/discovery.js）と UI の撮影対象の語
   const discovery = require("../../../api/_qr_map/discovery.js");
   const server = discovery.DISCOVERY_CATEGORIES.map((c) => c.id).concat([discovery.OTHER]);
   assert.deepEqual(f.CATEGORY_IDS, server);
+});
+
+// ---- Human Review 1 回目のフィードバック（「今後すべて」表記・期間指定と過去の境界）----------------------------------------
+// 撮影日時だけが違う計画を、4 分類それぞれに同じだけ置く（分類ごとの特例が無いことを、同じ結果になることで確かめる）
+const OFFSETS = { past40d: -40 * 86400000, past3d: -3 * 86400000, past1s: -1000, now: 0, in2h: 2 * 3600000,
+  in5d: 5 * 86400000, in20d: 20 * 86400000, in60d: 60 * 86400000 };
+const TIMED = [];
+for (const c of f.CATEGORY_IDS) {
+  for (const [k, ms] of Object.entries(OFFSETS)) TIMED.push(plan(c + ":" + k, [c], new Date(NOW + ms).toISOString()));
+}
+const keysOf = (list, c) => list.filter((p) => p.categories[0] === c).map((p) => p.plan_id.split(":")[1]);
+
+test("「今後すべて」= t_d >= 今・終わり無し。60 日後も入り、過去は入らない", () => {
+  assert.equal(f.PERIODS.find((p) => p.id === "upcoming").label, "今後すべて");
+  assert.deepEqual(f.PERIODS.map((p) => p.label), ["今後すべて", "今週末", "7日間", "30日間", "期間指定", "過去を見る"]);
+  assert.deepEqual(f.periodRange({ period: "upcoming" }, NOW), { start: NOW, end: null });
+  const out = f.filterPlans(TIMED, f.defaultState(), NOW);
+  for (const c of f.CATEGORY_IDS) assert.deepEqual(keysOf(out, c), ["now", "in2h", "in5d", "in20d", "in60d"], c);
+  const far = [plan("far", ["diamond"], "2030-01-01T00:00:00Z")];
+  assert.deepEqual(ids(f.filterPlans(far, f.defaultState(), NOW)), ["far"]);
+});
+
+test("「7日間」「30日間」は上限を持つ（60 日後は入らない）", () => {
+  const d7 = f.filterPlans(TIMED, { period: "days7", categories: f.CATEGORY_IDS }, NOW);
+  const d30 = f.filterPlans(TIMED, { period: "days30", categories: f.CATEGORY_IDS }, NOW);
+  for (const c of f.CATEGORY_IDS) {
+    assert.deepEqual(keysOf(d7, c), ["now", "in2h", "in5d"], c);
+    assert.deepEqual(keysOf(d30, c), ["now", "in2h", "in5d", "in20d"], c);
+  }
+});
+
+test("期間指定: すべて未来なら指定どおり / 今をまたぐなら過去を除く（例 10/5〜10/15 → 今〜10/15）/ すべて過去なら 0 件", () => {
+  const st = (from, to) => ({ period: "custom", from, to, categories: f.CATEGORY_IDS });
+  // すべて未来: 10/12〜10/31 → in5d（10/13）と in20d（10/28）
+  const future = f.filterPlans(TIMED, st("2026-10-12", "2026-10-31"), NOW);
+  assert.deepEqual(f.periodRange(st("2026-10-12", "2026-10-31"), NOW),
+    { start: jst("2026-10-12T00:00:00"), end: jst("2026-10-31T23:59:59.999"), beforeNow: false });
+  // 今をまたぐ: effective start = max(10/5 00:00, 今) = 今。past3d（10/5 12:00）と past1s は出ない
+  const straddle = f.filterPlans(TIMED, st("2026-10-05", "2026-10-15"), NOW);
+  assert.deepEqual(f.periodRange(st("2026-10-05", "2026-10-15"), NOW), { start: NOW, end: jst("2026-10-15T23:59:59.999"), beforeNow: true });
+  // すべて過去: 0 件（自動で「過去を見る」にはしない = 過去の計画を返さない）
+  const allPast = f.filterPlans(TIMED, st("2026-08-01", "2026-10-07"), NOW);
+  assert.equal(f.customPastState(st("2026-08-01", "2026-10-07"), NOW), "all");
+  assert.deepEqual(allPast, []);
+  for (const c of f.CATEGORY_IDS) {
+    assert.deepEqual(keysOf(future, c), ["in5d", "in20d"], c);
+    assert.deepEqual(keysOf(straddle, c), ["now", "in2h", "in5d"], c);
+  }
+  // どんな期間指定でも過去の計画は通常の Discovery に戻らない（抜け道が無い）
+  for (const [from, to] of [["1970-01-01", "2100-12-31"], ["2026-10-08", "2026-10-08"], ["2026-09-01", "2026-10-08"]]) {
+    assert.ok(f.filterPlans(TIMED, st(from, to), NOW).every((p) => Date.parse(p.t_d) >= NOW), from + "〜" + to);
+  }
+});
+
+test("過去の計画は「過去を見る」のときだけ。ダイヤ / パール / 天の川 / その他すべて同じ日時判定（分類ごとの特例なし）", () => {
+  const periods = [{ period: "upcoming" }, { period: "weekend" }, { period: "days7" }, { period: "days30" },
+    { period: "custom", from: "2026-01-01", to: "2026-12-31" }, { period: "past" }];
+  for (const p of periods) {
+    const out = f.filterPlans(TIMED, Object.assign({ categories: f.CATEGORY_IDS }, p), NOW);
+    const ref = keysOf(out, "diamond");
+    for (const c of f.CATEGORY_IDS) assert.deepEqual(keysOf(out, c), ref, p.period + " " + c);
+    const hasPast = out.some((x) => Date.parse(x.t_d) < NOW);
+    assert.equal(hasPast, p.period === "past", p.period);
+    assert.equal(f.pastNotice(p), p.period === "past", p.period);
+  }
+  const past = f.filterPlans(TIMED, { period: "past", categories: f.CATEGORY_IDS }, NOW);
+  for (const c of f.CATEGORY_IDS) assert.deepEqual(keysOf(past, c), ["past40d", "past3d", "past1s"], c);
 });

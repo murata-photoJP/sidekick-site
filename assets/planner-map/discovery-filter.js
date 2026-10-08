@@ -8,7 +8,7 @@
  * - 期間は撮影日時 `t_d`（UTC、保存値のまま）で絞る。境目は Asia/Tokyo（MVP は固定、HD-5）。
  * - **未来と過去を分ける（HD-4 訂正）。** PublicPlan は「この場所でこの対象が撮れる」恒久的な地点情報ではなく、特定の日時に
  *   対する撮影計画の snapshot。Discovery の単位は 撮影地点 × 撮影日時 × 分類 で、どの分類（ダイヤ / パール / 天の川 / その他）も
- *   日時で成り立つものとして同じに扱う。通常の Discovery（これから・今週末・7日間・30日間・期間指定）は t_d >= 今 だけ。
+ *   日時で成り立つものとして同じに扱う。通常の Discovery（今後すべて・今週末・7日間・30日間・期間指定）は t_d >= 今 だけ。
  *   過去の計画は「過去を見る」で明示的に選んだときだけ出し、「現在も同じ条件で撮影できることを示すものではない」と知らせる。
  *   QR / SharePlan / Viewer / snapshot は変えない（古い QR は「その日時の撮影計画の記録」として有効）。
  */
@@ -32,9 +32,10 @@
   ];
   var CATEGORY_IDS = CATEGORIES.map(function (c) { return c.id; });
 
-  // 未来の検索（初期 = これから）と、明示的に選ぶ「過去を見る」を分ける
+  // 未来の検索（初期 = 今後すべて）と、明示的に選ぶ「過去を見る」を分ける。
+  // 「今後すべて」= t_d >= 今・終わり無し（Human Review で「これから」から表記だけ変更。id は upcoming のまま）
   var PERIODS = [
-    { id: "upcoming", label: "これから" },
+    { id: "upcoming", label: "今後すべて" },
     { id: "weekend", label: "今週末" },
     { id: "days7", label: "7日間" },
     { id: "days30", label: "30日間" },
@@ -110,10 +111,12 @@
   }
 
   // 期間 → { start, end }（UTC ms、両端を含む。null の端は無制限）。不正なら { invalid: true }。
-  //   これから: 今 〜（終わり無し）。過去を見る: （始まり無し）〜 今の直前。
+  //   今後すべて: 今 〜（終わり無し）。過去を見る: （始まり無し）〜 今の直前。
   //   今週末: 月〜金 = 次の土曜 00:00 〜 日曜 23:59:59.999。土 = 今 〜 日曜 23:59:59.999。日 = 今 〜 今日 23:59:59.999。
   //   7日間 / 30日間: 今 〜（今日 + 7 / 30 日）23:59:59.999。
-  //   期間指定: 開始日 00:00 〜 終了日 23:59:59.999。ただし今より前は含めない（beforeNow = 切り捨てた部分がある）。
+  //   期間指定: 開始日 00:00 〜 終了日 23:59:59.999。ただし実際の開始は max(開始日 00:00, 今) で、今より前は含めない
+  //   （beforeNow = 切り捨てた部分がある。allPast = 期間がすべて過ぎていて 0 件。自動で「過去を見る」には切り替えない）。
+  //   期間指定で過去の計画を通常の Discovery へ戻す抜け道は作らない。分類ごとの特例も無い（どの分類も同じ t_d で比べる）。
   function periodRange(state, nowMs, timeZone) {
     var tz = timeZone || TIME_ZONE;
     var period = (state && state.period) || DEFAULT_PERIOD;
@@ -138,7 +141,7 @@
       var end = endOfDayMs(to, tz);
       if (start > end) return { invalid: true };
       // 期間指定も通常の Discovery（t_d >= 今）。今より前の部分は含めない（過去は「過去を見る」だけ）
-      if (end < nowMs) return { start: nowMs, end: nowMs - 1, beforeNow: true };   // 空の範囲
+      if (end < nowMs) return { start: nowMs, end: nowMs - 1, beforeNow: true, allPast: true };   // 空の範囲
       return { start: Math.max(start, nowMs), end: end, beforeNow: start < nowMs };
     }
     return { invalid: true };
@@ -163,7 +166,16 @@
     return !range.invalid && !!range.beforeNow;
   }
 
-  var CUSTOM_PAST_HINT = "今より前の撮影計画は含めていません。過去の撮影計画は「過去を見る」で表示できます。";
+  // 期間指定が今より前を含むときの状態: "none"（すべて今以降）/ "partial"（今より前の部分を除いた）/ "all"（すべて過ぎている = 0 件）
+  function customPastState(state, nowMs, timeZone) {
+    if (!state || state.period !== "custom") return "none";
+    var range = periodRange(state, nowMs, timeZone);
+    if (range.invalid || !range.beforeNow) return "none";
+    return range.allPast ? "all" : "partial";
+  }
+
+  var CUSTOM_PAST_HINT = "過去の撮影計画は含まれません。過去の計画は「過去を見る」から確認できます。";
+  var CUSTOM_ALL_PAST_HINT = "指定した期間はすでに過ぎています。過去の撮影計画は「過去を見る」から確認できます。";
 
   function isDefault(state) {
     return !!state && (state.period || DEFAULT_PERIOD) === DEFAULT_PERIOD && Array.isArray(state.categories)
@@ -185,7 +197,7 @@
   function summary(state) {
     var id = (state && state.period) || DEFAULT_PERIOD;
     var period = PERIODS.filter(function (p) { return p.id === id; })[0];
-    var periodText = period ? period.label : "これから";
+    var periodText = period ? period.label : PERIODS[0].label;
     if (id === "custom" && state.from && state.to) periodText = state.from.replace(/-/g, "/") + "〜" + state.to.replace(/-/g, "/");
     if (id === "past") periodText = "過去";
     var cats = CATEGORIES.filter(function (c) { return state.categories.indexOf(c.id) >= 0; }).map(function (c) { return c.label; });
@@ -207,7 +219,9 @@
     filterPlans: filterPlans,
     pastNotice: pastNotice,
     customOmitsPast: customOmitsPast,
+    customPastState: customPastState,
     CUSTOM_PAST_HINT: CUSTOM_PAST_HINT,
+    CUSTOM_ALL_PAST_HINT: CUSTOM_ALL_PAST_HINT,
     isDefault: isDefault,
     summary: summary,
     zonedMidnightMs: zonedMidnightMs
