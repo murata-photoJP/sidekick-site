@@ -114,14 +114,14 @@
     return s;
   }
 
-  function setStatus(kind, text, retry) {
+  function setStatus(kind, text, retry, retryLabel) {
     statusEl.textContent = "";
     statusEl.dataset.kind = kind || "";
     if (!text) { statusEl.hidden = true; return; }
     statusEl.hidden = false;
     statusEl.appendChild(el("span", null, text));
     if (retry) {
-      var b = el("button", "pm-retry", "もう一度読み込む");
+      var b = el("button", "pm-retry", retryLabel || "もう一度読み込む");
       b.type = "button";
       b.addEventListener("click", retry);
       statusEl.appendChild(b);
@@ -201,24 +201,218 @@
       if (seq !== requestSeq) return; // 古い要求の結果は描かない
       var truncatedCount = 0;
       results.forEach(function (r) { if (r.truncated) truncatedCount += r.count - r.plans.length; });
-      var plans = core.uniquePlans(results.map(function (r) { return r.plans; }));
-      render(plans);
-      updateCue();
-      var visible = plans.filter(function (p) { return b.contains([p.lat, p.lon]); }).length;
-      if (truncatedCount > 0) {
-        setStatus("hint", "この範囲には、表示しきれない撮影計画があります（ほか " + truncatedCount + " 件）。地図を拡大してください。");
-      } else if (visible === 0) {
-        setStatus("empty", "この範囲には、公開された撮影計画はまだありません。");
-      } else {
-        setStatus("", "");
-      }
+      lastResult = { plans: core.uniquePlans(results.map(function (r) { return r.plans; })), truncatedCount: truncatedCount, bounds: b };
+      applyFilter();
     }, function () {
       if (seq !== requestSeq) return;
+      lastResult = null;
       markerLayer.clearLayers();
       updateCue();
+      updateFilterUi();
       setStatus("error", "撮影計画を読み込めませんでした。時間をおいてもう一度お試しください。", refresh);
     });
   }
+
+  // ---- G-6 Map Discovery Filter: 取得済みの計画（表示範囲の tile）を 期間 × 撮影対象 で絞る ----
+  // server へ全件を求めない（地域 = 表示範囲。地図を動かすと今までどおり自動で取り直す、HD-1）。
+  // 初期は「これから」× すべての撮影対象。過去は「過去を見る」で明示的に選んだときだけ（HD-4 訂正）。
+  var Filter = window.PlannerMapFilter;
+  var filterState = Filter.defaultState();
+  var lastResult = null;   // { plans, truncatedCount, bounds }（最後に取得した表示範囲の計画。絞る前）
+
+  function applyFilter() {
+    if (!lastResult) { updateFilterUi(); return; }
+    var b = lastResult.bounds;
+    var shown = Filter.filterPlans(lastResult.plans, filterState, Date.now());
+    render(shown);
+    updateCue();
+    var visible = shown.filter(function (p) { return b.contains([p.lat, p.lon]); }).length;
+    updateFilterUi(visible);
+    if (lastResult.truncatedCount > 0) {
+      setStatus("hint", "この範囲には、表示しきれない撮影計画があります（ほか " + lastResult.truncatedCount + " 件）。地図を拡大してください。");
+    } else if (filterState.categories.length === 0) {
+      setStatus("empty", "撮影対象が選ばれていません", selectAllCategories, "すべて選ぶ");
+    } else if (visible === 0 && lastResult.plans.length === 0) {
+      setStatus("empty", "この範囲には、公開された撮影計画はまだありません。");
+    } else if (visible === 0) {
+      setStatus("empty", "この範囲には、選んだ条件に合う撮影計画はありません。");
+    } else {
+      setStatus("", "");
+    }
+  }
+
+  var filterBox = el("div", "pm-filter");
+  var filterToggle = el("button", "pm-filter-toggle");
+  filterToggle.type = "button";
+  filterToggle.id = "pm-filter-toggle";
+  filterToggle.setAttribute("aria-expanded", "false");
+  filterToggle.setAttribute("aria-controls", "pm-filter-panel");
+  filterToggle.appendChild(el("span", "pm-filter-label", "絞り込み"));
+  var filterSummary = el("span", "pm-filter-summary");
+  filterSummary.id = "pm-filter-summary";
+  filterToggle.appendChild(filterSummary);
+  var filterCount = el("p", "pm-filter-count");
+  filterCount.id = "pm-filter-count";
+  filterCount.setAttribute("role", "status");
+  filterCount.setAttribute("aria-live", "polite");
+  var pastNoticeEl = el("p", "pm-past-notice", Filter.PAST_NOTICE);
+  pastNoticeEl.id = "pm-past-notice";
+  pastNoticeEl.setAttribute("role", "note");
+  pastNoticeEl.hidden = true;
+
+  var filterPanel = el("section", "pm-filter-panel");
+  filterPanel.id = "pm-filter-panel";
+  filterPanel.setAttribute("aria-label", "撮影計画の絞り込み");
+  filterPanel.hidden = true;
+
+  function radio(name, value, label, checked) {
+    var wrap = el("label", "pm-filter-option");
+    var input = el("input");
+    input.type = "radio";
+    input.name = name;
+    input.value = value;
+    input.checked = checked;
+    wrap.appendChild(input);
+    wrap.appendChild(el("span", null, label));
+    return wrap;
+  }
+
+  // 期間: 未来の検索（これから・今週末・7日間・30日間・期間指定）と、過去を見る を分けて置く
+  var periodSet = el("fieldset", "pm-filter-group");
+  periodSet.appendChild(el("legend", null, "撮影日時"));
+  Filter.PERIODS.forEach(function (p) {
+    if (p.id === "past") return;
+    periodSet.appendChild(radio("pm-period", p.id, p.label, filterState.period === p.id));
+  });
+  var customBox = el("div", "pm-filter-custom");
+  customBox.hidden = true;
+  var fromInput = el("input");
+  fromInput.type = "date";
+  fromInput.id = "pm-filter-from";
+  fromInput.setAttribute("aria-label", "開始日");
+  var toInput = el("input");
+  toInput.type = "date";
+  toInput.id = "pm-filter-to";
+  toInput.setAttribute("aria-label", "終了日");
+  customBox.appendChild(fromInput);
+  customBox.appendChild(el("span", null, "〜"));
+  customBox.appendChild(toInput);
+  periodSet.appendChild(customBox);
+  var customHintEl = el("p", "pm-filter-note", Filter.CUSTOM_PAST_HINT);
+  customHintEl.id = "pm-filter-custom-hint";
+  customHintEl.hidden = true;
+  periodSet.appendChild(customHintEl);
+  var pastSet = el("fieldset", "pm-filter-group pm-filter-past");
+  pastSet.appendChild(el("legend", null, "過去の撮影計画"));
+  pastSet.appendChild(radio("pm-period", "past", "過去を見る", filterState.period === "past"));
+  pastSet.appendChild(el("p", "pm-filter-note", "撮影日時を過ぎた計画です。現在も同じ条件で撮影できるとは限りません。"));
+
+  var catSet = el("fieldset", "pm-filter-group");
+  catSet.appendChild(el("legend", null, "撮影対象"));
+  var catInputs = Filter.CATEGORIES.map(function (c) {
+    var wrap = el("label", "pm-filter-option");
+    var input = el("input");
+    input.type = "checkbox";
+    input.value = c.id;
+    input.checked = filterState.categories.indexOf(c.id) >= 0;
+    wrap.appendChild(input);
+    wrap.appendChild(el("span", null, c.label));
+    catSet.appendChild(wrap);
+    return input;
+  });
+  var allButton = el("button", "pm-filter-all", "すべて選ぶ");
+  allButton.type = "button";
+  catSet.appendChild(allButton);
+
+  var panelFoot = el("div", "pm-filter-foot");
+  var resetButton = el("button", "pm-filter-reset", "初期の条件に戻す");
+  resetButton.type = "button";
+  var doneButton = el("button", "pm-filter-done", "閉じる");
+  doneButton.type = "button";
+  panelFoot.appendChild(resetButton);
+  panelFoot.appendChild(doneButton);
+  filterPanel.appendChild(periodSet);
+  filterPanel.appendChild(pastSet);
+  filterPanel.appendChild(catSet);
+  filterPanel.appendChild(panelFoot);
+  filterBox.appendChild(filterToggle);
+  filterBox.appendChild(filterCount);
+  filterBox.appendChild(pastNoticeEl);
+  filterBox.appendChild(filterPanel);
+
+  function updateFilterUi(visible) {
+    filterSummary.textContent = Filter.summary(filterState);
+    filterToggle.dataset.filtered = Filter.isDefault(filterState) ? "false" : "true";
+    customBox.hidden = filterState.period !== "custom";
+    pastNoticeEl.hidden = !Filter.pastNotice(filterState);
+    customHintEl.hidden = !Filter.customOmitsPast(filterState, Date.now());
+    if (typeof visible === "number") {
+      filterCount.textContent = "この範囲 " + visible + "件" + (lastResult && lastResult.truncatedCount > 0 ? "以上" : "");
+      filterCount.hidden = false;
+    } else {
+      filterCount.textContent = "";
+      filterCount.hidden = true;
+    }
+  }
+
+  function readFilterControls() {
+    var checked = filterPanel.querySelector('input[name="pm-period"]:checked');
+    filterState = {
+      period: checked ? checked.value : Filter.DEFAULT_PERIOD,
+      from: fromInput.value,
+      to: toInput.value,
+      categories: catInputs.filter(function (i) { return i.checked; }).map(function (i) { return i.value; })
+    };
+    applyFilter();
+  }
+
+  function writeFilterControls() {
+    Array.prototype.forEach.call(filterPanel.querySelectorAll('input[name="pm-period"]'), function (r) {
+      r.checked = r.value === filterState.period;
+    });
+    fromInput.value = filterState.from || "";
+    toInput.value = filterState.to || "";
+    catInputs.forEach(function (i) { i.checked = filterState.categories.indexOf(i.value) >= 0; });
+  }
+
+  function selectAllCategories() {
+    catInputs.forEach(function (i) { i.checked = true; });
+    readFilterControls();
+  }
+
+  function setFilterOpen(open) {
+    filterPanel.hidden = !open;
+    filterToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    filterBox.classList.toggle("pm-filter-open", open);
+    // スマートフォンの sheet（position: fixed）が右下の出典（Leaflet control）の下に隠れないよう、開いている間だけ
+    // 右上の control 群を前に出す（出典は消さない）
+    if (filterBox.parentElement) filterBox.parentElement.classList.toggle("pm-filter-raised", open);
+    if (open) {
+      var first = filterPanel.querySelector('input[name="pm-period"]:checked');
+      if (first) first.focus();
+    }
+  }
+
+  filterPanel.addEventListener("change", readFilterControls);
+  allButton.addEventListener("click", selectAllCategories);
+  resetButton.addEventListener("click", function () { filterState = Filter.defaultState(); writeFilterControls(); applyFilter(); });
+  doneButton.addEventListener("click", function () { setFilterOpen(false); filterToggle.focus(); });
+  filterToggle.addEventListener("click", function () { setFilterOpen(filterPanel.hidden); });
+  filterPanel.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape") { ev.preventDefault(); setFilterOpen(false); filterToggle.focus(); }
+  });
+
+  // 地図の上の小さな control（右上）。地図の中に置くので、詳細の panel と重ならない。操作が地図の pan / zoom にならない
+  var FilterControl = L.Control.extend({
+    options: { position: "topright" },
+    onAdd: function () {
+      L.DomEvent.disableClickPropagation(filterBox);
+      L.DomEvent.disableScrollPropagation(filterBox);
+      return filterBox;
+    }
+  });
+  map.addControl(new FilterControl());
+  updateFilterUi();
 
   // 1 件 = pin（ジャンル記号入り）、複数 = 同じ pin ＋ 件数 ＋ 後ろに重なったもう 1 本（G-3.2）。
   // 同じ「撮影計画がある地点」の family として見せ、中身（記号 / 数字）と重なりで区別する（色だけにしない）

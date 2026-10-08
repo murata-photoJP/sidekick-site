@@ -12,6 +12,7 @@ const zlib = require("node:zlib");
 const { CONSTANTS } = require("./config");
 const { sha256Hex } = require("./tokens");
 const viewer = require("./viewer_decoder.generated.js");
+const { categoriesFromDecoded } = require("./discovery");
 
 class SharePlanError extends Error {
   constructor(code, message) {
@@ -88,6 +89,8 @@ async function parsePublishableFragment(fragment) {
       sky_object_label: labels.skyObjectLabel
     };
   }
+  // G-6（Map Discovery Filter）: Map で探すための分類層。genre・空の対象 id から導く（表示文字列では判定しない）
+  display.categories = categoriesFromDecoded(decoded);
   return {
     snapshot: {
       fragment,

@@ -184,7 +184,9 @@ def test_11_12_tile_responses_expose_no_fragment_or_owner_fields(browser):
     goto_map(page)
     set_view(page, 35.418, 138.87, 13)
     assert rec.tile_bodies
-    allowed = {"plan_id", "lat", "lon", "genre", "genre_label", "target_label", "sky_object_label", "t_d", "location_precision"}
+    # G-6（HD-6）: Map discovery の分類 categories を追加（識別子の配列だけ。fragment / token / owner は引き続き出さない）
+    allowed = {"plan_id", "lat", "lon", "genre", "genre_label", "target_label", "sky_object_label", "t_d", "location_precision",
+               "categories"}
     for body in rec.tile_bodies:
         data = json.loads(body)
         assert set(data) <= {"z", "x", "y", "truncated", "count", "plans"}

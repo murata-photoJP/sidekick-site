@@ -13,6 +13,7 @@ const { newPlanId, newManageToken, sha256Hex, tokenMatches, PLAN_ID_RE, IDEMPOTE
 const { parsePublishableFragment, SharePlanError } = require("./shareplan");
 const { tileKeysFor, parseTileRequest } = require("./tiles");
 const lifecycle = require("./lifecycle");
+const { categoriesOfDocument } = require("./discovery");
 
 class QrMapError extends Error {
   constructor(code, status) {
@@ -43,7 +44,9 @@ function publicView(doc, withFragment) {
     target_label: doc.display.target_label,
     sky_object_label: doc.display.sky_object_label,
     t_d: doc.display.t_d,
-    location_precision: doc.location_precision
+    location_precision: doc.location_precision,
+    // G-6: Map discovery の分類（G-6 より前の document は取得時に導く。migration しない）
+    categories: categoriesOfDocument(doc)
   };
   if (withFragment) {
     out.fragment = doc.snapshot.fragment;

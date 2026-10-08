@@ -120,7 +120,54 @@ article.pm-card { margin-top: 6px; }
 .pm-cue[hidden] { display: none; }
 .pm-cue-sub { font-size: 0.78rem; font-weight: 400; opacity: 0.92; }
 
+/* ---- G-6 Map Discovery Filter: 地図右上の小さな control（地図を大きく隠さない） ---- */
+.pm-filter { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; max-width: 300px; }
+.pm-filter-toggle { display: flex; flex-direction: column; align-items: flex-end; gap: 1px; min-height: 40px; padding: 6px 12px;
+  border: 1px solid var(--pm-border); border-radius: 8px; background: var(--pm-panel); color: var(--pm-fg); cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2); font: inherit; text-align: right; }
+.pm-filter-label { font-weight: 700; font-size: 0.92rem; }
+.pm-filter-label::after { content: " ▾"; font-size: 0.8em; }
+.pm-filter-open .pm-filter-label::after { content: " ▴"; }
+.pm-filter-summary { font-size: 0.78rem; color: var(--pm-muted); }
+.pm-filter-toggle[data-filtered="true"] { border-color: var(--pm-action); border-width: 2px; }
+.pm-filter-toggle[data-filtered="true"] .pm-filter-summary { color: var(--pm-action); font-weight: 600; }
+.pm-filter-count { margin: 0; padding: 2px 8px; border-radius: 6px; background: rgba(255, 255, 255, 0.94);
+  font-size: 0.82rem; font-weight: 600; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
+.pm-filter-count[hidden] { display: none; }
+.pm-past-notice { margin: 0; padding: 6px 10px; max-width: 280px; border: 2px solid #b45309; border-radius: 8px;
+  background: #fffbeb; color: #78350f; font-size: 0.82rem; font-weight: 600; line-height: 1.45; }
+.pm-past-notice[hidden] { display: none; }
+.pm-filter-panel { width: 280px; max-height: calc(100vh - 220px); overflow-y: auto; padding: 10px 12px; border: 1px solid var(--pm-border);
+  border-radius: 10px; background: var(--pm-panel); box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); text-align: left; }
+.pm-filter-panel[hidden] { display: none; }
+.pm-filter-group { margin: 0 0 10px; padding: 0; border: 0; }
+.pm-filter-group legend { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+.pm-filter-option { display: flex; align-items: center; gap: 8px; min-height: 32px; font-size: 0.92rem; cursor: pointer; }
+.pm-filter-option input { width: 18px; height: 18px; margin: 0; }
+.pm-filter-custom { display: flex; align-items: center; gap: 4px; margin: 2px 0 4px 26px; flex-wrap: wrap; }
+.pm-filter-custom[hidden] { display: none; }
+.pm-filter-custom input { font: inherit; font-size: 0.85rem; padding: 2px 4px; }
+.pm-filter-past { padding-top: 8px; border-top: 1px dashed var(--pm-border); }
+.pm-filter-note { margin: 2px 0 0; font-size: 0.78rem; color: var(--pm-muted); }
+.pm-filter-note[hidden] { display: none; }
+.pm-filter-all, .pm-filter-reset { margin-top: 4px; padding: 2px 0; border: 0; background: none; color: var(--pm-action);
+  font: inherit; font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
+.pm-filter-foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding-top: 6px;
+  border-top: 1px solid var(--pm-border); }
+.pm-filter-done { min-height: 36px; padding: 4px 14px; border: 1px solid var(--pm-border); border-radius: 6px;
+  background: var(--pm-panel); font: inherit; cursor: pointer; }
+.leaflet-top.pm-filter-raised { z-index: 1001; }
+.pm-filter-toggle:focus-visible, .pm-filter-option input:focus-visible, .pm-filter-all:focus-visible, .pm-filter-reset:focus-visible,
+.pm-filter-done:focus-visible, .pm-filter-custom input:focus-visible { outline: 3px solid var(--pm-focus); outline-offset: 2px; }
+
 @media (max-width: 700px) {
+  /* スマートフォン: 地図の上はボタン・件数・注意だけ。条件は画面下の sheet（開いている間だけ） */
+  .pm-filter { max-width: 210px; }
+  .pm-filter-toggle { min-height: 36px; padding: 4px 10px; }
+  .pm-filter-summary { max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pm-past-notice { max-width: 200px; font-size: 0.75rem; }
+  .pm-filter-panel { position: fixed; left: 0; right: 0; bottom: 0; width: auto; max-height: 62vh; z-index: 1100;
+    border-radius: 14px 14px 0 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); }
   .pm-intro { padding: 8px 12px 8px 12px; gap: 4px; border-left-width: 5px; }
   .pm-intro-eyebrow { font-size: 0.75rem; }
   .pm-intro-headline { font-size: 1.08rem; }

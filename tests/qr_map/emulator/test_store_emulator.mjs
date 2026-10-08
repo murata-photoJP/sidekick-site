@@ -436,3 +436,30 @@ test("G-5.1 live local smoke（HTTP 経由・Cron endpoint）: publish → 詳�
   assert.equal(JSON.stringify(ok.body).includes(planId), false);           // 応答に plan_id を出さない
   assert.equal(await planDoc(planId), null);
 });
+
+// ---- G-6（Map Discovery Filter）U1: display.categories --------------------------------------------
+test("G-6: publish で display.categories を保存し、tile の応答に返す（実 SharePlan、v1 / v2）", async () => {
+  const cases = [["VALID_GV-1", ["diamond"]], ["VALID_GV-3", ["pearl"]], ["VALID_V2-SLMW-1", ["milky_way"]],
+    ["VALID_V2-SLST-1", ["other"]], ["VALID_V2-SL-1", ["other"]], ["VALID_V2-ST-1", ["other"]]];
+  for (const [id, expected] of cases) {
+    const r = await publish(byId[id].payload);
+    const doc = await planDoc(r.plan_id);
+    assert.deepEqual(doc.display.categories, expected, id + "（保存値）");
+    const [z, x, y] = doc.tiles.z6.split("/").map(Number);
+    const tile = await store.getTile({ z, x, y, nowMs: T0 + 1 });
+    const mine = tile.plans.find((p) => p.plan_id === r.plan_id);
+    assert.deepEqual(mine.categories, expected, id + "（tile の応答）");
+    assert.equal(mine.fragment, undefined);
+  }
+});
+
+test("G-6: G-6 より前の document（categories 無し）も tile で分類を返す（migration しない、取得時に導く）", async () => {
+  const r = await publish(byId["VALID_V2-SLMW-1"].payload);
+  const ref = db.collection(CONSTANTS.COLLECTION_PLANS).doc(r.plan_id);
+  await ref.update({ "display.categories": admin.firestore.FieldValue.delete() });
+  const doc = await planDoc(r.plan_id);
+  assert.equal(doc.display.categories, undefined);
+  const [z, x, y] = doc.tiles.z6.split("/").map(Number);
+  const tile = await store.getTile({ z, x, y, nowMs: T0 + 1 });
+  assert.deepEqual(tile.plans.find((p) => p.plan_id === r.plan_id).categories, ["milky_way"]);
+});
