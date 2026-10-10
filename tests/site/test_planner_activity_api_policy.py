@@ -111,7 +111,10 @@ def test_vercel_cron_runs_the_cleanup_once_a_day() -> None:
     import json
     config = json.loads(VERCEL_JSON.read_text(encoding="utf-8-sig"))
     crons = config.get("crons", [])
-    assert [c["path"] for c in crons] == ["/api/planner-activity-cleanup"]
-    schedule = crons[0]["schedule"].split()
+    # ほかの機能の Cron（QR マップの /api/qr-map-cleanup、site a991c5c・HD-PLANNERQRMAP-044）が並んでもよい。
+    # Planner の Activity cleanup がちょうど 1 本あることだけを確かめる。
+    planner = [c for c in crons if c["path"] == "/api/planner-activity-cleanup"]
+    assert len(planner) == 1
+    schedule = planner[0]["schedule"].split()
     assert len(schedule) == 5 and schedule[2:] == ["*", "*", "*"]      # 1 日 1 回（Hobby の精度）
     assert schedule[0].isdigit() and schedule[1].isdigit()
