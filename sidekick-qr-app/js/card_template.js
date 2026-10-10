@@ -25,10 +25,10 @@
   const SECONDARY_QR_SCALE = 5;
   const SECONDARY_QR_BORDER = 4;
   // Card の見た目（Sidekick シリーズの色: Planner Card = 黒、Sidekick QR URL = 灰、Sidekick QR EXIF = 白）。
-  // 具体的な濃度・frame は Human Review で実物を見て決める（HD-SIDEKICKQR-026）。
+  // 具体的な濃度・frame は Human Review で実物を見て決める（HD-SIDEKICKQR-026）。1.1.1: URL の地 = 128（#808080）、文字は明るく。
   const STYLES = Object.freeze({
-    url: Object.freeze({ background: "#e4e6e8", frame: "#aab1b7", rule: null }),
-    exif: Object.freeze({ background: "#ffffff", frame: "#c7cdd2", rule: null }),
+    url: Object.freeze({ background: "#808080", frame: "#aab1b7", rule: null, ink: "#ffffff", subInk: "#e6e9ec" }),
+    exif: Object.freeze({ background: "#ffffff", frame: "#c7cdd2", rule: null, ink: "#1d2328", subInk: "#59636c" }),
   });
   const MAT = 48;                // 写真の上・左・右の余白（px）。下は帯の余白（Card Engine の padding）が続く
   const FRAME_GAP = 12;          // 写真の縁と細線の間（px）
@@ -64,7 +64,7 @@
       title,
       lines: description ? [["", description]] : [],
       branding: { ...BRANDING, qrPng: secondaryQrPng },
-      style: { background: style.background, rule: style.rule },
+      style: { background: style.background, rule: style.rule, ink: style.ink, subInk: style.subInk },
     });
     return { card, mode, payload, qrPng, qr, secondaryQrPng, secondaryQr };
   }

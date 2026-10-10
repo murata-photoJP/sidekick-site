@@ -116,3 +116,13 @@ py -3.10 tools/preview_static_site.py --port 3334    # http://127.0.0.1:3334/sid
 - **Human Acceptance PASS（2026-09-30、HD-SIDEKICKQR-031）**: URL / EXIF が同じ製品の 2 つの使い方として自然・EXIF 選択時の UI・撮影情報の説明・GPS 等を含めない説明・
   「写真から、Webへつなぐ。」の性格・layout がすべて PASS。修正は上部の 1 文だけ（Primary は `/exif#…` への URL なので「撮影情報へつながる QR」が正確）:
   JA「URLだけでなく、写真の撮影情報へつながるQRコードも作れます。」/ EN「You can also create a QR code that links to the photo's shooting information.」
+
+## 12. Sidekick QR 1.1.1（2026-10-10、HD-SIDEKICKQR-032 / -033）
+
+- URL Card の地 = 128（`#808080`）・文字を明るく（`#ffffff` / `#e6e9ec`）、「1. 画像」の枠への D&D。EXIF Card（白）・QR・Secondary `/card/qr`・`/exif` は変えない。
+  Human Acceptance は 1.1.1-rc.1（HD-SIDEKICKQR-033）。
+- `/sidekick-qr-app/` = Sidekick QR source `fae34da` の書き出し（core = Portable 1.1.1）。validation surface の copy は 1.0.0 のまま。
+- Download: 製品ページ（JA 1 か所・EN 2 か所）は **`/downloads/sidekick-qr/SidekickQR-1.1.1.zip`**（35,892 bytes、SHA-256 `013d7a5d7a85b7dbc43db0e0161051415ce787cd01be1ba7d6681644d55192ba`、
+  identity は Sidekick QR repository の `docs/release_artifact_1.1.1.json`）へ。**1.0.0 / 1.0.1 / 1.1.0 の ZIP は置いたまま・上書きしない**（link はしない）。
+- 製品ページの本文は版・Download だけを変えた（ZIP の大きさは約 35 KB のまま）。title・meta description・nav・sitemap は変えない。
+- 固定テスト: `tests/site/test_sidekick_qr_product_page.py`（1.1.1 の link・SHA、1.0.0 / 1.0.1 / 1.1.0 が不変で残る）、`tests/site/test_sidekick_qr_web_validation.py`（copy ごとの版、1.1.1 の core）。

@@ -22,6 +22,9 @@
   label .optional{font-weight:400;color:var(--sub)}
   input[type=text],input[type=url]{width:100%;padding:10px;font:inherit;border:1px solid var(--line);border-radius:6px}
   input[type=file]{font:inherit}
+  .drop{border:2px dashed var(--line);border-radius:8px;padding:14px;background:var(--bg)}
+  .drop.over{border-color:var(--accent);background:#eaf2fa}
+  .drop-hint{color:var(--sub);font-size:.875rem;margin:6px 0 0}
   .hint{color:var(--sub);font-size:.875rem;margin:4px 0 0}
   ul.messages{margin:6px 0 0;padding-left:1.2em;font-size:.9rem;color:var(--warn)}
   ul.messages.error{color:var(--error)}
@@ -76,7 +79,10 @@
     </fieldset>
 
     <label for="photo">1. 画像</label>
-    <input id="photo" type="file" accept="image/jpeg,image/png">
+    <div id="photo-drop" class="drop">
+      <input id="photo" type="file" accept="image/jpeg,image/png">
+      <p class="drop-hint">ここに画像をドラッグ＆ドロップしても選べます</p>
+    </div>
     <p class="hint">JPEG / PNG を 1 枚。画像は切り取らずに全体を収めます。<span id="photo-info"></span></p>
 
     <div id="url-section">

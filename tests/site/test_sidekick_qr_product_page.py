@@ -38,12 +38,13 @@ JA_KEY = "sidekick-qr"
 EN_KEY = "en/sidekick-qr"
 JA_URL = "https://www.sidekick-lab.com/sidekick-qr"
 EN_URL = "https://www.sidekick-lab.com/en/sidekick-qr"
-DOWNLOAD_HREF = "/downloads/sidekick-qr/SidekickQR-1.1.0.zip"
-# Sidekick QR repository の docs/release_artifact_1.1.0.json / tools/build_portable_zip.py（source 452cc6a）で作った正式 artifact（HD-SIDEKICKQR-030）
-DOWNLOAD_SHA256 = "67d36101f28f604918d5f70ecbfe4d9fbc26213da865bf572f55a294ed992564"
+DOWNLOAD_HREF = "/downloads/sidekick-qr/SidekickQR-1.1.1.zip"
+# Sidekick QR repository の docs/release_artifact_1.1.1.json / tools/build_portable_zip.py（source ce81f68）で作った正式 artifact（HD-SIDEKICKQR-033）
+DOWNLOAD_SHA256 = "013d7a5d7a85b7dbc43db0e0161051415ce787cd01be1ba7d6681644d55192ba"
 # 1.0.0（HD-SIDEKICKQR-016、source e9b3900）・1.0.1（HD-SIDEKICKQR-023、source 6f53361）は immutable: 置いたまま・bytes を変えない（link はもうしない）
 PREVIOUS = {"/downloads/sidekick-qr/SidekickQR-1.0.0.zip": "6bdaac3bd617b523195a07448d198ae013869a7ccd0d8c719f8862e666cbf405",
-            "/downloads/sidekick-qr/SidekickQR-1.0.1.zip": "0447c2e8fd69949e54ba1242835eca71623de491f7bc17c665de15722f4964e1"}
+            "/downloads/sidekick-qr/SidekickQR-1.0.1.zip": "0447c2e8fd69949e54ba1242835eca71623de491f7bc17c665de15722f4964e1",
+            "/downloads/sidekick-qr/SidekickQR-1.1.0.zip": "67d36101f28f604918d5f70ecbfe4d9fbc26213da865bf572f55a294ed992564"}   # 1.1.0（HD-SIDEKICKQR-030）も 1.1.1 から immutable
 
 FORBIDDEN_IN_MAIN = (
     "overlay", "オーバーレイ", "sns", "テンプレート", "template", "一括", "batch",
@@ -123,7 +124,7 @@ def test_ja_required_content(rendered: dict[str, str]) -> None:
     for text in ("Sidekick QR", "by Sidekick Lab", "写真から、Webへつなぐ。", "写真 ＋ URL → QRカード", "JPEG / PNG", "プレビュー",
                  "PNG で保存", "Windows", "ZIP", "インストール不要", "Python などの追加ソフトも不要", "画像は sRGB を基準に処理します。",
                  "Sidekick QR の処理のために外部のサーバーへ送信されません。", "その QRコードが指す Web ページにアクセスします",
-                 "1.1.0", "TERMS.txt", "自動更新はありません",
+                 "1.1.1", "TERMS.txt", "自動更新はありません",
                  # Web 版（HD-SIDEKICKQR-021）と privacy / analytics の境界
                  "このページの中で、そのまま使えます", "オフラインで使う", "［PNGを保存・共有］",
                  "このページの表示（ページや画像、プログラムの読み込み）にはインターネットを使います。",
@@ -143,7 +144,7 @@ def test_en_required_content(rendered: dict[str, str]) -> None:
     for text in ("Sidekick QR", "by Sidekick Lab", "Connect a photo to the web.", "Photo + URL → QR card", "JPEG / PNG", "preview",
                  "save it as PNG", "Windows", "ZIP", "No installation", "no Python", "Images are processed on an sRGB basis.",
                  "not sent to any external server for Sidekick QR's processing.", "open the web page that code points to",
-                 "1.1.0", "TERMS.txt", "no automatic updates",
+                 "1.1.1", "TERMS.txt", "no automatic updates",
                  # 1.1.0 EXIF mode（JA と同じ事実）
                  "You can also create a QR code that links to the photo's shooting information.", "A URL, or the shooting information",
                  "URL mode", "EXIF mode", "camera, lens, focal length, aperture, shutter speed, ISO and date taken",
@@ -250,7 +251,7 @@ def test_global_nav_has_sidekick_qr_right_after_dof() -> None:
 
 
 def test_previous_release_zip_is_kept_unchanged(rendered: dict[str, str]) -> None:
-    """1.0.0 / 1.0.1 の ZIP は上書き・削除しない（HD-SIDEKICKQR-023 / -030）。製品ページからは最新の 1.1.0 だけへ link する。"""
+    """1.0.0 / 1.0.1 / 1.1.0 の ZIP は上書き・削除しない（HD-SIDEKICKQR-023 / -030 / -033）。製品ページからは最新の 1.1.1 だけへ link する。"""
     for href, sha256 in PREVIOUS.items():
         artifact = REPO_ROOT / href.lstrip("/")
         assert artifact.is_file(), href

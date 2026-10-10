@@ -70,6 +70,7 @@
   //   lines:   [[label, value], ...]（label が空なら値だけの行）
   //            frame（任意、2026-09-30 追加）: {x, y, width, height, lineWidth, color} があれば、写真の周りにその矩形の細線を描く（Sidekick QR 1.1.0 の mat / frame）。
   //   style（任意、2026-09-30 追加）: {background, rule}。Card の地の色と、写真と帯の区切り線（rule が null なら描かない）。無ければ今までの CARD の値。
+//            ink / subInk（任意、1.1.1 追加）: 見出し・値・branding の文字色 / label・caption の文字色。無ければ CARD の値（暗い地の Card で明るい文字にする）。
   //            QR の quiet zone は QR の PNG 自体が白で持っているので、地の色を変えても白のまま（QR の PNG は加工しない）。
   //   branding: {name, caption, qrPng?, cta?}（無ければ描かない）
   //            qrPng があれば（Sidekick QR の Secondary QR、2026-09-27 追加）、帯の左下に等倍・補間なしで置き、その右に name / caption / cta を並べる。
@@ -104,6 +105,8 @@
     canvas.height = picture.areaHeight + bandHeight;
     const context = canvas.getContext("2d");
     const style = input.style || {};
+    const ink = style.ink || CARD.ink;
+    const subInk = style.subInk || CARD.subInk;
     context.fillStyle = style.background || CARD.background;
     context.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -139,14 +142,14 @@
     const textX = pad;
     const textWidth = qrX - 2 * pad;
     let y = qrY;
-    drawText(context, input.title, textX, y, "700 44px system-ui, sans-serif", CARD.ink, textWidth);
+    drawText(context, input.title, textX, y, "700 44px system-ui, sans-serif", ink, textWidth);
     y += 76;
     for (const [label, value] of input.lines || []) {
       if (label) {
-        drawText(context, label, textX, y, "600 26px system-ui, sans-serif", CARD.subInk, textWidth);
+        drawText(context, label, textX, y, "600 26px system-ui, sans-serif", subInk, textWidth);
         y += 36;
       }
-      drawText(context, value, textX, y, "400 36px system-ui, sans-serif", CARD.ink, textWidth);
+      drawText(context, value, textX, y, "400 36px system-ui, sans-serif", ink, textWidth);
       y += 60;
     }
     if (input.branding && brandQr) {
@@ -159,21 +162,21 @@
       const brandX = brandQrX + brandQr.naturalWidth + 24;
       const brandWidth = qrX - pad - brandX;
       let brandY = brandQrY + Math.max(0, Math.round((brandQr.naturalHeight - 134) / 2));
-      drawText(context, input.branding.name, brandX, brandY, "700 52px system-ui, sans-serif", CARD.ink, brandWidth);
+      drawText(context, input.branding.name, brandX, brandY, "700 52px system-ui, sans-serif", ink, brandWidth);
       brandY += 64;
       if (input.branding.caption) {
-        drawText(context, input.branding.caption, brandX, brandY, "400 26px system-ui, sans-serif", CARD.subInk, brandWidth);
+        drawText(context, input.branding.caption, brandX, brandY, "400 26px system-ui, sans-serif", subInk, brandWidth);
         brandY += 40;
       }
       if (input.branding.cta) {
-        drawText(context, input.branding.cta, brandX, brandY, "600 26px system-ui, sans-serif", CARD.ink, brandWidth);
+        drawText(context, input.branding.cta, brandX, brandY, "600 26px system-ui, sans-serif", ink, brandWidth);
       }
     } else if (input.branding) {
       const brandY = picture.areaHeight + bandHeight - pad - 92;
-      drawText(context, input.branding.name, textX, brandY, "700 52px system-ui, sans-serif", CARD.ink, textWidth);
+      drawText(context, input.branding.name, textX, brandY, "700 52px system-ui, sans-serif", ink, textWidth);
       if (input.branding.caption) {
         drawText(context, input.branding.caption, textX, brandY + 64, "400 26px system-ui, sans-serif",
-                 CARD.subInk, textWidth);
+                 subInk, textWidth);
       }
     }
 

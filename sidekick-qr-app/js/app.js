@@ -131,6 +131,34 @@
       }
       await readExif();
     });
+
+    // D&D: 落とした最初の 1 枚を file input に入れ、選んだときと同じ change の処理を通す。
+    // 枠の外に落としたときは browser が画像を開いて入力が消えないよう、既定の動作だけ止める。
+    const dropZone = $("photo-drop");
+    const hasFiles = (event) => event.dataTransfer && Array.from(event.dataTransfer.types || []).includes("Files");
+    document.addEventListener("dragover", (event) => { if (hasFiles(event)) event.preventDefault(); });
+    document.addEventListener("drop", (event) => { if (hasFiles(event)) event.preventDefault(); });
+    dropZone.addEventListener("dragover", (event) => {
+      if (!hasFiles(event)) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "copy";
+      dropZone.classList.add("over");
+    });
+    dropZone.addEventListener("dragleave", (event) => {
+      if (!dropZone.contains(event.relatedTarget)) dropZone.classList.remove("over");
+    });
+    dropZone.addEventListener("drop", (event) => {
+      dropZone.classList.remove("over");
+      if (!hasFiles(event)) return;
+      event.preventDefault();
+      const file = event.dataTransfer.files[0];
+      if (!file) return;
+      const transfer = new DataTransfer();
+      transfer.items.add(file);
+      photoInput.files = transfer.files;
+      photoInput.dispatchEvent(new Event("change"));
+    });
+
     for (const input of [titleInput, descriptionInput]) input.addEventListener("input", inputsChanged);
     urlInput.addEventListener("input", () => { inputsChanged(); checkUrlField(); });
 
