@@ -962,7 +962,55 @@ let lastTerrain = null;
     return targetDistanceM - distanceAlongRayM <= RULE.target_side_m && pointToTargetM <= RULE.target_massif_radius_m;
   }
 
-  global.PreviewTerrainRule = Object.freeze({ RULE, rangeM, belongsToTarget });
+  const FAR_WINDOW = Object.freeze({
+    max_range_m: 300000,
+  });
+
+  function farRangeM(targetDistanceM, baseRangeM) {
+    const neededM = targetDistanceM + RULE.range_beyond_target_m;
+    return neededM > baseRangeM ? Math.min(FAR_WINDOW.max_range_m, neededM) : null;
+  }
+
+  function farWindow(targetAzimuthDeg, targetDistanceM, baseRangeM, azimuthStepDeg) {
+    const rangeM = farRangeM(targetDistanceM, baseRangeM);
+    if (rangeM === null || !Number.isFinite(targetAzimuthDeg)) return null;
+    const halfDeg = (Math.asin(Math.min(1, RULE.target_massif_radius_m / targetDistanceM)) * 180) / Math.PI + azimuthStepDeg;
+    return { center_deg: targetAzimuthDeg, half_deg: halfDeg, range_m: rangeM };
+  }
+
+  function rayRangeM(azimuthDeg, baseRangeM, farWindowSpec) {
+    if (!farWindowSpec) return baseRangeM;
+    const unwrapped = azimuthDeg + 360 * Math.round((farWindowSpec.center_deg - azimuthDeg) / 360);
+    const offsetDeg = Math.abs(unwrapped - farWindowSpec.center_deg);
+    return offsetDeg <= farWindowSpec.half_deg ? farWindowSpec.range_m : baseRangeM;
+  }
+
+  const NEAR_REFINE = Object.freeze({
+    near_range_m: 5000,
+    first_m: 150,
+    step_m: 25,
+  });
+
+  function nearRefineDistances(coarse, coarseStepM) {
+    const key = (d) => Math.round(d * 1000) / 1000;
+    const out = new Set();
+    const add = (d) => { if (d >= NEAR_REFINE.first_m && d <= NEAR_REFINE.near_range_m) out.add(key(d)); };
+    if (coarse.length > 0) {
+      for (let d = NEAR_REFINE.first_m; d < coarse[0][0]; d += NEAR_REFINE.step_m) add(d);
+    }
+    for (let i = 0; i < coarse.length; i += 1) {
+      const prev = i > 0 ? coarse[i - 1][1] : -Infinity;
+      const next = i + 1 < coarse.length ? coarse[i + 1][1] : -Infinity;
+      if (coarse[i][1] >= prev && coarse[i][1] >= next) {
+        for (let d = coarse[i][0] - coarseStepM + NEAR_REFINE.step_m; d < coarse[i][0] + coarseStepM; d += NEAR_REFINE.step_m) add(d);
+      }
+    }
+    for (const c of coarse) out.delete(key(c[0]));
+    return [...out].sort((a, b) => a - b);
+  }
+
+  global.PreviewTerrainRule = Object.freeze({ RULE, FAR_WINDOW, NEAR_REFINE, rangeM, belongsToTarget, farRangeM, farWindow, rayRangeM,
+    nearRefineDistances });
 })(typeof window !== "undefined" ? window : globalThis);
 
 (function (global) {
@@ -1110,6 +1158,10 @@ async function terrainModel(plan, generation) {
                                     plan.resolved_target_longitude_deg);
   /* 範囲と「ターゲットの山 / 手前の地形」の分け方は Planner と同じ preview_terrain_rule.js（2026-10-17） */
   const range = PreviewTerrainRule.rangeM(targetDistance, T.minimum_range_m);
+  /* ターゲットの方向の窓（2026-10-18、Viewer far window V2、AI-19017）: Planner と同じ preview_terrain_rule.js の規則。
+     ターゲット ＋ 10 km が範囲（上限 120 km）を超えるときだけ、ターゲットの方位の窓の中を、ターゲットの先 10 km まで
+     途中を飛ばさずに読む（窓の中の上限 300 km）。窓の外は range のまま。方位の刻みは、この画角の中の刻み。 */
+  const farWindow = PreviewTerrainRule.farWindow(plan.target_azimuth_deg, targetDistance, range, 2 * halfFov / (count - 1));
   const farZoom = comp.fov_horizontal_deg > T.wide_fov_deg ? T.far_zoom_wide : T.far_zoom;
   const R = VIEWER.earth_radius_m;
   const run = {seen: new Set(), loaded: 0, failed: 0};      /* この run で使えた DEM tile の集計 */
@@ -1122,8 +1174,10 @@ async function terrainModel(plan, generation) {
   for (let i = 0; i < count; i += 1) {
     const azimuth = plan.target_azimuth_deg - halfFov + 2 * halfFov * i / (count - 1);
     let maxAlt = -90, maxFuji = null, maxSurrounding = null;
-    for (let d = T.distance_step_near_m; d <= range;
-         d += (d < T.near_range_m ? T.distance_step_near_m : T.distance_step_far_m)) {
+    const rayRange = PreviewTerrainRule.rayRangeM(azimuth, range, farWindow);
+    /* 近景の尾根の読み直し（2026-10-18、AI-19020）: 粗い刻みの後で、Planner と同じ nearRefineDistances の距離を読み足す */
+    const nearSamples = [];
+    const sampleAt = async (d) => {
       const point = destination(lat0, lon0, azimuth, d);
       const e = await demElevation(point[0], point[1], d <= T.near_range_m ? T.near_zoom : farZoom, run);
       if (e === null) sea += 1;
@@ -1139,7 +1193,14 @@ async function terrainModel(plan, generation) {
         }
       }
       samples += 1;
+      return alt;
+    };
+    for (let d = T.distance_step_near_m; d <= rayRange;
+         d += (d < T.near_range_m ? T.distance_step_near_m : T.distance_step_far_m)) {
+      const alt = await sampleAt(d);
+      if (d <= PreviewTerrainRule.NEAR_REFINE.near_range_m) nearSamples.push([d, alt]);
     }
+    for (const d of PreviewTerrainRule.nearRefineDistances(nearSamples, T.distance_step_near_m)) await sampleAt(d);
     skyline.push({azimuth_deg: azimuth, altitude_deg: maxAlt});
     fujiSkyline.push({azimuth_deg: azimuth, altitude_deg: maxFuji});
     surroundingSkyline.push({azimuth_deg: azimuth, altitude_deg: maxSurrounding});
@@ -1151,7 +1212,7 @@ async function terrainModel(plan, generation) {
   const separated = separateFuji && fujiSkyline.some((q) => q.altitude_deg !== null);
   return {
     available: run.loaded > 0, skyline: skyline, azimuth_count: count,
-    half_fov_deg: halfFov, range_m: range, far_zoom: farZoom,
+    half_fov_deg: halfFov, range_m: range, far_window: farWindow, far_zoom: farZoom,
     observer_elevation_m: observerElevation, samples: samples, sea_samples: sea,
     tiles_loaded: run.loaded, tiles_failed: run.failed,
     fuji_separated: separated,
