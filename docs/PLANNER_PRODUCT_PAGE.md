@@ -133,3 +133,23 @@ footer「Sidekick Planner（開発中）」→「Sidekick Planner β」→ `/sid
 ## 7. β1.01（2026-09-21、AI-13050）
 
 製品ページの表記を β1.01（1.0.0-beta.2）へ、「提供期間」行に「終了予定日を過ぎると β版（β1.01 以降）は起動できなくなる／延長は新しいβ版」を追加（Legal FINAL §3、`HD-PLANNERBETA1EXPIRYLEGAL-006`）。スクリーンショット 8 枚は RC13 UI の撮影のまま（UI は β1.01 でも同一、title 表記のみ異なる）。`tests/site/test_planner_product_page.py` §5 に expiry disclosure / JA-EN parity test を追加。
+
+## 8. 版上げ時に更新・確認するページ（2026-10-27 追加）
+
+β1.03 の公開（804117b）では製品ページ・dl-planner・register-dl・changelog だけを更新し、トップページと著者ページの
+製品カードが β1.00 のまま、JA 製品ページの meta description が β1.01 のまま残った（371d5db で修正）。
+版を上げるときは、次をまとめて更新・確認する（JA / EN とも。本番 HTML は `build_site.py --page` で再生成し、手書きしない）。
+
+| ページ | テンプレート | 版表記の場所 |
+|---|---|---|
+| `/sidekick-planner`・`/en/sidekick-planner` | `templates/site/pages/sidekick-planner.html`・`en/` | title / meta description / og / twitter / 本文 / JSON-LD `softwareVersion` |
+| `/dl-planner` | （手書き HTML） | title・版の行・ボタン・ZIP の URL と `download` 名 |
+| `/register-dl` | （手書き HTML） | 製品名・`product_version` |
+| `/changelog`・`/en/changelog` | `templates/site/pages/changelog.html`・`en/` | 新しい entry を追加（過去の entry は変えない） |
+| `/`・`/en` | `templates/site/pages/index.html`・`en/` | Planner カードの `hc-name` |
+| `/ichiro-murata`・`/en/ichiro-murata` | `templates/site/pages/ichiro-murata.html`・`en/` | 製品カードの `prod-name` |
+
+Story の related_links は版番号を含まない名前にしてある（e0aad82）ので、版上げで更新しない。
+`tests/site/test_planner_product_page.py` の `test_product_cards_name_the_current_beta` と
+`test_head_meta_names_the_current_beta` は、版を上げたら期待値（β1.03 / Beta 1.03 と旧版の正規表現）も更新する。
+公開後は本番で上の各ページの版表記を確認する（コメント中の旧版の履歴は対象外）。
