@@ -8,7 +8,7 @@ status: "published"
 summary: "Sidekick Planner did not come out of failed shoots. It came out of a very simple question: \"If someone tells me to stand here, I can take the photograph. But I can't work out where 'here' is.\" I wanted a way to find that 'here' more easily."
 source_slug: when-and-where-should-i-go
 related_links:
-  - label: "Sidekick Planner Beta 1.00 (product page)"
+  - label: "Sidekick Planner (product page)"
     url: "/en/sidekick-planner"
 ---
 
