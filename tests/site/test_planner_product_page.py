@@ -35,7 +35,7 @@ EN_KEY = "en/sidekick-planner"
 # release_acceptance.json（record_version 4）の artifact_identity。ページ作成時に
 # canonical の dist/rc13/Sidekick Planner/SidekickPlanner.exe で再計算して一致を確認した値。
 RC13_EXE_SHA256 = "709afc4e8a7b3ecd0073fc3926566b570a8c0fc8519080231ba598f18c720af7"
-PRODUCT_VERSION = "1.0.0-beta.3"   # β1.02 = RC15（release candidate、自作 AI-16567）。β1.01 = 1.0.0-beta.2 / β1.00 = 1.0.0-beta.1 は history
+PRODUCT_VERSION = "1.0.0-beta.4"   # β1.03 = 正式RC27（2026-10-27）。β1.02 = 1.0.0-beta.3 = RC15（自作 AI-16567）。β1.01 = 1.0.0-beta.2 / β1.00 = 1.0.0-beta.1 は history
 
 # HD-PLANNERBETA1GENERICSURFACE-009: β1.00 の public surface に出さない語。
 # β1.02（HD-PLANNERSHAREV2-034 / -037 で星景・風景が public、Human 指示 2026-10-02）: 星景・天の川・太陽・月・Milky Way・
@@ -185,8 +185,8 @@ def test_register_dl_maps_planner_to_dl_planner() -> None:
     source = (REPO_ROOT / "register-dl.html").read_text(encoding="utf-8")
     assert re.search(r"planner:\s*'/dl-planner'", source)
     assert re.search(r"planner:\s*'Sidekick_Planner'", source)
-    assert re.search(r"planner:\s*'1\.0\.0-beta\.3'", source), "register-dl の PRODUCT_VERSIONS は release の product_version"
-    assert "Sidekick Planner β1.02" in source
+    assert re.search(r"planner:\s*'1\.0\.0-beta\.4'", source), "register-dl の PRODUCT_VERSIONS は release の product_version"
+    assert "Sidekick Planner β1.03" in source
     assert (REPO_ROOT / "dl-planner.html").exists()
 
 
@@ -195,8 +195,10 @@ def test_register_dl_maps_planner_to_dl_planner() -> None:
 # β1.00（Sidekick_Planner_1.0.0-beta.1_bea1697.zip / 93c27bf1…、AI-10850）は R2 に保存したまま配布導線から外した。
 # β1.02 release candidate（自作 AI-16567）: RC15 の distribution package identity。正本は Planner 側
 # manifests/release/distribution_package_Sidekick_Planner_1.0.0-beta.3_f07d84f.zip.identity.json。β1.01（RC14、a577b809…）は R2 に保存したまま導線から外す。
-PLANNER_ZIP_URL = "https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.3_f07d84f.zip"
-PLANNER_ZIP_SHA256 = "340c2d93e376451389aaa13691e66b6980d933045b9affbf8af9a1d32201907c"
+# β1.03 Web 候補（2026-10-27）: 正式RC27 の distribution package（Sidekick_Planner_1.0.0-beta.4_58f03e7.zip、64d44de4…、R2 upload・public 照合済み）。
+# β1.02（RC15、340c2d93…）は R2 に保存したまま導線から外す。
+PLANNER_ZIP_URL = "https://pub-123781c638d64762ac2e397ce0e98259.r2.dev/Sidekick_Planner_1.0.0-beta.4_58f03e7.zip"
+PLANNER_ZIP_SHA256 = "64d44de4ed54b9860ee1bb747a7be929094fb9dc180b021377fa4988054b9f3a"
 
 
 def test_dl_planner_points_at_the_verified_distribution_package() -> None:
@@ -209,7 +211,8 @@ def test_dl_planner_points_at_the_verified_distribution_package() -> None:
     zips = set(re.findall(r'https?://\S+?\.zip', source))
     assert zips == {PLANNER_ZIP_URL}, f"配布 URL は R2 の Planner object 1 つだけ: {zips}"
     assert "pub-123781c638d64762ac2e397ce0e98259.r2.dev" in PLANNER_ZIP_URL   # dl-star.html と同じ bucket
-    assert "Sidekick_Planner_1.0.0-beta.3_f07d84f.zip" in source.split("setAttribute('download'")[1][:80]
+    assert "Sidekick_Planner_1.0.0-beta.4_58f03e7.zip" in source.split("setAttribute('download'")[1][:80]
+    assert "Sidekick_Planner_1.0.0-beta.3_f07d84f.zip" not in source.split("const PLANNER_DOWNLOAD_URL")[1].split(";")[0]
     assert "Sidekick_Planner_1.0.0-beta.2_c3faa92.zip" not in source.split("const PLANNER_DOWNLOAD_URL")[1].split(";")[0]
     assert "Sidekick_Planner_1.0.0-beta.1_bea1697.zip" not in source.split("const PLANNER_DOWNLOAD_URL")[1].split(";")[0]
     assert 'id="pending-state"' in source and "配布は準備中" in source          # fail-closed 経路は残す
@@ -318,12 +321,12 @@ def test_privacy_9_1_discloses_local_last_seen_ja_en() -> None:
 def test_product_page_discloses_expiry_and_beta_1_02(rendered: dict[str, str], key: str) -> None:
     html = rendered[key]
     if key == JA_KEY:
-        assert "Sidekick Planner β1.02（1.0.0-beta.3）" in html
+        assert "Sidekick Planner β1.03（1.0.0-beta.4）" in html
         assert "終了予定日を過ぎると、β版（β1.01 以降）は起動できなくなります" in html
         assert "延長する場合は新しいβ版を配布します" in html
         assert "β1.00" not in html.split("<main>", 1)[1]
     else:
-        assert "Sidekick Planner Beta 1.02 (1.0.0-beta.3)" in html
+        assert "Sidekick Planner Beta 1.03 (1.0.0-beta.4)" in html
         assert "After the planned end date, the beta (beta 1.01 and later) can no longer be started." in html
         assert "an extension is delivered as a new beta version" in html
         assert "1.00" not in html.split("<main>", 1)[1]
@@ -334,7 +337,7 @@ def test_dl_planner_discloses_expiry_and_beta_1_02() -> None:
     body = source.split("<body>", 1)[1].split("<script>", 1)[0]
     assert "<dt>利用期限</dt>" in body
     assert "2026年11月30日（日本時間）まで。期限を過ぎると、このβ版は起動できなくなります" in body
-    assert "Sidekick Planner β1.02（1.0.0-beta.3）" in body
+    assert "Sidekick Planner β1.03（1.0.0-beta.4）" in body
     assert "β1.00" not in body
 
 
@@ -353,3 +356,18 @@ def test_changelog_has_the_beta_1_01_release_entry_ja_en() -> None:
     assert "すでに配布した β1.00 には利用期限の仕組みは含まれていませんが、利用条件上の提供期間は同じです" in ja
     assert "Sidekick Planner Beta 1.01 released — the beta now has an expiry date" in en
     assert "Beta 1.00 copies already distributed do not contain the expiry mechanism, but the beta period in the Terms of Use is the same" in en
+
+
+def test_beta_1_03_known_issues_and_changelog_ja_en(rendered: dict[str, str]) -> None:
+    """β1.03 Web 候補（2026-10-27、Human 承認「既知の問題と2026年11月30日までの試用期限を正確に記載」）:
+    製品ページ JA/EN の「β1.03 について」に既知の問題の行、changelog JA/EN に β1.03 の entry（β1.02 より上、期限 11/30）。"""
+    ja = rendered[JA_KEY]; en = rendered[EN_KEY]
+    assert '<th scope="row">既知の問題</th>' in ja and "日付を正しく入力し直すと再表示されます" in ja
+    assert '<th scope="row">Known issues</th>' in en and "It reappears when you enter the date correctly" in en
+    cja = _page("changelog.html"); cen = _page("en/changelog.html")
+    assert "Sidekick Planner β1.03 を公開しました" in cja
+    assert "β1.03 は 2026年11月30日（日本時間）までご利用いただけます" in cja
+    assert "Sidekick Planner Beta 1.03 released" in cen
+    assert "Beta 1.03 can be used until 30 November 2026 (Japan time)" in cen
+    assert cja.index("β1.03 を公開しました") < cja.index("β1.02 を公開しました")   # 新しい entry が上
+    assert cen.index("Beta 1.03 released") < cen.index("Beta 1.02 released")

@@ -1,6 +1,7 @@
 {# Sidekick Planner 製品ページ（日本語版）。2026-09-20 新設（β1.00）、2026-09-21 β1.01。
    2026-10-02 β1.02 release candidate（自作 AI-16567、RC15 1.0.0-beta.3+20261001T200831Z.gf07d84f）: 版・期限 11/30・
    撮影計画 4 種（太陽 / パール / 星景 / 風景、HD-PLANNERSHAREV2-034 / -037）。以下は β1.01 時点の記述（履歴）。
+   2026-10-27 β1.03 Web 候補（正式RC27 1.0.0-beta.4+20261027T000528Z.g58f03e7、ZIP Sidekick_Planner_1.0.0-beta.4_58f03e7.zip）: 版・富士山 2026 年データ・既知の問題。未公開・未 push。
    （Track planner-beta1-web-product-page、AI-10450、HD namespace HD-PLANNERBETA1WEBPRODUCTPAGE）。
 
    位置づけ: Sidekick Star / Portrait / Sky Effect と同じ「製品ページ」の系列。
@@ -33,15 +34,15 @@
    新しいデザインシステムは作らない。 #}
 {% extends "base.html" %}
 
-{% block title %}Sidekick Planner β1.02 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
+{% block title %}Sidekick Planner β1.03 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
 
 {% block meta_description %}Sidekick Planner（サイドキック プランナー）は、太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。ダイヤモンド富士をはじめ、山・塔・城・寺院など100か所の被写体に対応。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.01 は無料の公開ベータ版（日本語UI）。{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/sidekick-planner{% endblock %}
 
-{% block og_title %}Sidekick Planner β1.02 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
+{% block og_title %}Sidekick Planner β1.03 | 撮りたいイメージから、撮れる場所と日時を探す{% endblock %}
 
-{% block og_description %}太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。構図プレビュー・地図・QR共有・スマホ用ビューアー。β1.02 は無料の公開ベータ版。{% endblock %}
+{% block og_description %}太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す Windows 用ソフトウェア。構図プレビュー・地図・QR共有・スマホ用ビューアー。β1.03 は無料の公開ベータ版。{% endblock %}
 
 {% block extra_head %}
   <style>
@@ -347,7 +348,7 @@
     }
     .callout p{margin:0;color:var(--sub);font-size:15px;}
 
-    /* ── β1.02 について（本ページ固有） ── */
+    /* ── β1.03 について（本ページ固有） ── */
     .beta-table{
       width:100%;
       border-collapse:collapse;
@@ -478,10 +479,10 @@
     "@type": "SoftwareApplication",
     "name": "Sidekick Planner",
     "alternateName": "サイドキック プランナー",
-    "softwareVersion": "1.0.0-beta.3",
+    "softwareVersion": "1.0.0-beta.4",
     "operatingSystem": "Windows 10 (64-bit) 以降",
     "applicationCategory": "MultimediaApplication",
-    "description": "太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す写真家向けの撮影計画ソフトウェア。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.02 は無料の公開ベータ版。",
+    "description": "太陽と被写体が重なる撮影計画を、場所と日時の両方向から探す写真家向けの撮影計画ソフトウェア。構図プレビュー、地図、QR共有、スマートフォン用ビューアー。β1.03 は無料の公開ベータ版。",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -506,7 +507,7 @@
       <div class="wrap hero-grid">
         <div>
           <div class="eyebrow">
-            🗺️ Sidekick Planner β1.02 ｜ Windows ｜ 無料の公開ベータ版
+            🗺️ Sidekick Planner β1.03 ｜ Windows ｜ 無料の公開ベータ版
           </div>
 
           <h1>
@@ -528,13 +529,13 @@
               ▶ β版を試す（無料）
             </a>
             <a class="btn btn-secondary" href="#beta">
-              β1.02 について →
+              β1.03 について →
             </a>
           </div>
 
           <div class="hero-note">
             Windows 10（64-bit）以降 &nbsp;·&nbsp; 日本語UI &nbsp;·&nbsp; クレジットカード不要<br>
-            <strong>ダウンロードは約2GB</strong> — 2027年分の年間撮影計画データを同梱しているためです
+            <strong>ダウンロードは約2GB</strong> — 2027年分の年間撮影計画データ（と富士山の2026年分）を同梱しているためです
           </div>
         </div>
 
@@ -605,9 +606,9 @@
       <div class="wrap">
         <div class="section-head">
           <span class="section-label">Use cases</span>
-          <h2>β1.02 でできる撮影計画</h2>
+          <h2>β1.03 でできる撮影計画</h2>
           <p>
-            β1.02 では、撮影計画の種類を次の 4 つから選べます（アプリの「撮影計画の種類」と同じ名前です）。
+            β1.03 では、撮影計画の種類を次の 4 つから選べます（アプリの「撮影計画の種類」と同じ名前です）。
             代表例はダイヤモンド富士ですが、被写体は富士山だけではありません。
           </p>
           <ul class="feature-list">
@@ -849,13 +850,13 @@
     </section>
 
     <!-- ═══════════════════════════════════════════
-         β1.02 について
+         β1.03 について
     ═══════════════════════════════════════════ -->
     <section class="section" id="beta">
       <div class="wrap">
         <div class="section-head">
           <span class="section-label">About the beta</span>
-          <h2>β1.02 について</h2>
+          <h2>β1.03 について</h2>
           <p>
             正式版（Version 1）の公開に先立つ公開テスト版です。動作や使い勝手を確かめていただくために、無償で提供します。
           </p>
@@ -865,7 +866,7 @@
           <tbody>
             <tr>
               <th scope="row">バージョン</th>
-              <td>Sidekick Planner β1.02（1.0.0-beta.3）</td>
+              <td>Sidekick Planner β1.03（1.0.0-beta.4）</td>
             </tr>
             <tr>
               <th scope="row">対応 OS</th>
@@ -885,7 +886,18 @@
             </tr>
             <tr>
               <th scope="row">ダウンロードサイズ</th>
-              <td>約2GB（ZIP）。2027年分の年間撮影計画データ（主要な被写体についての年間軌跡データ）を同梱しているため、この容量になります。データを同梱することで、検索が手元の PC で完結します。</td>
+              <td>約2GB（ZIP）。2027年分の年間撮影計画データ（主要な被写体についての年間軌跡データ）と、富士山の2026年分のデータを同梱しているため、この容量になります。データを同梱することで、検索が手元の PC で完結します。</td>
+            </tr>
+            <tr>
+              <th scope="row">既知の問題</th>
+              <td>
+                次の点は、今後のβ版で改善する予定です。
+                <ul>
+                  <li><strong>「星の軌跡」の日付入力について：</strong> キーボードで入力した日付は、Enterキーを押すか、入力欄の外をクリックすると確定します。キーボード操作のあとにカレンダーから日付を選んだ場合も、確定するまで表示が更新されないことがあります。</li>
+                  <li><strong>日付が未完成の場合：</strong> 日付の一部を消したまま入力欄の外をクリックすると、プレビューが一時的に消えることがあります。日付を正しく入力し直すと再表示されます。</li>
+                  <li><strong>年間撮影候補の表示について：</strong> 地図上の候補点をクリックした際、吹き出しに「この日の詳しいラインを表示」ボタンが出ない場合があります。その場合は、左側の候補日ボタン、または地図上のラインから選択してください。</li>
+                </ul>
+              </td>
             </tr>
             <tr>
               <th scope="row">コード署名</th>
@@ -921,7 +933,7 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>次のダイヤモンド富士を、計算しておく。</h2>
-          <p>β1.02 は無料です。使ってみて気づいたことは、ぜひ教えてください。</p>
+          <p>β1.03 は無料です。使ってみて気づいたことは、ぜひ教えてください。</p>
           <div class="cta-actions">
             <a class="btn btn-primary btn-lg"
                href="/register-dl?product=planner&src=sidekick-planner" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">

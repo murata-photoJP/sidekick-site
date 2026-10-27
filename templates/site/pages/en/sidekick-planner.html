@@ -1,6 +1,7 @@
 {# Sidekick Planner product page (English). Added 2026-09-20 (beta 1.00); beta 1.01 on 2026-09-21.
    2026-10-02 beta 1.02 release candidate (自作 AI-16567, RC15 1.0.0-beta.3+20261001T200831Z.gf07d84f): version, expiry 30 November,
    four plan types. Notes below describe the beta 1.01 state (history).
+   2026-10-27 beta 1.03 web candidate (official RC27 1.0.0-beta.4+20261027T000528Z.g58f03e7, ZIP Sidekick_Planner_1.0.0-beta.4_58f03e7.zip): version, Mount Fuji 2026 data, known issues. Not published, not pushed.
    (Track planner-beta1-web-product-page, AI-10450).
 
    Mirrors templates/site/pages/sidekick-planner.html. The Japanese page is the
@@ -17,15 +18,15 @@
    The <style> block is a copy of the Japanese template's; only the JSON-LD text differs. #}
 {% extends "base.html" %}
 
-{% block title %}Sidekick Planner Beta 1.02 | Find where and when to shoot, from the image you want{% endblock %}
+{% block title %}Sidekick Planner Beta 1.03 | Find where and when to shoot, from the image you want{% endblock %}
 
-{% block meta_description %}Sidekick Planner is Windows software for photographers that finds where and when the sun lines up with a landmark — searching from either the place or the date. Diamond Fuji and 100 landmarks (mountains, towers, castles, temples). Composition preview, map, QR sharing, smartphone viewer. Beta 1.02 is a free public beta with a Japanese UI.{% endblock %}
+{% block meta_description %}Sidekick Planner is Windows software for photographers that finds where and when the sun lines up with a landmark — searching from either the place or the date. Diamond Fuji and 100 landmarks (mountains, towers, castles, temples). Composition preview, map, QR sharing, smartphone viewer. Beta 1.03 is a free public beta with a Japanese UI.{% endblock %}
 
 {% block canonical %}https://www.sidekick-lab.com/en/sidekick-planner{% endblock %}
 
-{% block og_title %}Sidekick Planner Beta 1.02 | Find where and when to shoot, from the image you want{% endblock %}
+{% block og_title %}Sidekick Planner Beta 1.03 | Find where and when to shoot, from the image you want{% endblock %}
 
-{% block og_description %}Windows software that finds where and when the sun lines up with a landmark, from either the place or the date. Composition preview, map, QR sharing, smartphone viewer. Beta 1.02 is a free public beta (Japanese UI).{% endblock %}
+{% block og_description %}Windows software that finds where and when the sun lines up with a landmark, from either the place or the date. Composition preview, map, QR sharing, smartphone viewer. Beta 1.03 is a free public beta (Japanese UI).{% endblock %}
 
 {% block extra_head %}
   <style>
@@ -331,7 +332,7 @@
     }
     .callout p{margin:0;color:var(--sub);font-size:15px;}
 
-    /* ── β1.02 について（本ページ固有） ── */
+    /* ── β1.03 について（本ページ固有） ── */
     .beta-table{
       width:100%;
       border-collapse:collapse;
@@ -461,10 +462,10 @@
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     "name": "Sidekick Planner",
-    "softwareVersion": "1.0.0-beta.3",
+    "softwareVersion": "1.0.0-beta.4",
     "operatingSystem": "Windows 10 (64-bit) or later",
     "applicationCategory": "MultimediaApplication",
-    "description": "Shot-planning software for photographers: find where and when the sun lines up with a landmark, from either the place or the date. Composition preview, map, QR sharing and a smartphone viewer. Beta 1.02 is a free public beta (Japanese UI).",
+    "description": "Shot-planning software for photographers: find where and when the sun lines up with a landmark, from either the place or the date. Composition preview, map, QR sharing and a smartphone viewer. Beta 1.03 is a free public beta (Japanese UI).",
     "offers": {
       "@type": "Offer",
       "price": "0",
@@ -489,7 +490,7 @@
       <div class="wrap hero-grid">
         <div>
           <div class="eyebrow">
-            🗺️ Sidekick Planner Beta 1.02 ｜ Windows ｜ Free public beta ｜ Japanese UI
+            🗺️ Sidekick Planner Beta 1.03 ｜ Windows ｜ Free public beta ｜ Japanese UI
           </div>
 
           <h1>
@@ -510,13 +511,13 @@
               ▶ Try the beta (free)
             </a>
             <a class="btn btn-secondary" href="#beta">
-              About beta 1.02 →
+              About beta 1.03 →
             </a>
           </div>
 
           <div class="hero-note">
             Windows 10 (64-bit) or later &nbsp;·&nbsp; Japanese UI &nbsp;·&nbsp; no credit card<br>
-            <strong>The download is about 2 GB</strong> — it bundles the 2027 annual planning data
+            <strong>The download is about 2 GB</strong> — it bundles the 2027 annual planning data (plus Mount Fuji for 2026)
           </div>
         </div>
 
@@ -586,9 +587,9 @@
       <div class="wrap">
         <div class="section-head">
           <span class="section-label">Use cases</span>
-          <h2>What beta 1.02 can plan</h2>
+          <h2>What beta 1.03 can plan</h2>
           <p>
-            Beta 1.02 offers four plan types (they match the plan types in the app). Diamond Fuji is the flagship example,
+            Beta 1.03 offers four plan types (they match the plan types in the app). Diamond Fuji is the flagship example,
             but the subject is not limited to Mount Fuji.
           </p>
           <ul class="feature-list">
@@ -826,7 +827,7 @@
       <div class="wrap">
         <div class="section-head">
           <span class="section-label">About the beta</span>
-          <h2>About beta 1.02</h2>
+          <h2>About beta 1.03</h2>
           <p>A public test release ahead of Version 1, provided free of charge so you can try how it works.</p>
         </div>
 
@@ -834,7 +835,7 @@
           <tbody>
             <tr>
               <th scope="row">Version</th>
-              <td>Sidekick Planner Beta 1.02 (1.0.0-beta.3)</td>
+              <td>Sidekick Planner Beta 1.03 (1.0.0-beta.4)</td>
             </tr>
             <tr>
               <th scope="row">Operating system</th>
@@ -854,7 +855,18 @@
             </tr>
             <tr>
               <th scope="row">Download size</th>
-              <td>About 2 GB (ZIP). It bundles the 2027 annual planning data (year-round track data for the main subjects), which is why the download is this large — and why searches run entirely on your PC.</td>
+              <td>About 2 GB (ZIP). It bundles the 2027 annual planning data (year-round track data for the main subjects) and Mount Fuji's data for 2026, which is why the download is this large — and why searches run entirely on your PC.</td>
+            </tr>
+            <tr>
+              <th scope="row">Known issues</th>
+              <td>
+                We plan to improve the following in a later beta.
+                <ul>
+                  <li><strong>Date entry in "Star trails":</strong> A date typed with the keyboard is applied when you press Enter or click outside the field. If you pick a date from the calendar after using the keyboard, the display may not update until the date is applied.</li>
+                  <li><strong>Incomplete dates:</strong> If you click outside the field after deleting part of the date, the preview may disappear for a moment. It reappears when you enter the date correctly.</li>
+                  <li><strong>Annual shooting candidates:</strong> When you click a candidate point on the map, the popup may not show the button for the detailed line of that day. In that case, choose from the candidate date buttons on the left or from the lines on the map.</li>
+                </ul>
+              </td>
             </tr>
             <tr>
               <th scope="row">Code signing</th>
@@ -890,7 +902,7 @@
       <div class="wrap">
         <div class="cta-card">
           <h2>Have the next Diamond Fuji computed in advance.</h2>
-          <p>Beta 1.02 is free. If you notice anything while using it, please let us know.</p>
+          <p>Beta 1.03 is free. If you notice anything while using it, please let us know.</p>
           <div class="cta-actions">
             <a class="btn btn-primary btn-lg"
                href="/register-dl?product=planner&src=sidekick-planner&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Planner'})">
