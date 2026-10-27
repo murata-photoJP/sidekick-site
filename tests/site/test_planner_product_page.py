@@ -371,3 +371,25 @@ def test_beta_1_03_known_issues_and_changelog_ja_en(rendered: dict[str, str]) ->
     assert "Beta 1.03 can be used until 30 November 2026 (Japan time)" in cen
     assert cja.index("β1.03 を公開しました") < cja.index("β1.02 を公開しました")   # 新しい entry が上
     assert cen.index("Beta 1.03 released") < cen.index("Beta 1.02 released")
+
+
+@pytest.mark.parametrize("key,label", [
+    ("index", '<div class="hc-name">Sidekick Planner β1.03</div>'),
+    ("en/index", '<div class="hc-name">Sidekick Planner Beta 1.03</div>'),
+    ("ichiro-murata", '<div class="prod-name">🗺️ Sidekick Planner β1.03</div>'),
+    ("en/ichiro-murata", '<div class="prod-name">🗺️ Sidekick Planner Beta 1.03</div>'),
+])
+def test_product_cards_name_the_current_beta(key: str, label: str) -> None:
+    """2026-10-27: β1.03 公開後もトップページと著者ページの製品カードが β1.00 のままだった（Human が本番で確認）。
+    版を上げるときは製品ページ・dl-planner と一緒にこのカードも更新する。"""
+    (html,) = bs.render_all(key).values()
+    assert label in html
+    body = re.sub(r"<!--.*?-->", "", html.split("<body", 1)[1], flags=re.S)   # 履歴コメントの β1.00 は対象外
+    assert not re.search(r"Sidekick Planner (β|Beta )1\.0[0-2]\b", body)
+
+
+@pytest.mark.parametrize("key", [JA_KEY, EN_KEY])
+def test_head_meta_names_the_current_beta(rendered: dict[str, str], key: str) -> None:
+    """meta description に β1.01 が残っていた（2026-10-27 発見）。<head> の版表記は β1.03 だけ。"""
+    head = re.sub(r"<!--.*?-->|/\*.*?\*/", "", rendered[key].split("</head>", 1)[0], flags=re.S)
+    assert not re.search(r"(β|[Bb]eta )1\.0[0-2]\b", head)
