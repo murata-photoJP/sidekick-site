@@ -361,6 +361,17 @@ const LANG = (params.get('lang') || '').toLowerCase() === 'en' || /-en$/.test(SR
   ? 'en'
   : 'ja';
 
+// Sidekick Star の緊急配布停止（2026-10-28）。
+// product が star・空・未指定・想定外の値のときは、この頁は Star として動く（PRODUCT の既定が 'star'）。
+// その場合は登録の画面を使わず、メールアドレスも集めずに、一時停止のお知らせへ移す。
+// 配布中の製品（portrait / sky / ai / planner）は、今までどおり登録できる。停止を解くときに、この部分を外す。
+const STAR_PAUSE_ACTIVE_PRODUCTS = { portrait: true, sky: true, ai: true, planner: true };
+const STAR_PAUSED = !Object.prototype.hasOwnProperty.call(STAR_PAUSE_ACTIVE_PRODUCTS, params.get('product') || '');
+const STAR_PAUSED_PAGE = LANG === 'en' ? '/en/star-download-paused' : '/star-download-paused';
+if (STAR_PAUSED) {
+  window.location.replace(STAR_PAUSED_PAGE);
+}
+
 const DL_PAGES = {
   star:     '/dl-star',
   portrait: '/dl-portrait',
@@ -461,6 +472,11 @@ function updateEmailBtn() {
 }
 
 async function submitEmail() {
+  // Star の緊急配布停止中は、何も送らない（上の STAR_PAUSED を参照）
+  if (STAR_PAUSED) {
+    window.location.replace(STAR_PAUSED_PAGE);
+    return;
+  }
   const email = document.getElementById('email-input').value.trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     showError('正しいメールアドレスを入力してください。');
