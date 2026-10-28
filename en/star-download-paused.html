@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Important: Sidekick Star downloads paused | Sidekick Lab</title>
+<meta name="description" content="Some released versions of Sidekick Star can delete the folder containing your original photos under certain conditions. Downloads and purchases are paused for safety.">
+<link rel="canonical" href="https://www.sidekick-lab.com/en/star-download-paused">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/star-download-paused">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/star-download-paused">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
+</script>
+<style>
+  :root { --bg: #0a0a0d; --card: #16181f; --line: #252a36; --text: #f0f3fa; --sub: #9aa3b4; --accent: #ff8a00; --warn: #ffb4a8; --warnbg: #2a1414; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: -apple-system, "Segoe UI", Roboto, sans-serif; line-height: 1.7; }
+  header { padding: 18px 16px; border-bottom: 1px solid var(--line); }
+  header a { color: var(--text); text-decoration: none; font-weight: 700; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  .notice { background: var(--warnbg); border: 1px solid #5a2a2a; border-radius: 12px; padding: 24px 20px; }
+  h1 { font-size: 1.45rem; line-height: 1.4; margin: 0 0 6px; }
+  .date { color: var(--sub); margin: 0 0 20px; }
+  h2 { font-size: 1.12rem; margin: 28px 0 8px; color: var(--accent); }
+  p { margin: 0 0 12px; }
+  ul { margin: 0 0 12px; padding-left: 1.4em; }
+  .strong { color: var(--warn); font-weight: 700; }
+  .paused { display: inline-block; margin: 8px 0 16px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; color: var(--sub); }
+  .links { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; }
+  .links a { color: var(--accent); }
+  footer { color: var(--sub); text-align: center; padding: 24px 16px; border-top: 1px solid var(--line); font-size: .9rem; }
+  footer a { color: var(--sub); }
+</style>
+</head>
+<body>
+<header><a href="/en/">Sidekick Lab</a></header>
+<main>
+  <div class="notice" id="notice">
+    <h1>Important for Sidekick Star users: risk of deleting original images</h1>
+    <p class="date">October 28, 2026</p>
+    <p class="paused">For safety, downloads and purchases of Sidekick Star (Full and Core) are paused.</p>
+
+    <p>We found that some released versions of Sidekick Star can delete the folder containing your original photos under a certain combination of folder layout and settings.</p>
+    <p>We have confirmed this problem in the version released on October 17, 2026 (including Core) and in the September 3 version. Other earlier released versions may contain the same problem.</p>
+    <p class="strong">Deleted files do not go to the Recycle Bin.</p>
+    <p>We are now verifying a fixed version with safety measures.</p>
+    <p class="strong">Please stop using Sidekick Star until the fixed version is released.</p>
+
+    <h2>When it can happen</h2>
+    <p>If "Auto-delete temporary files" under Lighten Composite is turned on and any of the following applies, the folder containing your original images can be deleted.</p>
+    <ul>
+      <li>The folder containing your photos is named "temp"</li>
+      <li>The folder one level above your photo folder is named "temp"</li>
+      <li>Your photos are in folders named like "temp\AI飛行機除去" or "temp\平均_N05"</li>
+    </ul>
+    <p>Folder names are not case-sensitive: "Temp" and "TEMP" are included.</p>
+
+    <h2>If you must use it</h2>
+    <p>Uncheck "Auto-delete temporary files". It is off by default, but if you turned it on before, that setting may still be saved.</p>
+    <p>Turning this setting off does not solve every problem.</p>
+    <p>Do not use folders named "temp", or folders named "AI飛行機除去", "平均_N05" and the like inside it, to store your shooting data. With certain folder layouts, images can be overwritten regardless of this setting.</p>
+    <p>Also, RAW development can rewrite, and in rare cases delete, existing XMP files in the same folder as your photos.</p>
+    <p class="strong">Always back up important shooting data and XMP files to another location.</p>
+    <p>If possible, work on copies instead of the original images.</p>
+
+    <h2>What comes next</h2>
+    <p>We are verifying a fixed version that protects original images and existing XMP files.</p>
+    <p>We will release it after confirming its safety.</p>
+    <p>We apologize for the concern and inconvenience.</p>
+    <p>Protecting your shooting data is our top priority.</p>
+    <p>Sidekick Lab</p>
+  </div>
+  <div class="links">
+    <a href="/en/sidekick-star">Sidekick Star product page</a>
+    <a href="/star-download-paused">日本語</a>
+  </div>
+</main>
+<footer>
+  <a href="/en/privacy">Privacy Policy</a> &nbsp;·&nbsp; <a href="/en/legal">Legal Notice</a> &nbsp;·&nbsp; <a href="/en/faq">FAQ</a>
+</footer>
+</body>
+</html>

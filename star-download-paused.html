@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>【重要】Sidekick Star ダウンロード一時停止のお知らせ | Sidekick Lab</title>
+<meta name="description" content="Sidekick Star の一部の公開版で、元の写真を含むフォルダが削除される可能性がある問題を確認しました。安全対策のため、ダウンロードと購入を一時停止しています。">
+<link rel="canonical" href="https://www.sidekick-lab.com/star-download-paused">
+<link rel="alternate" hreflang="ja" href="https://www.sidekick-lab.com/star-download-paused">
+<link rel="alternate" hreflang="en" href="https://www.sidekick-lab.com/en/star-download-paused">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K73T3Y352W"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-K73T3Y352W');
+</script>
+<style>
+  :root { --bg: #0a0a0d; --card: #16181f; --line: #252a36; --text: #f0f3fa; --sub: #9aa3b4; --accent: #ff8a00; --warn: #ffb4a8; --warnbg: #2a1414; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: "Hiragino Sans", "Yu Gothic UI", "Meiryo", sans-serif; line-height: 1.8; }
+  header { padding: 18px 16px; border-bottom: 1px solid var(--line); }
+  header a { color: var(--text); text-decoration: none; font-weight: 700; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  .notice { background: var(--warnbg); border: 1px solid #5a2a2a; border-radius: 12px; padding: 24px 20px; }
+  h1 { font-size: 1.45rem; line-height: 1.5; margin: 0 0 6px; }
+  .date { color: var(--sub); margin: 0 0 20px; }
+  h2 { font-size: 1.12rem; margin: 28px 0 8px; color: var(--accent); }
+  p { margin: 0 0 12px; }
+  ul { margin: 0 0 12px; padding-left: 1.4em; }
+  .strong { color: var(--warn); font-weight: 700; }
+  .paused { display: inline-block; margin: 8px 0 16px; padding: 8px 14px; border: 1px solid var(--line); border-radius: 8px; color: var(--sub); }
+  .links { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 16px; }
+  .links a { color: var(--accent); }
+  footer { color: var(--sub); text-align: center; padding: 24px 16px; border-top: 1px solid var(--line); font-size: .9rem; }
+  footer a { color: var(--sub); }
+</style>
+</head>
+<body>
+<header><a href="/">Sidekick Lab</a></header>
+<main>
+  <div class="notice" id="notice">
+    <h1>【重要】Sidekick Starをご利用の方へ — 元画像の削除リスクについて</h1>
+    <p class="date">2026年10月28日</p>
+    <p class="paused">安全対策のため、Sidekick Star（Full版・Core版）のダウンロードと購入を一時停止しています。</p>
+
+    <p>Sidekick Starの一部の公開版で、特定のフォルダ構成と設定の組み合わせにより、元の写真を含むフォルダが削除される可能性がある問題を確認しました。</p>
+    <p>2026年10月17日公開版（Core版を含む）および9月3日版で、この問題が含まれることを確認しています。その他の過去の公開版にも、同様の問題が含まれる可能性があります。</p>
+    <p class="strong">削除されたファイルは、ごみ箱に入りません。</p>
+    <p>安全対策を施した修正版を現在検証しています。</p>
+    <p class="strong">修正版の公開まで、Sidekick Starの使用を一時停止してください。</p>
+
+    <h2>危険がある条件</h2>
+    <p>「比較明スタック」の「一時ファイルを自動削除する」がオンになっており、次のいずれかに当てはまる場合、元画像を含むフォルダが削除される可能性があります。</p>
+    <ul>
+      <li>写真を入れたフォルダの名前が「temp」</li>
+      <li>写真を入れたフォルダの一つ上のフォルダの名前が「temp」</li>
+      <li>写真を「temp\AI飛行機除去」「temp\平均_N05」などの名前のフォルダに置いている</li>
+    </ul>
+    <p>フォルダ名の大文字・小文字は区別しません。「Temp」「TEMP」も含まれます。</p>
+
+    <h2>やむを得ず使用する場合</h2>
+    <p>「一時ファイルを自動削除する」のチェックを外してください。初期設定はオフですが、以前オンに変更した場合は、その設定が保存されている可能性があります。</p>
+    <p>ただし、この設定をオフにしても、すべての問題が解消されるわけではありません。</p>
+    <p>「temp」や、その中の「AI飛行機除去」「平均_N05」などの名前のフォルダを撮影データの保存先に使用しないでください。特定のフォルダ構成では、設定に関係なく画像が上書きされる可能性があります。</p>
+    <p>また、RAW現像では、写真と同じフォルダにある既存のXMPファイルが書き換えられたり、まれに削除されたりする可能性があります。</p>
+    <p class="strong">大切な撮影データとXMPファイルは、必ず別の場所へバックアップしてください。</p>
+    <p>可能であれば、元画像ではなく作業用コピーを使用してください。</p>
+
+    <h2>今後の対応</h2>
+    <p>現在、元画像と既存XMPファイルを保護する修正版を検証しています。</p>
+    <p>安全性を確認したうえで、修正版を公開する予定です。</p>
+    <p>ご利用の皆様にはご心配とご不便をおかけし、申し訳ありません。</p>
+    <p>撮影データの保護を最優先に対応を進めています。</p>
+    <p>Sidekick Lab</p>
+  </div>
+  <div class="links">
+    <a href="/sidekick-star">Sidekick Star の紹介ページへ</a>
+    <a href="/en/star-download-paused">English</a>
+  </div>
+</main>
+<footer>
+  <a href="/privacy">プライバシーポリシー</a> &nbsp;·&nbsp; <a href="/legal">特定商取引法</a> &nbsp;·&nbsp; <a href="/faq">FAQ</a>
+</footer>
+</body>
+</html>

@@ -291,6 +291,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="star-download-paused-notice" role="alert" style="background:#2a1414;color:#f0f3fa;border:1px solid #5a2a2a;border-radius:10px;margin:16px auto;max-width:960px;padding:14px 16px;line-height:1.7;font-size:15px;"><strong style="color:#ffb4a8;">Important for Sidekick Star users</strong><br>Some released versions can delete the folder containing your original photos. For safety, downloads and purchases of Sidekick Star are paused. Please stop using it until the fixed version is released. <a href="/en/star-download-paused" style="color:#ff8a00;">Read the notice →</a></div>
   <main>
 
     <!-- Hero -->
@@ -310,12 +311,11 @@
             Sidekick Star handles them so you don't have to.
           </p>
           <div class="hero-actions">
-            <a class="btn btn-primary btn-lg"
-               href="/register-dl?product=star&src=sidekick-star&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
-              ▶ Free Download
+            <a class="btn btn-primary btn-lg" href="/en/star-download-paused" data-star-paused="1">
+              Downloads paused (safety)
             </a>
-            <a class="btn btn-secondary" href="/buy-star" onclick="gtag('event','buy_click',{'product':'Sidekick_Star'})">
-              Buy now →
+            <a class="btn btn-secondary" href="/en/star-download-paused" data-star-paused="1">
+              Purchases paused (safety)
             </a>
           </div>
           <div class="hero-note">
@@ -768,9 +768,8 @@
 
           <div class="pricing-cta-group">
             <a class="btn btn-primary btn-lg"
-               href="/register-dl?product=star&src=sidekick-star&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})"
-               style="width:100%;max-width:380px;">
-              ▶ Free Download
+               style="width:100%;max-width:380px;" href="/en/star-download-paused" data-star-paused="1">
+              Downloads paused (safety)
             </a>
 
             <span class="divider-or">— Ready to buy? —</span>
@@ -780,8 +779,8 @@
                 ¥9,800
                 <small>tax incl. &nbsp;·&nbsp; one-time purchase</small>
               </div>
-              <a class="btn btn-secondary" href="/buy-star" onclick="gtag('event','buy_click',{'product':'Sidekick_Star'})">
-                Buy now →
+              <a class="btn btn-secondary" href="/en/star-download-paused" data-star-paused="1">
+                Purchases paused (safety)
               </a>
             </div>
           </div>

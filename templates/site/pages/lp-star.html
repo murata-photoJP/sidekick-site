@@ -781,6 +781,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="star-download-paused-notice" role="alert" style="background:#2a1414;color:#f0f3fa;border:1px solid #5a2a2a;border-radius:10px;margin:16px auto;max-width:960px;padding:14px 16px;line-height:1.7;font-size:15px;"><strong style="color:#ffb4a8;">【重要】Sidekick Star をご利用の方へ</strong><br>一部の公開版で、元の写真を含むフォルダが削除される可能性がある問題を確認しました。安全対策のため、Sidekick Star のダウンロードと購入を一時停止しています。修正版の公開まで、使用を一時停止してください。 <a href="/star-download-paused" style="color:#ff8a00;">詳しいお知らせ →</a></div>
   <main>
 
     <!-- ══════════════════════════════════════════
@@ -813,9 +814,8 @@
             </div>
 
             <div class="hero-cta">
-              <a class="btn btn-primary btn-lg"
-                 href="/register-dl?product=star&src=lp-star" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
-                ▶ 無料でダウンロード
+              <a class="btn btn-primary btn-lg" href="/star-download-paused" data-star-paused="1">
+                ダウンロード一時停止中（安全対策）
               </a>
               <a class="btn btn-outline" href="#ba-main">Before/After を見る ↓</a>
             </div>
@@ -1004,9 +1004,8 @@
               ツールが代わりにやる。あなたはレタッチの本番だけに集中できる。
             </span>
           </div>
-          <a class="btn btn-primary btn-lg"
-             href="/register-dl?product=star&src=lp-star" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
-            ▶ 無料でダウンロード
+          <a class="btn btn-primary btn-lg" href="/star-download-paused" data-star-paused="1">
+            ダウンロード一時停止中（安全対策）
           </a>
         </div>
 
@@ -1602,9 +1601,8 @@
 
           <div class="cta-dl">
             <a class="btn btn-primary btn-xl"
-               href="/register-dl?product=star&src=lp-star" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})"
-               style="width:100%;">
-              ▶ 無料でダウンロード
+               style="width:100%;" href="/star-download-paused" data-star-paused="1">
+              ダウンロード一時停止中（安全対策）
             </a>
             <span style="font-size:12px;color:var(--muted);">クレジットカード不要・フル機能・90日間試用</span>
           </div>
@@ -1620,8 +1618,8 @@
             </a>
           </div>
           <div style="margin-top:12px;display:flex;justify-content:center;">
-            <a class="btn btn-ghost" href="/buy-star" onclick="gtag('event','buy_click',{'product':'Sidekick_Star'})">
-              💳 今すぐ購入する（¥9,800 税込）
+            <a class="btn btn-ghost" href="/star-download-paused" data-star-paused="1">
+              購入一時停止中（安全対策）
             </a>
           </div>
 
@@ -1646,17 +1644,15 @@
   <!-- Sticky CTA bar: Hero が画面外に出たら表示 -->
   <div class="sticky-cta" id="sticky-cta">
     <span class="sticky-cta-text"><strong>Sidekick Star</strong> — 90日間無料・CC不要・¥9,800 買い切り</span>
-    <a href="/register-dl?product=star&src=lp-star-sticky"
+    <a 
        class="btn btn-primary"
-       onclick="gtag('event','cta_click',{cta_label:'sticky_cta'})"
-       style="min-height:42px;padding:0 22px;font-size:14px;border-radius:10px;">
-      ▶ 無料でダウンロード
+       style="min-height:42px;padding:0 22px;font-size:14px;border-radius:10px;" href="/star-download-paused" data-star-paused="1">
+      ダウンロード一時停止中（安全対策）
     </a>
-    <a href="/buy-star"
+    <a 
        class="btn btn-outline"
-       onclick="gtag('event','cta_click',{cta_label:'sticky_buy'})"
-       style="min-height:42px;padding:0 18px;font-size:13px;border-radius:10px;">
-      今すぐ購入 ¥9,800
+       style="min-height:42px;padding:0 18px;font-size:13px;border-radius:10px;" href="/star-download-paused" data-star-paused="1">
+      購入一時停止中（安全対策）
     </a>
   </div>
 

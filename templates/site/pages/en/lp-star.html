@@ -472,6 +472,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="star-download-paused-notice" role="alert" style="background:#2a1414;color:#f0f3fa;border:1px solid #5a2a2a;border-radius:10px;margin:16px auto;max-width:960px;padding:14px 16px;line-height:1.7;font-size:15px;"><strong style="color:#ffb4a8;">Important for Sidekick Star users</strong><br>Some released versions can delete the folder containing your original photos. For safety, downloads and purchases of Sidekick Star are paused. Please stop using it until the fixed version is released. <a href="/en/star-download-paused" style="color:#ff8a00;">Read the notice →</a></div>
   <main>
 
     <section class="hero">
@@ -500,9 +501,8 @@
             </div>
 
             <div class="hero-cta">
-              <a class="btn btn-primary btn-lg"
-                 href="/register-dl?product=star&src=lp-star-en&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
-                ▶ Free Download
+              <a class="btn btn-primary btn-lg" href="/en/star-download-paused" data-star-paused="1">
+                Downloads paused (safety)
               </a>
               <a class="btn btn-outline" href="#ba-main">See Before/After ↓</a>
             </div>
@@ -677,9 +677,8 @@
               Let the tool handle the repetition. You focus on the creative work only you can do.
             </span>
           </div>
-          <a class="btn btn-primary btn-lg"
-             href="/register-dl?product=star&src=lp-star-en&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">
-            ▶ Free Download
+          <a class="btn btn-primary btn-lg" href="/en/star-download-paused" data-star-paused="1">
+            Downloads paused (safety)
           </a>
         </div>
 
@@ -1035,9 +1034,8 @@
 
           <div class="cta-dl">
             <a class="btn btn-primary btn-xl"
-               href="/register-dl?product=star&src=lp-star-en&lang=en" onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})"
-               style="width:100%;">
-              ▶ Free Download
+               style="width:100%;" href="/en/star-download-paused" data-star-paused="1">
+              Downloads paused (safety)
             </a>
             <span style="font-size:12px;color:var(--muted);">No credit card · Full features · 3-month trial</span>
           </div>
@@ -1053,8 +1051,8 @@
             </a>
           </div>
           <div style="margin-top:12px;display:flex;justify-content:center;">
-            <a class="btn btn-ghost" href="/buy-star" onclick="gtag('event','buy_click',{'product':'Sidekick_Star'})">
-              💳 Buy Now (¥9,800 tax included)
+            <a class="btn btn-ghost" href="/en/star-download-paused" data-star-paused="1">
+              Purchases paused (safety)
             </a>
           </div>
 

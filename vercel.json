@@ -15,6 +15,34 @@
       "permanent": true
     },
     {
+      "source": "/dl-star",
+      "destination": "/star-download-paused",
+      "permanent": false
+    },
+    {
+      "source": "/buy-star",
+      "destination": "/star-download-paused",
+      "permanent": false
+    },
+    {
+      "source": "/register-dl",
+      "has": [{ "type": "query", "key": "product", "value": "star" }, { "type": "query", "key": "lang", "value": "en" }],
+      "destination": "/en/star-download-paused",
+      "permanent": false
+    },
+    {
+      "source": "/register-dl",
+      "has": [{ "type": "query", "key": "product", "value": "star" }],
+      "destination": "/star-download-paused",
+      "permanent": false
+    },
+    {
+      "source": "/register-dl",
+      "missing": [{ "type": "query", "key": "product" }],
+      "destination": "/star-download-paused",
+      "permanent": false
+    },
+    {
       "source": "/card/qr",
       "has": [{ "type": "header", "key": "accept-language", "value": "(^|.*[, ])[jJ][aA]($|[-;, ].*)" }],
       "destination": "/sidekick-qr?utm_source=sidekick-qr&utm_medium=qr-card&utm_campaign=secondary-qr",

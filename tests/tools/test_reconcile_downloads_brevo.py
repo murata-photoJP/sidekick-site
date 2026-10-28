@@ -225,7 +225,11 @@ def test_EN側のリンクにlangが付いている():
     for name in ["index", "lp-star", "portrait", "sidekick-star", "sidekick", "sky-effect"]:
         for path in [REPO / "en" / f"{name}.html",
                      REPO / "templates" / "site" / "pages" / "en" / f"{name}.html"]:
-            links = re.findall(r"register-dl\?[^\"'<> ]*", path.read_text(encoding="utf-8"))
+            text = path.read_text(encoding="utf-8")
+            links = re.findall(r"register-dl\?[^\"'<> ]*", text)
+            # Star の緊急配布停止中（2026-10-28）は、Star だけの頁に register-dl のリンクが無い。停止の印がある頁だけ許す（停止を解くときに戻す）
+            if not links and 'data-star-paused="1"' in text:
+                continue
             assert links, f"{path} に register-dl リンクが見つからない"
             for link in links:
                 assert "lang=en" in link, f"{path}: {link} に lang=en が無い"

@@ -313,6 +313,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="star-download-paused-notice" role="alert" style="background:#2a1414;color:#f0f3fa;border:1px solid #5a2a2a;border-radius:10px;margin:16px auto;max-width:960px;padding:14px 16px;line-height:1.7;font-size:15px;"><strong style="color:#ffb4a8;">Important for Sidekick Star users</strong><br>Some released versions can delete the folder containing your original photos. For safety, downloads and purchases of Sidekick Star are paused. Please stop using it until the fixed version is released. <a href="/en/star-download-paused" style="color:#ff8a00;">Read the notice →</a></div>
 
   <main>
 
@@ -367,8 +368,7 @@
         </ul>
 
         <div class="ba-cta">
-          <a href="/register-dl?product=star&src=index-en&lang=en" class="btn btn-p btn-lg"
-             onclick="gtag('event','download_trial',{'product':'Sidekick_Star'})">▶ Free Download</a>
+          <a  class="btn btn-p btn-lg" href="/en/star-download-paused" data-star-paused="1">Downloads paused (safety)</a>
           <a href="/en/lp-star" class="btn btn-o btn-lg">See detailed examples</a>
         </div>
       </div>
