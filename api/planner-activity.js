@@ -27,7 +27,20 @@
 //
 // 将来の B3（HD-003 V1 以降）: event に optional field（plan_ref 等）を足すときは allow-list と schema version を
 // 上げるだけで、collection / document 形は変えない。β1.00 では plan_ref を受け取っても捨てる。
+//
+// 開発者の識別（HD-PLANNERACTIVITY-014、2026-11-02、AI-29516）:
+//   開発者が実際に発行した QR の share_created を、一般の集計から外す。body の allow-list は変えない。
+//   - Authorization header が無い（一般の利用者・Viewer）: 従来どおり。204、daily / totals に加算する。
+//   - Authorization: Bearer <PLANNER_ACTIVITY_DEVELOPER_TOKEN> が一致: 同じ planner_activity_events/{event_id} に
+//     audience: "developer" を付けて create し、daily / totals には加算しない（開発者用の集計は作らない）。
+//     event_id の冪等は一般と開発者をまたいで効く（先に入った分類のまま）。
+//   - Authorization があるが一致しない / server の env が未設定・短すぎる: 何も保存せず 401。
+//     Planner は送信失敗として backlog を保持する（開発者の分が一般に混ざらない）。
+//   - GET ?check=<event_id>: 認証が一致した時だけ、開発者の event の有無と受信時刻を返す（no-store）。
+//     認証なしは 401。一般の event は found: false（一覧は返さない）。?check の無い GET は従来どおり。
+//   token・その hash は保存も log もしない。開発者を示すのは audience の 1 項目だけ。
 
+const crypto = require('crypto');
 const admin = require('firebase-admin');
 
 const SCHEMA = 'planner_activity/1';
@@ -44,6 +57,8 @@ const RETENTION_DAYS = 425;
 const PUBLIC_K = 5;
 const DAILY_WINDOW_DAYS = 30;
 const ALLOWED_ORIGINS = ['https://www.sidekick-lab.com'];
+const AUDIENCE_DEVELOPER = 'developer';
+const DEVELOPER_TOKEN_MIN_LENGTH = 32;
 
 // --------------------------------------------------------------------
 // Firestore
@@ -162,6 +177,34 @@ function originAllowed(req) {
   return ALLOWED_ORIGINS.includes(origin);
 }
 
+// 開発者の認証（HD-PLANNERACTIVITY-014）。'none' = Authorization なし（一般）、'ok' = 一致、'rejected' = それ以外。
+// env が未設定・短すぎる時は、Authorization 付きの要求をすべて 'rejected' にする（fail-closed）。
+function developerAuth(req, env) {
+  const headers = (req && req.headers) || {};
+  const raw = headers.authorization !== undefined ? headers.authorization : headers.Authorization;
+  if (raw === undefined || raw === null) return 'none';
+  const expected = String((env || process.env).PLANNER_ACTIVITY_DEVELOPER_TOKEN || '');
+  if (expected.length < DEVELOPER_TOKEN_MIN_LENGTH) return 'rejected';
+  const m = /^Bearer ([^\s]+)$/.exec(String(raw));
+  if (!m) return 'rejected';
+  const given = Buffer.from(m[1], 'utf8');
+  const want = Buffer.from(expected, 'utf8');
+  return given.length === want.length && crypto.timingSafeEqual(given, want) ? 'ok' : 'rejected';
+}
+
+function queryParam(req, name) {
+  if (req && req.query && Object.prototype.hasOwnProperty.call(req.query, name)) {
+    const v = req.query[name];
+    return Array.isArray(v) ? String(v[0]) : String(v);
+  }
+  try {
+    const url = new URL(String((req && req.url) || ''), 'https://www.sidekick-lab.com');
+    return url.searchParams.has(name) ? url.searchParams.get(name) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
 // 公開集計の細粒度は k >= 5 未満を伏せる（HD-009）。totals の主要件数はそのまま。
 function publicView(counts) {
   const out = {};
@@ -178,24 +221,28 @@ function publicView(counts) {
 // --------------------------------------------------------------------
 // 書き込み（1 event = 1 document。batch id は持たない。create の重複は無視 = 冪等）
 // --------------------------------------------------------------------
-async function storeEvents(db, normalized) {
+async function storeEvents(db, normalized, developer) {
   const FieldValue = admin.firestore.FieldValue;
   let stored = 0;
   let duplicates = 0;
   for (const item of normalized) {
     const ref = db.collection('planner_activity_events').doc(item.id);
     const expireAt = new Date(item.doc.at.getTime() + RETENTION_DAYS * 86400000);
+    const doc = {
+      ...item.doc,
+      at: admin.firestore.Timestamp.fromDate(item.doc.at),
+      received_at: FieldValue.serverTimestamp(),
+      expire_at: admin.firestore.Timestamp.fromDate(expireAt)
+    };
+    if (developer) doc.audience = AUDIENCE_DEVELOPER;
     try {
-      await ref.create({
-        ...item.doc,
-        at: admin.firestore.Timestamp.fromDate(item.doc.at),
-        received_at: FieldValue.serverTimestamp(),
-        expire_at: admin.firestore.Timestamp.fromDate(expireAt)
-      });
+      await ref.create(doc);
     } catch (err) {
       if (err && (err.code === 6 || /already exists/i.test(String(err.message)))) { duplicates += 1; continue; }
       throw err;
     }
+    // 開発者の event は daily / totals に加算しない（HD-PLANNERACTIVITY-014）。
+    if (developer) { stored += 1; continue; }
     const inc = incrementsFor(item.doc);
     const incFields = {};
     for (const k of Object.keys(inc)) incFields[k] = FieldValue.increment(inc[k]);
@@ -229,9 +276,31 @@ async function readAggregate(db, now) {
 // --------------------------------------------------------------------
 // handler
 // --------------------------------------------------------------------
+// 開発者の受信確認（HD-PLANNERACTIVITY-014）。認証必須・no-store・1 件の有無だけ。
+async function readDeveloperCheck(req, res, eventId) {
+  res.setHeader('Cache-Control', 'no-store');
+  if (developerAuth(req) !== 'ok') return res.status(401).end();
+  if (!EVENT_ID_RE.test(String(eventId || ''))) return res.status(400).json({ error: 'bad_event_id' });
+  const db = getFirestore();
+  if (!db) return res.status(503).json({ error: 'firestore_unavailable' });
+  try {
+    const snap = await db.collection('planner_activity_events').doc(eventId).get();
+    const data = snap.exists ? snap.data() : null;
+    if (!data || data.audience !== AUDIENCE_DEVELOPER) return res.status(200).json({ found: false });
+    const received = data.received_at && typeof data.received_at.toDate === 'function'
+      ? data.received_at.toDate().toISOString() : null;
+    return res.status(200).json({ found: true, audience: AUDIENCE_DEVELOPER, event: data.event, received_at: received });
+  } catch (err) {
+    console.error('planner-activity check failed:', err.message);
+    return res.status(503).json({ error: 'read_failed' });
+  }
+}
+
 module.exports = async function handler(req, res) {
   const now = new Date();
   if (req.method === 'GET') {
+    const check = queryParam(req, 'check');
+    if (check !== null) return readDeveloperCheck(req, res, check);
     const db = getFirestore();
     if (!db) return res.status(503).json({ error: 'firestore_unavailable' });
     try {
@@ -248,16 +317,24 @@ module.exports = async function handler(req, res) {
     return res.status(405).end();
   }
   // ここから先は何があっても 204（Viewer / Planner の主処理を止めない）。
+  // 例外は Authorization 付きで認証が一致しない要求だけ（401。Planner の開発者モードが backlog を保持する）。
   try {
     if (!originAllowed(req)) return res.status(204).end();
+    const auth = developerAuth(req);
+    if (auth === 'rejected') {
+      console.log('planner-activity: developer auth rejected');
+      return res.status(401).end();
+    }
+    const developer = auth === 'ok';
     const parsed = parseBody(req);
     const clientKind = classifyUserAgent(req.headers && req.headers['user-agent']);
     const normalized = eventsOf(parsed).map((e) => normalizeEvent(e, clientKind, now)).filter(Boolean);
     if (normalized.length === 0) return res.status(204).end();
     const db = getFirestore();
     if (!db) { console.error('planner-activity: firestore unavailable, dropped', normalized.length); return res.status(204).end(); }
-    const result = await storeEvents(db, normalized);
+    const result = await storeEvents(db, normalized, developer);
     if (result.duplicates) console.log('planner-activity: duplicates ignored', result.duplicates);
+    if (developer) console.log('planner-activity: developer events stored', result.stored);
   } catch (err) {
     console.error('planner-activity write failed:', err.message);
   }
@@ -271,3 +348,4 @@ module.exports.normalizeEvent = normalizeEvent;
 module.exports.normalizeAt = normalizeAt;
 module.exports.incrementsFor = incrementsFor;
 module.exports.publicView = publicView;
+module.exports.developerAuth = developerAuth;

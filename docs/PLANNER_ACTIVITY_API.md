@@ -34,6 +34,7 @@ IP（`x-forwarded-for` 等を読まない）／ IP 由来の地理情報（`x-ve
 ## 応答
 
 - `POST` → **常に 204**（body が壊れていても、Firestore が落ちていても）。Viewer の表示・Planner の QR 発行を止めない。
+  例外は `Authorization` 付きで認証が一致しない要求への `401` だけ（下の「開発者の識別」。一般の利用者は該当しない）。
   browser からの request（`Origin` あり）は `https://www.sidekick-lab.com` 以外を無視する。Planner（`Origin` 無し）は通す。
 - `GET` → 集計 JSON（`Cache-Control: public, max-age=300`）:
 
@@ -81,12 +82,51 @@ curl -s -o /dev/null -w "%{http_code}\n" -X POST "https://www.sidekick-lab.com/a
    → `204`。続けて `curl -s "https://www.sidekick-lab.com/api/planner-activity"` が `200` で aggregate JSON を返せば function と Firestore（Admin SDK read）は生きている。
 4. **B-6 Privacy 文面**（`privacy.html` と Planner 内 `legal_documents.js`）に、送るもの・送らないもの・IP の到達・**保持期間「raw event は約 14 か月後に自動削除、集計は保持」**（Firestore TTL を使っているとは書かない）・停止方法を書く（Phase 3 と同時）。
 
+## 開発者の識別（`HD-PLANNERACTIVITY-014`、2026-11-02、AI-29516）
+
+開発者（作者）が WS・QR マップの拡充で実際に発行した QR の `share_created` を、一般の利用者の集計から外す。
+**body・allow-list・schema（`planner_activity/1`）は変えない。** 区別は request header だけで行う。
+
+| 要求 | 扱い | 応答 |
+|---|---|---|
+| `Authorization` なし（一般の利用者・Viewer の sendBeacon） | 従来どおり。daily / totals に加算 | `204` |
+| `Authorization: Bearer <PLANNER_ACTIVITY_DEVELOPER_TOKEN>` が一致 | 同じ `planner_activity_events/{event_id}` に `audience: "developer"` を付けて create。**daily / totals に加算しない**（開発者用の集計は作らない） | `204` |
+| `Authorization` があるが一致しない・形式違い／env 未設定・32 文字未満 | 何も保存しない | `401` |
+
+- event_id の冪等は一般と開発者をまたぐ（先に入った分類のまま、二重に数えない）。
+- 開発者の raw event も `expire_at = at + 425 日`。既存の cleanup がそのまま削除する（cleanup は変えない）。
+- token・その hash・IP・UA の生文字列は保存も log もしない。開発者を示すのは `audience` の 1 項目だけ
+  （token は開発者の全 PC で共通の値で、端末を識別しない。`HD-PLANNERACTIVITY-004` と矛盾しない）。
+- Viewer の閲覧 event（`share_viewed` / `share_view_failed`）は、従来どおり一般の閲覧として扱う。
+- 既存の raw event・daily・totals は変えない（既に一般として入っている開発者の分もそのまま）。
+
+受信確認（開発者専用）:
+
+```text
+GET /api/planner-activity?check=<event_id>
+Authorization: Bearer <token>
+```
+
+- 認証が一致しなければ `401`。`Cache-Control: no-store`。
+- 一致すれば `{"found": true, "audience": "developer", "event": "...", "received_at": "..."}`、
+  一般の event・未着は `{"found": false}`。1 件の有無だけを返し、一覧は返さない。
+- `?check` の無い GET（公開の集計）は従来どおりで、開発者の event を含まない。
+- Planner 側の照会 CLI は `activity_delivery_check.py`（Planner repo、配布物に入らない）。
+
+本番への反映（Human 作業、順序が重要）:
+
+1. Vercel の Production env に `PLANNER_ACTIVITY_DEVELOPER_TOKEN`（32 文字以上の random 値）を登録する。`CRON_SECRET` とは別の値にする。
+2. この変更を deploy する。
+3. **その後で**、開発者の PC に Windows ユーザー環境変数 `SIDEKICK_PLANNER_DEVELOPER_MODE=1` と
+   `SIDEKICK_PLANNER_DEVELOPER_TOKEN=<同じ値>` を設定する。
+   （旧 server は `Authorization` を無視して一般として保存するので、deploy の前に開発者モードを有効にしない。）
+
 ## test
 
 ```bash
-node --test tests/tools/test_planner_activity_api.mjs      # 挙動（firebase-admin を fake に差し替え）14 件
+node --test tests/tools/test_planner_activity_api.mjs      # 挙動（firebase-admin を fake に差し替え）21 件（開発者の識別 7 件を含む）
 node --test tests/tools/test_planner_activity_cleanup.mjs  # cleanup（期限切れのみ・500 件単位・冪等・secret）6 件
-python -m pytest tests/site/test_planner_activity_api_policy.py -q   # source 上の privacy policy ＋ cleanup / cron policy 12 件
+python -m pytest tests/site/test_planner_activity_api_policy.py -q   # source 上の privacy policy ＋ cleanup / cron policy ＋ 開発者の識別 17 件
 ```
 
 ## 将来（B3、V1 以降）

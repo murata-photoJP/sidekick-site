@@ -1,4 +1,4 @@
-"""`api/planner-activity.js` の privacy policy を source 上で固定する（HD-PLANNERACTIVITY-001〜011、AI-6205）。
+"""`api/planner-activity.js` の privacy policy を source 上で固定する（HD-PLANNERACTIVITY-001〜011・014、AI-6205・AI-29516）。
 
 挙動の test は `tests/tools/test_planner_activity_api.mjs`（`node --test`）にある。ここは Node が無い環境でも
 `pytest tests -q` で「保存してはいけないものを読んでいない」ことだけを守る。
@@ -55,10 +55,64 @@ def test_vocabularies_match_the_decision() -> None:
 
 
 def test_post_never_fails_the_caller() -> None:
-    """Viewer の表示・Planner の QR 発行を止めない: POST 経路の応答は 204 だけ。"""
+    """Viewer の表示・Planner の QR 発行を止めない: POST 経路の応答は 204 だけ。
+
+    例外は 1 つ（HD-PLANNERACTIVITY-014、AI-29516）: Authorization 付きで認証が一致しない要求への 401。
+    一般の利用者・Viewer は Authorization を送らないので、この 401 に当たらない。
+    """
     post_path = CODE[CODE.index("if (req.method !== 'POST')"):]
     statuses = set(re.findall(r"res\.status\((\d{3})\)", post_path))
-    assert statuses == {"405", "204"}, statuses
+    assert statuses == {"405", "204", "401"}, statuses
+    rejected = post_path[post_path.index("if (auth === 'rejected')"):]
+    assert rejected.index("res.status(401)") < rejected.index("}")
+    assert post_path.count("res.status(401)") == 1
+
+
+# ---------------------------------------------------------------- 開発者の識別（HD-PLANNERACTIVITY-014、AI-29516）
+
+def test_developer_auth_is_header_only_constant_time_and_fail_closed() -> None:
+    auth = CODE[CODE.index("function developerAuth"):CODE.index("function queryParam")]
+    assert "PLANNER_ACTIVITY_DEVELOPER_TOKEN" in auth
+    assert "crypto.timingSafeEqual(given, want)" in auth
+    assert "if (raw === undefined || raw === null) return 'none';" in auth
+    assert "if (expected.length < DEVELOPER_TOKEN_MIN_LENGTH) return 'rejected';" in auth
+    assert "const DEVELOPER_TOKEN_MIN_LENGTH = 32;" in CODE
+    assert "req.body" not in auth                     # body の値で開発者にならない（偽装できない）
+
+
+def test_developer_events_are_not_aggregated_and_carry_only_audience() -> None:
+    store = CODE[CODE.index("async function storeEvents"):CODE.index("async function readAggregate")]
+    assert "if (developer) doc.audience = AUDIENCE_DEVELOPER;" in store
+    skip = store.index("if (developer) { stored += 1; continue; }")
+    assert skip < store.index("planner_activity_daily") and skip < store.index("planner_activity_totals")
+    assert "const AUDIENCE_DEVELOPER = 'developer';" in CODE
+    # token・Authorization を document にも log にも入れない
+    for marker in ("token:", "authorization:", "token_hash", "createHash"):
+        assert marker not in CODE, marker
+    for line in CODE.splitlines():
+        if "console." in line:
+            assert "expected" not in line and "given" not in line and "raw" not in line, line
+
+
+def test_public_aggregate_does_not_read_developer_events() -> None:
+    aggregate = CODE[CODE.index("async function readAggregate"):CODE.index("async function readDeveloperCheck")]
+    assert "planner_activity_events" not in aggregate
+    assert "audience" not in aggregate
+
+
+def test_developer_check_requires_auth_and_is_not_cached() -> None:
+    check = CODE[CODE.index("async function readDeveloperCheck"):CODE.index("module.exports = async function handler")]
+    assert check.index("res.setHeader('Cache-Control', 'no-store');") < check.index("developerAuth(req)")
+    assert "if (developerAuth(req) !== 'ok') return res.status(401).end();" in check
+    assert "data.audience !== AUDIENCE_DEVELOPER" in check
+    assert ".where(" not in check and ".limit(" not in check   # 一覧は返さない（1 件の有無だけ）
+
+
+def test_no_secret_value_is_committed() -> None:
+    """env の名前以外に、32 文字以上の token らしい文字列 literal を持たない。"""
+    for literal in re.findall(r"'([^'\n]{32,})'|\"([^\"\n]{32,})\"", CODE):
+        value = literal[0] or literal[1]
+        assert " " in value or "/" in value or ":" in value, value
 
 
 def test_collections_are_the_documented_ones() -> None:

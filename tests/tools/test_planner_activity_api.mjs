@@ -230,3 +230,129 @@ test("その他の method は 405", async () => {
   await api({ method: "DELETE", headers: {} }, res);
   assert.equal(res.statusCode, 405);
 });
+
+// ---- 開発者の識別（HD-PLANNERACTIVITY-014、AI-29516）--------------------------------
+// token は test 専用の値（本番の secret ではない）。test ごとに env を設定し、終わったら必ず戻す。
+const TEST_TOKEN = "test-only-developer-token-" + "0123456789abcdef";
+const PLANNER_UA = { "user-agent": "SidekickPlanner/1.0.0-beta.4" };
+const bearer = (t) => ({ authorization: "Bearer " + t });
+const created = (n, extra = {}) => ({ schema: "planner_activity/1", event: "share_created", event_id: hex(n), at: "2026-10-30T07:00Z", category: "mountain", transport: "viewer", ...extra });
+const eventDocs = () => [...fakeDb.store.entries()].filter(([k]) => k.startsWith("planner_activity_events/"));
+const aggregateDocs = () => [...fakeDb.store.keys()].filter((k) => k.startsWith("planner_activity_daily/") || k.startsWith("planner_activity_totals/"));
+function withToken(value, fn) {
+  return async () => {
+    const saved = process.env.PLANNER_ACTIVITY_DEVELOPER_TOKEN;
+    if (value === undefined) delete process.env.PLANNER_ACTIVITY_DEVELOPER_TOKEN;
+    else process.env.PLANNER_ACTIVITY_DEVELOPER_TOKEN = value;
+    fakeDb = makeFakeDb();
+    try { await fn(); } finally {
+      if (saved === undefined) delete process.env.PLANNER_ACTIVITY_DEVELOPER_TOKEN;
+      else process.env.PLANNER_ACTIVITY_DEVELOPER_TOKEN = saved;
+    }
+  };
+}
+async function getCheck(id, headers = {}, viaUrl = false) {
+  const req = viaUrl
+    ? { method: "GET", headers, url: "/api/planner-activity?check=" + id }
+    : { method: "GET", headers, query: { check: id }, url: "/api/planner-activity?check=" + id };
+  const res = fakeRes();
+  await api(req, res);
+  return res;
+}
+
+test("developerAuth: header なし = none、一致 = ok、それ以外（不一致・形式違い・env 未設定 / 短い）= rejected", () => {
+  const env = { PLANNER_ACTIVITY_DEVELOPER_TOKEN: TEST_TOKEN };
+  assert.equal(api.developerAuth({ headers: {} }, env), "none");
+  assert.equal(api.developerAuth({ headers: bearer(TEST_TOKEN) }, env), "ok");
+  assert.equal(api.developerAuth({ headers: { Authorization: "Bearer " + TEST_TOKEN } }, env), "ok");
+  assert.equal(api.developerAuth({ headers: bearer(TEST_TOKEN + "x") }, env), "rejected");
+  assert.equal(api.developerAuth({ headers: bearer(TEST_TOKEN.slice(0, -1) + "X") }, env), "rejected");
+  assert.equal(api.developerAuth({ headers: { authorization: "Basic " + TEST_TOKEN } }, env), "rejected");
+  assert.equal(api.developerAuth({ headers: { authorization: "Bearer " } }, env), "rejected");
+  assert.equal(api.developerAuth({ headers: { authorization: "" } }, env), "rejected");
+  assert.equal(api.developerAuth({ headers: bearer(TEST_TOKEN) }, {}), "rejected");
+  assert.equal(api.developerAuth({ headers: bearer("short") }, { PLANNER_ACTIVITY_DEVELOPER_TOKEN: "short" }), "rejected");
+});
+
+test("POST: Authorization なし（一般・Viewer）は env があっても従来どおり加算し、audience を付けない", withToken(TEST_TOKEN, async () => {
+  assert.equal((await post(created(300), PLANNER_UA)).statusCode, 204);
+  assert.equal((await post(JSON.stringify({ schema: "planner_activity/1", event: "share_viewed", event_id: hex(301), repeat: false }))).statusCode, 204);
+  for (const [, v] of eventDocs()) assert.equal("audience" in v, false);
+  const totals = fakeDb.store.get("planner_activity_totals/all");
+  assert.equal(totals.share_created, 1);
+  assert.equal(totals.share_viewed, 1);
+}));
+
+test("POST: 認証一致の share_created は audience developer で保存し、daily / totals に加算しない", withToken(TEST_TOKEN, async () => {
+  const res = await post({ events: [created(310), created(311, { transport: "planner", category: "structure" })] }, { ...PLANNER_UA, ...bearer(TEST_TOKEN) });
+  assert.equal(res.statusCode, 204);
+  const docs = eventDocs();
+  assert.equal(docs.length, 2);
+  for (const [, v] of docs) {
+    assert.equal(v.audience, "developer");
+    assert.equal(v.client_kind, "planner");
+    assert.equal(Math.round((v.expire_at - v.at) / 86400000), 425);
+    for (const k of ["token", "authorization", "token_hash", "ip", "user_agent", "installation_id"]) assert.equal(k in v, false, k);
+  }
+  assert.deepEqual(aggregateDocs(), []);
+  assert.equal(JSON.stringify([...fakeDb.store.values()]).includes(TEST_TOKEN), false);
+}));
+
+test("POST: 認証が一致しない / server の env 未設定・短い → 401、何も保存しない（body が壊れていても）", async () => {
+  await withToken(TEST_TOKEN, async () => {
+    assert.equal((await post(created(320), { ...PLANNER_UA, ...bearer("wrong-" + TEST_TOKEN) })).statusCode, 401);
+    assert.equal((await post("not json", { ...PLANNER_UA, ...bearer("wrong-" + TEST_TOKEN) })).statusCode, 401);
+    assert.equal((await post(created(321), { ...PLANNER_UA, authorization: "Basic abc" })).statusCode, 401);
+    assert.equal(fakeDb.store.size, 0);
+  })();
+  await withToken(undefined, async () => {
+    assert.equal((await post(created(322), { ...PLANNER_UA, ...bearer(TEST_TOKEN) })).statusCode, 401);
+    assert.equal(fakeDb.store.size, 0);
+  })();
+  await withToken("too-short", async () => {
+    assert.equal((await post(created(323), { ...PLANNER_UA, ...bearer("too-short") })).statusCode, 401);
+    assert.equal(fakeDb.store.size, 0);
+  })();
+});
+
+test("POST: event_id の冪等は一般と開発者をまたぐ（先に入った分類のまま、二重に数えない）", withToken(TEST_TOKEN, async () => {
+  await post(created(330), PLANNER_UA);                                         // 一般で先に届いた
+  await post(created(330), { ...PLANNER_UA, ...bearer(TEST_TOKEN) });           // 開発者として再送
+  assert.equal("audience" in fakeDb.store.get("planner_activity_events/" + hex(330)), false);
+  assert.equal(fakeDb.store.get("planner_activity_totals/all").share_created, 1);
+  await post(created(331), { ...PLANNER_UA, ...bearer(TEST_TOKEN) });           // 開発者で先に届いた
+  await post(created(331), PLANNER_UA);                                         // 一般として再送
+  assert.equal(fakeDb.store.get("planner_activity_events/" + hex(331)).audience, "developer");
+  assert.equal(fakeDb.store.get("planner_activity_totals/all").share_created, 1);
+}));
+
+test("GET（公開の集計）: 開発者の event は totals / daily に出ない", withToken(TEST_TOKEN, async () => {
+  for (let i = 0; i < 6; i++) await post(created(340 + i), { ...PLANNER_UA, ...bearer(TEST_TOKEN) });
+  await post(created(350), PLANNER_UA);
+  const res = fakeRes();
+  await api({ method: "GET", headers: {} }, res);
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.totals.share_created, 1);
+  assert.equal(JSON.stringify(res.body).includes("developer"), false);
+}));
+
+test("GET ?check: 認証必須・no-store。開発者の event だけ found、一般・未着は found false", withToken(TEST_TOKEN, async () => {
+  await post(created(360), { ...PLANNER_UA, ...bearer(TEST_TOKEN) });
+  await post(created(361), PLANNER_UA);
+  let res = await getCheck(hex(360));
+  assert.equal(res.statusCode, 401);
+  assert.equal(res.headers["Cache-Control"], "no-store");
+  assert.equal(res.body, undefined);
+  assert.equal((await getCheck(hex(360), bearer("wrong-" + TEST_TOKEN))).statusCode, 401);
+  assert.equal((await getCheck("not-an-id", bearer(TEST_TOKEN))).statusCode, 400);
+  res = await getCheck(hex(360), bearer(TEST_TOKEN));
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.headers["Cache-Control"], "no-store");
+  assert.equal(res.body.found, true);
+  assert.equal(res.body.audience, "developer");
+  assert.equal(res.body.event, "share_created");
+  assert.deepEqual((await getCheck(hex(361), bearer(TEST_TOKEN))).body, { found: false });
+  assert.deepEqual((await getCheck(hex(362), bearer(TEST_TOKEN))).body, { found: false });
+  assert.equal((await getCheck(hex(360), bearer(TEST_TOKEN), true)).body.found, true);   // req.query が無い形
+  assert.equal(fakeDb.store.get("planner_activity_totals/all").share_created, 1);         // check は何も書かない
+}));
