@@ -212,7 +212,8 @@ test("POST: 文字列 body（sendBeacon の text/plain）も受ける", async ()
 
 test("GET: totals ＋ 直近 30 日 daily、細粒度は k >= 5 未満を伏せる、cache 5 分", async () => {
   fakeDb = makeFakeDb();
-  for (let i = 0; i < 3; i++) await post({ schema: "planner_activity/1", event: "share_created", event_id: hex(200 + i), at: "2026-09-18T07:00Z", category: "mountain", transport: "viewer" }, { "user-agent": "SidekickPlanner/1.0.0-beta.1" });
+  const day = new Date(Date.now() - 86400000).toISOString().slice(0, 10);   // 直近 30 日の窓の中の日（前日、UTC）。固定日付だと窓から外れる
+  for (let i = 0; i < 3; i++) await post({ schema: "planner_activity/1", event: "share_created", event_id: hex(200 + i), at: day + "T07:00Z", category: "mountain", transport: "viewer" }, { "user-agent": "SidekickPlanner/1.0.0-beta.1" });
   const req = { method: "GET", headers: {} };
   const res = fakeRes();
   await api(req, res);
@@ -221,8 +222,8 @@ test("GET: totals ＋ 直近 30 日 daily、細粒度は k >= 5 未満を伏せ�
   assert.equal(res.body.schema, "planner_activity_aggregate/1");
   assert.equal(res.body.totals.share_created, 3);
   assert.equal("share_created_category_mountain" in res.body.totals, false);
-  assert.equal(res.body.daily["2026-09-18"].share_created, 3);
-  assert.equal("updated_at" in res.body.daily["2026-09-18"], false);
+  assert.equal(res.body.daily[day].share_created, 3);
+  assert.equal("updated_at" in res.body.daily[day], false);
 });
 
 test("その他の method は 405", async () => {
